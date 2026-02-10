@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -7,10 +8,27 @@ import {
   CheckCircle, 
   Info,
   ArrowRight,
-  CaretRight
+  CaretRight,
+  Warning
 } from '@phosphor-icons/react'
+import { getEmailStatus } from '@/lib/smtp-service'
 
 export function EmailSystemInfo() {
+  const [status, setStatus] = useState<any>(null)
+
+  useEffect(() => {
+    loadStatus()
+  }, [])
+
+  const loadStatus = async () => {
+    try {
+      const emailStatus = await getEmailStatus()
+      setStatus(emailStatus)
+    } catch (error) {
+      console.error('Fehler beim Laden des Status:', error)
+    }
+  }
+
   return (
     <Card className="p-6 bg-gradient-to-br from-primary/5 to-accent/5 border-2">
       <div className="space-y-4">
@@ -19,9 +37,30 @@ export function EmailSystemInfo() {
             <Envelope className="w-6 h-6 text-primary-foreground" weight="fill" />
           </div>
           <div>
-            <h3 className="text-xl font-bold mb-2">📧 E-Mail-Versand aktiv</h3>
+            <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+              📧 E-Mail-Versand
+              {status && (
+                <Badge variant={status.testMode ? 'secondary' : 'default'} className="gap-1">
+                  {status.testMode ? (
+                    <>
+                      <Warning className="w-3 h-3" weight="fill" />
+                      Test-Modus
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-3 h-3" weight="fill" />
+                      Live ({status.provider.toUpperCase()})
+                    </>
+                  )}
+                </Badge>
+              )}
+            </h3>
             <p className="text-sm text-muted-foreground">
-              Auftragsbestätigungen werden automatisch an <strong>info@sundsmessebau.com</strong> und den Kunden versendet.
+              {status?.testMode ? (
+                <>E-Mails werden simuliert. Konfigurieren Sie SendGrid/AWS SES im Admin-Dashboard für echten Versand.</>
+              ) : (
+                <>Auftragsbestätigungen werden automatisch an <strong>info@sundsmessebau.com</strong> und den Kunden versendet.</>
+              )}
             </p>
           </div>
         </div>
@@ -51,13 +90,25 @@ export function EmailSystemInfo() {
           </div>
         </div>
 
-        <Alert>
-          <Info className="w-4 h-4" />
-          <AlertDescription className="text-sm">
-            Alle E-Mails können im <strong>Admin-Dashboard</strong> verwaltet werden. 
-            Zugriff über Footer → Admin (nur für Projekt-Besitzer).
-          </AlertDescription>
-        </Alert>
+        {status?.testMode && (
+          <Alert>
+            <Info className="w-4 h-4" />
+            <AlertDescription className="text-sm">
+              <strong>Hinweis:</strong> Im Test-Modus werden E-Mails nur simuliert und in der Browser-Konsole angezeigt. 
+              Öffnen Sie das Admin-Dashboard, um SendGrid oder AWS SES zu konfigurieren.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {!status?.testMode && (
+          <Alert>
+            <CheckCircle className="w-4 h-4" />
+            <AlertDescription className="text-sm">
+              <strong>Live-Modus aktiv:</strong> E-Mails werden über {status?.provider.toUpperCase()} versendet. 
+              Alle Nachrichten werden an echte E-Mail-Adressen zugestellt.
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="flex gap-2">
           <Button

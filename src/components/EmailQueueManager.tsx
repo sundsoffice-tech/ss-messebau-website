@@ -6,6 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { Envelope, Eye, Trash, CheckCircle, PaperPlaneTilt } from '@phosphor-icons/react'
 import { toast } from 'sonner'
+import { sendQueuedEmail } from '@/lib/email-service'
 
 interface EmailQueueItem {
   id: string
@@ -66,28 +67,35 @@ export function EmailQueueManager() {
   }
 
   const handleSendEmail = async (email: EmailQueueItem) => {
-    toast.info('E-Mail-Versand simuliert', {
+    const loadingToast = toast.loading('E-Mails werden versendet...', {
       description: `An: ${email.to} & ${email.customerEmail}`,
-      duration: 3000,
     })
 
-    console.log('📧 E-Mail-Versand (Simulation)')
-    console.log('═════════════════════════════')
-    console.log('An Firma:', email.to)
-    console.log('Betreff:', email.subject)
-    console.log('Anhänge:', email.attachments.length)
-    console.log('─────────────────────────────')
-    console.log('An Kunde:', email.customerEmail)
-    console.log('Betreff:', email.customerSubject)
-    console.log('═════════════════════════════')
-    
-    toast.success('E-Mails versendet!', {
-      description: `Bestätigung an ${email.customerEmail} und Bestellung an ${email.to} versendet`,
-      duration: 5000,
-    })
+    try {
+      const result = await sendQueuedEmail(email.id)
 
-    await window.spark.kv.delete(email.id)
-    await loadEmailQueue()
+      if (result.success) {
+        toast.success('E-Mails erfolgreich versendet!', {
+          id: loadingToast,
+          description: `✓ An Firma (${email.to}) und Kunde (${email.customerEmail})`,
+          duration: 5000,
+        })
+
+        await loadEmailQueue()
+      } else {
+        toast.error('E-Mail-Versand fehlgeschlagen', {
+          id: loadingToast,
+          description: result.error || 'Unbekannter Fehler',
+          duration: 7000,
+        })
+      }
+    } catch (error) {
+      toast.error('Fehler beim E-Mail-Versand', {
+        id: loadingToast,
+        description: error instanceof Error ? error.message : 'Unbekannter Fehler',
+        duration: 7000,
+      })
+    }
   }
 
   const handleDelete = async (emailId: string) => {
@@ -102,11 +110,41 @@ export function EmailQueueManager() {
     if (emailQueue.length === 0) return
 
     if (confirm(`Alle ${emailQueue.length} E-Mails versenden?`)) {
+      const loadingToast = toast.loading(`Versende ${emailQueue.length} E-Mails...`)
+      
+      let successCount = 0
+      let errorCount = 0
+
       for (const email of emailQueue) {
-        await handleSendEmail(email)
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        try {
+          const result = await sendQueuedEmail(email.id)
+          if (result.success) {
+            successCount++
+          } else {
+            errorCount++
+            console.error('Fehler beim Versenden:', email.id, result.error)
+          }
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+        } catch (error) {
+          errorCount++
+          console.error('Fehler beim Versenden:', email.id, error)
+        }
       }
-      toast.success(`${emailQueue.length} E-Mails versendet!`)
+
+      if (errorCount === 0) {
+        toast.success(`${successCount} E-Mails erfolgreich versendet!`, {
+          id: loadingToast,
+          duration: 5000,
+        })
+      } else {
+        toast.warning(`${successCount} versendet, ${errorCount} fehlgeschlagen`, {
+          id: loadingToast,
+          description: 'Prüfen Sie die Konsole für Details',
+          duration: 7000,
+        })
+      }
+
+      await loadEmailQueue()
     }
   }
 

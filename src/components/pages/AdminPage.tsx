@@ -3,13 +3,15 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { EmailQueueManager } from '@/components/EmailQueueManager'
+import { SMTPConfigPanel } from '@/components/SMTPConfigPanel'
 import { Badge } from '@/components/ui/badge'
 import { 
   Envelope, 
   ShoppingCart, 
   User, 
   Lock,
-  CheckCircle
+  CheckCircle,
+  Gear
 } from '@phosphor-icons/react'
 
 interface AdminPageProps {
@@ -154,6 +156,10 @@ export function AdminPage({ onOpenInquiry }: AdminPageProps) {
                 </Badge>
               )}
             </TabsTrigger>
+            <TabsTrigger value="smtp" className="gap-2">
+              <Gear className="w-4 h-4" />
+              SMTP-Konfiguration
+            </TabsTrigger>
             <TabsTrigger value="orders" className="gap-2">
               <ShoppingCart className="w-4 h-4" />
               Bestellungen
@@ -162,6 +168,10 @@ export function AdminPage({ onOpenInquiry }: AdminPageProps) {
 
           <TabsContent value="emails">
             <EmailQueueManager />
+          </TabsContent>
+
+          <TabsContent value="smtp">
+            <SMTPConfigPanel />
           </TabsContent>
 
           <TabsContent value="orders">

@@ -1,9 +1,11 @@
 import { BannerConfig } from '@/components/pages/BannerBestellenPage'
 import { SerializedFile } from './file-utils'
+import { sendEmail } from './smtp-service'
 
 interface EmailData {
   config: BannerConfig
   configId: string
+  sendImmediately?: boolean
 }
 
 function formatConfigForEmail(config: BannerConfig): string {
@@ -273,9 +275,9 @@ function formatFileSize(bytes: number): string {
   return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
 }
 
-export async function sendOrderConfirmationEmail(data: EmailData): Promise<boolean> {
+export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ success: boolean; queueId?: string; error?: string }> {
   try {
-    const { config, configId } = data
+    const { config, configId, sendImmediately = false } = data
     
     const emailSubject = `Neue Banner-Bestellung: ${config.step6.firmaKontakt} - ${config.step1.menge}x ${formatRahmenart(config.step1.rahmenart)}`
     const emailBody = formatConfigForEmail(config)
@@ -297,18 +299,78 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<boole
       customerTextBody: convertHtmlToText(customerEmailBody),
       attachments: config.step4.serializedFiles || [],
       configId,
+      timestamp: new Date().toISOString(),
+      sent: false,
     }
 
-    await window.spark.kv.set(`email_queue_${configId}`, emailData)
+    const queueId = `email_queue_${configId}`
+    await window.spark.kv.set(queueId, emailData)
     
-    console.log('✅ E-Mail erfolgreich vorbereitet:', emailSubject)
+    console.log('✅ E-Mail in Queue gespeichert:', emailSubject)
     console.log('📧 An:', 'info@sundsmessebau.com')
     console.log('👤 Kunde:', config.step6.email)
+
+    if (sendImmediately) {
+      console.log('📤 Sofortiger Versand aktiviert...')
+      const sendResult = await sendQueuedEmail(queueId)
+      
+      if (sendResult.success) {
+        return { success: true, queueId }
+      } else {
+        return { success: false, queueId, error: sendResult.error }
+      }
+    }
     
-    return true
+    return { success: true, queueId }
   } catch (error) {
     console.error('❌ Fehler beim E-Mail-Versand:', error)
-    return false
+    const errorMessage = error instanceof Error ? error.message : 'Unbekannter Fehler'
+    return { success: false, error: errorMessage }
+  }
+}
+
+export async function sendQueuedEmail(queueId: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const emailData = await window.spark.kv.get<any>(queueId)
+    
+    if (!emailData) {
+      return { success: false, error: 'E-Mail nicht in Queue gefunden' }
+    }
+
+    const companyResult = await sendEmail({
+      to: emailData.to,
+      subject: emailData.subject,
+      htmlBody: emailData.htmlBody,
+      textBody: emailData.textBody,
+      attachments: emailData.attachments,
+    })
+
+    if (!companyResult.success) {
+      return { success: false, error: `Firmen-E-Mail: ${companyResult.error}` }
+    }
+
+    const customerResult = await sendEmail({
+      to: emailData.customerEmail,
+      subject: emailData.customerSubject,
+      htmlBody: emailData.customerHtmlBody,
+      textBody: emailData.customerTextBody,
+    })
+
+    if (!customerResult.success) {
+      return { success: false, error: `Kunden-E-Mail: ${customerResult.error}` }
+    }
+
+    emailData.sent = true
+    emailData.sentAt = new Date().toISOString()
+    await window.spark.kv.set(queueId, emailData)
+
+    console.log('✅ E-Mails erfolgreich versendet:', queueId)
+    
+    return { success: true }
+  } catch (error) {
+    console.error('❌ Fehler beim Versenden der E-Mail:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unbekannter Fehler'
+    return { success: false, error: errorMessage }
   }
 }
 
