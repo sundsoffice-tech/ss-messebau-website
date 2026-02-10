@@ -1,0 +1,281 @@
+import { useState, useEffect } from 'react'
+import { useKV } from '@github/spark/hooks'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { Check } from '@phosphor-icons/react'
+import { ConfiguratorStep1 } from './configurator/ConfiguratorStep1'
+import { ConfiguratorStep2 } from './configurator/ConfiguratorStep2'
+import { ConfiguratorStep3 } from './configurator/ConfiguratorStep3'
+import { ConfiguratorStep4 } from './configurator/ConfiguratorStep4'
+import { ConfiguratorStep5 } from './configurator/ConfiguratorStep5'
+import { ConfiguratorStep6 } from './configurator/ConfiguratorStep6'
+import { ConfigSummary } from './configurator/ConfigSummary'
+import { ThankYouPage } from './configurator/ThankYouPage'
+
+export interface BannerConfig {
+  step1: {
+    einsatzort: string
+    rahmenart: string
+    menge: number
+    indoorOutdoor: string
+    montage: boolean
+    montageOrt?: string
+    montageZeitraum?: string
+  }
+  step2: {
+    breite: number
+    hoehe: number
+    profil: string
+    ecken: string
+    seitigkeit: string
+    led: boolean
+    ledStrom?: string
+    ledEinsatz?: string
+  }
+  step3: {
+    bannerBenoetigt: boolean
+    material?: string
+    konfektion?: string[]
+    brandschutz?: boolean
+    druckqualitaet?: string
+  }
+  step4: {
+    druckdatenVorhanden: boolean
+    dateien?: File[]
+    grafikservice?: boolean
+    designwunsch?: string
+    kommentar?: string
+  }
+  step5: {
+    firma: string
+    strasse: string
+    plz: string
+    ort: string
+    land: string
+    wunschDatum?: string
+    express: boolean
+    lieferart: string
+    zeitfenster?: string
+  }
+  step6: {
+    firmaKontakt: string
+    ansprechpartner: string
+    email: string
+    telefon: string
+    ustId?: string
+    dsgvo: boolean
+    newsletter: boolean
+  }
+}
+
+const initialConfig: BannerConfig = {
+  step1: {
+    einsatzort: '',
+    rahmenart: 'haengerahmen',
+    menge: 1,
+    indoorOutdoor: 'indoor',
+    montage: false,
+  },
+  step2: {
+    breite: 0,
+    hoehe: 0,
+    profil: 'standard',
+    ecken: 'gehrung',
+    seitigkeit: 'einseitig',
+    led: false,
+  },
+  step3: {
+    bannerBenoetigt: true,
+  },
+  step4: {
+    druckdatenVorhanden: true,
+  },
+  step5: {
+    firma: '',
+    strasse: '',
+    plz: '',
+    ort: '',
+    land: 'Deutschland',
+    express: false,
+    lieferart: 'spedition',
+  },
+  step6: {
+    firmaKontakt: '',
+    ansprechpartner: '',
+    email: '',
+    telefon: '',
+    dsgvo: false,
+    newsletter: false,
+  },
+}
+
+interface BannerBestellenPageProps {
+  onOpenInquiry: () => void
+}
+
+export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps) {
+  const [currentStep, setCurrentStep] = useState(1)
+  const [config, setConfig] = useKV<BannerConfig>('banner_config_draft', initialConfig)
+  const [submitted, setSubmitted] = useState(false)
+
+  const totalSteps = 6
+  const progress = (currentStep / totalSteps) * 100
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentStep])
+
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep((prev) => prev + 1)
+    }
+  }
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep((prev) => prev - 1)
+    }
+  }
+
+  const handleStepChange = (step: number) => {
+    if (step <= currentStep) {
+      setCurrentStep(step)
+    }
+  }
+
+  const updateConfig = (step: string, data: any) => {
+    setConfig((prev) => {
+      if (!prev) return initialConfig
+      return {
+        ...prev,
+        [step]: { ...prev[step as keyof BannerConfig], ...data },
+      } as BannerConfig
+    })
+  }
+
+  const handleSubmit = async () => {
+    try {
+      const configId = `banner_${Date.now()}`
+      await window.spark.kv.set(configId, {
+        ...config,
+        timestamp: new Date().toISOString(),
+        status: 'neu',
+      })
+
+      setSubmitted(true)
+      
+      localStorage.removeItem('banner_config_draft')
+    } catch (error) {
+      console.error('Fehler beim Speichern:', error)
+    }
+  }
+
+  if (submitted && config) {
+    return <ThankYouPage config={config} />
+  }
+
+  return (
+    <div className="min-h-screen bg-secondary/20 py-12">
+      <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-8 text-center">
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">Banner online konfigurieren</h1>
+            <p className="text-muted-foreground">
+              Schritt {currentStep} von {totalSteps}
+            </p>
+          </div>
+
+          <div className="mb-8">
+            <Progress value={progress} className="h-2" />
+            <div className="mt-4 hidden md:flex justify-between text-sm">
+              {['Einsatz', 'Maße', 'Druck', 'Daten', 'Lieferung', 'Kontakt'].map((label, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleStepChange(idx + 1)}
+                  className={`flex items-center gap-2 ${
+                    idx + 1 < currentStep
+                      ? 'text-primary cursor-pointer'
+                      : idx + 1 === currentStep
+                      ? 'text-foreground font-semibold'
+                      : 'text-muted-foreground cursor-not-allowed'
+                  }`}
+                  disabled={idx + 1 > currentStep}
+                >
+                  {idx + 1 < currentStep ? (
+                    <Check className="w-5 h-5" weight="bold" />
+                  ) : (
+                    <span className="w-5 h-5 flex items-center justify-center rounded-full border-2 border-current text-xs">
+                      {idx + 1}
+                    </span>
+                  )}
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <Card className="p-6 md:p-8">
+                {currentStep === 1 && config && (
+                  <ConfiguratorStep1
+                    data={config.step1}
+                    onChange={(data) => updateConfig('step1', data)}
+                    onNext={handleNext}
+                  />
+                )}
+                {currentStep === 2 && config && (
+                  <ConfiguratorStep2
+                    data={config.step2}
+                    onChange={(data) => updateConfig('step2', data)}
+                    onNext={handleNext}
+                    onBack={handleBack}
+                  />
+                )}
+                {currentStep === 3 && config && (
+                  <ConfiguratorStep3
+                    data={config.step3}
+                    step1Data={config.step1}
+                    step2Data={config.step2}
+                    onChange={(data) => updateConfig('step3', data)}
+                    onNext={handleNext}
+                    onBack={handleBack}
+                  />
+                )}
+                {currentStep === 4 && config && (
+                  <ConfiguratorStep4
+                    data={config.step4}
+                    onChange={(data) => updateConfig('step4', data)}
+                    onNext={handleNext}
+                    onBack={handleBack}
+                  />
+                )}
+                {currentStep === 5 && config && (
+                  <ConfiguratorStep5
+                    data={config.step5}
+                    onChange={(data) => updateConfig('step5', data)}
+                    onNext={handleNext}
+                    onBack={handleBack}
+                  />
+                )}
+                {currentStep === 6 && config && (
+                  <ConfiguratorStep6
+                    data={config.step6}
+                    onChange={(data) => updateConfig('step6', data)}
+                    onBack={handleBack}
+                    onSubmit={handleSubmit}
+                  />
+                )}
+              </Card>
+            </div>
+
+            <div className="lg:col-span-1">
+              {config && <ConfigSummary config={config} currentStep={currentStep} />}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

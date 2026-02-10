@@ -45,6 +45,11 @@ export function Footer() {
                 </button>
               </li>
               <li>
+                <button onClick={() => handleNavigation('/bannerrahmen')} className="hover:text-primary transition-colors">
+                  Bannerrahmen
+                </button>
+              </li>
+              <li>
                 <button onClick={() => handleNavigation('/nachhaltigkeit')} className="hover:text-primary transition-colors">
                   Nachhaltigkeit
                 </button>

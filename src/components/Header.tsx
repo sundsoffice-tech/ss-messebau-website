@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { List, X, House, Briefcase, Buildings, Images, Users, Path, Leaf, Article, Envelope, Phone } from '@phosphor-icons/react'
+import { List, X, House, Briefcase, Buildings, Images, Users, Path, Leaf, Article, Envelope, Phone, FrameCorners } from '@phosphor-icons/react'
 import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
 
 interface HeaderProps {
@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { label: 'Leistungen', path: '/leistungen', icon: Briefcase },
   { label: 'Branchen', path: '/branchen', icon: Buildings },
   { label: 'Referenzen', path: '/referenzen', icon: Images },
+  { label: 'Bannerrahmen', path: '/bannerrahmen', icon: FrameCorners },
   { label: 'Über uns', path: '/ueber-uns', icon: Users },
   { label: 'Ablauf', path: '/ablauf', icon: Path },
   { label: 'Nachhaltigkeit', path: '/nachhaltigkeit', icon: Leaf },
@@ -46,7 +47,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
           </button>
 
           <nav className="hidden lg:flex items-center gap-1">
-            {NAV_ITEMS.slice(0, 5).map((item) => (
+            {NAV_ITEMS.slice(0, 6).map((item) => (
               <Button
                 key={item.path}
                 variant="ghost"
@@ -58,8 +59,17 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             ))}
             <Button
               variant="default"
+              onClick={() => handleNavigation('/banner-bestellen')}
+              className="ml-2 bg-primary hover:bg-primary/90"
+              size="sm"
+            >
+              Banner konfigurieren
+            </Button>
+            <Button
+              variant="default"
               onClick={onOpenInquiry}
-              className="ml-2 bg-accent hover:bg-accent/90"
+              className="ml-1 bg-accent hover:bg-accent/90"
+              size="sm"
             >
               Projekt anfragen
             </Button>
