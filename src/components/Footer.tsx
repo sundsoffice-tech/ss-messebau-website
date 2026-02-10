@@ -122,6 +122,9 @@ export function Footer() {
             <button onClick={() => handleNavigation('/datenschutz')} className="hover:text-primary transition-colors">
               Datenschutz
             </button>
+            <button onClick={() => handleNavigation('/admin')} className="hover:text-primary transition-colors">
+              Admin
+            </button>
           </div>
         </div>
       </div>

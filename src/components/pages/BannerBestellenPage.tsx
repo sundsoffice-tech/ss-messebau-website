@@ -189,6 +189,17 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
       
       await window.spark.kv.set(configId, configToSave)
 
+      if (config) {
+        const { sendOrderConfirmationEmail } = await import('@/lib/email-service')
+        const emailSent = await sendOrderConfirmationEmail({ config, configId })
+        
+        if (emailSent) {
+          console.log('✅ Auftragsbestätigung per E-Mail versendet')
+        } else {
+          console.warn('⚠️ E-Mail konnte nicht versendet werden')
+        }
+      }
+
       setSubmitted(true)
     } catch (error) {
       console.error('Fehler beim Speichern:', error)

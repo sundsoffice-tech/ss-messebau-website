@@ -14,6 +14,7 @@ import { BlogPage } from './components/pages/BlogPage'
 import { UeberUnsPage, AblaufPage, NachhaltigkeitPage, ImpressumPage, DatenschutzPage } from './components/pages/OtherPages'
 import { BannerrahmenPage } from './components/pages/BannerrahmenPage'
 import { BannerBestellenPage } from './components/pages/BannerBestellenPage'
+import { AdminPage } from './components/pages/AdminPage'
 
 function App() {
   const [inquiryDialogOpen, setInquiryDialogOpen] = useState(false)
@@ -56,6 +57,8 @@ function App() {
         return <BannerrahmenPage onOpenInquiry={onOpenInquiry} />
       case '/banner-bestellen':
         return <BannerBestellenPage onOpenInquiry={onOpenInquiry} />
+      case '/admin':
+        return <AdminPage onOpenInquiry={onOpenInquiry} />
       case '/impressum':
         return <ImpressumPage />
       case '/datenschutz':

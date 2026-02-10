@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { CheckCircle, ArrowRight, Phone, File as FileIcon } from '@phosphor-icons/react'
+import { CheckCircle, ArrowRight, Phone, File as FileIcon, Envelope, Check } from '@phosphor-icons/react'
 import type { BannerConfig } from '../BannerBestellenPage'
 
 interface ThankYouPageProps {
@@ -23,21 +23,36 @@ export function ThankYouPage({ config }: ThankYouPageProps) {
               Vielen Dank, {config.step6.ansprechpartner.split(' ')[0]}!
             </h1>
 
-            <p className="text-lg text-muted-foreground mb-8">
-              Ihre Konfiguration ist bei uns eingegangen. Sie erhalten in Kürze eine Bestätigung per E-Mail mit
-              allen Details an <strong>{config.step6.email}</strong>.
+            <p className="text-lg text-muted-foreground mb-6">
+              Ihre Konfiguration ist bei uns eingegangen.
             </p>
 
-            {fileCount > 0 && (
-              <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mb-6">
-                <div className="flex items-center justify-center gap-2 text-primary">
-                  <FileIcon className="w-5 h-5" />
-                  <span className="font-semibold">
-                    {fileCount} {fileCount === 1 ? 'Datei' : 'Dateien'} erfolgreich hochgeladen
-                  </span>
+            <div className="bg-primary/10 border-2 border-primary/30 rounded-lg p-6 mb-6">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-primary rounded-lg shrink-0">
+                  <Envelope className="w-6 h-6 text-primary-foreground" weight="fill" />
+                </div>
+                <div className="text-left">
+                  <h3 className="font-bold text-lg mb-2">📧 E-Mail versendet!</h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" weight="bold" />
+                      <span>Bestätigung an <strong>{config.step6.email}</strong></span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" weight="bold" />
+                      <span>Bestellung an <strong>info@sundsmessebau.com</strong></span>
+                    </div>
+                    {fileCount > 0 && (
+                      <div className="flex items-center gap-2">
+                        <Check className="w-4 h-4 text-primary" weight="bold" />
+                        <span>{fileCount} Datei{fileCount > 1 ? 'en' : ''} als Anhang übermittelt</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            )}
+            </div>
 
             <div className="bg-secondary/50 rounded-lg p-6 text-left mb-8">
               <h2 className="font-bold mb-4">Wie geht es weiter?</h2>
