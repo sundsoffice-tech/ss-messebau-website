@@ -45,7 +45,8 @@ const LEISTUNGEN_MEGA_MENU = [
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
     features: ['Design & Konzeption', 'Standbau & Montage', 'Full-Service-Betreuung'],
-    gradient: 'from-blue-500/10 to-blue-600/5'
+    gradient: 'from-blue-500/10 to-blue-600/5',
+    previewImage: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop'
   },
   {
     title: 'Eventbau & Bühnen',
@@ -54,7 +55,8 @@ const LEISTUNGEN_MEGA_MENU = [
     color: 'text-purple-600',
     bgColor: 'bg-purple-50',
     features: ['Bühnenaufbau', 'Event-Ausstattung', 'Technik-Integration'],
-    gradient: 'from-purple-500/10 to-purple-600/5'
+    gradient: 'from-purple-500/10 to-purple-600/5',
+    previewImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop'
   },
   {
     title: 'Ladenbau & Showrooms',
@@ -63,7 +65,8 @@ const LEISTUNGEN_MEGA_MENU = [
     color: 'text-orange-600',
     bgColor: 'bg-orange-50',
     features: ['Ladeneinrichtung', 'Showroom-Design', 'Präsentationssysteme'],
-    gradient: 'from-orange-500/10 to-orange-600/5'
+    gradient: 'from-orange-500/10 to-orange-600/5',
+    previewImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop'
   },
   {
     title: 'Böden & Ausstattung',
@@ -72,7 +75,8 @@ const LEISTUNGEN_MEGA_MENU = [
     color: 'text-green-600',
     bgColor: 'bg-green-50',
     features: ['Messeboden-Systeme', 'Möbel & Ausstattung', 'Beleuchtung'],
-    gradient: 'from-green-500/10 to-green-600/5'
+    gradient: 'from-green-500/10 to-green-600/5',
+    previewImage: 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=400&h=300&fit=crop'
   }
 ]
 
@@ -228,24 +232,27 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                           <button
                             key={item.title}
                             onClick={() => handleNavigation('/leistungen')}
-                            className="group relative overflow-hidden rounded-lg border p-5 text-left transition-all hover:border-primary hover:shadow-lg"
+                            className="group relative overflow-hidden rounded-lg border text-left transition-all hover:border-primary hover:shadow-xl"
                           >
-                            <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
-                            
-                            <div className="relative">
-                              <div className="flex items-start gap-4 mb-3">
-                                <div className={`${item.bgColor} ${item.color} p-3 rounded-lg flex-shrink-0`}>
-                                  <Icon className="h-6 w-6" weight="duotone" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
-                                    {item.title}
-                                  </h3>
-                                  <p className="text-sm text-muted-foreground line-clamp-1">
-                                    {item.description}
-                                  </p>
-                                </div>
+                            <div className="aspect-[16/9] relative overflow-hidden">
+                              <img
+                                src={item.previewImage}
+                                alt={item.title}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                              />
+                              <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent`} />
+                              <div className={`absolute top-3 left-3 ${item.bgColor} ${item.color} p-2 rounded-lg`}>
+                                <Icon className="h-5 w-5" weight="duotone" />
                               </div>
+                            </div>
+                            
+                            <div className="p-4">
+                              <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                                {item.title}
+                              </h3>
+                              <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
+                                {item.description}
+                              </p>
                               
                               <ul className="space-y-1.5">
                                 {item.features.map((feature) => (

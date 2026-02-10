@@ -56,11 +56,11 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                     <ArrowRight className="ml-2" />
                   </Button>
                 </div>
-                <div className="aspect-square rounded-lg overflow-hidden">
+                <div className="group aspect-square rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                   <img 
-                    src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800" 
+                    src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=800&fit=crop" 
                     alt="Food Messestand"
-                    className="object-cover w-full h-full"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
                   />
                 </div>
               </div>
@@ -93,11 +93,11 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                     <ArrowRight className="ml-2" />
                   </Button>
                 </div>
-                <div className="aspect-square rounded-lg overflow-hidden lg:order-1">
+                <div className="group aspect-square rounded-lg overflow-hidden lg:order-1 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                   <img 
-                    src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800" 
+                    src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&h=800&fit=crop" 
                     alt="Versicherungs Messestand"
-                    className="object-cover w-full h-full"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
                   />
                 </div>
               </div>
@@ -130,11 +130,11 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                     <ArrowRight className="ml-2" />
                   </Button>
                 </div>
-                <div className="aspect-square rounded-lg overflow-hidden">
+                <div className="group aspect-square rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                   <img 
-                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800" 
+                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=800&fit=crop" 
                     alt="Industrie Messestand"
-                    className="object-cover w-full h-full"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
                   />
                 </div>
               </div>

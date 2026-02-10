@@ -71,36 +71,56 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 icon: Warehouse,
                 title: 'Messebau',
                 description: 'Von Systemständen bis zu individuellen Konstruktionen – professionell und termingerecht.',
-                link: '/leistungen'
+                link: '/leistungen',
+                image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop'
               },
               {
                 icon: CalendarDot,
                 title: 'Eventbau',
                 description: 'Bühnen, Präsentationsflächen und Eventausstattung für beeindruckende Veranstaltungen.',
-                link: '/leistungen'
+                link: '/leistungen',
+                image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=250&fit=crop'
               },
               {
                 icon: Storefront,
                 title: 'Ladenbau',
                 description: 'Showrooms und Verkaufsflächen, die Ihre Produkte optimal in Szene setzen.',
-                link: '/leistungen'
+                link: '/leistungen',
+                image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=250&fit=crop'
               },
               {
                 icon: Armchair,
                 title: 'Böden & Möbel',
                 description: 'Hochwertige Ausstattung: Messeboden, Möblierung, Beleuchtung und Technik.',
-                link: '/leistungen'
+                link: '/leistungen',
+                image: 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=400&h=250&fit=crop'
               }
             ].map((service, index) => {
               const Icon = service.icon
               return (
-                <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handleNavigation(service.link)}>
-                  <CardContent className="p-6">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 mb-4">
-                      <Icon className="h-6 w-6 text-primary" />
+                <Card 
+                  key={index} 
+                  className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
+                  onClick={() => handleNavigation(service.link)}
+                >
+                  <div className="aspect-[4/3] relative overflow-hidden">
+                    <img 
+                      src={service.image} 
+                      alt={service.title}
+                      className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                    <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                        <Icon className="h-5 w-5" weight="duotone" />
+                      </div>
+                      <h3 className="font-bold text-white text-lg">{service.title}</h3>
                     </div>
-                    <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
-                    <p className="text-muted-foreground text-sm">{service.description}</p>
+                  </div>
+                  <CardContent className="p-5">
+                    <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                      {service.description}
+                    </p>
                   </CardContent>
                 </Card>
               )
@@ -164,23 +184,31 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {DEMO_REFERENCES.map((reference) => (
-              <Card key={reference.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handleNavigation('/referenzen')}>
-                <div className="aspect-video relative overflow-hidden">
+              <Card 
+                key={reference.id} 
+                className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
+                onClick={() => handleNavigation('/referenzen')}
+              >
+                <div className="aspect-video relative overflow-hidden bg-muted">
                   <img 
                     src={reference.imageUrl} 
                     alt={reference.title}
-                    className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
+                    className="object-cover w-full h-full group-hover:scale-110 group-hover:rotate-1 transition-all duration-500"
                   />
-                  <Badge className="absolute top-4 left-4 bg-background/90 text-foreground">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <Badge className="absolute top-4 left-4 bg-background/95 text-foreground shadow-lg">
                     {reference.size}
                   </Badge>
+                  <div className="absolute bottom-4 left-4 right-4 transform translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <p className="text-white text-sm font-medium drop-shadow-lg">Mehr erfahren →</p>
+                  </div>
                 </div>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2 mb-3">
                     <Badge variant="secondary">{reference.branche === 'food' ? 'Food & Feinkost' : reference.branche === 'versicherungen' ? 'Versicherungen' : 'Industrie'}</Badge>
                   </div>
-                  <h3 className="font-semibold mb-2">{reference.title}</h3>
-                  <p className="text-sm text-muted-foreground">{reference.description}</p>
+                  <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">{reference.title}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{reference.description}</p>
                 </CardContent>
               </Card>
             ))}

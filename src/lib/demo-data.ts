@@ -7,7 +7,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'food',
     size: '50 qm',
     type: 'messebau',
-    imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop',
     description: 'Moderner Messestand mit offener Verkostungsküche und Premium-Präsentation',
     challenge: 'Feinkost Meyer benötigte einen Stand, der hochwertige Produkte ansprechend präsentiert und gleichzeitig Verkostungen ermöglicht.',
     solution: 'Wir entwickelten ein offenes Konzept mit integrierter Showküche, LED-beleuchteten Produktvitrinen und einer einladenden Lounge-Area.',
@@ -20,7 +20,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'versicherungen',
     size: '80 qm',
     type: 'messebau',
-    imageUrl: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&h=600&fit=crop',
     description: 'Repräsentativer Messeauftritt mit Beratungszonen und interaktiven Elementen',
     challenge: 'Seriöser, vertrauensvoller Auftritt mit gleichzeitig moderner, zugänglicher Atmosphäre.',
     solution: 'Klare Raumzonierung: Offene Welcome-Area, abgeschirmte Beratungszonen, digitale Infoscreens.',
@@ -33,7 +33,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'industrie',
     size: '120 qm',
     type: 'ladenbau',
-    imageUrl: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop',
     description: 'Permanenter Showroom für Kunststoff-Fertigungstechnik',
     challenge: 'Große Maschinen ansprechend präsentieren und technische Kompetenz vermitteln.',
     solution: 'Industrieller Look mit hochwertigen Details: Sichtbeton-Optik, LED-Spots, interaktive Produktkonfiguratoren.',
@@ -84,7 +84,7 @@ export const DEMO_BLOG_POSTS: BlogPost[] = [
 - Lead-Follow-Up
 - Erfolgs-Auswertung`,
     category: 'Planung',
-    imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop',
     publishedAt: Date.now() - 7 * 24 * 60 * 60 * 1000
   },
   {
@@ -138,7 +138,7 @@ export const DEMO_BLOG_POSTS: BlogPost[] = [
 
 S&S Messebau bietet faire Komplettpreise - sprechen Sie uns an!`,
     category: 'Budget',
-    imageUrl: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop',
     publishedAt: Date.now() - 14 * 24 * 60 * 60 * 1000
   },
   {
@@ -184,7 +184,7 @@ Immer mehr Messebesucher achten auf Nachhaltigkeit. Ein umweltbewusster Auftritt
 
 S&S Messebau - nachhaltig und wirtschaftlich zugleich.`,
     category: 'Nachhaltigkeit',
-    imageUrl: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&h=600&fit=crop',
     publishedAt: Date.now() - 21 * 24 * 60 * 60 * 1000
   }
 ]

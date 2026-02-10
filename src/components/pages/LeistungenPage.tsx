@@ -166,21 +166,21 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 <ArrowRight className="ml-2" />
               </Button>
             </div>
-            <div className="aspect-video rounded-lg overflow-hidden">
+            <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
               <img 
-                src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800" 
+                src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop" 
                 alt="Ladenbau"
-                className="object-cover w-full h-full"
+                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
               />
             </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-start">
-            <div className="aspect-video rounded-lg overflow-hidden lg:order-2">
+            <div className="group aspect-video rounded-lg overflow-hidden lg:order-2 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
               <img 
-                src="https://images.unsplash.com/photo-1556912998-c57cc6b63cd7?w=800" 
+                src="https://images.unsplash.com/photo-1556912998-c57cc6b63cd7?w=800&h=600&fit=crop" 
                 alt="Ausstattung"
-                className="object-cover w-full h-full"
+                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
               />
             </div>
             <div className="lg:order-1">

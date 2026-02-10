@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { DEMO_REFERENCES } from '@/lib/demo-data'
 import { Reference } from '@/lib/types'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { CheckCircle } from '@phosphor-icons/react'
+import { CheckCircle, ArrowRight } from '@phosphor-icons/react'
 
 interface ReferenzenPageProps {
   onOpenInquiry: () => void
@@ -116,26 +116,33 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
               {filteredReferences.map((reference) => (
                 <Card 
                   key={reference.id} 
-                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                  className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary"
                   onClick={() => setSelectedReference(reference)}
                 >
-                  <div className="aspect-video relative overflow-hidden">
+                  <div className="aspect-video relative overflow-hidden bg-muted">
                     <img 
                       src={reference.imageUrl} 
                       alt={reference.title}
-                      className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
+                      className="object-cover w-full h-full group-hover:scale-110 group-hover:rotate-1 transition-all duration-500"
                     />
-                    <Badge className="absolute top-4 left-4 bg-background/90 text-foreground">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <Badge className="absolute top-4 left-4 bg-background/95 text-foreground shadow-lg backdrop-blur-sm">
                       {reference.size}
                     </Badge>
+                    <div className="absolute bottom-4 left-4 right-4 transform translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                      <p className="text-white text-sm font-semibold drop-shadow-lg flex items-center gap-2">
+                        Details ansehen
+                        <ArrowRight className="h-4 w-4" />
+                      </p>
+                    </div>
                   </div>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-2 mb-3">
                       <Badge variant="secondary">{getBrancheLabel(reference.branche)}</Badge>
                       <Badge variant="outline">{getTypeLabel(reference.type)}</Badge>
                     </div>
-                    <h3 className="font-semibold mb-2">{reference.title}</h3>
-                    <p className="text-sm text-muted-foreground">{reference.description}</p>
+                    <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">{reference.title}</h3>
+                    <p className="text-sm text-muted-foreground line-clamp-2">{reference.description}</p>
                   </CardContent>
                 </Card>
               ))}
