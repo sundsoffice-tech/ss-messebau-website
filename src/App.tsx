@@ -4,6 +4,7 @@ import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import { StickyCTA, MobileStickyCTA } from './components/StickyCTA'
 import { InquiryDialog } from './components/InquiryDialog'
+import { LoadingScreen } from './components/LoadingScreen'
 import { HomePage } from './components/pages/HomePage'
 import { LeistungenPage } from './components/pages/LeistungenPage'
 import { BranchenPage } from './components/pages/BranchenPage'
@@ -62,17 +63,20 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header onOpenInquiry={() => setInquiryDialogOpen(true)} />
-      <main className="flex-1">
-        {renderPage()}
-      </main>
-      <Footer />
-      <StickyCTA onClick={() => setInquiryDialogOpen(true)} />
-      <MobileStickyCTA onClick={() => setInquiryDialogOpen(true)} />
-      <InquiryDialog open={inquiryDialogOpen} onOpenChange={setInquiryDialogOpen} />
-      <Toaster position="top-center" richColors />
-    </div>
+    <>
+      <LoadingScreen />
+      <div className="min-h-screen flex flex-col">
+        <Header onOpenInquiry={() => setInquiryDialogOpen(true)} />
+        <main className="flex-1">
+          {renderPage()}
+        </main>
+        <Footer />
+        <StickyCTA onClick={() => setInquiryDialogOpen(true)} />
+        <MobileStickyCTA onClick={() => setInquiryDialogOpen(true)} />
+        <InquiryDialog open={inquiryDialogOpen} onOpenChange={setInquiryDialogOpen} />
+        <Toaster position="top-center" richColors />
+      </div>
+    </>
   )
 }
 
