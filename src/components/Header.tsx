@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { 
@@ -15,7 +15,15 @@ import {
   Envelope, 
   Phone, 
   FrameCorners,
-  CaretDown 
+  CaretDown,
+  Storefront,
+  Microphone,
+  Armchair,
+  Package,
+  PaintBrush,
+  Truck,
+  Wrench,
+  ArrowRight
 } from '@phosphor-icons/react'
 import {
   DropdownMenu,
@@ -28,6 +36,51 @@ import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
 interface HeaderProps {
   onOpenInquiry: () => void
 }
+
+const LEISTUNGEN_MEGA_MENU = [
+  {
+    title: 'Messebau',
+    description: 'Professionelle Messestände von 20-200 qm',
+    icon: Package,
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50',
+    features: ['Design & Konzeption', 'Standbau & Montage', 'Full-Service-Betreuung'],
+    gradient: 'from-blue-500/10 to-blue-600/5'
+  },
+  {
+    title: 'Eventbau & Bühnen',
+    description: 'Eindrucksvolle Event-Locations',
+    icon: Microphone,
+    color: 'text-purple-600',
+    bgColor: 'bg-purple-50',
+    features: ['Bühnenaufbau', 'Event-Ausstattung', 'Technik-Integration'],
+    gradient: 'from-purple-500/10 to-purple-600/5'
+  },
+  {
+    title: 'Ladenbau & Showrooms',
+    description: 'Verkaufsräume die überzeugen',
+    icon: Storefront,
+    color: 'text-orange-600',
+    bgColor: 'bg-orange-50',
+    features: ['Ladeneinrichtung', 'Showroom-Design', 'Präsentationssysteme'],
+    gradient: 'from-orange-500/10 to-orange-600/5'
+  },
+  {
+    title: 'Böden & Ausstattung',
+    description: 'Hochwertige Komplettlösungen',
+    icon: Armchair,
+    color: 'text-green-600',
+    bgColor: 'bg-green-50',
+    features: ['Messeboden-Systeme', 'Möbel & Ausstattung', 'Beleuchtung'],
+    gradient: 'from-green-500/10 to-green-600/5'
+  }
+]
+
+const LEISTUNGEN_SERVICES = [
+  { label: 'Design & Konzeption', icon: PaintBrush },
+  { label: 'Logistik & Transport', icon: Truck },
+  { label: 'Montage & Service', icon: Wrench }
+]
 
 const PRIMARY_NAV = [
   { label: 'Start', path: '/', icon: House },
@@ -50,6 +103,9 @@ const ALL_NAV = [...PRIMARY_NAV, ...SECONDARY_NAV]
 export function Header({ onOpenInquiry }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [megaMenuOpen, setMegaMenuOpen] = useState(false)
+  const megaMenuRef = useRef<HTMLDivElement>(null)
+  const megaMenuTriggerRef = useRef<HTMLButtonElement>(null)
   const currentPath = window.location.hash.slice(1) || '/'
 
   useEffect(() => {
@@ -60,10 +116,36 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        megaMenuOpen &&
+        megaMenuRef.current &&
+        megaMenuTriggerRef.current &&
+        !megaMenuRef.current.contains(event.target as Node) &&
+        !megaMenuTriggerRef.current.contains(event.target as Node)
+      ) {
+        setMegaMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [megaMenuOpen])
+
   const handleNavigation = (path: string) => {
     window.location.hash = path
     setMobileMenuOpen(false)
+    setMegaMenuOpen(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleLeistungenClick = () => {
+    if (megaMenuOpen) {
+      handleNavigation('/leistungen')
+    } else {
+      setMegaMenuOpen(true)
+    }
   }
 
   return (
@@ -102,7 +184,118 @@ export function Header({ onOpenInquiry }: HeaderProps) {
           </button>
 
           <nav className="hidden xl:flex items-center gap-1">
-            {PRIMARY_NAV.map((item) => (
+            <Button
+              variant="ghost"
+              onClick={() => handleNavigation('/')}
+              className={`transition-colors ${
+                currentPath === '/' 
+                  ? 'text-primary font-semibold bg-primary/5' 
+                  : 'hover:text-primary'
+              }`}
+              size={scrolled ? 'sm' : 'default'}
+            >
+              Start
+            </Button>
+
+            <div className="relative">
+              <Button
+                ref={megaMenuTriggerRef}
+                variant="ghost"
+                onClick={handleLeistungenClick}
+                onMouseEnter={() => setMegaMenuOpen(true)}
+                className={`transition-colors gap-1 ${
+                  currentPath === '/leistungen' || megaMenuOpen
+                    ? 'text-primary font-semibold bg-primary/5' 
+                    : 'hover:text-primary'
+                }`}
+                size={scrolled ? 'sm' : 'default'}
+              >
+                Leistungen
+                <CaretDown className={`h-4 w-4 transition-transform ${megaMenuOpen ? 'rotate-180' : ''}`} />
+              </Button>
+
+              {megaMenuOpen && (
+                <div
+                  ref={megaMenuRef}
+                  onMouseLeave={() => setMegaMenuOpen(false)}
+                  className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[900px] z-50"
+                >
+                  <div className="bg-background border rounded-lg shadow-2xl p-6 animate-in fade-in-0 zoom-in-95 duration-200">
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      {LEISTUNGEN_MEGA_MENU.map((item) => {
+                        const Icon = item.icon
+                        return (
+                          <button
+                            key={item.title}
+                            onClick={() => handleNavigation('/leistungen')}
+                            className="group relative overflow-hidden rounded-lg border p-5 text-left transition-all hover:border-primary hover:shadow-lg"
+                          >
+                            <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                            
+                            <div className="relative">
+                              <div className="flex items-start gap-4 mb-3">
+                                <div className={`${item.bgColor} ${item.color} p-3 rounded-lg flex-shrink-0`}>
+                                  <Icon className="h-6 w-6" weight="duotone" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                                    {item.title}
+                                  </h3>
+                                  <p className="text-sm text-muted-foreground line-clamp-1">
+                                    {item.description}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <ul className="space-y-1.5">
+                                {item.features.map((feature) => (
+                                  <li key={feature} className="text-xs text-muted-foreground flex items-center gap-2">
+                                    <div className="w-1 h-1 rounded-full bg-primary flex-shrink-0" />
+                                    {feature}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </div>
+
+                    <div className="border-t pt-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-6">
+                          {LEISTUNGEN_SERVICES.map((service) => {
+                            const Icon = service.icon
+                            return (
+                              <button
+                                key={service.label}
+                                onClick={() => handleNavigation('/leistungen')}
+                                className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                              >
+                                <Icon className="h-4 w-4" />
+                                <span>{service.label}</span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                        
+                        <Button
+                          onClick={() => handleNavigation('/leistungen')}
+                          variant="ghost"
+                          size="sm"
+                          className="gap-2 text-primary hover:text-primary"
+                        >
+                          Alle Leistungen anzeigen
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {PRIMARY_NAV.slice(2).map((item) => (
               <Button
                 key={item.path}
                 variant="ghost"
@@ -167,7 +360,36 @@ export function Header({ onOpenInquiry }: HeaderProps) {
           </nav>
 
           <nav className="hidden md:flex xl:hidden items-center gap-1">
-            {PRIMARY_NAV.slice(0, 3).map((item) => (
+            <Button
+              variant="ghost"
+              onClick={() => handleNavigation('/')}
+              className={`transition-colors ${
+                currentPath === '/' 
+                  ? 'text-primary font-semibold bg-primary/5' 
+                  : 'hover:text-primary'
+              }`}
+              size="sm"
+            >
+              Start
+            </Button>
+
+            <div className="relative">
+              <Button
+                variant="ghost"
+                onClick={handleLeistungenClick}
+                className={`transition-colors gap-1 ${
+                  currentPath === '/leistungen'
+                    ? 'text-primary font-semibold bg-primary/5' 
+                    : 'hover:text-primary'
+                }`}
+                size="sm"
+              >
+                Leistungen
+                <CaretDown className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {PRIMARY_NAV.slice(2, 3).map((item) => (
               <Button
                 key={item.path}
                 variant="ghost"
@@ -260,7 +482,59 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   </Button>
 
                   <nav className="flex flex-col gap-1">
-                    {ALL_NAV.map((item) => {
+                    <Button
+                      variant={currentPath === '/' ? 'secondary' : 'ghost'}
+                      onClick={() => handleNavigation('/')}
+                      className="justify-start gap-3 h-11 w-full"
+                    >
+                      <House className="h-5 w-5 flex-shrink-0" />
+                      <span className="text-left">Start</span>
+                    </Button>
+
+                    <div className="my-2">
+                      <div className="px-3 mb-2 text-sm font-semibold text-muted-foreground">
+                        Leistungen
+                      </div>
+                      <div className="space-y-2">
+                        {LEISTUNGEN_MEGA_MENU.map((item) => {
+                          const Icon = item.icon
+                          return (
+                            <button
+                              key={item.title}
+                              onClick={() => handleNavigation('/leistungen')}
+                              className="w-full group relative overflow-hidden rounded-lg border p-3 text-left transition-all hover:border-primary hover:shadow-md"
+                            >
+                              <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                              
+                              <div className="relative flex items-center gap-3">
+                                <div className={`${item.bgColor} ${item.color} p-2 rounded-lg flex-shrink-0`}>
+                                  <Icon className="h-4 w-4" weight="duotone" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-semibold text-sm text-foreground mb-0.5 group-hover:text-primary transition-colors">
+                                    {item.title}
+                                  </div>
+                                  <div className="text-xs text-muted-foreground line-clamp-1">
+                                    {item.description}
+                                  </div>
+                                </div>
+                              </div>
+                            </button>
+                          )
+                        })}
+                      </div>
+                      <Button
+                        variant="ghost"
+                        onClick={() => handleNavigation('/leistungen')}
+                        className="w-full mt-2 gap-2 text-primary"
+                        size="sm"
+                      >
+                        Alle Leistungen anzeigen
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+
+                    {ALL_NAV.slice(2).map((item) => {
                       const Icon = item.icon
                       return (
                         <Button
