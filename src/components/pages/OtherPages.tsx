@@ -10,7 +10,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Über S&S Messebau</h1>
           <p className="text-xl opacity-90 max-w-3xl">
-            Seit 1995 realisieren wir Messestände mit Leidenschaft und Präzision. 
+            Seit vielen Jahren realisieren wir Messestände mit Leidenschaft und Präzision. 
             Als inhabergeführte GbR aus Hückelhoven verbinden wir persönliche Betreuung mit professionellem Service.
           </p>
         </div>
@@ -23,7 +23,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
               <h2 className="text-3xl font-bold mb-6">Unsere Geschichte</h2>
               <div className="space-y-4 text-lg text-muted-foreground">
                 <p>
-                  Was 1995 als kleines Messebau-Unternehmen in Hückelhoven begann, ist heute ein etablierter 
+                  Was als kleines Messebau-Unternehmen in Hückelhoven begann, ist heute ein etablierter 
                   Full-Service-Anbieter für Messebau, Eventbau und Ladenbau im gesamten Bundesgebiet.
                 </p>
                 <p>

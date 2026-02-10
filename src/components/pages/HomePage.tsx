@@ -34,7 +34,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         
         <div className="container mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
-            <Badge className="mb-6 bg-accent text-accent-foreground">Full-Service Messebau seit 1995</Badge>
+            <Badge className="mb-6 bg-accent text-accent-foreground">Full-Service Messebau mit Erfahrung</Badge>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
               Messestände, die verkaufen.
             </h1>

@@ -41,7 +41,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             <img src={logo} alt="S&S Messebau Logo" className="h-12 w-auto" />
             <div className="hidden sm:block">
               <div className="text-lg font-bold text-foreground">S&S Messebau</div>
-              <div className="text-xs text-muted-foreground">Full-Service seit 1995</div>
+              <div className="text-xs text-muted-foreground">Full-Service Messebau</div>
             </div>
           </button>
 
