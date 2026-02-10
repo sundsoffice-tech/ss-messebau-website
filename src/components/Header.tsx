@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { List, X, House, Briefcase, Buildings, Images, Users, Path, Leaf, Article, Envelope, Phone } from '@phosphor-icons/react'
+import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
 
 interface HeaderProps {
   onOpenInquiry: () => void
@@ -37,9 +38,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             onClick={() => handleNavigation('/')}
             className="flex items-center gap-3 transition-opacity hover:opacity-80"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
-              <span className="text-2xl font-bold text-primary-foreground">S&S</span>
-            </div>
+            <img src={logo} alt="S&S Messebau Logo" className="h-12 w-auto" />
             <div className="hidden sm:block">
               <div className="text-lg font-bold text-foreground">S&S Messebau</div>
               <div className="text-xs text-muted-foreground">Full-Service seit 1995</div>
@@ -84,9 +83,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <SheetContent side="left" className="w-80">
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                      <span className="text-xl font-bold text-primary-foreground">S&S</span>
-                    </div>
+                    <img src={logo} alt="S&S Messebau Logo" className="h-10 w-auto" />
                     <span className="font-bold">Menü</span>
                   </div>
                   <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>

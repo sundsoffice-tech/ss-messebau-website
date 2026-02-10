@@ -1,5 +1,6 @@
 import { Separator } from '@/components/ui/separator'
 import { Phone, Envelope, MapPin } from '@phosphor-icons/react'
+import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
 
 export function Footer() {
   const handleNavigation = (path: string) => {
@@ -13,9 +14,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                <span className="text-xl font-bold text-primary-foreground">S&S</span>
-              </div>
+              <img src={logo} alt="S&S Messebau Logo" className="h-10 w-auto" />
               <div>
                 <div className="font-bold">S&S Messebau</div>
                 <div className="text-xs text-muted-foreground">GbR</div>
