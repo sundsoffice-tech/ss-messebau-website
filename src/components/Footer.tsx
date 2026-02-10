@@ -1,0 +1,126 @@
+import { Separator } from '@/components/ui/separator'
+import { Phone, Envelope, MapPin } from '@phosphor-icons/react'
+
+export function Footer() {
+  const handleNavigation = (path: string) => {
+    window.location.hash = path
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  return (
+    <footer className="bg-muted border-t mt-24">
+      <div className="container mx-auto max-w-7xl px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                <span className="text-xl font-bold text-primary-foreground">S&S</span>
+              </div>
+              <div>
+                <div className="font-bold">S&S Messebau</div>
+                <div className="text-xs text-muted-foreground">GbR</div>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Full-Service Messebau, Eventbau und Ladenbau aus Hückelhoven. 
+              Persönliche Betreuung, starkes Netzwerk, faire Preise.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-4">Leistungen</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <button onClick={() => handleNavigation('/leistungen')} className="hover:text-primary transition-colors">
+                  Messebau
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation('/leistungen')} className="hover:text-primary transition-colors">
+                  Eventbau
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation('/leistungen')} className="hover:text-primary transition-colors">
+                  Ladenbau
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation('/nachhaltigkeit')} className="hover:text-primary transition-colors">
+                  Nachhaltigkeit
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-4">Unternehmen</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <button onClick={() => handleNavigation('/ueber-uns')} className="hover:text-primary transition-colors">
+                  Über uns
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation('/referenzen')} className="hover:text-primary transition-colors">
+                  Referenzen
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation('/blog')} className="hover:text-primary transition-colors">
+                  Blog
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation('/kontakt')} className="hover:text-primary transition-colors">
+                  Kontakt
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-4">Kontakt</h3>
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-start gap-2 text-muted-foreground">
+                <MapPin className="h-5 w-5 shrink-0 mt-0.5" />
+                <div>
+                  <div>Marienstr. 37-42</div>
+                  <div>41836 Hückelhoven</div>
+                </div>
+              </li>
+              <li className="flex items-center gap-2 text-muted-foreground">
+                <Phone className="h-5 w-5 shrink-0" />
+                <a href="tel:+4924334427144" className="hover:text-primary transition-colors">
+                  (02433) 4427144
+                </a>
+              </li>
+              <li className="flex items-center gap-2 text-muted-foreground">
+                <Envelope className="h-5 w-5 shrink-0" />
+                <a href="mailto:info@sundsmessebau.de" className="hover:text-primary transition-colors">
+                  info@sundsmessebau.de
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <Separator className="my-8" />
+
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+          <div>
+            © {new Date().getFullYear()} S&S Messebau GbR. Alle Rechte vorbehalten.
+          </div>
+          <div className="flex gap-6">
+            <button onClick={() => handleNavigation('/impressum')} className="hover:text-primary transition-colors">
+              Impressum
+            </button>
+            <button onClick={() => handleNavigation('/datenschutz')} className="hover:text-primary transition-colors">
+              Datenschutz
+            </button>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
