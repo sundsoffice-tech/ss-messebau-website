@@ -12,6 +12,7 @@ import { ConfiguratorStep5 } from './configurator/ConfiguratorStep5'
 import { ConfiguratorStep6 } from './configurator/ConfiguratorStep6'
 import { ConfigSummary } from './configurator/ConfigSummary'
 import { ThankYouPage } from './configurator/ThankYouPage'
+import { SerializedFile } from '@/lib/file-utils'
 
 export interface BannerConfig {
   step1: {
@@ -43,6 +44,7 @@ export interface BannerConfig {
   step4: {
     druckdatenVorhanden: boolean
     dateien?: File[]
+    serializedFiles?: SerializedFile[]
     grafikservice?: boolean
     designwunsch?: string
     kommentar?: string
@@ -144,28 +146,50 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
     }
   }
 
-  const updateConfig = (step: string, data: any) => {
-    setConfig((prev) => {
-      if (!prev) return initialConfig
-      return {
-        ...prev,
-        [step]: { ...prev[step as keyof BannerConfig], ...data },
-      } as BannerConfig
-    })
+  const updateConfig = async (step: string, data: any) => {
+    if (step === 'step4' && data.dateien) {
+      const { filesToSerializable } = await import('@/lib/file-utils')
+      const serializedFiles = await filesToSerializable(data.dateien)
+      
+      setConfig((prev) => {
+        if (!prev) return initialConfig
+        return {
+          ...prev,
+          step4: { 
+            ...prev.step4, 
+            ...data, 
+            serializedFiles,
+          },
+        } as BannerConfig
+      })
+    } else {
+      setConfig((prev) => {
+        if (!prev) return initialConfig
+        return {
+          ...prev,
+          [step]: { ...prev[step as keyof BannerConfig], ...data },
+        } as BannerConfig
+      })
+    }
   }
 
   const handleSubmit = async () => {
     try {
       const configId = `banner_${Date.now()}`
-      await window.spark.kv.set(configId, {
+      
+      const configToSave = {
         ...config,
+        step4: {
+          ...config?.step4,
+          dateien: undefined,
+        },
         timestamp: new Date().toISOString(),
         status: 'neu',
-      })
+      }
+      
+      await window.spark.kv.set(configId, configToSave)
 
       setSubmitted(true)
-      
-      localStorage.removeItem('banner_config_draft')
     } catch (error) {
       console.error('Fehler beim Speichern:', error)
     }

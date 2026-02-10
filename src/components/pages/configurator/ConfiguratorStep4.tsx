@@ -3,7 +3,9 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { ArrowRight, ArrowLeft, UploadSimple } from '@phosphor-icons/react'
+import { ArrowRight, ArrowLeft, Info } from '@phosphor-icons/react'
+import { FileUpload, UploadedFile } from '@/components/FileUpload'
+import { useState, useEffect } from 'react'
 
 interface Step4Data {
   druckdatenVorhanden: boolean
@@ -21,6 +23,33 @@ interface ConfiguratorStep4Props {
 }
 
 export function ConfiguratorStep4({ data, onChange, onNext, onBack }: ConfiguratorStep4Props) {
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
+
+  useEffect(() => {
+    if (data.dateien && data.dateien.length > 0) {
+      const mapped: UploadedFile[] = data.dateien.map((file, idx) => ({
+        id: `${Date.now()}-${idx}`,
+        file,
+        progress: 100,
+        status: 'success' as const,
+      }))
+      setUploadedFiles(mapped)
+    }
+  }, [])
+
+  const handleFileChange = (files: UploadedFile[]) => {
+    setUploadedFiles(files)
+    const actualFiles = files.map(f => f.file)
+    onChange({ dateien: actualFiles })
+  }
+
+  const canProceed = () => {
+    if (!data.druckdatenVorhanden && !data.designwunsch?.trim()) {
+      return false
+    }
+    return true
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -39,8 +68,8 @@ export function ConfiguratorStep4({ data, onChange, onNext, onBack }: Configurat
           >
             <Label
               htmlFor="druck-ja"
-              className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer ${
-                data.druckdatenVorhanden ? 'border-primary bg-primary/5' : 'border-border'
+              className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                data.druckdatenVorhanden ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
               }`}
             >
               <RadioGroupItem value="ja" id="druck-ja" />
@@ -48,8 +77,8 @@ export function ConfiguratorStep4({ data, onChange, onNext, onBack }: Configurat
             </Label>
             <Label
               htmlFor="druck-nein"
-              className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer ${
-                !data.druckdatenVorhanden ? 'border-primary bg-primary/5' : 'border-border'
+              className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                !data.druckdatenVorhanden ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
               }`}
             >
               <RadioGroupItem value="nein" id="druck-nein" />
@@ -59,63 +88,103 @@ export function ConfiguratorStep4({ data, onChange, onNext, onBack }: Configurat
         </div>
 
         {data.druckdatenVorhanden ? (
-          <div className="space-y-3 animate-in fade-in">
-            <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors">
-              <UploadSimple className="w-12 h-12 mx-auto mb-3 text-muted-foreground" />
-              <p className="font-medium mb-1">Dateien hier ablegen oder klicken</p>
-              <p className="text-sm text-muted-foreground mb-3">
-                PDF, AI, EPS, JPG, PNG, TIF - max. 100 MB pro Datei
-              </p>
-              <Button variant="outline" size="sm">
-                Dateien auswählen
-              </Button>
-            </div>
+          <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-300">
+            <FileUpload
+              files={uploadedFiles}
+              onChange={handleFileChange}
+              maxFiles={10}
+              maxFileSize={100 * 1024 * 1024}
+              acceptedTypes={['.pdf', '.ai', '.eps', '.jpg', '.jpeg', '.png', '.tif', '.tiff']}
+            />
+            
             <Alert>
+              <Info className="h-4 w-4" />
               <AlertDescription className="text-sm">
-                Format: CMYK, 100dpi, Endformat + 2cm Beschnitt pro Seite
+                <strong>Druckdaten-Anforderungen:</strong> Format CMYK, mindestens 100dpi Auflösung, 
+                Endformat plus 2cm Beschnitt pro Seite. Bei Fragen hilft unser Team gerne weiter.
               </AlertDescription>
             </Alert>
           </div>
         ) : (
-          <div className="space-y-3 animate-in fade-in">
-            <Alert>
-              <AlertDescription>
-                Unser Grafikteam erstellt Ihre Druckdaten nach Ihren Vorgaben. 
-                Kosten werden im Angebot separat ausgewiesen.
+          <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-300">
+            <Alert className="border-primary bg-primary/5">
+              <Info className="h-4 w-4 text-primary" />
+              <AlertDescription className="text-primary">
+                <strong>Grafikservice:</strong> Unser Designteam erstellt Ihre Druckdaten nach Ihren Vorgaben. 
+                Die Kosten werden im Angebot separat ausgewiesen (ab 49€ für einfache Layouts).
               </AlertDescription>
             </Alert>
+            
             <div>
-              <Label htmlFor="designwunsch">Beschreiben Sie Ihre Designvorstellung *</Label>
+              <Label htmlFor="designwunsch" className="text-base font-semibold">
+                Beschreiben Sie Ihre Designvorstellung *
+              </Label>
+              <p className="text-sm text-muted-foreground mb-2">
+                Je detaillierter, desto besser können wir Ihre Vorstellung umsetzen.
+              </p>
               <Textarea
                 id="designwunsch"
                 value={data.designwunsch || ''}
                 onChange={(e) => onChange({ designwunsch: e.target.value })}
-                placeholder="z.B. Firmenlogo zentriert, Slogan darunter, Hintergrund weiß..."
-                className="mt-2 h-32"
+                placeholder="Beispiel: Firmenlogo zentriert oben, Slogan darunter in Rot, Produktfotos unten, Hintergrund in Firmenfarben Blau/Weiß, moderne Optik..."
+                className="mt-2 h-40"
+                maxLength={1000}
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                {data.designwunsch?.length || 0} / 1000 Zeichen
+              </p>
+            </div>
+
+            <div>
+              <Label htmlFor="logo-upload" className="text-base font-semibold">
+                Logo & CI-Elemente hochladen (optional)
+              </Label>
+              <p className="text-sm text-muted-foreground mb-2">
+                Falls vorhanden, laden Sie Ihr Firmenlogo und weitere Grafiken hoch.
+              </p>
+              <FileUpload
+                files={uploadedFiles}
+                onChange={handleFileChange}
+                maxFiles={5}
+                maxFileSize={50 * 1024 * 1024}
+                acceptedTypes={['.pdf', '.ai', '.eps', '.jpg', '.jpeg', '.png', '.svg']}
               />
             </div>
           </div>
         )}
 
         <div>
-          <Label htmlFor="kommentar">Besondere Anforderungen oder Hinweise? (optional)</Label>
+          <Label htmlFor="kommentar" className="text-base font-semibold">
+            Besondere Anforderungen oder Hinweise? (optional)
+          </Label>
+          <p className="text-sm text-muted-foreground mb-2">
+            z.B. spezielle Deadline, Muster gewünscht, telefonische Rücksprache erforderlich
+          </p>
           <Textarea
             id="kommentar"
             value={data.kommentar || ''}
             onChange={(e) => onChange({ kommentar: e.target.value })}
-            placeholder="z.B. spezielle Deadline, Skizze per E-Mail folgt, Muster gewünscht..."
+            placeholder="Ihre Hinweise..."
             className="mt-2"
+            rows={4}
             maxLength={500}
           />
+          <p className="text-xs text-muted-foreground mt-1">
+            {data.kommentar?.length || 0} / 500 Zeichen
+          </p>
         </div>
       </div>
 
-      <div className="flex justify-between pt-4 border-t">
-        <Button onClick={onBack} variant="outline">
+      <div className="flex justify-between pt-6 border-t">
+        <Button onClick={onBack} variant="outline" size="lg">
           <ArrowLeft className="mr-2 w-5 h-5" />
           Zurück
         </Button>
-        <Button onClick={onNext}>
+        <Button 
+          onClick={onNext} 
+          size="lg"
+          disabled={!canProceed()}
+        >
           Weiter zu Lieferung
           <ArrowRight className="ml-2 w-5 h-5" />
         </Button>

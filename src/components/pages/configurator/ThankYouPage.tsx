@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { CheckCircle, ArrowRight, Phone } from '@phosphor-icons/react'
+import { CheckCircle, ArrowRight, Phone, File as FileIcon } from '@phosphor-icons/react'
 import type { BannerConfig } from '../BannerBestellenPage'
 
 interface ThankYouPageProps {
@@ -8,6 +8,8 @@ interface ThankYouPageProps {
 }
 
 export function ThankYouPage({ config }: ThankYouPageProps) {
+  const fileCount = config.step4.serializedFiles?.length || 0
+
   return (
     <div className="min-h-screen bg-secondary/20 py-12">
       <div className="container mx-auto px-4">
@@ -26,6 +28,17 @@ export function ThankYouPage({ config }: ThankYouPageProps) {
               allen Details an <strong>{config.step6.email}</strong>.
             </p>
 
+            {fileCount > 0 && (
+              <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mb-6">
+                <div className="flex items-center justify-center gap-2 text-primary">
+                  <FileIcon className="w-5 h-5" />
+                  <span className="font-semibold">
+                    {fileCount} {fileCount === 1 ? 'Datei' : 'Dateien'} erfolgreich hochgeladen
+                  </span>
+                </div>
+              </div>
+            )}
+
             <div className="bg-secondary/50 rounded-lg p-6 text-left mb-8">
               <h2 className="font-bold mb-4">Wie geht es weiter?</h2>
               <ol className="space-y-3">
@@ -33,7 +46,11 @@ export function ThankYouPage({ config }: ThankYouPageProps) {
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm font-bold shrink-0">
                     1
                   </span>
-                  <span>Wir prüfen Ihre Angaben und Druckdaten (falls vorhanden)</span>
+                  <span>
+                    Wir prüfen Ihre Angaben
+                    {config.step4.druckdatenVorhanden && fileCount > 0 && ' und Druckdaten'}
+                    {!config.step4.druckdatenVorhanden && ' - unser Grafikteam erstellt Ihre Designs'}
+                  </span>
                 </li>
                 <li className="flex gap-3">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm font-bold shrink-0">
@@ -51,13 +68,20 @@ export function ThankYouPage({ config }: ThankYouPageProps) {
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm font-bold shrink-0">
                     4
                   </span>
-                  <span>Lieferung zum Wunschtermin oder nach 5-10 Werktagen</span>
+                  <span>
+                    Lieferung zum Wunschtermin
+                    {config.step5.wunschDatum && ` (${new Date(config.step5.wunschDatum).toLocaleDateString('de-DE')})`}
+                    {' '}oder nach 5-10 Werktagen
+                  </span>
                 </li>
               </ol>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Button size="lg" onClick={() => (window.location.hash = '/banner-bestellen')}>
+              <Button size="lg" onClick={() => {
+                window.location.hash = '/banner-bestellen'
+                window.location.reload()
+              }}>
                 Weitere Anfrage stellen
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>

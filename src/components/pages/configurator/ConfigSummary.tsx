@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { Check } from '@phosphor-icons/react'
+import { Check, File as FileIcon } from '@phosphor-icons/react'
 import type { BannerConfig } from '../BannerBestellenPage'
 
 interface ConfigSummaryProps {
@@ -43,6 +43,8 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
     }
     return labels[value] || value
   }
+
+  const fileCount = config.step4?.serializedFiles?.length || 0
 
   return (
     <Card className="p-6 lg:sticky lg:top-6">
@@ -93,6 +95,31 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
               <p className="text-muted-foreground text-xs">
                 {getMaterialLabel(config.step3.material)}
                 {config.step3.brandschutz && ' • B1-Brandschutz'}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {currentStep >= 4 && config.step4.druckdatenVorhanden && fileCount > 0 && (
+          <div className="flex items-start gap-2">
+            <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" weight="bold" />
+            <div>
+              <p className="font-medium">Druckdaten</p>
+              <p className="text-muted-foreground text-xs flex items-center gap-1">
+                <FileIcon className="w-3.5 h-3.5" />
+                {fileCount} {fileCount === 1 ? 'Datei' : 'Dateien'} hochgeladen
+              </p>
+            </div>
+          </div>
+        )}
+
+        {currentStep >= 4 && !config.step4.druckdatenVorhanden && (
+          <div className="flex items-start gap-2">
+            <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" weight="bold" />
+            <div>
+              <p className="font-medium">Grafikservice</p>
+              <p className="text-muted-foreground text-xs">
+                Design wird erstellt
               </p>
             </div>
           </div>
