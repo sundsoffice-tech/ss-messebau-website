@@ -1,9 +1,8 @@
 import { BannerConfig } from '@/components/pages/BannerBestellenPage'
 import { sendEmail } from './smtp-service'
-import type { SerializedFile } from '@/types/email'
-import type { FileAttachment } from '@/types/email'
+import type { SerializedFile, FileAttachment } from '@/types/email'
 
-interface EmailQueueItem {
+interface BannerEmailQueueItem {
   id: string
   to: string
   subject: string
@@ -342,7 +341,7 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
 
 export async function sendQueuedEmail(queueId: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const emailData = await window.spark.kv.get<EmailQueueItem>(queueId)
+    const emailData = await window.spark.kv.get<BannerEmailQueueItem>(queueId)
     
     if (!emailData) {
       return { success: false, error: 'E-Mail nicht in Queue gefunden' }
