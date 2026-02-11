@@ -109,6 +109,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const megaMenuRef = useRef<HTMLDivElement>(null)
   const megaMenuTriggerRef = useRef<HTMLButtonElement>(null)
+  const sheetContentRef = useRef<HTMLDivElement>(null)
   const currentPath = window.location.hash.slice(1) || '/'
 
   useEffect(() => {
@@ -135,6 +136,98 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [megaMenuOpen])
+
+  useEffect(() => {
+    if (!mobileMenuOpen || !sheetContentRef.current) return
+
+    const sheetContent = sheetContentRef.current
+    let isDragging = false
+    let startX = 0
+    let startY = 0
+    let currentX = 0
+
+    const handleTouchStart = (e: TouchEvent) => {
+      startX = e.touches[0].clientX
+      startY = e.touches[0].clientY
+      currentX = startX
+      isDragging = false
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      currentX = e.touches[0].clientX
+      const deltaX = currentX - startX
+      const deltaY = Math.abs(e.touches[0].clientY - startY)
+      
+      if (!isDragging && Math.abs(deltaX) > 10 && deltaY < 50) {
+        isDragging = true
+      }
+
+      if (isDragging && deltaX > 0) {
+        e.preventDefault()
+        sheetContent.style.transform = `translateX(${deltaX}px)`
+        sheetContent.style.transition = 'none'
+        
+        const opacity = Math.max(0, 1 - (deltaX / (window.innerWidth * 0.5)))
+        const overlay = document.querySelector('[data-slot="sheet-overlay"]') as HTMLElement
+        if (overlay) {
+          overlay.style.opacity = opacity.toString()
+        }
+      }
+    }
+
+    const handleTouchEnd = () => {
+      if (!isDragging) {
+        sheetContent.style.transform = ''
+        sheetContent.style.transition = ''
+        return
+      }
+
+      const deltaX = currentX - startX
+      const threshold = window.innerWidth * 0.25
+
+      sheetContent.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+      
+      const overlay = document.querySelector('[data-slot="sheet-overlay"]') as HTMLElement
+      if (overlay) {
+        overlay.style.transition = 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+      }
+
+      if (deltaX > threshold) {
+        setMobileMenuOpen(false)
+      } else {
+        sheetContent.style.transform = ''
+        if (overlay) {
+          overlay.style.opacity = ''
+        }
+      }
+
+      isDragging = false
+    }
+
+    const handleTouchCancel = () => {
+      sheetContent.style.transform = ''
+      sheetContent.style.transition = ''
+      isDragging = false
+      
+      const overlay = document.querySelector('[data-slot="sheet-overlay"]') as HTMLElement
+      if (overlay) {
+        overlay.style.opacity = ''
+        overlay.style.transition = ''
+      }
+    }
+
+    sheetContent.addEventListener('touchstart', handleTouchStart, { passive: true })
+    sheetContent.addEventListener('touchmove', handleTouchMove, { passive: false })
+    sheetContent.addEventListener('touchend', handleTouchEnd, { passive: true })
+    sheetContent.addEventListener('touchcancel', handleTouchCancel, { passive: true })
+
+    return () => {
+      sheetContent.removeEventListener('touchstart', handleTouchStart)
+      sheetContent.removeEventListener('touchmove', handleTouchMove)
+      sheetContent.removeEventListener('touchend', handleTouchEnd)
+      sheetContent.removeEventListener('touchcancel', handleTouchCancel)
+    }
+  }, [mobileMenuOpen])
 
   const handleNavigation = (path: string) => {
     window.location.hash = path
@@ -463,7 +556,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   <span className="sr-only">Menü öffnen</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[85vw] sm:w-80 px-0">
+              <SheetContent side="right" className="w-[85vw] sm:w-80 px-0" ref={sheetContentRef}>
                 <div className="flex items-center px-4 mb-6">
                   <div className="flex items-center gap-2">
                     <img src={logo} alt="S&S Messebau Logo" className="h-9 w-auto" />
