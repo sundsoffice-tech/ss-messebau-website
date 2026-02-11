@@ -27,7 +27,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
 
       <section className="py-12 md:py-16">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12 md:mb-16">
+          <div id="messebau" className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12 md:mb-16 scroll-mt-20">
             <div>
               <div className="flex items-center gap-3 mb-4 md:mb-6">
                 <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
@@ -83,7 +83,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             </Card>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12 md:mb-16">
+          <div id="eventbau" className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12 md:mb-16 scroll-mt-20">
             <Card className="lg:order-2 mt-8 lg:mt-0">
               <CardContent className="p-5 md:p-8">
                 <h3 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Event-Typ-Beispiele</h3>
@@ -135,7 +135,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12 md:mb-16">
+          <div id="ladenbau" className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12 md:mb-16 scroll-mt-20">
             <div>
               <div className="flex items-center gap-3 mb-4 md:mb-6">
                 <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
@@ -175,7 +175,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+          <div id="boeden-ausstattung" className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start scroll-mt-20">
             <div className="group aspect-video rounded-lg overflow-hidden lg:order-2 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
               <img 
                 src="https://images.unsplash.com/photo-1556912998-c57cc6b63cd7?w=800&h=600&fit=crop" 

@@ -45,7 +45,8 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-blue-50',
     features: ['Design & Konzeption', 'Standbau & Montage', 'Full-Service-Betreuung'],
     gradient: 'from-blue-500/10 to-blue-600/5',
-    previewImage: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop'
+    previewImage: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop',
+    sectionId: 'messebau'
   },
   {
     title: 'Eventbau & Bühnen',
@@ -55,7 +56,8 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-purple-50',
     features: ['Bühnenaufbau', 'Event-Ausstattung', 'Technik-Integration'],
     gradient: 'from-purple-500/10 to-purple-600/5',
-    previewImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop'
+    previewImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop',
+    sectionId: 'eventbau'
   },
   {
     title: 'Ladenbau & Showrooms',
@@ -65,7 +67,8 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-orange-50',
     features: ['Ladeneinrichtung', 'Showroom-Design', 'Präsentationssysteme'],
     gradient: 'from-orange-500/10 to-orange-600/5',
-    previewImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop'
+    previewImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
+    sectionId: 'ladenbau'
   },
   {
     title: 'Böden & Ausstattung',
@@ -75,7 +78,8 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-green-50',
     features: ['Messeboden-Systeme', 'Möbel & Ausstattung', 'Beleuchtung'],
     gradient: 'from-green-500/10 to-green-600/5',
-    previewImage: 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=400&h=300&fit=crop'
+    previewImage: 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=400&h=300&fit=crop',
+    sectionId: 'boeden-ausstattung'
   }
 ]
 
@@ -236,6 +240,42 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const handleSectionNavigation = (sectionId: string) => {
+    const currentPath = window.location.hash.slice(1) || '/'
+    
+    if (currentPath !== '/leistungen') {
+      window.location.hash = '/leistungen'
+      setTimeout(() => {
+        const element = document.getElementById(sectionId)
+        if (element) {
+          const headerOffset = 80
+          const elementPosition = element.getBoundingClientRect().top
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          })
+        }
+      }, 100)
+    } else {
+      const element = document.getElementById(sectionId)
+      if (element) {
+        const headerOffset = 80
+        const elementPosition = element.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    }
+    
+    setMobileMenuOpen(false)
+    setMegaMenuOpen(false)
+  }
+
   const handleLeistungenClick = () => {
     if (megaMenuOpen) {
       handleNavigation('/leistungen')
@@ -368,7 +408,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         return (
                           <button
                             key={item.title}
-                            onClick={() => handleNavigation('/leistungen')}
+                            onClick={() => handleSectionNavigation(item.sectionId)}
                             className="group relative overflow-hidden rounded-lg border text-left transition-all hover:border-primary hover:shadow-xl"
                           >
                             <div className="aspect-[16/9] relative overflow-hidden">
@@ -648,7 +688,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                           return (
                             <button
                               key={item.title}
-                              onClick={() => handleNavigation('/leistungen')}
+                              onClick={() => handleSectionNavigation(item.sectionId)}
                               className="w-full group relative overflow-hidden rounded-lg border p-4 text-left transition-all hover:border-primary hover:shadow-md min-h-[56px]"
                             >
                               <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
