@@ -39,7 +39,7 @@ function App() {
       if (section) {
         setTimeout(() => {
           scrollToSection(section, 100)
-        }, 150)
+        }, 200)
       } else {
         scrollToTop(false)
       }

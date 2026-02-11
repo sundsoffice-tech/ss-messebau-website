@@ -1,5 +1,7 @@
 import React from 'react'
 import { scrollToSection } from '@/lib/scroll-utils'
+import { createSectionHash } from '@/lib/section-map'
+import { navigateToPageAndSection } from '@/lib/deep-linking'
 
 interface RouterLinkProps {
   to: string
@@ -24,12 +26,16 @@ export function RouterLink({
     e.preventDefault()
     
     if (section) {
-      const [page, sectionId] = section.includes('#') ? section.split('#') : [to, section]
+      const currentPage = window.location.hash.replace('#', '').split('#')[0] || '/'
       
-      if (window.location.hash.replace('#', '') === page) {
-        scrollToSection(sectionId)
+      if (currentPage === to) {
+        scrollToSection(section, 100)
       } else {
-        window.location.hash = `${page}#${sectionId}`
+        navigateToPageAndSection(to, section, {
+          maxRetries: 15,
+          retryDelay: 100,
+          headerOffset: 100
+        })
       }
     } else {
       window.location.hash = to
@@ -39,9 +45,11 @@ export function RouterLink({
     onClick?.()
   }
 
+  const href = section ? createSectionHash(to, section) : `#${to}`
+
   return (
     <a 
-      href={section ? `#${section}` : `#${to}`}
+      href={href}
       onClick={handleClick}
       className={className}
       aria-label={ariaLabel}

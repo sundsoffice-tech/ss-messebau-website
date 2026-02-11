@@ -1,26 +1,39 @@
 import { useEffect, useCallback } from 'react'
-import { parseDeepLink, navigateToSection, navigateToPageAndSection, updateUrlWithSection } from '@/lib/deep-linking'
+import { parseDeepLink, navigateToSection, navigateToPageAndSection, updateUrlWithSection, isValidDeepLink } from '@/lib/deep-linking'
 
 export function useDeepLinking(currentPage: string) {
   useEffect(() => {
     const deepLink = parseDeepLink(window.location.hash)
     
     if (deepLink.page === currentPage && deepLink.section) {
+      if (!isValidDeepLink(currentPage, deepLink.section)) {
+        console.warn(`Invalid section "${deepLink.section}" for page "${currentPage}"`)
+      }
+      
       const timeoutId = setTimeout(() => {
-        navigateToSection(deepLink.section!)
-      }, 300)
+        const success = navigateToSection(deepLink.section!, 100)
+        if (!success) {
+          console.warn(`Failed to navigate to section "${deepLink.section}"`)
+        }
+      }, 400)
       
       return () => clearTimeout(timeoutId)
     }
   }, [currentPage])
 
   const navigateToSectionOnPage = useCallback((page: string, section: string) => {
-    navigateToPageAndSection(page, section)
+    navigateToPageAndSection(page, section, {
+      maxRetries: 15,
+      retryDelay: 100,
+      headerOffset: 100
+    })
   }, [])
 
   const scrollToSection = useCallback((sectionId: string) => {
-    navigateToSection(sectionId)
-    updateUrlWithSection(sectionId)
+    const success = navigateToSection(sectionId, 100)
+    if (success) {
+      updateUrlWithSection(sectionId, true)
+    }
   }, [])
 
   return {
@@ -29,7 +42,7 @@ export function useDeepLinking(currentPage: string) {
   }
 }
 
-export function useSectionObserver(sectionIds: string[], rootMargin: string = '-80px 0px -80% 0px') {
+export function useSectionObserver(sectionIds: string[], rootMargin: string = '-100px 0px -70% 0px') {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -37,14 +50,14 @@ export function useSectionObserver(sectionIds: string[], rootMargin: string = '-
           if (entry.isIntersecting && entry.intersectionRatio > 0) {
             const sectionId = entry.target.id
             if (sectionId) {
-              updateUrlWithSection(sectionId)
+              updateUrlWithSection(sectionId, true)
             }
           }
         })
       },
       {
         rootMargin,
-        threshold: [0, 0.25, 0.5, 0.75, 1]
+        threshold: [0, 0.1, 0.25, 0.5]
       }
     )
 

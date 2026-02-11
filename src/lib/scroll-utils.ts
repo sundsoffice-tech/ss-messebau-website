@@ -1,26 +1,31 @@
-export function scrollToSection(sectionId: string, offset: number = 80) {
+import { parseSectionHash, createSectionHash } from './section-map'
+
+export function scrollToSection(sectionId: string, offset: number = 100): boolean {
   const element = document.getElementById(sectionId)
   
-  if (element) {
-    const headerOffset = offset
-    const elementPosition = element.getBoundingClientRect().top
-    const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: prefersReducedMotion ? 'auto' : 'smooth'
-    })
-    
-    setTimeout(() => {
-      element.focus({ preventScroll: true })
-    }, prefersReducedMotion ? 0 : 300)
-    
-    return true
+  if (!element) {
+    return false
   }
   
-  return false
+  const headerOffset = offset
+  const elementPosition = element.getBoundingClientRect().top
+  const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: prefersReducedMotion ? 'auto' : 'smooth'
+  })
+  
+  setTimeout(() => {
+    if (!element.hasAttribute('tabindex')) {
+      element.setAttribute('tabindex', '-1')
+    }
+    element.focus({ preventScroll: true })
+  }, prefersReducedMotion ? 0 : 400)
+  
+  return true
 }
 
 export function scrollToTop(smooth: boolean = true) {
@@ -33,17 +38,10 @@ export function scrollToTop(smooth: boolean = true) {
 }
 
 export function parseHashWithSection(hash: string): { page: string; section?: string } {
-  const cleanHash = hash.replace('#', '')
-  
-  if (cleanHash.includes('#')) {
-    const [page, section] = cleanHash.split('#')
-    return { page, section }
-  }
-  
-  return { page: cleanHash }
+  return parseSectionHash(hash)
 }
 
-export function smoothScrollToElement(element: HTMLElement, offset: number = 80) {
+export function smoothScrollToElement(element: HTMLElement, offset: number = 100) {
   const elementPosition = element.getBoundingClientRect().top
   const offsetPosition = elementPosition + window.pageYOffset - offset
 
@@ -56,7 +54,7 @@ export function smoothScrollToElement(element: HTMLElement, offset: number = 80)
 }
 
 export function createSectionLink(page: string, section: string): string {
-  return `#${page}#${section}`
+  return createSectionHash(page, section)
 }
 
 export function setupSmoothScrolling() {
@@ -68,8 +66,9 @@ export function setupSmoothScrolling() {
         if (parts.length === 2) {
           e.preventDefault()
           const [page, section] = parts
-          if (window.location.hash.includes(page)) {
-            scrollToSection(section)
+          const currentPage = window.location.hash.slice(1).split('#')[0] || '/'
+          if (currentPage === page) {
+            scrollToSection(section, 100)
           } else {
             window.location.hash = href
           }
@@ -79,11 +78,11 @@ export function setupSmoothScrolling() {
   })
 }
 
-export function scrollToSectionWithRetry(sectionId: string, maxRetries: number = 5, delay: number = 100) {
+export function scrollToSectionWithRetry(sectionId: string, maxRetries: number = 10, delay: number = 100) {
   let attempts = 0
   
   const tryScroll = () => {
-    const success = scrollToSection(sectionId)
+    const success = scrollToSection(sectionId, 100)
     
     if (!success && attempts < maxRetries) {
       attempts++

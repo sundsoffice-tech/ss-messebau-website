@@ -9,6 +9,10 @@ import "./main.css"
 import "./styles/theme.css"
 import "./index.css"
 
+if (import.meta.env.DEV) {
+  import('./lib/validate-sections')
+}
+
 createRoot(document.getElementById('root')!).render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
     <App />
