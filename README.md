@@ -112,11 +112,16 @@ Siehe **[TESTING_GUIDE.md](TESTING_GUIDE.md)** für detaillierte Test-Anleitunge
 
 Die Website wird automatisch auf Hostinger deployed bei jedem Push auf den `main` Branch.
 
+**📖 Ausführliche Deployment-Dokumentation:** [HOSTINGER_DEPLOYMENT.md](HOSTINGER_DEPLOYMENT.md)
+
 **Automatisches Deployment:**
 - ✅ GitHub Actions Workflow: `.github/workflows/deploy.yml`
 - ✅ Automatischer Build bei jedem Push auf `main`
 - ✅ Sichere FTPS-Verbindung zu Hostinger (verschlüsselt)
 - ✅ Deployment direkt nach erfolgreichem Build
+- ✅ Vollständige Apache/.htaccess-Konfiguration für SPA-Routing
+- ✅ Gzip-Kompression und Browser-Caching
+- ✅ Sicherheits-Header und SEO-Optimierung
 
 **Benötigte GitHub Secrets:**
 Die folgenden Secrets müssen in den Repository Settings konfiguriert sein:
@@ -131,6 +136,14 @@ Die folgenden Secrets müssen in den Repository Settings konfiguriert sein:
 4. Projekt wird gebaut (`npm run build`)
 5. Build-Artefakte werden via FTPS zu Hostinger hochgeladen (verschlüsselt)
 6. Website ist live unter der konfigurierten Domain
+
+**Hostinger-Kompatibilität:**
+- ✅ `.htaccess` für Apache-Server (SPA-Routing, HTTPS, Caching)
+- ✅ `robots.txt` und `sitemap.xml` für SEO
+- ✅ PWA-Support via `manifest.json`
+- ✅ Custom 404-Seite mit Weiterleitung
+- ✅ Health-Check Endpoint (`/health.json`)
+- ✅ PHP-Konfiguration (`php.ini`)
 
 ### Projekt-Struktur
 
@@ -182,6 +195,9 @@ Mobil: (01514) 0322125
 E-Mail: info@sundsmessebau.de
 
 ## 📄 Weitere Dokumentation
+
+### Deployment
+- **[HOSTINGER_DEPLOYMENT.md](HOSTINGER_DEPLOYMENT.md)** - Hostinger Deployment Guide ⭐
 
 ### E-Mail-System
 - **[EMAIL_SYSTEM.md](EMAIL_SYSTEM.md)** - E-Mail-System Dokumentation
