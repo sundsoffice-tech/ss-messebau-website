@@ -39,12 +39,12 @@ export function StickyCTA({ onClick }: StickyCTAProps) {
 
 export function MobileStickyCTA({ onClick }: StickyCTAProps) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-background border-t p-4 shadow-lg">
-      <div className="flex gap-3">
+    <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-background/95 backdrop-blur-sm border-t shadow-lg pb-safe">
+      <div className="flex gap-3 p-3">
         <Button
           size="lg"
           onClick={openWhatsApp}
-          className="flex-1 bg-[#25D366] hover:bg-[#20BD5A] text-white gap-2"
+          className="flex-1 bg-[#25D366] hover:bg-[#20BD5A] text-white gap-2 min-h-[44px] text-base font-medium"
         >
           <WhatsappLogo className="h-5 w-5" weight="fill" />
           WhatsApp
@@ -52,7 +52,7 @@ export function MobileStickyCTA({ onClick }: StickyCTAProps) {
         <Button
           size="lg"
           onClick={onClick}
-          className="flex-1 bg-accent hover:bg-accent/90 gap-2"
+          className="flex-1 bg-accent hover:bg-accent/90 gap-2 min-h-[44px] text-base font-medium"
         >
           <PaperPlaneRight className="h-5 w-5" />
           Anfragen

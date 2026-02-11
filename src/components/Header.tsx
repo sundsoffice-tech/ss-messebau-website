@@ -160,24 +160,24 @@ export function Header({ onOpenInquiry }: HeaderProps) {
           : 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
       }`}
     >
-      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
         <div className={`flex items-center justify-between transition-all duration-300 ${
-          scrolled ? 'h-16' : 'h-18 sm:h-20'
+          scrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'
         }`}>
           <button 
             onClick={() => handleNavigation('/')}
-            className="flex items-center gap-2 sm:gap-3 transition-all hover:opacity-80 flex-shrink-0"
+            className="flex items-center gap-2 sm:gap-3 transition-all hover:opacity-80 flex-shrink-0 min-h-[44px] min-w-[44px] -ml-2 pl-2"
           >
             <img 
               src={logo} 
               alt="S&S Messebau Logo" 
               className={`w-auto transition-all duration-300 ${
-                scrolled ? 'h-9 sm:h-10' : 'h-10 sm:h-12'
+                scrolled ? 'h-8 sm:h-10' : 'h-9 sm:h-12'
               }`}
             />
             <div className="hidden xs:block">
               <div className={`font-bold text-foreground transition-all duration-300 ${
-                scrolled ? 'text-base sm:text-lg' : 'text-lg sm:text-xl'
+                scrolled ? 'text-sm sm:text-lg' : 'text-base sm:text-xl'
               }`}>
                 S&S Messebau
               </div>
@@ -448,23 +448,24 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             </div>
           </nav>
 
-          <div className="flex items-center gap-1.5 sm:gap-2 md:hidden">
+          <div className="flex items-center gap-2 md:hidden">
             <Button
               variant="default"
               size="sm"
               onClick={onOpenInquiry}
-              className="bg-accent hover:bg-accent/90 text-xs sm:text-sm px-2.5 sm:px-3"
+              className="bg-accent hover:bg-accent/90 text-sm px-3 py-2 min-h-[44px]"
             >
               Anfragen
             </Button>
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="px-2">
-                  <List className="h-5 w-5 sm:h-6 sm:w-6" />
+                <Button variant="ghost" size="sm" className="px-3 min-h-[44px] min-w-[44px]">
+                  <List className="h-6 w-6" />
+                  <span className="sr-only">Menü öffnen</span>
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[85vw] sm:w-80 px-0">
-                <div className="flex items-center justify-between px-6 mb-6">
+                <div className="flex items-center justify-between px-4 mb-6">
                   <div className="flex items-center gap-2">
                     <img src={logo} alt="S&S Messebau Logo" className="h-9 w-auto" />
                     <span className="font-bold text-lg">Menü</span>
@@ -473,33 +474,34 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     variant="ghost" 
                     size="icon" 
                     onClick={() => setMobileMenuOpen(false)}
-                    className="h-8 w-8"
+                    className="min-h-[44px] min-w-[44px]"
                   >
                     <X className="h-5 w-5" />
+                    <span className="sr-only">Menü schließen</span>
                   </Button>
                 </div>
                 
-                <div className="px-4 overflow-y-auto max-h-[calc(100vh-180px)]">
+                <div className="px-3 overflow-y-auto max-h-[calc(100vh-180px)]">
                   <Button
                     onClick={() => handleNavigation('/banner-bestellen')}
-                    className="w-full mb-4 bg-primary hover:bg-primary/90"
+                    className="w-full mb-4 bg-primary hover:bg-primary/90 min-h-[48px] text-base font-medium"
                   >
                     <FrameCorners className="h-5 w-5 mr-2" />
                     Banner konfigurieren
                   </Button>
 
-                  <nav className="flex flex-col gap-1">
+                  <nav className="flex flex-col gap-2">
                     <Button
                       variant={currentPath === '/' ? 'secondary' : 'ghost'}
                       onClick={() => handleNavigation('/')}
-                      className="justify-start gap-3 h-11 w-full"
+                      className="justify-start gap-3 min-h-[48px] w-full text-base"
                     >
                       <House className="h-5 w-5 flex-shrink-0" />
                       <span className="text-left">Start</span>
                     </Button>
 
-                    <div className="my-2">
-                      <div className="px-3 mb-2 text-sm font-semibold text-muted-foreground">
+                    <div className="my-3">
+                      <div className="px-3 mb-3 text-sm font-semibold text-muted-foreground">
                         Leistungen
                       </div>
                       <div className="space-y-2">
@@ -509,19 +511,19 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                             <button
                               key={item.title}
                               onClick={() => handleNavigation('/leistungen')}
-                              className="w-full group relative overflow-hidden rounded-lg border p-3 text-left transition-all hover:border-primary hover:shadow-md"
+                              className="w-full group relative overflow-hidden rounded-lg border p-4 text-left transition-all hover:border-primary hover:shadow-md min-h-[56px]"
                             >
                               <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
                               
                               <div className="relative flex items-center gap-3">
-                                <div className={`${item.bgColor} ${item.color} p-2 rounded-lg flex-shrink-0`}>
-                                  <Icon className="h-4 w-4" weight="duotone" />
+                                <div className={`${item.bgColor} ${item.color} p-2.5 rounded-lg flex-shrink-0`}>
+                                  <Icon className="h-5 w-5" weight="duotone" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <div className="font-semibold text-sm text-foreground mb-0.5 group-hover:text-primary transition-colors">
+                                  <div className="font-semibold text-base text-foreground mb-0.5 group-hover:text-primary transition-colors">
                                     {item.title}
                                   </div>
-                                  <div className="text-xs text-muted-foreground line-clamp-1">
+                                  <div className="text-sm text-muted-foreground line-clamp-1">
                                     {item.description}
                                   </div>
                                 </div>
@@ -533,8 +535,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                       <Button
                         variant="ghost"
                         onClick={() => handleNavigation('/leistungen')}
-                        className="w-full mt-2 gap-2 text-primary"
-                        size="sm"
+                        className="w-full mt-3 gap-2 text-primary min-h-[44px] text-base"
                       >
                         Alle Leistungen anzeigen
                         <ArrowRight className="h-4 w-4" />
@@ -548,7 +549,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                           key={item.path}
                           variant={currentPath === item.path ? 'secondary' : 'ghost'}
                           onClick={() => handleNavigation(item.path)}
-                          className="justify-start gap-3 h-11 w-full"
+                          className="justify-start gap-3 min-h-[48px] w-full text-base"
                         >
                           <Icon className="h-5 w-5 flex-shrink-0" />
                           <span className="text-left">{item.label}</span>

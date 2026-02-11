@@ -78,7 +78,7 @@ function App() {
       <LoadingScreen />
       <div className="min-h-screen flex flex-col">
         <Header onOpenInquiry={() => setInquiryDialogOpen(true)} />
-        <main className="flex-1">
+        <main className="flex-1 mobile-safe-bottom">
           {renderPage()}
         </main>
         <Footer />

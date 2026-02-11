@@ -72,120 +72,141 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Projekt anfragen</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-xl sm:text-2xl">Projekt anfragen</DialogTitle>
+          <DialogDescription className="text-sm sm:text-base">
             Beschreiben Sie uns Ihr Projekt und wir erstellen Ihnen ein individuelles Angebot.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6 mt-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 mt-4">
+          <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Name *</Label>
+              <Label htmlFor="name" className="text-sm font-medium">Name *</Label>
               <Input
                 id="name"
+                type="text"
+                autoComplete="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="Max Mustermann"
+                className="min-h-[44px] text-base"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company">Firma</Label>
+              <Label htmlFor="company" className="text-sm font-medium">Firma</Label>
               <Input
                 id="company"
+                type="text"
+                autoComplete="organization"
                 value={formData.company}
                 onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                 placeholder="Mustermann GmbH"
+                className="min-h-[44px] text-base"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">E-Mail *</Label>
+              <Label htmlFor="email" className="text-sm font-medium">E-Mail *</Label>
               <Input
                 id="email"
                 type="email"
+                autoComplete="email"
+                inputMode="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="max@mustermann.de"
+                className="min-h-[44px] text-base"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Telefon</Label>
+              <Label htmlFor="phone" className="text-sm font-medium">Telefon</Label>
               <Input
                 id="phone"
                 type="tel"
+                autoComplete="tel"
+                inputMode="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 placeholder="+49 123 456789"
+                className="min-h-[44px] text-base"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="event">Messe / Event</Label>
+              <Label htmlFor="event" className="text-sm font-medium">Messe / Event</Label>
               <Input
                 id="event"
+                type="text"
                 value={formData.event}
                 onChange={(e) => setFormData({ ...formData, event: e.target.value })}
                 placeholder="z.B. Anuga 2024"
+                className="min-h-[44px] text-base"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="size">Standgröße</Label>
+              <Label htmlFor="size" className="text-sm font-medium">Standgröße</Label>
               <Input
                 id="size"
+                type="text"
+                inputMode="numeric"
                 value={formData.size}
                 onChange={(e) => setFormData({ ...formData, size: e.target.value })}
                 placeholder="z.B. 50 qm"
+                className="min-h-[44px] text-base"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="budget">Budget (optional)</Label>
+            <Label htmlFor="budget" className="text-sm font-medium">Budget (optional)</Label>
             <Input
               id="budget"
+              type="text"
               value={formData.budget}
               onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
               placeholder="z.B. 30.000 - 40.000 €"
+              className="min-h-[44px] text-base"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="message">Ihre Nachricht *</Label>
+            <Label htmlFor="message" className="text-sm font-medium">Ihre Nachricht *</Label>
             <Textarea
               id="message"
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               placeholder="Beschreiben Sie uns Ihr Projekt..."
               rows={4}
+              className="text-base resize-none"
               required
             />
           </div>
 
-          <div className="flex gap-3 justify-end">
+          <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={loading}
+              className="min-h-[44px] w-full sm:w-auto text-base"
             >
               Abbrechen
             </Button>
             <Button
               type="submit"
               disabled={loading}
-              className="bg-accent hover:bg-accent/90"
+              className="bg-accent hover:bg-accent/90 min-h-[44px] w-full sm:w-auto text-base font-medium"
             >
               {loading ? 'Wird gesendet...' : 'Anfrage absenden'}
             </Button>

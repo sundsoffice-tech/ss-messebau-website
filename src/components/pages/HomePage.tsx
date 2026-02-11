@@ -28,24 +28,24 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
 
   return (
     <div>
-      <section className="relative min-h-[600px] flex items-center hero-gradient overflow-hidden">
+      <section className="relative min-h-[500px] sm:min-h-[600px] flex items-center hero-gradient overflow-hidden">
         <div className="absolute inset-0 hero-overlay" />
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1600')] bg-cover bg-center opacity-20" />
         
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 py-12 sm:py-16">
           <div className="max-w-3xl">
-            <Badge className="mb-6 bg-accent text-accent-foreground">Full-Service Messebau mit Erfahrung</Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            <Badge className="mb-4 sm:mb-6 bg-accent text-accent-foreground text-sm">Full-Service Messebau mit Erfahrung</Badge>
+            <h1 className="font-bold text-white mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>
               Messestände, die verkaufen.
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
+            <p className="text-white/90 mb-6 sm:mb-8 leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', lineHeight: '1.5' }}>
               S&S Messebau – Full-Service von Idee bis Abbau. Bundesweiter Messebau, Eventbau, Ladenbau – Planung, Logistik, Aufbau aus einer Hand.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Button 
                 size="lg" 
                 onClick={onOpenInquiry}
-                className="bg-accent hover:bg-accent/90 text-lg px-8 py-6"
+                className="bg-accent hover:bg-accent/90 px-6 sm:px-8 py-6 text-base sm:text-lg font-medium min-h-[48px]"
               >
                 Projekt anfragen
                 <ArrowRight className="ml-2" />
@@ -54,7 +54,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 size="lg" 
                 variant="outline"
                 onClick={() => handleNavigation('/leistungen')}
-                className="text-lg px-8 py-6 bg-white/10 text-white border-white/30 hover:bg-white/20"
+                className="px-6 sm:px-8 py-6 text-base sm:text-lg font-medium bg-white/10 text-white border-white/30 hover:bg-white/20 min-h-[48px]"
               >
                 Leistungen entdecken
               </Button>
@@ -63,9 +63,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="py-12 sm:py-16 bg-muted">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {[
               {
                 icon: Warehouse,
@@ -100,7 +100,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               return (
                 <Card 
                   key={index} 
-                  className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
+                  className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary min-h-[44px]" 
                   onClick={() => handleNavigation(service.link)}
                 >
                   <div className="aspect-[4/3] relative overflow-hidden">
@@ -108,17 +108,18 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                       src={service.image} 
                       alt={service.title}
                       className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                     <div className="absolute bottom-3 left-3 flex items-center gap-2">
                       <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                         <Icon className="h-5 w-5" weight="duotone" />
                       </div>
-                      <h3 className="font-bold text-white text-lg">{service.title}</h3>
+                      <h3 className="font-bold text-white" style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)' }}>{service.title}</h3>
                     </div>
                   </div>
-                  <CardContent className="p-5">
-                    <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                  <CardContent className="p-4 sm:p-5">
+                    <p className="text-sm leading-relaxed text-muted-foreground group-hover:text-foreground transition-colors">
                       {service.description}
                     </p>
                   </CardContent>
@@ -129,11 +130,11 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Warum S&S Messebau?</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Warum S&S Messebau?</h2>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Drei entscheidende Vorteile, die uns zum idealen Partner für Ihren Messeauftritt machen.
             </p>
           </div>
