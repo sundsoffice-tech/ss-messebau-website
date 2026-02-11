@@ -3,6 +3,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { CheckCircle, Leaf, Recycle, TrendUp, ArrowRight } from '@phosphor-icons/react'
 
+export { KIBeraterPage } from './KIBeraterPage'
+
 export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
   return (
     <div>

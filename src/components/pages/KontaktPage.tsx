@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { toast } from 'sonner'
-import { Phone, Envelope, MapPin, PaperPlaneRight, ChatCircleDots, Sparkle, Calculator, ClockClockwise, Lightbulb, X, CheckCircle, ArrowRight, Microphone, Stop } from '@phosphor-icons/react'
+import { Phone, Envelope, MapPin, PaperPlaneRight, ChatCircleDots, Sparkle, Calculator, ClockClockwise, Lightbulb, X, CheckCircle, ArrowRight, Microphone, Stop, Info } from '@phosphor-icons/react'
 import { ContactInquiry, ChatMessage } from '@/lib/types'
 import { useKV } from '@github/spark/hooks'
 import { useVoiceInput } from '@/hooks/use-voice-input'
@@ -488,16 +488,21 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
                         <Sparkle className="h-7 w-7" weight="fill" />
                       </div>
                       <div>
-                        <CardTitle className="text-xl mb-1">Digitaler Messebau-Berater</CardTitle>
+                        <CardTitle className="text-xl mb-1">KI-Messebau-Berater</CardTitle>
                         <CardDescription>
-                          Sofortige Antworten auf Ihre Fragen – rund um die Uhr verfügbar
+                          Sofortige Antworten rund um die Uhr
                         </CardDescription>
                       </div>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-3 text-xs">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Stellen Sie Fragen zu Budget, Planung und Materialien – per Text oder Spracheingabe. 
+                    Unser intelligenter Berater unterstützt Sie bei allen Aspekten Ihres Messeprojekts.
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-2.5 text-xs">
                     <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2.5">
                       <Calculator className="h-4 w-4 text-primary" weight="fill" />
                       <span className="font-medium">Budget-Kalkulation</span>
@@ -510,21 +515,11 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
                       <Lightbulb className="h-4 w-4 text-primary" weight="fill" />
                       <span className="font-medium">Materialberatung</span>
                     </div>
-                    <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2.5">
-                      <CheckCircle className="h-4 w-4 text-green-600" weight="fill" />
-                      <span className="font-medium">24/7 Verfügbar</span>
-                    </div>
                     {isVoiceSupported && (
-                      <>
-                        <div className="flex items-center gap-2 bg-gradient-to-r from-accent/20 to-primary/20 rounded-lg p-2.5 border border-accent/30">
-                          <Microphone className="h-4 w-4 text-accent" weight="fill" />
-                          <span className="font-semibold">Spracheingabe</span>
-                        </div>
-                        <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2.5">
-                          <CheckCircle className="h-4 w-4 text-green-600" weight="fill" />
-                          <span className="font-medium">Freihändig bedienbar</span>
-                        </div>
-                      </>
+                      <div className="flex items-center gap-2 bg-gradient-to-r from-accent/20 to-primary/20 rounded-lg p-2.5 border border-accent/30">
+                        <Microphone className="h-4 w-4 text-accent" weight="fill" />
+                        <span className="font-semibold">Spracheingabe</span>
+                      </div>
                     )}
                   </div>
 
@@ -556,6 +551,15 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
                       </Button>
                     )}
                   </div>
+
+                  <Button 
+                    onClick={() => window.location.hash = '/ki-berater'}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Info className="mr-2 h-4 w-4" />
+                    Mehr über den KI-Berater erfahren
+                  </Button>
 
                   {chatOpen && (
                     <div className="border-2 rounded-xl bg-background shadow-inner overflow-hidden">
@@ -703,149 +707,6 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
               </Card>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="py-12 bg-gradient-to-br from-primary/5 via-background to-accent/5">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center p-3 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl mb-4">
-              <Sparkle className="h-8 w-8 text-primary" weight="fill" />
-            </div>
-            <h2 className="text-3xl font-bold mb-4">Digitale Messebau-Beratung</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Nutzen Sie unseren intelligenten Berater für schnelle Antworten auf Ihre Fragen zu Budget, Planung und Umsetzung
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover:shadow-lg">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl">
-                    <Calculator className="h-6 w-6 text-primary" weight="duotone" />
-                  </div>
-                  <h3 className="font-semibold text-lg">Budget-Kalkulator</h3>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Erhalten Sie sofortige Budget-Schätzungen basierend auf Standgröße, Ausstattung und Ihren spezifischen Anforderungen
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover:shadow-lg">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl">
-                    <ClockClockwise className="h-6 w-6 text-primary" weight="duotone" />
-                  </div>
-                  <h3 className="font-semibold text-lg">Timeline-Planer</h3>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Detaillierte Zeitpläne von Erstgespräch bis Messetermin mit allen wichtigen Meilensteinen und Fristen
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover:shadow-lg">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl">
-                    <Lightbulb className="h-6 w-6 text-primary" weight="duotone" />
-                  </div>
-                  <h3 className="font-semibold text-lg">Material-Berater</h3>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Empfehlungen zu passenden Systemen, Materialien und nachhaltigen Lösungen für Ihr Messeprojekt
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {isVoiceSupported && (
-            <Card className="bg-gradient-to-br from-accent/5 to-primary/5 border-2 border-accent/30 mb-12 overflow-hidden">
-              <CardContent className="p-8">
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-accent/80 text-white shadow-xl">
-                    <Microphone className="h-9 w-9" weight="fill" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-xl font-bold">Spracheingabe verfügbar</h3>
-                      <span className="text-xs bg-accent text-white px-2.5 py-1 rounded-full font-bold">NEU</span>
-                    </div>
-                    <p className="text-muted-foreground mb-4 leading-relaxed">
-                      Stellen Sie Ihre Fragen bequem per Sprache. Klicken Sie im Chat auf das Mikrofon-Symbol und sprechen Sie Ihre Frage – 
-                      die Verarbeitung erfolgt direkt in Ihrem Browser.
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-                      <div className="flex items-center gap-2.5">
-                        <CheckCircle className="h-4 w-4 text-accent" weight="fill" />
-                        <span className="font-medium">Freihändige Bedienung</span>
-                      </div>
-                      <div className="flex items-center gap-2.5">
-                        <CheckCircle className="h-4 w-4 text-accent" weight="fill" />
-                        <span className="font-medium">Deutsche Spracherkennung</span>
-                      </div>
-                      <div className="flex items-center gap-2.5">
-                        <CheckCircle className="h-4 w-4 text-accent" weight="fill" />
-                        <span className="font-medium">Sofortige Verarbeitung</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          <Card className="bg-muted/50 border-border/50">
-            <CardContent className="p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <Lightbulb className="h-6 w-6 text-primary" weight="duotone" />
-                <h3 className="font-semibold text-lg">Beispiel-Fragen{isVoiceSupported && ' (auch per Sprache)'}</h3>
-              </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-background/60 transition-colors">
-                  <div className="mt-1 text-primary font-bold">•</div>
-                  <p className="text-sm leading-relaxed">"Was kostet ein 50 qm Messestand inklusive Aufbau für die Anuga?"</p>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-background/60 transition-colors">
-                  <div className="mt-1 text-primary font-bold">•</div>
-                  <p className="text-sm leading-relaxed">"Wie lange dauert die Planung und Umsetzung eines individuellen Stands?"</p>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-background/60 transition-colors">
-                  <div className="mt-1 text-primary font-bold">•</div>
-                  <p className="text-sm leading-relaxed">"Welche nachhaltigen Systemlösungen bieten Sie an?"</p>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-background/60 transition-colors">
-                  <div className="mt-1 text-primary font-bold">•</div>
-                  <p className="text-sm leading-relaxed">"Was ist der Unterschied zwischen System- und Individualstand?"</p>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-background/60 transition-colors">
-                  <div className="mt-1 text-primary font-bold">•</div>
-                  <p className="text-sm leading-relaxed">"Wie funktioniert die Logistik bei einer Messe in München?"</p>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-background/60 transition-colors">
-                  <div className="mt-1 text-primary font-bold">•</div>
-                  <p className="text-sm leading-relaxed">"Können Sie mir Referenzen aus der Food-Branche zeigen?"</p>
-                </div>
-              </div>
-              {isVoiceSupported && (
-                <div className="mt-6 pt-6 border-t border-border">
-                  <div className="flex items-start gap-3 bg-accent/5 rounded-xl p-4 border border-accent/20">
-                    <Microphone className="h-5 w-5 text-accent shrink-0 mt-0.5" weight="fill" />
-                    <div>
-                      <p className="text-sm font-semibold mb-1.5">Tipp zur Spracheingabe</p>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        Klicken Sie auf das Mikrofon-Symbol im Chat und sprechen Sie Ihre Frage natürlich aus. 
-                        Die Spracherkennung funktioniert am besten in ruhiger Umgebung.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
         </div>
       </section>
 
