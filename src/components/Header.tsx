@@ -120,10 +120,9 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
       <div className="aspect-[16/9] relative overflow-hidden">
         <img
           src={item.previewImage}
-          alt=""
+          alt={`Vorschaubild für ${item.title}`}
           loading="lazy"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          aria-hidden="true"
         />
         <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent`} />
         <div className={`absolute top-3 left-3 ${item.bgColor} ${item.color} p-2 rounded-lg`}>

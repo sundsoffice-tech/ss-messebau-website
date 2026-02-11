@@ -9,7 +9,12 @@ export function useActiveSection() {
   const [activeSection, setActiveSection] = useState<{
     page: string
     section?: string
-  }>(() => parseDeepLink(window.location.hash))
+  }>(() => {
+    if (typeof window === 'undefined') {
+      return { page: '/' }
+    }
+    return parseDeepLink(window.location.hash)
+  })
 
   useEffect(() => {
     const handleHashChange = () => {
