@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, memo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { 
@@ -108,6 +108,49 @@ const SECONDARY_NAV = [
 
 const ALL_NAV = [...PRIMARY_NAV, ...SECONDARY_NAV]
 
+const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_MENU[0], onNavigate: (sectionId: string) => void }) => {
+  const Icon = item.icon
+  return (
+    <button
+      onClick={() => onNavigate(item.sectionId)}
+      className="group relative overflow-hidden rounded-lg border text-left transition-all hover:border-primary hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+    >
+      <div className="aspect-[16/9] relative overflow-hidden">
+        <img
+          src={item.previewImage}
+          alt={item.title}
+          loading="lazy"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent`} />
+        <div className={`absolute top-3 left-3 ${item.bgColor} ${item.color} p-2 rounded-lg`}>
+          <Icon className="h-5 w-5" weight="duotone" aria-hidden="true" />
+        </div>
+      </div>
+      
+      <div className="p-4">
+        <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+          {item.title}
+        </h3>
+        <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
+          {item.description}
+        </p>
+        
+        <ul className="space-y-1.5">
+          {item.features.map((feature) => (
+            <li key={feature} className="text-xs text-muted-foreground flex items-center gap-2">
+              <div className="w-1 h-1 rounded-full bg-primary flex-shrink-0" aria-hidden="true" />
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </button>
+  )
+})
+
+MegaMenuItem.displayName = 'MegaMenuItem'
+
 export function Header({ onOpenInquiry }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -119,8 +162,15 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   const currentPath = deepLink.page
 
   useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 20)
+          ticking = false
+        })
+        ticking = true
+      }
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
@@ -235,11 +285,13 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     }
   }, [mobileMenuOpen])
 
-  const handleNavigation = (path: string) => {
-    window.location.hash = path
+  const handleNavigation = (path: string, event?: React.MouseEvent) => {
+    if (event) {
+      event.preventDefault()
+    }
     setMobileMenuOpen(false)
     setMegaMenuOpen(false)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.location.hash = path
   }
 
   const handleSectionNavigation = (sectionId: string) => {
@@ -248,8 +300,15 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     navigateToPageAndSection('/leistungen', sectionId)
   }
 
-  const handleLeistungenClick = () => {
-    if (megaMenuOpen) {
+  const handleLeistungenClick = (event?: React.MouseEvent) => {
+    if (event) {
+      event.preventDefault()
+    }
+    if (currentPath === '/leistungen' && megaMenuOpen) {
+      setMegaMenuOpen(false)
+    } else if (currentPath === '/leistungen') {
+      setMegaMenuOpen(true)
+    } else if (megaMenuOpen) {
       handleNavigation('/leistungen')
     } else {
       setMegaMenuOpen(true)
@@ -262,14 +321,11 @@ export function Header({ onOpenInquiry }: HeaderProps) {
       setMegaMenuOpen(false)
       megaMenuTriggerRef.current?.focus()
     }
-    
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      if (megaMenuOpen) {
-        handleNavigation('/leistungen')
-      } else {
-        setMegaMenuOpen(true)
-      }
+  }
+
+  const handleMegaMenuBlur = (e: React.FocusEvent) => {
+    if (megaMenuRef.current && !megaMenuRef.current.contains(e.relatedTarget as Node)) {
+      setTimeout(() => setMegaMenuOpen(false), 150)
     }
   }
 
@@ -288,11 +344,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
         }`}>
           <a
             href="#/"
-            onClick={(e) => {
-              e.preventDefault()
-              handleNavigation('/')
-            }}
-            className="flex items-center gap-2 sm:gap-3 transition-all hover:opacity-80 flex-shrink-0 min-h-[44px] min-w-[44px] -ml-2 pl-2 group"
+            onClick={(e) => handleNavigation('/', e)}
+            className="flex items-center gap-2 sm:gap-3 transition-all hover:opacity-80 focus-visible:opacity-80 flex-shrink-0 min-h-[44px] min-w-[44px] -ml-2 pl-2 group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label="S&S Messebau - Zur Startseite"
             aria-current={currentPath === '/' ? 'page' : undefined}
           >
@@ -304,6 +357,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 alt="S&S Messebau Logo"
                 width="48"
                 height="48"
+                loading="eager"
                 className="w-full h-full object-contain filter drop-shadow-sm group-hover:drop-shadow-md transition-all duration-300"
               />
             </div>
@@ -324,7 +378,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
           <nav className="hidden xl:flex items-center gap-1" aria-label="Hauptnavigation">
             <Button
               variant="ghost"
-              onClick={() => handleNavigation('/')}
+              onClick={(e) => handleNavigation('/', e)}
               className={`transition-colors ${
                 currentPath === '/' 
                   ? 'text-primary font-semibold bg-primary/5' 
@@ -354,7 +408,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 aria-controls="leistungen-mega-menu"
               >
                 Leistungen
-                <CaretDown className={`h-4 w-4 transition-transform ${megaMenuOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+                <CaretDown className={`h-4 w-4 transition-transform duration-200 ${megaMenuOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </Button>
 
               {megaMenuOpen && (
@@ -364,57 +418,19 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   role="region"
                   aria-label="Leistungen Übersicht"
                   onMouseLeave={() => setMegaMenuOpen(false)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Escape') {
-                      e.preventDefault()
-                      setMegaMenuOpen(false)
-                      megaMenuTriggerRef.current?.focus()
-                    }
-                  }}
+                  onKeyDown={handleMegaMenuKeyDown}
+                  onBlur={handleMegaMenuBlur}
                   className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[900px] z-50"
                 >
                   <div className="bg-background border rounded-lg shadow-2xl p-6 animate-in fade-in-0 zoom-in-95 duration-200">
                     <div className="grid grid-cols-2 gap-4 mb-6">
-                      {LEISTUNGEN_MEGA_MENU.map((item) => {
-                        const Icon = item.icon
-                        return (
-                          <button
-                            key={item.title}
-                            onClick={() => handleSectionNavigation(item.sectionId)}
-                            className="group relative overflow-hidden rounded-lg border text-left transition-all hover:border-primary hover:shadow-xl"
-                          >
-                            <div className="aspect-[16/9] relative overflow-hidden">
-                              <img
-                                src={item.previewImage}
-                                alt={item.title}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                              />
-                              <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent`} />
-                              <div className={`absolute top-3 left-3 ${item.bgColor} ${item.color} p-2 rounded-lg`}>
-                                <Icon className="h-5 w-5" weight="duotone" />
-                              </div>
-                            </div>
-                            
-                            <div className="p-4">
-                              <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
-                                {item.title}
-                              </h3>
-                              <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
-                                {item.description}
-                              </p>
-                              
-                              <ul className="space-y-1.5">
-                                {item.features.map((feature) => (
-                                  <li key={feature} className="text-xs text-muted-foreground flex items-center gap-2">
-                                    <div className="w-1 h-1 rounded-full bg-primary flex-shrink-0" />
-                                    {feature}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </button>
-                        )
-                      })}
+                      {LEISTUNGEN_MEGA_MENU.map((item) => (
+                        <MegaMenuItem 
+                          key={item.sectionId}
+                          item={item}
+                          onNavigate={handleSectionNavigation}
+                        />
+                      ))}
                     </div>
 
                     <div className="border-t pt-4">
@@ -425,10 +441,10 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                             return (
                               <button
                                 key={service.label}
-                                onClick={() => handleNavigation('/leistungen')}
-                                className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                                onClick={(e) => handleNavigation('/leistungen', e)}
+                                className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md px-2 py-1"
                               >
-                                <Icon className="h-4 w-4" />
+                                <Icon className="h-4 w-4" aria-hidden="true" />
                                 <span>{service.label}</span>
                               </button>
                             )
@@ -436,13 +452,13 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         </div>
                         
                         <Button
-                          onClick={() => handleNavigation('/leistungen')}
+                          onClick={(e) => handleNavigation('/leistungen', e)}
                           variant="ghost"
                           size="sm"
                           className="gap-2 text-primary hover:text-primary"
                         >
                           Alle Leistungen anzeigen
-                          <ArrowRight className="h-4 w-4" />
+                          <ArrowRight className="h-4 w-4" aria-hidden="true" />
                         </Button>
                       </div>
                     </div>
@@ -455,7 +471,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <Button
                 key={item.path}
                 variant="ghost"
-                onClick={() => handleNavigation(item.path)}
+                onClick={(e) => handleNavigation(item.path, e)}
                 className={`transition-colors ${
                   currentPath === item.path 
                     ? 'text-primary font-semibold bg-primary/5' 
@@ -474,9 +490,10 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   variant="ghost" 
                   size={scrolled ? 'sm' : 'default'}
                   className="gap-1"
+                  aria-label="Weitere Seiten"
                 >
                   Mehr
-                  <CaretDown className="h-4 w-4" />
+                  <CaretDown className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
@@ -485,10 +502,10 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   return (
                     <DropdownMenuItem
                       key={item.path}
-                      onClick={() => handleNavigation(item.path)}
+                      onClick={(e) => handleNavigation(item.path, e as any)}
                       className="gap-2 cursor-pointer"
                     >
-                      <Icon className="h-4 w-4" />
+                      <Icon className="h-4 w-4" aria-hidden="true" />
                       {item.label}
                     </DropdownMenuItem>
                   )
@@ -499,8 +516,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             <div className="ml-2 flex items-center gap-1">
               <Button
                 variant="outline"
-                onClick={() => handleNavigation('/banner-bestellen')}
-                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                onClick={(e) => handleNavigation('/banner-bestellen', e)}
+                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
                 size={scrolled ? 'sm' : 'default'}
               >
                 Banner konfigurieren
@@ -508,7 +525,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <Button
                 variant="default"
                 onClick={onOpenInquiry}
-                className="bg-accent hover:bg-accent/90"
+                className="bg-accent hover:bg-accent/90 transition-colors"
                 size={scrolled ? 'sm' : 'default'}
               >
                 Projekt anfragen
@@ -516,16 +533,17 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             </div>
           </nav>
 
-          <nav className="hidden md:flex xl:hidden items-center gap-1">
+          <nav className="hidden md:flex xl:hidden items-center gap-1" aria-label="Hauptnavigation">
             <Button
               variant="ghost"
-              onClick={() => handleNavigation('/')}
+              onClick={(e) => handleNavigation('/', e)}
               className={`transition-colors ${
                 currentPath === '/' 
                   ? 'text-primary font-semibold bg-primary/5' 
                   : 'hover:text-primary'
               }`}
               size="sm"
+              aria-current={currentPath === '/' ? 'page' : undefined}
             >
               Start
             </Button>
@@ -534,15 +552,18 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <Button
                 variant="ghost"
                 onClick={handleLeistungenClick}
+                onMouseEnter={() => setMegaMenuOpen(true)}
                 className={`transition-colors gap-1 ${
-                  currentPath === '/leistungen'
+                  currentPath === '/leistungen' || megaMenuOpen
                     ? 'text-primary font-semibold bg-primary/5' 
                     : 'hover:text-primary'
                 }`}
                 size="sm"
+                aria-expanded={megaMenuOpen}
+                aria-haspopup="true"
               >
                 Leistungen
-                <CaretDown className="h-4 w-4" />
+                <CaretDown className="h-4 w-4 transition-transform duration-200" aria-hidden="true" />
               </Button>
             </div>
 
@@ -550,13 +571,14 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <Button
                 key={item.path}
                 variant="ghost"
-                onClick={() => handleNavigation(item.path)}
+                onClick={(e) => handleNavigation(item.path, e)}
                 className={`transition-colors ${
                   currentPath === item.path 
                     ? 'text-primary font-semibold bg-primary/5' 
                     : 'hover:text-primary'
                 }`}
                 size="sm"
+                aria-current={currentPath === item.path ? 'page' : undefined}
               >
                 {item.label}
               </Button>
@@ -564,9 +586,9 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-1">
+                <Button variant="ghost" size="sm" className="gap-1" aria-label="Weitere Seiten">
                   Mehr
-                  <CaretDown className="h-4 w-4" />
+                  <CaretDown className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
@@ -575,10 +597,10 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   return (
                     <DropdownMenuItem
                       key={item.path}
-                      onClick={() => handleNavigation(item.path)}
+                      onClick={(e) => handleNavigation(item.path, e as any)}
                       className="gap-2 cursor-pointer"
                     >
-                      <Icon className="h-4 w-4" />
+                      <Icon className="h-4 w-4" aria-hidden="true" />
                       {item.label}
                     </DropdownMenuItem>
                   )
@@ -590,7 +612,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <Button
                 variant="default"
                 onClick={onOpenInquiry}
-                className="bg-accent hover:bg-accent/90"
+                className="bg-accent hover:bg-accent/90 transition-colors"
                 size="sm"
               >
                 Anfragen
@@ -603,130 +625,141 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               variant="default"
               size="sm"
               onClick={onOpenInquiry}
-              className="bg-accent hover:bg-accent/90 text-sm px-3 py-2 min-h-[44px]"
+              className="bg-accent hover:bg-accent/90 transition-colors text-sm px-3 py-2 min-h-[44px]"
             >
               Anfragen
             </Button>
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="px-3 min-h-[44px] min-w-[44px]">
-                  <List className="h-6 w-6" />
-                  <span className="sr-only">Menü öffnen</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="px-3 min-h-[44px] min-w-[44px]"
+                  aria-label={mobileMenuOpen ? 'Menü schließen' : 'Menü öffnen'}
+                >
+                  <List className="h-6 w-6" aria-hidden="true" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[85vw] sm:w-80 px-0" ref={sheetContentRef}>
-                <div className="flex items-center px-4 mb-6 pt-2">
-                  <div className="flex items-center gap-3">
-                    <div className="relative w-10 h-10 flex-shrink-0">
-                      <img 
-                        src={logo} 
-                        alt="S&S Messebau Logo" 
-                        className="w-full h-full object-contain filter drop-shadow-sm" 
-                      />
-                    </div>
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-bold text-lg leading-none tracking-tight text-foreground">Menü</span>
-                      <span className="text-[10px] text-muted-foreground tracking-wide leading-none">Navigation</span>
+                <nav aria-label="Mobile Navigation">
+                  <div className="flex items-center px-4 mb-6 pt-2">
+                    <div className="flex items-center gap-3">
+                      <div className="relative w-10 h-10 flex-shrink-0">
+                        <img 
+                          src={logo} 
+                          alt="S&S Messebau Logo"
+                          loading="eager" 
+                          className="w-full h-full object-contain filter drop-shadow-sm" 
+                        />
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-bold text-lg leading-none tracking-tight text-foreground">Menü</span>
+                        <span className="text-[10px] text-muted-foreground tracking-wide leading-none">Navigation</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="px-3 overflow-y-auto max-h-[calc(100vh-180px)]">
-                  <nav className="flex flex-col gap-2">
-                    <div className="mb-3">
-                      <div className="px-3 mb-3 text-sm font-semibold text-muted-foreground">
-                        Leistungen
-                      </div>
-                      <div className="space-y-2">
-                        {LEISTUNGEN_MEGA_MENU.map((item) => {
-                          const Icon = item.icon
-                          return (
-                            <button
-                              key={item.title}
-                              onClick={() => handleSectionNavigation(item.sectionId)}
-                              className="w-full group relative overflow-hidden rounded-lg border p-4 text-left transition-all hover:border-primary hover:shadow-md min-h-[56px]"
-                            >
-                              <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
-                              
-                              <div className="relative flex items-center gap-3">
-                                <div className={`${item.bgColor} ${item.color} p-2.5 rounded-lg flex-shrink-0`}>
-                                  <Icon className="h-5 w-5" weight="duotone" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="font-semibold text-base text-foreground mb-0.5 group-hover:text-primary transition-colors">
-                                    {item.title}
+                  
+                  <div className="px-3 overflow-y-auto max-h-[calc(100vh-180px)]">
+                    <div className="flex flex-col gap-2">
+                      <div className="mb-3">
+                        <div className="px-3 mb-3 text-sm font-semibold text-muted-foreground">
+                          Leistungen
+                        </div>
+                        <div className="space-y-2">
+                          {LEISTUNGEN_MEGA_MENU.map((item) => {
+                            const Icon = item.icon
+                            return (
+                              <button
+                                key={item.sectionId}
+                                onClick={() => handleSectionNavigation(item.sectionId)}
+                                className="w-full group relative overflow-hidden rounded-lg border p-4 text-left transition-all hover:border-primary hover:shadow-md min-h-[56px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                              >
+                                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                                
+                                <div className="relative flex items-center gap-3">
+                                  <div className={`${item.bgColor} ${item.color} p-2.5 rounded-lg flex-shrink-0`}>
+                                    <Icon className="h-5 w-5" weight="duotone" aria-hidden="true" />
                                   </div>
-                                  <div className="text-sm text-muted-foreground line-clamp-1">
-                                    {item.description}
+                                  <div className="flex-1 min-w-0">
+                                    <div className="font-semibold text-base text-foreground mb-0.5 group-hover:text-primary transition-colors">
+                                      {item.title}
+                                    </div>
+                                    <div className="text-sm text-muted-foreground line-clamp-1">
+                                      {item.description}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </button>
-                          )
-                        })}
-                      </div>
-                      <Button
-                        variant="ghost"
-                        onClick={() => handleNavigation('/leistungen')}
-                        className="w-full mt-3 gap-2 text-primary min-h-[44px] text-base"
-                      >
-                        Alle Leistungen anzeigen
-                        <ArrowRight className="h-4 w-4" />
-                      </Button>
-                    </div>
-
-                    <Button
-                      onClick={() => handleNavigation('/banner-bestellen')}
-                      className="w-full mb-3 bg-primary hover:bg-primary/90 min-h-[48px] text-base font-medium"
-                    >
-                      <FrameCorners className="h-5 w-5 mr-2" />
-                      Banner konfigurieren
-                    </Button>
-
-                    <Button
-                      variant={currentPath === '/' ? 'secondary' : 'ghost'}
-                      onClick={() => handleNavigation('/')}
-                      className="justify-start gap-3 min-h-[48px] w-full text-base"
-                    >
-                      <House className="h-5 w-5 flex-shrink-0" />
-                      <span className="text-left">Start</span>
-                    </Button>
-
-                    {ALL_NAV.slice(2).map((item) => {
-                      const Icon = item.icon
-                      return (
+                              </button>
+                            )
+                          })}
+                        </div>
                         <Button
-                          key={item.path}
-                          variant={currentPath === item.path ? 'secondary' : 'ghost'}
-                          onClick={() => handleNavigation(item.path)}
-                          className="justify-start gap-3 min-h-[48px] w-full text-base"
+                          variant="ghost"
+                          onClick={(e) => handleNavigation('/leistungen', e)}
+                          className="w-full mt-3 gap-2 text-primary min-h-[44px] text-base"
                         >
-                          <Icon className="h-5 w-5 flex-shrink-0" />
-                          <span className="text-left">{item.label}</span>
+                          Alle Leistungen anzeigen
+                          <ArrowRight className="h-4 w-4" aria-hidden="true" />
                         </Button>
-                      )
-                    })}
-                  </nav>
-                </div>
+                      </div>
 
-                <div className="absolute bottom-0 left-0 right-0 px-6 py-4 border-t bg-background">
-                  <div className="space-y-2.5 text-sm">
-                    <a 
-                      href="tel:+4924334427144" 
-                      className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      <Phone className="h-4 w-4 flex-shrink-0" />
-                      <span>(02433) 4427144</span>
-                    </a>
-                    <a 
-                      href="mailto:info@sundsmessebau.de" 
-                      className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      <Envelope className="h-4 w-4 flex-shrink-0" />
-                      <span className="truncate">info@sundsmessebau.de</span>
-                    </a>
+                      <Button
+                        onClick={(e) => handleNavigation('/banner-bestellen', e)}
+                        className="w-full mb-3 bg-primary hover:bg-primary/90 transition-colors min-h-[48px] text-base font-medium"
+                      >
+                        <FrameCorners className="h-5 w-5 mr-2" aria-hidden="true" />
+                        Banner konfigurieren
+                      </Button>
+
+                      <Button
+                        variant={currentPath === '/' ? 'secondary' : 'ghost'}
+                        onClick={(e) => handleNavigation('/', e)}
+                        className="justify-start gap-3 min-h-[48px] w-full text-base"
+                        aria-current={currentPath === '/' ? 'page' : undefined}
+                      >
+                        <House className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+                        <span className="text-left">Start</span>
+                      </Button>
+
+                      {ALL_NAV.slice(2).map((item) => {
+                        const Icon = item.icon
+                        return (
+                          <Button
+                            key={item.path}
+                            variant={currentPath === item.path ? 'secondary' : 'ghost'}
+                            onClick={(e) => handleNavigation(item.path, e)}
+                            className="justify-start gap-3 min-h-[48px] w-full text-base"
+                            aria-current={currentPath === item.path ? 'page' : undefined}
+                          >
+                            <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+                            <span className="text-left">{item.label}</span>
+                          </Button>
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
+
+                  <div className="absolute bottom-0 left-0 right-0 px-6 py-4 border-t bg-background">
+                    <div className="space-y-2.5 text-sm">
+                      <a 
+                        href="tel:+4924334427144" 
+                        className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        aria-label="Anrufen: (02433) 4427144"
+                      >
+                        <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+                        <span>(02433) 4427144</span>
+                      </a>
+                      <a 
+                        href="mailto:info@sundsmessebau.de" 
+                        className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        aria-label="E-Mail senden an info@sundsmessebau.de"
+                      >
+                        <Envelope className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+                        <span className="truncate">info@sundsmessebau.de</span>
+                      </a>
+                    </div>
+                  </div>
+                </nav>
               </SheetContent>
             </Sheet>
           </div>
