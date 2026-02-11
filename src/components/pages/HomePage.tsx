@@ -15,55 +15,37 @@ import {
   Target
 } from '@phosphor-icons/react'
 import { DEMO_REFERENCES } from '@/lib/demo-data'
+import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 
 interface HomePageProps {
   onOpenInquiry: () => void
 }
 
 export function HomePage({ onOpenInquiry }: HomePageProps) {
+  const { navigateToSectionOnPage, scrollToSection } = useDeepLinking('/')
+  
+  useSectionObserver([
+    'hero',
+    'services',
+    'advantages',
+    'references',
+    'testimonials',
+    'cta'
+  ])
+
   const handleNavigation = (path: string) => {
     window.location.hash = path
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleSectionNavigation = (sectionId: string) => {
-    const currentPath = window.location.hash.slice(1) || '/'
-    
-    const scrollToSection = () => {
-      const element = document.getElementById(sectionId)
-      if (element) {
-        const headerOffset = 80
-        const elementPosition = element.getBoundingClientRect().top
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        })
-      }
-    }
-    
-    if (currentPath !== '/leistungen') {
-      window.location.hash = '/leistungen'
-      
-      const checkElement = () => {
-        const element = document.getElementById(sectionId)
-        if (element) {
-          scrollToSection()
-        } else {
-          setTimeout(checkElement, 50)
-        }
-      }
-      
-      setTimeout(checkElement, 100)
-    } else {
-      scrollToSection()
-    }
+    navigateToSectionOnPage('/leistungen', sectionId)
   }
 
   return (
     <div>
       <section 
+        id="hero"
         className="relative min-h-[500px] sm:min-h-[600px] flex items-center hero-gradient overflow-hidden"
         aria-labelledby="hero-heading"
       >
@@ -130,7 +112,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <section className="py-12 sm:py-16 bg-muted" aria-labelledby="services-heading">
+      <section id="services" className="py-12 sm:py-16 bg-muted" aria-labelledby="services-heading">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 id="services-heading" className="sr-only">Unsere Hauptleistungen</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -201,7 +183,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <section className="py-12 sm:py-16">
+      <section id="advantages" className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Warum S&S Messebau?</h2>
@@ -245,7 +227,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <section className="py-16 bg-muted">
+      <section id="references" className="py-16 bg-muted">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Erfolgreiche Projekte</h2>
@@ -299,7 +281,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <section className="py-16">
+      <section id="testimonials" className="py-16">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Das sagen unsere Kunden</h2>
@@ -346,7 +328,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <section className="py-16 bg-primary text-primary-foreground">
+      <section id="cta" className="py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Bereit für Ihren perfekten Messeauftritt?</h2>
           <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">

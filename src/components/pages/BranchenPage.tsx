@@ -2,15 +2,20 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ArrowRight, CheckCircle } from '@phosphor-icons/react'
+import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 
 interface BranchenPageProps {
   onOpenInquiry: () => void
 }
 
 export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
+  const { scrollToSection } = useDeepLinking('/branchen')
+  
+  useSectionObserver(['food', 'versicherungen', 'industrie'])
+
   return (
     <div>
-      <section className="py-12 md:py-16 bg-primary text-primary-foreground">
+      <section id="branchen-hero" className="py-12 md:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">Branchen-Expertise</h1>
           <p className="text-base md:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
@@ -20,7 +25,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
         </div>
       </section>
 
-      <section className="py-12 md:py-16">
+      <section id="branchen-content" className="py-12 md:py-16">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <Tabs defaultValue="food" className="w-full">
             <TabsList className="grid w-full grid-cols-3 mb-8 md:mb-12 h-auto">
@@ -35,7 +40,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
               <TabsTrigger value="industrie" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">Industrie</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="food" className="space-y-6 md:space-y-8">
+            <TabsContent value="food" className="space-y-6 md:space-y-8" id="food">
               <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
                 <div>
                   <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Food & Feinkost</h2>
@@ -76,7 +81,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
               </div>
             </TabsContent>
 
-            <TabsContent value="versicherungen" className="space-y-6 md:space-y-8">
+            <TabsContent value="versicherungen" className="space-y-6 md:space-y-8" id="versicherungen">
               <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
                 <div className="lg:order-2">
                   <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Versicherungen & Dienstleistungen</h2>
@@ -117,7 +122,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
               </div>
             </TabsContent>
 
-            <TabsContent value="industrie" className="space-y-6 md:space-y-8">
+            <TabsContent value="industrie" className="space-y-6 md:space-y-8" id="industrie">
               <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
                 <div>
                   <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Industrie & Technik</h2>

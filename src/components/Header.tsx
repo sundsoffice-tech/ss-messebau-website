@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
+import { navigateToPageAndSection, parseDeepLink } from '@/lib/deep-linking'
 
 interface HeaderProps {
   onOpenInquiry: () => void
@@ -114,7 +115,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   const megaMenuRef = useRef<HTMLDivElement>(null)
   const megaMenuTriggerRef = useRef<HTMLButtonElement>(null)
   const sheetContentRef = useRef<HTMLDivElement>(null)
-  const currentPath = window.location.hash.slice(1) || '/'
+  const deepLink = parseDeepLink(window.location.hash)
+  const currentPath = deepLink.page
 
   useEffect(() => {
     const handleScroll = () => {
@@ -241,49 +243,9 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   }
 
   const handleSectionNavigation = (sectionId: string) => {
-    const currentPath = window.location.hash.slice(1) || '/'
-    
-    const scrollToSection = () => {
-      const element = document.getElementById(sectionId)
-      if (element) {
-        const headerOffset = 100
-        const elementPosition = element.getBoundingClientRect().top
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        })
-      }
-    }
-    
     setMobileMenuOpen(false)
     setMegaMenuOpen(false)
-    
-    if (currentPath !== '/leistungen') {
-      window.location.hash = '/leistungen'
-      
-      let attempts = 0
-      const maxAttempts = 40
-      
-      const checkElement = () => {
-        const element = document.getElementById(sectionId)
-        if (element) {
-          setTimeout(() => {
-            scrollToSection()
-          }, 150)
-        } else if (attempts < maxAttempts) {
-          attempts++
-          setTimeout(checkElement, 50)
-        }
-      }
-      
-      setTimeout(checkElement, 100)
-    } else {
-      setTimeout(() => {
-        scrollToSection()
-      }, 50)
-    }
+    navigateToPageAndSection('/leistungen', sectionId)
   }
 
   const handleLeistungenClick = () => {

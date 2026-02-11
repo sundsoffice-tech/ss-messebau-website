@@ -2,13 +2,18 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { CheckCircle, Leaf, Recycle, TrendUp, ArrowRight } from '@phosphor-icons/react'
+import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 
 export { KIBeraterPage } from './KIBeraterPage'
 
 export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
+  const { scrollToSection } = useDeepLinking('/ueber-uns')
+  
+  useSectionObserver(['ueber-uns-hero', 'geschichte', 'werte', 'team', 'arbeitsweise'])
+
   return (
     <div>
-      <section className="py-16 bg-primary text-primary-foreground">
+      <section id="ueber-uns-hero" className="py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Über S&S Messebau</h1>
           <p className="text-xl opacity-90 max-w-3xl">

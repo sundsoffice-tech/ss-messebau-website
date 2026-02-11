@@ -10,6 +10,7 @@ import { Phone, Envelope, MapPin, PaperPlaneRight, ChatCircleDots, Sparkle, Calc
 import { ContactInquiry, ChatMessage } from '@/lib/types'
 import { useKV } from '@github/spark/hooks'
 import { useVoiceInput } from '@/hooks/use-voice-input'
+import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 
 interface KontaktPageProps {
   onOpenInquiry: () => void
@@ -24,6 +25,10 @@ interface QuickAction {
 }
 
 export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
+  const { scrollToSection } = useDeepLinking('/kontakt')
+  
+  useSectionObserver(['kontakt-hero', 'kontakt-info', 'kontakt-form', 'ki-chat'])
+
   const [inquiries, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
   const [loading, setLoading] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
@@ -309,7 +314,7 @@ Antworte jetzt:`
 
   return (
     <div>
-      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+      <section id="kontakt-hero" className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Kontakt</h1>
           <p className="text-base sm:text-xl opacity-90 max-w-3xl">
@@ -318,7 +323,7 @@ Antworte jetzt:`
         </div>
       </section>
 
-      <section className="py-8 sm:py-12 lg:py-16">
+      <section id="kontakt-form" className="py-8 sm:py-12 lg:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
             <div className="order-2 lg:order-1">
@@ -436,7 +441,7 @@ Antworte jetzt:`
               </form>
             </div>
 
-            <div className="order-1 lg:order-2">
+            <div className="order-1 lg:order-2" id="kontakt-info">
               <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Kontaktdaten</h2>
               <div className="space-y-4 mb-6 sm:mb-8">
                 <Card>
@@ -499,7 +504,7 @@ Antworte jetzt:`
                 </Card>
               </div>
 
-              <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-2 border-primary/20 shadow-lg">
+              <Card id="ki-chat" className="bg-gradient-to-br from-primary/5 to-accent/5 border-2 border-primary/20 shadow-lg scroll-mt-20">
                 <CardHeader className="pb-3 sm:pb-6">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3 sm:gap-4 min-w-0">

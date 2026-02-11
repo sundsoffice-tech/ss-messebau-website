@@ -15,6 +15,7 @@ import { UeberUnsPage, AblaufPage, NachhaltigkeitPage, ImpressumPage, Datenschut
 import { BannerrahmenPage } from './components/pages/BannerrahmenPage'
 import { BannerBestellenPage } from './components/pages/BannerBestellenPage'
 import { AdminPage } from './components/pages/AdminPage'
+import { parseDeepLink } from './lib/deep-linking'
 
 function App() {
   const [inquiryDialogOpen, setInquiryDialogOpen] = useState(false)
@@ -22,8 +23,10 @@ function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.slice(1) || '/'
-      setCurrentPage(hash)
+      const deepLink = parseDeepLink(window.location.hash)
+      setCurrentPage(deepLink.page)
+      
+      window.scrollTo({ top: 0, behavior: 'instant' })
     }
 
     handleHashChange()
