@@ -110,7 +110,28 @@ Siehe **[TESTING_GUIDE.md](TESTING_GUIDE.md)** für detaillierte Test-Anleitunge
 
 ### Deployment
 
-Die Website ist deploy-ready und läuft im Spark Runtime Environment.
+Die Website wird automatisch auf Hostinger deployed bei jedem Push auf den `main` Branch.
+
+**Automatisches Deployment:**
+- ✅ GitHub Actions Workflow: `.github/workflows/deploy.yml`
+- ✅ Automatischer Build bei jedem Push auf `main`
+- ✅ Sichere FTP-Verbindung zu Hostinger
+- ✅ Deployment direkt nach erfolgreichem Build
+
+**Benötigte GitHub Secrets:**
+Die folgenden Secrets müssen in den Repository Settings konfiguriert sein:
+- `FTP_SERVER` - Hostinger FTP Server-Adresse
+- `FTP_USERNAME` - FTP Benutzername
+- `FTP_PASSWORD` - FTP Passwort
+- `FTP_PORT` - FTP Port (normalerweise 21)
+
+**Deployment-Prozess:**
+1. Code wird eingecheckt und auf `main` gepusht
+2. GitHub Actions startet automatisch den Build-Prozess
+3. Dependencies werden installiert (`npm ci`)
+4. Projekt wird gebaut (`npm run build`)
+5. Build-Artefakte werden via FTP zu Hostinger hochgeladen
+6. Website ist live unter der konfigurierten Domain
 
 ### Projekt-Struktur
 
