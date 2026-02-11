@@ -1,4 +1,4 @@
-name: Deploy to Hostinger via FTP
+name: Deploy to Hostinger
 
 on:
   push:
@@ -37,7 +37,7 @@ jobs:
           retention-days: 1
 
   deploy:
-    name: Deploy via FTP
+    name: Deploy to Hostinger
     runs-on: ubuntu-latest
     needs: build
     
