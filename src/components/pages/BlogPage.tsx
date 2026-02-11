@@ -24,21 +24,21 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
 
   return (
     <div>
-      <section className="py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Article className="h-10 w-10" />
-            <h1 className="text-4xl md:text-5xl font-bold">Blog & Ratgeber</h1>
+      <section className="py-12 md:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+          <div className="flex items-center gap-2.5 md:gap-3 mb-3 md:mb-4">
+            <Article className="h-8 w-8 md:h-10 md:w-10 shrink-0" />
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">Blog & Ratgeber</h1>
           </div>
-          <p className="text-xl opacity-90 max-w-3xl">
+          <p className="text-base md:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
             Hilfreiche Tipps, Checklisten und Fachwissen rund um Messebau, Eventplanung und erfolgreiche Messeauftritte.
           </p>
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section className="py-12 md:py-16">
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {DEMO_BLOG_POSTS.map((post) => (
               <Card key={post.id} className="group overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col border-2 hover:border-primary cursor-pointer">
                 <div className="aspect-video relative overflow-hidden bg-muted">
@@ -48,21 +48,21 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
                     className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute top-4 right-4">
-                    <Badge className="bg-primary text-primary-foreground shadow-lg">{post.category}</Badge>
+                  <div className="absolute top-3 right-3 md:top-4 md:right-4">
+                    <Badge className="bg-primary text-primary-foreground shadow-lg text-xs md:text-sm">{post.category}</Badge>
                   </div>
                 </div>
-                <CardContent className="p-6 flex-1 flex flex-col">
-                  <div className="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    {formatDate(post.publishedAt)}
+                <CardContent className="p-4 md:p-6 flex-1 flex flex-col">
+                  <div className="flex items-center gap-2 mb-2 md:mb-3 text-xs md:text-sm text-muted-foreground">
+                    <Clock className="h-3.5 w-3.5 md:h-4 md:w-4 shrink-0" />
+                    <span className="truncate">{formatDate(post.publishedAt)}</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">{post.title}</h3>
-                  <p className="text-muted-foreground mb-4 flex-1 line-clamp-3">{post.excerpt}</p>
+                  <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 group-hover:text-primary transition-colors leading-tight line-clamp-2">{post.title}</h3>
+                  <p className="text-muted-foreground text-sm md:text-base mb-4 flex-1 line-clamp-3 leading-relaxed">{post.excerpt}</p>
                   <Button 
                     variant="outline" 
                     onClick={() => handleNavigation(`/blog/${post.slug}`)}
-                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors min-h-[44px] text-sm md:text-base"
                   >
                     Weiterlesen
                     <ArrowRight className="ml-2" />
@@ -74,13 +74,13 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
         </div>
       </section>
 
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Haben Sie Fragen zu Ihrem Messeprojekt?</h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+      <section className="py-12 md:py-16 bg-muted">
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Haben Sie Fragen zu Ihrem Messeprojekt?</h2>
+          <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
             Unsere Experten beraten Sie gerne persönlich zu allen Aspekten Ihres Messeauftritts.
           </p>
-          <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90">
+          <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
             Kostenlose Beratung anfragen
             <ArrowRight className="ml-2" />
           </Button>
