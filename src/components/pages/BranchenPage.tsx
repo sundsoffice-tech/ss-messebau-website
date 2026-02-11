@@ -3,6 +3,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ArrowRight, CheckCircle } from '@phosphor-icons/react'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
+import { useEffect, useState } from 'react'
+import { parseDeepLink } from '@/lib/deep-linking'
 
 interface BranchenPageProps {
   onOpenInquiry: () => void
@@ -10,8 +12,21 @@ interface BranchenPageProps {
 
 export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
   const { scrollToSection } = useDeepLinking('/branchen')
+  const [activeTab, setActiveTab] = useState<string>('food')
   
   useSectionObserver(['food', 'versicherungen', 'industrie'])
+
+  useEffect(() => {
+    const deepLink = parseDeepLink(window.location.hash)
+    if (deepLink.section && ['food', 'versicherungen', 'industrie'].includes(deepLink.section)) {
+      setActiveTab(deepLink.section)
+      setTimeout(() => {
+        if (deepLink.section) {
+          scrollToSection(deepLink.section)
+        }
+      }, 100)
+    }
+  }, [scrollToSection])
 
   return (
     <div>
@@ -27,7 +42,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
 
       <section id="branchen-content" className="py-12 md:py-16">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <Tabs defaultValue="food" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-3 mb-8 md:mb-12 h-auto">
               <TabsTrigger value="food" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">
                 <span className="hidden sm:inline">Food & Feinkost</span>

@@ -1,11 +1,16 @@
 import { Separator } from '@/components/ui/separator'
 import { Phone, Envelope, MapPin } from '@phosphor-icons/react'
 import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
+import { navigateToPageAndSection } from '@/lib/deep-linking'
 
 export function Footer() {
   const handleNavigation = (path: string) => {
     window.location.hash = path
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleSectionNavigation = (page: string, sectionId: string) => {
+    navigateToPageAndSection(page, sectionId)
   }
 
   return (
@@ -36,17 +41,17 @@ export function Footer() {
             <h3 className="font-semibold mb-3 sm:mb-4 text-base">Leistungen</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <button onClick={() => handleNavigation('/leistungen')} className="hover:text-primary transition-colors text-left min-h-[44px] py-2 -my-2">
+                <button onClick={() => handleSectionNavigation('/leistungen', 'messebau')} className="hover:text-primary transition-colors text-left min-h-[44px] py-2 -my-2">
                   Messebau
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavigation('/leistungen')} className="hover:text-primary transition-colors text-left min-h-[44px] py-2 -my-2">
+                <button onClick={() => handleSectionNavigation('/leistungen', 'eventbau')} className="hover:text-primary transition-colors text-left min-h-[44px] py-2 -my-2">
                   Eventbau
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavigation('/leistungen')} className="hover:text-primary transition-colors text-left min-h-[44px] py-2 -my-2">
+                <button onClick={() => handleSectionNavigation('/leistungen', 'ladenbau')} className="hover:text-primary transition-colors text-left min-h-[44px] py-2 -my-2">
                   Ladenbau
                 </button>
               </li>
