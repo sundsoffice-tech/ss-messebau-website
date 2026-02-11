@@ -28,6 +28,24 @@ jobs:
 
       - name: Build project
         run: npm run build
+      
+      - name: Verify .htaccess exists in build
+        run: |
+          echo "Checking for .htaccess file in dist/"
+          if [ -f "dist/.htaccess" ]; then
+            echo "✓ .htaccess found in dist/"
+            cat dist/.htaccess | head -20
+          else
+            echo "✗ Warning: .htaccess not found in dist/"
+            exit 1
+          fi
+      
+      - name: List build contents
+        run: |
+          echo "Build directory contents:"
+          ls -lah dist/
+          echo "Total size:"
+          du -sh dist/
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -58,6 +76,7 @@ jobs:
           protocol: ftps
           local-dir: dist/
           server-dir: /public_html/
+          dangerous-clean-slate: false
           exclude: |
             **/.git*
             **/.git*/**
@@ -66,3 +85,10 @@ jobs:
             **/.env
             **/dist-ssr/**
           log-level: verbose
+      
+      - name: Deployment Summary
+        if: success()
+        run: |
+          echo "✓ Deployment to Hostinger completed successfully!"
+          echo "✓ All files uploaded including .htaccess for SPA routing"
+          echo "✓ Site should be live at the configured domain"
