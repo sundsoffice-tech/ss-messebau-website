@@ -45,9 +45,65 @@ Dieses Projekt ist vollständig für das Hosting auf **Hostinger** (HostingEr) o
 
 ## 🚀 Deployment
 
-### Automatisches Deployment via GitHub Actions
+Das Projekt unterstützt **zwei Deployment-Methoden**:
 
-Das Projekt wird automatisch deployed bei jedem Push auf den `main` Branch.
+### Methode 1: Git-basiertes Deployment (EMPFOHLEN) ⭐
+
+**Workflow:** `.github/workflows/deploy-hostinger.yml`
+
+Dies ist die **bevorzugte Methode** für Hostinger, da sie die native Git-Integration nutzt.
+
+#### Deployment-Prozess:
+1. ✅ Code wird ausgecheckt
+2. ✅ Node.js 20.x wird installiert
+3. ✅ Dependencies werden installiert (`npm ci`)
+4. ✅ Projekt wird gebaut (`npm run build`)
+5. ✅ `index.html` im Build wird verifiziert (Abbruch bei Fehler)
+6. ✅ Build-Output wird zu Branch `hostinger` gepusht (clean deployment)
+7. ✅ Hostinger deployed automatisch von Branch `hostinger`
+
+#### Vorteile:
+- ✅ **Keine FTP-Zugangsdaten nötig** (nur Git)
+- ✅ **Automatische Updates** bei jedem Push auf `main`
+- ✅ **Sauberer Deployment-Branch** (nur Production-Dateien)
+- ✅ **Versionskontrolle** des Deployments
+- ✅ **index.html garantiert im Root** des Branches
+
+#### Hostinger Git-Konfiguration:
+
+1. **In Hostinger hPanel:**
+   - Navigiere zu: `Advanced → Git`
+   - Klicke auf `Create Git Repository`
+
+2. **Repository-Einstellungen:**
+   ```
+   Repository URL:     git@github.com:sundsoffice-tech/ss-messebau-website.git
+   Branch:             hostinger
+   Deployment Path:    public_html (oder leer lassen für Root)
+   ```
+
+3. **SSH-Key hinzufügen:**
+   - Hostinger generiert einen SSH-Key
+   - Füge diesen als **Deploy Key** in GitHub hinzu:
+     - GitHub → Settings → Deploy keys → Add deploy key
+     - Paste Hostinger SSH-Key
+     - **WICHTIG:** Nur Read-Zugriff nötig
+
+4. **Auto-Deploy aktivieren:**
+   - In Hostinger: `Auto-deployment` aktivieren
+   - Bei jedem Push auf `hostinger` wird automatisch deployed
+
+#### Testen:
+```bash
+# Nach Push auf main:
+git checkout hostinger
+git pull origin hostinger
+ls -la  # index.html sollte im Root sein
+```
+
+---
+
+### Methode 2: FTP-basiertes Deployment (Legacy)
 
 **Workflow:** `.github/workflows/deploy.yml`
 
@@ -66,6 +122,8 @@ FTP_SERVER    - Hostinger FTP Server (z.B. ftp.example.com)
 FTP_USERNAME  - FTP Benutzername
 FTP_PASSWORD  - FTP Passwort
 ```
+
+**Hinweis:** Diese Methode wird weiterhin unterstützt, aber Git-Deployment (Methode 1) wird empfohlen.
 
 ### Manuelles Deployment
 
@@ -102,6 +160,37 @@ dist/
     ├── ui-vendor-[hash].js
     └── ...
 ```
+
+## 🌿 Branch-Struktur
+
+### `main` Branch
+- **Enthält:** Quellcode, Entwicklungs-Setup, Dokumentation
+- **Verwendung:** Entwicklung, PRs, Code-Reviews
+- **Nicht deployed:** Hostinger sieht diesen Branch nicht
+
+### `hostinger` Branch ⭐
+- **Enthält:** Nur Production-Build (`dist/` Inhalte im Root)
+- **Verwendung:** Automatisches Deployment durch GitHub Action
+- **Deployed von:** Hostinger Git-Integration
+- **Struktur:**
+  ```
+  hostinger/
+  ├── .htaccess          # Im Root!
+  ├── index.html         # Im Root!
+  ├── 404.html
+  ├── manifest.json
+  ├── robots.txt
+  ├── sitemap.xml
+  ├── health.json
+  ├── php.ini
+  └── assets/
+      └── ...
+  ```
+
+**Wichtig:** 
+- ⚠️ Niemals manuell in `hostinger` Branch arbeiten
+- ⚠️ Wird automatisch von GitHub Actions überschrieben
+- ✅ Nur für Hostinger-Deployment gedacht
 
 ## 🔧 Hostinger-Spezifische Konfiguration
 
