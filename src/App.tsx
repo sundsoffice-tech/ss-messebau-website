@@ -15,8 +15,7 @@ import { UeberUnsPage, AblaufPage, NachhaltigkeitPage, ImpressumPage, Datenschut
 import { BannerrahmenPage } from './components/pages/BannerrahmenPage'
 import { BannerBestellenPage } from './components/pages/BannerBestellenPage'
 import { AdminPage } from './components/pages/AdminPage'
-import { parseDeepLink } from './lib/deep-linking'
-import { scrollToSection, scrollToTop } from './lib/scroll-utils'
+import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath, HEADER_OFFSET } from './lib/deep-linking'
 import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 
 function App() {
@@ -28,20 +27,19 @@ function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const deepLink = parseDeepLink(window.location.hash)
-      const hash = window.location.hash.replace('#', '')
-      
-      const hashParts = hash.split('#')
-      const page = hashParts[0] || '/'
-      const section = hashParts[1]
+      const page = normalizePagePath(deepLink.page)
+      const section = deepLink.section
       
       setCurrentPage(page)
       
       if (section) {
-        setTimeout(() => {
-          scrollToSection(section, 100)
-        }, 200)
+        scrollToSectionWithRetry(section, {
+          maxRetries: 20,
+          retryDelay: 150,
+          headerOffset: HEADER_OFFSET
+        })
       } else {
-        scrollToTop(false)
+        window.scrollTo({ top: 0, behavior: 'auto' })
       }
     }
 

@@ -5,6 +5,8 @@ export interface DeepLinkConfig {
   section?: string
 }
 
+export const HEADER_OFFSET = 100
+
 export function parseDeepLink(hash: string): DeepLinkConfig {
   return parseSectionHash(hash)
 }
@@ -13,7 +15,13 @@ export function createDeepLink(page: string, section?: string): string {
   return createSectionHash(page, section)
 }
 
-export function navigateToSection(sectionId: string, headerOffset: number = 100): boolean {
+export function normalizePagePath(page: string): string {
+  if (!page || page === '') return '/'
+  if (!page.startsWith('/')) return `/${page}`
+  return page
+}
+
+export function navigateToSection(sectionId: string, headerOffset: number = HEADER_OFFSET): boolean {
   const element = document.getElementById(sectionId)
   
   if (!element) {
@@ -39,12 +47,40 @@ export function navigateToSection(sectionId: string, headerOffset: number = 100)
   return true
 }
 
-export function navigateToPageAndSection(
-  page: string, 
-  section: string, 
+export function scrollToSectionWithRetry(
+  sectionId: string,
   options: { maxRetries?: number; retryDelay?: number; headerOffset?: number } = {}
-) {
-  const { maxRetries = 15, retryDelay = 100, headerOffset = 100 } = options
+): void {
+  const { maxRetries = 20, retryDelay = 150, headerOffset = HEADER_OFFSET } = options
+  
+  let attempts = 0
+  
+  const tryScroll = () => {
+    const element = document.getElementById(sectionId)
+    
+    if (element) {
+      navigateToSection(sectionId, headerOffset)
+      return
+    }
+    
+    if (attempts >= maxRetries) {
+      console.warn(`Section "${sectionId}" not found after ${maxRetries} attempts`)
+      return
+    }
+    
+    attempts++
+    setTimeout(tryScroll, retryDelay)
+  }
+  
+  setTimeout(tryScroll, 200)
+}
+
+export function navigateToPageAndSection(
+  page: string,
+  section: string,
+  options: { maxRetries?: number; retryDelay?: number; headerOffset?: number } = {}
+): void {
+  const { maxRetries = 20, retryDelay = 150, headerOffset = HEADER_OFFSET } = options
   
   if (!validateSectionExists(page, section)) {
     console.warn(`Section "${section}" not found in page "${page}" configuration`)
@@ -56,34 +92,11 @@ export function navigateToPageAndSection(
     navigateToSection(section, headerOffset)
   } else {
     window.location.hash = createDeepLink(page, section)
-    
-    let attempts = 0
-    const checkAndScroll = () => {
-      const element = document.getElementById(section)
-      
-      if (element) {
-        navigateToSection(section, headerOffset)
-        return
-      }
-      
-      if (attempts >= maxRetries) {
-        console.warn(`Failed to find section "${section}" after ${maxRetries} attempts`)
-        return
-      }
-      
-      attempts++
-      setTimeout(checkAndScroll, retryDelay)
-    }
-    
-    setTimeout(checkAndScroll, 400)
+    scrollToSectionWithRetry(section, { maxRetries, retryDelay, headerOffset })
   }
 }
 
-export function getCurrentDeepLink(): DeepLinkConfig {
-  return parseDeepLink(window.location.hash)
-}
-
-export function updateUrlWithSection(section: string, replaceState: boolean = true) {
+export function updateUrlWithSection(section: string, replaceState: boolean = true): void {
   const currentPage = window.location.hash.slice(1).split('#')[0] || '/'
   const newHash = createDeepLink(currentPage, section)
   
@@ -103,8 +116,6 @@ export function isValidDeepLink(page: string, section?: string): boolean {
   return validateSectionExists(page, section)
 }
 
-export function normalizePagePath(page: string): string {
-  if (!page || page === '') return '/'
-  if (!page.startsWith('/')) return `/${page}`
-  return page
+export function getCurrentDeepLink(): DeepLinkConfig {
+  return parseDeepLink(window.location.hash)
 }
