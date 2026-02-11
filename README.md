@@ -115,7 +115,7 @@ Die Website wird automatisch auf Hostinger deployed bei jedem Push auf den `main
 **Automatisches Deployment:**
 - ✅ GitHub Actions Workflow: `.github/workflows/deploy.yml`
 - ✅ Automatischer Build bei jedem Push auf `main`
-- ✅ Sichere FTP-Verbindung zu Hostinger
+- ✅ Sichere FTPS-Verbindung zu Hostinger (verschlüsselt)
 - ✅ Deployment direkt nach erfolgreichem Build
 
 **Benötigte GitHub Secrets:**
@@ -123,7 +123,6 @@ Die folgenden Secrets müssen in den Repository Settings konfiguriert sein:
 - `FTP_SERVER` - Hostinger FTP Server-Adresse
 - `FTP_USERNAME` - FTP Benutzername
 - `FTP_PASSWORD` - FTP Passwort
-- `FTP_PORT` - FTP Port (normalerweise 21)
 
 **Deployment-Prozess:**
 1. Code wird eingecheckt und auf `main` gepusht
