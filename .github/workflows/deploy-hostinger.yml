@@ -25,6 +25,10 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Write deploy test file
+        run: echo "DEPLOY_OK" > dist/DEPLOY_TEST.txt
+
+
       - name: Deploy via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
