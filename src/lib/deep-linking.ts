@@ -22,16 +22,20 @@ export function createDeepLink(page: string, section?: string): string {
 
 export function navigateToSection(sectionId: string, headerOffset: number = 80) {
   const element = document.getElementById(sectionId)
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  
   if (element) {
     const elementPosition = element.getBoundingClientRect().top
     const offsetPosition = elementPosition + window.pageYOffset - headerOffset
     
     window.scrollTo({
       top: offsetPosition,
-      behavior: 'smooth'
+      behavior: prefersReducedMotion ? 'auto' : 'smooth'
     })
     
-    element.focus({ preventScroll: true })
+    setTimeout(() => {
+      element.focus({ preventScroll: true })
+    }, prefersReducedMotion ? 0 : 300)
     
     return true
   }
@@ -67,5 +71,7 @@ export function updateUrlWithSection(section: string) {
   const currentPage = window.location.hash.slice(1).split('#')[0] || '/'
   const newHash = createDeepLink(currentPage, section)
   
-  window.history.replaceState(null, '', newHash)
+  if (window.history && window.history.replaceState) {
+    window.history.replaceState(null, '', newHash)
+  }
 }

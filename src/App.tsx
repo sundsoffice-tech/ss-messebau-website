@@ -16,17 +16,33 @@ import { BannerrahmenPage } from './components/pages/BannerrahmenPage'
 import { BannerBestellenPage } from './components/pages/BannerBestellenPage'
 import { AdminPage } from './components/pages/AdminPage'
 import { parseDeepLink } from './lib/deep-linking'
+import { scrollToSection, scrollToTop } from './lib/scroll-utils'
+import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 
 function App() {
   const [inquiryDialogOpen, setInquiryDialogOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState('/')
 
+  useSmoothScrollLinks()
+
   useEffect(() => {
     const handleHashChange = () => {
       const deepLink = parseDeepLink(window.location.hash)
-      setCurrentPage(deepLink.page)
+      const hash = window.location.hash.replace('#', '')
       
-      window.scrollTo({ top: 0, behavior: 'instant' })
+      const hashParts = hash.split('#')
+      const page = hashParts[0] || '/'
+      const section = hashParts[1]
+      
+      setCurrentPage(page)
+      
+      if (section) {
+        setTimeout(() => {
+          scrollToSection(section, 100)
+        }, 150)
+      } else {
+        scrollToTop(false)
+      }
     }
 
     handleHashChange()

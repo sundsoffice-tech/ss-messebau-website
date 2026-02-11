@@ -1,4 +1,5 @@
 import React from 'react'
+import { scrollToSection } from '@/lib/scroll-utils'
 
 interface RouterLinkProps {
   to: string
@@ -7,6 +8,7 @@ interface RouterLinkProps {
   onClick?: () => void
   'aria-label'?: string
   'aria-current'?: 'page' | 'step' | 'location' | 'date' | 'time' | boolean
+  section?: string
 }
 
 export function RouterLink({ 
@@ -15,18 +17,31 @@ export function RouterLink({
   className, 
   onClick,
   'aria-label': ariaLabel,
-  'aria-current': ariaCurrent
+  'aria-current': ariaCurrent,
+  section
 }: RouterLinkProps) {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
-    window.location.hash = to
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    
+    if (section) {
+      const [page, sectionId] = section.includes('#') ? section.split('#') : [to, section]
+      
+      if (window.location.hash.replace('#', '') === page) {
+        scrollToSection(sectionId)
+      } else {
+        window.location.hash = `${page}#${sectionId}`
+      }
+    } else {
+      window.location.hash = to
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    
     onClick?.()
   }
 
   return (
     <a 
-      href={`#${to}`}
+      href={section ? `#${section}` : `#${to}`}
       onClick={handleClick}
       className={className}
       aria-label={ariaLabel}
