@@ -246,7 +246,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     const scrollToSection = () => {
       const element = document.getElementById(sectionId)
       if (element) {
-        const headerOffset = 80
+        const headerOffset = 100
         const elementPosition = element.getBoundingClientRect().top
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset
         
@@ -257,25 +257,33 @@ export function Header({ onOpenInquiry }: HeaderProps) {
       }
     }
     
+    setMobileMenuOpen(false)
+    setMegaMenuOpen(false)
+    
     if (currentPath !== '/leistungen') {
       window.location.hash = '/leistungen'
+      
+      let attempts = 0
+      const maxAttempts = 40
       
       const checkElement = () => {
         const element = document.getElementById(sectionId)
         if (element) {
-          scrollToSection()
-        } else {
+          setTimeout(() => {
+            scrollToSection()
+          }, 150)
+        } else if (attempts < maxAttempts) {
+          attempts++
           setTimeout(checkElement, 50)
         }
       }
       
       setTimeout(checkElement, 100)
     } else {
-      scrollToSection()
+      setTimeout(() => {
+        scrollToSection()
+      }, 50)
     }
-    
-    setMobileMenuOpen(false)
-    setMegaMenuOpen(false)
   }
 
   const handleLeistungenClick = () => {
