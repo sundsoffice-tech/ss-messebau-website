@@ -5,6 +5,7 @@ import { Footer } from './components/Footer'
 import { StickyCTA, MobileStickyCTA } from './components/StickyCTA'
 import { InquiryDialog } from './components/InquiryDialog'
 import { LoadingScreen } from './components/LoadingScreen'
+import { NavigationLoadingIndicator } from './components/NavigationLoadingIndicator'
 import { HomePage } from './components/pages/HomePage'
 import { LeistungenPage } from './components/pages/LeistungenPage'
 import { BranchenPage } from './components/pages/BranchenPage'
@@ -102,6 +103,7 @@ function App() {
   return (
     <>
       <LoadingScreen />
+      <NavigationLoadingIndicator />
       <div className="min-h-screen flex flex-col">
         <a
           href="#main-content"

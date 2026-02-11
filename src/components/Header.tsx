@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, memo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { FocusScope } from '@radix-ui/react-focus-scope'
 import { 
   List, 
   House, 
@@ -691,8 +692,9 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[85vw] sm:w-80 px-0" ref={sheetContentRef}>
-                <nav aria-label="Mobile Navigation">
-                  <div className="flex items-center px-4 mb-6 pt-2">
+                <FocusScope loop trapped={mobileMenuOpen}>
+                  <nav aria-label="Mobile Navigation">
+                    <div className="flex items-center px-4 mb-6 pt-2">
                     <div className="flex items-center gap-3">
                       <div className="relative w-10 h-10 flex-shrink-0">
                         <img 
@@ -810,6 +812,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     </div>
                   </div>
                 </nav>
+              </FocusScope>
               </SheetContent>
             </Sheet>
           </div>
