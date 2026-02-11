@@ -1,13 +1,28 @@
 import { parseSectionHash, createSectionHash } from './section-map'
 
-export function scrollToSection(sectionId: string, offset: number = 100): boolean {
+export function getHeaderHeight(): number {
+  const header = document.querySelector('header')
+  if (!header) return 100
+  
+  const rect = header.getBoundingClientRect()
+  const computedStyle = window.getComputedStyle(header)
+  const position = computedStyle.position
+  
+  if (position === 'fixed' || position === 'sticky') {
+    return rect.height + 20
+  }
+  
+  return 100
+}
+
+export function scrollToSection(sectionId: string, offset?: number): boolean {
   const element = document.getElementById(sectionId)
   
   if (!element) {
     return false
   }
   
-  const headerOffset = offset
+  const headerOffset = offset ?? getHeaderHeight()
   const elementPosition = element.getBoundingClientRect().top
   const offsetPosition = elementPosition + window.pageYOffset - headerOffset
 
@@ -18,12 +33,16 @@ export function scrollToSection(sectionId: string, offset: number = 100): boolea
     behavior: prefersReducedMotion ? 'auto' : 'smooth'
   })
   
+  const focusDelay = prefersReducedMotion ? 50 : 400
   setTimeout(() => {
     if (!element.hasAttribute('tabindex')) {
       element.setAttribute('tabindex', '-1')
     }
     element.focus({ preventScroll: true })
-  }, prefersReducedMotion ? 0 : 400)
+    
+    element.setAttribute('aria-live', 'polite')
+    setTimeout(() => element.removeAttribute('aria-live'), 1000)
+  }, focusDelay)
   
   return true
 }
@@ -41,9 +60,10 @@ export function parseHashWithSection(hash: string): { page: string; section?: st
   return parseSectionHash(hash)
 }
 
-export function smoothScrollToElement(element: HTMLElement, offset: number = 100) {
+export function smoothScrollToElement(element: HTMLElement, offset?: number) {
+  const headerOffset = offset ?? getHeaderHeight()
   const elementPosition = element.getBoundingClientRect().top
-  const offsetPosition = elementPosition + window.pageYOffset - offset
+  const offsetPosition = elementPosition + window.pageYOffset - headerOffset
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -68,7 +88,7 @@ export function setupSmoothScrolling() {
           const [page, section] = parts
           const currentPage = window.location.hash.slice(1).split('#')[0] || '/'
           if (currentPage === page) {
-            scrollToSection(section, 100)
+            scrollToSection(section)
           } else {
             window.location.hash = href
           }
@@ -82,7 +102,7 @@ export function scrollToSectionWithRetry(sectionId: string, maxRetries: number =
   let attempts = 0
   
   const tryScroll = () => {
-    const success = scrollToSection(sectionId, 100)
+    const success = scrollToSection(sectionId)
     
     if (!success && attempts < maxRetries) {
       attempts++

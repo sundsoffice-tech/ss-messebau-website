@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react'
-import { parseDeepLink, navigateToSection, navigateToPageAndSection, updateUrlWithSection, isValidDeepLink } from '@/lib/deep-linking'
+import { parseDeepLink, navigateToSection, navigateToPageAndSection, updateUrlWithSection, isValidDeepLink, getHeaderHeight } from '@/lib/deep-linking'
 
 export function useDeepLinking(currentPage: string) {
   useEffect(() => {
@@ -11,7 +11,7 @@ export function useDeepLinking(currentPage: string) {
       }
       
       const timeoutId = setTimeout(() => {
-        const success = navigateToSection(deepLink.section!, 100)
+        const success = navigateToSection(deepLink.section!)
         if (!success) {
           console.warn(`Failed to navigate to section "${deepLink.section}"`)
         }
@@ -24,13 +24,12 @@ export function useDeepLinking(currentPage: string) {
   const navigateToSectionOnPage = useCallback((page: string, section: string) => {
     navigateToPageAndSection(page, section, {
       maxRetries: 15,
-      retryDelay: 100,
-      headerOffset: 100
+      retryDelay: 100
     })
   }, [])
 
   const scrollToSection = useCallback((sectionId: string) => {
-    const success = navigateToSection(sectionId, 100)
+    const success = navigateToSection(sectionId)
     if (success) {
       updateUrlWithSection(sectionId, true)
     }

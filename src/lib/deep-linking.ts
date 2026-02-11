@@ -7,6 +7,21 @@ export interface DeepLinkConfig {
 
 export const HEADER_OFFSET = 100
 
+export function getHeaderHeight(): number {
+  const header = document.querySelector('header')
+  if (!header) return HEADER_OFFSET
+  
+  const rect = header.getBoundingClientRect()
+  const computedStyle = window.getComputedStyle(header)
+  const position = computedStyle.position
+  
+  if (position === 'fixed' || position === 'sticky') {
+    return rect.height + 20
+  }
+  
+  return HEADER_OFFSET
+}
+
 export function parseDeepLink(hash: string): DeepLinkConfig {
   return parseSectionHash(hash)
 }
@@ -21,28 +36,33 @@ export function normalizePagePath(page: string): string {
   return page
 }
 
-export function navigateToSection(sectionId: string, headerOffset: number = HEADER_OFFSET): boolean {
+export function navigateToSection(sectionId: string, headerOffset?: number): boolean {
   const element = document.getElementById(sectionId)
   
   if (!element) {
     return false
   }
   
+  const offset = headerOffset ?? getHeaderHeight()
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const elementPosition = element.getBoundingClientRect().top
-  const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+  const offsetPosition = elementPosition + window.pageYOffset - offset
   
   window.scrollTo({
     top: offsetPosition,
     behavior: prefersReducedMotion ? 'auto' : 'smooth'
   })
   
+  const focusDelay = prefersReducedMotion ? 50 : 400
   setTimeout(() => {
     if (!element.hasAttribute('tabindex')) {
       element.setAttribute('tabindex', '-1')
     }
     element.focus({ preventScroll: true })
-  }, prefersReducedMotion ? 0 : 400)
+    
+    element.setAttribute('aria-live', 'polite')
+    setTimeout(() => element.removeAttribute('aria-live'), 1000)
+  }, focusDelay)
   
   return true
 }
@@ -51,7 +71,7 @@ export function scrollToSectionWithRetry(
   sectionId: string,
   options: { maxRetries?: number; retryDelay?: number; headerOffset?: number } = {}
 ): void {
-  const { maxRetries = 20, retryDelay = 150, headerOffset = HEADER_OFFSET } = options
+  const { maxRetries = 20, retryDelay = 150, headerOffset } = options
   
   let attempts = 0
   
@@ -59,7 +79,8 @@ export function scrollToSectionWithRetry(
     const element = document.getElementById(sectionId)
     
     if (element) {
-      navigateToSection(sectionId, headerOffset)
+      const offset = headerOffset ?? getHeaderHeight()
+      navigateToSection(sectionId, offset)
       return
     }
     
@@ -80,7 +101,7 @@ export function navigateToPageAndSection(
   section: string,
   options: { maxRetries?: number; retryDelay?: number; headerOffset?: number } = {}
 ): void {
-  const { maxRetries = 20, retryDelay = 150, headerOffset = HEADER_OFFSET } = options
+  const { maxRetries = 20, retryDelay = 150, headerOffset } = options
   
   if (!validateSectionExists(page, section)) {
     console.warn(`Section "${section}" not found in page "${page}" configuration`)
@@ -89,7 +110,8 @@ export function navigateToPageAndSection(
   const currentPage = window.location.hash.slice(1).split('#')[0] || '/'
   
   if (currentPage === page) {
-    navigateToSection(section, headerOffset)
+    const offset = headerOffset ?? getHeaderHeight()
+    navigateToSection(section, offset)
   } else {
     window.location.hash = createDeepLink(page, section)
     scrollToSectionWithRetry(section, { maxRetries, retryDelay, headerOffset })

@@ -15,7 +15,7 @@ import { UeberUnsPage, AblaufPage, NachhaltigkeitPage, ImpressumPage, Datenschut
 import { BannerrahmenPage } from './components/pages/BannerrahmenPage'
 import { BannerBestellenPage } from './components/pages/BannerBestellenPage'
 import { AdminPage } from './components/pages/AdminPage'
-import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath, HEADER_OFFSET } from './lib/deep-linking'
+import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath } from './lib/deep-linking'
 import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 
 function App() {
@@ -35,17 +35,26 @@ function App() {
       if (section) {
         scrollToSectionWithRetry(section, {
           maxRetries: 20,
-          retryDelay: 150,
-          headerOffset: HEADER_OFFSET
+          retryDelay: 150
         })
       } else {
-        window.scrollTo({ top: 0, behavior: 'auto' })
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        window.scrollTo({ 
+          top: 0, 
+          behavior: prefersReducedMotion ? 'auto' : 'smooth'
+        })
       }
     }
 
     handleHashChange()
     window.addEventListener('hashchange', handleHashChange)
-    return () => window.removeEventListener('hashchange', handleHashChange)
+    
+    window.addEventListener('popstate', handleHashChange)
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+      window.removeEventListener('popstate', handleHashChange)
+    }
   }, [])
 
   const renderPage = () => {

@@ -8,7 +8,7 @@
   
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 100px;
+    scroll-padding-top: 120px;
   }
   
   @media (prefers-reduced-motion: reduce) {
@@ -24,11 +24,11 @@
   }
   
   [id] {
-    scroll-margin-top: 100px;
+    scroll-margin-top: 120px;
   }
   
   section[id] {
-    scroll-margin-top: 80px;
+    scroll-margin-top: 120px;
   }
   
   *:focus-visible {
@@ -51,6 +51,11 @@
     outline: 3px solid oklch(0.45 0.15 250);
     outline-offset: 0;
     box-shadow: 0 0 0 4px oklch(0.45 0.15 250 / 0.1);
+  }
+  
+  [tabindex="-1"]:focus {
+    outline: 2px dashed oklch(0.45 0.15 250);
+    outline-offset: 4px;
   }
   
   body {
