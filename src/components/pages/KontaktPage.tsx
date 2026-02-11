@@ -309,47 +309,49 @@ Antworte jetzt:`
 
   return (
     <div>
-      <section className="py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Kontakt</h1>
-          <p className="text-xl opacity-90 max-w-3xl">
+      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Kontakt</h1>
+          <p className="text-base sm:text-xl opacity-90 max-w-3xl">
             Haben Sie Fragen oder ein konkretes Projekt? Kontaktieren Sie uns – wir freuen uns auf Ihre Nachricht!
           </p>
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <h2 className="text-3xl font-bold mb-6">Schreiben Sie uns</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <section className="py-8 sm:py-12 lg:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+            <div className="order-2 lg:order-1">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Schreiben Sie uns</h2>
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="contact-name">Name *</Label>
+                    <Label htmlFor="contact-name" className="text-sm sm:text-base">Name *</Label>
                     <Input
                       id="contact-name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="Max Mustermann"
                       required
+                      className="h-11 sm:h-10"
+                      autoComplete="name"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="contact-company">Firma</Label>
+                    <Label htmlFor="contact-company" className="text-sm sm:text-base">Firma</Label>
                     <Input
                       id="contact-company"
                       value={formData.company}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                       placeholder="Mustermann GmbH"
+                      className="h-11 sm:h-10"
+                      autoComplete="organization"
                     />
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="contact-email">E-Mail *</Label>
+                    <Label htmlFor="contact-email" className="text-sm sm:text-base">E-Mail *</Label>
                     <Input
                       id="contact-email"
                       type="email"
@@ -357,62 +359,68 @@ Antworte jetzt:`
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="max@mustermann.de"
                       required
+                      className="h-11 sm:h-10"
+                      autoComplete="email"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="contact-phone">Telefon</Label>
+                    <Label htmlFor="contact-phone" className="text-sm sm:text-base">Telefon</Label>
                     <Input
                       id="contact-phone"
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+49 123 456789"
+                      className="h-11 sm:h-10"
+                      autoComplete="tel"
                     />
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="contact-event">Messe / Event</Label>
+                    <Label htmlFor="contact-event" className="text-sm sm:text-base">Messe / Event</Label>
                     <Input
                       id="contact-event"
                       value={formData.event}
                       onChange={(e) => setFormData({ ...formData, event: e.target.value })}
-                      placeholder="z.B. Anuga 2024"
+                      placeholder="z.B. Anuga"
+                      className="h-11 sm:h-10"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="contact-size">Standgröße</Label>
+                    <Label htmlFor="contact-size" className="text-sm sm:text-base">Standgröße</Label>
                     <Input
                       id="contact-size"
                       value={formData.size}
                       onChange={(e) => setFormData({ ...formData, size: e.target.value })}
                       placeholder="z.B. 50 qm"
+                      className="h-11 sm:h-10"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="contact-budget">Budget (optional)</Label>
+                  <Label htmlFor="contact-budget" className="text-sm sm:text-base">Budget (optional)</Label>
                   <Input
                     id="contact-budget"
                     value={formData.budget}
                     onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                     placeholder="z.B. 30.000 - 40.000 €"
+                    className="h-11 sm:h-10"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="contact-message">Ihre Nachricht *</Label>
+                  <Label htmlFor="contact-message" className="text-sm sm:text-base">Ihre Nachricht *</Label>
                   <Textarea
                     id="contact-message"
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="Beschreiben Sie uns Ihr Projekt..."
-                    rows={5}
+                    rows={4}
                     required
+                    className="resize-y min-h-[100px]"
                   />
                 </div>
 
@@ -420,26 +428,26 @@ Antworte jetzt:`
                   type="submit"
                   size="lg"
                   disabled={loading}
-                  className="w-full bg-accent hover:bg-accent/90"
+                  className="w-full bg-accent hover:bg-accent/90 h-12 sm:h-11 text-base font-semibold"
                 >
                   {loading ? 'Wird gesendet...' : 'Nachricht absenden'}
-                  <PaperPlaneRight className="ml-2" />
+                  <PaperPlaneRight className="ml-2" weight="fill" />
                 </Button>
               </form>
             </div>
 
-            <div>
-              <h2 className="text-3xl font-bold mb-6">Kontaktdaten</h2>
-              <div className="space-y-6 mb-8">
+            <div className="order-1 lg:order-2">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Kontaktdaten</h2>
+              <div className="space-y-4 mb-6 sm:mb-8">
                 <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                        <MapPin className="h-6 w-6 text-primary" />
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                      <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                        <MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                       </div>
-                      <div>
-                        <h3 className="font-semibold mb-1">Adresse</h3>
-                        <p className="text-muted-foreground">
+                      <div className="min-w-0">
+                        <h3 className="font-semibold mb-1 text-sm sm:text-base">Adresse</h3>
+                        <p className="text-sm sm:text-base text-muted-foreground">
                           Marienstr. 37-42<br />
                           41836 Hückelhoven<br />
                           Deutschland
@@ -450,32 +458,38 @@ Antworte jetzt:`
                 </Card>
 
                 <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                        <Phone className="h-6 w-6 text-primary" />
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                      <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                        <Phone className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                       </div>
-                      <div>
-                        <h3 className="font-semibold mb-1">Telefon</h3>
-                        <p className="text-muted-foreground">
-                          Festnetz: <a href="tel:+4924334427144" className="hover:text-primary">(02433) 4427144</a><br />
-                          Mobil: <a href="tel:+4915140322125" className="hover:text-primary">(01514) 0322125</a>
-                        </p>
+                      <div className="min-w-0">
+                        <h3 className="font-semibold mb-1 text-sm sm:text-base">Telefon</h3>
+                        <div className="text-sm sm:text-base text-muted-foreground space-y-1">
+                          <div>
+                            <span className="text-xs text-muted-foreground/80">Festnetz:</span>{' '}
+                            <a href="tel:+4924334427144" className="hover:text-primary font-medium">(02433) 4427144</a>
+                          </div>
+                          <div>
+                            <span className="text-xs text-muted-foreground/80">Mobil:</span>{' '}
+                            <a href="tel:+4915140322125" className="hover:text-primary font-medium">(01514) 0322125</a>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                        <Envelope className="h-6 w-6 text-primary" />
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                      <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                        <Envelope className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                       </div>
-                      <div>
-                        <h3 className="font-semibold mb-1">E-Mail</h3>
-                        <p className="text-muted-foreground">
-                          <a href="mailto:info@sundsmessebau.de" className="hover:text-primary">
+                      <div className="min-w-0">
+                        <h3 className="font-semibold mb-1 text-sm sm:text-base">E-Mail</h3>
+                        <p className="text-sm sm:text-base text-muted-foreground break-all">
+                          <a href="mailto:info@sundsmessebau.de" className="hover:text-primary font-medium">
                             info@sundsmessebau.de
                           </a>
                         </p>
@@ -486,44 +500,44 @@ Antworte jetzt:`
               </div>
 
               <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-2 border-primary/20 shadow-lg">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-md">
-                        <Sparkle className="h-7 w-7" weight="fill" />
+                <CardHeader className="pb-3 sm:pb-6">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3 sm:gap-4 min-w-0">
+                      <div className="flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-md">
+                        <Sparkle className="h-6 w-6 sm:h-7 sm:w-7" weight="fill" />
                       </div>
-                      <div>
-                        <CardTitle className="text-xl mb-1">KI-Messebau-Berater</CardTitle>
-                        <CardDescription>
+                      <div className="min-w-0">
+                        <CardTitle className="text-lg sm:text-xl mb-1">KI-Messebau-Berater</CardTitle>
+                        <CardDescription className="text-xs sm:text-sm">
                           Sofortige Antworten rund um die Uhr
                         </CardDescription>
                       </div>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                <CardContent className="space-y-3 sm:space-y-4">
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                     Stellen Sie Fragen zu Budget, Planung und Materialien – per Text oder Spracheingabe. 
                     Unser intelligenter Berater unterstützt Sie bei allen Aspekten Ihres Messeprojekts.
                   </p>
 
-                  <div className="grid grid-cols-2 gap-2.5 text-xs">
-                    <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2.5">
-                      <Calculator className="h-4 w-4 text-primary" weight="fill" />
-                      <span className="font-medium">Budget-Kalkulation</span>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2">
+                      <Calculator className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary shrink-0" weight="fill" />
+                      <span className="font-medium text-[11px] sm:text-xs leading-tight">Budget-Kalkulation</span>
                     </div>
-                    <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2.5">
-                      <ClockClockwise className="h-4 w-4 text-primary" weight="fill" />
-                      <span className="font-medium">Timeline-Planung</span>
+                    <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2">
+                      <ClockClockwise className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary shrink-0" weight="fill" />
+                      <span className="font-medium text-[11px] sm:text-xs leading-tight">Timeline-Planung</span>
                     </div>
-                    <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2.5">
-                      <Lightbulb className="h-4 w-4 text-primary" weight="fill" />
-                      <span className="font-medium">Materialberatung</span>
+                    <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2">
+                      <Lightbulb className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary shrink-0" weight="fill" />
+                      <span className="font-medium text-[11px] sm:text-xs leading-tight">Materialberatung</span>
                     </div>
                     {isVoiceSupported && (
-                      <div className="flex items-center gap-2 bg-gradient-to-r from-accent/20 to-primary/20 rounded-lg p-2.5 border border-accent/30">
-                        <Microphone className="h-4 w-4 text-accent" weight="fill" />
-                        <span className="font-semibold">Spracheingabe</span>
+                      <div className="flex items-center gap-2 bg-gradient-to-r from-accent/20 to-primary/20 rounded-lg p-2 border border-accent/30">
+                        <Microphone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent shrink-0" weight="fill" />
+                        <span className="font-semibold text-[11px] sm:text-xs leading-tight">Spracheingabe</span>
                       </div>
                     )}
                   </div>
@@ -531,18 +545,18 @@ Antworte jetzt:`
                   <div className="flex gap-2">
                     <Button 
                       onClick={() => setChatOpen(!chatOpen)} 
-                      className="flex-1 bg-primary hover:bg-primary/90"
+                      className="flex-1 bg-primary hover:bg-primary/90 h-11 sm:h-10"
                       size="lg"
                     >
                       {chatOpen ? (
                         <>
-                          <X className="mr-2" />
-                          Chat minimieren
+                          <X className="mr-2 h-5 w-5" />
+                          <span className="text-sm">Minimieren</span>
                         </>
                       ) : (
                         <>
-                          <ChatCircleDots className="mr-2" weight="fill" />
-                          Chat starten
+                          <ChatCircleDots className="mr-2 h-5 w-5" weight="fill" />
+                          <span className="text-sm">Chat starten</span>
                         </>
                       )}
                     </Button>
@@ -551,8 +565,9 @@ Antworte jetzt:`
                         onClick={clearChat}
                         variant="outline"
                         size="lg"
+                        className="h-11 sm:h-10 px-3"
                       >
-                        <ClockClockwise />
+                        <ClockClockwise className="h-5 w-5" />
                       </Button>
                     )}
                   </div>
@@ -560,7 +575,7 @@ Antworte jetzt:`
                   <Button 
                     onClick={() => window.location.hash = '/ki-berater'}
                     variant="outline"
-                    className="w-full"
+                    className="w-full h-10 text-sm"
                   >
                     <Info className="mr-2 h-4 w-4" />
                     Mehr über den KI-Berater erfahren
@@ -569,59 +584,59 @@ Antworte jetzt:`
                   {chatOpen && (
                     <div className="border-2 rounded-xl bg-background shadow-inner overflow-hidden">
                       {isListening && (
-                        <div className="bg-gradient-to-r from-red-500/10 via-red-500/20 to-red-500/10 border-b border-red-500/30 p-3 animate-pulse">
-                          <div className="flex items-center justify-center gap-3">
-                            <div className="flex gap-1">
-                              <div className="w-1 h-6 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '0ms', animationDuration: '600ms' }} />
-                              <div className="w-1 h-8 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '100ms', animationDuration: '600ms' }} />
-                              <div className="w-1 h-10 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '200ms', animationDuration: '600ms' }} />
-                              <div className="w-1 h-8 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '300ms', animationDuration: '600ms' }} />
-                              <div className="w-1 h-6 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '400ms', animationDuration: '600ms' }} />
+                        <div className="bg-gradient-to-r from-red-500/10 via-red-500/20 to-red-500/10 border-b border-red-500/30 p-2 sm:p-3 animate-pulse">
+                          <div className="flex items-center justify-center gap-2 sm:gap-3">
+                            <div className="flex gap-0.5 sm:gap-1">
+                              <div className="w-0.5 sm:w-1 h-4 sm:h-6 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '0ms', animationDuration: '600ms' }} />
+                              <div className="w-0.5 sm:w-1 h-5 sm:h-8 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '100ms', animationDuration: '600ms' }} />
+                              <div className="w-0.5 sm:w-1 h-6 sm:h-10 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '200ms', animationDuration: '600ms' }} />
+                              <div className="w-0.5 sm:w-1 h-5 sm:h-8 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '300ms', animationDuration: '600ms' }} />
+                              <div className="w-0.5 sm:w-1 h-4 sm:h-6 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '400ms', animationDuration: '600ms' }} />
                             </div>
-                            <span className="text-sm font-semibold text-red-700">
+                            <span className="text-xs sm:text-sm font-semibold text-red-700">
                               Sprechen Sie jetzt...
                             </span>
                           </div>
                         </div>
                       )}
-                      <ScrollArea className="h-[500px]" ref={scrollRef}>
-                        <div className="p-4 space-y-4">
+                      <ScrollArea className="h-[400px] sm:h-[500px]" ref={scrollRef}>
+                        <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
                           {(chatMessages || []).map((msg, index) => (
                             <div
                               key={index}
                               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}
                             >
                               <div
-                                className={`max-w-[85%] rounded-2xl p-4 shadow-sm ${
+                                className={`max-w-[90%] sm:max-w-[85%] rounded-2xl p-3 sm:p-4 shadow-sm ${
                                   msg.role === 'user'
                                     ? 'bg-primary text-primary-foreground'
                                     : 'bg-muted border border-border'
                                 }`}
                               >
-                                <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                                <p className="text-xs sm:text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
                               </div>
                             </div>
                           ))}
                           {isTyping && (
                             <div className="flex justify-start animate-in fade-in slide-in-from-bottom-2 duration-300">
-                              <div className="max-w-[85%] rounded-2xl p-4 shadow-sm bg-muted border border-border">
-                                <p className="text-sm leading-relaxed whitespace-pre-wrap">{typingText}</p>
+                              <div className="max-w-[90%] sm:max-w-[85%] rounded-2xl p-3 sm:p-4 shadow-sm bg-muted border border-border">
+                                <p className="text-xs sm:text-sm leading-relaxed whitespace-pre-wrap">{typingText}</p>
                                 <div className="flex gap-1 mt-2">
-                                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                                 </div>
                               </div>
                             </div>
                           )}
                           {chatLoading && !isTyping && (
                             <div className="flex justify-start">
-                              <div className="bg-muted rounded-2xl p-4 shadow-sm border border-border">
+                              <div className="bg-muted rounded-2xl p-3 sm:p-4 shadow-sm border border-border">
                                 <div className="flex gap-2 items-center">
-                                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                                  <span className="text-sm text-muted-foreground ml-2">Analysiere Anfrage...</span>
+                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                  <span className="text-xs sm:text-sm text-muted-foreground ml-2">Analysiere Anfrage...</span>
                                 </div>
                               </div>
                             </div>
@@ -631,30 +646,30 @@ Antworte jetzt:`
                       </ScrollArea>
 
                       {showQuickActions && !chatLoading && (
-                        <div className="p-4 border-t bg-muted/30">
-                          <p className="text-xs font-semibold text-muted-foreground mb-3 flex items-center gap-2">
-                            <Lightbulb className="h-4 w-4" />
+                        <div className="p-3 sm:p-4 border-t bg-muted/30">
+                          <p className="text-xs font-semibold text-muted-foreground mb-2 sm:mb-3 flex items-center gap-2">
+                            <Lightbulb className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                             Schnellaktionen
                           </p>
-                          <div className="grid grid-cols-2 gap-2">
+                          <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
                             {quickActions.map((action) => (
                               <Button
                                 key={action.id}
                                 onClick={() => handleQuickAction(action)}
                                 variant="outline"
                                 size="sm"
-                                className="justify-start text-xs h-auto py-2 hover:bg-primary/10 hover:border-primary/50"
+                                className="justify-start text-[11px] sm:text-xs h-auto py-2 hover:bg-primary/10 hover:border-primary/50"
                                 disabled={chatLoading}
                               >
-                                <span className="mr-2">{action.icon}</span>
-                                <span className="truncate">{action.label}</span>
+                                <span className="mr-1.5 sm:mr-2 shrink-0">{action.icon}</span>
+                                <span className="truncate text-left">{action.label}</span>
                               </Button>
                             ))}
                           </div>
                         </div>
                       )}
 
-                      <div className="p-4 border-t bg-background/50">
+                      <div className="p-3 sm:p-4 border-t bg-background/50">
                         <div className="flex gap-2">
                           <Input
                             value={isListening ? (chatInput + ' ' + interimTranscript).trim() : chatInput}
@@ -667,7 +682,7 @@ Antworte jetzt:`
                             }}
                             placeholder={isListening ? "Ich höre zu..." : "Ihre Frage eingeben..."}
                             disabled={chatLoading || isListening}
-                            className="flex-1"
+                            className="flex-1 h-11 sm:h-10 text-sm"
                           />
                           {isVoiceSupported && (
                             <Button
@@ -675,7 +690,7 @@ Antworte jetzt:`
                               disabled={chatLoading}
                               size="icon"
                               variant={isListening ? "destructive" : "outline"}
-                              className={isListening ? "animate-pulse" : ""}
+                              className={`h-11 w-11 sm:h-10 sm:w-10 shrink-0 ${isListening ? "animate-pulse" : ""}`}
                               title={isListening ? "Aufnahme stoppen" : "Spracheingabe starten"}
                             >
                               {isListening ? (
@@ -689,12 +704,12 @@ Antworte jetzt:`
                             onClick={() => handleChatSubmit()}
                             disabled={chatLoading || !chatInput.trim() || isListening}
                             size="icon"
-                            className="shrink-0 bg-primary hover:bg-primary/90"
+                            className="shrink-0 bg-primary hover:bg-primary/90 h-11 w-11 sm:h-10 sm:w-10"
                           >
                             <PaperPlaneRight weight="fill" />
                           </Button>
                         </div>
-                        <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
+                        <div className="flex items-center justify-between mt-2 text-[10px] sm:text-xs text-muted-foreground">
                           <span>
                             Powered by GPT-4
                           </span>
@@ -715,9 +730,9 @@ Antworte jetzt:`
         </div>
       </section>
 
-      <section className="py-12 bg-muted">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="aspect-video rounded-lg overflow-hidden">
+      <section className="py-8 sm:py-12 bg-muted">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="aspect-video rounded-lg overflow-hidden shadow-lg">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2516.847!2d6.223!3d51.056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTHCsDAzJzIxLjYiTiA2wrAxMyczMy44IkU!5e0!3m2!1sde!2sde!4v1234567890"
               width="100%"

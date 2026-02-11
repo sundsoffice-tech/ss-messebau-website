@@ -42,21 +42,21 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
 
   return (
     <div>
-      <section className="py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Unsere Referenzen</h1>
-          <p className="text-xl opacity-90 max-w-3xl">
+      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Unsere Referenzen</h1>
+          <p className="text-base sm:text-xl opacity-90 max-w-3xl">
             Überzeugen Sie sich von der Qualität unserer Arbeit. Hier finden Sie eine Auswahl erfolgreicher Projekte, 
             die wir für unsere Kunden realisiert haben.
           </p>
         </div>
       </section>
 
-      <section className="py-12 border-b bg-muted">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+      <section className="py-6 sm:py-8 lg:py-12 border-b bg-muted">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <p className="text-sm text-muted-foreground mb-2">Filter nach Branche</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-2 font-medium">Filter nach Branche</p>
               <div className="flex flex-wrap gap-2">
                 {[
                   { value: 'alle', label: 'Alle Branchen' },
@@ -69,6 +69,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                     variant={selectedBranche === option.value ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setSelectedBranche(option.value)}
+                    className="h-9 text-xs sm:text-sm"
                   >
                     {option.label}
                   </Button>
@@ -77,7 +78,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
             </div>
 
             <div>
-              <p className="text-sm text-muted-foreground mb-2">Filter nach Typ</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-2 font-medium">Filter nach Typ</p>
               <div className="flex flex-wrap gap-2">
                 {[
                   { value: 'alle', label: 'Alle Typen' },
@@ -90,6 +91,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                     variant={selectedType === option.value ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setSelectedType(option.value)}
+                    className="h-9 text-xs sm:text-sm"
                   >
                     {option.label}
                   </Button>
@@ -100,23 +102,23 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
+      <section className="py-8 sm:py-12 lg:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {filteredReferences.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-lg text-muted-foreground mb-6">
+            <div className="text-center py-12 sm:py-16">
+              <p className="text-base sm:text-lg text-muted-foreground mb-6">
                 Keine Projekte in dieser Kategorie gefunden. Kontaktieren Sie uns für Ihr individuelles Projekt!
               </p>
-              <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90">
+              <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 h-11 sm:h-10">
                 Projekt anfragen
               </Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {filteredReferences.map((reference) => (
                 <Card 
                   key={reference.id} 
-                  className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary"
+                  className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary active:scale-[0.98]"
                   onClick={() => setSelectedReference(reference)}
                 >
                   <div className="aspect-video relative overflow-hidden bg-muted">
@@ -126,23 +128,23 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                       className="object-cover w-full h-full group-hover:scale-110 group-hover:rotate-1 transition-all duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <Badge className="absolute top-4 left-4 bg-background/95 text-foreground shadow-lg backdrop-blur-sm">
+                    <Badge className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-background/95 text-foreground shadow-lg backdrop-blur-sm text-xs sm:text-sm">
                       {reference.size}
                     </Badge>
-                    <div className="absolute bottom-4 left-4 right-4 transform translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                      <p className="text-white text-sm font-semibold drop-shadow-lg flex items-center gap-2">
+                    <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 transform translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                      <p className="text-white text-xs sm:text-sm font-semibold drop-shadow-lg flex items-center gap-2">
                         Details ansehen
                         <ArrowRight className="h-4 w-4" />
                       </p>
                     </div>
                   </div>
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Badge variant="secondary">{getBrancheLabel(reference.branche)}</Badge>
-                      <Badge variant="outline">{getTypeLabel(reference.type)}</Badge>
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
+                      <Badge variant="secondary" className="text-[10px] sm:text-xs">{getBrancheLabel(reference.branche)}</Badge>
+                      <Badge variant="outline" className="text-[10px] sm:text-xs">{getTypeLabel(reference.type)}</Badge>
                     </div>
-                    <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">{reference.title}</h3>
-                    <p className="text-sm text-muted-foreground line-clamp-2">{reference.description}</p>
+                    <h3 className="font-semibold text-sm sm:text-base mb-1 sm:mb-2 group-hover:text-primary transition-colors line-clamp-1">{reference.title}</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{reference.description}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -152,14 +154,14 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
       </section>
 
       <Dialog open={!!selectedReference} onOpenChange={(open) => !open && setSelectedReference(null)}>
-        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           {selectedReference && (
             <>
               <DialogHeader>
-                <DialogTitle className="text-2xl">{selectedReference.title}</DialogTitle>
+                <DialogTitle className="text-xl sm:text-2xl pr-8">{selectedReference.title}</DialogTitle>
               </DialogHeader>
 
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div className="aspect-video rounded-lg overflow-hidden">
                   <img 
                     src={selectedReference.imageUrl} 
@@ -168,44 +170,44 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                   />
                 </div>
 
-                <div className="flex flex-wrap gap-2">
-                  <Badge>{getBrancheLabel(selectedReference.branche)}</Badge>
-                  <Badge variant="outline">{getTypeLabel(selectedReference.type)}</Badge>
-                  <Badge variant="secondary">{selectedReference.size}</Badge>
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                  <Badge className="text-xs">{getBrancheLabel(selectedReference.branche)}</Badge>
+                  <Badge variant="outline" className="text-xs">{getTypeLabel(selectedReference.type)}</Badge>
+                  <Badge variant="secondary" className="text-xs">{selectedReference.size}</Badge>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Ausgangslage</h3>
-                  <p className="text-muted-foreground">{selectedReference.challenge}</p>
+                  <h3 className="font-semibold text-base sm:text-lg mb-2">Ausgangslage</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{selectedReference.challenge}</p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Unsere Lösung</h3>
-                  <p className="text-muted-foreground">{selectedReference.solution}</p>
+                  <h3 className="font-semibold text-base sm:text-lg mb-2">Unsere Lösung</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{selectedReference.solution}</p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Ergebnis</h3>
-                  <p className="text-muted-foreground">{selectedReference.result}</p>
+                  <h3 className="font-semibold text-base sm:text-lg mb-2">Ergebnis</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{selectedReference.result}</p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-lg mb-3">Projekt-Facts</h3>
+                  <h3 className="font-semibold text-base sm:text-lg mb-3">Projekt-Facts</h3>
                   <div className="space-y-2">
                     {selectedReference.keyfacts.map((fact, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
-                        <span>{fact}</span>
+                      <div key={index} className="flex items-start gap-2 sm:gap-3">
+                        <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0 mt-0.5" weight="fill" />
+                        <span className="text-xs sm:text-sm leading-relaxed">{fact}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4">
+                <div className="pt-2 sm:pt-4">
                   <Button onClick={() => {
                     setSelectedReference(null)
                     onOpenInquiry()
-                  }} className="w-full bg-accent hover:bg-accent/90">
+                  }} className="w-full bg-accent hover:bg-accent/90 h-11 sm:h-10">
                     Ähnliches Projekt anfragen
                   </Button>
                 </div>
@@ -215,13 +217,13 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
         </DialogContent>
       </Dialog>
 
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Bereit für Ihr eigenes Erfolgsprojekt?</h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+      <section className="py-12 sm:py-16 bg-muted">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Bereit für Ihr eigenes Erfolgsprojekt?</h2>
+          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
             Lassen Sie uns gemeinsam Ihren perfekten Messeauftritt planen.
           </p>
-          <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90">
+          <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 h-12 sm:h-11">
             Jetzt Projekt besprechen
           </Button>
         </div>

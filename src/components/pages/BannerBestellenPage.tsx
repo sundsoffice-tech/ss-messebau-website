@@ -211,19 +211,19 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
   }
 
   return (
-    <div className="min-h-screen bg-secondary/20 py-12">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-secondary/20 py-6 sm:py-8 lg:py-12">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">Banner online konfigurieren</h1>
-            <p className="text-muted-foreground">
+          <div className="mb-6 sm:mb-8 text-center px-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Banner online konfigurieren</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">
               Schritt {currentStep} von {totalSteps}
             </p>
           </div>
 
-          <div className="mb-8">
-            <Progress value={progress} className="h-2" />
-            <div className="mt-4 hidden md:flex justify-between text-sm">
+          <div className="mb-6 sm:mb-8 px-2">
+            <Progress value={progress} className="h-1.5 sm:h-2" />
+            <div className="mt-3 sm:mt-4 hidden md:flex justify-between text-sm">
               {['Einsatz', 'Maße', 'Druck', 'Daten', 'Lieferung', 'Kontakt'].map((label, idx) => (
                 <button
                   key={idx}
@@ -248,11 +248,27 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
                 </button>
               ))}
             </div>
+            
+            <div className="mt-3 flex md:hidden justify-center gap-1.5">
+              {['Einsatz', 'Maße', 'Druck', 'Daten', 'Lieferung', 'Kontakt'].map((label, idx) => (
+                <div
+                  key={idx}
+                  className={`h-1.5 flex-1 rounded-full transition-all ${
+                    idx + 1 < currentStep
+                      ? 'bg-primary'
+                      : idx + 1 === currentStep
+                      ? 'bg-primary/60'
+                      : 'bg-muted'
+                  }`}
+                  title={label}
+                />
+              ))}
+            </div>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <Card className="p-6 md:p-8">
+          <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="lg:col-span-2 order-2 lg:order-1">
+              <Card className="p-4 sm:p-6 md:p-8">
                 {currentStep === 1 && config && (
                   <ConfiguratorStep1
                     data={config.step1}
@@ -305,7 +321,7 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
               </Card>
             </div>
 
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 order-1 lg:order-2">
               {config && <ConfigSummary config={config} currentStep={currentStep} />}
             </div>
           </div>
