@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { 
   List, 
-  X, 
   House, 
   Briefcase, 
   Buildings, 
@@ -465,20 +464,11 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[85vw] sm:w-80 px-0">
-                <div className="flex items-center justify-between px-4 mb-6">
+                <div className="flex items-center px-4 mb-6">
                   <div className="flex items-center gap-2">
                     <img src={logo} alt="S&S Messebau Logo" className="h-9 w-auto" />
                     <span className="font-bold text-lg">Menü</span>
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="min-h-[44px] min-w-[44px]"
-                  >
-                    <X className="h-5 w-5" />
-                    <span className="sr-only">Menü schließen</span>
-                  </Button>
                 </div>
                 
                 <div className="px-3 overflow-y-auto max-h-[calc(100vh-180px)]">
