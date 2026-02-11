@@ -6,9 +6,10 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { toast } from 'sonner'
-import { Phone, Envelope, MapPin, PaperPlaneRight, ChatCircleDots, Sparkle, Calculator, ClockClockwise, Lightbulb, X, CheckCircle, ArrowRight } from '@phosphor-icons/react'
+import { Phone, Envelope, MapPin, PaperPlaneRight, ChatCircleDots, Sparkle, Calculator, ClockClockwise, Lightbulb, X, CheckCircle, ArrowRight, Microphone, Stop } from '@phosphor-icons/react'
 import { ContactInquiry, ChatMessage } from '@/lib/types'
 import { useKV } from '@github/spark/hooks'
+import { useVoiceInput } from '@/hooks/use-voice-input'
 
 interface KontaktPageProps {
   onOpenInquiry: () => void
@@ -36,6 +37,28 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
   const [isTyping, setIsTyping] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const chatEndRef = useRef<HTMLDivElement>(null)
+  
+  const {
+    isListening,
+    isSupported: isVoiceSupported,
+    transcript,
+    interimTranscript,
+    startListening,
+    stopListening,
+    resetTranscript
+  } = useVoiceInput({
+    lang: 'de-DE',
+    continuous: false,
+    interimResults: true,
+    onTranscript: (text, isFinal) => {
+      if (isFinal) {
+        setChatInput((prev) => (prev + ' ' + text).trim())
+      }
+    },
+    onError: (error) => {
+      toast.error(error)
+    }
+  })
 
   const [formData, setFormData] = useState({
     name: '',
@@ -164,6 +187,8 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
     if (!customPrompt) {
       setChatInput('')
     }
+    
+    resetTranscript()
     
     setShowQuickActions(false)
     setChatMessages((prev) => [...(prev || []), { role: 'user', content: userMessage }])
@@ -489,6 +514,18 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
                       <CheckCircle className="h-4 w-4 text-green-600" weight="fill" />
                       <span>24/7 Verfügbar</span>
                     </div>
+                    {isVoiceSupported && (
+                      <>
+                        <div className="flex items-center gap-2 bg-gradient-to-r from-accent/20 to-primary/20 rounded-lg p-2 border border-accent/30">
+                          <Microphone className="h-4 w-4 text-accent" weight="fill" />
+                          <span className="font-semibold">Spracheingabe</span>
+                        </div>
+                        <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2">
+                          <CheckCircle className="h-4 w-4 text-green-600" weight="fill" />
+                          <span>Freihändig bedienbar</span>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   <div className="flex gap-2">
@@ -522,6 +559,22 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
 
                   {chatOpen && (
                     <div className="border-2 rounded-xl bg-background shadow-inner overflow-hidden">
+                      {isListening && (
+                        <div className="bg-gradient-to-r from-red-500/10 via-red-500/20 to-red-500/10 border-b border-red-500/30 p-3 animate-pulse">
+                          <div className="flex items-center justify-center gap-3">
+                            <div className="flex gap-1">
+                              <div className="w-1 h-6 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '0ms', animationDuration: '600ms' }} />
+                              <div className="w-1 h-8 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '100ms', animationDuration: '600ms' }} />
+                              <div className="w-1 h-10 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '200ms', animationDuration: '600ms' }} />
+                              <div className="w-1 h-8 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '300ms', animationDuration: '600ms' }} />
+                              <div className="w-1 h-6 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '400ms', animationDuration: '600ms' }} />
+                            </div>
+                            <span className="text-sm font-semibold text-red-700">
+                              🎤 Sprechen Sie jetzt...
+                            </span>
+                          </div>
+                        </div>
+                      )}
                       <ScrollArea className="h-[500px]" ref={scrollRef}>
                         <div className="p-4 space-y-4">
                           {(chatMessages || []).map((msg, index) => (
@@ -595,7 +648,7 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
                       <div className="p-4 border-t bg-background/50">
                         <div className="flex gap-2">
                           <Input
-                            value={chatInput}
+                            value={isListening ? (chatInput + ' ' + interimTranscript).trim() : chatInput}
                             onChange={(e) => setChatInput(e.target.value)}
                             onKeyDown={(e) => {
                               if (e.key === 'Enter' && !e.shiftKey) {
@@ -603,22 +656,46 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
                                 handleChatSubmit()
                               }
                             }}
-                            placeholder="Stellen Sie Ihre Frage..."
-                            disabled={chatLoading}
+                            placeholder={isListening ? "Ich höre zu..." : "Stellen Sie Ihre Frage..."}
+                            disabled={chatLoading || isListening}
                             className="flex-1"
                           />
+                          {isVoiceSupported && (
+                            <Button
+                              onClick={isListening ? stopListening : startListening}
+                              disabled={chatLoading}
+                              size="icon"
+                              variant={isListening ? "destructive" : "outline"}
+                              className={isListening ? "animate-pulse" : ""}
+                              title={isListening ? "Aufnahme stoppen" : "Spracheingabe starten"}
+                            >
+                              {isListening ? (
+                                <Stop weight="fill" className="h-5 w-5" />
+                              ) : (
+                                <Microphone weight="fill" className="h-5 w-5" />
+                              )}
+                            </Button>
+                          )}
                           <Button
                             onClick={() => handleChatSubmit()}
-                            disabled={chatLoading || !chatInput.trim()}
+                            disabled={chatLoading || !chatInput.trim() || isListening}
                             size="icon"
                             className="shrink-0 bg-primary hover:bg-primary/90"
                           >
                             <PaperPlaneRight weight="fill" />
                           </Button>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-2 text-center">
-                          Powered by GPT-4 • Kontextwissen über S&S Messebau
-                        </p>
+                        <div className="flex items-center justify-between mt-2">
+                          <p className="text-xs text-muted-foreground">
+                            Powered by GPT-4 • Kontextwissen über S&S Messebau
+                          </p>
+                          {isVoiceSupported && (
+                            <p className="text-xs text-muted-foreground flex items-center gap-1">
+                              <Microphone className="h-3 w-3" />
+                              Spracheingabe verfügbar
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -685,9 +762,45 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
             </Card>
           </div>
 
+          {isVoiceSupported && (
+            <Card className="bg-gradient-to-br from-accent/10 to-primary/10 border-2 border-accent/30 mb-12">
+              <CardContent className="p-8">
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-accent/80 text-white shadow-lg">
+                    <Microphone className="h-9 w-9" weight="fill" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                      🎤 Spracheingabe verfügbar
+                      <span className="text-xs bg-accent text-white px-2 py-1 rounded-full font-semibold">NEU</span>
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Stellen Sie Ihre Fragen bequem per Sprache! Klicken Sie im Chat auf das Mikrofon-Symbol und sprechen Sie Ihre Frage. 
+                      Die Spracheingabe erfolgt direkt in Ihrem Browser – sicher und privat.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-accent" weight="fill" />
+                        <span>Freihändige Bedienung</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-accent" weight="fill" />
+                        <span>Deutsche Spracherkennung</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-accent" weight="fill" />
+                        <span>Sofortige Verarbeitung</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <Card className="bg-muted/50">
             <CardContent className="p-8">
-              <h3 className="font-semibold text-lg mb-4">💡 Beispiel-Fragen, die Sie stellen können:</h3>
+              <h3 className="font-semibold text-lg mb-4">💡 Beispiel-Fragen, die Sie stellen können{isVoiceSupported && ' (auch per Sprache)'}:</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="flex items-start gap-3">
                   <div className="mt-1 text-primary">•</div>
@@ -714,6 +827,20 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
                   <p className="text-sm">"Können Sie mir Referenzen aus der Food-Branche zeigen?"</p>
                 </div>
               </div>
+              {isVoiceSupported && (
+                <div className="mt-6 pt-6 border-t border-border">
+                  <div className="flex items-start gap-3 bg-accent/5 rounded-lg p-4 border border-accent/20">
+                    <Microphone className="h-5 w-5 text-accent shrink-0 mt-0.5" weight="fill" />
+                    <div>
+                      <p className="text-sm font-semibold mb-1">💡 Tipp: Spracheingabe nutzen</p>
+                      <p className="text-xs text-muted-foreground">
+                        Klicken Sie auf das Mikrofon-Symbol im Chat und sprechen Sie Ihre Frage natürlich aus. 
+                        Die Spracherkennung funktioniert am besten in ruhiger Umgebung.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
