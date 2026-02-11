@@ -244,6 +244,23 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     }
   }
 
+  const handleMegaMenuKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      setMegaMenuOpen(false)
+      megaMenuTriggerRef.current?.focus()
+    }
+    
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      if (megaMenuOpen) {
+        handleNavigation('/leistungen')
+      } else {
+        setMegaMenuOpen(true)
+      }
+    }
+  }
+
   return (
     <header 
       className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
@@ -251,14 +268,21 @@ export function Header({ onOpenInquiry }: HeaderProps) {
           ? 'bg-background/98 backdrop-blur-md shadow-sm' 
           : 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
       }`}
+      role="banner"
     >
       <div className="container mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
         <div className={`flex items-center justify-between transition-all duration-300 ${
           scrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'
         }`}>
-          <button 
-            onClick={() => handleNavigation('/')}
+          <a
+            href="#/"
+            onClick={(e) => {
+              e.preventDefault()
+              handleNavigation('/')
+            }}
             className="flex items-center gap-2 sm:gap-3 transition-all hover:opacity-80 flex-shrink-0 min-h-[44px] min-w-[44px] -ml-2 pl-2 group"
+            aria-label="S&S Messebau - Zur Startseite"
+            aria-current={currentPath === '/' ? 'page' : undefined}
           >
             <div className={`relative flex-shrink-0 transition-all duration-300 ${
               scrolled ? 'w-8 h-8 sm:w-10 sm:h-10' : 'w-9 h-9 sm:w-12 sm:h-12'
@@ -283,9 +307,9 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 Full-Service Messebau
               </div>
             </div>
-          </button>
+          </a>
 
-          <nav className="hidden xl:flex items-center gap-1">
+          <nav className="hidden xl:flex items-center gap-1" aria-label="Hauptnavigation">
             <Button
               variant="ghost"
               onClick={() => handleNavigation('/')}
@@ -295,6 +319,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   : 'hover:text-primary'
               }`}
               size={scrolled ? 'sm' : 'default'}
+              aria-current={currentPath === '/' ? 'page' : undefined}
             >
               Start
             </Button>
@@ -304,6 +329,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 ref={megaMenuTriggerRef}
                 variant="ghost"
                 onClick={handleLeistungenClick}
+                onKeyDown={handleMegaMenuKeyDown}
                 onMouseEnter={() => setMegaMenuOpen(true)}
                 className={`transition-colors gap-1 ${
                   currentPath === '/leistungen' || megaMenuOpen
@@ -311,15 +337,28 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     : 'hover:text-primary'
                 }`}
                 size={scrolled ? 'sm' : 'default'}
+                aria-expanded={megaMenuOpen}
+                aria-haspopup="true"
+                aria-controls="leistungen-mega-menu"
               >
                 Leistungen
-                <CaretDown className={`h-4 w-4 transition-transform ${megaMenuOpen ? 'rotate-180' : ''}`} />
+                <CaretDown className={`h-4 w-4 transition-transform ${megaMenuOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </Button>
 
               {megaMenuOpen && (
                 <div
+                  id="leistungen-mega-menu"
                   ref={megaMenuRef}
+                  role="region"
+                  aria-label="Leistungen Übersicht"
                   onMouseLeave={() => setMegaMenuOpen(false)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                      e.preventDefault()
+                      setMegaMenuOpen(false)
+                      megaMenuTriggerRef.current?.focus()
+                    }
+                  }}
                   className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[900px] z-50"
                 >
                   <div className="bg-background border rounded-lg shadow-2xl p-6 animate-in fade-in-0 zoom-in-95 duration-200">
@@ -411,6 +450,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     : 'hover:text-primary'
                 }`}
                 size={scrolled ? 'sm' : 'default'}
+                aria-current={currentPath === item.path ? 'page' : undefined}
               >
                 {item.label}
               </Button>

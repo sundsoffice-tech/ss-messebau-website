@@ -6,9 +6,32 @@
     @apply border-border
   }
   
+  *:focus-visible {
+    outline: 3px solid oklch(0.45 0.15 250);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+  
+  button:focus-visible,
+  a:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 3px solid oklch(0.45 0.15 250);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px oklch(0.45 0.15 250 / 0.15);
+  }
+  
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 3px solid oklch(0.45 0.15 250);
+    outline-offset: 0;
+    box-shadow: 0 0 0 4px oklch(0.45 0.15 250 / 0.1);
+  }
+  
   body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
+    overscroll-behavior-y: contain;
   }
   
   h1, h2, h3, h4, h5, h6 {

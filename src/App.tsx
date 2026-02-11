@@ -77,8 +77,14 @@ function App() {
     <>
       <LoadingScreen />
       <div className="min-h-screen flex flex-col">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-20 focus:left-4 focus:z-50 focus:px-6 focus:py-3 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:font-medium focus:shadow-lg"
+        >
+          Zum Hauptinhalt springen
+        </a>
         <Header onOpenInquiry={() => setInquiryDialogOpen(true)} />
-        <main className="flex-1 mobile-safe-bottom">
+        <main id="main-content" tabIndex={-1} className="flex-1 mobile-safe-bottom focus:outline-none">
           {renderPage()}
         </main>
         <Footer />

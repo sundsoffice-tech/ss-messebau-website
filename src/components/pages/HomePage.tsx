@@ -28,7 +28,10 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
 
   return (
     <div>
-      <section className="relative min-h-[500px] sm:min-h-[600px] flex items-center hero-gradient overflow-hidden">
+      <section 
+        className="relative min-h-[500px] sm:min-h-[600px] flex items-center hero-gradient overflow-hidden"
+        aria-labelledby="hero-heading"
+      >
         <div className="absolute inset-0 hero-overlay" />
         <picture>
           <source
@@ -48,6 +51,8 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           <img
             src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1024&q=75&auto=format"
             alt=""
+            role="presentation"
+            aria-hidden="true"
             width="1920"
             height="1080"
             className="absolute inset-0 w-full h-full object-cover opacity-20"
@@ -60,7 +65,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 py-12 sm:py-16">
           <div className="max-w-3xl">
             <Badge className="mb-4 sm:mb-6 bg-accent text-accent-foreground text-sm">Full-Service Messebau mit Erfahrung</Badge>
-            <h1 className="font-bold text-white mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>
+            <h1 id="hero-heading" className="font-bold text-white mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>
               Messestände, die verkaufen.
             </h1>
             <p className="text-white/90 mb-6 sm:mb-8 leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', lineHeight: '1.5' }}>
@@ -71,15 +76,17 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 size="lg" 
                 onClick={onOpenInquiry}
                 className="bg-accent hover:bg-accent/90 px-6 sm:px-8 py-6 text-base sm:text-lg font-medium min-h-[48px]"
+                aria-label="Projekt anfragen - Formular öffnen"
               >
                 Projekt anfragen
-                <ArrowRight className="ml-2" />
+                <ArrowRight className="ml-2" aria-hidden="true" />
               </Button>
               <Button 
                 size="lg" 
                 variant="outline"
                 onClick={() => handleNavigation('/leistungen')}
                 className="px-6 sm:px-8 py-6 text-base sm:text-lg font-medium bg-white/10 text-white border-white/30 hover:bg-white/20 min-h-[48px]"
+                aria-label="Zu den Leistungen navigieren"
               >
                 Leistungen entdecken
               </Button>
@@ -88,8 +95,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <section className="py-12 sm:py-16 bg-muted">
+      <section className="py-12 sm:py-16 bg-muted" aria-labelledby="services-heading">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 id="services-heading" className="sr-only">Unsere Hauptleistungen</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {[
               {
