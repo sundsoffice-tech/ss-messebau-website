@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, memo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { FocusScope } from '@radix-ui/react-focus-scope'
 import { 
   List, 
   House, 
@@ -114,11 +115,12 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
     <button
       onClick={() => onNavigate(item.sectionId)}
       className="group relative overflow-hidden rounded-lg border text-left transition-all hover:border-primary hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      aria-label={`${item.title} - ${item.description}`}
     >
       <div className="aspect-[16/9] relative overflow-hidden">
         <img
           src={item.previewImage}
-          alt={item.title}
+          alt={`Vorschaubild für ${item.title}`}
           loading="lazy"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
@@ -136,7 +138,7 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
           {item.description}
         </p>
         
-        <ul className="space-y-1.5">
+        <ul className="space-y-1.5" aria-label={`${item.title} Features`}>
           {item.features.map((feature) => (
             <li key={feature} className="text-xs text-muted-foreground flex items-center gap-2">
               <div className="w-1 h-1 rounded-full bg-primary flex-shrink-0" aria-hidden="true" />
@@ -320,6 +322,42 @@ export function Header({ onOpenInquiry }: HeaderProps) {
       e.preventDefault()
       setMegaMenuOpen(false)
       megaMenuTriggerRef.current?.focus()
+      return
+    }
+
+    // Enhanced keyboard navigation for mega menu items
+    const focusableElements = megaMenuRef.current?.querySelectorAll(
+      'button:not([disabled]), a:not([disabled])'
+    )
+    
+    if (!focusableElements || focusableElements.length === 0) return
+
+    const currentIndex = Array.from(focusableElements).indexOf(
+      document.activeElement as HTMLElement
+    )
+
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault()
+      const nextIndex = currentIndex + 1
+      if (nextIndex < focusableElements.length) {
+        (focusableElements[nextIndex] as HTMLElement).focus()
+      } else {
+        (focusableElements[0] as HTMLElement).focus()
+      }
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault()
+      const prevIndex = currentIndex - 1
+      if (prevIndex >= 0) {
+        (focusableElements[prevIndex] as HTMLElement).focus()
+      } else {
+        (focusableElements[focusableElements.length - 1] as HTMLElement).focus()
+      }
+    } else if (e.key === 'Home') {
+      e.preventDefault()
+      (focusableElements[0] as HTMLElement).focus()
+    } else if (e.key === 'End') {
+      e.preventDefault()
+      (focusableElements[focusableElements.length - 1] as HTMLElement).focus()
     }
   }
 
@@ -327,6 +365,17 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     if (megaMenuRef.current && !megaMenuRef.current.contains(e.relatedTarget as Node)) {
       setTimeout(() => setMegaMenuOpen(false), 150)
     }
+  }
+
+  // Prefetch mega menu images on hover/focus for better performance
+  const handleLeistungenHover = () => {
+    setMegaMenuOpen(true)
+    
+    // Prefetch images for instant loading
+    LEISTUNGEN_MEGA_MENU.forEach(item => {
+      const img = new Image()
+      img.src = item.previewImage
+    })
   }
 
   return (
@@ -396,7 +445,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 variant="ghost"
                 onClick={handleLeistungenClick}
                 onKeyDown={handleMegaMenuKeyDown}
-                onMouseEnter={() => setMegaMenuOpen(true)}
+                onMouseEnter={handleLeistungenHover}
+                onFocus={handleLeistungenHover}
                 className={`transition-colors gap-1 ${
                   currentPath === '/leistungen' || megaMenuOpen
                     ? 'text-primary font-semibold bg-primary/5' 
@@ -641,8 +691,9 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[85vw] sm:w-80 px-0" ref={sheetContentRef}>
-                <nav aria-label="Mobile Navigation">
-                  <div className="flex items-center px-4 mb-6 pt-2">
+                <FocusScope loop trapped={mobileMenuOpen}>
+                  <nav aria-label="Mobile Navigation">
+                    <div className="flex items-center px-4 mb-6 pt-2">
                     <div className="flex items-center gap-3">
                       <div className="relative w-10 h-10 flex-shrink-0">
                         <img 
@@ -760,6 +811,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     </div>
                   </div>
                 </nav>
+              </FocusScope>
               </SheetContent>
             </Sheet>
           </div>

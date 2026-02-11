@@ -106,9 +106,9 @@ export const THEMATIC_LINKS: Record<string, { page: string; section: string; lab
   'home-to-ladenbau': { page: '/leistungen', section: 'ladenbau', label: 'Ladenbau' },
   'home-to-boeden': { page: '/leistungen', section: 'boeden-ausstattung', label: 'Böden & Möbel' },
   
-  'nav-to-food': { page: '/branchen', section: 'food-feinkost', label: 'Food & Feinkost' },
+  'nav-to-food': { page: '/branchen', section: 'food', label: 'Food & Feinkost' },
   'nav-to-versicherungen': { page: '/branchen', section: 'versicherungen', label: 'Versicherungen' },
-  'nav-to-industrie': { page: '/branchen', section: 'industrie-technik', label: 'Industrie & Technik' },
+  'nav-to-industrie': { page: '/branchen', section: 'industrie', label: 'Industrie & Technik' },
   
   'footer-to-kontakt': { page: '/kontakt', section: 'kontaktformular', label: 'Kontakt' },
   'footer-to-anfahrt': { page: '/kontakt', section: 'anfahrt', label: 'Anfahrt' }
