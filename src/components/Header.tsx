@@ -632,25 +632,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 </div>
                 
                 <div className="px-3 overflow-y-auto max-h-[calc(100vh-180px)]">
-                  <Button
-                    onClick={() => handleNavigation('/banner-bestellen')}
-                    className="w-full mb-4 bg-primary hover:bg-primary/90 min-h-[48px] text-base font-medium"
-                  >
-                    <FrameCorners className="h-5 w-5 mr-2" />
-                    Banner konfigurieren
-                  </Button>
-
                   <nav className="flex flex-col gap-2">
-                    <Button
-                      variant={currentPath === '/' ? 'secondary' : 'ghost'}
-                      onClick={() => handleNavigation('/')}
-                      className="justify-start gap-3 min-h-[48px] w-full text-base"
-                    >
-                      <House className="h-5 w-5 flex-shrink-0" />
-                      <span className="text-left">Start</span>
-                    </Button>
-
-                    <div className="my-3">
+                    <div className="mb-3">
                       <div className="px-3 mb-3 text-sm font-semibold text-muted-foreground">
                         Leistungen
                       </div>
@@ -691,6 +674,23 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         <ArrowRight className="h-4 w-4" />
                       </Button>
                     </div>
+
+                    <Button
+                      onClick={() => handleNavigation('/banner-bestellen')}
+                      className="w-full mb-3 bg-primary hover:bg-primary/90 min-h-[48px] text-base font-medium"
+                    >
+                      <FrameCorners className="h-5 w-5 mr-2" />
+                      Banner konfigurieren
+                    </Button>
+
+                    <Button
+                      variant={currentPath === '/' ? 'secondary' : 'ghost'}
+                      onClick={() => handleNavigation('/')}
+                      className="justify-start gap-3 min-h-[48px] w-full text-base"
+                    >
+                      <House className="h-5 w-5 flex-shrink-0" />
+                      <span className="text-left">Start</span>
+                    </Button>
 
                     {ALL_NAV.slice(2).map((item) => {
                       const Icon = item.icon
