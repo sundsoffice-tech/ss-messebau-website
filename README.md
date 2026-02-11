@@ -129,7 +129,7 @@ Die folgenden Secrets müssen in den Repository Settings konfiguriert sein:
 2. GitHub Actions startet automatisch den Build-Prozess
 3. Dependencies werden installiert (`npm ci`)
 4. Projekt wird gebaut (`npm run build`)
-5. Build-Artefakte werden via FTP zu Hostinger hochgeladen
+5. Build-Artefakte werden via FTPS zu Hostinger hochgeladen (verschlüsselt)
 6. Website ist live unter der konfigurierten Domain
 
 ### Projekt-Struktur
