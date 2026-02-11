@@ -1,6 +1,21 @@
 import { BannerConfig } from '@/components/pages/BannerBestellenPage'
-import { SerializedFile } from './file-utils'
 import { sendEmail } from './smtp-service'
+import type { SerializedFile, FileAttachment } from '@/types/email'
+
+interface BannerEmailQueueItem {
+  id: string
+  to: string
+  subject: string
+  htmlBody: string
+  textBody: string
+  customerEmail: string
+  customerSubject: string
+  customerHtmlBody: string
+  customerTextBody: string
+  attachments: FileAttachment[]
+  configId: string
+  timestamp?: string
+}
 
 interface EmailData {
   config: BannerConfig
@@ -305,13 +320,8 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
 
     const queueId = `email_queue_${configId}`
     await window.spark.kv.set(queueId, emailData)
-    
-    console.log('✅ E-Mail in Queue gespeichert:', emailSubject)
-    console.log('📧 An:', 'info@sundsmessebau.com')
-    console.log('👤 Kunde:', config.step6.email)
 
     if (sendImmediately) {
-      console.log('📤 Sofortiger Versand aktiviert...')
       const sendResult = await sendQueuedEmail(queueId)
       
       if (sendResult.success) {
@@ -331,7 +341,7 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
 
 export async function sendQueuedEmail(queueId: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const emailData = await window.spark.kv.get<any>(queueId)
+    const emailData = await window.spark.kv.get<BannerEmailQueueItem>(queueId)
     
     if (!emailData) {
       return { success: false, error: 'E-Mail nicht in Queue gefunden' }
@@ -363,8 +373,6 @@ export async function sendQueuedEmail(queueId: string): Promise<{ success: boole
     emailData.sent = true
     emailData.sentAt = new Date().toISOString()
     await window.spark.kv.set(queueId, emailData)
-
-    console.log('✅ E-Mails erfolgreich versendet:', queueId)
     
     return { success: true }
   } catch (error) {

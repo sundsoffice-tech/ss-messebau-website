@@ -204,18 +204,15 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
     switch (config.provider) {
       case 'sendgrid':
         await sendViaSendGrid(options, config)
-        console.log('✅ E-Mail via SendGrid versendet:', options.to)
         break
 
       case 'ses':
         await sendViaSES(options, config)
-        console.log('✅ E-Mail via AWS SES versendet:', options.to)
         break
 
       case 'test':
       default:
         simulateEmailSend(options)
-        console.log('✅ E-Mail simuliert (Test-Modus):', options.to)
         break
     }
 

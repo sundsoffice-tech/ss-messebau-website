@@ -10,7 +10,6 @@ import {
   CheckCircle,
   ArrowRight,
   Star,
-  Users,
   Handshake,
   Target
 } from '@phosphor-icons/react'
@@ -22,7 +21,7 @@ interface HomePageProps {
 }
 
 export function HomePage({ onOpenInquiry }: HomePageProps) {
-  const { navigateToSectionOnPage, scrollToSection } = useDeepLinking('/')
+  const { navigateToSectionOnPage } = useDeepLinking('/')
   
   useSectionObserver([
     'hero',

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useKV } from '@github/spark/hooks'
-import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Check } from '@phosphor-icons/react'
@@ -191,13 +190,7 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
 
       if (config) {
         const { sendOrderConfirmationEmail } = await import('@/lib/email-service')
-        const emailSent = await sendOrderConfirmationEmail({ config, configId })
-        
-        if (emailSent) {
-          console.log('✅ Auftragsbestätigung per E-Mail versendet')
-        } else {
-          console.warn('⚠️ E-Mail konnte nicht versendet werden')
-        }
+        await sendOrderConfirmationEmail({ config, configId })
       }
 
       setSubmitted(true)

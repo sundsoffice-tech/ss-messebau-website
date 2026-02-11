@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Envelope, Eye, Trash, CheckCircle, PaperPlaneTilt } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { sendQueuedEmail } from '@/lib/email-service'
+import type { FileAttachment } from '@/types/email'
 
 interface EmailQueueItem {
   id: string
@@ -18,7 +19,7 @@ interface EmailQueueItem {
   customerSubject: string
   customerHtmlBody: string
   customerTextBody: string
-  attachments: any[]
+  attachments: FileAttachment[]
   configId: string
   timestamp?: string
 }
@@ -41,7 +42,7 @@ export function EmailQueueManager() {
 
       const emails: EmailQueueItem[] = []
       for (const key of emailKeys) {
-        const data = await window.spark.kv.get<any>(key)
+        const data = await window.spark.kv.get<EmailQueueItem>(key)
         if (data) {
           emails.push({
             id: key,
