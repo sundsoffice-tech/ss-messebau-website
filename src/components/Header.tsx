@@ -243,22 +243,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   const handleSectionNavigation = (sectionId: string) => {
     const currentPath = window.location.hash.slice(1) || '/'
     
-    if (currentPath !== '/leistungen') {
-      window.location.hash = '/leistungen'
-      setTimeout(() => {
-        const element = document.getElementById(sectionId)
-        if (element) {
-          const headerOffset = 80
-          const elementPosition = element.getBoundingClientRect().top
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-          
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          })
-        }
-      }, 100)
-    } else {
+    const scrollToSection = () => {
       const element = document.getElementById(sectionId)
       if (element) {
         const headerOffset = 80
@@ -270,6 +255,23 @@ export function Header({ onOpenInquiry }: HeaderProps) {
           behavior: 'smooth'
         })
       }
+    }
+    
+    if (currentPath !== '/leistungen') {
+      window.location.hash = '/leistungen'
+      
+      const checkElement = () => {
+        const element = document.getElementById(sectionId)
+        if (element) {
+          scrollToSection()
+        } else {
+          setTimeout(checkElement, 50)
+        }
+      }
+      
+      setTimeout(checkElement, 100)
+    } else {
+      scrollToSection()
     }
     
     setMobileMenuOpen(false)
