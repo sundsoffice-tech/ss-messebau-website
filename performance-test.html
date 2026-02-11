@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Testing Tool - S&S Messebau</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .metric.good {
+            border-left-color: #10b981;
+        }
+
+        .metric.warning {
+            border-left-color: #f59e0b;
+        }
+
+        .metric.bad {
+            border-left-color: #ef4444;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .metric-target {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-top: 0.25rem;
+        }
+
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .status {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status.warning {
+            background: #fed7aa;
+            color: #92400e;
+        }
+
+        code {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .test-list {
+            list-style: none;
+        }
+
+        .test-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7e7;
+        }
+
+        .test-list li:before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .command-box {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .command-box code {
+            background: transparent;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Performance Testing Tool</h1>
+    <p>Teste die Mobile-Performance der S&S Messebau Website und miss Core Web Vitals in Echtzeit.</p>
+
+    <div class="card">
+        <h2>📊 Core Web Vitals (Live)</h2>
+        <p>Diese Metriken werden automatisch gemessen, sobald die Seite geladen wurde.</p>
+        
+        <div class="metrics" id="live-metrics">
+            <div class="metric" id="lcp-metric">
+                <div class="metric-label">LCP (Largest Contentful Paint)</div>
+                <div class="metric-value" id="lcp-value">Messung läuft...</div>
+                <div class="metric-target">Ziel: < 2.5s</div>
+            </div>
+            
+            <div class="metric" id="fcp-metric">
+                <div class="metric-label">FCP (First Contentful Paint)</div>
+                <div class="metric-value" id="fcp-value">Messung läuft...</div>
+                <div class="metric-target">Ziel: < 1.8s</div>
+            </div>
+            
+            <div class="metric" id="cls-metric">
+                <div class="metric-label">CLS (Cumulative Layout Shift)</div>
+                <div class="metric-value" id="cls-value">Messung läuft...</div>
+                <div class="metric-target">Ziel: < 0.1</div>
+            </div>
+            
+            <div class="metric" id="inp-metric">
+                <div class="metric-label">INP (Interaction to Next Paint)</div>
+                <div class="metric-value" id="inp-value">Messung läuft...</div>
+                <div class="metric-target">Ziel: < 200ms</div>
+            </div>
+        </div>
+
+        <div class="status info" id="status">
+            Warte auf Performance-Daten...
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🔬 Lighthouse Tests</h2>
+        <p>Führe automatisierte Lighthouse-Tests über die Browser DevTools durch:</p>
+        
+        <ol style="margin-left: 1.5rem; margin-top: 1rem;">
+            <li>Öffne Chrome DevTools (F12)</li>
+            <li>Gehe zum Tab "Lighthouse"</li>
+            <li>Wähle "Mobile" als Device</li>
+            <li>Aktiviere nur "Performance"</li>
+            <li>Klicke "Analyze page load"</li>
+        </ol>
+
+        <div style="margin-top: 1rem;">
+            <button onclick="openDevTools()">DevTools öffnen (F12)</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🖥️ Command-Line Testing</h2>
+        <p>Lighthouse über die Kommandozeile ausführen:</p>
+        
+        <h3 style="margin-top: 1rem;">Installation</h3>
+        <div class="command-box">
+            <code>npm install -g lighthouse</code>
+        </div>
+
+        <h3>Mobile Test</h3>
+        <div class="command-box">
+            <code>lighthouse http://localhost:5173 --preset=perf --form-factor=mobile --output=html --output-path=./lighthouse-mobile.html</code>
+        </div>
+
+        <h3>Desktop Test</h3>
+        <div class="command-box">
+            <code>lighthouse http://localhost:5173 --preset=perf --form-factor=desktop --output=html --output-path=./lighthouse-desktop.html</code>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>📱 Network Throttling Tests</h2>
+        <p>Teste unter verschiedenen Netzwerk-Bedingungen:</p>
+        
+        <ol style="margin-left: 1.5rem; margin-top: 1rem;">
+            <li>Öffne DevTools > Network Tab</li>
+            <li>Wähle ein Network-Profil:
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Slow 3G</strong> (400 Kbps, 400ms RTT) - Worst Case</li>
+                    <li><strong>Fast 3G</strong> (1.6 Mbps, 150ms RTT) - Typisches Mobile</li>
+                    <li><strong>Slow 4G</strong> (4 Mbps, 40ms RTT) - Standard Test</li>
+                </ul>
+            </li>
+            <li>Lade die Seite neu und beobachte Loading-Zeiten</li>
+        </ol>
+
+        <div style="margin-top: 1rem;">
+            <button onclick="testNetworkSpeed()">Network Speed testen</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>✅ Test-Checkliste</h2>
+        <p>Stelle sicher, dass alle Punkte geprüft wurden:</p>
+        
+        <ul class="test-list">
+            <li>LCP < 2.5s auf Slow 4G erreicht</li>
+            <li>INP < 200ms bei allen Interaktionen</li>
+            <li>CLS < 0.1 beim Laden</li>
+            <li>LoadingScreen erscheint < 500ms</li>
+            <li>Hero-Image lädt mit WebP/AVIF</li>
+            <li>Fonts laden ohne FOIT (Flash of Invisible Text)</li>
+            <li>Keine Layout-Shifts beim Laden</li>
+            <li>Navigation fühlt sich flüssig an</li>
+            <li>Formular-Interaktionen ohne Verzögerung</li>
+            <li>Burger-Menu öffnet instant (< 100ms)</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>🌐 WebPageTest</h2>
+        <p>Für detaillierte Tests von realen Standorten:</p>
+        
+        <ol style="margin-left: 1.5rem; margin-top: 1rem;">
+            <li>Gehe zu <a href="https://www.webpagetest.org/" target="_blank">webpagetest.org</a></li>
+            <li>Gib deine URL ein (Production-URL erforderlich)</li>
+            <li>Wähle Location: <strong>Frankfurt, Germany</strong></li>
+            <li>Wähle Device: <strong>Chrome - Mobile</strong></li>
+            <li>Wähle Connection: <strong>3G (1.6 Mbps/768 Kbps, 300ms RTT)</strong></li>
+            <li>Starte Test und analysiere Filmstrip + Waterfall</li>
+        </ol>
+    </div>
+
+    <script>
+        // Web Vitals Measurement
+        function measureWebVitals() {
+            // FCP - First Contentful Paint
+            const fcpObserver = new PerformanceObserver((list) => {
+                const entries = list.getEntries();
+                entries.forEach((entry) => {
+                    if (entry.name === 'first-contentful-paint') {
+                        const fcpTime = entry.startTime / 1000;
+                        document.getElementById('fcp-value').textContent = fcpTime.toFixed(2) + 's';
+                        
+                        const fcpMetric = document.getElementById('fcp-metric');
+                        if (fcpTime < 1.8) {
+                            fcpMetric.classList.add('good');
+                        } else if (fcpTime < 3.0) {
+                            fcpMetric.classList.add('warning');
+                        } else {
+                            fcpMetric.classList.add('bad');
+                        }
+                    }
+                });
+            });
+            fcpObserver.observe({ entryTypes: ['paint'] });
+
+            // LCP - Largest Contentful Paint
+            const lcpObserver = new PerformanceObserver((list) => {
+                const entries = list.getEntries();
+                const lastEntry = entries[entries.length - 1];
+                const lcpTime = lastEntry.startTime / 1000;
+                
+                document.getElementById('lcp-value').textContent = lcpTime.toFixed(2) + 's';
+                
+                const lcpMetric = document.getElementById('lcp-metric');
+                if (lcpTime < 2.5) {
+                    lcpMetric.classList.add('good');
+                } else if (lcpTime < 4.0) {
+                    lcpMetric.classList.add('warning');
+                } else {
+                    lcpMetric.classList.add('bad');
+                }
+            });
+            lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+
+            // CLS - Cumulative Layout Shift
+            let clsValue = 0;
+            const clsObserver = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (!entry.hadRecentInput) {
+                        clsValue += entry.value;
+                    }
+                }
+                
+                document.getElementById('cls-value').textContent = clsValue.toFixed(3);
+                
+                const clsMetric = document.getElementById('cls-metric');
+                if (clsValue < 0.1) {
+                    clsMetric.classList.add('good');
+                } else if (clsValue < 0.25) {
+                    clsMetric.classList.add('warning');
+                } else {
+                    clsMetric.classList.add('bad');
+                }
+            });
+            clsObserver.observe({ entryTypes: ['layout-shift'] });
+
+            // INP - Interaction to Next Paint (simplified)
+            let maxINP = 0;
+            const inpObserver = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    const duration = entry.processingStart - entry.startTime + entry.duration;
+                    if (duration > maxINP) {
+                        maxINP = duration;
+                    }
+                }
+                
+                if (maxINP > 0) {
+                    document.getElementById('inp-value').textContent = Math.round(maxINP) + 'ms';
+                    
+                    const inpMetric = document.getElementById('inp-metric');
+                    if (maxINP < 200) {
+                        inpMetric.classList.add('good');
+                    } else if (maxINP < 500) {
+                        inpMetric.classList.add('warning');
+                    } else {
+                        inpMetric.classList.add('bad');
+                    }
+                }
+            });
+            
+            try {
+                inpObserver.observe({ entryTypes: ['event'] });
+            } catch (e) {
+                document.getElementById('inp-value').textContent = 'Nicht unterstützt';
+            }
+
+            // Update status after measurements
+            setTimeout(() => {
+                const status = document.getElementById('status');
+                status.className = 'status success';
+                status.textContent = '✅ Performance-Messung abgeschlossen!';
+            }, 3000);
+        }
+
+        function openDevTools() {
+            alert('Drücke F12 oder Rechtsklick > "Untersuchen" um die DevTools zu öffnen.');
+        }
+
+        function testNetworkSpeed() {
+            const startTime = performance.now();
+            const testImage = new Image();
+            
+            testImage.onload = () => {
+                const endTime = performance.now();
+                const duration = endTime - startTime;
+                const size = 50000; // ca. 50KB
+                const speedKbps = (size * 8) / duration;
+                
+                alert(`Network Speed Test:\n\nDauer: ${duration.toFixed(0)}ms\nGeschätzte Geschwindigkeit: ${speedKbps.toFixed(0)} Kbps`);
+            };
+            
+            testImage.src = 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=50&t=' + Date.now();
+        }
+
+        // Start measurements when page loads
+        window.addEventListener('load', () => {
+            measureWebVitals();
+        });
+
+        // Log page load metrics
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                console.log('📊 Page Load Metrics:');
+                console.log('DNS Lookup:', perfData.domainLookupEnd - perfData.domainLookupStart, 'ms');
+                console.log('TCP Connection:', perfData.connectEnd - perfData.connectStart, 'ms');
+                console.log('Request Time:', perfData.responseStart - perfData.requestStart, 'ms');
+                console.log('Response Time:', perfData.responseEnd - perfData.responseStart, 'ms');
+                console.log('DOM Processing:', perfData.domComplete - perfData.domLoading, 'ms');
+                console.log('Total Load Time:', perfData.loadEventEnd - perfData.fetchStart, 'ms');
+            }, 0);
+        });
+    </script>
+</body>
+</html>
