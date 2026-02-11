@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { CheckCircle, ArrowRight, Phone, File as FileIcon, Envelope, Check } from '@phosphor-icons/react'
+import { CheckCircle, ArrowRight, Phone, Envelope, Check } from '@phosphor-icons/react'
 import type { BannerConfig } from '../BannerBestellenPage'
 
 interface ThankYouPageProps {

@@ -353,10 +353,10 @@ export function Header({ onOpenInquiry }: HeaderProps) {
         (focusableElements[focusableElements.length - 1] as HTMLElement).focus()
       }
     } else if (e.key === 'Home') {
-      e.preventDefault()
+      e.preventDefault();
       (focusableElements[0] as HTMLElement).focus()
     } else if (e.key === 'End') {
-      e.preventDefault()
+      e.preventDefault();
       (focusableElements[focusableElements.length - 1] as HTMLElement).focus()
     }
   }

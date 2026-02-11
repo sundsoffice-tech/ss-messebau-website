@@ -1,27 +1,19 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Warehouse, CalendarDot, Storefront, Armchair, ArrowRight, CheckCircle } from '@phosphor-icons/react'
-import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
+import { useSectionObserver } from '@/hooks/use-deep-linking'
 
 interface LeistungenPageProps {
   onOpenInquiry: () => void
 }
 
 export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
-  const { scrollToSection } = useDeepLinking('/leistungen')
-  
   useSectionObserver([
     'messebau',
     'eventbau',
     'ladenbau',
     'boeden-ausstattung'
   ])
-
-  const handleNavigation = (path: string) => {
-    window.location.hash = path
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
 
   return (
     <div>

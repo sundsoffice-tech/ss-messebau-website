@@ -13,14 +13,22 @@ import {
   CheckCircle,
   Gear
 } from '@phosphor-icons/react'
+import type { BannerConfig } from './BannerBestellenPage'
 
-interface AdminPageProps {
-  onOpenInquiry: () => void
+interface GitHubUserInfo {
+  login: string
+  name?: string
+  avatar_url?: string
+  email?: string
 }
 
-export function AdminPage({ onOpenInquiry }: AdminPageProps) {
+interface AdminPageProps {
+  _onOpenInquiry: () => void
+}
+
+export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [userInfo, setUserInfo] = useState<any>(null)
+  const [userInfo, setUserInfo] = useState<GitHubUserInfo | null>(null)
   const [stats, setStats] = useState({
     emailQueue: 0,
     orders: 0,
@@ -184,7 +192,7 @@ export function AdminPage({ onOpenInquiry }: AdminPageProps) {
 }
 
 function OrdersManager() {
-  const [orders, setOrders] = useState<any[]>([])
+  const [orders, setOrders] = useState<Array<{ id: string; data: BannerConfig; timestamp: string }>>([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -197,9 +205,9 @@ function OrdersManager() {
       const keys = await window.spark.kv.keys()
       const orderKeys = keys.filter((key) => key.startsWith('banner_'))
 
-      const loadedOrders: any[] = []
+      const loadedOrders: Array<{ id: string; data: BannerConfig; timestamp: string }> = []
       for (const key of orderKeys) {
-        const data = await window.spark.kv.get<any>(key)
+        const data = await window.spark.kv.get<BannerConfig>(key)
         if (data) {
           loadedOrders.push({
             id: key,

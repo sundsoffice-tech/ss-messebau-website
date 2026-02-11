@@ -24,12 +24,9 @@ interface QuickAction {
   category: string
 }
 
-export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
-  const { scrollToSection } = useDeepLinking('/kontakt')
-  
+export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
   useSectionObserver(['kontakt-hero', 'kontakt-info', 'kontakt-form', 'ki-chat'])
 
-  const [inquiries, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
   const [loading, setLoading] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMessages, setChatMessages] = useKV<ChatMessage[]>('kontakt-chat-history', [
@@ -46,7 +43,6 @@ export function KontaktPage({ onOpenInquiry }: KontaktPageProps) {
   const {
     isListening,
     isSupported: isVoiceSupported,
-    transcript,
     interimTranscript,
     startListening,
     stopListening,
@@ -289,7 +285,7 @@ Antworte jetzt:`
       setIsTyping(false)
       setTypingText('')
       
-    } catch (error) {
+    } catch {
       toast.error('Fehler beim Abrufen der Antwort. Bitte versuchen Sie es erneut.')
       setChatMessages((prev) => {
         const filtered = (prev || []).filter((_, idx) => idx !== (prev || []).length - 1)

@@ -5,6 +5,27 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ArrowRight, ArrowLeft, Lightbulb } from '@phosphor-icons/react'
 
+interface Step1Data {
+  einsatzort: string
+  rahmenart: string
+  menge: number
+  indoorOutdoor: string
+  montage: boolean
+  montageOrt?: string
+  montageZeitraum?: string
+}
+
+interface Step2Data {
+  breite: number
+  hoehe: number
+  profil: string
+  ecken: string
+  seitigkeit: string
+  led: boolean
+  ledStrom?: string
+  ledEinsatz?: string
+}
+
 interface Step3Data {
   bannerBenoetigt: boolean
   material?: string
@@ -15,8 +36,8 @@ interface Step3Data {
 
 interface ConfiguratorStep3Props {
   data: Step3Data
-  step1Data: any
-  step2Data: any
+  step1Data: Step1Data
+  step2Data: Step2Data
   onChange: (data: Partial<Step3Data>) => void
   onNext: () => void
   onBack: () => void
