@@ -258,22 +258,26 @@ export function Header({ onOpenInquiry }: HeaderProps) {
         }`}>
           <button 
             onClick={() => handleNavigation('/')}
-            className="flex items-center gap-2 sm:gap-3 transition-all hover:opacity-80 flex-shrink-0 min-h-[44px] min-w-[44px] -ml-2 pl-2"
+            className="flex items-center gap-2 sm:gap-3 transition-all hover:opacity-80 flex-shrink-0 min-h-[44px] min-w-[44px] -ml-2 pl-2 group"
           >
-            <img 
-              src={logo} 
-              alt="S&S Messebau Logo" 
-              className={`w-auto transition-all duration-300 ${
-                scrolled ? 'h-8 sm:h-10' : 'h-9 sm:h-12'
-              }`}
-            />
+            <div className={`relative flex-shrink-0 transition-all duration-300 ${
+              scrolled ? 'w-8 h-8 sm:w-10 sm:h-10' : 'w-9 h-9 sm:w-12 sm:h-12'
+            }`}>
+              <img 
+                src={logo} 
+                alt="S&S Messebau Logo" 
+                className="w-full h-full object-contain filter drop-shadow-sm group-hover:drop-shadow-md transition-all duration-300"
+              />
+            </div>
             <div className="hidden xs:block">
-              <div className={`font-bold text-foreground transition-all duration-300 ${
+              <div className={`font-bold text-foreground transition-all duration-300 tracking-tight leading-tight ${
                 scrolled ? 'text-sm sm:text-lg' : 'text-base sm:text-xl'
               }`}>
                 S&S Messebau
               </div>
-              <div className="text-xs text-muted-foreground hidden sm:block">
+              <div className={`text-muted-foreground hidden sm:block transition-all duration-300 tracking-wide ${
+                scrolled ? 'text-[10px]' : 'text-xs'
+              }`}>
                 Full-Service Messebau
               </div>
             </div>
@@ -557,10 +561,19 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[85vw] sm:w-80 px-0" ref={sheetContentRef}>
-                <div className="flex items-center px-4 mb-6">
-                  <div className="flex items-center gap-2">
-                    <img src={logo} alt="S&S Messebau Logo" className="h-9 w-auto" />
-                    <span className="font-bold text-lg">Menü</span>
+                <div className="flex items-center px-4 mb-6 pt-2">
+                  <div className="flex items-center gap-3">
+                    <div className="relative w-10 h-10 flex-shrink-0">
+                      <img 
+                        src={logo} 
+                        alt="S&S Messebau Logo" 
+                        className="w-full h-full object-contain filter drop-shadow-sm" 
+                      />
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="font-bold text-lg leading-none tracking-tight text-foreground">Menü</span>
+                      <span className="text-[10px] text-muted-foreground tracking-wide leading-none">Navigation</span>
+                    </div>
                   </div>
                 </div>
                 
