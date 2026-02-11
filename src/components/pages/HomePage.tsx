@@ -26,6 +26,41 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const handleSectionNavigation = (sectionId: string) => {
+    const currentPath = window.location.hash.slice(1) || '/'
+    
+    const scrollToSection = () => {
+      const element = document.getElementById(sectionId)
+      if (element) {
+        const headerOffset = 80
+        const elementPosition = element.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    }
+    
+    if (currentPath !== '/leistungen') {
+      window.location.hash = '/leistungen'
+      
+      const checkElement = () => {
+        const element = document.getElementById(sectionId)
+        if (element) {
+          scrollToSection()
+        } else {
+          setTimeout(checkElement, 50)
+        }
+      }
+      
+      setTimeout(checkElement, 100)
+    } else {
+      scrollToSection()
+    }
+  }
+
   return (
     <div>
       <section 
@@ -104,28 +139,28 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 icon: Warehouse,
                 title: 'Messebau',
                 description: 'Von Systemständen bis zu individuellen Konstruktionen – professionell und termingerecht.',
-                link: '/leistungen',
+                sectionId: 'messebau',
                 image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop'
               },
               {
                 icon: CalendarDot,
                 title: 'Eventbau',
                 description: 'Bühnen, Präsentationsflächen und Eventausstattung für beeindruckende Veranstaltungen.',
-                link: '/leistungen',
+                sectionId: 'eventbau',
                 image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=250&fit=crop'
               },
               {
                 icon: Storefront,
                 title: 'Ladenbau',
                 description: 'Showrooms und Verkaufsflächen, die Ihre Produkte optimal in Szene setzen.',
-                link: '/leistungen',
+                sectionId: 'ladenbau',
                 image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=250&fit=crop'
               },
               {
                 icon: Armchair,
                 title: 'Böden & Möbel',
                 description: 'Hochwertige Ausstattung: Messeboden, Möblierung, Beleuchtung und Technik.',
-                link: '/leistungen',
+                sectionId: 'boeden-ausstattung',
                 image: 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=400&h=250&fit=crop'
               }
             ].map((service, index) => {
@@ -134,7 +169,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 <Card 
                   key={index} 
                   className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary min-h-[44px]" 
-                  onClick={() => handleNavigation(service.link)}
+                  onClick={() => handleSectionNavigation(service.sectionId)}
                 >
                   <div className="aspect-[4/3] relative overflow-hidden">
                     <img 
