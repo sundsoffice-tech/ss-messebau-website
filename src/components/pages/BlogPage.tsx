@@ -43,8 +43,12 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
               <Card key={post.id} className="group overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col border-2 hover:border-primary cursor-pointer">
                 <div className="aspect-video relative overflow-hidden bg-muted">
                   <img 
-                    src={post.imageUrl} 
+                    src={post.imageUrl}
                     alt={post.title}
+                    width="640"
+                    height="360"
+                    loading="lazy"
+                    decoding="async"
                     className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

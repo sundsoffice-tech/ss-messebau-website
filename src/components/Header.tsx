@@ -116,7 +116,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
     }
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -265,7 +265,9 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             }`}>
               <img 
                 src={logo} 
-                alt="S&S Messebau Logo" 
+                alt="S&S Messebau Logo"
+                width="48"
+                height="48"
                 className="w-full h-full object-contain filter drop-shadow-sm group-hover:drop-shadow-md transition-all duration-300"
               />
             </div>

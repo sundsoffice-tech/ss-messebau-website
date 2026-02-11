@@ -30,7 +30,13 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
     <div>
       <section className="relative min-h-[500px] sm:min-h-[600px] flex items-center hero-gradient overflow-hidden">
         <div className="absolute inset-0 hero-overlay" />
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1600')] bg-cover bg-center opacity-20" />
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1024&fm=webp&q=75&auto=format')`,
+          }}
+          role="presentation"
+        />
         
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 py-12 sm:py-16">
           <div className="max-w-3xl">
@@ -105,10 +111,13 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 >
                   <div className="aspect-[4/3] relative overflow-hidden">
                     <img 
-                      src={service.image} 
+                      src={`${service.image}&fm=webp&q=75`}
                       alt={service.title}
+                      width="400"
+                      height="300"
                       className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
                       loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                     <div className="absolute bottom-3 left-3 flex items-center gap-2">
@@ -192,8 +201,12 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               >
                 <div className="aspect-video relative overflow-hidden bg-muted">
                   <img 
-                    src={reference.imageUrl} 
+                    src={reference.imageUrl}
                     alt={reference.title}
+                    width="640"
+                    height="360"
+                    loading="lazy"
+                    decoding="async"
                     className="object-cover w-full h-full group-hover:scale-110 group-hover:rotate-1 transition-all duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

@@ -8,7 +8,7 @@ export function LoadingScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
-    }, 2000)
+    }, 300)
 
     return () => clearTimeout(timer)
   }, [])
@@ -39,6 +39,8 @@ export function LoadingScreen() {
               <img
                 src={logo}
                 alt="S&S Messebau"
+                width="160"
+                height="160"
                 className="h-32 w-auto md:h-40 object-contain drop-shadow-2xl"
               />
             </motion.div>

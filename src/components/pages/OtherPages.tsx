@@ -40,8 +40,12 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
             </div>
             <div className="aspect-video rounded-lg overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800" 
+                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&fm=webp&q=75"
                 alt="Team"
+                width="800"
+                height="450"
+                loading="lazy"
+                decoding="async"
                 className="object-cover w-full h-full"
               />
             </div>

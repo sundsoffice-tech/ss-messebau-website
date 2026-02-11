@@ -14,7 +14,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <img src={logo} alt="S&S Messebau Logo" className="h-10 w-auto" />
+              <img 
+                src={logo} 
+                alt="S&S Messebau Logo"
+                width="40"
+                height="40"
+                className="h-10 w-auto"
+              />
               <div>
                 <div className="font-bold">S&S Messebau</div>
                 <div className="text-xs text-muted-foreground">GbR</div>

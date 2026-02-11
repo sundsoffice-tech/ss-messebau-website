@@ -123,8 +123,12 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                 >
                   <div className="aspect-video relative overflow-hidden bg-muted">
                     <img 
-                      src={reference.imageUrl} 
+                      src={reference.imageUrl}
                       alt={reference.title}
+                      width="640"
+                      height="360"
+                      loading="lazy"
+                      decoding="async"
                       className="object-cover w-full h-full group-hover:scale-110 group-hover:rotate-1 transition-all duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
