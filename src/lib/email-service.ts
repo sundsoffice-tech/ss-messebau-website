@@ -237,7 +237,7 @@ function formatConfigForEmail(config: BannerConfig): string {
       <p style="margin: 0; font-size: 14px; opacity: 0.9;">
         Marienstr. 37-42 | 41836 Hückelhoven<br>
         Tel: (02433) 4427144 | Mobil: (01514) 0322125<br>
-        E-Mail: info@sundsmessebau.de
+        E-Mail: info@sunds-messebau.de
       </p>
     </div>
   </div>
@@ -304,7 +304,7 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
       : ''
 
     const emailData = {
-      to: 'info@sundsmessebau.com',
+      to: 'info@sunds-messebau.de',
       subject: emailSubject,
       htmlBody: emailBody,
       textBody: convertHtmlToText(emailBody) + attachmentInfo,
@@ -443,7 +443,7 @@ function generateCustomerConfirmationEmail(config: BannerConfig, configId: strin
       <p style="margin: 0; font-size: 14px; opacity: 0.9;">
         Marienstr. 37-42 | 41836 Hückelhoven<br>
         Tel: (02433) 4427144 | Mobil: (01514) 0322125<br>
-        E-Mail: info@sundsmessebau.de
+        E-Mail: info@sunds-messebau.de
       </p>
     </div>
   </div>

@@ -218,7 +218,7 @@ FIRMENINFO S&S MESSEBAU:
   - Nachhaltige, wiederverwendbare Systeme
   - Faire, transparente Preise für Mittelstand
 • Zielgruppen: Food/Feinkost, Versicherungen, Industrie, Technik
-• Kontakt: Tel. (02433) 4427144, Mobil (01514) 0322125, info@sundsmessebau.de
+• Kontakt: Tel. (02433) 4427144, Mobil (01514) 0322125, info@sunds-messebau.de
 
 BUDGET-RICHTWERTE (inkl. Design, Bau, Logistik, Auf-/Abbau):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -490,8 +490,8 @@ Antworte jetzt:`
                       <div className="min-w-0">
                         <h3 className="font-semibold mb-1 text-sm sm:text-base">E-Mail</h3>
                         <p className="text-sm sm:text-base text-muted-foreground break-all">
-                          <a href="mailto:info@sundsmessebau.de" className="hover:text-primary font-medium">
-                            info@sundsmessebau.de
+                          <a href="mailto:info@sunds-messebau.de" className="hover:text-primary font-medium">
+                            info@sunds-messebau.de
                           </a>
                         </p>
                       </div>

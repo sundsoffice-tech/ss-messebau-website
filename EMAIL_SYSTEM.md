@@ -2,7 +2,7 @@
 
 ## Übersicht
 
-Das E-Mail-System versendet automatisch Auftragsbestätigungen mit Dateianhängen an **info@sundsmessebau.com** und eine Bestätigung an den Kunden. Das System unterstützt **echten E-Mail-Versand** über SendGrid oder AWS SES.
+Das E-Mail-System versendet automatisch Auftragsbestätigungen mit Dateianhängen an **info@sunds-messebau.de** und eine Bestätigung an den Kunden. Das System unterstützt **echten E-Mail-Versand** über SendGrid oder AWS SES.
 
 ## Funktionsweise
 
@@ -47,13 +47,13 @@ Wenn ein Kunde eine Banner-Bestellung abschließt:
 1. **Daten werden gespeichert** in der KV-Datenbank
 2. **E-Mail wird vorbereitet** mit allen Bestelldetails
 3. **Zwei E-Mails werden in Queue gestellt**:
-   - **An Firma** (`info@sundsmessebau.com`): Vollständige Bestelldetails mit Anhängen
+   - **An Firma** (`info@sunds-messebau.de`): Vollständige Bestelldetails mit Anhängen
    - **An Kunde**: Auftragsbestätigung mit nächsten Schritten
 4. **Sofortiger Versand** (optional): E-Mails werden direkt über den konfigurierten SMTP-Provider versendet
 
 ### 4. E-Mail-Inhalt
 
-#### E-Mail an Firma (info@sundsmessebau.com)
+#### E-Mail an Firma (info@sunds-messebau.de)
 - ✅ Vollständige Kundendaten
 - ✅ Alle Konfigurationsdetails (Einsatz, Maße, Druck, Lieferung)
 - ✅ Hochgeladene Druckdaten als Anhang (Base64)
@@ -179,7 +179,7 @@ Zugriff: `/#/admin` (nur für Besitzer des Spark-Projekts)
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
 │ 5. Bestätigung                                              │
-│    - ✓ E-Mail an info@sundsmessebau.com                    │
+│    - ✓ E-Mail an info@sunds-messebau.de                    │
 │    - ✓ E-Mail an Kunde                                      │
 │    - ✓ Dateien als Anhang                                   │
 │    - ✓ Toast-Notification bei Erfolg/Fehler               │
@@ -191,7 +191,7 @@ Zugriff: `/#/admin` (nur für Besitzer des Spark-Projekts)
 ```typescript
 {
   id: "email_queue_banner_1234567890",
-  to: "info@sundsmessebau.com",
+  to: "info@sunds-messebau.de",
   subject: "Neue Banner-Bestellung: [Firma] - [Anzahl]x [Rahmenart]",
   htmlBody: "<html>...</html>",
   textBody: "...",
@@ -221,7 +221,7 @@ Zugriff: `/#/admin` (nur für Besitzer des Spark-Projekts)
   provider: "sendgrid" | "ses" | "test",
   apiKey: "SG.xxxxxxxxxx" | "AKIA...",
   region: "eu-central-1" (nur für SES),
-  fromEmail: "noreply@sundsmessebau.de",
+  fromEmail: "noreply@sunds-messebau.de",
   fromName: "S&S Messebau GbR"
 }
 ```
@@ -253,7 +253,7 @@ import { saveEmailConfig } from '@/lib/smtp-service'
 await saveEmailConfig({
   provider: 'sendgrid',
   apiKey: 'SG.xxxxxxxx',
-  fromEmail: 'noreply@sundsmessebau.de',
+  fromEmail: 'noreply@sunds-messebau.de',
   fromName: 'S&S Messebau GbR'
 })
 
@@ -317,7 +317,7 @@ if (result.success) {
 
 ## Sicherheit & Datenschutz
 
-- ✅ E-Mails nur an verifizierte Adresse (`info@sundsmessebau.com`)
+- ✅ E-Mails nur an verifizierte Adresse (`info@sunds-messebau.de`)
 - ✅ Admin-Zugriff nur für Projekt-Owner
 - ✅ API Keys verschlüsselt in KV-Storage
 - ✅ Dateien als Base64 in E-Mail (temporär in Queue)
@@ -377,7 +377,7 @@ Das System behandelt verschiedene Fehlerszenarien:
 ## Support
 
 Bei Fragen oder Problemen:
-- **E-Mail**: info@sundsmessebau.de
+- **E-Mail**: info@sunds-messebau.de
 - **Telefon**: (02433) 4427144
 - **Mobil**: (01514) 0322125
 
@@ -401,12 +401,12 @@ Wenn ein Kunde eine Banner-Bestellung abschließt:
 1. **Daten werden gespeichert** in der KV-Datenbank
 2. **E-Mail wird vorbereitet** mit allen Bestelldetails
 3. **Zwei E-Mails werden in Queue gestellt**:
-   - **An Firma** (`info@sundsmessebau.com`): Vollständige Bestelldetails mit Anhängen
+   - **An Firma** (`info@sunds-messebau.de`): Vollständige Bestelldetails mit Anhängen
    - **An Kunde**: Auftragsbestätigung mit nächsten Schritten
 
 ### 2. E-Mail-Inhalt
 
-#### E-Mail an Firma (info@sundsmessebau.com)
+#### E-Mail an Firma (info@sunds-messebau.de)
 - ✅ Vollständige Kundendaten
 - ✅ Alle Konfigurationsdetails (Einsatz, Maße, Druck, Lieferung)
 - ✅ Hochgeladene Druckdaten als Anhang
@@ -486,7 +486,7 @@ Zugriff: `/#/admin` (nur für Besitzer des Spark-Projekts)
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
 │ 4. ThankYouPage zeigt Bestätigung                          │
-│    - ✓ E-Mail an info@sundsmessebau.com                    │
+│    - ✓ E-Mail an info@sunds-messebau.de                    │
 │    - ✓ E-Mail an Kunde                                      │
 │    - ✓ Dateien als Anhang                                   │
 └─────────────────────────────────────────────────────────────┘
@@ -505,7 +505,7 @@ Zugriff: `/#/admin` (nur für Besitzer des Spark-Projekts)
 ```typescript
 {
   id: "email_queue_banner_1234567890",
-  to: "info@sundsmessebau.com",
+  to: "info@sunds-messebau.de",
   subject: "Neue Banner-Bestellung: [Firma] - [Anzahl]x [Rahmenart]",
   htmlBody: "<html>...</html>",  // Formatierte E-Mail mit allen Details
   textBody: "...",                // Plain-Text-Version
@@ -588,7 +588,7 @@ Für echten E-Mail-Versand integrieren:
 
 ## Sicherheit & Datenschutz
 
-- ✅ E-Mails nur an verifizierte Adresse (`info@sundsmessebau.com`)
+- ✅ E-Mails nur an verifizierte Adresse (`info@sunds-messebau.de`)
 - ✅ Admin-Zugriff nur für Projekt-Owner
 - ✅ Dateien als Base64 in KV (temporär)
 - ✅ DSGVO-Checkbox erforderlich vor Submit
@@ -605,6 +605,6 @@ Für echten E-Mail-Versand integrieren:
 ## Support
 
 Bei Fragen oder Problemen:
-- **E-Mail**: info@sundsmessebau.com
+- **E-Mail**: info@sunds-messebau.de
 - **Telefon**: (02433) 4427144
 - **Mobil**: (01514) 0322125

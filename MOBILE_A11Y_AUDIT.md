@@ -561,7 +561,7 @@ className="line-clamp-1" // Schneidet Text ab
 #### Pa11y CI
 Automatisierte A11y-Tests für alle Routen:
 ```bash
-pa11y-ci --sitemap https://sundsmessebau.de/sitemap.xml
+pa11y-ci --sitemap https://sunds-messebau.de/sitemap.xml
 ```
 
 ---

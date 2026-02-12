@@ -2,7 +2,7 @@
 
 ## 📋 Übersicht
 
-Diese Anleitung führt Sie Schritt für Schritt durch die Konfiguration des SendGrid E-Mail-Versands für Ihre S&S Messebau Website. Nach Abschluss werden alle Banner-Bestellungen automatisch per E-Mail an `info@sundsmessebau.com` versendet.
+Diese Anleitung führt Sie Schritt für Schritt durch die Konfiguration des SendGrid E-Mail-Versands für Ihre S&S Messebau Website. Nach Abschluss werden alle Banner-Bestellungen automatisch per E-Mail an `info@sunds-messebau.de` versendet.
 
 ## ✨ Was ist bereits implementiert?
 
@@ -28,7 +28,7 @@ Diese Anleitung führt Sie Schritt für Schritt durch die Konfiguration des Send
    - Wählen Sie "Free Plan" (100 E-Mails/Tag kostenlos)
    - Füllen Sie das Formular aus:
      - Vorname, Nachname
-     - E-Mail: info@sundsmessebau.de (empfohlen)
+     - E-Mail: info@sunds-messebau.de (empfohlen)
      - Passwort
    - Bestätigen Sie Ihre E-Mail-Adresse
 
@@ -47,8 +47,8 @@ Um E-Mails versenden zu können, muss Ihre Absender-Adresse verifiziert werden:
 
 2. **Absender-Informationen eingeben:**
    - From Name: `S&S Messebau GbR`
-   - From Email Address: `noreply@sundsmessebau.de` oder `info@sundsmessebau.de`
-   - Reply To: `info@sundsmessebau.de`
+   - From Email Address: `noreply@sunds-messebau.de` oder `info@sunds-messebau.de`
+   - Reply To: `info@sunds-messebau.de`
    - Company Address:
      - Street: `Marienstr. 37-42`
      - City: `Hückelhoven`
@@ -92,7 +92,7 @@ Um E-Mails versenden zu können, muss Ihre Absender-Adresse verifiziert werden:
 
 3. **API Key eintragen:**
    - Fügen Sie den kopierten API Key in das Feld **"SendGrid API Key"** ein
-   - Überprüfen Sie die **"Absender E-Mail"**: `noreply@sundsmessebau.de`
+   - Überprüfen Sie die **"Absender E-Mail"**: `noreply@sunds-messebau.de`
    - Überprüfen Sie den **"Absender Name"**: `S&S Messebau GbR`
    - Klicken Sie auf **"SendGrid aktivieren"**
    - ✅ Sie sollten eine Erfolgsbestätigung sehen
@@ -126,7 +126,7 @@ Um E-Mails versenden zu können, muss Ihre Absender-Adresse verifiziert werden:
    - ✅ Sie sollten eine Erfolgsbestätigung sehen
 
 3. **E-Mails prüfen:**
-   - **Firmen-E-Mail:** Prüfen Sie `info@sundsmessebau.com`
+   - **Firmen-E-Mail:** Prüfen Sie `info@sunds-messebau.de`
      - Betreff: "Neue Banner-Bestellung: [Firma] - [Menge]x [Rahmenart]"
      - Enthält: Alle Bestelldetails, Kundenkontakt, ggf. Dateianhänge
    - **Kunden-E-Mail:** Prüfen Sie die eingegebene Kunden-E-Mail
@@ -158,7 +158,7 @@ Um E-Mails versenden zu können, muss Ihre Absender-Adresse verifiziert werden:
 3. **Admin prüft E-Mail im Dashboard** (`#/admin` → "E-Mail Queue")
 4. **Admin sendet E-Mail manuell** (oder automatisch bei sofortigem Versand)
 5. **Beide E-Mails werden versendet:**
-   - ✉️ An Firma: `info@sundsmessebau.com` mit allen Details
+   - ✉️ An Firma: `info@sunds-messebau.de` mit allen Details
    - ✉️ An Kunde: Bestätigung mit nächsten Schritten
 
 ### Automatischer Versand (optional)
@@ -194,7 +194,7 @@ Für bessere Zustellraten und professionelleres Branding:
 2. **DNS-Einträge hinzufügen:**
    - SendGrid zeigt Ihnen DNS-Einträge (CNAME, MX)
    - Fügen Sie diese bei Ihrem Domain-Provider hinzu
-   - Nach Verifizierung: E-Mails kommen von `@sundsmessebau.de`
+   - Nach Verifizierung: E-Mails kommen von `@sunds-messebau.de`
 
 ### E-Mail-Limits
 
@@ -251,7 +251,7 @@ Für bessere Zustellraten und professionelleres Branding:
 
 ## 📊 E-Mail-Templates
 
-### Firmen-E-Mail (info@sundsmessebau.com)
+### Firmen-E-Mail (info@sunds-messebau.de)
 
 **Enthält:**
 - ✅ Vollständige Kundeninformationen
@@ -322,7 +322,7 @@ Für bessere Zustellraten und professionelleres Branding:
 - [ ] API Key im Admin-Panel eingetragen
 - [ ] Verbindungstest erfolgreich
 - [ ] Test-Bestellung durchgeführt
-- [ ] Firmen-E-Mail erhalten (`info@sundsmessebau.com`)
+- [ ] Firmen-E-Mail erhalten (`info@sunds-messebau.de`)
 - [ ] Kunden-E-Mail erhalten (eigene Testadresse)
 - [ ] E-Mail-Queue im Admin geprüft
 - [ ] Status-Badge zeigt "SendGrid" an (nicht "Test-Modus")

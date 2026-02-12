@@ -59,7 +59,7 @@ export function EmailSystemInfo() {
               {status?.testMode ? (
                 <>E-Mails werden simuliert. Konfigurieren Sie SendGrid/AWS SES im Admin-Dashboard für echten Versand.</>
               ) : (
-                <>Auftragsbestätigungen werden automatisch an <strong>info@sundsmessebau.com</strong> und den Kunden versendet.</>
+                <>Auftragsbestätigungen werden automatisch an <strong>info@sunds-messebau.de</strong> und den Kunden versendet.</>
               )}
             </p>
           </div>
@@ -73,7 +73,7 @@ export function EmailSystemInfo() {
           <div className="space-y-2 text-sm">
             <div className="flex items-start gap-2">
               <CaretRight className="w-4 h-4 text-primary mt-0.5 shrink-0" weight="bold" />
-              <span>E-Mail an <strong>info@sundsmessebau.com</strong> mit vollständigen Bestelldetails</span>
+              <span>E-Mail an <strong>info@sunds-messebau.de</strong> mit vollständigen Bestelldetails</span>
             </div>
             <div className="flex items-start gap-2">
               <CaretRight className="w-4 h-4 text-primary mt-0.5 shrink-0" weight="bold" />

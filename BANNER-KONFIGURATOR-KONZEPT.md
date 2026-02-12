@@ -439,7 +439,7 @@ Ihre Druckdaten: [Dateinamen als Links]
 Wir prüfen nun Ihre Angaben und erstellen ein individuelles Angebot, das Sie binnen 24 Stunden erhalten.
 
 Bei Rückfragen erreichen Sie uns unter:
-Tel: (02433) 4427144 oder info@sundsmessebau.de
+Tel: (02433) 4427144 oder info@sunds-messebau.de
 
 Mit freundlichen Grüßen
 Ihr S&S Messebau Team
@@ -449,7 +449,7 @@ Ihr S&S Messebau Team
 
 ---
 
-**Intern erhält** info@sundsmessebau.de:
+**Intern erhält** info@sunds-messebau.de:
 ```
 Betreff: NEUE BANNER-KONFIGURATION [#ID] - [Firma]
 
@@ -859,7 +859,7 @@ if (einsatz === 'messe' && !b1Selected) {
 <title>Banner & Bannerrahmen online konfigurieren | S&S Messebau</title>
 <meta name="description" content="Konfigurieren Sie Bannerrahmen und Großformatdruck online. Von Standard bis LED-Backlit, mit Montageservice. Angebot binnen 24h. Bundesweite Lieferung." />
 <meta name="keywords" content="Bannerrahmen bestellen, Banner konfigurieren, Großformatdruck, Messebanner, LED Banner, Bannerrahmen kaufen" />
-<link rel="canonical" href="https://sundsmessebau.de/banner-bestellen" />
+<link rel="canonical" href="https://sunds-messebau.de/banner-bestellen" />
 ```
 
 **Strukturierte Daten** (Schema.org):

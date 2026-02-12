@@ -6,7 +6,7 @@
 
 Wenn ein Kunde eine Banner-Bestellung abschließt, werden automatisch zwei E-Mails versendet:
 
-1. **An info@sundsmessebau.com** (Firma)
+1. **An info@sunds-messebau.de** (Firma)
    - Vollständige Bestelldetails
    - Kundenkontaktdaten
    - Konfiguration (Einsatz, Maße, Druck, Lieferung)
@@ -76,7 +76,7 @@ if (config) {
 
 ### `/src/components/pages/configurator/ThankYouPage.tsx`
 - Zeigt E-Mail-Versandstatus mit Checkmarks
-- "E-Mail an info@sundsmessebau.com ✓"
+- "E-Mail an info@sunds-messebau.de ✓"
 - "E-Mail an [kunde@example.com] ✓"
 - "X Dateien als Anhang ✓"
 
@@ -145,7 +145,7 @@ case '/admin':
 │  E-Mail-Liste:                               │
 │  ┌────────────────────────────────────────┐ │
 │  │ 📧 Neue Banner-Bestellung: [Firma]     │ │
-│  │ An: info@sundsmessebau.com             │ │
+│  │ An: info@sunds-messebau.de             │ │
 │  │ Kunde: kunde@example.com               │ │
 │  │ 📎 3 Anhänge                            │ │
 │  │ [Vorschau Firma] [Vorschau Kunde]      │ │
@@ -187,7 +187,7 @@ case '/admin':
 
 4. ThankYouPage anzeigen
    └─> Checkmarks für versendete E-Mails
-       ├─> ✓ E-Mail an info@sundsmessebau.com
+       ├─> ✓ E-Mail an info@sunds-messebau.de
        ├─> ✓ E-Mail an [kunde@example.com]
        └─> ✓ 3 Dateien als Anhang
 
@@ -200,7 +200,7 @@ case '/admin':
 
 ## 📧 E-Mail-Inhalte Beispiel
 
-### An info@sundsmessebau.com:
+### An info@sunds-messebau.de:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -262,7 +262,7 @@ Lieferart:       🚛 Spedition EXPRESS
 S&S Messebau GbR
 Marienstr. 37-42 | 41836 Hückelhoven
 Tel: (02433) 4427144 | Mobil: (01514) 0322125
-E-Mail: info@sundsmessebau.de
+E-Mail: info@sunds-messebau.de
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -317,7 +317,7 @@ Ihr S&S Messebau Team
 S&S Messebau GbR
 Marienstr. 37-42 | 41836 Hückelhoven
 Tel: (02433) 4427144 | Mobil: (01514) 0322125
-E-Mail: info@sundsmessebau.de
+E-Mail: info@sunds-messebau.de
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -340,7 +340,7 @@ E-Mail: info@sundsmessebau.de
 
 ## 🔐 Sicherheit
 
-- ✅ E-Mails nur an verifizierte Adresse (`info@sundsmessebau.com`)
+- ✅ E-Mails nur an verifizierte Adresse (`info@sunds-messebau.de`)
 - ✅ Admin-Zugriff nur für Projekt-Owner (`spark.user().isOwner`)
 - ✅ Dateien als Base64 in KV (temporär)
 - ✅ DSGVO-Checkbox vor Submit erforderlich
@@ -377,7 +377,7 @@ if (success) {
 Das E-Mail-System ist vollständig integriert und bereit:
 
 ✅ Automatischer Versand bei Banner-Bestellung  
-✅ E-Mails an info@sundsmessebau.com  
+✅ E-Mails an info@sunds-messebau.de  
 ✅ Kundenbestätigungen  
 ✅ Dateianhänge  
 ✅ Admin-Dashboard  

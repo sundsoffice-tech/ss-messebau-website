@@ -43,21 +43,26 @@ jobs:
             echo "Build failed - cannot deploy without index.html"
             exit 1
           fi
-          echo "✅ index.html found in dist/"
-          
+
+          if ! grep -q '<div id="root"></div>' dist/index.html; then
+            echo "❌ ERROR: root mount element missing in dist/index.html"
+            exit 1
+          fi
+
+          if [ ! -f "dist/.htaccess" ]; then
+            echo "❌ ERROR: .htaccess not found in dist/ (Hostinger SPA routing would break)"
+            exit 1
+          fi
+
+          echo "✅ index.html, #root mount point und .htaccess sind vorhanden"
+
           echo ""
           echo "Build directory contents:"
           ls -lah dist/
-          
+
           echo ""
           echo "Total build size:"
           du -sh dist/
-          
-          if [ -f "dist/.htaccess" ]; then
-            echo "✅ .htaccess found (SPA routing configured)"
-          else
-            echo "⚠️  Warning: .htaccess not found"
-          fi
 
       - name: Deploy to hostinger branch
         run: |

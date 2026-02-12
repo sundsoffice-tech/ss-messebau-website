@@ -21,7 +21,7 @@
 │                                         │
 │  ┌───────────────────────────────────┐ │
 │  │ Email Address                     │ │
-│  │ info@sundsmessebau.de            │ │
+│  │ info@sunds-messebau.de            │ │
 │  └───────────────────────────────────┘ │
 │                                         │
 │  ┌───────────────────────────────────┐ │
@@ -36,7 +36,7 @@
 ```
 
 **Aktion:**
-- ✏️ E-Mail eingeben: `info@sundsmessebau.de`
+- ✏️ E-Mail eingeben: `info@sunds-messebau.de`
 - ✏️ Sicheres Passwort erstellen
 - ☑️ Terms of Service akzeptieren
 - 🖱️ Klick auf "Sign Up"
@@ -44,7 +44,7 @@
 ### 1.2 E-Mail bestätigen
 
 **Was passiert:**
-- 📧 SendGrid sendet E-Mail an `info@sundsmessebau.de`
+- 📧 SendGrid sendet E-Mail an `info@sunds-messebau.de`
 - ⏱️ E-Mail kommt in 1-2 Minuten
 
 **E-Mail Betreff:** "SendGrid Account Verification"
@@ -64,7 +64,7 @@ Tell us about yourself:
 │ First Name: [Ihr Vorname]        │
 │ Last Name: [Ihr Nachname]        │
 │ Company: S&S Messebau GbR        │
-│ Website: sundsmessebau.de        │
+│ Website: sunds-messebau.de        │
 │ Role: Marketing / IT             │
 └───────────────────────────────────┘
 
@@ -142,12 +142,12 @@ Dashboard (Linke Sidebar)
 │                                            │
 │  From Email Address: (This will be shown) │
 │  ┌────────────────────────────────────┐   │
-│  │ noreply@sundsmessebau.de          │   │
+│  │ noreply@sunds-messebau.de          │   │
 │  └────────────────────────────────────┘   │
 │                                            │
 │  Reply To: (Where replies go)             │
 │  ┌────────────────────────────────────┐   │
-│  │ info@sundsmessebau.de             │   │
+│  │ info@sunds-messebau.de             │   │
 │  └────────────────────────────────────┘   │
 │                                            │
 │  Company Address:                          │
@@ -171,8 +171,8 @@ Dashboard (Linke Sidebar)
 ```
 
 **Wichtig:**
-- 📧 **From Email:** `noreply@sundsmessebau.de` (oder `info@sundsmessebau.de`)
-- 📧 **Reply To:** `info@sundsmessebau.de` (Kundenantworten landen hier!)
+- 📧 **From Email:** `noreply@sunds-messebau.de` (oder `info@sunds-messebau.de`)
+- 📧 **Reply To:** `info@sunds-messebau.de` (Kundenantworten landen hier!)
 - 🏢 **Company Address:** Vollständige Adresse angeben (DSGVO-Pflicht)
 
 **Aktion:**
@@ -186,13 +186,13 @@ Dashboard (Linke Sidebar)
 ✅ Sender Created Successfully!
 
 We've sent a verification email to:
-📧 noreply@sundsmessebau.de
+📧 noreply@sunds-messebau.de
 
 Please check your inbox and click the verification link.
 ```
 
 **Aktion:**
-1. 📬 Postfach `noreply@sundsmessebau.de` öffnen
+1. 📬 Postfach `noreply@sunds-messebau.de` öffnen
 2. 🔍 E-Mail von SendGrid finden
    - **Betreff:** "Please Verify Your Single Sender"
 3. 🖱️ Klick auf den Link **"Verify Single Sender"**
@@ -206,7 +206,7 @@ Settings → Sender Authentication → Single Sender Verification
 ┌────────────────────────────────────────────┐
 │  Verified Senders                          │
 │                                            │
-│  ✅ noreply@sundsmessebau.de              │
+│  ✅ noreply@sunds-messebau.de              │
 │     From: S&S Messebau GbR                │
 │     Status: Verified ✓                    │
 │     Created: [Datum]                      │
@@ -543,11 +543,11 @@ Schritt 6: Kontakt
 
 **2 E-Mails werden versendet:**
 
-#### E-Mail 1: An Firma (info@sundsmessebau.com)
+#### E-Mail 1: An Firma (info@sunds-messebau.de)
 
 ```
-Von: S&S Messebau GbR <noreply@sundsmessebau.de>
-An: info@sundsmessebau.com
+Von: S&S Messebau GbR <noreply@sunds-messebau.de>
+An: info@sunds-messebau.de
 Betreff: Neue Banner-Bestellung: Test GmbH - 1x Hängerahmen
 
 ┌────────────────────────────────────────────┐
@@ -577,7 +577,7 @@ Betreff: Neue Banner-Bestellung: Test GmbH - 1x Hängerahmen
 #### E-Mail 2: An Kunde (Ihre Test-E-Mail)
 
 ```
-Von: S&S Messebau GbR <noreply@sundsmessebau.de>
+Von: S&S Messebau GbR <noreply@sunds-messebau.de>
 An: [Ihre E-Mail]
 Betreff: Auftragsbestätigung: Banner-Bestellung #abc12345
 

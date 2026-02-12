@@ -41,7 +41,7 @@ export function ThankYouPage({ config }: ThankYouPageProps) {
                     </div>
                     <div className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-primary" weight="bold" />
-                      <span>Bestellung an <strong>info@sundsmessebau.com</strong></span>
+                      <span>Bestellung an <strong>info@sunds-messebau.de</strong></span>
                     </div>
                     {fileCount > 0 && (
                       <div className="flex items-center gap-2">

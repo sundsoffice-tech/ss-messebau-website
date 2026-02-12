@@ -214,7 +214,7 @@ hostinger/
 
 3. **Nach Hostinger-Setup: Website testen:**
    ```
-   https://www.sundsmessebau.de/
+   https://www.sunds-messebau.de/
    ```
 
 ---

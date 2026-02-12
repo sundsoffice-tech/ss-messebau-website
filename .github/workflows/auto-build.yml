@@ -40,7 +40,18 @@ jobs:
             echo "❌ ERROR: index.html not found in dist/"
             exit 1
           fi
-          echo "✅ Build successful"
+
+          if ! grep -q '<div id="root"></div>' dist/index.html; then
+            echo "❌ ERROR: root mount element missing in dist/index.html"
+            exit 1
+          fi
+
+          if [ ! -f "dist/.htaccess" ]; then
+            echo "❌ ERROR: .htaccess not found in dist/ (Hostinger SPA routing would break)"
+            exit 1
+          fi
+
+          echo "✅ Build successful (index.html + #root + .htaccess vorhanden)"
           ls -lah dist/
 
       - name: Check for changes in dist

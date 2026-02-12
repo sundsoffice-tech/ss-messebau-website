@@ -200,7 +200,7 @@ Marienstr. 37-42
 
 Tel: (02433) 4427144  
 Mobil: (01514) 0322125  
-E-Mail: info@sundsmessebau.de
+E-Mail: info@sunds-messebau.de
 
 ## 📄 Weitere Dokumentation
 

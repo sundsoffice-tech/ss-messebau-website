@@ -25,7 +25,7 @@ interface SMTPConfig {
 
 const DEFAULT_CONFIG: SMTPConfig = {
   provider: 'test',
-  fromEmail: 'noreply@sundsmessebau.de',
+  fromEmail: 'noreply@sunds-messebau.de',
   fromName: 'S&S Messebau GbR',
 }
 
@@ -236,7 +236,7 @@ export async function testEmailConnection(): Promise<{ success: boolean; message
     }
 
     const testEmail: EmailOptions = {
-      to: 'test@sundsmessebau.de',
+      to: 'test@sunds-messebau.de',
       subject: 'Test-E-Mail von S&S Messebau',
       htmlBody: '<html><body><h1>Test erfolgreich!</h1><p>Die E-Mail-Konfiguration funktioniert.</p></body></html>',
       textBody: 'Test erfolgreich! Die E-Mail-Konfiguration funktioniert.',
