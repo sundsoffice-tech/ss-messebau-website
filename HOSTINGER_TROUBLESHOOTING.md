@@ -2,6 +2,25 @@
 
 ## Quick Diagnostics Checklist
 
+## ⚠️ Kritischer Schnellcheck: Richtige Domain verwenden
+
+**Im Projekt ist durchgehend die Domain `sundsmessebau.de` (ohne Bindestrich) dokumentiert.**
+
+Wenn ihr stattdessen `sunds-messebau.de` (mit Bindestrich) aufruft, kann folgendes passieren:
+- ihr landet auf einer anderen (oder nicht konfigurierten) Domain,
+- SSL-Zertifikat passt nicht,
+- DNS zeigt nicht auf eure Hostinger-Instanz,
+- oder ihr seht nur eine Placeholder-/Fehlerseite.
+
+### Prüfen
+1. Hostinger → **Domains**: Ist `sundsmessebau.de` als Primary Domain hinterlegt?
+2. Hostinger → **Subdomains/Redirects**: Gibt es einen Redirect von `sunds-messebau.de` auf `https://www.sundsmessebau.de/`?
+3. Git-Deployment in Hostinger zeigt auf die gleiche Website-Instanz (gleiches `public_html`).
+
+> Empfehlung: Eine Domain als **kanonische Hauptdomain** festlegen (z. B. `www.sundsmessebau.de`) und alle Varianten per 301 dorthin leiten.
+
+---
+
 Wenn die Website auf Hostinger nicht läuft, gehe diese Checkliste durch:
 
 ### ✅ 1. Build-Verifizierung (Lokal)
