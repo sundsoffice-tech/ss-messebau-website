@@ -15,7 +15,7 @@ export const sparkKVAdapter = {
     }
   },
 
-  async set(key: string, value: any): Promise<void> {
+  async set(key: string, value: unknown): Promise<void> {
     try {
       localStorage.setItem(KV_PREFIX + key, JSON.stringify(value))
     } catch (error) {
@@ -50,7 +50,7 @@ if (typeof window !== 'undefined') {
   (window as any).spark = {
     kv: sparkKVAdapter,
     // Stub for LLM functionality - returns a helpful message
-    llm: async (prompt: string) => {
+    llm: async () => {
       console.warn('window.spark.llm is not available in this environment')
       return 'Entschuldigung, die KI-Funktion ist derzeit nicht verfügbar. Bitte nutzen Sie das Kontaktformular oder rufen Sie uns direkt an.'
     },

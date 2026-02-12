@@ -65,16 +65,16 @@ jobs:
           TEMP_DIR=$(mktemp -d)
           echo "Using temp directory: $TEMP_DIR"
           
-          cp -r dist/* "$TEMP_DIR/"
-          cp dist/.htaccess "$TEMP_DIR/" 2>/dev/null || true
+          cp -a dist/* "$TEMP_DIR/"
+          cp -a dist/.htaccess "$TEMP_DIR/" 2>/dev/null || true
           
           COMMIT_SHA=$(git rev-parse --short HEAD)
           
           git checkout --orphan hostinger-deploy
           git rm -rf .
           
-          cp -r "$TEMP_DIR"/* .
-          cp "$TEMP_DIR"/.htaccess . 2>/dev/null || true
+          cp -a "$TEMP_DIR"/* .
+          cp -a "$TEMP_DIR"/.htaccess . 2>/dev/null || true
           
           git add -A
           
