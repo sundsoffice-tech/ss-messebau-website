@@ -2,6 +2,51 @@
 
 ## Quick Diagnostics Checklist
 
+## ⚠️ Kritischer Schnellcheck: Richtige Domain verwenden
+
+**Im Projekt ist durchgehend die Domain `sundsmessebau.de` (ohne Bindestrich) dokumentiert.**
+
+Wenn ihr stattdessen `sunds-messebau.de` (mit Bindestrich) aufruft, kann folgendes passieren:
+- ihr landet auf einer anderen (oder nicht konfigurierten) Domain,
+- SSL-Zertifikat passt nicht,
+- DNS zeigt nicht auf eure Hostinger-Instanz,
+- oder ihr seht nur eine Placeholder-/Fehlerseite.
+
+### Prüfen
+1. Hostinger → **Domains**: Ist `sundsmessebau.de` als Primary Domain hinterlegt?
+2. Hostinger → **Subdomains/Redirects**: Gibt es einen Redirect von `sunds-messebau.de` auf `https://www.sundsmessebau.de/`?
+3. Git-Deployment in Hostinger zeigt auf die gleiche Website-Instanz (gleiches `public_html`).
+
+> Empfehlung: Eine Domain als **kanonische Hauptdomain** festlegen (z. B. `www.sundsmessebau.de`) und alle Varianten per 301 dorthin leiten.
+
+---
+
+## 🌐 Live-Diagnose: Ist das Problem wirklich behoben?
+
+Wenn die Seite "manchmal geht" oder nur unter einer Domain-Variante erreichbar ist, prüfe aktiv DNS + HTTP-Redirects:
+
+```bash
+# DNS vergleichen (müssen auf dieselbe Ziel-Infrastruktur zeigen)
+dig +short A sundsmessebau.de
+dig +short A www.sundsmessebau.de
+dig +short A sunds-messebau.de
+dig +short A www.sunds-messebau.de
+
+# Redirects prüfen (alle Varianten sollten auf die kanonische Domain führen)
+curl -I -L https://sundsmessebau.de
+curl -I -L https://www.sundsmessebau.de
+curl -I -L https://sunds-messebau.de
+curl -I -L https://www.sunds-messebau.de
+```
+
+**So interpretierst du das Ergebnis:**
+- ✅ **Behoben:** Alle Domain-Varianten enden per `301/308` auf derselben kanonischen URL.
+- ❌ **Nicht behoben:** Unterschiedliche A-Records oder keine Redirect-Kette auf dieselbe Ziel-Domain.
+
+**Wichtig:** Selbst wenn Git-Deployment auf `hostinger` erfolgreich ist, bleibt die Website "kaputt", wenn DNS/Domain-Zuordnung auf eine andere Instanz zeigt.
+
+---
+
 Wenn die Website auf Hostinger nicht läuft, gehe diese Checkliste durch:
 
 ### ✅ 1. Build-Verifizierung (Lokal)
