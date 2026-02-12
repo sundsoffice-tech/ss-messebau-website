@@ -112,30 +112,37 @@ Siehe **[TESTING_GUIDE.md](TESTING_GUIDE.md)** für detaillierte Test-Anleitunge
 
 Die Website wird automatisch auf Hostinger deployed bei jedem Push auf den `main` Branch.
 
-**📖 Ausführliche Deployment-Dokumentation:** [HOSTINGER_DEPLOYMENT.md](HOSTINGER_DEPLOYMENT.md)
+**📖 Deployment-Dokumentation:**
+- **[HOSTINGER_DEPLOYMENT.md](HOSTINGER_DEPLOYMENT.md)** - Komplette Deployment-Anleitung ⭐
+- **[HOSTINGER_TROUBLESHOOTING.md](HOSTINGER_TROUBLESHOOTING.md)** - Fehlerbehebung & Debugging 🔧
+- **[HOSTINGER_GIT_SETUP.md](HOSTINGER_GIT_SETUP.md)** - Git-Deployment Setup-Guide
+
+**Build-Verifizierung:**
+```bash
+# Build erstellen
+npm run build
+
+# Build verifizieren (empfohlen vor Deployment)
+./verify-build.sh
+```
 
 **Automatisches Deployment:**
-- ✅ GitHub Actions Workflow: `.github/workflows/deploy.yml`
+- ✅ GitHub Actions Workflow: `.github/workflows/deploy-hostinger.yml`
 - ✅ Automatischer Build bei jedem Push auf `main`
-- ✅ Sichere FTPS-Verbindung zu Hostinger (verschlüsselt)
-- ✅ Deployment direkt nach erfolgreichem Build
+- ✅ Deployment via Git zu Branch `hostinger`
+- ✅ Hostinger deployed automatisch von Branch `hostinger`
 - ✅ Vollständige Apache/.htaccess-Konfiguration für SPA-Routing
 - ✅ Gzip-Kompression und Browser-Caching
 - ✅ Sicherheits-Header und SEO-Optimierung
-
-**Benötigte GitHub Secrets:**
-Die folgenden Secrets müssen in den Repository Settings konfiguriert sein:
-- `FTP_SERVER` - Hostinger FTP Server-Adresse
-- `FTP_USERNAME` - FTP Benutzername
-- `FTP_PASSWORD` - FTP Passwort
 
 **Deployment-Prozess:**
 1. Code wird eingecheckt und auf `main` gepusht
 2. GitHub Actions startet automatisch den Build-Prozess
 3. Dependencies werden installiert (`npm ci`)
 4. Projekt wird gebaut (`npm run build`)
-5. Build-Artefakte werden via FTPS zu Hostinger hochgeladen (verschlüsselt)
-6. Website ist live unter der konfigurierten Domain
+5. Build-Output wird zu Branch `hostinger` gepusht
+6. Hostinger deployed automatisch von Branch `hostinger`
+7. Website ist live unter der konfigurierten Domain
 
 **Hostinger-Kompatibilität:**
 - ✅ `.htaccess` für Apache-Server (SPA-Routing, HTTPS, Caching)
@@ -144,6 +151,7 @@ Die folgenden Secrets müssen in den Repository Settings konfiguriert sein:
 - ✅ Custom 404-Seite mit Weiterleitung
 - ✅ Health-Check Endpoint (`/health.json`)
 - ✅ PHP-Konfiguration (`php.ini`)
+- ✅ Build-Verifizierung (`verify-build.sh`)
 
 ### Projekt-Struktur
 
@@ -198,6 +206,9 @@ E-Mail: info@sundsmessebau.de
 
 ### Deployment
 - **[HOSTINGER_DEPLOYMENT.md](HOSTINGER_DEPLOYMENT.md)** - Hostinger Deployment Guide ⭐
+- **[HOSTINGER_TROUBLESHOOTING.md](HOSTINGER_TROUBLESHOOTING.md)** - Fehlerbehebung & Debugging 🔧
+- **[HOSTINGER_GIT_SETUP.md](HOSTINGER_GIT_SETUP.md)** - Git-Deployment Setup-Guide
+- **[HOSTINGER_COMPATIBILITY_SUMMARY.md](HOSTINGER_COMPATIBILITY_SUMMARY.md)** - Kompatibilitäts-Übersicht
 
 ### E-Mail-System
 - **[EMAIL_SYSTEM.md](EMAIL_SYSTEM.md)** - E-Mail-System Dokumentation

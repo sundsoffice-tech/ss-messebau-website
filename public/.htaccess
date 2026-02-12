@@ -10,6 +10,8 @@
   RewriteBase /
 
   # Force HTTPS (redirect HTTP to HTTPS)
+  # NOTE: If you experience redirect loops, comment out these lines
+  # as Hostinger may already handle HTTPS redirects at the server level
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
