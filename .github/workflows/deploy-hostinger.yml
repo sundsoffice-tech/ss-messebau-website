@@ -73,8 +73,19 @@ jobs:
           git checkout --orphan hostinger-deploy
           git rm -rf .
           
+          # Ensure working directory is completely clean
+          rm -rf node_modules/ 2>/dev/null || true
+          rm -rf dist/ 2>/dev/null || true
+          
+          # Create temporary .gitignore to exclude node_modules
+          echo "node_modules/" > .gitignore
+          echo "dist/" >> .gitignore
+          
           cp -a "$TEMP_DIR"/* .
           cp -a "$TEMP_DIR"/.htaccess . 2>/dev/null || true
+          
+          # Remove the temporary .gitignore
+          rm -f .gitignore
           
           git add -A
           
