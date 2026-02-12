@@ -81,6 +81,12 @@
 </head>
 
 <body>
+    <script>
+      // Initialize Eruda early if injected by the hosting platform
+      if (window.eruda && typeof window.eruda.init === 'function') {
+        try { window.eruda.init(); } catch (e) {}
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
 </body>
