@@ -5,8 +5,6 @@ import App from './App.tsx'
 import { ErrorFallback } from './ErrorFallback.tsx'
 
 import "./main.css"
-import "./styles/theme.css"
-import "./index.css"
 import "./lib/spark-kv-adapter"
 
 if (import.meta.env.DEV) {
