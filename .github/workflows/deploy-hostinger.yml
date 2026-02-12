@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -47,7 +49,6 @@ jobs:
           echo "Total build size:"
           du -sh dist/
           
-          # Check for .htaccess
           if [ -f "dist/.htaccess" ]; then
             echo "✅ .htaccess found (SPA routing configured)"
           else
@@ -58,43 +59,31 @@ jobs:
         run: |
           echo "🚀 Preparing deployment to hostinger branch..."
           
-          # Configure git
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           
-          # Create a temporary directory for the hostinger branch
           TEMP_DIR=$(mktemp -d)
           echo "Using temp directory: $TEMP_DIR"
           
-          # Copy build files to temp directory
-          cp -r dist/* "$TEMP_DIR/"
-          cp -r dist/.htaccess "$TEMP_DIR/" 2>/dev/null || true
+          cp -a dist/* "$TEMP_DIR/"
+          cp -a dist/.htaccess "$TEMP_DIR/" 2>/dev/null || true
           
-          # Switch to hostinger branch (create if doesn't exist)
-          git fetch origin hostinger:hostinger 2>/dev/null || git checkout --orphan hostinger
-          git checkout hostinger || git checkout --orphan hostinger
+          COMMIT_SHA=$(git rev-parse --short HEAD)
           
-          # Remove all existing files
-          git rm -rf . 2>/dev/null || true
-          rm -rf ./*
+          git checkout --orphan hostinger-deploy
+          git rm -rf .
           
-          # Copy build files from temp directory
-          cp -r "$TEMP_DIR"/* .
-          cp "$TEMP_DIR"/.htaccess . 2>/dev/null || true
+          cp -a "$TEMP_DIR"/* .
+          cp -a "$TEMP_DIR"/.htaccess . 2>/dev/null || true
           
-          # Add all files
           git add -A
           
-          # Commit changes
-          COMMIT_MSG="Deploy from main @ $(git rev-parse --short main) - $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          COMMIT_MSG="Deploy from main @ ${COMMIT_SHA} - $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
           git commit -m "$COMMIT_MSG" || echo "No changes to commit"
           
-          # Push to hostinger branch
-          git push -f origin hostinger
+          git push -f origin HEAD:hostinger
           
           echo "✅ Deployment to hostinger branch completed!"
-          echo "📦 Branch 'hostinger' now contains the production-ready website"
-          echo "🔗 Configure Hostinger to deploy from branch 'hostinger'"
 
       - name: Deployment Summary
         if: success()
@@ -107,14 +96,6 @@ jobs:
           echo "   • Source Branch: main"
           echo "   • Target Branch: hostinger"
           echo "   • Build Output: dist/ → hostinger branch root"
-          echo "   • index.html: ✅ Available in branch root"
-          echo "   • .htaccess: ✅ Configured for SPA routing"
           echo ""
-          echo "🔧 Hostinger Git Configuration:"
-          echo "   • Repository: sundsoffice-tech/ss-messebau-website"
-          echo "   • Branch: hostinger"
-          echo "   • Deploy Path: public_html (oder leer lassen)"
-          echo "   • Auto-Deploy: Aktiviert"
-          echo ""
-          echo "🌐 The website is ready to be deployed by Hostinger!"
+          echo "🌐 The website will be deployed by Hostinger automatically!"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
