@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
+# dist - IMPORTANT: dist/ is NOT ignored - needed for Hostinger deployment
 dist-ssr
 *-dist
 *.local

@@ -21,32 +21,6 @@ Wenn ihr stattdessen `sunds-messebau.de` (mit Bindestrich) aufruft, kann folgend
 
 ---
 
-## 🌐 Live-Diagnose: Ist das Problem wirklich behoben?
-
-Wenn die Seite "manchmal geht" oder nur unter einer Domain-Variante erreichbar ist, prüfe aktiv DNS + HTTP-Redirects:
-
-```bash
-# DNS vergleichen (müssen auf dieselbe Ziel-Infrastruktur zeigen)
-dig +short A sundsmessebau.de
-dig +short A www.sundsmessebau.de
-dig +short A sunds-messebau.de
-dig +short A www.sunds-messebau.de
-
-# Redirects prüfen (alle Varianten sollten auf die kanonische Domain führen)
-curl -I -L https://sundsmessebau.de
-curl -I -L https://www.sundsmessebau.de
-curl -I -L https://sunds-messebau.de
-curl -I -L https://www.sunds-messebau.de
-```
-
-**So interpretierst du das Ergebnis:**
-- ✅ **Behoben:** Alle Domain-Varianten enden per `301/308` auf derselben kanonischen URL.
-- ❌ **Nicht behoben:** Unterschiedliche A-Records oder keine Redirect-Kette auf dieselbe Ziel-Domain.
-
-**Wichtig:** Selbst wenn Git-Deployment auf `hostinger` erfolgreich ist, bleibt die Website "kaputt", wenn DNS/Domain-Zuordnung auf eine andere Instanz zeigt.
-
----
-
 Wenn die Website auf Hostinger nicht läuft, gehe diese Checkliste durch:
 
 ### ✅ 1. Build-Verifizierung (Lokal)
