@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Check } from '@phosphor-icons/react'
