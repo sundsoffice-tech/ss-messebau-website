@@ -1,0 +1,26 @@
+{
+  "name": "S&S Messebau GbR - Full-Service Messebau",
+  "short_name": "S&S Messebau",
+  "description": "Professioneller Messebau, Eventbau und Ladenbau aus Hückelhoven, NRW",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3730a3",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": [
+    "business",
+    "construction",
+    "events"
+  ],
+  "lang": "de",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}

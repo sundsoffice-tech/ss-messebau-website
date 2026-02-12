@@ -1,3 +1,7 @@
+# NOTE: This workflow is now OPTIONAL since the auto-build.yml workflow
+# commits the dist/ folder directly to the main branch.
+# Hostinger can deploy directly from the main branch instead of using this separate hostinger branch.
+# This workflow is kept as a backup deployment option.
 name: Deploy to Hostinger (Git)
 
 on:
