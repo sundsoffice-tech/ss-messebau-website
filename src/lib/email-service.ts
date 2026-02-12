@@ -1,4 +1,4 @@
-import { BannerConfig } from '@/components/pages/BannerBestellenPage'
+import type { BannerConfig } from '@/components/pages/BannerBestellenPage'
 import { sendEmail } from './smtp-service'
 import type { SerializedFile, FileAttachment } from '@/types/email'
 
