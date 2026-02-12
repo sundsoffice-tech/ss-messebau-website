@@ -114,37 +114,28 @@ Die Website wird automatisch auf Hostinger deployed bei jedem Push auf den `main
 
 **📖 Ausführliche Deployment-Dokumentation:** [HOSTINGER_DEPLOYMENT.md](HOSTINGER_DEPLOYMENT.md)
 
-**Empfohlene Deployment-Methode: Git-basiert** ⭐
-- ✅ GitHub Actions Workflow: `.github/workflows/deploy-hostinger.yml`
-- ✅ Automatischer Build bei jedem Push auf `main`
-- ✅ Deployment über Git-Integration (keine FTP-Zugangsdaten nötig)
-- ✅ Build-Output wird in Branch `hostinger` veröffentlicht
-- ✅ Vollständige Apache/.htaccess-Konfiguration für SPA-Routing
-- ✅ Automatische Validierung von `index.html` im Build-Output
-
-**Hostinger Git-Konfiguration (Empfohlen):**
-1. In Hostinger hPanel: `Advanced → Git → Create Git Repository`
-2. Repository-Einstellungen:
-   - Repository URL: `git@github.com:sundsoffice-tech/ss-messebau-website.git`
-   - Branch: `hostinger`
-   - Deploy Path: leer lassen (oder `public_html`)
-   - Auto-Deploy: Aktivieren
-3. SSH-Key von Hostinger als Deploy Key in GitHub hinzufügen
-4. Bei jedem Push auf `main` wird automatisch der Branch `hostinger` aktualisiert
-
-**Alternative: FTP-basiertes Deployment**
+**Automatisches Deployment:**
 - ✅ GitHub Actions Workflow: `.github/workflows/deploy.yml`
-- ⚠️ Benötigt FTP-Zugangsdaten als GitHub Secrets
+- ✅ Automatischer Build bei jedem Push auf `main`
+- ✅ Sichere FTPS-Verbindung zu Hostinger (verschlüsselt)
+- ✅ Deployment direkt nach erfolgreichem Build
+- ✅ Vollständige Apache/.htaccess-Konfiguration für SPA-Routing
+- ✅ Gzip-Kompression und Browser-Caching
+- ✅ Sicherheits-Header und SEO-Optimierung
+
+**Benötigte GitHub Secrets:**
+Die folgenden Secrets müssen in den Repository Settings konfiguriert sein:
+- `FTP_SERVER` - Hostinger FTP Server-Adresse
+- `FTP_USERNAME` - FTP Benutzername
+- `FTP_PASSWORD` - FTP Passwort
 
 **Deployment-Prozess:**
 1. Code wird eingecheckt und auf `main` gepusht
 2. GitHub Actions startet automatisch den Build-Prozess
 3. Dependencies werden installiert (`npm ci`)
 4. Projekt wird gebaut (`npm run build`)
-5. Build-Output-Verzeichnis wird automatisch ermittelt (default: `dist/`)
-6. `index.html` im Root wird validiert (Abbruch bei Fehler)
-7. Build-Artefakte werden zum Branch `hostinger` gepusht
-8. Hostinger deployed automatisch vom Branch `hostinger`
+5. Build-Artefakte werden via FTPS zu Hostinger hochgeladen (verschlüsselt)
+6. Website ist live unter der konfigurierten Domain
 
 **Hostinger-Kompatibilität:**
 - ✅ `.htaccess` für Apache-Server (SPA-Routing, HTTPS, Caching)

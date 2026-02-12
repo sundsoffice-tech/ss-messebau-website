@@ -29,68 +29,26 @@ jobs:
       - name: Build project
         run: npm run build
       
-      - name: Determine build output directory
-        id: build_dir
-        run: |
-          echo "🔍 Determining build output directory..."
-          
-          # Check vite.config.ts for build.outDir
-          BUILD_DIR=""
-          if [ -f "vite.config.ts" ]; then
-            # Extract outDir from vite.config.ts if present
-            VITE_OUT_DIR=$(grep -Po "outDir:\s*['\"]?\K[^'\",]+" vite.config.ts 2>/dev/null | head -1 | tr -d ' ')
-            if [ -n "$VITE_OUT_DIR" ]; then
-              BUILD_DIR="$VITE_OUT_DIR"
-              echo "Found outDir in vite.config.ts: $BUILD_DIR"
-            fi
-          fi
-          
-          # Check package.json for build output configuration
-          if [ -z "$BUILD_DIR" ] && [ -f "package.json" ]; then
-            PKG_OUT_DIR=$(jq -r '.build.outDir // empty' package.json 2>/dev/null)
-            if [ -n "$PKG_OUT_DIR" ]; then
-              BUILD_DIR="$PKG_OUT_DIR"
-              echo "Found outDir in package.json: $BUILD_DIR"
-            fi
-          fi
-          
-          # Default to 'dist' if not found
-          if [ -z "$BUILD_DIR" ]; then
-            BUILD_DIR="dist"
-            echo "Using default build directory: $BUILD_DIR"
-          fi
-          
-          # Verify directory exists
-          if [ ! -d "$BUILD_DIR" ]; then
-            echo "❌ ERROR: Build directory '$BUILD_DIR' does not exist"
-            exit 1
-          fi
-          
-          echo "✅ Build output directory: $BUILD_DIR"
-          echo "build_dir=$BUILD_DIR" >> $GITHUB_OUTPUT
-      
       - name: Verify build output
         run: |
-          BUILD_DIR="${{ steps.build_dir.outputs.build_dir }}"
-          echo "Checking for index.html in $BUILD_DIR/"
-          
-          if [ ! -f "$BUILD_DIR/index.html" ]; then
-            echo "❌ ERROR: index.html not found in $BUILD_DIR/"
-            echo "Build failed - cannot deploy without index.html in root"
+          echo "Checking for index.html in dist/"
+          if [ ! -f "dist/index.html" ]; then
+            echo "❌ ERROR: index.html not found in dist/"
+            echo "Build failed - cannot deploy without index.html"
             exit 1
           fi
-          echo "✅ index.html found in $BUILD_DIR/"
+          echo "✅ index.html found in dist/"
           
           echo ""
           echo "Build directory contents:"
-          ls -lah "$BUILD_DIR/"
+          ls -lah dist/
           
           echo ""
           echo "Total build size:"
-          du -sh "$BUILD_DIR/"
+          du -sh dist/
           
           # Check for .htaccess
-          if [ -f "$BUILD_DIR/.htaccess" ]; then
+          if [ -f "dist/.htaccess" ]; then
             echo "✅ .htaccess found (SPA routing configured)"
           else
             echo "⚠️  Warning: .htaccess not found"
@@ -98,9 +56,7 @@ jobs:
 
       - name: Deploy to hostinger branch
         run: |
-          BUILD_DIR="${{ steps.build_dir.outputs.build_dir }}"
           echo "🚀 Preparing deployment to hostinger branch..."
-          echo "Build directory: $BUILD_DIR"
           
           # Configure git
           git config --global user.name "GitHub Actions"
@@ -111,8 +67,8 @@ jobs:
           echo "Using temp directory: $TEMP_DIR"
           
           # Copy build files to temp directory
-          cp -r "$BUILD_DIR"/* "$TEMP_DIR/"
-          [ -f "$BUILD_DIR/.htaccess" ] && cp "$BUILD_DIR/.htaccess" "$TEMP_DIR/" || true
+          cp -r dist/* "$TEMP_DIR/"
+          cp -r dist/.htaccess "$TEMP_DIR/" 2>/dev/null || true
           
           # Switch to hostinger branch (create if doesn't exist)
           git fetch origin hostinger:hostinger 2>/dev/null || git checkout --orphan hostinger
@@ -124,7 +80,7 @@ jobs:
           
           # Copy build files from temp directory
           cp -r "$TEMP_DIR"/* .
-          [ -f "$TEMP_DIR/.htaccess" ] && cp "$TEMP_DIR/.htaccess" . || true
+          cp "$TEMP_DIR"/.htaccess . 2>/dev/null || true
           
           # Add all files
           git add -A
@@ -143,7 +99,6 @@ jobs:
       - name: Deployment Summary
         if: success()
         run: |
-          BUILD_DIR="${{ steps.build_dir.outputs.build_dir }}"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "✅ DEPLOYMENT SUCCESSFUL"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -151,7 +106,7 @@ jobs:
           echo "📋 Deployment Details:"
           echo "   • Source Branch: main"
           echo "   • Target Branch: hostinger"
-          echo "   • Build Output: $BUILD_DIR/ → hostinger branch root"
+          echo "   • Build Output: dist/ → hostinger branch root"
           echo "   • index.html: ✅ Available in branch root"
           echo "   • .htaccess: ✅ Configured for SPA routing"
           echo ""
