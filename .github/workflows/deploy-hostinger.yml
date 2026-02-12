@@ -38,7 +38,7 @@ jobs:
           BUILD_DIR=""
           if [ -f "vite.config.ts" ]; then
             # Extract outDir from vite.config.ts if present
-            VITE_OUT_DIR=$(grep -Po "outDir:\s*['\"]?\K[^'\"،]+" vite.config.ts 2>/dev/null | head -1 | tr -d ' ')
+            VITE_OUT_DIR=$(grep -Po "outDir:\s*['\"]?\K[^'\",]+" vite.config.ts 2>/dev/null | head -1 | tr -d ' ')
             if [ -n "$VITE_OUT_DIR" ]; then
               BUILD_DIR="$VITE_OUT_DIR"
               echo "Found outDir in vite.config.ts: $BUILD_DIR"
@@ -112,7 +112,7 @@ jobs:
           
           # Copy build files to temp directory
           cp -r "$BUILD_DIR"/* "$TEMP_DIR/"
-          cp "$BUILD_DIR"/.htaccess "$TEMP_DIR/" 2>/dev/null || true
+          [ -f "$BUILD_DIR/.htaccess" ] && cp "$BUILD_DIR/.htaccess" "$TEMP_DIR/" || true
           
           # Switch to hostinger branch (create if doesn't exist)
           git fetch origin hostinger:hostinger 2>/dev/null || git checkout --orphan hostinger
@@ -124,7 +124,7 @@ jobs:
           
           # Copy build files from temp directory
           cp -r "$TEMP_DIR"/* .
-          cp "$TEMP_DIR"/.htaccess . 2>/dev/null || true
+          [ -f "$TEMP_DIR/.htaccess" ] && cp "$TEMP_DIR/.htaccess" . || true
           
           # Add all files
           git add -A
