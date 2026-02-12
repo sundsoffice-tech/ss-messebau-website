@@ -1,11 +1,11 @@
 # S&S Messebau GbR - Robots.txt
-# https://www.sundsmessebau.de/robots.txt
+# https://sunds-messebau.de/robots.txt
 
 User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://www.sundsmessebau.de/sitemap.xml
+Sitemap: https://sunds-messebau.de/sitemap.xml
 
 # Disallow admin and internal pages
 Disallow: /#/admin

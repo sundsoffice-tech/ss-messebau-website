@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Homepage -->
   <url>
-    <loc>https://www.sundsmessebau.de/</loc>
+    <loc>https://sunds-messebau.de/</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -10,56 +10,56 @@
   
   <!-- Main Pages -->
   <url>
-    <loc>https://www.sundsmessebau.de/#/leistungen</loc>
+    <loc>https://sunds-messebau.de/#/leistungen</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://www.sundsmessebau.de/#/branchen</loc>
+    <loc>https://sunds-messebau.de/#/branchen</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://www.sundsmessebau.de/#/referenzen</loc>
+    <loc>https://sunds-messebau.de/#/referenzen</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://www.sundsmessebau.de/#/ueber-uns</loc>
+    <loc>https://sunds-messebau.de/#/ueber-uns</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://www.sundsmessebau.de/#/ablauf</loc>
+    <loc>https://sunds-messebau.de/#/ablauf</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://www.sundsmessebau.de/#/nachhaltigkeit</loc>
+    <loc>https://sunds-messebau.de/#/nachhaltigkeit</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://www.sundsmessebau.de/#/blog</loc>
+    <loc>https://sunds-messebau.de/#/blog</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://www.sundsmessebau.de/#/kontakt</loc>
+    <loc>https://sunds-messebau.de/#/kontakt</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -67,14 +67,14 @@
   
   <!-- Banner Services -->
   <url>
-    <loc>https://www.sundsmessebau.de/#/bannerrahmen</loc>
+    <loc>https://sunds-messebau.de/#/bannerrahmen</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://www.sundsmessebau.de/#/banner-bestellen</loc>
+    <loc>https://sunds-messebau.de/#/banner-bestellen</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -82,14 +82,14 @@
   
   <!-- Legal Pages -->
   <url>
-    <loc>https://www.sundsmessebau.de/#/impressum</loc>
+    <loc>https://sunds-messebau.de/#/impressum</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://www.sundsmessebau.de/#/datenschutz</loc>
+    <loc>https://sunds-messebau.de/#/datenschutz</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
