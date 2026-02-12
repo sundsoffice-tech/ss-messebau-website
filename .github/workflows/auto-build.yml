@@ -1,0 +1,68 @@
+name: Auto-Build and Commit dist
+
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+      - 'dist/**'  # Prevents infinite loop
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-commit:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+      
+      - name: Verify build output
+        run: |
+          echo "Checking build output..."
+          if [ ! -f "dist/index.html" ]; then
+            echo "❌ ERROR: index.html not found in dist/"
+            exit 1
+          fi
+          echo "✅ Build successful"
+          ls -lah dist/
+
+      - name: Check for changes in dist
+        id: check_changes
+        run: |
+          git add dist/ -f
+          if git diff --cached --quiet; then
+            echo "No changes in dist/"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected in dist/"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push dist to main
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          
+          git add dist/ -f
+          git commit -m "🤖 Auto-build: Update dist/ [skip ci]"
+          git push origin main
+          
+          echo "✅ dist/ committed to main branch"
