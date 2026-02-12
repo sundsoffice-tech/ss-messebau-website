@@ -20,7 +20,7 @@ Der E-Mail-Verarbeitungsprozess ist **technisch vollständig implementiert** und
 #### B) E-Mail-Queue-System
 - E-Mails werden in eine Queue geschrieben (`email_queue_CONFIGID`)
 - Zwei E-Mails pro Bestellung:
-  1. **Firmen-E-Mail** an `info@sundsmessebau.com` (mit Details + Anhänge)
+  1. **Firmen-E-Mail** an `info@sunds-messebau.de` (mit Details + Anhänge)
   2. **Kunden-E-Mail** an Besteller (Bestätigung)
 - Queue-Verwaltung im Admin-Dashboard verfügbar
 - Vorschau-Funktion für beide E-Mails vorhanden
@@ -89,20 +89,20 @@ Konsole   Echter E-Mail-Versand
 // smtp-service.ts - DEFAULT_CONFIG
 {
   provider: 'test',  // ← Muss auf 'sendgrid' oder 'ses' geändert werden
-  fromEmail: 'noreply@sundsmessebau.de',
+  fromEmail: 'noreply@sunds-messebau.de',
   fromName: 'S&S Messebau GbR',
   apiKey: undefined  // ← API Key fehlt
 }
 ```
 
 #### B) E-Mail-Domain-Verifizierung
-**Problem:** `noreply@sundsmessebau.de` muss beim Provider verifiziert sein
+**Problem:** `noreply@sunds-messebau.de` muss beim Provider verifiziert sein
 **Status:** Noch nicht durchgeführt
 
 **Erforderliche Schritte:**
 1. SendGrid/SES Account erstellen
-2. Domain `sundsmessebau.de` verifizieren (DNS-Einträge)
-3. Sender-Adresse `noreply@sundsmessebau.de` freischalten
+2. Domain `sunds-messebau.de` verifizieren (DNS-Einträge)
+3. Sender-Adresse `noreply@sunds-messebau.de` freischalten
 
 #### C) API-Limitierungen verstehen
 **SendGrid Free Tier:**
@@ -179,7 +179,7 @@ Konsole   Echter E-Mail-Versand
 2. **Sender Identity verifizieren**
    - Settings → Sender Authentication
    - Single Sender Verification
-   - `noreply@sundsmessebau.de` eintragen
+   - `noreply@sunds-messebau.de` eintragen
    - Bestätigungs-E-Mail klicken
 
 3. **API Key erstellen**
@@ -229,7 +229,7 @@ Konsole   Echter E-Mail-Versand
 
 console.log('📧 ═══════════════════════════════════════')
 console.log('📨 E-MAIL SIMULATION (TEST MODE)')
-console.log('An: info@sundsmessebau.com')
+console.log('An: info@sunds-messebau.de')
 console.log('Betreff: Neue Banner-Bestellung...')
 // ...vollständige E-Mail-Details
 ```

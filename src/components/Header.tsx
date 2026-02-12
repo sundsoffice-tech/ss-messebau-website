@@ -801,12 +801,12 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         <span>(02433) 4427144</span>
                       </a>
                       <a 
-                        href="mailto:info@sundsmessebau.de" 
+                        href="mailto:info@sunds-messebau.de" 
                         className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label="E-Mail senden an info@sundsmessebau.de"
+                        aria-label="E-Mail senden an info@sunds-messebau.de"
                       >
                         <Envelope className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
-                        <span className="truncate">info@sundsmessebau.de</span>
+                        <span className="truncate">info@sunds-messebau.de</span>
                       </a>
                     </div>
                   </div>

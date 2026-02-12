@@ -97,7 +97,7 @@ ls -la
 
 Nach Deployment in Hostinger:
 ```
-https://www.sundsmessebau.de/
+https://www.sunds-messebau.de/
 ```
 
 ✅ Website sollte laden  

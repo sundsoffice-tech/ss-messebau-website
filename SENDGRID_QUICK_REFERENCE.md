@@ -8,7 +8,7 @@
 
 ### SendGrid Login
 - **URL:** https://app.sendgrid.com/login
-- **E-Mail:** `info@sundsmessebau.de`
+- **E-Mail:** `info@sunds-messebau.de`
 - **Passwort:** [In Passwort-Manager gespeichert]
 
 ### Admin-Dashboard
@@ -69,7 +69,7 @@
 3. **Admin:** Prüft E-Mail in Queue (`#/admin` → E-Mail Queue)
 4. **Admin:** Klickt "Versenden" (oder automatisch bei Aktivierung)
 5. **System:** Versendet 2 E-Mails:
-   - ✉️ **An Firma:** `info@sundsmessebau.com` (mit allen Details + Anhängen)
+   - ✉️ **An Firma:** `info@sunds-messebau.de` (mit allen Details + Anhängen)
    - ✉️ **An Kunde:** Bestätigung mit Bestellnummer
 
 ---
@@ -78,7 +78,7 @@
 
 ### Firmen-E-Mail
 
-**An:** `info@sundsmessebau.com`  
+**An:** `info@sunds-messebau.de`  
 **Betreff:** `Neue Banner-Bestellung: [Firma] - [Menge]x [Rahmenart]`
 
 **Enthält:**
@@ -145,7 +145,7 @@
 
 **Kurzfristig:**
 - Kunde informieren: Spam-Ordner prüfen
-- `noreply@sundsmessebau.de` zu Kontakten hinzufügen
+- `noreply@sunds-messebau.de` zu Kontakten hinzufügen
 
 **Langfristig:**
 - Domain Authentication einrichten (siehe unten)
@@ -174,7 +174,7 @@
 ### Tägliche Routine
 - [ ] E-Mail Queue prüfen (wartende E-Mails?)
 - [ ] SendGrid Dashboard prüfen (Fehler? Bounces?)
-- [ ] info@sundsmessebau.com Postfach prüfen (neue Bestellungen?)
+- [ ] info@sunds-messebau.de Postfach prüfen (neue Bestellungen?)
 
 ### Wöchentliche Routine
 - [ ] SendGrid Activity prüfen (Zustellraten OK?)
@@ -233,13 +233,13 @@
 
 **Warum?**
 - ✅ Bessere Zustellraten (weniger Spam)
-- ✅ Professioneller (`@sundsmessebau.de` statt `@sendgrid.net`)
+- ✅ Professioneller (`@sunds-messebau.de` statt `@sendgrid.net`)
 - ✅ Vertrauenswürdiger für E-Mail-Provider
 
 **Wie?**
 1. SendGrid → Settings → Sender Authentication
 2. "Authenticate Your Domain" klicken
-3. Domain eingeben: `sundsmessebau.de`
+3. Domain eingeben: `sunds-messebau.de`
 4. DNS-Einträge kopieren (CNAME, MX)
 5. Bei Domain-Provider eintragen (z.B. Strato, 1&1, etc.)
 6. Verifizierung abwarten (bis 48h)
@@ -270,7 +270,7 @@
 ### S&S Messebau
 - **Website:** https://[ihre-domain].de
 - **Admin:** https://[ihre-domain].de/#/admin
-- **E-Mail:** info@sundsmessebau.de
+- **E-Mail:** info@sunds-messebau.de
 - **Telefon:** (02433) 4427144
 
 ### Anleitungen
@@ -293,7 +293,7 @@
 ### Täglich
 - [ ] E-Mail Queue geprüft
 - [ ] Wartende E-Mails versendet
-- [ ] info@sundsmessebau.com Postfach geprüft
+- [ ] info@sunds-messebau.de Postfach geprüft
 
 ### Bei Problemen
 - [ ] Browser-Konsole geprüft (F12 → Console)

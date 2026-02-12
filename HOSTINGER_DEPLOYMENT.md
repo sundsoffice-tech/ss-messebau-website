@@ -232,34 +232,34 @@ Nach erfolgreichem Deployment prüfen:
 
 ### 1. SPA-Routing funktioniert
 ```
-✓ https://www.sundsmessebau.de/
-✓ https://www.sundsmessebau.de/#/leistungen
-✓ https://www.sundsmessebau.de/#/kontakt
-✓ Direkter Aufruf: https://www.sundsmessebau.de/leistungen
+✓ https://www.sunds-messebau.de/
+✓ https://www.sunds-messebau.de/#/leistungen
+✓ https://www.sunds-messebau.de/#/kontakt
+✓ Direkter Aufruf: https://www.sunds-messebau.de/leistungen
   sollte auf /#/leistungen weiterleiten
 ```
 
 ### 2. HTTPS-Weiterleitung
 ```
-✓ http://www.sundsmessebau.de
-  → https://www.sundsmessebau.de
+✓ http://www.sunds-messebau.de
+  → https://www.sunds-messebau.de
 ```
 
 ### 3. Kompression aktiv
 ```bash
-curl -H "Accept-Encoding: gzip" -I https://www.sundsmessebau.de
+curl -H "Accept-Encoding: gzip" -I https://www.sunds-messebau.de
 # Sollte "Content-Encoding: gzip" enthalten
 ```
 
 ### 4. Caching-Header
 ```bash
-curl -I https://www.sundsmessebau.de/assets/index-[hash].css
+curl -I https://www.sunds-messebau.de/assets/index-[hash].css
 # Sollte "Cache-Control: max-age=31536000" enthalten
 ```
 
 ### 5. Sicherheits-Header
 ```bash
-curl -I https://www.sundsmessebau.de
+curl -I https://www.sunds-messebau.de
 # Sollte enthalten:
 # X-Frame-Options: SAMEORIGIN
 # X-Content-Type-Options: nosniff
@@ -267,14 +267,14 @@ curl -I https://www.sundsmessebau.de
 
 ### 6. Health Check
 ```
-✓ https://www.sundsmessebau.de/health.json
+✓ https://www.sunds-messebau.de/health.json
   Sollte JSON mit "status": "ok" zurückgeben
 ```
 
 ### 7. SEO-Dateien
 ```
-✓ https://www.sundsmessebau.de/robots.txt
-✓ https://www.sundsmessebau.de/sitemap.xml
+✓ https://www.sunds-messebau.de/robots.txt
+✓ https://www.sunds-messebau.de/sitemap.xml
 ```
 
 ## 🐛 Troubleshooting

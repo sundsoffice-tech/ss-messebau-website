@@ -24,7 +24,7 @@ Die Website ist bereits mit E-Mail-Funktionalität ausgestattet. Standardmäßig
 1. Gehen Sie zu: https://signup.sendgrid.com
 2. Klicken Sie auf "Start for Free"
 3. Füllen Sie das Registrierungsformular aus:
-   - E-Mail-Adresse (z.B. info@sundsmessebau.de)
+   - E-Mail-Adresse (z.B. info@sunds-messebau.de)
    - Passwort erstellen
    - Persönliche Daten eingeben
 4. Bestätigen Sie Ihre E-Mail-Adresse (Check-E-Mail in Ihrem Postfach)
@@ -38,8 +38,8 @@ Die Website ist bereits mit E-Mail-Funktionalität ausgestattet. Standardmäßig
 5. Füllen Sie das Formular aus:
    ```
    From Name: S&S Messebau GbR
-   From Email Address: noreply@sundsmessebau.de (oder info@sundsmessebau.de)
-   Reply To: info@sundsmessebau.de
+   From Email Address: noreply@sunds-messebau.de (oder info@sunds-messebau.de)
+   Reply To: info@sunds-messebau.de
    Company Address: Marienstr. 37-42, 41836 Hückelhoven
    ```
 6. Klicken Sie auf **Create**
@@ -69,7 +69,7 @@ Die Website ist bereits mit E-Mail-Funktionalität ausgestattet. Standardmäßig
 6. Geben Sie folgende Daten ein:
    ```
    SendGrid API Key: [Ihr kopierter API Key]
-   Absender E-Mail: noreply@sundsmessebau.de
+   Absender E-Mail: noreply@sunds-messebau.de
    Absender Name: S&S Messebau GbR
    ```
 7. Klicken Sie auf **SendGrid aktivieren**
@@ -81,7 +81,7 @@ Die Website ist bereits mit E-Mail-Funktionalität ausgestattet. Standardmäßig
 ✅ Ihr E-Mail-Versand ist jetzt aktiv!
 
 Ab sofort werden alle Banner-Bestellungen automatisch per E-Mail versendet:
-- An **info@sundsmessebau.com** mit allen Bestelldetails und Anhängen
+- An **info@sunds-messebau.de** mit allen Bestelldetails und Anhängen
 - An den **Kunden** mit Auftragsbestätigung und Bestellnummer
 
 ### Testen Sie den Versand
@@ -91,7 +91,7 @@ Ab sofort werden alle Banner-Bestellungen automatisch per E-Mail versendet:
 3. Verwenden Sie Ihre eigene E-Mail-Adresse als Kunden-E-Mail
 4. Senden Sie die Bestellung ab
 5. Prüfen Sie Ihre beiden E-Mail-Postfächer:
-   - info@sundsmessebau.com sollte die detaillierte Bestellung erhalten
+   - info@sunds-messebau.de sollte die detaillierte Bestellung erhalten
    - Ihre Test-E-Mail sollte die Kundenbestätigung erhalten
 
 ---
@@ -146,9 +146,9 @@ Ab sofort werden alle Banner-Bestellungen automatisch per E-Mail versendet:
 ### Kann ich mehrere Absender-E-Mails verwenden?
 
 Ja, aber jede E-Mail muss einzeln verifiziert werden:
-- `info@sundsmessebau.de` für allgemeine Anfragen
-- `noreply@sundsmessebau.de` für automatische E-Mails
-- `angebote@sundsmessebau.de` für Angebote
+- `info@sunds-messebau.de` für allgemeine Anfragen
+- `noreply@sunds-messebau.de` für automatische E-Mails
+- `angebote@sunds-messebau.de` für Angebote
 
 ### Was passiert, wenn das Limit überschritten wird?
 
@@ -159,13 +159,13 @@ Bei SendGrid:
 
 ### Können Kunden die E-Mails beantworten?
 
-Ja! Die Reply-To Adresse ist auf `info@sundsmessebau.de` gesetzt. Wenn ein Kunde auf die Bestätigungs-E-Mail antwortet, landet die Antwort in Ihrem normalen Postfach.
+Ja! Die Reply-To Adresse ist auf `info@sunds-messebau.de` gesetzt. Wenn ein Kunde auf die Bestätigungs-E-Mail antwortet, landet die Antwort in Ihrem normalen Postfach.
 
 ### Wie sehe ich, welche E-Mails versendet wurden?
 
 1. **In der Website**: Admin → E-Mail Queue (zeigt ausstehende E-Mails)
 2. **Bei SendGrid**: Dashboard → Activity (zeigt alle versendeten E-Mails mit Status)
-3. **In Ihrem Postfach**: Kopie jeder Firmen-E-Mail wird an info@sundsmessebau.de gesendet
+3. **In Ihrem Postfach**: Kopie jeder Firmen-E-Mail wird an info@sunds-messebau.de gesendet
 
 ### Sind die E-Mails DSGVO-konform?
 
@@ -220,7 +220,7 @@ Ja, aber es erfordert Code-Anpassungen:
    - Vermeiden Sie Spam-Wörter (kostenlos, gewonnen, etc.)
    - Verwenden Sie professionelles HTML
 3. **Kunden informieren**:
-   - E-Mail von noreply@sundsmessebau.de zu Kontakten hinzufügen
+   - E-Mail von noreply@sunds-messebau.de zu Kontakten hinzufügen
 
 ### Test-Modus lässt sich nicht deaktivieren
 
@@ -241,7 +241,7 @@ Ja, aber es erfordert Code-Anpassungen:
 - **Status**: https://status.sendgrid.com
 
 ### S&S Messebau Support
-- **E-Mail**: info@sundsmessebau.de
+- **E-Mail**: info@sunds-messebau.de
 - **Telefon**: (02433) 4427144
 - **Mobil**: (01514) 0322125
 
@@ -260,14 +260,14 @@ Verwenden Sie diese Checkliste, um sicherzustellen, dass alles korrekt eingerich
 - [ ] API Key erstellt (Full Access)
 - [ ] API Key in Website eingetragen (Admin → SMTP-Konfiguration)
 - [ ] Provider auf "SendGrid" gesetzt
-- [ ] Absender-Daten konfiguriert (noreply@sundsmessebau.de)
+- [ ] Absender-Daten konfiguriert (noreply@sunds-messebau.de)
 - [ ] Verbindungstest durchgeführt (erfolgreich)
 - [ ] Test-Bestellung durchgeführt
-- [ ] Firmen-E-Mail an info@sundsmessebau.de erhalten
+- [ ] Firmen-E-Mail an info@sunds-messebau.de erhalten
 - [ ] Kunden-E-Mail erhalten
 - [ ] E-Mails sind korrekt formatiert
 - [ ] Anhänge funktionieren (falls Druckdaten hochgeladen)
-- [ ] Reply-To funktioniert (E-Mail beantwortet → landet bei info@sundsmessebau.de)
+- [ ] Reply-To funktioniert (E-Mail beantwortet → landet bei info@sunds-messebau.de)
 
 **Herzlichen Glückwunsch!** 🎉 Ihr E-Mail-Versand ist jetzt vollständig eingerichtet und funktioniert.
 

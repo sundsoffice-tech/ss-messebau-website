@@ -450,7 +450,7 @@ export function ImpressumPage() {
             <p>
               Telefon: (02433) 4427144<br />
               Mobil: (01514) 0322125<br />
-              E-Mail: info@sundsmessebau.de
+              E-Mail: info@sunds-messebau.de
             </p>
           </div>
 
@@ -527,7 +527,7 @@ export function DatenschutzPage() {
               S&S Messebau GbR<br />
               Marienstr. 37-42<br />
               41836 Hückelhoven<br />
-              E-Mail: info@sundsmessebau.de
+              E-Mail: info@sunds-messebau.de
             </p>
           </div>
         </div>

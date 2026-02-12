@@ -4,7 +4,7 @@
 
 ## ⚠️ Kritischer Schnellcheck: Richtige Domain verwenden
 
-**Im Projekt ist durchgehend die Domain `sundsmessebau.de` (ohne Bindestrich) dokumentiert.**
+**Im Projekt ist durchgehend die Domain `sunds-messebau.de` (ohne Bindestrich) dokumentiert.**
 
 Wenn ihr stattdessen `sunds-messebau.de` (mit Bindestrich) aufruft, kann folgendes passieren:
 - ihr landet auf einer anderen (oder nicht konfigurierten) Domain,
@@ -13,11 +13,11 @@ Wenn ihr stattdessen `sunds-messebau.de` (mit Bindestrich) aufruft, kann folgend
 - oder ihr seht nur eine Placeholder-/Fehlerseite.
 
 ### Prüfen
-1. Hostinger → **Domains**: Ist `sundsmessebau.de` als Primary Domain hinterlegt?
-2. Hostinger → **Subdomains/Redirects**: Gibt es einen Redirect von `sunds-messebau.de` auf `https://www.sundsmessebau.de/`?
+1. Hostinger → **Domains**: Ist `sunds-messebau.de` als Primary Domain hinterlegt?
+2. Hostinger → **Subdomains/Redirects**: Gibt es einen Redirect von `sunds-messebau.de` auf `https://www.sunds-messebau.de/`?
 3. Git-Deployment in Hostinger zeigt auf die gleiche Website-Instanz (gleiches `public_html`).
 
-> Empfehlung: Eine Domain als **kanonische Hauptdomain** festlegen (z. B. `www.sundsmessebau.de`) und alle Varianten per 301 dorthin leiten.
+> Empfehlung: Eine Domain als **kanonische Hauptdomain** festlegen (z. B. `www.sunds-messebau.de`) und alle Varianten per 301 dorthin leiten.
 
 ---
 
@@ -141,7 +141,7 @@ Git → Actions → Pull & Deploy
 
 **Öffne im Browser:**
 ```
-https://www.sundsmessebau.de/
+https://www.sunds-messebau.de/
 ```
 
 #### Test 1: Homepage lädt
@@ -169,9 +169,9 @@ https://www.sundsmessebau.de/
 #### Test 3: SPA-Routing funktioniert
 **Teste URLs:**
 ```
-✅ https://www.sundsmessebau.de/
-✅ https://www.sundsmessebau.de/#/leistungen
-✅ https://www.sundsmessebau.de/#/kontakt
+✅ https://www.sunds-messebau.de/
+✅ https://www.sunds-messebau.de/#/leistungen
+✅ https://www.sunds-messebau.de/#/kontakt
 ```
 
 **Falls Seiten 404:**
@@ -181,13 +181,13 @@ https://www.sundsmessebau.de/
 #### Test 4: HTTPS-Redirect
 **Test:**
 ```bash
-curl -I http://www.sundsmessebau.de/
+curl -I http://www.sunds-messebau.de/
 ```
 
 **Erwartung:**
 ```
 HTTP/1.1 301 Moved Permanently
-Location: https://www.sundsmessebau.de/
+Location: https://www.sunds-messebau.de/
 ```
 
 **Falls Redirect-Loop (zu viele Redirects):**
@@ -438,23 +438,23 @@ npm run build
 
 **Homepage testen:**
 ```bash
-curl -I https://www.sundsmessebau.de/
+curl -I https://www.sunds-messebau.de/
 ```
 
 **HTTPS-Redirect testen:**
 ```bash
-curl -I http://www.sundsmessebau.de/
+curl -I http://www.sunds-messebau.de/
 ```
 
 **Compression testen:**
 ```bash
-curl -H "Accept-Encoding: gzip" -I https://www.sundsmessebau.de/
+curl -H "Accept-Encoding: gzip" -I https://www.sunds-messebau.de/
 # Sollte enthalten: Content-Encoding: gzip
 ```
 
 **Health Check:**
 ```bash
-curl https://www.sundsmessebau.de/health.json
+curl https://www.sunds-messebau.de/health.json
 # Sollte JSON zurückgeben: {"status":"ok"}
 ```
 
@@ -511,7 +511,7 @@ Nach jedem Fix diese Checkliste durchgehen:
 - [ ] Hostinger Auto-Deploy ausgelöst
 
 ### Website-Zugriff
-- [ ] Homepage lädt: https://www.sundsmessebau.de/
+- [ ] Homepage lädt: https://www.sunds-messebau.de/
 - [ ] Keine 404-Fehler in Browser-Konsole
 - [ ] CSS/JS laden korrekt
 - [ ] Bilder werden angezeigt

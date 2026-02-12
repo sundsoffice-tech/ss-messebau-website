@@ -31,7 +31,7 @@ interface SMTPConfig {
 export function SMTPConfigPanel() {
   const [config, setConfig] = useState<SMTPConfig>({
     provider: 'test',
-    fromEmail: 'noreply@sundsmessebau.de',
+    fromEmail: 'noreply@sunds-messebau.de',
     fromName: 'S&S Messebau GbR',
   })
   const [loading, setLoading] = useState(false)
@@ -179,7 +179,7 @@ export function SMTPConfigPanel() {
                 type="email"
                 value={config.fromEmail}
                 onChange={(e) => setConfig({ ...config, fromEmail: e.target.value })}
-                placeholder="noreply@sundsmessebau.de"
+                placeholder="noreply@sunds-messebau.de"
               />
               <p className="text-sm text-muted-foreground">
                 Diese E-Mail-Adresse muss bei Ihrem Provider verifiziert sein
