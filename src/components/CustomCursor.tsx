@@ -10,6 +10,7 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
   const [cursorVariant, setCursorVariant] = useState<'default' | 'link' | 'button'>('default')
   const [isMobile, setIsMobile] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [isClicking, setIsClicking] = useState(false)
   
   const cursorX = useMotionValue(-100)
   const cursorY = useMotionValue(-100)
@@ -83,6 +84,14 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
       }
     }
 
+    const handleMouseDown = () => {
+      setIsClicking(true)
+    }
+
+    const handleMouseUp = () => {
+      setIsClicking(false)
+    }
+
     const handleMouseLeave = () => {
       cursorX.set(-100)
       cursorY.set(-100)
@@ -91,6 +100,8 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
     }
 
     window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mousedown', handleMouseDown)
+    window.addEventListener('mouseup', handleMouseUp)
     document.addEventListener('mouseleave', handleMouseLeave)
 
     // Cleanup old trails periodically
@@ -103,6 +114,8 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mousedown', handleMouseDown)
+      window.removeEventListener('mouseup', handleMouseUp)
       document.removeEventListener('mouseleave', handleMouseLeave)
       clearInterval(trailCleanup)
       if (animationFrameId) {
@@ -149,8 +162,8 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
         <motion.div
           className="rounded-full bg-white"
           animate={{
-            width: isHovering ? 8 : 6,
-            height: isHovering ? 8 : 6,
+            width: isClicking ? 4 : (isHovering ? 8 : 6),
+            height: isClicking ? 4 : (isHovering ? 8 : 6),
           }}
           transition={{ type: 'spring', stiffness: 500, damping: 28 }}
         />
@@ -169,8 +182,8 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
         <motion.div
           className="rounded-full border-2 border-white mix-blend-difference"
           animate={{
-            width: isHovering ? (cursorVariant === 'button' ? 60 : 48) : 32,
-            height: isHovering ? (cursorVariant === 'button' ? 60 : 48) : 32,
+            width: isClicking ? 28 : (isHovering ? (cursorVariant === 'button' ? 60 : 48) : 32),
+            height: isClicking ? 28 : (isHovering ? (cursorVariant === 'button' ? 60 : 48) : 32),
             opacity: isHovering ? 0.5 : 0.3,
           }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
