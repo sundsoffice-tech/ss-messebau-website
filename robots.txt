@@ -1,0 +1,15 @@
+# S&S Messebau GbR - Robots.txt
+# https://sunds-messebau.de/robots.txt
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://sunds-messebau.de/sitemap.xml
+
+# Disallow admin and internal pages
+Disallow: /#/admin
+Disallow: /admin
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
