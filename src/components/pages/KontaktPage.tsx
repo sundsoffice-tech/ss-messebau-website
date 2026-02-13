@@ -10,7 +10,7 @@ import { Phone, Envelope, MapPin, PaperPlaneRight, ChatCircleDots, Sparkle, Calc
 import { ContactInquiry, ChatMessage } from '@/lib/types'
 import { useKV } from '@/hooks/use-kv'
 import { useVoiceInput } from '@/hooks/use-voice-input'
-import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
+import { useSectionObserver } from '@/hooks/use-deep-linking'
 
 interface KontaktPageProps {
   onOpenInquiry: () => void

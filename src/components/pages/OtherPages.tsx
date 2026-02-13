@@ -2,13 +2,11 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { CheckCircle, Leaf, Recycle, TrendUp, ArrowRight } from '@phosphor-icons/react'
-import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
+import { useSectionObserver } from '@/hooks/use-deep-linking'
 
 export { KIBeraterPage } from './KIBeraterPage'
 
 export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
-  const { scrollToSection } = useDeepLinking('/ueber-uns')
-  
   useSectionObserver(['story', 'team', 'werte', 'arbeitsweise', 'vergleich'])
 
   return (
@@ -25,7 +23,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 
       <section id="story" className="py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div id="team" className="grid lg:grid-cols-2 gap-12 items-center mb-16 scroll-mt-20">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl font-bold mb-6">Unsere Geschichte</h2>
               <div className="space-y-4 text-lg text-muted-foreground">
@@ -55,9 +53,22 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
               />
             </div>
           </div>
+        </div>
+      </section>
 
-          <div id="werte" className="mb-16 scroll-mt-20">
-            <h2 className="text-3xl font-bold mb-8 text-center">Unsere Werte</h2>
+      <section id="team" className="py-16 bg-muted scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
+          <h2 className="text-3xl font-bold mb-8 text-center">Unser Team</h2>
+          <p className="text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-12">
+            Als inhabergeführte GbR sind Fabrice Noel Schippers und Parampuneet Singh Ihre direkten Ansprechpartner 
+            für alle Projektphasen – von der ersten Idee bis zum Abbau.
+          </p>
+        </div>
+      </section>
+
+      <section id="werte" className="py-16 scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
+          <h2 className="text-3xl font-bold mb-8 text-center">Unsere Werte</h2>
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
@@ -81,10 +92,12 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
                 </Card>
               ))}
             </div>
-          </div>
+        </div>
+      </section>
 
-          <div id="arbeitsweise" className="mb-16 scroll-mt-20">
-            <h2 className="text-3xl font-bold mb-8 text-center">So arbeiten wir</h2>
+      <section id="arbeitsweise" className="py-16 bg-muted scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
+          <h2 className="text-3xl font-bold mb-8 text-center">So arbeiten wir</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {[
                 { title: 'Persönlich', desc: 'Ein fester Ansprechpartner für Ihr gesamtes Projekt' },
@@ -102,10 +115,12 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
                 </div>
               ))}
             </div>
-          </div>
+        </div>
+      </section>
 
-          <div id="vergleich" className="scroll-mt-20">
-            <h2 className="text-3xl font-bold mb-8 text-center">S&S vs. Größere Konkurrenz</h2>
+      <section id="vergleich" className="py-16 scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
+          <h2 className="text-3xl font-bold mb-8 text-center">S&S vs. Größere Konkurrenz</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -139,7 +154,6 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
                 </tbody>
               </table>
             </div>
-          </div>
         </div>
       </section>
 
