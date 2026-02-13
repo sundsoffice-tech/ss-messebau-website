@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, memo } from 'react'
+import { useState, useEffect, useRef, memo, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { FocusScope } from '@radix-ui/react-focus-scope'
@@ -287,22 +287,22 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     }
   }, [mobileMenuOpen])
 
-  const handleNavigation = (path: string, event?: React.MouseEvent) => {
+  const handleNavigation = useCallback((path: string, event?: React.MouseEvent) => {
     if (event) {
       event.preventDefault()
     }
     setMobileMenuOpen(false)
     setMegaMenuOpen(false)
     window.location.hash = path
-  }
+  }, [])
 
-  const handleSectionNavigation = (sectionId: string) => {
+  const handleSectionNavigation = useCallback((sectionId: string) => {
     setMobileMenuOpen(false)
     setMegaMenuOpen(false)
     navigateToPageAndSection('/leistungen', sectionId)
-  }
+  }, [])
 
-  const handleLeistungenClick = (event?: React.MouseEvent) => {
+  const handleLeistungenClick = useCallback((event?: React.MouseEvent) => {
     if (event) {
       event.preventDefault()
     }
@@ -315,9 +315,9 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     } else {
       setMegaMenuOpen(true)
     }
-  }
+  }, [currentPath, megaMenuOpen, handleNavigation])
 
-  const handleMegaMenuKeyDown = (e: React.KeyboardEvent) => {
+  const handleMegaMenuKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       e.preventDefault()
       setMegaMenuOpen(false)
@@ -359,16 +359,16 @@ export function Header({ onOpenInquiry }: HeaderProps) {
       e.preventDefault();
       (focusableElements[focusableElements.length - 1] as HTMLElement).focus()
     }
-  }
+  }, [])
 
-  const handleMegaMenuBlur = (e: React.FocusEvent) => {
+  const handleMegaMenuBlur = useCallback((e: React.FocusEvent) => {
     if (megaMenuRef.current && !megaMenuRef.current.contains(e.relatedTarget as Node)) {
       setTimeout(() => setMegaMenuOpen(false), 150)
     }
-  }
+  }, [])
 
   // Prefetch mega menu images on hover/focus for better performance
-  const handleLeistungenHover = () => {
+  const handleLeistungenHover = useCallback(() => {
     setMegaMenuOpen(true)
     
     // Prefetch images for instant loading
@@ -376,7 +376,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
       const img = new Image()
       img.src = item.previewImage
     })
-  }
+  }, [])
 
   return (
     <header 
@@ -387,7 +387,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
       }`}
       role="banner"
     >
-      <div className="container mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className={`flex items-center justify-between transition-all duration-300 ${
           scrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'
         }`}>
@@ -470,10 +470,10 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   onMouseLeave={() => setMegaMenuOpen(false)}
                   onKeyDown={handleMegaMenuKeyDown}
                   onBlur={handleMegaMenuBlur}
-                  className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[900px] z-50 max-h-[calc(100vh-80px)]"
+                  className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(90vw,900px)] z-50 max-h-[calc(100vh-80px)]"
                 >
-                  <div className="bg-background border rounded-lg shadow-2xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto max-h-[calc(100vh-100px)]">
-                    <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="bg-background border rounded-lg shadow-2xl p-3 sm:p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto max-h-[calc(100vh-100px)]">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
                       {LEISTUNGEN_MEGA_MENU.map((item) => (
                         <MegaMenuItem 
                           key={item.sectionId}
@@ -484,8 +484,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     </div>
 
                     <div className="border-t pt-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-6">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <div className="flex flex-wrap items-center gap-3 sm:gap-6">
                           {LEISTUNGEN_SERVICES.map((service) => {
                             const Icon = service.icon
                             return (
@@ -505,7 +505,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                           onClick={(e) => handleNavigation('/leistungen', e)}
                           variant="ghost"
                           size="sm"
-                          className="gap-2 text-primary hover:text-primary"
+                          className="gap-2 text-primary hover:text-primary whitespace-nowrap"
                         >
                           Alle Leistungen anzeigen
                           <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -603,6 +603,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 variant="ghost"
                 onClick={handleLeistungenClick}
                 onMouseEnter={() => setMegaMenuOpen(true)}
+                onKeyDown={handleMegaMenuKeyDown}
+                onFocus={() => setMegaMenuOpen(true)}
                 className={`transition-colors gap-1 ${
                   currentPath === '/leistungen' || megaMenuOpen
                     ? 'text-primary font-semibold bg-primary/5' 
@@ -611,9 +613,10 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 size="sm"
                 aria-expanded={megaMenuOpen}
                 aria-haspopup="true"
+                aria-controls="leistungen-mega-menu-tablet"
               >
                 Leistungen
-                <CaretDown className="h-4 w-4 transition-transform duration-200" aria-hidden="true" />
+                <CaretDown className={`h-4 w-4 transition-transform duration-200 ${megaMenuOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </Button>
             </div>
 
@@ -686,11 +689,13 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   size="sm" 
                   className="px-3 min-h-[44px] min-w-[44px]"
                   aria-label={mobileMenuOpen ? 'Menü schließen' : 'Menü öffnen'}
+                  aria-haspopup="menu"
+                  aria-expanded={mobileMenuOpen}
                 >
                   <List className="h-6 w-6" aria-hidden="true" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[85vw] sm:w-80 px-0" ref={sheetContentRef}>
+              <SheetContent side="right" className="w-[90vw] sm:w-[380px] px-0" ref={sheetContentRef}>
                 <FocusScope loop trapped={mobileMenuOpen}>
                   <nav aria-label="Mobile Navigation">
                     <div className="flex items-center px-4 mb-6 pt-2">
