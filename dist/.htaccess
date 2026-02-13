@@ -10,10 +10,10 @@
   RewriteBase /
 
   # Force HTTPS (redirect HTTP to HTTPS)
-  # NOTE: If you experience redirect loops, comment out these lines
-  # as Hostinger may already handle HTTPS redirects at the server level
-  RewriteCond %{HTTPS} off
-  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  # NOTE: COMMENTED OUT - Hostinger handles HTTPS redirects automatically at server level
+  # Enabling both server-level and .htaccess redirects causes ERR_TOO_MANY_REDIRECTS
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Redirect www to non-www (optional - adjust based on preference)
   # RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
