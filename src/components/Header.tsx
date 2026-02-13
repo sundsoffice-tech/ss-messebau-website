@@ -117,7 +117,7 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
       className="group relative overflow-hidden rounded-lg border text-left transition-all hover:border-primary hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
       aria-label={`${item.title} - ${item.description}`}
     >
-      <div className="aspect-[16/9] relative overflow-hidden">
+      <div className="aspect-[2/1] relative overflow-hidden">
         <img
           src={item.previewImage}
           alt={`Vorschaubild für ${item.title}`}
@@ -130,15 +130,15 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
         </div>
       </div>
       
-      <div className="p-4">
+      <div className="p-3">
         <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
           {item.title}
         </h3>
-        <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
+        <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
           {item.description}
         </p>
         
-        <ul className="space-y-1.5" aria-label={`${item.title} Features`}>
+        <ul className="space-y-1" aria-label={`${item.title} Features`}>
           {item.features.map((feature) => (
             <li key={feature} className="text-xs text-muted-foreground flex items-center gap-2">
               <div className="w-1 h-1 rounded-full bg-primary flex-shrink-0" aria-hidden="true" />
@@ -470,10 +470,10 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   onMouseLeave={() => setMegaMenuOpen(false)}
                   onKeyDown={handleMegaMenuKeyDown}
                   onBlur={handleMegaMenuBlur}
-                  className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[900px] z-50"
+                  className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[900px] z-50 max-h-[calc(100vh-80px)]"
                 >
-                  <div className="bg-background border rounded-lg shadow-2xl p-6 animate-in fade-in-0 zoom-in-95 duration-200">
-                    <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="bg-background border rounded-lg shadow-2xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto max-h-[calc(100vh-100px)]">
+                    <div className="grid grid-cols-2 gap-3 mb-4">
                       {LEISTUNGEN_MEGA_MENU.map((item) => (
                         <MegaMenuItem 
                           key={item.sectionId}
