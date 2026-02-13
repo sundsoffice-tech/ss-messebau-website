@@ -6,6 +6,8 @@ import { StickyCTA, MobileStickyCTA } from './components/StickyCTA'
 import { InquiryDialog } from './components/InquiryDialog'
 import { LoadingScreen } from './components/LoadingScreen'
 import { NavigationLoadingIndicator } from './components/NavigationLoadingIndicator'
+import { CustomCursor } from './components/CustomCursor'
+import { CursorGlow } from './components/CursorGlow'
 import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath } from './lib/deep-linking'
 import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 
@@ -109,6 +111,8 @@ function App() {
 
   return (
     <>
+      <CustomCursor isVisible={true} />
+      <CursorGlow />
       <LoadingScreen />
       <NavigationLoadingIndicator />
       <div className="min-h-screen flex flex-col">
