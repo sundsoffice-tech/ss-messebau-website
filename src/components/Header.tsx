@@ -543,7 +543,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   aria-label="Weitere Seiten"
                 >
                   Mehr
-                  <CaretDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" aria-hidden="true" />
+                  <CaretDown className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 p-2 shadow-lg border-border/50 bg-background/95 backdrop-blur-sm">
@@ -638,7 +638,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="gap-1 transition-all duration-200 hover:bg-accent/50" aria-label="Weitere Seiten">
                   Mehr
-                  <CaretDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" aria-hidden="true" />
+                  <CaretDown className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 p-2 shadow-lg border-border/50 bg-background/95 backdrop-blur-sm">
