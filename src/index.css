@@ -61,6 +61,25 @@
     overscroll-behavior-y: contain;
   }
   
+  /* Custom cursor styles - only on desktop with mouse */
+  @media (pointer: fine) and (hover: hover) {
+    * {
+      cursor: none !important;
+    }
+    
+    /* Keep cursor for inputs and text areas for better UX */
+    input, textarea, select, [contenteditable="true"] {
+      cursor: text !important;
+    }
+  }
+  
+  /* Disable custom cursor for reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      cursor: auto !important;
+    }
+  }
+  
   h1, h2, h3, h4, h5, h6 {
     line-height: 1.3;
   }
