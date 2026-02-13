@@ -289,11 +289,17 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
             </p>
             <Button 
               variant="outline" 
-              onClick={() => window.open('https://www.google.com/search?q=sundsmessebau', '_blank')}
+              asChild
               className="gap-2"
             >
-              <Star className="h-4 w-4 text-yellow-500" weight="fill" />
-              Alle Google-Bewertungen ansehen
+              <a 
+                href="https://www.google.com/search?q=sundsmessebau" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <Star className="h-4 w-4 text-yellow-500" weight="fill" />
+                Alle Google-Bewertungen ansehen
+              </a>
             </Button>
           </div>
 
