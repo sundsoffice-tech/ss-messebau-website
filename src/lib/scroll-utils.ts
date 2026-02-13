@@ -77,27 +77,6 @@ export function createSectionLink(page: string, section: string): string {
   return createSectionHash(page, section)
 }
 
-export function setupSmoothScrolling() {
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      const href = (e.currentTarget as HTMLAnchorElement).getAttribute('href')
-      if (href && href.includes('#')) {
-        const parts = href.split('#').filter(Boolean)
-        if (parts.length === 2) {
-          e.preventDefault()
-          const [page, section] = parts
-          const currentPage = window.location.hash.slice(1).split('#')[0] || '/'
-          if (currentPage === page) {
-            scrollToSection(section)
-          } else {
-            window.location.hash = href
-          }
-        }
-      }
-    })
-  })
-}
-
 export function scrollToSectionWithRetry(sectionId: string, maxRetries: number = 10, delay: number = 100) {
   let attempts = 0
   
