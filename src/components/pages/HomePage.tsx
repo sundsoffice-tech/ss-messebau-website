@@ -284,6 +284,23 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Das sagen unsere Kunden</h2>
+            <p className="text-lg text-muted-foreground mb-4">
+              Echte Bewertungen von echten Kunden
+            </p>
+            <Button 
+              variant="outline" 
+              asChild
+              className="gap-2"
+            >
+              <a 
+                href="https://www.google.com/search?q=sundsmessebau" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <Star className="h-4 w-4 text-yellow-500" weight="fill" />
+                Alle Google-Bewertungen ansehen
+              </a>
+            </Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
