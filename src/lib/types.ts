@@ -40,3 +40,12 @@ export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
 }
+
+export interface GoogleReview {
+  id: string
+  author: string
+  rating: number
+  text: string
+  date: string
+  source: 'google'
+}

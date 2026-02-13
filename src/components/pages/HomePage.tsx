@@ -14,6 +14,7 @@ import {
   Target
 } from '@phosphor-icons/react'
 import { DEMO_REFERENCES } from '@/lib/demo-data'
+import { getRotatingReviews } from '@/lib/google-reviews'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 
 interface HomePageProps {
@@ -22,6 +23,9 @@ interface HomePageProps {
 
 export function HomePage({ onOpenInquiry }: HomePageProps) {
   const { navigateToSectionOnPage } = useDeepLinking('/')
+  
+  // Get rotating Google reviews
+  const reviews = getRotatingReviews(3)
   
   useSectionObserver([
     'hero',
@@ -304,38 +308,19 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                text: 'Perfekter Stand, pünktlich aufgebaut und sehr professionell. Die Zusammenarbeit war unkompliziert und das Ergebnis überzeugt uns und unsere Messebesucher.',
-                author: 'Michael Schmidt',
-                company: 'Feinkost Meyer GmbH',
-                rating: 5
-              },
-              {
-                text: 'S&S Messebau hat uns von der ersten Planung bis zum Abbau begleitet. Absolut empfehlenswert für alle, die Wert auf Qualität und persönliche Betreuung legen.',
-                author: 'Julia Bergmann',
-                company: 'Allianz Regional',
-                rating: 5
-              },
-              {
-                text: 'Faire Preise, kreative Lösungen und ein Team, das mitdenkt. Unser Showroom ist genau so geworden, wie wir ihn uns vorgestellt haben.',
-                author: 'Thomas Weber',
-                company: 'TechnoPlast GmbH',
-                rating: 5
-              }
-            ].map((testimonial, index) => (
-              <Card key={index}>
+            {reviews.map((review) => (
+              <Card key={review.id}>
                 <CardContent className="p-6">
                   <div className="flex gap-1 mb-4">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
+                    {Array.from({ length: review.rating }).map((_, i) => (
                       <Star key={i} className="h-5 w-5 text-yellow-500" weight="fill" />
                     ))}
                   </div>
-                  <p className="text-muted-foreground mb-4 italic">"{testimonial.text}"</p>
+                  <p className="text-muted-foreground mb-4 italic">"{review.text}"</p>
                   <Separator className="my-4" />
                   <div>
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
+                    <p className="font-semibold">{review.author}</p>
+                    <p className="text-sm text-muted-foreground">Google-Bewertung vom {new Date(review.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
                   </div>
                 </CardContent>
               </Card>
