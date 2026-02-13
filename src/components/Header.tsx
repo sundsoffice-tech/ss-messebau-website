@@ -539,24 +539,24 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 <Button 
                   variant="ghost" 
                   size={scrolled ? 'sm' : 'default'}
-                  className="gap-1"
+                  className="gap-1 transition-all duration-200 hover:bg-accent/50"
                   aria-label="Weitere Seiten"
                 >
                   Mehr
                   <CaretDown className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-56 p-2 shadow-lg border-border/50 bg-background/95 backdrop-blur-sm">
                 {SECONDARY_NAV.map((item) => {
                   const Icon = item.icon
                   return (
                     <DropdownMenuItem
                       key={item.path}
                       onClick={(e) => handleNavigation(item.path, e as any)}
-                      className="gap-2 cursor-pointer"
+                      className="gap-3 cursor-pointer px-3 py-2.5 rounded-md transition-all duration-200 hover:bg-accent/80 hover:pl-4 focus:bg-accent/80 focus:pl-4 group"
                     >
-                      <Icon className="h-4 w-4" aria-hidden="true" />
-                      {item.label}
+                      <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" aria-hidden="true" />
+                      <span className="text-sm font-medium">{item.label}</span>
                     </DropdownMenuItem>
                   )
                 })}
@@ -636,22 +636,22 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-1" aria-label="Weitere Seiten">
+                <Button variant="ghost" size="sm" className="gap-1 transition-all duration-200 hover:bg-accent/50" aria-label="Weitere Seiten">
                   Mehr
                   <CaretDown className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-56 p-2 shadow-lg border-border/50 bg-background/95 backdrop-blur-sm">
                 {[...PRIMARY_NAV.slice(3), ...SECONDARY_NAV].map((item) => {
                   const Icon = item.icon
                   return (
                     <DropdownMenuItem
                       key={item.path}
                       onClick={(e) => handleNavigation(item.path, e as any)}
-                      className="gap-2 cursor-pointer"
+                      className="gap-3 cursor-pointer px-3 py-2.5 rounded-md transition-all duration-200 hover:bg-accent/80 hover:pl-4 focus:bg-accent/80 focus:pl-4 group"
                     >
-                      <Icon className="h-4 w-4" aria-hidden="true" />
-                      {item.label}
+                      <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" aria-hidden="true" />
+                      <span className="text-sm font-medium">{item.label}</span>
                     </DropdownMenuItem>
                   )
                 })}
