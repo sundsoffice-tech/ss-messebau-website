@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { Toaster } from 'sonner'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
@@ -6,18 +6,25 @@ import { StickyCTA, MobileStickyCTA } from './components/StickyCTA'
 import { InquiryDialog } from './components/InquiryDialog'
 import { LoadingScreen } from './components/LoadingScreen'
 import { NavigationLoadingIndicator } from './components/NavigationLoadingIndicator'
-import { HomePage } from './components/pages/HomePage'
-import { LeistungenPage } from './components/pages/LeistungenPage'
-import { BranchenPage } from './components/pages/BranchenPage'
-import { ReferenzenPage } from './components/pages/ReferenzenPage'
-import { KontaktPage } from './components/pages/KontaktPage'
-import { BlogPage } from './components/pages/BlogPage'
-import { UeberUnsPage, AblaufPage, NachhaltigkeitPage, ImpressumPage, DatenschutzPage, KIBeraterPage } from './components/pages/OtherPages'
-import { BannerrahmenPage } from './components/pages/BannerrahmenPage'
-import { BannerBestellenPage } from './components/pages/BannerBestellenPage'
-import { AdminPage } from './components/pages/AdminPage'
 import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath } from './lib/deep-linking'
 import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
+
+// Lazy load page components for code-splitting
+const HomePage = lazy(() => import('./components/pages/HomePage').then(m => ({ default: m.HomePage })))
+const LeistungenPage = lazy(() => import('./components/pages/LeistungenPage').then(m => ({ default: m.LeistungenPage })))
+const BranchenPage = lazy(() => import('./components/pages/BranchenPage').then(m => ({ default: m.BranchenPage })))
+const ReferenzenPage = lazy(() => import('./components/pages/ReferenzenPage').then(m => ({ default: m.ReferenzenPage })))
+const KontaktPage = lazy(() => import('./components/pages/KontaktPage').then(m => ({ default: m.KontaktPage })))
+const BlogPage = lazy(() => import('./components/pages/BlogPage').then(m => ({ default: m.BlogPage })))
+const UeberUnsPage = lazy(() => import('./components/pages/OtherPages').then(m => ({ default: m.UeberUnsPage })))
+const AblaufPage = lazy(() => import('./components/pages/OtherPages').then(m => ({ default: m.AblaufPage })))
+const NachhaltigkeitPage = lazy(() => import('./components/pages/OtherPages').then(m => ({ default: m.NachhaltigkeitPage })))
+const ImpressumPage = lazy(() => import('./components/pages/OtherPages').then(m => ({ default: m.ImpressumPage })))
+const DatenschutzPage = lazy(() => import('./components/pages/OtherPages').then(m => ({ default: m.DatenschutzPage })))
+const KIBeraterPage = lazy(() => import('./components/pages/OtherPages').then(m => ({ default: m.KIBeraterPage })))
+const BannerrahmenPage = lazy(() => import('./components/pages/BannerrahmenPage').then(m => ({ default: m.BannerrahmenPage })))
+const BannerBestellenPage = lazy(() => import('./components/pages/BannerBestellenPage').then(m => ({ default: m.BannerBestellenPage })))
+const AdminPage = lazy(() => import('./components/pages/AdminPage').then(m => ({ default: m.AdminPage })))
 
 function App() {
   const [inquiryDialogOpen, setInquiryDialogOpen] = useState(false)
@@ -113,7 +120,14 @@ function App() {
         </a>
         <Header onOpenInquiry={() => setInquiryDialogOpen(true)} />
         <main id="main-content" tabIndex={-1} className="flex-1 mobile-safe-bottom focus:outline-none">
-          {renderPage()}
+          <Suspense fallback={
+            <div className="flex items-center justify-center min-h-[50vh]" role="status" aria-live="polite">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <span className="sr-only">Seite wird geladen...</span>
+            </div>
+          }>
+            {renderPage()}
+          </Suspense>
         </main>
         <Footer />
         <StickyCTA onClick={() => setInquiryDialogOpen(true)} />
