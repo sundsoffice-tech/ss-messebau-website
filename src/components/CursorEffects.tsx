@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 
 /**
@@ -91,6 +91,3 @@ export function CursorRipple() {
     </>
   )
 }
-
-// Import useRef
-import { useRef } from 'react'
