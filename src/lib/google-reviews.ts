@@ -98,3 +98,16 @@ export function getRotatingReviews(count: number = 3): GoogleReview[] {
   
   return reviews
 }
+
+/**
+ * Format review date in German format (DD.MM.YYYY)
+ * @param date ISO date string (YYYY-MM-DD)
+ * @returns Formatted date string
+ */
+export function formatReviewDate(date: string): string {
+  return new Date(date).toLocaleDateString('de-DE', { 
+    day: '2-digit', 
+    month: '2-digit', 
+    year: 'numeric' 
+  })
+}

@@ -14,7 +14,7 @@ import {
   Target
 } from '@phosphor-icons/react'
 import { DEMO_REFERENCES } from '@/lib/demo-data'
-import { getRotatingReviews } from '@/lib/google-reviews'
+import { getRotatingReviews, formatReviewDate } from '@/lib/google-reviews'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 
 interface HomePageProps {
@@ -320,7 +320,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   <Separator className="my-4" />
                   <div>
                     <p className="font-semibold">{review.author}</p>
-                    <p className="text-sm text-muted-foreground">Google-Bewertung vom {new Date(review.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+                    <p className="text-sm text-muted-foreground">Google-Bewertung vom {formatReviewDate(review.date)}</p>
                   </div>
                 </CardContent>
               </Card>
