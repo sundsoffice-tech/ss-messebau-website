@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { shouldDisableCursorEffects } from '../lib/cursor-utils'
 
 /**
  * Cursor Scale Effect
@@ -8,11 +9,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 export function useCursorScale() {
   useEffect(() => {
     // Check for mobile and reduced motion
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-      || window.matchMedia('(pointer: coarse)').matches
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    
-    if (isMobile || prefersReducedMotion) return
+    if (shouldDisableCursorEffects()) return
 
     const handleMouseEnter = (e: Event) => {
       const target = e.target as HTMLElement
@@ -50,11 +47,7 @@ export function CursorRipple() {
 
   useEffect(() => {
     // Check for mobile and reduced motion
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-      || window.matchMedia('(pointer: coarse)').matches
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    
-    if (isMobile || prefersReducedMotion) return
+    if (shouldDisableCursorEffects()) return
 
     const handleClick = (e: MouseEvent) => {
       const newRipple = { x: e.clientX, y: e.clientY, id: rippleIdRef.current++ }

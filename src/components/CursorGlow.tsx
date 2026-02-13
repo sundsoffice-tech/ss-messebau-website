@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { isMobileDevice } from '../lib/cursor-utils'
 
 /**
  * Interactive Cursor Glow Effect
@@ -19,8 +20,7 @@ export function CursorGlow() {
 
   useEffect(() => {
     // Check for mobile
-    const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-      || window.matchMedia('(pointer: coarse)').matches
+    const mobile = isMobileDevice()
     setIsMobile(mobile)
     
     if (mobile) return

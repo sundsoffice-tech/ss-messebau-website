@@ -1,4 +1,5 @@
 import { useEffect, useRef, RefObject } from 'react'
+import { isMobileDevice, prefersReducedMotion } from '../lib/cursor-utils'
 
 interface MagneticCursorOptions {
   strength?: number // How strong the magnetic effect is (0-1)
@@ -24,13 +25,10 @@ export function useMagneticCursor<T extends HTMLElement>(
     if (!element) return
 
     // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReducedMotion) return
+    if (prefersReducedMotion()) return
 
     // Check for mobile devices
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-      || window.matchMedia('(pointer: coarse)').matches
-    if (isMobile) return
+    if (isMobileDevice()) return
 
     let currentX = 0
     let currentY = 0

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { isMobileDevice, prefersReducedMotion } from '../lib/cursor-utils'
 
 interface CursorProps {
   isVisible?: boolean
@@ -26,9 +27,7 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
   useEffect(() => {
     // Check for mobile devices
     const checkMobile = () => {
-      const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
-        || window.matchMedia('(pointer: coarse)').matches
-      setIsMobile(mobile)
+      setIsMobile(isMobileDevice())
     }
     
     // Check for reduced motion preference
