@@ -25,7 +25,7 @@ interface QuickAction {
 }
 
 export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
-  useSectionObserver(['kontakt-hero', 'kontakt-info', 'kontakt-form', 'ki-chat'])
+  useSectionObserver(['kontaktformular', 'anfahrt', 'ki-berater'])
 
   const [loading, setLoading] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
@@ -319,7 +319,7 @@ Antworte jetzt:`
         </div>
       </section>
 
-      <section id="kontakt-form" className="py-8 sm:py-12 lg:py-16">
+      <section id="kontaktformular" className="py-8 sm:py-12 lg:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
             <div className="order-2 lg:order-1">
@@ -437,7 +437,7 @@ Antworte jetzt:`
               </form>
             </div>
 
-            <div className="order-1 lg:order-2" id="kontakt-info">
+            <div className="order-1 lg:order-2" id="anfahrt">
               <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Kontaktdaten</h2>
               <div className="space-y-4 mb-6 sm:mb-8">
                 <Card>
@@ -493,7 +493,7 @@ Antworte jetzt:`
                 </Card>
               </div>
 
-              <Card id="ki-chat" className="bg-gradient-to-br from-primary/5 to-accent/5 border-2 border-primary/20 shadow-lg scroll-mt-20">
+              <Card id="ki-berater" className="bg-gradient-to-br from-primary/5 to-accent/5 border-2 border-primary/20 shadow-lg scroll-mt-20">
                 <CardHeader className="pb-3 sm:pb-6">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3 sm:gap-4 min-w-0">

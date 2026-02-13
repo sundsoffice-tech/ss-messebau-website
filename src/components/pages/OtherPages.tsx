@@ -9,7 +9,7 @@ export { KIBeraterPage } from './KIBeraterPage'
 export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
   const { scrollToSection } = useDeepLinking('/ueber-uns')
   
-  useSectionObserver(['ueber-uns-hero', 'geschichte', 'werte', 'team', 'arbeitsweise'])
+  useSectionObserver(['story', 'team', 'werte', 'arbeitsweise', 'vergleich'])
 
   return (
     <div>
@@ -23,9 +23,9 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         </div>
       </section>
 
-      <section className="py-16">
+      <section id="story" className="py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+          <div id="team" className="grid lg:grid-cols-2 gap-12 items-center mb-16 scroll-mt-20">
             <div>
               <h2 className="text-3xl font-bold mb-6">Unsere Geschichte</h2>
               <div className="space-y-4 text-lg text-muted-foreground">
@@ -56,7 +56,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
             </div>
           </div>
 
-          <div className="mb-16">
+          <div id="werte" className="mb-16 scroll-mt-20">
             <h2 className="text-3xl font-bold mb-8 text-center">Unsere Werte</h2>
             <div className="grid md:grid-cols-3 gap-8">
               {[
@@ -83,7 +83,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
             </div>
           </div>
 
-          <div className="mb-16">
+          <div id="arbeitsweise" className="mb-16 scroll-mt-20">
             <h2 className="text-3xl font-bold mb-8 text-center">So arbeiten wir</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {[
@@ -104,7 +104,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
             </div>
           </div>
 
-          <div>
+          <div id="vergleich" className="scroll-mt-20">
             <h2 className="text-3xl font-bold mb-8 text-center">S&S vs. Größere Konkurrenz</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -175,7 +175,7 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         </div>
       </section>
 
-      <section className="py-16">
+      <section id="timeline" className="py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             {[
@@ -232,7 +232,7 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         </div>
       </section>
 
-      <section className="py-16 bg-muted">
+      <section id="faq" className="py-16 bg-muted scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-8 text-center">Häufige Fragen</h2>
           <div className="max-w-3xl mx-auto">
@@ -321,7 +321,7 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
         </div>
       </section>
 
-      <section className="py-16">
+      <section id="systeme" className="py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             {[
@@ -358,7 +358,7 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
             })}
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+          <div id="partnernetzwerk" className="grid lg:grid-cols-2 gap-12 items-center mb-16 scroll-mt-20">
             <div>
               <h2 className="text-3xl font-bold mb-6">Der Business-Vorteil</h2>
               <p className="text-lg text-muted-foreground mb-6">
@@ -389,7 +389,7 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
             </div>
           </div>
 
-          <div>
+          <div id="vorteile" className="scroll-mt-20">
             <h2 className="text-3xl font-bold mb-8 text-center">Unsere nachhaltigen Maßnahmen</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {[
