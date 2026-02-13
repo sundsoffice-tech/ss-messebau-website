@@ -160,6 +160,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   const megaMenuRef = useRef<HTMLDivElement>(null)
   const megaMenuTriggerRef = useRef<HTMLButtonElement>(null)
   const sheetContentRef = useRef<HTMLDivElement>(null)
+  const imagesPrefetched = useRef(false)
   const deepLink = parseDeepLink(window.location.hash)
   const currentPath = deepLink.page
 
@@ -374,11 +375,14 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   const handleLeistungenHover = useCallback(() => {
     setMegaMenuOpen(true)
     
-    // Prefetch images for instant loading
-    LEISTUNGEN_MEGA_MENU.forEach(item => {
-      const img = new Image()
-      img.src = item.previewImage
-    })
+    // Prefetch images only once for instant loading
+    if (!imagesPrefetched.current) {
+      imagesPrefetched.current = true
+      LEISTUNGEN_MEGA_MENU.forEach(item => {
+        const img = new Image()
+        img.src = item.previewImage
+      })
+    }
   }, [])
 
   return (
