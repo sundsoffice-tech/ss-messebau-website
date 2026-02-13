@@ -71,6 +71,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           
+          # Build-Output sichern
           TEMP_DIR=$(mktemp -d)
           echo "Using temp directory: $TEMP_DIR"
           
@@ -79,31 +80,41 @@ jobs:
           
           COMMIT_SHA=$(git rev-parse --short HEAD)
           
-          git checkout --orphan hostinger-deploy
-          git rm -rf .
+          # Bestehenden hostinger Branch auschecken (oder neu erstellen)
+          echo "Fetching hostinger branch..."
+          git fetch origin hostinger || true
           
-          # Ensure working directory is completely clean
-          rm -rf node_modules/ 2>/dev/null || true
-          rm -rf dist/ 2>/dev/null || true
+          if git rev-parse --verify origin/hostinger >/dev/null 2>&1; then
+            echo "✓ Hostinger branch exists, checking out..."
+            git checkout hostinger
+            git pull origin hostinger || true
+          else
+            echo "✓ Creating new hostinger branch..."
+            git checkout --orphan hostinger
+            git rm -rf . 2>/dev/null || true
+          fi
           
-          # Create temporary .gitignore to exclude node_modules
-          echo "node_modules/" > .gitignore
-          echo "dist/" >> .gitignore
+          # Alte Dateien entfernen
+          echo "Cleaning old files..."
+          git rm -rf . 2>/dev/null || true
+          rm -rf node_modules/ dist/ .gitignore 2>/dev/null || true
           
+          # Neue Build-Dateien kopieren
+          echo "Copying new build files..."
           cp -a "$TEMP_DIR"/* .
           cp -a "$TEMP_DIR"/.htaccess . 2>/dev/null || true
           
-          # Remove the temporary .gitignore
-          rm -f .gitignore
-          
+          # Normal committen und pushen (KEIN --force!)
           git add -A
           
           COMMIT_MSG="Deploy from main @ ${COMMIT_SHA} - $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-          git commit -m "$COMMIT_MSG" || echo "No changes to commit"
-          
-          git push -f origin HEAD:hostinger
-          
-          echo "✅ Deployment to hostinger branch completed!"
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "$COMMIT_MSG"
+            git push origin hostinger
+            echo "✅ Deployment to hostinger branch completed!"
+          fi
 
       - name: Deployment Summary
         if: success()
