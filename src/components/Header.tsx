@@ -311,11 +311,13 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     } else if (currentPath === '/leistungen') {
       setMegaMenuOpen(true)
     } else if (megaMenuOpen) {
-      handleNavigation('/leistungen')
+      setMobileMenuOpen(false)
+      setMegaMenuOpen(false)
+      window.location.hash = '/leistungen'
     } else {
       setMegaMenuOpen(true)
     }
-  }, [currentPath, megaMenuOpen, handleNavigation])
+  }, [currentPath, megaMenuOpen])
 
   const handleMegaMenuKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
@@ -361,6 +363,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     }
   }, [])
 
+  // Refs are stable and don't need to be in dependency array
   const handleMegaMenuBlur = useCallback((e: React.FocusEvent) => {
     if (megaMenuRef.current && !megaMenuRef.current.contains(e.relatedTarget as Node)) {
       setTimeout(() => setMegaMenuOpen(false), 150)
