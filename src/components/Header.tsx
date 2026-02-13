@@ -793,20 +793,20 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   <div className="absolute bottom-0 left-0 right-0 px-6 py-4 border-t bg-background">
                     <div className="space-y-2.5 text-sm">
                       <a 
-                        href="tel:+4924334427144" 
+                        href="tel:+4917631570041" 
                         className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label="Anrufen: (02433) 4427144"
+                        aria-label="Anrufen: +49 176 31570041"
                       >
                         <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
-                        <span>(02433) 4427144</span>
+                        <span>+49 176 31570041</span>
                       </a>
                       <a 
-                        href="mailto:info@sunds-messebau.de" 
+                        href="mailto:sunds-messebau@gmx.de" 
                         className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label="E-Mail senden an info@sunds-messebau.de"
+                        aria-label="E-Mail senden an sunds-messebau@gmx.de"
                       >
                         <Envelope className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
-                        <span className="truncate">info@sunds-messebau.de</span>
+                        <span className="truncate">sunds-messebau@gmx.de</span>
                       </a>
                     </div>
                   </div>
