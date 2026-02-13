@@ -39,7 +39,7 @@ export const Footer = memo(function Footer() {
               </div>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Full-Service Messebau, Eventbau und Ladenbau aus Hückelhoven. 
+              Full-Service Messebau, Eventbau und Ladenbau aus Mönchengladbach. 
               Persönliche Betreuung, starkes Netzwerk, faire Preise.
             </p>
           </div>
@@ -138,28 +138,28 @@ export const Footer = memo(function Footer() {
               <li className="flex items-start gap-2 text-muted-foreground">
                 <MapPin className="h-5 w-5 shrink-0 mt-0.5" aria-hidden="true" />
                 <address className="leading-relaxed not-italic">
-                  <div>Marienstr. 37-42</div>
-                  <div>41836 Hückelhoven</div>
+                  <div>Bonnenbroicherstraße 93</div>
+                  <div>41238 Mönchengladbach</div>
                 </address>
               </li>
               <li className="flex items-center gap-2 text-muted-foreground min-h-[44px]">
                 <Phone className="h-5 w-5 shrink-0" aria-hidden="true" />
                 <a 
-                  href="tel:+4924334427144" 
+                  href="tel:+4917631570041" 
                   className="hover:text-primary focus-visible:text-primary transition-colors py-2 focus-visible:outline-none focus-visible:underline"
-                  aria-label="Anrufen: (02433) 4427144"
+                  aria-label="Anrufen: +49 176 31570041"
                 >
-                  (02433) 4427144
+                  +49 176 31570041
                 </a>
               </li>
               <li className="flex items-center gap-2 text-muted-foreground min-h-[44px]">
                 <Envelope className="h-5 w-5 shrink-0" aria-hidden="true" />
                 <a 
-                  href="mailto:info@sunds-messebau.de" 
+                  href="mailto:sunds-messebau@gmx.de" 
                   className="hover:text-primary focus-visible:text-primary transition-colors py-2 break-all focus-visible:outline-none focus-visible:underline"
-                  aria-label="E-Mail senden an info@sunds-messebau.de"
+                  aria-label="E-Mail senden an sunds-messebau@gmx.de"
                 >
-                  info@sunds-messebau.de
+                  sunds-messebau@gmx.de
                 </a>
               </li>
             </ul>

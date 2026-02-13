@@ -235,9 +235,9 @@ function formatConfigForEmail(config: BannerConfig): string {
     <div class="footer">
       <p style="margin: 0 0 10px 0;"><strong>S&S Messebau GbR</strong></p>
       <p style="margin: 0; font-size: 14px; opacity: 0.9;">
-        Marienstr. 37-42 | 41836 Hückelhoven<br>
-        Tel: (02433) 4427144 | Mobil: (01514) 0322125<br>
-        E-Mail: info@sunds-messebau.de
+        Bonnenbroicherstraße 93 | 41238 Mönchengladbach<br>
+        Tel: +49 176 31570041<br>
+        E-Mail: sunds-messebau@gmx.de
       </p>
     </div>
   </div>
@@ -441,9 +441,9 @@ function generateCustomerConfirmationEmail(config: BannerConfig, configId: strin
     <div class="footer">
       <p style="margin: 0 0 10px 0;"><strong>S&S Messebau GbR</strong></p>
       <p style="margin: 0; font-size: 14px; opacity: 0.9;">
-        Marienstr. 37-42 | 41836 Hückelhoven<br>
-        Tel: (02433) 4427144 | Mobil: (01514) 0322125<br>
-        E-Mail: info@sunds-messebau.de
+        Bonnenbroicherstraße 93 | 41238 Mönchengladbach<br>
+        Tel: +49 176 31570041<br>
+        E-Mail: sunds-messebau@gmx.de
       </p>
     </div>
   </div>

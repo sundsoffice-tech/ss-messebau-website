@@ -107,9 +107,9 @@ export function ThankYouPage({ config }: ThankYouPageProps) {
 
             <div className="border-t pt-6">
               <p className="text-sm text-muted-foreground mb-2">Fragen? Rufen Sie uns an:</p>
-              <a href="tel:+4924334427144" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+              <a href="tel:+4917631570041" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
                 <Phone className="w-5 h-5" />
-                (02433) 4427144
+                +49 176 31570041
               </a>
             </div>
           </Card>

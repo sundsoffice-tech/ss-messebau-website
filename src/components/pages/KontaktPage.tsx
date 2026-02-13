@@ -201,11 +201,11 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
         `${m.role === 'user' ? 'Kunde' : 'Berater'}: ${m.content}`
       ).join('\n\n')
 
-      const prompt = `Du bist ein professioneller Berater für S&S Messebau GbR aus Hückelhoven. Du hilfst Kunden bei allen Fragen rund um Messebau, Eventbau und Ladenbau.
+      const prompt = `Du bist ein professioneller Berater für S&S Messebau GbR aus Mönchengladbach. Du hilfst Kunden bei allen Fragen rund um Messebau, Eventbau und Ladenbau.
 
 FIRMENINFO S&S MESSEBAU:
 ━━━━━━━━━━━━━━━━━━━━━━━
-• Standort: Hückelhoven, NRW (bundesweite Projekte)
+• Standort: Mönchengladbach, NRW (bundesweite Projekte)
 • Leistungen: Full-Service von Konzeption bis Abbau
   - Messebau (20-200 qm): Systemstände & Individualstände
   - Eventbau & Bühnen
@@ -218,7 +218,7 @@ FIRMENINFO S&S MESSEBAU:
   - Nachhaltige, wiederverwendbare Systeme
   - Faire, transparente Preise für Mittelstand
 • Zielgruppen: Food/Feinkost, Versicherungen, Industrie, Technik
-• Kontakt: Tel. (02433) 4427144, Mobil (01514) 0322125, info@sunds-messebau.de
+• Kontakt: Tel. +49 176 31570041, sunds-messebau@gmx.de
 
 BUDGET-RICHTWERTE (inkl. Design, Bau, Logistik, Auf-/Abbau):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -449,8 +449,8 @@ Antworte jetzt:`
                       <div className="min-w-0">
                         <h3 className="font-semibold mb-1 text-sm sm:text-base">Adresse</h3>
                         <p className="text-sm sm:text-base text-muted-foreground">
-                          Marienstr. 37-42<br />
-                          41836 Hückelhoven<br />
+                          Bonnenbroicherstraße 93<br />
+                          41238 Mönchengladbach<br />
                           Deutschland
                         </p>
                       </div>
@@ -466,15 +466,8 @@ Antworte jetzt:`
                       </div>
                       <div className="min-w-0">
                         <h3 className="font-semibold mb-1 text-sm sm:text-base">Telefon</h3>
-                        <div className="text-sm sm:text-base text-muted-foreground space-y-1">
-                          <div>
-                            <span className="text-xs text-muted-foreground/80">Festnetz:</span>{' '}
-                            <a href="tel:+4924334427144" className="hover:text-primary font-medium">(02433) 4427144</a>
-                          </div>
-                          <div>
-                            <span className="text-xs text-muted-foreground/80">Mobil:</span>{' '}
-                            <a href="tel:+4915140322125" className="hover:text-primary font-medium">(01514) 0322125</a>
-                          </div>
+                        <div className="text-sm sm:text-base text-muted-foreground">
+                          <a href="tel:+4917631570041" className="hover:text-primary font-medium">+49 176 31570041</a>
                         </div>
                       </div>
                     </div>
@@ -490,8 +483,8 @@ Antworte jetzt:`
                       <div className="min-w-0">
                         <h3 className="font-semibold mb-1 text-sm sm:text-base">E-Mail</h3>
                         <p className="text-sm sm:text-base text-muted-foreground break-all">
-                          <a href="mailto:info@sunds-messebau.de" className="hover:text-primary font-medium">
-                            info@sunds-messebau.de
+                          <a href="mailto:sunds-messebau@gmx.de" className="hover:text-primary font-medium">
+                            sunds-messebau@gmx.de
                           </a>
                         </p>
                       </div>
