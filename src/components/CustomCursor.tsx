@@ -10,7 +10,7 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
   const [isHovering, setIsHovering] = useState(false)
   const [cursorVariant, setCursorVariant] = useState<'default' | 'link' | 'button'>('default')
   const [isMobile, setIsMobile] = useState(false)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [hasReducedMotion, setHasReducedMotion] = useState(false)
   const [isClicking, setIsClicking] = useState(false)
   
   const cursorX = useMotionValue(-100)
@@ -32,10 +32,10 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
     
     // Check for reduced motion preference
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(motionQuery.matches)
+    setHasReducedMotion(motionQuery.matches)
     
     const handleMotionChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
+      setHasReducedMotion(e.matches)
     }
     
     motionQuery.addEventListener('change', handleMotionChange)
@@ -47,11 +47,10 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
   }, [])
 
   useEffect(() => {
-    if (isMobile || !isVisible || prefersReducedMotion) return
+    if (isMobile || !isVisible || hasReducedMotion) return
 
-    let animationFrameId: number
-    let lastTrailTime = 0
     const TRAIL_INTERVAL = 30 // milliseconds between trails
+    let lastTrailTime = 0
 
     const handleMouseMove = (e: MouseEvent) => {
       cursorX.set(e.clientX)
@@ -117,14 +116,11 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
       window.removeEventListener('mouseup', handleMouseUp)
       document.removeEventListener('mouseleave', handleMouseLeave)
       clearInterval(trailCleanup)
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId)
-      }
     }
-  }, [cursorX, cursorY, isMobile, isVisible, prefersReducedMotion])
+  }, [cursorX, cursorY, isMobile, isVisible, hasReducedMotion])
 
   // Don't render on mobile or if disabled
-  if (isMobile || !isVisible || prefersReducedMotion) {
+  if (isMobile || !isVisible || hasReducedMotion) {
     return null
   }
 
