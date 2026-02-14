@@ -7,7 +7,7 @@ interface Fact {
 }
 
 const facts: Fact[] = [
-  { value: 48, suffix: 'h', label: 'Angebot mit 3D-Visualisierung' },
+  { value: 48, suffix: 'h', label: 'Angebot – schnell & verbindlich' },
   { value: 200, suffix: 'm²', label: 'Standgrößen bis' },
   { value: 3, suffix: '', label: 'Branchen-Schwerpunkte' },
   { value: 98, suffix: '%', label: 'Termintreu' },

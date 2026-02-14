@@ -613,7 +613,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
 
             <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
               {[
-                { title: 'Konzeption & Design', desc: '3D-Visualisierung Ihres Stands noch vor der Produktion' },
+                { title: 'Konzeption & Design', desc: 'Individuelle Entwürfe und Konzeptentwicklung für Ihren Stand' },
                 { title: 'Produktion & Bau', desc: 'Hochwertige Verarbeitung durch erfahrene Partner' },
                 { title: 'Logistik', desc: 'Bundesweiter Transport und termingerechte Anlieferung' },
                 { title: 'Auf- & Abbau', desc: 'Professionelles Team kümmert sich vor Ort um alles' },
@@ -634,7 +634,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         </div>
       </section>
 
-      {/* Lead Magnet: Free 3D Visualization */}
+      {/* Lead Magnet: 3D Visualization When Commissioned */}
       <section id="lead-magnet" className="py-12 md:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
@@ -707,7 +707,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
           { label: 'Unser Ablauf', description: 'Vom Erstgespräch bis zum Abbau – so arbeiten wir.', hash: '/ablauf' },
           { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für umweltbewusste Auftritte.', hash: '/nachhaltigkeit' },
           { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit – lernen Sie uns kennen.', hash: '/ueber-uns' },
-          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit 3D-Visualisierung anfordern.', hash: '/kontakt' },
+          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit persönlicher Beratung anfordern.', hash: '/kontakt' },
         ]}
       />
 

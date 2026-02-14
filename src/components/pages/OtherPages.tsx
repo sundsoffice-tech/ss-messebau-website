@@ -133,7 +133,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
                 <tbody>
                   <tr className="border-b">
                     <td className="p-4 font-medium">Angebots-Tempo</td>
-                    <td className="p-4 bg-primary/5">48h-Angebot mit 3D-Visualisierung</td>
+                    <td className="p-4 bg-primary/5">48h-Angebot – schnell und verbindlich</td>
                     <td className="p-4">Oft 1–2 Wochen Wartezeit</td>
                   </tr>
                   <tr className="border-b">
@@ -216,7 +216,7 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
               { 
                 step: '2', 
                 title: 'Konzept & Design', 
-                desc: 'Unsere Designer entwickeln erste Entwürfe und 3D-Visualisierungen. Sie erhalten mehrere Varianten zur Auswahl.' 
+                desc: 'Unsere Designer entwickeln erste Entwürfe und Konzepte. Bei Beauftragung auch 3D-Visualisierungen – je nach Projektumfang.' 
               },
               { 
                 step: '3', 
@@ -297,7 +297,7 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
                 },
                 {
                   q: 'Können wir den Stand vorher sehen?',
-                  a: 'Sie erhalten 3D-Visualisierungen. Bei größeren Projekten können wir auch Musteraufbauten in unserer Partnerwerkstatt organisieren.'
+                  a: 'Bei Beauftragung erstellen wir auf Wunsch 3D-Visualisierungen Ihres Messestands – je nach Projektumfang.'
                 },
                 {
                   q: 'Was ist im Aufbau enthalten?',

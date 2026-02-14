@@ -390,10 +390,10 @@ Planen Sie Ihren Food-Messestand mindestens 6 Monate im Voraus. Die technischen 
     id: '6',
     title: 'Schnelle Angebotsstellung im Messebau – warum 48h reichen',
     slug: 'schnelle-angebotsstellung-messebau-48h',
-    excerpt: 'Warum warten, wenn es schnell gehen kann? Wie S&S Messebau innerhalb von 48 Stunden ein vollständiges Angebot mit 3D-Visualisierung liefert.',
+    excerpt: 'Warum warten, wenn es schnell gehen kann? Wie S&S Messebau innerhalb von 48 Stunden ein vollständiges Angebot mit individueller Konzeptberatung liefert.',
     content: `## Schnelle Angebotsstellung im Messebau – warum 48h reichen
 
-In der Messebranche zählt jeder Tag. Wenn die nächste Messe näher rückt, brauchen Sie schnelle Entscheidungsgrundlagen. Deshalb liefern wir bei S&S Messebau Ihr Angebot innerhalb von 48 Stunden – inklusive 3D-Visualisierung.
+In der Messebranche zählt jeder Tag. Wenn die nächste Messe näher rückt, brauchen Sie schnelle Entscheidungsgrundlagen. Deshalb liefern wir bei S&S Messebau Ihr Angebot innerhalb von 48 Stunden – mit detaillierter Kalkulation und Konzeptbeschreibung.
 
 ### Wie ist das möglich?
 
@@ -405,10 +405,10 @@ In der Messebranche zählt jeder Tag. Wenn die nächste Messe näher rückt, bra
 **2. Modulare Systemstände:**
 - Bewährte Grundkonfigurationen als Ausgangsbasis
 - Individuelle Anpassungen statt komplettem Neubau
-- Sofort verfügbare 3D-Modelle als Planungsgrundlage
+- Sofort verfügbare Planungsgrundlagen
 
 **3. Digitalisierte Abläufe:**
-- CAD-gestützte Planung für schnelle Visualisierung
+- CAD-gestützte Planung für schnelle Konzeptentwicklung
 - Automatisierte Kalkulation der Kernkomponenten
 - Digitale Kommunikation ohne Umwege
 
@@ -416,12 +416,12 @@ In der Messebranche zählt jeder Tag. Wenn die nächste Messe näher rückt, bra
 
 **Stunde 0:** Ihre Anfrage geht ein
 **Stunde 1–4:** Erstgespräch und Anforderungsaufnahme
-**Stunde 4–24:** Konzeptentwicklung und 3D-Visualisierung
+**Stunde 4–24:** Konzeptentwicklung und Kalkulation
 **Stunde 24–48:** Detaillierte Kalkulation und Angebotsversand
 
 ### Was Sie im 48h-Angebot erhalten:
 
-✅ Fotorealistische 3D-Visualisierung Ihres Stands
+✅ Individuelle Konzeptbeschreibung Ihres Stands
 ✅ Detaillierte Kostenaufstellung aller Positionen
 ✅ Transparente Materialspezifikation
 ✅ Zeitplan für Produktion und Aufbau
@@ -437,7 +437,7 @@ In der Messebranche zählt jeder Tag. Wenn die nächste Messe näher rückt, bra
 
 Qualität und Geschwindigkeit schließen sich nicht aus. Unser 48h-Angebot ist genauso detailliert und verbindlich wie Angebote, die anderswo Wochen dauern.
 
-**Testen Sie uns: Senden Sie jetzt Ihre Anfrage und erhalten Sie innerhalb von 48 Stunden Ihr individuelles Angebot mit 3D-Visualisierung!**`,
+**Testen Sie uns: Senden Sie jetzt Ihre Anfrage und erhalten Sie innerhalb von 48 Stunden Ihr individuelles Angebot mit Konzeptbeschreibung!**`,
     category: 'Service',
     imageUrl: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop',
     publishedAt: Date.now() - 1 * 24 * 60 * 60 * 1000

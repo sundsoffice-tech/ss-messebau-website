@@ -14,8 +14,8 @@ export function GuaranteeBanner({ onOpenInquiry }: GuaranteeBannerProps) {
           <div className="flex items-center gap-3 text-center sm:text-left">
             <Lightning className="h-6 w-6 sm:h-7 sm:w-7 shrink-0" weight="fill" />
             <div>
-              <p className="font-bold text-sm sm:text-base">48h-Angebotsgarantie mit 3D-Visualisierung</p>
-              <p className="text-xs sm:text-sm opacity-80">Kostenlose Erstberatung – unverbindlich und transparent</p>
+              <p className="font-bold text-sm sm:text-base">48h-Angebotsgarantie – schnell und verbindlich</p>
+              <p className="text-xs sm:text-sm opacity-80">Unverbindliche Erstberatung – persönlich und transparent</p>
             </div>
           </div>
           <Button

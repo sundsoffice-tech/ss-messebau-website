@@ -8,7 +8,7 @@ interface ProcessTimelineProps {
 const steps = [
   { title: 'Anfrage', desc: 'Ihr Projekt anfragen – per Formular, Telefon oder WhatsApp.' },
   { title: '48h Angebot', desc: 'Innerhalb von 48h erhalten Sie ein kalkuliertes Angebot.' },
-  { title: '3D-Entwurf', desc: 'Fotorealistische 3D-Visualisierung Ihres Messestands.' },
+  { title: 'Konzept & Entwurf', desc: 'Individuelle Konzeptentwicklung und Entwürfe für Ihren Messestand.' },
   { title: 'Produktion', desc: 'Hochwertige Fertigung mit bewährten Partnern.' },
   { title: 'Aufbau', desc: 'Professioneller Aufbau vor Ort – termingerecht.' },
   { title: 'Lagerung', desc: 'Einlagerung für den nächsten Einsatz – kosteneffizient.' },

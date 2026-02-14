@@ -79,7 +79,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               Messestände 20–200 m², die Ihre Marke verkaufen.
             </h1>
             <p className="text-white/90 mb-5 sm:mb-6 leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', lineHeight: '1.5' }}>
-              S&S Messebau – 48h-Angebot mit 3D-Visualisierung. Full-Service Messebau, Eventbau & Showrooms für Food, Finance und Industrie – bundesweit aus NRW.
+              S&S Messebau – 48h-Angebot mit persönlicher Beratung. Full-Service Messebau, Eventbau & Showrooms für Food, Finance und Industrie – bundesweit aus NRW.
             </p>
             <div className="mb-5 sm:mb-6">
               <USPBadges />
@@ -127,7 +127,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 title: 'Full-Service Messebau',
                 description: 'Ihre Kernleistung aus einer Hand – von der ersten Idee über Produktion und Logistik bis zur Lagerung für den nächsten Einsatz.',
                 bullets: [
-                  'Planung, Entwurf und 3D-Visualisierung',
+                  'Planung, Entwurf und Konzeptentwicklung',
                   'Produktion, Logistik, Aufbau & Abbau',
                   'Lagerung und Wiederverwendung von Standbauteilen',
                   'Technische Betreuung und Service vor Ort'
@@ -233,8 +233,8 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
             {[
               {
                 icon: CheckCircle,
-                title: '48h-Angebot mit 3D-Visualisierung',
-                description: 'Innerhalb von 48 Stunden erhalten Sie ein kalkuliertes Angebot inklusive 3D-Visualisierung Ihres Messestands – für schnelle Entscheidungen.'
+                title: '48h-Angebot mit persönlicher Beratung',
+                description: 'Innerhalb von 48 Stunden erhalten Sie ein kalkuliertes Angebot inklusive individueller Konzeptberatung für Ihren Messestand – für schnelle Entscheidungen.'
               },
               {
                 icon: Target,
@@ -403,7 +403,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für die Umwelt.', hash: '/nachhaltigkeit' },
           { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit.', hash: '/ueber-uns' },
           { label: 'Blog & Ratgeber', description: 'Tipps und Insights rund um den Messeauftritt.', hash: '/blog' },
-          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit 3D-Visualisierung anfordern.', hash: '/kontakt' },
+          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit persönlicher Beratung anfordern.', hash: '/kontakt' },
         ]}
       />
 
