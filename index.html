@@ -72,6 +72,7 @@
       }
       
       /* Reserve space for sticky mobile CTA to prevent CLS */
+      /* Height calculation: 44px (button min-height) + 12px (top padding) + 12px (bottom padding) = 68px */
       @media (max-width: 1023px) {
         #root { padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)); }
       }
