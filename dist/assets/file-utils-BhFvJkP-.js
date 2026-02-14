@@ -1,1 +1,0 @@
-async function e(e){return new Promise((a,n)=>{const r=new FileReader;r.onload=()=>{a({name:e.name,type:e.type,size:e.size,lastModified:e.lastModified,dataUrl:r.result})},r.onerror=n,r.readAsDataURL(e)})}async function a(a){return Promise.all(a.map(e))}export{e as fileToSerializable,a as filesToSerializable};
