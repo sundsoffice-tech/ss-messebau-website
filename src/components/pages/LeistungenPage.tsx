@@ -221,7 +221,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             </div>
           </div>
 
-          {/* Image Gallery: Floor and Furniture Examples */}
+          {/* Furniture Examples Gallery */}
           <div className="grid md:grid-cols-2 gap-6 mt-12">
             <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
               <img 
