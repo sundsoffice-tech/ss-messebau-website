@@ -9,6 +9,7 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
     { id: 'hero', label: 'Startseite', page: '/' },
     { id: 'services', label: 'Leistungsübersicht', page: '/' },
     { id: 'advantages', label: 'Unsere Vorteile', page: '/' },
+    { id: '48h-garantie', label: '48h-Angebotsgarantie', page: '/' },
     { id: 'references', label: 'Referenzen', page: '/' },
     { id: 'testimonials', label: 'Kundenstimmen', page: '/' },
     { id: 'cta', label: 'Kontakt', page: '/' }
@@ -16,7 +17,7 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
   '/leistungen': [
     { id: 'messebau', label: 'Messebau', page: '/leistungen' },
     { id: 'touren', label: 'Touren & Messeauftritte', page: '/leistungen' },
-    { id: 'trockenbau', label: 'Trockenbau & Innenausbau', page: '/leistungen' },
+    { id: 'showrooms', label: 'Showrooms & Brand Spaces', page: '/leistungen' },
     { id: 'eventbau', label: 'Eventbau & Bühnen', page: '/leistungen' },
     { id: 'ladenbau', label: 'Ladenbau & Showrooms', page: '/leistungen' },
     { id: 'boeden-ausstattung', label: 'Böden & Ausstattung', page: '/leistungen' }
@@ -35,10 +36,12 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
     { id: 'team', label: 'Unser Team', page: '/ueber-uns' },
     { id: 'werte', label: 'Unsere Werte', page: '/ueber-uns' },
     { id: 'arbeitsweise', label: 'Unsere Arbeitsweise', page: '/ueber-uns' },
-    { id: 'vergleich', label: 'Warum S&S', page: '/ueber-uns' }
+    { id: 'vergleich', label: 'Warum S&S Messebau', page: '/ueber-uns' }
   ],
   '/ablauf': [
+    { id: 'prozess', label: 'Unser Prozess', page: '/ablauf' },
     { id: 'timeline', label: 'Projekt-Ablauf', page: '/ablauf' },
+    { id: '48h-garantie', label: '48h-Angebotsgarantie', page: '/ablauf' },
     { id: 'faq', label: 'Häufige Fragen', page: '/ablauf' }
   ],
   '/nachhaltigkeit': [
@@ -105,7 +108,7 @@ export function parseSectionHash(hash: string): { page: string; section?: string
 export const THEMATIC_LINKS: Record<string, { page: string; section: string; label: string }> = {
   'home-to-messebau': { page: '/leistungen', section: 'messebau', label: 'Messebau' },
   'home-to-touren': { page: '/leistungen', section: 'touren', label: 'Touren & Messeauftritte' },
-  'home-to-trockenbau': { page: '/leistungen', section: 'trockenbau', label: 'Trockenbau & Innenausbau' },
+  'home-to-trockenbau': { page: '/leistungen', section: 'showrooms', label: 'Showrooms & Brand Spaces' },
   'home-to-eventbau': { page: '/leistungen', section: 'eventbau', label: 'Eventbau' },
   'home-to-ladenbau': { page: '/leistungen', section: 'ladenbau', label: 'Ladenbau' },
   'home-to-boeden': { page: '/leistungen', section: 'boeden-ausstattung', label: 'Böden & Möbel' },

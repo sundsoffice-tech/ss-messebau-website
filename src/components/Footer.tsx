@@ -82,10 +82,10 @@ export const Footer = memo(function Footer() {
                 </li>
                 <li>
                   <button 
-                    onClick={(e) => handleSectionNavigation('/leistungen', 'trockenbau', e)} 
+                    onClick={(e) => handleSectionNavigation('/leistungen', 'showrooms', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Trockenbau & Innenausbau
+                    Showrooms & Brand Spaces
                   </button>
                 </li>
                 <li>

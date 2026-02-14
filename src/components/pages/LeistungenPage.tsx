@@ -11,7 +11,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
   useSectionObserver([
     'messebau',
     'touren',
-    'trockenbau',
+    'showrooms',
     'eventbau',
     'ladenbau',
     'boeden-ausstattung'
@@ -546,18 +546,18 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         </div>
       </section>
 
-      <section id="trockenbau" className="py-12 md:py-16 bg-muted scroll-mt-20">
+      <section id="showrooms" className="py-12 md:py-16 bg-muted scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Trockenbau & Innenausbau</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Showrooms & Brand Spaces</h2>
               <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                Neben unserem Messebau-Know-how bieten wir Ihnen professionelle Trockenbau- und Ausbauprojekte: Shops, Büros, Showrooms – Planung und Ausführung aus einer Hand durch unseren großen Pool an Facharbeitern.
+                Neben unserem Messebau-Know-how realisieren wir professionelle Showrooms, Brand Spaces und Markenerlebnisräume – Planung und Ausführung aus einer Hand durch unseren großen Pool an Facharbeitern.
               </p>
               <h3 className="text-xl font-semibold mb-4">Das können wir für Sie tun:</h3>
               <div className="space-y-2.5 md:space-y-3 mb-6">
                 {[
-                  'Ausbau von Shops, Büros und Showrooms',
+                  'Showrooms, Brand Spaces und Erlebnisräume',
                   'Planung und Ausführung durch erfahrene Facharbeiter',
                   'Einsatz desselben Monteur-Teams wie im Messebau',
                   'Kostenoptimierte Lösungen für langfristige Projekte',
@@ -570,7 +570,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 ))}
               </div>
               <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                Trockenbau-Projekt anfragen
+                Showroom-Projekt anfragen
                 <ArrowRight className="ml-2" />
               </Button>
             </div>

@@ -98,7 +98,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           <div className="text-center mb-8 sm:mb-12">
             <h2 id="services-heading" className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Unsere Leistungen</h2>
             <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Drei Leistungsbereiche, ein Ansprechpartner: Full-Service Messebau als Kernleistung, skalierbare Tourenlösungen für wiederkehrende Auftritte und professioneller Trockenbau & Innenausbau – alles kostenoptimiert aus einer Hand.
+              Drei Leistungsbereiche, ein Ansprechpartner: Full-Service Messebau als Kernleistung, skalierbare Tourenlösungen für wiederkehrende Auftritte und professionelle Showrooms & Brand Spaces – alles kostenoptimiert aus einer Hand.
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -131,15 +131,15 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               },
               {
                 icon: Storefront,
-                title: 'Trockenbau & Innenausbau',
-                description: 'Shops, Büros und Showrooms – Planung und Ausführung mit demselben Facharbeiter-Team, das Sie aus dem Messebau kennen.',
+                title: 'Showrooms & Brand Spaces',
+                description: 'Showrooms, Markenerlebnisräume und Brand Spaces – Planung und Ausführung mit demselben Facharbeiter-Team, das Sie aus dem Messebau kennen.',
                 bullets: [
-                  'Ausbau von Shops, Büros und Showrooms',
+                  'Showrooms, Brand Spaces und Erlebnisräume',
                   'Planung und Ausführung aus einer Hand',
                   'Einsatz desselben Monteur-Teams wie im Messebau',
                   'Langfristig effiziente und kostenoptimierte Lösungen'
                 ],
-                sectionId: 'trockenbau',
+                sectionId: 'showrooms',
                 image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=320&fit=crop'
               }
             ].map((service, index) => {

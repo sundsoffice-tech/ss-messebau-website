@@ -11,6 +11,7 @@ import { CursorGlow } from './components/CursorGlow'
 import { CursorRipple, useCursorScale } from './components/CursorEffects'
 import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath } from './lib/deep-linking'
 import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
+import { usePageMeta } from './hooks/use-page-meta'
 
 // Lazy load page components for code-splitting
 const HomePage = lazy(() => import('./components/pages/HomePage').then(m => ({ default: m.HomePage })))
@@ -35,6 +36,7 @@ function App() {
 
   useSmoothScrollLinks()
   useCursorScale() // Add cursor scale effect
+  usePageMeta(currentPage)
 
   useEffect(() => {
     const handleHashChange = () => {
