@@ -32,7 +32,7 @@ export function StickyCTA({ onClick }: StickyCTAProps) {
         size="lg"
         onClick={() => { trackHeroCTAClick('sticky_desktop'); onClick() }}
         className="bg-accent hover:bg-accent/90 shadow-lg hover:shadow-xl transition-all hover:scale-105 gap-2"
-        aria-label="Anfrage senden - Formular öffnen"
+        aria-label="Anfrage - Formular öffnen"
       >
         <PaperPlaneRight className="h-5 w-5" aria-hidden="true" />
         <span>Anfrage</span>
@@ -63,7 +63,7 @@ export function MobileStickyCTA({ onClick }: StickyCTAProps) {
           size="lg"
           onClick={() => { trackHeroCTAClick('sticky_mobile'); onClick() }}
           className="flex-1 bg-accent hover:bg-accent/90 gap-2 min-h-[44px] text-base font-medium"
-          aria-label="Anfrage senden - Formular öffnen"
+          aria-label="Anfrage - Formular öffnen"
         >
           <PaperPlaneRight className="h-5 w-5" aria-hidden="true" />
           <span>Anfrage</span>
