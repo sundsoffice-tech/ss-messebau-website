@@ -12,7 +12,10 @@ export const DEMO_REFERENCES: Reference[] = [
     challenge: 'Feinkost Meyer benötigte einen Stand, der hochwertige Produkte ansprechend präsentiert und gleichzeitig Verkostungen ermöglicht.',
     solution: 'Wir entwickelten ein offenes Konzept mit integrierter Showküche, LED-beleuchteten Produktvitrinen und einer einladenden Lounge-Area.',
     result: '40% mehr Messebesucher als im Vorjahr, 25 qualifizierte Neukunden-Leads',
-    keyfacts: ['50 qm Standfläche', 'Anuga Köln 2023', '3 Tage Aufbau', 'Nachhaltige Systemelemente']
+    keyfacts: ['50 qm Standfläche', 'Anuga Köln 2023', '3 Tage Aufbau', 'Nachhaltige Systemelemente'],
+    kunde: 'Feinkost Meyer',
+    messe: 'Anuga Köln',
+    zielsetzung: 'Hochwertige Produktpräsentation mit Live-Verkostungen zur Neukundengewinnung'
   },
   {
     id: '2',
@@ -25,7 +28,10 @@ export const DEMO_REFERENCES: Reference[] = [
     challenge: 'Seriöser, vertrauensvoller Auftritt mit gleichzeitig moderner, zugänglicher Atmosphäre.',
     solution: 'Klare Raumzonierung: Offene Welcome-Area, abgeschirmte Beratungszonen, digitale Infoscreens.',
     result: 'Über 300 Beratungsgespräche, sehr positive Kundenfeedbacks zur Atmosphäre',
-    keyfacts: ['80 qm Standfläche', 'DKM Dortmund 2023', 'Modulares System', '6 Beratungsplätze']
+    keyfacts: ['80 qm Standfläche', 'DKM Dortmund 2023', 'Modulares System', '6 Beratungsplätze'],
+    kunde: 'Allianz Regional',
+    messe: 'DKM Dortmund',
+    zielsetzung: 'Vertrauensbildende Präsenz mit effizienten Beratungszonen für Kundengespräche'
   },
   {
     id: '3',
@@ -38,7 +44,106 @@ export const DEMO_REFERENCES: Reference[] = [
     challenge: 'Große Maschinen ansprechend präsentieren und technische Kompetenz vermitteln.',
     solution: 'Industrieller Look mit hochwertigen Details: Sichtbeton-Optik, LED-Spots, interaktive Produktkonfiguratoren.',
     result: 'Dauerhafter Showroom seit 2022, regelmäßige Kundenführungen, positives Markenimage',
-    keyfacts: ['120 qm Showroom', 'Permanent-Installation', 'Integrierte Medienwände', 'Barrierefreier Zugang']
+    keyfacts: ['120 qm Showroom', 'Permanent-Installation', 'Integrierte Medienwände', 'Barrierefreier Zugang'],
+    kunde: 'TechnoPlast GmbH',
+    messe: 'Hannover Messe',
+    zielsetzung: 'Permanenter Showroom zur Demonstration technischer Kompetenz und Maschinenvielfalt'
+  },
+  {
+    id: '4',
+    title: 'BioGourmet Premium-Stand ISM',
+    branche: 'food',
+    size: '35 qm',
+    type: 'messebau',
+    imageUrl: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=600&fit=crop',
+    description: 'Nachhaltiger Messestand für Bio-Feinkost mit Verkostungsbereich und B2B-Kontaktzone',
+    challenge: 'Bio-Food-Startup musste Premium-Produkte überzeugend präsentieren und gezielt B2B-Kontakte generieren.',
+    solution: 'Warme Materialien, einladende Verkostungsstationen, LED-Produktpräsentation und gezielte Gesprächszonen für Einkäufer.',
+    result: '60 neue B2B-Kontakte, 3 Listungsvereinbarungen mit Feinkost-Händlern',
+    keyfacts: ['ISM Köln', '35 qm', 'Verkostungstheken', 'Nachhaltige Materialien'],
+    kunde: 'BioGourmet',
+    messe: 'ISM Köln',
+    zielsetzung: 'Premium-Produktpräsentation und B2B-Kontaktgenerierung für Markteintritt'
+  },
+  {
+    id: '5',
+    title: 'Confiserie Reichert – Süße Präsentation',
+    branche: 'food',
+    size: '28 qm',
+    type: 'messebau',
+    imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&h=600&fit=crop',
+    description: 'Temperaturkontrollierter Messestand für handgefertigte Confiserie-Produkte',
+    challenge: 'Handwerklicher Chocolatier benötigte temperaturkontrollierte Produktpräsentation auf der ISM.',
+    solution: 'Integrierte Kühlung, kunstvolle Displayvitrinen und beleuchtete Markenwand für maximale Produktinszenierung.',
+    result: '45% mehr Besucherkontakte im Vergleich zum Vorjahr',
+    keyfacts: ['ISM Köln', '28 qm', 'Kühlvitrinen', 'Markeninszenierung'],
+    kunde: 'Confiserie Reichert',
+    messe: 'ISM Köln',
+    zielsetzung: 'Optimale Produktpräsentation unter Temperaturkontrolle für Premiumschokolade'
+  },
+  {
+    id: '6',
+    title: 'SecurLife Versicherung – Vertrauensraum',
+    branche: 'versicherungen',
+    size: '60 qm',
+    type: 'messebau',
+    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=600&fit=crop',
+    description: 'Vertrauensbildender Messestand mit semi-privaten Beratungsräumen und digitalen Produktwänden',
+    challenge: 'Vertrauensaufbau durch Standdesign für Versicherungskunden in offener Messeatmosphäre.',
+    solution: 'Semi-private Beratungsräume, warme Beleuchtung und digitale Produktwände für interaktive Tarifberatung.',
+    result: '250+ qualifizierte Leads, Auszeichnung als bester Messestand der DKM',
+    keyfacts: ['DKM Dortmund', '60 qm', '8 Beratungsplätze', 'Digital Signage'],
+    kunde: 'SecurLife Versicherung',
+    messe: 'DKM Dortmund',
+    zielsetzung: 'Vertrauensbildende Standgestaltung mit maximaler Beratungskapazität'
+  },
+  {
+    id: '7',
+    title: 'FinanzPro AG – Roadshow-System',
+    branche: 'versicherungen',
+    size: '40 qm',
+    type: 'eventbau',
+    imageUrl: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&h=600&fit=crop',
+    description: 'Modulares Roadshow-Standsystem für konsistente Markenpräsenz auf regionalen Finanzmessen',
+    challenge: 'Konsistente Markenpräsenz über 6 regionale Veranstaltungen pro Jahr bei effizienter Budgetnutzung.',
+    solution: 'Modulares, wiederverwendbares Standsystem mit schnellem Auf- und Abbau, transportoptimiert für den Roadshow-Einsatz.',
+    result: '40% Kosteneinsparung gegenüber Einzelbauten, konsistente Markenpräsenz auf allen Events',
+    keyfacts: ['6 Messen/Jahr', '40 qm Systemstand', '2h Aufbauzeit', 'Wiederverwendbar'],
+    kunde: 'FinanzPro AG',
+    messe: 'Mehrere Messen',
+    zielsetzung: 'Kosteneffiziente, konsistente Markenpräsenz über mehrere regionale Finanzmessen'
+  },
+  {
+    id: '8',
+    title: 'MaschTech GmbH – Hannover Messe',
+    branche: 'industrie',
+    size: '100 qm',
+    type: 'messebau',
+    imageUrl: 'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=800&h=600&fit=crop',
+    description: 'Schwerlast-Messestand mit Doppelstock-Meetingbereich für die Hannover Messe',
+    challenge: 'Schwere Maschinen (2 Tonnen) erforderten verstärkte Bodeninfrastruktur und Starkstromversorgung.',
+    solution: 'Verstärkter Schwerlastboden, integrierte Drehstromversorgung und Doppelstock-Meetingbereich für separate Kundengespräche.',
+    result: '15 qualifizierte Projektanfragen, 3 Direktaufträge auf der Messe',
+    keyfacts: ['Hannover Messe', '100 qm', 'Doppelstock', 'Schwerlastboden 2t'],
+    kunde: 'MaschTech GmbH',
+    messe: 'Hannover Messe',
+    zielsetzung: 'Professionelle Maschinenpräsentation mit Schwerlastinfrastruktur und VIP-Meetingbereich'
+  },
+  {
+    id: '9',
+    title: 'InnoTech Robotics – Automatica München',
+    branche: 'industrie',
+    size: '75 qm',
+    type: 'messebau',
+    imageUrl: 'https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=800&h=600&fit=crop',
+    description: 'Robotik-Messestand mit Live-Demo-Fläche und Sicherheitszonen auf der Automatica',
+    challenge: 'Robotik-Unternehmen benötigte Live-Demo-Bereich mit Sicherheitszonen für Industrieroboter.',
+    solution: 'Transparente Sicherheitsabsperrungen, erhöhte Demo-Plattform und interaktive Touch-Displays für technische Details.',
+    result: 'Virale Social-Media-Aufmerksamkeit, 80 qualifizierte Leads',
+    keyfacts: ['Automatica München', '75 qm', 'Live-Demo-Fläche', 'Safety-Absperrungen'],
+    kunde: 'InnoTech Robotics',
+    messe: 'Automatica München',
+    zielsetzung: 'Eindrucksvolle Live-Robotik-Demonstration mit höchsten Sicherheitsstandards'
   }
 ]
 
