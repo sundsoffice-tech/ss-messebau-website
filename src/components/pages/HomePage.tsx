@@ -114,68 +114,101 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
       <section id="services" className="py-12 sm:py-16 bg-muted" aria-labelledby="services-heading">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 id="services-heading" className="font-bold" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Leistungen</h2>
+            <h2 id="services-heading" className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Unsere Leistungen</h2>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Von der ersten Idee bis zum professionellen Abbau – wir bieten Ihnen kostenoptimierte Full-Service-Lösungen für Messebau, Touren und Innenausbau.
+            </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 icon: Warehouse,
-                title: 'Messebau',
-                description: 'Von Systemständen bis zu individuellen Konstruktionen – professionell und termingerecht.',
+                title: 'Full-Service Messebau',
+                description: 'Ihr Messeauftritt aus einer Hand – von der Planung bis zur Lagerung.',
+                bullets: [
+                  'Planung, Entwurf und 3D-Visualisierung',
+                  'Produktion, Logistik, Aufbau & Abbau',
+                  'Lagerung und Wiederverwendung von Standbauteilen',
+                  'Service und technische Betreuung vor Ort'
+                ],
                 sectionId: 'messebau',
-                image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop'
+                image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&h=320&fit=crop'
               },
               {
                 icon: CalendarDot,
-                title: 'Eventbau',
-                description: 'Bühnen, Präsentationsflächen und Eventausstattung für beeindruckende Veranstaltungen.',
-                sectionId: 'eventbau',
-                image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=250&fit=crop'
+                title: 'Touren & wiederkehrende Messeauftritte',
+                description: 'Skalierbare Lösungen für viele kleine Messen – zentral organisiert ab NRW.',
+                bullets: [
+                  'Zentrale Logistik ab NRW, ideal für viele kleine Messen',
+                  'Skalierbare Systemstände, die mehrfach einsetzbar sind',
+                  'Kostenoptimierte Routen- und Aufbauplanung',
+                  'Bundesweite Verfügbarkeit für DACH-Region'
+                ],
+                sectionId: 'touren',
+                image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500&h=320&fit=crop'
               },
               {
                 icon: Storefront,
-                title: 'Ladenbau',
-                description: 'Showrooms und Verkaufsflächen, die Ihre Produkte optimal in Szene setzen.',
-                sectionId: 'ladenbau',
-                image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=250&fit=crop'
-              },
-              {
-                icon: Armchair,
-                title: 'Böden & Möbel',
-                description: 'Hochwertige Ausstattung: Messeboden, Möblierung, Beleuchtung und Technik.',
-                sectionId: 'boeden-ausstattung',
-                image: '/images/boeden/holzboden-laminat-verlegung.svg'
+                title: 'Trockenbau & Innenausbau',
+                description: 'Shops, Büros und Showrooms – Planung und Ausführung aus einer Hand.',
+                bullets: [
+                  'Ausbau von Shops, Büros und Showrooms',
+                  'Planung und Ausführung mit eigenem Facharbeiter-Team',
+                  'Einsatz desselben Monteur-Teams wie im Messebau',
+                  'Langfristig effiziente und kostenoptimierte Lösungen'
+                ],
+                sectionId: 'trockenbau',
+                image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=320&fit=crop'
               }
             ].map((service, index) => {
               const Icon = service.icon
               return (
                 <Card 
                   key={index} 
-                  className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary min-h-[44px]" 
+                  className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
                   onClick={() => handleSectionNavigation(service.sectionId)}
                 >
-                  <div className="aspect-[4/3] relative overflow-hidden">
+                  <div className="relative aspect-[25/16] overflow-hidden">
                     <img 
                       src={`${service.image}&fm=webp&q=75`}
-                      alt={service.title}
-                      width="400"
-                      height="300"
-                      className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                      alt=""
+                      role="presentation"
+                      width="500"
+                      height="320"
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
                       decoding="async"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                    <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                        <Icon className="h-5 w-5" weight="duotone" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute bottom-4 left-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-white text-primary shadow-lg">
+                        <Icon className="h-6 w-6" weight="duotone" />
                       </div>
-                      <h3 className="font-bold text-white" style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)' }}>{service.title}</h3>
                     </div>
                   </div>
-                  <CardContent className="p-4 sm:p-5">
-                    <p className="text-sm leading-relaxed text-muted-foreground group-hover:text-foreground transition-colors">
+                  <CardContent className="p-5 sm:p-6 space-y-4">
+                    <h3 className="font-bold leading-tight" style={{ fontSize: 'clamp(1.125rem, 2vw, 1.25rem)' }}>
+                      {service.title}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
                       {service.description}
                     </p>
+                    <div className="space-y-2">
+                      {service.bullets.map((bullet, idx) => (
+                        <div key={idx} className="flex items-start gap-2">
+                          <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" weight="fill" />
+                          <span className="text-sm leading-relaxed">{bullet}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-between group/btn hover:bg-primary/5 mt-2"
+                      aria-label={`Mehr erfahren über ${service.title}`}
+                    >
+                      <span>Mehr erfahren</span>
+                      <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </Button>
                   </CardContent>
                 </Card>
               )
