@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Warehouse, CalendarDot, Storefront, Armchair, ArrowRight, CheckCircle } from '@phosphor-icons/react'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
+import { InternalLinkSection } from '@/components/InternalLinkSection'
 
 interface LeistungenPageProps {
   onOpenInquiry: () => void
@@ -21,7 +22,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
     <div>
       <section className="py-12 md:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">Unsere Leistungen</h1>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">Messebau-Leistungen – Full-Service von 20–200 m²</h1>
           <p className="text-base md:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
             Von der ersten Idee bis zum professionellen Abbau – wir begleiten Sie durch alle Phasen Ihres Messeprojekts. 
             Unser Full-Service-Ansatz spart Zeit, Kosten und Nerven.
@@ -629,6 +630,18 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
           </div>
         </div>
       </section>
+
+      <InternalLinkSection
+        title="Mehr erfahren"
+        links={[
+          { label: 'Branchen-Expertise', description: 'Messebau für Food, Finance & Industrie – mit Branchenkenntnis.', hash: '/branchen' },
+          { label: 'Referenzen ansehen', description: 'Realisierte Messebau-Projekte von 20–200 m² im Überblick.', hash: '/referenzen' },
+          { label: 'Unser Ablauf', description: 'Vom Erstgespräch bis zum Abbau – so arbeiten wir.', hash: '/ablauf' },
+          { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für umweltbewusste Auftritte.', hash: '/nachhaltigkeit' },
+          { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit – lernen Sie uns kennen.', hash: '/ueber-uns' },
+          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit 3D-Visualisierung anfordern.', hash: '/kontakt' },
+        ]}
+      />
 
       <section className="py-12 md:py-16">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 text-center">

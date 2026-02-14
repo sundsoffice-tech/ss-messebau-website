@@ -13,7 +13,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
     <div>
       <section id="ueber-uns-hero" className="py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Über S&S Messebau</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">Über S&S Messebau – Ihr Partner aus NRW</h1>
           <p className="text-xl opacity-90 max-w-3xl">
             Seit vielen Jahren realisieren wir Messestände mit Leidenschaft und Präzision. 
             Als inhabergeführte GbR aus Mönchengladbach verbinden wir persönliche Betreuung mit professionellem Service.
@@ -120,7 +120,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 
       <section id="vergleich" className="py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-8 text-center">S&S vs. Größere Konkurrenz</h2>
+          <h2 className="text-3xl font-bold mb-8 text-center">S&S Messebau vs. Größere Konkurrenz</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -132,24 +132,29 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
                 </thead>
                 <tbody>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">Struktur</td>
-                    <td className="p-4 bg-primary/5">Flexible GbR, kurze Wege</td>
-                    <td className="p-4">GmbHs mit komplexen Teams</td>
+                    <td className="p-4 font-medium">Angebots-Tempo</td>
+                    <td className="p-4 bg-primary/5">48h-Angebot mit 3D-Visualisierung</td>
+                    <td className="p-4">Oft 1–2 Wochen Wartezeit</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">USP</td>
-                    <td className="p-4 bg-primary/5">Partnernetzwerk, faire Preise</td>
-                    <td className="p-4">Hohe Kapazität, großer Fuhrpark</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-medium">Zielgruppe</td>
-                    <td className="p-4 bg-primary/5">20-200 qm Mittelstand</td>
+                    <td className="p-4 font-medium">Spezialisierung</td>
+                    <td className="p-4 bg-primary/5">Branchenexperte 20–200 m² (Food, Finance, Industrie)</td>
                     <td className="p-4">Alle Größen, Fokus auf Konzerne</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-medium">Struktur</td>
+                    <td className="p-4 bg-primary/5">Inhabergeführt, kurze Wege</td>
+                    <td className="p-4">GmbHs mit komplexen Teams</td>
                   </tr>
                   <tr className="border-b">
                     <td className="p-4 font-medium">Betreuung</td>
                     <td className="p-4 bg-primary/5">Ein fester Ansprechpartner</td>
                     <td className="p-4">Wechselnde Projektmanager</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-medium">Preis-Leistung</td>
+                    <td className="p-4 bg-primary/5">Effizient durch starkes Partnernetzwerk</td>
+                    <td className="p-4">Hohe Kapazität, großer Fuhrpark, höhere Kosten</td>
                   </tr>
                 </tbody>
               </table>
@@ -182,7 +187,7 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
     <div>
       <section className="py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Unser Ablauf</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">Ablauf – So entsteht Ihr Messestand</h1>
           <p className="text-xl opacity-90 max-w-3xl">
             Von der ersten Idee bis zur Nachsorge – so läuft ein Messeprojekt mit S&S Messebau ab.
           </p>
@@ -326,7 +331,7 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex items-center gap-4 mb-6">
             <Leaf className="h-12 w-12" />
-            <h1 className="text-4xl md:text-5xl font-bold">Nachhaltigkeit</h1>
+            <h1 className="text-4xl md:text-5xl font-bold">Nachhaltiger Messebau – Systembau & Wiederverwendung</h1>
           </div>
           <p className="text-xl opacity-90 max-w-3xl">
             Messebau muss nicht Wegwerfkultur sein. Mit wiederverwendbaren Systemen, 

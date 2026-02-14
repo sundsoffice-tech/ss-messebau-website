@@ -5,6 +5,7 @@ import { ArrowRight, CheckCircle } from '@phosphor-icons/react'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { useEffect, useState } from 'react'
 import { parseDeepLink } from '@/lib/deep-linking'
+import { InternalLinkSection } from '@/components/InternalLinkSection'
 
 interface BranchenPageProps {
   onOpenInquiry: () => void
@@ -32,7 +33,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
     <div>
       <section id="branchen-hero" className="py-12 md:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">Branchen-Expertise</h1>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">Branchen-Expertise – Messebau für Food, Finance & Industrie</h1>
           <p className="text-base md:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
             Spezialisiert auf die Anforderungen von Mittelständlern in Food, Versicherungen und Industrie. 
             Wir kennen Ihre Branche und wissen, worauf es ankommt.
@@ -215,6 +216,18 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
           </div>
         </div>
       </section>
+
+      <InternalLinkSection
+        title="Weiterführende Informationen"
+        links={[
+          { label: 'Leistungen im Detail', description: 'Messebau, Eventbau, Showrooms & Brand Spaces – alle Leistungen.', hash: '/leistungen' },
+          { label: 'Referenzen ansehen', description: 'Erfolgreiche Messebau-Projekte aus Food, Finance & Industrie.', hash: '/referenzen' },
+          { label: 'Unser Ablauf', description: 'Vom Erstgespräch bis zum fertigen Messestand.', hash: '/ablauf' },
+          { label: 'Nachhaltiger Messebau', description: 'Systembau mit Wiederverwendung – für umweltbewusste Auftritte.', hash: '/nachhaltigkeit' },
+          { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit.', hash: '/ueber-uns' },
+          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit 3D-Visualisierung – jetzt anfragen.', hash: '/kontakt' },
+        ]}
+      />
     </div>
   )
 }

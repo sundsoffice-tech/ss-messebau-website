@@ -11,6 +11,7 @@ import { ContactInquiry, ChatMessage } from '@/lib/types'
 import { useKV } from '@/hooks/use-kv'
 import { useVoiceInput } from '@/hooks/use-voice-input'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
+import { InternalLinkSection } from '@/components/InternalLinkSection'
 
 interface KontaktPageProps {
   onOpenInquiry: () => void
@@ -312,7 +313,7 @@ Antworte jetzt:`
     <div>
       <section id="kontakt-hero" className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Kontakt</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Kontakt – Messestand jetzt anfragen</h1>
           <p className="text-base sm:text-xl opacity-90 max-w-3xl">
             Haben Sie Fragen oder ein konkretes Projekt? Kontaktieren Sie uns – wir freuen uns auf Ihre Nachricht!
           </p>
@@ -739,6 +740,18 @@ Antworte jetzt:`
           </div>
         </div>
       </section>
+
+      <InternalLinkSection
+        title="Mehr von S&S Messebau"
+        links={[
+          { label: 'Leistungen im Detail', description: 'Messebau, Eventbau, Showrooms & Brand Spaces im Überblick.', hash: '/leistungen' },
+          { label: 'Branchen-Expertise', description: 'Spezialisiert auf Food, Finance & Industrie.', hash: '/branchen' },
+          { label: 'Referenzen ansehen', description: 'Erfolgreiche Messebau-Projekte von 20–200 m².', hash: '/referenzen' },
+          { label: 'Unser Ablauf', description: 'Transparenter Projektablauf vom Erstgespräch bis Abbau.', hash: '/ablauf' },
+          { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für umweltbewusste Auftritte.', hash: '/nachhaltigkeit' },
+          { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit.', hash: '/ueber-uns' },
+        ]}
+      />
     </div>
   )
 }
