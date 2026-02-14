@@ -261,10 +261,10 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <section id="references" className="py-16 bg-muted">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
+      <section id="references" className="py-12 sm:py-16 bg-muted">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Referenzen</h2>
+            <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Referenzen</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Einige unserer realisierten Messestände und Eventbauten für zufriedene Kunden.
             </p>
@@ -315,10 +315,10 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <section id="testimonials" className="py-16">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
+      <section id="testimonials" className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Das sagen unsere Kunden</h2>
+            <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Das sagen unsere Kunden</h2>
             <p className="text-lg text-muted-foreground mb-4">
               Echte Bewertungen von echten Kunden
             </p>
@@ -379,9 +379,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <section id="cta" className="py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Kontakt</h2>
+      <section id="cta" className="py-12 sm:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Kontakt</h2>
           <p className="text-xl font-semibold mb-4 opacity-95">Bereit für Ihren perfekten Messeauftritt?</p>
           <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
             Kontaktieren Sie uns für ein unverbindliches Erstgespräch. Wir beraten Sie gerne zu Ihrem Projekt.
