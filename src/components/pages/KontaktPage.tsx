@@ -70,6 +70,7 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
     event: '',
     size: '',
     budget: '',
+    wunschtermin: '',
     message: ''
   })
 
@@ -176,6 +177,7 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
       event: '',
       size: '',
       budget: '',
+      wunschtermin: '',
       message: ''
     })
     
@@ -391,7 +393,7 @@ Antworte jetzt:`
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="contact-size" className="text-sm sm:text-base">Standgröße</Label>
+                    <Label htmlFor="contact-size" className="text-sm sm:text-base">Standgröße (m²)</Label>
                     <Input
                       id="contact-size"
                       value={formData.size}
@@ -403,12 +405,32 @@ Antworte jetzt:`
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="contact-budget" className="text-sm sm:text-base">Budget (optional)</Label>
-                  <Input
+                  <Label htmlFor="contact-budget" className="text-sm sm:text-base">Budgetkorridor</Label>
+                  <select
                     id="contact-budget"
                     value={formData.budget}
                     onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                    placeholder="z.B. 30.000 - 40.000 €"
+                    className="flex h-11 sm:h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  >
+                    <option value="">Bitte wählen...</option>
+                    <option value="bis 15.000 €">bis 15.000 €</option>
+                    <option value="15.000 – 30.000 €">15.000 – 30.000 €</option>
+                    <option value="30.000 – 50.000 €">30.000 – 50.000 €</option>
+                    <option value="50.000 – 80.000 €">50.000 – 80.000 €</option>
+                    <option value="80.000 – 120.000 €">80.000 – 120.000 €</option>
+                    <option value="über 120.000 €">über 120.000 €</option>
+                    <option value="noch unklar">Noch unklar / Beratung gewünscht</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="contact-wunschtermin" className="text-sm sm:text-base">Wunschtermin / Messedatum</Label>
+                  <Input
+                    id="contact-wunschtermin"
+                    type="date"
+                    value={formData.wunschtermin}
+                    onChange={(e) => setFormData({ ...formData, wunschtermin: e.target.value })}
+                    min={new Date().toISOString().split('T')[0]}
                     className="h-11 sm:h-10"
                   />
                 </div>

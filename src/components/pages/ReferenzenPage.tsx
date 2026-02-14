@@ -181,6 +181,29 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                   <Badge variant="secondary" className="text-xs">{selectedReference.size}</Badge>
                 </div>
 
+                {(selectedReference.kunde || selectedReference.messe || selectedReference.zielsetzung) && (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-muted rounded-lg">
+                    {selectedReference.kunde && (
+                      <div>
+                        <p className="text-xs text-muted-foreground font-medium mb-0.5">Kunde</p>
+                        <p className="text-sm font-semibold">{selectedReference.kunde}</p>
+                      </div>
+                    )}
+                    {selectedReference.messe && (
+                      <div>
+                        <p className="text-xs text-muted-foreground font-medium mb-0.5">Messe / Ort</p>
+                        <p className="text-sm font-semibold">{selectedReference.messe}</p>
+                      </div>
+                    )}
+                    {selectedReference.zielsetzung && (
+                      <div>
+                        <p className="text-xs text-muted-foreground font-medium mb-0.5">Zielsetzung</p>
+                        <p className="text-sm font-semibold">{selectedReference.zielsetzung}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div>
                   <h3 className="font-semibold text-base sm:text-lg mb-2">Ausgangslage</h3>
                   <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{selectedReference.challenge}</p>

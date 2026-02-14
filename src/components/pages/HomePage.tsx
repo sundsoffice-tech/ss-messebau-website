@@ -15,6 +15,11 @@ import {
 import { DEMO_REFERENCES } from '@/lib/demo-data'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
+import { USPBadges } from '@/components/ui/USPBadge'
+import { GuaranteeBanner } from '@/components/ui/GuaranteeBanner'
+import { FactBar } from '@/components/ui/FactBar'
+import { LogoWall } from '@/components/ui/LogoWall'
+import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
 
 interface HomePageProps {
   onOpenInquiry: () => void
@@ -28,6 +33,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
     'services',
     'advantages',
     'references',
+    'process',
     'testimonials',
     'cta'
   ])
@@ -67,9 +73,12 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
             <h1 id="hero-heading" className="font-bold text-white mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>
               Messestände 20–200 m², die Ihre Marke verkaufen.
             </h1>
-            <p className="text-white/90 mb-6 sm:mb-8 leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', lineHeight: '1.5' }}>
+            <p className="text-white/90 mb-5 sm:mb-6 leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', lineHeight: '1.5' }}>
               S&S Messebau – 48h-Angebot mit 3D-Visualisierung. Full-Service Messebau, Eventbau & Showrooms für Food, Finance und Industrie – bundesweit aus NRW.
             </p>
+            <div className="mb-5 sm:mb-6">
+              <USPBadges />
+            </div>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Button 
                 size="lg" 
@@ -93,6 +102,10 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           </div>
         </div>
       </section>
+
+      <GuaranteeBanner onOpenInquiry={onOpenInquiry} />
+
+      <FactBar />
 
       <section id="services" className="py-12 sm:py-16 bg-muted" aria-labelledby="services-heading">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -251,12 +264,12 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           <div className="text-center mb-12">
             <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Referenzen</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Einige unserer realisierten Messestände und Eventbauten für zufriedene Kunden.
+              Ausgewählte Projekte aus Food, Finance & Industrie – von 20 bis 200 m².
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {DEMO_REFERENCES.map((reference) => (
+            {DEMO_REFERENCES.slice(0, 3).map((reference) => (
               <Card 
                 key={reference.id} 
                 className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
@@ -278,6 +291,11 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   <Badge className="absolute top-4 left-4 bg-background/95 text-foreground shadow-lg">
                     {reference.size}
                   </Badge>
+                  {reference.messe && (
+                    <Badge className="absolute top-4 right-4 bg-primary/90 text-primary-foreground shadow-lg text-xs">
+                      {reference.messe}
+                    </Badge>
+                  )}
                   <div className="absolute bottom-4 left-4 right-4 transform translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
                     <p className="text-white text-sm font-medium drop-shadow-lg">Mehr erfahren →</p>
                   </div>
@@ -295,12 +313,16 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
 
           <div className="text-center mt-8">
             <Button variant="outline" onClick={() => handleNavigation('/referenzen')}>
-              Alle Referenzen ansehen
+              Alle {DEMO_REFERENCES.length} Referenzen ansehen
               <ArrowRight className="ml-2" />
             </Button>
           </div>
         </div>
       </section>
+
+      <ProcessTimeline onOpenInquiry={onOpenInquiry} />
+
+      <LogoWall />
 
       <section id="testimonials" className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

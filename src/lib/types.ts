@@ -24,6 +24,9 @@ export interface Reference {
   solution: string
   result: string
   keyfacts: string[]
+  kunde?: string
+  messe?: string
+  zielsetzung?: string
 }
 
 export interface BlogPost {
