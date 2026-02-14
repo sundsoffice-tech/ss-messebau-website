@@ -63,15 +63,15 @@ const LEISTUNGEN_MEGA_MENU = [
     sectionId: 'touren'
   },
   {
-    title: 'Trockenbau & Innenausbau',
-    description: 'Shops, Büros und Showrooms',
+    title: 'Showrooms & Brand Spaces',
+    description: 'Markenerlebnisräume und Showrooms',
     icon: Storefront,
     color: 'text-amber-600',
     bgColor: 'bg-amber-50',
     features: ['Planung & Ausführung', 'Eigenes Facharbeiter-Team', 'Kostenoptimiert'],
     gradient: 'from-amber-500/10 to-amber-600/5',
     previewImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
-    sectionId: 'trockenbau'
+    sectionId: 'showrooms'
   },
   {
     title: 'Eventbau & Bühnen',

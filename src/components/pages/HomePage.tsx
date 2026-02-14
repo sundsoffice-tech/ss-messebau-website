@@ -14,6 +14,7 @@ import {
 } from '@phosphor-icons/react'
 import { DEMO_REFERENCES } from '@/lib/demo-data'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
+import { InternalLinkSection } from '@/components/InternalLinkSection'
 
 interface HomePageProps {
   onOpenInquiry: () => void
@@ -62,12 +63,12 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 py-12 sm:py-16">
           <div className="max-w-3xl">
-            <Badge className="mb-4 sm:mb-6 bg-accent text-accent-foreground text-sm">Full-Service Messebau mit Erfahrung</Badge>
+            <Badge className="mb-4 sm:mb-6 bg-accent text-accent-foreground text-sm">S&S Messebau – Ihr Messestand-Partner aus NRW</Badge>
             <h1 id="hero-heading" className="font-bold text-white mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>
-              Messestände, die verkaufen.
+              Messestände 20–200 m², die Ihre Marke verkaufen.
             </h1>
             <p className="text-white/90 mb-6 sm:mb-8 leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', lineHeight: '1.5' }}>
-              S&S Messebau – Full-Service von Idee bis Abbau. Bundesweiter Messebau, Eventbau, Ladenbau – Planung, Logistik, Aufbau aus einer Hand.
+              S&S Messebau – 48h-Angebot mit 3D-Visualisierung. Full-Service Messebau, Eventbau & Showrooms für Food, Finance und Industrie – bundesweit aus NRW.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Button 
@@ -98,7 +99,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           <div className="text-center mb-8 sm:mb-12">
             <h2 id="services-heading" className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Unsere Leistungen</h2>
             <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Drei Leistungsbereiche, ein Ansprechpartner: Full-Service Messebau als Kernleistung, skalierbare Tourenlösungen für wiederkehrende Auftritte und professioneller Trockenbau & Innenausbau – alles kostenoptimiert aus einer Hand.
+              Drei Leistungsbereiche, ein Ansprechpartner: Full-Service Messebau als Kernleistung, skalierbare Tourenlösungen für wiederkehrende Auftritte und professionelle Showrooms & Brand Spaces – alles kostenoptimiert aus einer Hand.
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -131,15 +132,15 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               },
               {
                 icon: Storefront,
-                title: 'Trockenbau & Innenausbau',
-                description: 'Shops, Büros und Showrooms – Planung und Ausführung mit demselben Facharbeiter-Team, das Sie aus dem Messebau kennen.',
+                title: 'Showrooms & Brand Spaces',
+                description: 'Showrooms, Markenerlebnisräume und Brand Spaces – Planung und Ausführung mit demselben Facharbeiter-Team, das Sie aus dem Messebau kennen.',
                 bullets: [
-                  'Ausbau von Shops, Büros und Showrooms',
+                  'Showrooms, Brand Spaces und Erlebnisräume',
                   'Planung und Ausführung aus einer Hand',
                   'Einsatz desselben Monteur-Teams wie im Messebau',
                   'Langfristig effiziente und kostenoptimierte Lösungen'
                 ],
-                sectionId: 'trockenbau',
+                sectionId: 'showrooms',
                 image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=320&fit=crop'
               }
             ].map((service, index) => {
@@ -214,18 +215,18 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
             {[
               {
                 icon: CheckCircle,
-                title: 'Full-Service aus einer Hand',
-                description: 'Von der ersten Skizze über Produktion und Logistik bis zum kompletten Auf- und Abbau. Sie haben einen Ansprechpartner für alles.'
-              },
-              {
-                icon: Handshake,
-                title: 'Starkes Partnernetzwerk',
-                description: 'Durch langjährige Kooperationen mit Logistikern, Materiallieferanten und Technikern bieten wir beste Qualität zu fairen Preisen.'
+                title: '48h-Angebot mit 3D-Visualisierung',
+                description: 'Innerhalb von 48 Stunden erhalten Sie ein kalkuliertes Angebot inklusive 3D-Visualisierung Ihres Messestands – für schnelle Entscheidungen.'
               },
               {
                 icon: Target,
-                title: 'Fokus auf Mittelstand',
-                description: 'Spezialisiert auf 20-200 qm für mittelständische Unternehmen. Perfekt für Food, Versicherungen und Industriebetriebe.'
+                title: 'Spezialist für 20–200 m²',
+                description: 'Fokussiert auf Messestände für mittelständische Unternehmen. Perfekt für Food, Finance und Industriebranchen – ohne Agentur-Overhead.'
+              },
+              {
+                icon: Handshake,
+                title: 'Branchenexperte mit Netzwerk',
+                description: 'Tiefe Branchenkenntnis in Food (Anuga, ISM), Versicherungen (DKM) und Industrie (Hannover Messe) – plus starkes Partnernetzwerk für beste Qualität.'
               }
             ].map((advantage, index) => {
               const Icon = advantage.icon
@@ -364,6 +365,20 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           </div>
         </div>
       </section>
+
+      <InternalLinkSection
+        title="Alles über S&S Messebau"
+        links={[
+          { label: 'Leistungen im Detail', description: 'Messebau, Eventbau, Showrooms & Brand Spaces – alle Services.', hash: '/leistungen' },
+          { label: 'Branchen-Expertise', description: 'Spezialisiert auf Food, Finance & Industrie.', hash: '/branchen' },
+          { label: 'Referenzen ansehen', description: 'Realisierte Projekte von 20–200 m² im Überblick.', hash: '/referenzen' },
+          { label: 'Unser Ablauf', description: 'Vom Erstgespräch bis zum Abbau – so arbeiten wir.', hash: '/ablauf' },
+          { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für die Umwelt.', hash: '/nachhaltigkeit' },
+          { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit.', hash: '/ueber-uns' },
+          { label: 'Blog & Ratgeber', description: 'Tipps und Insights rund um den Messeauftritt.', hash: '/blog' },
+          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit 3D-Visualisierung anfordern.', hash: '/kontakt' },
+        ]}
+      />
 
       <section id="cta" className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">

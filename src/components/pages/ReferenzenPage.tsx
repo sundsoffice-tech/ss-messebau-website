@@ -6,6 +6,7 @@ import { DEMO_REFERENCES } from '@/lib/demo-data'
 import { Reference } from '@/lib/types'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { CheckCircle, ArrowRight } from '@phosphor-icons/react'
+import { InternalLinkSection } from '@/components/InternalLinkSection'
 
 interface ReferenzenPageProps {
   onOpenInquiry: () => void
@@ -44,7 +45,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
     <div>
       <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Unsere Referenzen</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Messebau-Referenzen – Projekte von 20–200 m²</h1>
           <p className="text-base sm:text-xl opacity-90 max-w-3xl">
             Überzeugen Sie sich von der Qualität unserer Arbeit. Hier finden Sie eine Auswahl erfolgreicher Projekte, 
             die wir für unsere Kunden realisiert haben.
@@ -232,6 +233,18 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
           </Button>
         </div>
       </section>
+
+      <InternalLinkSection
+        title="Mehr von S&S Messebau"
+        links={[
+          { label: 'Leistungen im Detail', description: 'Messebau, Eventbau, Showrooms & Brand Spaces im Überblick.', hash: '/leistungen' },
+          { label: 'Branchen-Expertise', description: 'Spezialisiert auf Food, Finance & Industrie.', hash: '/branchen' },
+          { label: 'Unser Ablauf', description: 'Transparenter Projektablauf vom Erstgespräch bis Abbau.', hash: '/ablauf' },
+          { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für umweltbewusste Auftritte.', hash: '/nachhaltigkeit' },
+          { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit.', hash: '/ueber-uns' },
+          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit 3D-Visualisierung anfordern.', hash: '/kontakt' },
+        ]}
+      />
     </div>
   )
 }

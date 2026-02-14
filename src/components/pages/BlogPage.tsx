@@ -28,7 +28,7 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <div className="flex items-center gap-2.5 md:gap-3 mb-3 md:mb-4">
             <Article className="h-8 w-8 md:h-10 md:w-10 shrink-0" />
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">Blog & Ratgeber</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">Blog & Ratgeber – Messebau-Tipps von S&S Messebau</h1>
           </div>
           <p className="text-base md:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
             Hilfreiche Tipps, Checklisten und Fachwissen rund um Messebau, Eventplanung und erfolgreiche Messeauftritte.

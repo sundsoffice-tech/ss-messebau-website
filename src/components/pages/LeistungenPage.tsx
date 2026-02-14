@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Warehouse, CalendarDot, Storefront, Armchair, ArrowRight, CheckCircle } from '@phosphor-icons/react'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
+import { InternalLinkSection } from '@/components/InternalLinkSection'
 
 interface LeistungenPageProps {
   onOpenInquiry: () => void
@@ -11,7 +12,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
   useSectionObserver([
     'messebau',
     'touren',
-    'trockenbau',
+    'showrooms',
     'eventbau',
     'ladenbau',
     'boeden-ausstattung'
@@ -21,7 +22,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
     <div>
       <section className="py-12 md:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">Unsere Leistungen</h1>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">Messebau-Leistungen – Full-Service von 20–200 m²</h1>
           <p className="text-base md:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
             Von der ersten Idee bis zum professionellen Abbau – wir begleiten Sie durch alle Phasen Ihres Messeprojekts. 
             Unser Full-Service-Ansatz spart Zeit, Kosten und Nerven.
@@ -546,18 +547,18 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         </div>
       </section>
 
-      <section id="trockenbau" className="py-12 md:py-16 bg-muted scroll-mt-20">
+      <section id="showrooms" className="py-12 md:py-16 bg-muted scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Trockenbau & Innenausbau</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Showrooms & Brand Spaces</h2>
               <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                Neben unserem Messebau-Know-how bieten wir Ihnen professionelle Trockenbau- und Ausbauprojekte: Shops, Büros, Showrooms – Planung und Ausführung aus einer Hand durch unseren großen Pool an Facharbeitern.
+                Neben unserem Messebau-Know-how realisieren wir professionelle Showrooms, Brand Spaces und Markenerlebnisräume – Planung und Ausführung aus einer Hand durch unseren großen Pool an Facharbeitern.
               </p>
               <h3 className="text-xl font-semibold mb-4">Das können wir für Sie tun:</h3>
               <div className="space-y-2.5 md:space-y-3 mb-6">
                 {[
-                  'Ausbau von Shops, Büros und Showrooms',
+                  'Showrooms, Brand Spaces und Erlebnisräume',
                   'Planung und Ausführung durch erfahrene Facharbeiter',
                   'Einsatz desselben Monteur-Teams wie im Messebau',
                   'Kostenoptimierte Lösungen für langfristige Projekte',
@@ -570,7 +571,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 ))}
               </div>
               <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                Trockenbau-Projekt anfragen
+                Showroom-Projekt anfragen
                 <ArrowRight className="ml-2" />
               </Button>
             </div>
@@ -629,6 +630,18 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
           </div>
         </div>
       </section>
+
+      <InternalLinkSection
+        title="Mehr erfahren"
+        links={[
+          { label: 'Branchen-Expertise', description: 'Messebau für Food, Finance & Industrie – mit Branchenkenntnis.', hash: '/branchen' },
+          { label: 'Referenzen ansehen', description: 'Realisierte Messebau-Projekte von 20–200 m² im Überblick.', hash: '/referenzen' },
+          { label: 'Unser Ablauf', description: 'Vom Erstgespräch bis zum Abbau – so arbeiten wir.', hash: '/ablauf' },
+          { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für umweltbewusste Auftritte.', hash: '/nachhaltigkeit' },
+          { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit – lernen Sie uns kennen.', hash: '/ueber-uns' },
+          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit 3D-Visualisierung anfordern.', hash: '/kontakt' },
+        ]}
+      />
 
       <section className="py-12 md:py-16">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 text-center">
