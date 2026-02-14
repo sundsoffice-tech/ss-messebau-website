@@ -69,7 +69,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-orange-50',
     features: ['Ladeneinrichtung', 'Showroom-Design', 'Präsentationssysteme'],
     gradient: 'from-orange-500/10 to-orange-600/5',
-    previewImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
+    previewImage: '/images/ladenbau/ladenbau-display-regal-led-beleuchtung.jpg',
     sectionId: 'ladenbau'
   },
   {
@@ -80,7 +80,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-green-50',
     features: ['Messeboden-Systeme', 'Möbel & Ausstattung', 'Beleuchtung'],
     gradient: 'from-green-500/10 to-green-600/5',
-    previewImage: '/images/boeden/holzboden-laminat-verlegung.svg',
+    previewImage: '/images/boeden/showroom-bodenproben-ausstellung.jpg',
     sectionId: 'boeden-ausstattung'
   }
 ]
