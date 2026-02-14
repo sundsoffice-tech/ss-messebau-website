@@ -215,8 +215,9 @@ export function Header({ onOpenInquiry }: HeaderProps) {
       currentX = e.touches[0].clientX
       const deltaX = currentX - startX
       const deltaY = Math.abs(e.touches[0].clientY - startY)
+      const absDeltaX = Math.abs(deltaX)
       
-      if (!isDragging && Math.abs(deltaX) > 30 && Math.abs(deltaX) > deltaY * 2) {
+      if (!isDragging && absDeltaX > 30 && absDeltaX > deltaY * 2) {
         isDragging = true
       }
 

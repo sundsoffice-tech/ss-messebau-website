@@ -216,7 +216,7 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
       </section>
 
       <section className="py-12 sm:py-16">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
           <h2 className="font-bold mb-6" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Bereit zu starten?</h2>
           <p className="text-lg text-muted-foreground mb-8">
             Konfigurieren Sie jetzt Ihre Banner online und erhalten Sie binnen 24 Stunden 
