@@ -761,30 +761,32 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         </div>
       </section>
 
-      {/* Sustainability Section */}
-      <section id="nachhaltigkeit-leistungen" className="py-12 md:py-16">
+      {/* Sustainability Section – Emotional, non-duplicating */}
+      <section id="nachhaltigkeit-leistungen" className="py-12 md:py-16 bg-green-50/50">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+          {/* Emotional Intro */}
           <div className="text-center mb-10 md:mb-12">
             <div className="flex items-center justify-center gap-2.5 mb-3">
               <Leaf className="h-8 w-8 text-green-600" weight="duotone" />
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">{t('sustainability.title')}</h2>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">{t('leistungen.sustainability.title')}</h2>
             </div>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              {t('sustainability.subtitle')}
+              {t('leistungen.sustainability.intro')}
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+
+          {/* Key-Anker Boxes */}
+          <div className="grid sm:grid-cols-3 gap-6 max-w-5xl mx-auto mb-10 md:mb-12">
             {[
-              { icon: Recycle, title: t('sustainability.reuse'), desc: t('sustainability.reuse.desc') },
-              { icon: TreeEvergreen, title: t('sustainability.materials'), desc: t('sustainability.materials.desc') },
-              { icon: Truck, title: t('sustainability.logistics'), desc: t('sustainability.logistics.desc') },
-              { icon: Leaf, title: t('sustainability.savings'), desc: t('sustainability.savings.desc') },
+              { icon: Truck, title: t('leistungen.sustainability.co2.title'), desc: t('leistungen.sustainability.co2.desc') },
+              { icon: Recycle, title: t('leistungen.sustainability.systembau.title'), desc: t('leistungen.sustainability.systembau.desc') },
+              { icon: Leaf, title: t('leistungen.sustainability.projekt.title'), desc: t('leistungen.sustainability.projekt.desc') },
             ].map((item, index) => {
               const Icon = item.icon
               return (
-                <Card key={index}>
+                <Card key={index} className="border-green-200 hover:shadow-lg transition-shadow">
                   <CardContent className="p-5 md:p-6 text-center">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-50 mx-auto mb-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 mx-auto mb-4">
                       <Icon className="h-6 w-6 text-green-600" weight="duotone" />
                     </div>
                     <h3 className="font-semibold text-base md:text-lg mb-2 leading-tight">{item.title}</h3>
@@ -793,6 +795,33 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 </Card>
               )
             })}
+          </div>
+
+          {/* Anecdote / Best Practice */}
+          <div className="max-w-3xl mx-auto bg-white rounded-2xl border border-green-200 p-6 md:p-8 mb-10 md:mb-12">
+            <h3 className="font-semibold text-lg md:text-xl mb-4 flex items-center gap-2">
+              <TreeEvergreen className="h-6 w-6 text-green-600" weight="duotone" />
+              {t('leistungen.sustainability.anecdote.title')}
+            </h3>
+            <div className="space-y-3 text-muted-foreground text-sm md:text-base leading-relaxed">
+              <p>{t('leistungen.sustainability.anecdote.text1')}</p>
+              <p>{t('leistungen.sustainability.anecdote.text2')}</p>
+            </div>
+          </div>
+
+          {/* Emotional CTA to Nachhaltigkeit page */}
+          <div className="text-center">
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 leading-relaxed">
+              {t('leistungen.sustainability.outro')}
+            </p>
+            <a
+              href="#/nachhaltigkeit"
+              onClick={(e) => { e.preventDefault(); window.location.hash = '/nachhaltigkeit' }}
+              className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-6 py-3 text-white font-semibold hover:bg-green-700 transition-colors min-h-[48px] text-base"
+            >
+              {t('leistungen.sustainability.cta')}
+              <ArrowRight className="h-5 w-5" />
+            </a>
           </div>
         </div>
       </section>
