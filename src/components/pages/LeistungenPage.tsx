@@ -16,8 +16,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
     'brand-activation',
     'digital-experience',
     'ausstattung-ambiente',
-    'methodik',
-    'erfolge'
+    'methodik'
   ])
 
   return (
@@ -181,27 +180,26 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <ArrowRight className="ml-2" />
                 </Button>
               </div>
-              <Card>
-                <CardContent className="p-5 md:p-8">
-                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Beispiel-Pakete für Touren</h4>
-                  <div className="space-y-4">
-                    {[
-                      { name: 'Starter-Tour', desc: '3×3m Systemstand, 5 Messen/Jahr', price: 'ab 12.500€/Jahr' },
-                      { name: 'Professional-Tour', desc: '5×3m Systemstand, 10 Messen/Jahr', price: 'ab 22.000€/Jahr' },
-                      { name: 'Enterprise-Tour', desc: 'Individuelle Lösungen für große Roadshows', price: 'auf Anfrage' }
-                    ].map((pkg, index) => (
-                      <div key={index} className="border-l-4 border-primary pl-4">
-                        <p className="font-semibold">{pkg.name}</p>
-                        <p className="text-sm text-muted-foreground">{pkg.desc}</p>
-                        <p className="text-sm font-semibold text-primary mt-1">{pkg.price}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-4">
-                    Preise inkl. Logistik und Aufbau, zzgl. MwSt.
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="bg-primary/5 rounded-lg p-6">
+                <h3 className="font-semibold text-lg mb-4">Touren & Roadshows: Ihre Vorteile</h3>
+                <div className="space-y-3 mb-4">
+                  {[
+                    'Modulare Systemstände für flexible Standgrößen (20–200 m²)',
+                    'Zentrale Logistik ab NRW – kurze Wege, schnelle Reaktion',
+                    'Wiederverwendbare Komponenten senken Ihre Kosten',
+                    'Kostenoptimierte Routenplanung für mehrere Messen',
+                    'Bei mehreren Messen amortisiert sich die Investition schnell'
+                  ].map((benefit, idx) => (
+                    <div key={idx} className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" weight="fill" />
+                      <span className="text-sm">{benefit}</span>
+                    </div>
+                  ))}
+                </div>
+                <Button onClick={onOpenInquiry} className="w-full">
+                  Touren-Paket anfragen – Individuelle Kalkulation
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -583,191 +581,102 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             </div>
 
             {/* Flooring Types Section */}
-            <div className="bg-muted/50 rounded-2xl p-6 md:p-8 lg:p-10">
-              <div className="text-center mb-8 md:mb-10">
-                <h3 className="text-2xl md:text-3xl font-bold mb-3">Premium Messeboden-Systeme</h3>
-                <p className="text-muted-foreground text-base md:text-lg max-w-3xl mx-auto">
-                  Wählen Sie aus verschiedenen hochwertigen Bodenbelägen – perfekt abgestimmt auf Ihr Standkonzept,
-                  Ihre Branche und Ihr Budget.
-                </p>
+            <div className="bg-muted/50 rounded-2xl p-6 md:p-8">
+              <h3 className="text-2xl font-bold mb-4">Premium Messeboden-Systeme</h3>
+              <p className="text-muted-foreground mb-6">
+                Von klassischem Messebau-Teppich bis zu hochwertigen Klick-Parkett-Systemen – 
+                wir bieten die passende Bodenlösung für Ihr Standkonzept. Alle Systeme sind 
+                schnell verlegbar, strapazierfähig und bei Bedarf wiederverwendbar.
+              </p>
+              
+              <div className="grid md:grid-cols-2 gap-4 mb-6">
+                <div className="border-l-4 border-primary pl-4">
+                  <p className="font-semibold">Vinyl & Laminat</p>
+                  <p className="text-sm text-muted-foreground">Modern, pflegeleicht, große Designauswahl</p>
+                </div>
+                <div className="border-l-4 border-primary pl-4">
+                  <p className="font-semibold">Messebau-Teppich</p>
+                  <p className="text-sm text-muted-foreground">Klassisch, schalldämmend, wirtschaftlich</p>
+                </div>
+                <div className="border-l-4 border-primary pl-4">
+                  <p className="font-semibold">Klick-Parkett</p>
+                  <p className="text-sm text-muted-foreground">Hochwertig, wiederverwendbar, nachhaltig</p>
+                </div>
+                <div className="border-l-4 border-primary pl-4">
+                  <p className="font-semibold">Design-Beläge</p>
+                  <p className="text-sm text-muted-foreground">Individuell, vielseitig, markant</p>
+                </div>
               </div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                  {
-                    name: 'Vinyl-Bodenbelag',
-                    desc: 'Modern, pflegeleicht und in vielen Designs erhältlich. Perfekt für hochfrequentierte Messestände.',
-                    features: ['Wasserabweisend', 'Rutschfest', 'Echtholz-Optik', 'Schnelle Verlegung'],
-                    price: 'ab 35€/qm'
-                  },
-                  {
-                    name: 'Messebau-Teppich',
-                    desc: 'Klassisch und bewährt. Schallabsorbierend und in allen Farben verfügbar.',
-                    features: ['Große Farbauswahl', 'Weiche Haptik', 'Schalldämmend', 'Wirtschaftlich'],
-                    price: 'ab 18€/qm'
-                  },
-                  {
-                    name: 'Klick-Parkett',
-                    desc: 'Hochwertige Holzoptik für Premium-Stände. Wiederverwendbar und nachhaltig.',
-                    features: ['Edle Optik', 'Wiederverwendbar', 'Robust', 'Natürlich'],
-                    price: 'ab 45€/qm'
-                  },
-                  {
-                    name: 'Design-Laminat',
-                    desc: 'Vielseitig und strapazierfähig. Ideal für moderne Standkonzepte.',
-                    features: ['Kratzfest', 'Viele Designs', 'Pflegeleicht', 'Langlebig'],
-                    price: 'ab 28€/qm'
-                  }
-                ].map((floor, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-shadow">
-                    <CardHeader>
-                      <CardTitle className="text-lg">{floor.name}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <p className="text-sm text-muted-foreground leading-relaxed">{floor.desc}</p>
-                      <div className="space-y-2">
-                        {floor.features.map((feature, idx) => (
-                          <div key={idx} className="flex items-center gap-2 text-sm">
-                            <CheckCircle className="h-4 w-4 text-primary shrink-0" weight="fill" />
-                            <span>{feature}</span>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="pt-3 border-t">
-                        <p className="text-sm font-semibold text-primary">{floor.price}</p>
-                        <p className="text-xs text-muted-foreground">inkl. Verlegung & Unterkonstruktion</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              <div className="mt-8 text-center">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Preise verstehen sich zzgl. MwSt. Individuelle Angebote auf Anfrage.
-                </p>
-              </div>
+              
+              <p className="text-sm text-muted-foreground text-center">
+                Individuelle Kalkulation nach Standgröße und Anforderungen – <button onClick={onOpenInquiry} className="underline font-medium">Jetzt anfragen</button>
+              </p>
             </div>
 
             {/* Furniture & Equipment Section */}
-            <div>
-              <div className="text-center mb-8 md:mb-10">
-                <h3 className="text-2xl md:text-3xl font-bold mb-3">Hochwertige Möblierung & Technik</h3>
-                <p className="text-muted-foreground text-base md:text-lg max-w-3xl mx-auto">
-                  Von der stilvollen Lounge-Ecke bis zur beleuchteten Produktpräsentation –
-                  wir statten Ihren Stand komplett aus.
+            <div className="grid lg:grid-cols-2 gap-8 items-start">
+              <div>
+                <h3 className="text-2xl font-bold mb-4">Hochwertige Möblierung & Technik</h3>
+                <p className="text-muted-foreground mb-6">
+                  Von der komfortablen Lounge-Ecke über beleuchtete Theken bis zu modernen 
+                  Präsentationssystemen – wir statten Ihren Stand komplett aus. Alle Möbel 
+                  sind hochwertig, funktional und auf Ihre Marke abgestimmt.
                 </p>
-              </div>
-
-              <div className="grid lg:grid-cols-3 gap-6 md:gap-8 mb-8">
-                {[
-                  {
-                    title: 'Lounge-Möbel & Sitzgruppen',
-                    desc: 'Komfortable Sofas, Sessel und Couchtische für entspannte Kundengespräche',
-                    items: ['Designer-Sofas', 'Lounge-Sessel', 'Stehtische', 'Besprechungstische']
-                  },
-                  {
-                    title: 'Theken & Empfangsbereiche',
-                    desc: 'Repräsentative Empfangstheken mit integrierter Beleuchtung und Stauraum',
-                    items: ['LED-Theken', 'Info-Counter', 'Bar-Lösungen', 'Modulare Systeme']
-                  },
-                  {
-                    title: 'Präsentations-Möbel',
-                    desc: 'Vitrinen, Regale und Display-Systeme für perfekte Produktinszenierung',
-                    items: ['Glasvitrinen', 'Wandregale', 'Produktdisplays', 'LED-Beleuchtung']
-                  }
-                ].map((category, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-shadow">
-                    <CardHeader>
-                      <CardTitle className="text-lg md:text-xl">{category.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                        {category.desc}
-                      </p>
-                      <div className="space-y-2">
-                        {category.items.map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 text-sm">
-                            <CheckCircle className="h-4 w-4 text-primary shrink-0" weight="fill" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              {/* Gallery */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                  <img
-                    src="/images/moebel/showroom-ausstellungsmoebel.svg"
-                    alt="Professioneller Showroom mit Ausstellungsmöbeln und Bodenproben – Möbelbau von S&S Messebau"
-                    width="800"
-                    height="600"
-                    loading="lazy"
-                    decoding="async"
-                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                  />
+                
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Lounge & Besprechung</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Designer-Sofas, Lounge-Sessel, Stehtische und Besprechungstische für 
+                      entspannte Kundengespräche.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Theken & Empfang</h4>
+                    <p className="text-sm text-muted-foreground">
+                      LED-Theken, Info-Counter und Bar-Lösungen mit integrierter Beleuchtung 
+                      und Stauraum.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Präsentation & Display</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Glasvitrinen, Wandregale, Produktdisplays und LED-Beleuchtung für 
+                      perfekte Inszenierung.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Technik & Medien</h4>
+                    <p className="text-sm text-muted-foreground">
+                      LED-Strahler, Displays, Monitore, Sound-Systeme und interaktive Terminals.
+                    </p>
+                  </div>
                 </div>
-                <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                  <img
-                    src="/images/moebel/individuelles-display-regal-led.svg"
-                    alt="Maßgefertigtes Display-Regal mit LED-Beleuchtung – individueller Möbelbau von S&S Messebau"
-                    width="800"
-                    height="600"
-                    loading="lazy"
-                    decoding="async"
-                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
+                
+                <Button onClick={onOpenInquiry} className="mt-6">
+                  Ausstattung anfragen
+                </Button>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <img src="/images/moebel/showroom-ausstellungsmoebel.svg" alt="Showroom Möbel" className="rounded-lg shadow-lg" />
+                <img src="/images/moebel/individuelles-display-regal-led.svg" alt="Display Regal" className="rounded-lg shadow-lg" />
               </div>
             </div>
 
-            {/* Technical Equipment Section */}
-            <div className="bg-primary/5 rounded-2xl p-6 md:p-8 lg:p-10">
-              <div className="grid lg:grid-cols-2 gap-8 items-center">
-                <div>
-                  <h3 className="text-2xl md:text-3xl font-bold mb-4">Technik & Beleuchtung</h3>
-                  <p className="text-muted-foreground text-base md:text-lg mb-6 leading-relaxed">
-                    Professionelle Beleuchtungskonzepte und moderne Präsentationstechnik setzen
-                    Ihre Produkte perfekt in Szene und schaffen die richtige Atmosphäre.
-                  </p>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {[
-                      'LED-Strahler & Spots',
-                      'Akzentbeleuchtung',
-                      'Displays & Monitore',
-                      'Sound-Systeme',
-                      'Interaktive Terminals',
-                      'Video-Walls'
-                    ].map((item, index) => (
-                      <div key={index} className="flex items-center gap-2.5 md:gap-3">
-                        <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
-                        <span className="text-sm md:text-base">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg p-6 shadow-lg">
-                  <h4 className="font-semibold text-lg mb-4">Beliebte Ausstattungs-Pakete</h4>
-                  <div className="space-y-4">
-                    {[
-                      { name: 'Basis-Paket', items: 'Boden, Grundmöblierung, Basis-Beleuchtung', price: 'ab 2.500€' },
-                      { name: 'Komfort-Paket', items: 'Boden, Lounge-Möbel, LED-Konzept, Display', price: 'ab 5.000€' },
-                      { name: 'Premium-Paket', items: 'Alles inklusive + Multimedia & Sonderanfertigungen', price: 'ab 8.500€' }
-                    ].map((pkg, index) => (
-                      <div key={index} className="border-l-4 border-primary pl-4">
-                        <p className="font-semibold">{pkg.name}</p>
-                        <p className="text-sm text-muted-foreground">{pkg.items}</p>
-                        <p className="text-sm font-semibold text-primary mt-1">{pkg.price}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-4">
-                    Preise für 50 qm Stand, zzgl. MwSt. und Logistik
-                  </p>
+            {/* Transparent Pricing Callout */}
+            <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-8 text-center">
+              <h3 className="text-2xl font-bold mb-3">Transparente Kalkulation, faire Preise</h3>
+              <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
+                Jeder Messestand ist einzigartig – darum kalkulieren wir individuell nach 
+                Ihren Anforderungen. Sie erhalten ein transparentes Angebot mit allen Positionen, 
+                ohne versteckte Kosten.
+              </p>
+              <div className="inline-flex items-center gap-3 bg-white rounded-lg px-6 py-4 shadow-md">
+                <CheckCircle className="h-8 w-8 text-green-600" weight="fill" />
+                <div className="text-left">
+                  <p className="font-bold text-lg">Bis zu 30% Kostenersparnis</p>
+                  <p className="text-sm text-muted-foreground">durch modulare Systeme und Wiederverwendung</p>
                 </div>
               </div>
             </div>
@@ -823,37 +732,6 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   </Card>
                 )
               })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Erfolgskacheln / Story-Kacheln */}
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <div id="erfolge" className="scroll-mt-20">
-            <div className="text-center mb-10 md:mb-12">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Unsere Erfolgsbilanz</h2>
-              <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Zahlen, die für sich sprechen – und für die Qualität unserer Arbeit.
-              </p>
-            </div>
-            <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {[
-                { metric: '120+ Messeprojekte', desc: 'Erfolgreich realisiert in DACH, Skandinavien und Benelux.' },
-                { metric: '98% Kundenzufriedenheit', desc: 'Gemessen an Wiederbuchungsquote und Kundenfeedback.' },
-                { metric: 'Ø 30% Kostenersparnis', desc: 'Durch modulare Systeme und intelligente Wiederverwendung.' },
-              ].map((item, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-5 md:p-6 text-center">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 mx-auto mb-4">
-                      <TrendUp className="h-6 w-6 text-primary" weight="duotone" />
-                    </div>
-                    <p className="font-bold text-xl md:text-2xl mb-2 leading-tight text-primary">{item.metric}</p>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
-                  </CardContent>
-                </Card>
-              ))}
             </div>
           </div>
         </div>
