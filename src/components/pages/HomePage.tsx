@@ -6,7 +6,6 @@ import {
   Warehouse, 
   CalendarDot, 
   Storefront, 
-  Armchair,
   CheckCircle,
   ArrowRight,
   Star,
