@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Warehouse, CalendarDot, Storefront, Armchair, ArrowRight, CheckCircle, Leaf, Recycle, TreeEvergreen, Truck, CubeTransparent, Lightning, Crosshair, Package, ChatCircleDots, TrendUp } from '@phosphor-icons/react'
+import { Warehouse, CalendarDot, Storefront, Armchair, ArrowRight, CheckCircle, Leaf, Recycle, TreeEvergreen, Truck, CubeTransparent, Lightning, Crosshair, Package, ChatCircleDots, TrendUp, DeviceMobile, ChartLine, Cube, Eye, Brain, Sparkle } from '@phosphor-icons/react'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { StandCalculator } from '@/components/ui/StandCalculator'
@@ -207,32 +207,250 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         </div>
       </section>
 
-      {/* Solution Module 2: Digital Experience & Showrooms */}
-      <section className="py-12 md:py-16 bg-muted">
+      {/* Solution Module 2: Tech & Data Experience */}
+      <section className="py-12 md:py-16 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <div id="digital-experience" className="scroll-mt-20 space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Digital Experience & Showrooms</h2>
+              <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-primary/10 rounded-full">
+                <Sparkle className="h-5 w-5 text-primary" weight="fill" />
+                <span className="text-sm font-semibold text-primary">Innovation & Präzision</span>
+              </div>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Tech & Data Experience</h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                So schafft S&S permanente Markenräume – vom Showroom über den Ladenbau bis zum Brand Space, der Ihre Geschichte erzählt.
+                Bei S&S ist digitale Erlebnisarchitektur selbstverständlich. Wir kombinieren modernste Technologien mit präzisem Handwerk – 
+                für mehr Sichtbarkeit, messbare Erfolge und unvergessliche Markenerlebnisse.
               </p>
             </div>
 
-            {/* Showrooms & Brand Spaces */}
+            {/* AR/VR & Virtual Trade Show Tours */}
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
               <div>
-                <h3 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Showrooms & Brand Spaces</h3>
+                <div className="flex items-center gap-3 mb-4 md:mb-6">
+                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+                    <Cube className="h-6 w-6 md:h-7 md:w-7 text-primary" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">AR/VR & Virtuelle Standbegehung</h3>
+                </div>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Neben unserem Messebau-Know-how realisieren wir professionelle Showrooms, Brand Spaces und Markenerlebnisräume – Planung und Ausführung aus einer Hand durch unseren großen Pool an Facharbeitern.
+                  Erleben Sie Ihren Messestand schon vor dem ersten Aufbau. Mit Virtual Reality und Augmented Reality 
+                  visualisieren wir Ihr Konzept und ermöglichen virtuelle Standbegehungen – für optimale Planungssicherheit.
                 </p>
-                <h4 className="text-xl font-semibold mb-4">Das können wir für Sie tun:</h4>
+                <div className="bg-primary/5 rounded-lg p-4 md:p-6 mb-6">
+                  <h4 className="font-semibold text-base md:text-lg mb-3">Unsere VR/AR Leistungen</h4>
+                  <div className="space-y-2.5 md:space-y-3">
+                    {[
+                      'VR-Showrooms für immersive Produktpräsentationen',
+                      'Virtuelle Standbegehung vor der Messe',
+                      'AR-Produktvisualisierung direkt am Stand',
+                      '360°-Touren für Remote-Teilnehmer',
+                      'Digitale Zwillinge Ihrer Messestände',
+                      'Interaktive 3D-Konfiguration in Echtzeit'
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center gap-2.5 md:gap-3">
+                        <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
+                        <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-accent/10 border-l-4 border-accent p-4 mb-6 rounded">
+                  <p className="text-sm md:text-base font-semibold mb-2 text-accent">💡 Use Case: VR-Showroom für internationales Publikum</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Ein Technologie-Unternehmen konnte durch unseren VR-Showroom seine Produktpalette bereits vor Messebeginn 
+                    weltweit präsentieren. Ergebnis: 40% mehr qualifizierte Leads und messbar höhere Besucherzahlen am physischen Stand.
+                  </p>
+                </div>
+                <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  VR/AR-Lösung anfragen
+                  <ArrowRight className="ml-2" />
+                </Button>
+              </div>
+              <Card className="mt-8 lg:mt-0">
+                <CardContent className="p-5 md:p-8">
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Ihr Weg zur digitalen Präsenz</h4>
+                  <div className="space-y-5 md:space-y-6">
+                    {[
+                      { step: '1', title: '3D-Modellierung', desc: 'Wir erstellen ein detailgetreues 3D-Modell Ihres Stands' },
+                      { step: '2', title: 'VR-Integration', desc: 'Umwandlung in eine begehbare Virtual-Reality-Erfahrung' },
+                      { step: '3', title: 'Testing & Freigabe', desc: 'Sie testen und optimieren vor der physischen Umsetzung' },
+                      { step: '4', title: 'Live-Einsatz', desc: 'VR-Station am Stand oder als Remote-Erlebnis' }
+                    ].map((item, index) => (
+                      <div key={index} className="flex gap-3 md:gap-4">
+                        <div className="flex h-9 w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm md:text-base">
+                          {item.step}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold mb-1 text-sm md:text-base">{item.title}</h4>
+                          <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Visitor Tracking & Analytics */}
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+              <div className="lg:order-2">
+                <div className="flex items-center gap-3 mb-4 md:mb-6">
+                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+                    <ChartLine className="h-6 w-6 md:h-7 md:w-7 text-primary" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Besuchertracking & Analytics</h3>
+                </div>
+                <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  Machen Sie Ihren Messeerfolg messbar. Mit intelligenten Tracking-Systemen analysieren wir Besucherströme, 
+                  Verweildauer und Interaktionspunkte – für datenbasierte Optimierung und ROI-Nachweise.
+                </p>
                 <div className="space-y-2.5 md:space-y-3 mb-6">
                   {[
-                    'Showrooms, Brand Spaces und Erlebnisräume',
-                    'Planung und Ausführung durch erfahrene Facharbeiter',
-                    'Einsatz desselben Monteur-Teams wie im Messebau',
-                    'Kostenoptimierte Lösungen für langfristige Projekte',
-                    'Keine unnötigen Kosten – effizient und termingerecht'
+                    'Heatmaps: Wo halten sich Besucher am längsten auf?',
+                    'Besucherzählung & demografische Analyse',
+                    'Interaktionsrate an digitalen Touchpoints',
+                    'Lead-Qualifizierung durch Verhaltensanalyse',
+                    'Live-Dashboards während der Messe',
+                    'Post-Event Reports mit Handlungsempfehlungen'
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-2.5 md:gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
+                      <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="bg-accent/10 border-l-4 border-accent p-4 mb-6 rounded">
+                  <p className="text-sm md:text-base font-semibold mb-2 text-accent">📊 Use Case: Heatmap-Analyse optimiert Standlayout</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Ein Automobilzulieferer nutzte unsere Heatmap-Analyse und stellte fest, dass 70% der Besucher die linke 
+                    Standhälfte ignorierten. Nach Layout-Anpassung: +55% mehr Interaktionen und 30% höhere Lead-Conversion.
+                  </p>
+                </div>
+                <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  Analytics-Lösung anfragen
+                  <ArrowRight className="ml-2" />
+                </Button>
+              </div>
+              <Card className="lg:order-1 mt-8 lg:mt-0">
+                <CardContent className="p-5 md:p-8">
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Messbare Erfolge</h4>
+                  <div className="space-y-4">
+                    {[
+                      { metric: 'Besucherströme', desc: 'Erfassen Sie, wie Besucher durch Ihren Stand navigieren', icon: Eye },
+                      { metric: 'Verweildauer', desc: 'Messen Sie die Aufmerksamkeitsspanne pro Zone', icon: TrendUp },
+                      { metric: 'Hot Zones', desc: 'Identifizieren Sie die beliebtesten Bereiche', icon: Crosshair },
+                      { metric: 'Conversion-Pfade', desc: 'Verstehen Sie den Weg vom Besucher zum Lead', icon: Lightning }
+                    ].map((item, index) => {
+                      const Icon = item.icon
+                      return (
+                        <div key={index} className="flex gap-3 items-start border-l-4 border-primary/30 pl-4">
+                          <Icon className="h-5 w-5 text-primary shrink-0 mt-0.5" weight="bold" />
+                          <div>
+                            <p className="font-semibold text-sm md:text-base">{item.metric}</p>
+                            <p className="text-xs md:text-sm text-muted-foreground">{item.desc}</p>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Interactive Presentation & Smart Solutions */}
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+              <div>
+                <div className="flex items-center gap-3 mb-4 md:mb-6">
+                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+                    <DeviceMobile className="h-6 w-6 md:h-7 md:w-7 text-primary" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Interaktive Präsentationstechnik</h3>
+                </div>
+                <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  Von Touchscreens über Videowalls bis zu KI-gestützten Assistenten – wir integrieren modernste 
+                  Präsentationstechnik nahtlos in Ihr Standkonzept.
+                </p>
+                <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                  {[
+                    { title: 'Touchscreen-Terminals', desc: 'Interaktive Produktkataloge & Konfiguratoren' },
+                    { title: 'LED-Videowalls', desc: 'Großformatige Displays für maximale Aufmerksamkeit' },
+                    { title: 'KI-Chatbots', desc: 'Digitale Assistenten für Erstberatung' },
+                    { title: 'Live-Produktdemos', desc: 'Integrierte Präsentationssysteme' }
+                  ].map((item, index) => (
+                    <div key={index} className="bg-primary/5 p-4 rounded-lg">
+                      <p className="font-semibold text-sm md:text-base mb-1">{item.title}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="bg-accent/10 border-l-4 border-accent p-4 mb-6 rounded">
+                  <p className="text-sm md:text-base font-semibold mb-2 text-accent">🤖 Use Case: KI-Produktberater steigert Qualifizierung</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Ein B2B-Software-Anbieter setzte unseren KI-Chatbot ein, der Besucherfragen vorqualifizierte. 
+                    Das Vertriebsteam konnte sich auf hochwertige Gespräche fokussieren – Effizienz +65%.
+                  </p>
+                </div>
+                <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  Interaktive Technik anfragen
+                  <ArrowRight className="ml-2" />
+                </Button>
+              </div>
+              <div className="space-y-6 mt-8 lg:mt-0">
+                <Card>
+                  <CardContent className="p-5 md:p-8">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Brain className="h-8 w-8 text-primary" weight="bold" />
+                      <h4 className="text-lg md:text-xl font-semibold">Smart Stand Lösungen</h4>
+                    </div>
+                    <p className="text-sm md:text-base text-muted-foreground mb-4 leading-relaxed">
+                      IoT-vernetzte Stände mit intelligenter Steuerung von Licht, Klima und Content – 
+                      für ein perfekt orchestriertes Markenerlebnis.
+                    </p>
+                    <div className="space-y-2.5">
+                      {[
+                        'Automatische Beleuchtungsanpassung',
+                        'Content-Management-Systeme',
+                        'Sensor-gesteuerte Interaktionen',
+                        'Zentrale Steuerung aller Systeme'
+                      ].map((item, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-primary shrink-0" weight="fill" />
+                          <span className="text-xs md:text-sm">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <div className="bg-gradient-to-br from-primary to-primary/80 rounded-xl p-6 text-primary-foreground">
+                  <h4 className="font-bold text-lg mb-2">Innovation als Standard</h4>
+                  <p className="text-sm opacity-90 leading-relaxed">
+                    Bei S&S Messebau ist digitale Exzellenz kein Aufpreis, sondern fester Bestandteil unserer DNA. 
+                    Wir denken digital first – für messbare Erfolge und zukunftssichere Markenräume.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Showrooms & Brand Spaces - moved here */}
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mt-12">
+              <div>
+                <div className="flex items-center gap-3 mb-4 md:mb-6">
+                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+                    <Storefront className="h-6 w-6 md:h-7 md:w-7 text-primary" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Showrooms & Brand Spaces</h3>
+                </div>
+                <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  Permanente Markenräume mit digitaler Integration – vom klassischen Showroom bis zum vollvernetzten Brand Space.
+                </p>
+                <div className="space-y-2.5 md:space-y-3 mb-6">
+                  {[
+                    'Showrooms mit integrierter Digital-Experience',
+                    'Interaktive Produktpräsentationen',
+                    'Smart Lighting & automatisierte Szenarien',
+                    'Content-Management für wechselnde Inhalte',
+                    'Analytics für Showroom-Besucher'
                   ].map((item, index) => (
                     <div key={index} className="flex items-center gap-2.5 md:gap-3">
                       <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
@@ -250,10 +468,10 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Unsere Ausbau-Leistungen</h4>
                   <div className="space-y-4">
                     {[
-                      { name: 'Shop-Ausbau', desc: 'Verkaufsflächen, Theken, Präsentationswände' },
-                      { name: 'Büro-Ausbau', desc: 'Trennwände, Akustiklösungen, Deckenausbau' },
-                      { name: 'Showroom-Gestaltung', desc: 'Produktpräsentationen, Beleuchtungskonzepte' },
-                      { name: 'Innenausbau', desc: 'Individuelle Raumgestaltung nach Ihren Wünschen' }
+                      { name: 'Shop-Ausbau', desc: 'Verkaufsflächen mit digitaler Integration' },
+                      { name: 'Büro-Ausbau', desc: 'Smart Office Lösungen & Akustikkonzepte' },
+                      { name: 'Showroom-Gestaltung', desc: 'Interaktive Produktpräsentationen' },
+                      { name: 'Brand Spaces', desc: 'Vollvernetzte Markenerlebnisräume' }
                     ].map((category, index) => (
                       <div key={index} className="border-l-4 border-primary pl-4">
                         <p className="font-semibold">{category.name}</p>
@@ -263,65 +481,6 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-
-            {/* Ladenbau */}
-            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
-              <div>
-                <div className="flex items-center gap-3 mb-4 md:mb-6">
-                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
-                    <Storefront className="h-6 w-6 md:h-7 md:w-7 text-primary" />
-                  </div>
-                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Ladenbau & Showrooms</h3>
-                </div>
-                <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Permanente Verkaufs- und Präsentationsflächen, die Ihre Produkte optimal in Szene setzen.
-                  Vom Konzept bis zur schlüsselfertigen Übergabe – professioneller Ladenbau mit Wiedererkennungswert.
-                </p>
-                <div className="space-y-2.5 md:space-y-3 mb-6">
-                  {[
-                    'Individuelle Ladenkonzepte',
-                    'Showroom-Ausstellungssysteme',
-                    'Verkaufsflächen & Produktpräsentation',
-                    'Maßgefertigte Möbel & Regalsysteme',
-                    'LED-Beleuchtung & Digitale Displays',
-                    'Corporate Identity Integration'
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-2.5 md:gap-3">
-                      <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
-                      <span className="text-sm md:text-base leading-relaxed">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                  Showroom anfragen
-                  <ArrowRight className="ml-2" />
-                </Button>
-              </div>
-              <div className="grid grid-cols-2 gap-4 mt-6 lg:mt-0">
-                <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                  <img
-                    src="/images/ladenbau/ladenbau-display-regal-led-beleuchtung.jpg"
-                    alt="Maßgefertigtes Display-Regal mit LED-Beleuchtung und integriertem Monitor – Ladenbau von S&S Messebau"
-                    width="800"
-                    height="450"
-                    loading="lazy"
-                    decoding="async"
-                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-                <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                  <img
-                    src="/images/ladenbau/showroom-bodenproben-ausstellung.jpg"
-                    alt="Professioneller Showroom mit Bodenproben-Ausstellungssystem – Ladenbau und Messebau von S&S"
-                    width="800"
-                    height="450"
-                    loading="lazy"
-                    decoding="async"
-                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-              </div>
             </div>
           </div>
         </div>
