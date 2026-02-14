@@ -32,6 +32,11 @@ export default defineConfig({
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash][extname]',
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-accordion', '@radix-ui/react-tabs', '@radix-ui/react-tooltip', '@radix-ui/react-select'],
+          'vendor-motion': ['framer-motion'],
+        },
       },
     },
     cssMinify: 'lightningcss',

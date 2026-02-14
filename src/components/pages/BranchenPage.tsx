@@ -91,7 +91,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                 <div className="group aspect-square rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
                     src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=800&fit=crop&fm=webp&q=75"
-                    alt="Food Messestand"
+                    alt="Professioneller Messestand für die Food-Branche auf einer Lebensmittelmesse"
                     width="800"
                     height="800"
                     loading="lazy"
@@ -151,7 +151,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                 <div className="group aspect-square rounded-lg overflow-hidden lg:order-1 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
                     src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&h=800&fit=crop&fm=webp&q=75"
-                    alt="Versicherungs Messestand"
+                    alt="Messestand für die Versicherungs- und Finanzbranche auf einer Fachmesse"
                     width="800"
                     height="800"
                     loading="lazy"
@@ -211,7 +211,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                 <div className="group aspect-square rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
                     src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=800&fit=crop&fm=webp&q=75"
-                    alt="Industrie Messestand"
+                    alt="Messestand für die Industriebranche auf einer technischen Fachmesse"
                     width="800"
                     height="800"
                     loading="lazy"
