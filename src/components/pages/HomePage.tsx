@@ -142,7 +142,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 title: 'Böden & Möbel',
                 description: 'Hochwertige Ausstattung: Messeboden, Möblierung, Beleuchtung und Technik.',
                 sectionId: 'boeden-ausstattung',
-                image: 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=400&h=250&fit=crop'
+                image: '/images/boeden/holzboden-laminat-verlegung.svg'
               }
             ].map((service, index) => {
               const Icon = service.icon

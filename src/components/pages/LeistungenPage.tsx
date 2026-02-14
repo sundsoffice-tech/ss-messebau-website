@@ -180,8 +180,12 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
           <div id="boeden-ausstattung" className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start scroll-mt-20">
             <div className="group aspect-video rounded-lg overflow-hidden lg:order-2 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
               <img 
-                src="https://images.unsplash.com/photo-1556912998-c57cc6b63cd7?w=800&h=600&fit=crop" 
-                alt="Ausstattung"
+                src="/images/boeden/vinylboden-raum-einrichtung.svg" 
+                alt="Moderner Vinylboden in Grau mit stilvoller Einrichtung – Bodenverlegung von S&S Messebau"
+                width="800"
+                height="600"
+                loading="lazy"
+                decoding="async"
                 className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
               />
             </div>
@@ -214,6 +218,32 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 Ausstattung anfragen
                 <ArrowRight className="ml-2" />
               </Button>
+            </div>
+          </div>
+
+          {/* Furniture Examples Gallery */}
+          <div className="grid md:grid-cols-2 gap-6 mt-12">
+            <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <img 
+                src="/images/moebel/showroom-ausstellungsmoebel.svg" 
+                alt="Professioneller Showroom mit Ausstellungsmöbeln und Bodenproben – Möbelbau von S&S Messebau"
+                width="800"
+                height="600"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <img 
+                src="/images/moebel/individuelles-display-regal-led.svg" 
+                alt="Maßgefertigtes Display-Regal mit LED-Beleuchtung – individueller Möbelbau von S&S Messebau"
+                width="800"
+                height="600"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+              />
             </div>
           </div>
         </div>

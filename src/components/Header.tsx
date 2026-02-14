@@ -80,7 +80,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-green-50',
     features: ['Messeboden-Systeme', 'Möbel & Ausstattung', 'Beleuchtung'],
     gradient: 'from-green-500/10 to-green-600/5',
-    previewImage: 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=400&h=300&fit=crop',
+    previewImage: '/images/boeden/holzboden-laminat-verlegung.svg',
     sectionId: 'boeden-ausstattung'
   }
 ]
