@@ -160,8 +160,9 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   const [currentPath, setCurrentPath] = useState(() => parseDeepLink(window.location.hash).page)
   const megaMenuRef = useRef<HTMLDivElement>(null)
   const megaMenuTriggerRef = useRef<HTMLButtonElement>(null)
-  const sheetContentRef = useRef<HTMLDivElement>(null)
+  const tabletMegaMenuRef = useRef<HTMLDivElement>(null)
   const tabletMegaMenuTriggerRef = useRef<HTMLButtonElement>(null)
+  const sheetContentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const updatePath = () => setCurrentPath(parseDeepLink(window.location.hash).page)
@@ -186,16 +187,16 @@ export function Header({ onOpenInquiry }: HeaderProps) {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        megaMenuOpen &&
-        megaMenuRef.current &&
-        megaMenuTriggerRef.current &&
-        tabletMegaMenuTriggerRef.current &&
-        !megaMenuRef.current.contains(event.target as Node) &&
-        !megaMenuTriggerRef.current.contains(event.target as Node) &&
-        !tabletMegaMenuTriggerRef.current.contains(event.target as Node)
-      ) {
-        setMegaMenuOpen(false)
+      if (megaMenuOpen) {
+        const isClickOutside = 
+          (!megaMenuRef.current || !megaMenuRef.current.contains(event.target as Node)) &&
+          (!megaMenuTriggerRef.current || !megaMenuTriggerRef.current.contains(event.target as Node)) &&
+          (!tabletMegaMenuRef.current || !tabletMegaMenuRef.current.contains(event.target as Node)) &&
+          (!tabletMegaMenuTriggerRef.current || !tabletMegaMenuTriggerRef.current.contains(event.target as Node))
+        
+        if (isClickOutside) {
+          setMegaMenuOpen(false)
+        }
       }
     }
 
@@ -324,12 +325,22 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     if (e.key === 'Escape') {
       e.preventDefault()
       setMegaMenuOpen(false)
-      megaMenuTriggerRef.current?.focus()
+      // Focus the appropriate trigger button based on which menu is open
+      if (tabletMegaMenuRef.current?.contains(e.target as Node)) {
+        tabletMegaMenuTriggerRef.current?.focus()
+      } else {
+        megaMenuTriggerRef.current?.focus()
+      }
       return
     }
 
     // Enhanced keyboard navigation for mega menu items
-    const focusableElements = megaMenuRef.current?.querySelectorAll(
+    // Check both desktop and tablet menu refs
+    const menuRef = megaMenuRef.current?.contains(e.target as Node) 
+      ? megaMenuRef.current 
+      : tabletMegaMenuRef.current
+      
+    const focusableElements = menuRef?.querySelectorAll(
       'button:not([disabled]), a:not([disabled])'
     )
     
@@ -365,7 +376,10 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   }
 
   const handleMegaMenuBlur = (e: React.FocusEvent) => {
-    if (megaMenuRef.current && !megaMenuRef.current.contains(e.relatedTarget as Node)) {
+    const inDesktopMenu = megaMenuRef.current && megaMenuRef.current.contains(e.relatedTarget as Node)
+    const inTabletMenu = tabletMegaMenuRef.current && tabletMegaMenuRef.current.contains(e.relatedTarget as Node)
+    
+    if (!inDesktopMenu && !inTabletMenu) {
       setTimeout(() => setMegaMenuOpen(false), 150)
     }
   }
@@ -639,7 +653,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               {megaMenuOpen && (
                 <div
                   id="tablet-leistungen-mega-menu"
-                  ref={megaMenuRef}
+                  ref={tabletMegaMenuRef}
                   role="region"
                   aria-label="Leistungen Übersicht"
                   onKeyDown={handleMegaMenuKeyDown}
