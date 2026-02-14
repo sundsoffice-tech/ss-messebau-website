@@ -13,7 +13,7 @@ export function useCursorScale() {
 
     const handleMouseEnter = (e: Event) => {
       const target = e.target as HTMLElement
-      if (target instanceof HTMLElement && target.matches && target.matches('button:not([disabled]), a, [role="button"]')) {
+      if (target instanceof HTMLElement && target.matches('button:not([disabled]), a, [role="button"]')) {
         target.style.transform = 'scale(1.05)'
         target.style.transition = 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)'
       }
@@ -21,7 +21,7 @@ export function useCursorScale() {
 
     const handleMouseLeave = (e: Event) => {
       const target = e.target as HTMLElement
-      if (target instanceof HTMLElement && target.matches && target.matches('button:not([disabled]), a, [role="button"]')) {
+      if (target instanceof HTMLElement && target.matches('button:not([disabled]), a, [role="button"]')) {
         target.style.transform = ''
         target.style.transition = 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)'
       }

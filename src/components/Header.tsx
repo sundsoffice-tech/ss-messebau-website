@@ -695,7 +695,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <SheetContent side="left" className="w-[85vw] sm:w-80 px-0" ref={sheetContentRef}>
                 <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
                 <SheetDescription className="sr-only">
-                  Hauptnavigation für mobile Geräte mit Zugriff auf alle Seiten und Leistungen
+                  Main navigation for mobile devices with access to all pages and services
                 </SheetDescription>
                 <FocusScope loop trapped={mobileMenuOpen}>
                   <nav aria-label="Mobile Navigation">
