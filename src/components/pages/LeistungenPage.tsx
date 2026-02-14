@@ -183,8 +183,8 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
               <div className="group aspect-video rounded-lg overflow-hidden lg:order-2 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                 <img 
-                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop&q=80" 
-                  alt="Moderner Messestand mit hochwertigem Vinylboden und stilvoller Möblierung – Bodenverlegung von S&S Messebau"
+                  src="/images/boeden/vinylboden-raum-einrichtung.svg" 
+                  alt="Moderner Vinylboden in Grau mit stilvoller Einrichtung – Bodenverlegung von S&S Messebau"
                   width="800"
                   height="600"
                   loading="lazy"
@@ -347,8 +347,8 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                   <img 
-                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop&q=80" 
-                    alt="Moderner Showroom mit hochwertigen Ausstellungsmöbeln und Präsentationsflächen – Möbelbau von S&S Messebau"
+                    src="/images/moebel/showroom-ausstellungsmoebel.svg" 
+                    alt="Professioneller Showroom mit Ausstellungsmöbeln und Bodenproben – Möbelbau von S&S Messebau"
                     width="800"
                     height="600"
                     loading="lazy"
@@ -358,8 +358,8 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 </div>
                 <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                   <img 
-                    src="https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?w=800&h=600&fit=crop&q=80" 
-                    alt="Maßgefertigtes Display-Regal mit integrierter LED-Beleuchtung – individueller Möbelbau von S&S Messebau"
+                    src="/images/moebel/individuelles-display-regal-led.svg" 
+                    alt="Maßgefertigtes Display-Regal mit LED-Beleuchtung – individueller Möbelbau von S&S Messebau"
                     width="800"
                     height="600"
                     loading="lazy"
