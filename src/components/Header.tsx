@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, memo } from 'react'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet'
 import { FocusScope } from '@radix-ui/react-focus-scope'
 import { 
   List, 
@@ -220,12 +220,13 @@ export function Header({ onOpenInquiry }: HeaderProps) {
         isDragging = true
       }
 
-      if (isDragging && deltaX > 0) {
+      // For left-side sheet, allow negative deltaX (swipe left to close)
+      if (isDragging && deltaX < 0) {
         e.preventDefault()
         sheetContent.style.transform = `translateX(${deltaX}px)`
         sheetContent.style.transition = 'none'
         
-        const opacity = Math.max(0, 1 - (deltaX / (window.innerWidth * 0.5)))
+        const opacity = Math.max(0, 1 - (Math.abs(deltaX) / (window.innerWidth * 0.5)))
         const overlay = document.querySelector('[data-slot="sheet-overlay"]') as HTMLElement
         if (overlay) {
           overlay.style.opacity = opacity.toString()
@@ -250,7 +251,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
         overlay.style.transition = 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
       }
 
-      if (deltaX > threshold) {
+      // For left-side sheet, close if swiped left beyond threshold
+      if (deltaX < -threshold) {
         setMobileMenuOpen(false)
       } else {
         sheetContent.style.transform = ''
@@ -690,7 +692,11 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   <List className="h-6 w-6" aria-hidden="true" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[85vw] sm:w-80 px-0" ref={sheetContentRef}>
+              <SheetContent side="left" className="w-[85vw] sm:w-80 px-0" ref={sheetContentRef}>
+                <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
+                <SheetDescription className="sr-only">
+                  Hauptnavigation für mobile Geräte mit Zugriff auf alle Seiten und Leistungen
+                </SheetDescription>
                 <FocusScope loop trapped={mobileMenuOpen}>
                   <nav aria-label="Mobile Navigation">
                     <div className="flex items-center px-4 mb-6 pt-2">
