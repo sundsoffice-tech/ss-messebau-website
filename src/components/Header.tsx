@@ -98,6 +98,7 @@ const PRIMARY_NAV = [
   { label: 'Referenzen', path: '/referenzen', icon: Images },
 ]
 
+// SECONDARY_NAV: Additional pages, rendered separately in mobile with visual separator
 const SECONDARY_NAV = [
   { label: 'Über uns', path: '/ueber-uns', icon: Users },
   { label: 'Ablauf', path: '/ablauf', icon: Path },
@@ -798,7 +799,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                       <Button 
                         variant="ghost" 
                         size="sm"
-                        className="h-11 w-11 p-0 rounded-full min-h-[44px] min-w-[44px]"
+                        className="p-0 rounded-full min-h-[44px] min-w-[44px]"
                         aria-label="Menü schließen"
                       >
                         <X className="h-5 w-5" aria-hidden="true" />
