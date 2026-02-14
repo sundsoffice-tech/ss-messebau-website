@@ -10,6 +10,8 @@ interface LeistungenPageProps {
 export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
   useSectionObserver([
     'messebau',
+    'touren',
+    'trockenbau',
     'eventbau',
     'ladenbau',
     'boeden-ausstattung'
@@ -83,6 +85,57 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 </div>
               </CardContent>
             </Card>
+          </div>
+
+          <div id="touren" className="py-12 md:py-16 scroll-mt-20">
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Touren & wiederkehrende Messeauftritte</h2>
+                <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  Sie bestreiten mehrere kleinere Messen pro Jahr oder führen Roadshows durch? Wir bieten Ihnen skalierbare, wiederverwendbare Systemlösungen, die zentral ab NRW koordiniert werden.
+                </p>
+                <h3 className="text-xl font-semibold mb-4">Ihre Vorteile:</h3>
+                <div className="space-y-2.5 md:space-y-3 mb-6">
+                  {[
+                    'Zentrale Logistik ab NRW – kurze Wege, schnelle Reaktionszeiten',
+                    'Modulare Systemstände für flexible Standgrößen',
+                    'Wiederverwendbare Komponenten senken Ihre Kosten',
+                    'Kostenoptimierte Routen- und Transportplanung',
+                    'Bundesweite Verfügbarkeit für DACH-Region'
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-2.5 md:gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
+                      <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  Touren-Paket anfragen
+                  <ArrowRight className="ml-2" />
+                </Button>
+              </div>
+              <Card>
+                <CardContent className="p-5 md:p-8">
+                  <h3 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Beispiel-Pakete für Touren</h3>
+                  <div className="space-y-4">
+                    {[
+                      { name: 'Starter-Tour', desc: '3×3m Systemstand, 5 Messen/Jahr', price: 'ab 12.500€/Jahr' },
+                      { name: 'Professional-Tour', desc: '5×3m Systemstand, 10 Messen/Jahr', price: 'ab 22.000€/Jahr' },
+                      { name: 'Enterprise-Tour', desc: 'Individuelle Lösungen für große Roadshows', price: 'auf Anfrage' }
+                    ].map((pkg, index) => (
+                      <div key={index} className="border-l-4 border-primary pl-4">
+                        <p className="font-semibold">{pkg.name}</p>
+                        <p className="text-sm text-muted-foreground">{pkg.desc}</p>
+                        <p className="text-sm font-semibold text-primary mt-1">{pkg.price}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-4">
+                    Preise inkl. Logistik und Aufbau, zzgl. MwSt.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           <div id="eventbau" className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12 md:mb-16 scroll-mt-20">
@@ -438,7 +491,57 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         </div>
       </section>
 
-      <section className="py-12 md:py-16 bg-muted">
+      <section id="trockenbau" className="py-12 md:py-16 bg-muted scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Trockenbau & Innenausbau</h2>
+              <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                Neben unserem Messebau-Know-how bieten wir Ihnen professionelle Trockenbau- und Ausbauprojekte: Shops, Büros, Showrooms – Planung und Ausführung aus einer Hand durch unseren großen Pool an Facharbeitern.
+              </p>
+              <h3 className="text-xl font-semibold mb-4">Das können wir für Sie tun:</h3>
+              <div className="space-y-2.5 md:space-y-3 mb-6">
+                {[
+                  'Ausbau von Shops, Büros und Showrooms',
+                  'Planung und Ausführung durch erfahrene Facharbeiter',
+                  'Einsatz desselben Monteur-Teams wie im Messebau',
+                  'Kostenoptimierte Lösungen für langfristige Projekte',
+                  'Keine unnötigen Kosten – effizient und termingerecht'
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center gap-2.5 md:gap-3">
+                    <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
+                    <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                  </div>
+                ))}
+              </div>
+              <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                Trockenbau-Projekt anfragen
+                <ArrowRight className="ml-2" />
+              </Button>
+            </div>
+            <Card>
+              <CardContent className="p-5 md:p-8">
+                <h3 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Unsere Ausbau-Leistungen</h3>
+                <div className="space-y-4">
+                  {[
+                    { name: 'Shop-Ausbau', desc: 'Verkaufsflächen, Theken, Präsentationswände' },
+                    { name: 'Büro-Ausbau', desc: 'Trennwände, Akustiklösungen, Deckenausbau' },
+                    { name: 'Showroom-Gestaltung', desc: 'Produktpräsentationen, Beleuchtungskonzepte' },
+                    { name: 'Innenausbau', desc: 'Individuelle Raumgestaltung nach Ihren Wünschen' }
+                  ].map((category, index) => (
+                    <div key={index} className="border-l-4 border-primary pl-4">
+                      <p className="font-semibold">{category.name}</p>
+                      <p className="text-sm text-muted-foreground">{category.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 md:py-16">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-10 md:mb-12">
