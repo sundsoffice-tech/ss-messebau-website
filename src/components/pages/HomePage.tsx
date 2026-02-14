@@ -50,27 +50,19 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         <div className="absolute inset-0 hero-overlay" />
         <picture>
           <source
-            type="image/avif"
-            srcSet="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=640&fm=avif&q=75&auto=format 640w,
-                    https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1024&fm=avif&q=75&auto=format 1024w,
-                    https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1920&fm=avif&q=75&auto=format 1920w"
-            sizes="100vw"
-          />
-          <source
             type="image/webp"
-            srcSet="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=640&fm=webp&q=75&auto=format 640w,
-                    https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1024&fm=webp&q=75&auto=format 1024w,
-                    https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1920&fm=webp&q=75&auto=format 1920w"
+            srcSet="/images/hero-messebau-startseite.webp 640w,
+                    /images/hero-messebau-startseite.webp 1024w,
+                    /images/hero-messebau-startseite.webp 1920w"
             sizes="100vw"
           />
           <img
-            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1024&q=75&auto=format"
-            alt=""
-            role="presentation"
-            aria-hidden="true"
+            src="/images/hero-messebau-startseite.jpg"
+            alt="Professioneller Messebau von S&S Messebau – Messestände, Events und Ladenbau aus Mönchengladbach"
             width="1920"
             height="1080"
             className="absolute inset-0 w-full h-full object-cover opacity-20"
+            style={{ objectPosition: 'center 25%' }}
             loading="eager"
             fetchPriority="high"
             decoding="async"
