@@ -1,0 +1,13 @@
+PLACEHOLDER IMAGES - TO BE REPLACED
+
+These placeholder files need to be replaced with actual project photos:
+
+1. holzboden-laminat-verlegung.webp (or .jpg)
+   - Description: High-quality wooden floor/laminate in a room with sloped ceiling
+   - Alt text: "Professionell verlegter Holzboden mit natürlicher Maserung – Bodenbelag von S&S Messebau"
+
+2. vinylboden-raum-einrichtung.webp (or .jpg)
+   - Description: Gray vinyl flooring with modern dining table and upholstered chairs
+   - Alt text: "Moderner Vinylboden in Grau mit stilvoller Einrichtung – Bodenverlegung von S&S Messebau"
+
+Please replace these with actual WebP or JPG images of appropriate size (recommended 800x600 or larger).
