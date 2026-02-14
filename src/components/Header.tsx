@@ -223,7 +223,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
       const deltaY = Math.abs(e.touches[0].clientY - startY)
       const absDeltaX = Math.abs(deltaX)
       
-      // Vertikales Scrollen hat Vorrang
+      // Vertical scrolling takes priority
       if (!isDragging && deltaY > 30) {
         return
       }
@@ -857,7 +857,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         Banner konfigurieren
                       </Button>
 
-                      {/* Visuelle Trennung zwischen Leistungen und Seiten-Navigation */}
+                      {/* Visual separation between services and page navigation */}
                       <div className="my-3 border-t" />
                       <div className="px-3 mb-2 text-sm font-semibold text-muted-foreground">
                         Seiten
@@ -899,7 +899,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         )
                       })}
 
-                      {/* Separator zwischen Haupt- und Zusatz-Navigation */}
+                      {/* Separator between primary and secondary navigation */}
                       <div className="mt-2 mb-2 border-t pt-3">
                         <div className="px-3 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                           Weitere
