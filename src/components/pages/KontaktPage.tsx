@@ -430,6 +430,7 @@ Antworte jetzt:`
                     type="date"
                     value={formData.wunschtermin}
                     onChange={(e) => setFormData({ ...formData, wunschtermin: e.target.value })}
+                    min={new Date().toISOString().split('T')[0]}
                     className="h-11 sm:h-10"
                   />
                 </div>

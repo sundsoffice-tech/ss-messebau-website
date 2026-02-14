@@ -20,7 +20,7 @@ function AnimatedNumber({ value, suffix, isVisible }: { value: number; suffix: s
     if (!isVisible) return
     const duration = 2000
     let startTime: number | null = null
-    let rafId: number
+    let rafId = 0
 
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp

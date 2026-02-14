@@ -20,7 +20,7 @@ export function LogoWall() {
               key={logo.name}
               className="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition-opacity duration-300"
             >
-              <span className="text-base sm:text-lg font-bold tracking-tight text-foreground/70">{logo.name}</span>
+              <span className="text-base sm:text-lg font-bold tracking-tight text-foreground">{logo.name}</span>
               <span className="text-[10px] text-muted-foreground uppercase tracking-widest">{logo.branche}</span>
             </div>
           ))}
