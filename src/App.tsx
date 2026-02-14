@@ -44,6 +44,10 @@ function App() {
 
   const t = getTranslation(lang)
 
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
+
   useSmoothScrollLinks()
   useCursorScale() // Add cursor scale effect
   usePageMeta(currentPage)

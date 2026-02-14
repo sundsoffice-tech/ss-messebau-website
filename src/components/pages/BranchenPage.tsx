@@ -9,6 +9,7 @@ import { parseDeepLink } from '@/lib/deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { DEMO_REFERENCES } from '@/lib/demo-data'
 import { CaseStudyCard } from '@/components/ui/CaseStudyCard'
+import { useTranslation } from '@/lib/i18n'
 
 interface BranchenPageProps {
   onOpenInquiry: () => void
@@ -17,6 +18,7 @@ interface BranchenPageProps {
 export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
   const { scrollToSection } = useDeepLinking('/branchen')
   const [activeTab, setActiveTab] = useState<string>('food')
+  const { t } = useTranslation()
   
   useSectionObserver(['food', 'versicherungen', 'industrie'])
 
@@ -282,18 +284,18 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
           <div className="text-center mb-10 md:mb-12">
             <div className="flex items-center justify-center gap-2.5 mb-3">
               <Leaf className="h-8 w-8 text-green-600" weight="duotone" />
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">Nachhaltiger Messebau für jede Branche</h2>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">{t('sustainability.branchen.title')}</h2>
             </div>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Umweltbewusster Messeauftritt – ohne Kompromisse bei Qualität und Wirkung.
+              {t('sustainability.branchen.subtitle')}
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Recycle, title: 'Wiederverwendbare Systeme', desc: 'Modulare Stände, die mehrfach eingesetzt werden – spart bis zu 60 % Material.' },
-              { icon: TreeEvergreen, title: 'Nachhaltige Materialien', desc: 'FSC-Holz, LED-Beleuchtung und recycelbare Werkstoffe als Standard.' },
-              { icon: Truck, title: 'Effiziente Logistik', desc: 'Regionale Partner, gebündelte Transporte und CO₂-optimierte Planung.' },
-              { icon: Leaf, title: 'Kosteneinsparung', desc: 'Nachhaltige Systeme amortisieren sich ab der 2. Messe deutlich.' },
+              { icon: Recycle, title: t('sustainability.reuse'), desc: t('sustainability.branchen.reuse.desc') },
+              { icon: TreeEvergreen, title: t('sustainability.materials'), desc: t('sustainability.branchen.materials.desc') },
+              { icon: Truck, title: t('sustainability.logistics'), desc: t('sustainability.branchen.logistics.desc') },
+              { icon: Leaf, title: t('sustainability.savings'), desc: t('sustainability.branchen.savings.desc') },
             ].map((item, index) => {
               const Icon = item.icon
               return (

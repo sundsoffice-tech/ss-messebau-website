@@ -35,16 +35,16 @@ function calculatePrice(size: Size, level: Level): { min: number; max: number } 
   }
 }
 
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value)
-}
-
 export function StandCalculator({ onOpenInquiry }: StandCalculatorProps) {
-  const { t } = useTranslation()
+  const { t, lang } = useTranslation()
   const [step, setStep] = useState(1)
   const [industry, setIndustry] = useState<Industry | null>(null)
   const [size, setSize] = useState<Size | null>(null)
   const [level, setLevel] = useState<Level | null>(null)
+
+  const formatCurrency = (value: number): string => {
+    return new Intl.NumberFormat(lang === 'en' ? 'en-DE' : 'de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value)
+  }
 
   const industries: { key: Industry; label: string }[] = [
     { key: 'food', label: t('calculator.industry.food') },

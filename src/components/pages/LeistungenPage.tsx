@@ -4,12 +4,14 @@ import { Warehouse, CalendarDot, Storefront, Armchair, ArrowRight, CheckCircle, 
 import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { StandCalculator } from '@/components/ui/StandCalculator'
+import { useTranslation } from '@/lib/i18n'
 
 interface LeistungenPageProps {
   onOpenInquiry: () => void
 }
 
 export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
+  const { t } = useTranslation()
   useSectionObserver([
     'messebau',
     'touren',
@@ -638,22 +640,21 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
           <div className="max-w-3xl mx-auto text-center">
             <div className="flex items-center justify-center gap-2.5 mb-4">
               <CubeTransparent className="h-10 w-10" weight="duotone" />
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">Kostenlose 3D-Visualisierung in 5 Tagen</h2>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">{t('cta.free3d')}</h2>
             </div>
             <p className="text-base md:text-lg opacity-90 mb-6 md:mb-8 leading-relaxed">
-              Fordern Sie jetzt Ihre individuelle 3D-Visualisierung an – völlig kostenlos und unverbindlich. 
-              Innerhalb von 5 Werktagen erhalten Sie eine fotorealistische Darstellung Ihres Messestands.
+              {t('cta.free3d.desc')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" onClick={onOpenInquiry} className="bg-white text-primary hover:bg-white/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg font-semibold">
-                Jetzt 3D-Visualisierung anfordern
+                {t('cta.free3d.button')}
                 <ArrowRight className="ml-2" />
               </Button>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4 mt-6 text-sm opacity-80">
-              <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4" weight="fill" /> 100 % kostenlos</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4" weight="fill" /> Unverbindlich</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4" weight="fill" /> In 5 Werktagen</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4" weight="fill" /> {t('cta.free3d.free')}</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4" weight="fill" /> {t('cta.free3d.nonbinding')}</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4" weight="fill" /> {t('cta.free3d.days')}</span>
             </div>
           </div>
         </div>
@@ -665,18 +666,18 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
           <div className="text-center mb-10 md:mb-12">
             <div className="flex items-center justify-center gap-2.5 mb-3">
               <Leaf className="h-8 w-8 text-green-600" weight="duotone" />
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">Nachhaltiger Messebau</h2>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">{t('sustainability.title')}</h2>
             </div>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Umweltbewusst, kosteneffizient, zukunftsorientiert – unser Ansatz für nachhaltigen Messebau.
+              {t('sustainability.subtitle')}
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {[
-              { icon: Recycle, title: 'Wiederverwendbare Systeme', desc: 'Modulare Standsysteme, die sich über mehrere Messen nutzen lassen – das spart Material und Kosten.' },
-              { icon: TreeEvergreen, title: 'Nachhaltige Materialien', desc: 'FSC-zertifiziertes Holz, LED-Beleuchtung und recycelbare Werkstoffe für einen umweltbewussten Auftritt.' },
-              { icon: Truck, title: 'Effiziente Logistik', desc: 'Optimierte Transportplanung und gebündelte Lieferungen reduzieren CO₂-Emissionen.' },
-              { icon: Leaf, title: 'Kosteneinsparung', desc: 'Ab der 2. Messe amortisieren sich nachhaltige Systeme – gut für Umwelt und Budget.' },
+              { icon: Recycle, title: t('sustainability.reuse'), desc: t('sustainability.reuse.desc') },
+              { icon: TreeEvergreen, title: t('sustainability.materials'), desc: t('sustainability.materials.desc') },
+              { icon: Truck, title: t('sustainability.logistics'), desc: t('sustainability.logistics.desc') },
+              { icon: Leaf, title: t('sustainability.savings'), desc: t('sustainability.savings.desc') },
             ].map((item, index) => {
               const Icon = item.icon
               return (
