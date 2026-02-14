@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Warehouse, CalendarDot, Storefront, Armchair, ArrowRight, CheckCircle, Leaf, Recycle, TreeEvergreen, Truck, CubeTransparent } from '@phosphor-icons/react'
+import { Warehouse, CalendarDot, Storefront, Armchair, ArrowRight, CheckCircle, Leaf, Recycle, TreeEvergreen, Truck, CubeTransparent, Lightning, Crosshair, Package, ChatCircleDots, TrendUp } from '@phosphor-icons/react'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { StandCalculator } from '@/components/ui/StandCalculator'
@@ -13,92 +13,155 @@ interface LeistungenPageProps {
 export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
   const { t } = useTranslation()
   useSectionObserver([
-    'messebau',
-    'touren',
-    'showrooms',
-    'eventbau',
-    'ladenbau',
-    'boeden-ausstattung'
+    'brand-activation',
+    'digital-experience',
+    'ausstattung-ambiente',
+    'methodik',
+    'erfolge'
   ])
 
   return (
     <div>
+      {/* Hero Section – Narrative Claim */}
       <section className="py-12 md:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">Messebau-Leistungen – Full-Service von 20–200 m²</h1>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">Wir schaffen Räume, die Ihre Marke verkaufen.</h1>
           <p className="text-base md:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
-            Von der ersten Idee bis zum professionellen Abbau – wir begleiten Sie durch alle Phasen Ihres Messeprojekts. 
-            Unser Full-Service-Ansatz spart Zeit, Kosten und Nerven.
+            S&S Messebau – Ihre Erlebnis-Architekten. Wir sind nicht einfach Standbauer, sondern strategische Partner
+            für Markenräume, die begeistern, überzeugen und verkaufen. Von der Messe über den Showroom bis zum Event.
           </p>
         </div>
       </section>
 
+      {/* Solution Module 1: Brand Activation */}
       <section className="py-12 md:py-16">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <div id="messebau" className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12 md:mb-16 scroll-mt-20">
-            <div>
-              <div className="flex items-center gap-3 mb-4 md:mb-6">
-                <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
-                  <Warehouse className="h-6 w-6 md:h-7 md:w-7 text-primary" />
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold leading-tight">Messebau</h2>
-              </div>
-              <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                Professionelle Messestände von 20 bis 200 qm für Messen bundesweit und international. 
-                Ob Systemstand oder individuelle Konstruktion – wir realisieren Ihren perfekten Messeauftritt.
+          <div id="brand-activation" className="scroll-mt-20 space-y-12 md:space-y-16">
+            <div className="text-center mb-8 md:mb-10">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Brand Activation</h2>
+              <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                So aktiviert S&S Ihre Marke auf Messen und Events – mit Messeständen, Bühnenbauten und skalierbaren Touren-Paketen.
               </p>
-              <div className="space-y-2.5 md:space-y-3 mb-6">
-                {[
-                  'Konzeption & 3D-Design',
-                  'Produktion & Bau',
-                  'Logistik & Transport',
-                  'Auf- und Abbau vor Ort',
-                  'Lagerung für Wiederverwendung'
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center gap-2.5 md:gap-3">
-                    <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
-                    <span className="text-sm md:text-base leading-relaxed">{item}</span>
-                  </div>
-                ))}
-              </div>
-              <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                Messestand anfragen
-                <ArrowRight className="ml-2" />
-              </Button>
             </div>
-            <Card className="mt-8 lg:mt-0">
-              <CardContent className="p-5 md:p-8">
-                <h3 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Unser Messebau-Ablauf</h3>
-                <div className="space-y-5 md:space-y-6">
+
+            {/* Messebau */}
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+              <div>
+                <div className="flex items-center gap-3 mb-4 md:mb-6">
+                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+                    <Warehouse className="h-6 w-6 md:h-7 md:w-7 text-primary" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Messebau</h3>
+                </div>
+                <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  Professionelle Messestände von 20 bis 200 qm für Messen bundesweit und international.
+                  Ob Systemstand oder individuelle Konstruktion – wir realisieren Ihren perfekten Messeauftritt.
+                </p>
+                <div className="space-y-2.5 md:space-y-3 mb-6">
                   {[
-                    { step: '1', title: 'Beratung & Konzept', desc: 'Wir analysieren Ihre Anforderungen und entwickeln erste Ideen' },
-                    { step: '2', title: 'Design & Planung', desc: 'Konzeptentwicklung, Materialauswahl, technische Planung' },
-                    { step: '3', title: 'Produktion', desc: 'Hochwertige Fertigung in unseren Partnerwerkstätten' },
-                    { step: '4', title: 'Aufbau & Betreuung', desc: 'Pünktlicher Aufbau, technischer Support während der Messe' }
+                    'Konzeption & 3D-Design',
+                    'Produktion & Bau',
+                    'Logistik & Transport',
+                    'Auf- und Abbau vor Ort',
+                    'Lagerung für Wiederverwendung'
                   ].map((item, index) => (
-                    <div key={index} className="flex gap-3 md:gap-4">
-                      <div className="flex h-9 w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm md:text-base">
-                        {item.step}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold mb-1 text-sm md:text-base">{item.title}</h4>
-                        <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-                      </div>
+                    <div key={index} className="flex items-center gap-2.5 md:gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
+                      <span className="text-sm md:text-base leading-relaxed">{item}</span>
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+                <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  Messestand anfragen
+                  <ArrowRight className="ml-2" />
+                </Button>
+              </div>
+              <Card className="mt-8 lg:mt-0">
+                <CardContent className="p-5 md:p-8">
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Unser Messebau-Ablauf</h4>
+                  <div className="space-y-5 md:space-y-6">
+                    {[
+                      { step: '1', title: 'Beratung & Konzept', desc: 'Wir analysieren Ihre Anforderungen und entwickeln erste Ideen' },
+                      { step: '2', title: 'Design & Planung', desc: 'Konzeptentwicklung, Materialauswahl, technische Planung' },
+                      { step: '3', title: 'Produktion', desc: 'Hochwertige Fertigung in unseren Partnerwerkstätten' },
+                      { step: '4', title: 'Aufbau & Betreuung', desc: 'Pünktlicher Aufbau, technischer Support während der Messe' }
+                    ].map((item, index) => (
+                      <div key={index} className="flex gap-3 md:gap-4">
+                        <div className="flex h-9 w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm md:text-base">
+                          {item.step}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold mb-1 text-sm md:text-base">{item.title}</h4>
+                          <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-          <div id="touren" className="py-12 md:py-16 scroll-mt-20">
+            {/* Eventbau */}
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+              <Card className="lg:order-2 mt-8 lg:mt-0">
+                <CardContent className="p-5 md:p-8">
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Event-Typ-Beispiele</h4>
+                  <div className="space-y-3 md:space-y-4">
+                    {[
+                      'Firmenjubiläen & Galas',
+                      'Produktpräsentationen',
+                      'Konferenzen & Tagungen',
+                      'Outdoor-Events & Festivals',
+                      'Pop-Up-Stores'
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center gap-2.5 md:gap-3 p-3 md:p-3.5 rounded-lg bg-muted">
+                        <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
+                        <span className="font-medium text-sm md:text-base">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+              <div className="lg:order-1">
+                <div className="flex items-center gap-3 mb-4 md:mb-6">
+                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+                    <CalendarDot className="h-6 w-6 md:h-7 md:w-7 text-primary" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Eventbau & Bühnen</h3>
+                </div>
+                <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  Beeindruckende Event-Inszenierungen: Von Bühnenbauten über Präsentationsflächen bis zu kompletten Event-Ausstattungen.
+                  Wir machen Ihre Veranstaltung zum unvergesslichen Erlebnis.
+                </p>
+                <div className="space-y-2.5 md:space-y-3 mb-6">
+                  {[
+                    'Bühnenbau & Podeste',
+                    'Event-Architektur',
+                    'Licht- und Tontechnik-Integration',
+                    'Dekoration & Ausstattung',
+                    'Sicherheitskonzepte'
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-2.5 md:gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
+                      <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  Event planen
+                  <ArrowRight className="ml-2" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Touren */}
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Touren & wiederkehrende Messeauftritte</h2>
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Touren & wiederkehrende Messeauftritte</h3>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
                   Sie bestreiten mehrere kleinere Messen pro Jahr oder führen Roadshows durch? Wir bieten Ihnen skalierbare, wiederverwendbare Systemlösungen, die zentral ab NRW koordiniert werden.
                 </p>
-                <h3 className="text-xl font-semibold mb-4">Ihre Vorteile:</h3>
+                <h4 className="text-xl font-semibold mb-4">Ihre Vorteile:</h4>
                 <div className="space-y-2.5 md:space-y-3 mb-6">
                   {[
                     'Zentrale Logistik ab NRW – kurze Wege, schnelle Reaktionszeiten',
@@ -120,7 +183,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               </div>
               <Card>
                 <CardContent className="p-5 md:p-8">
-                  <h3 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Beispiel-Pakete für Touren</h3>
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Beispiel-Pakete für Touren</h4>
                   <div className="space-y-4">
                     {[
                       { name: 'Starter-Tour', desc: '3×3m Systemstand, 5 Messen/Jahr', price: 'ab 12.500€/Jahr' },
@@ -141,124 +204,145 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               </Card>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div id="eventbau" className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12 md:mb-16 scroll-mt-20">
-            <Card className="lg:order-2 mt-8 lg:mt-0">
-              <CardContent className="p-5 md:p-8">
-                <h3 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Event-Typ-Beispiele</h3>
-                <div className="space-y-3 md:space-y-4">
+      {/* Solution Module 2: Digital Experience & Showrooms */}
+      <section className="py-12 md:py-16 bg-muted">
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+          <div id="digital-experience" className="scroll-mt-20 space-y-12 md:space-y-16">
+            <div className="text-center mb-8 md:mb-10">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Digital Experience & Showrooms</h2>
+              <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                So schafft S&S permanente Markenräume – vom Showroom über den Ladenbau bis zum Brand Space, der Ihre Geschichte erzählt.
+              </p>
+            </div>
+
+            {/* Showrooms & Brand Spaces */}
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+              <div>
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Showrooms & Brand Spaces</h3>
+                <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  Neben unserem Messebau-Know-how realisieren wir professionelle Showrooms, Brand Spaces und Markenerlebnisräume – Planung und Ausführung aus einer Hand durch unseren großen Pool an Facharbeitern.
+                </p>
+                <h4 className="text-xl font-semibold mb-4">Das können wir für Sie tun:</h4>
+                <div className="space-y-2.5 md:space-y-3 mb-6">
                   {[
-                    'Firmenjubiläen & Galas',
-                    'Produktpräsentationen',
-                    'Konferenzen & Tagungen',
-                    'Outdoor-Events & Festivals',
-                    'Pop-Up-Stores'
+                    'Showrooms, Brand Spaces und Erlebnisräume',
+                    'Planung und Ausführung durch erfahrene Facharbeiter',
+                    'Einsatz desselben Monteur-Teams wie im Messebau',
+                    'Kostenoptimierte Lösungen für langfristige Projekte',
+                    'Keine unnötigen Kosten – effizient und termingerecht'
                   ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-2.5 md:gap-3 p-3 md:p-3.5 rounded-lg bg-muted">
+                    <div key={index} className="flex items-center gap-2.5 md:gap-3">
                       <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
-                      <span className="font-medium text-sm md:text-base">{item}</span>
+                      <span className="text-sm md:text-base leading-relaxed">{item}</span>
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-            <div className="lg:order-1">
-              <div className="flex items-center gap-3 mb-4 md:mb-6">
-                <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
-                  <CalendarDot className="h-6 w-6 md:h-7 md:w-7 text-primary" />
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold leading-tight">Eventbau & Bühnen</h2>
+                <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  Showroom-Projekt anfragen
+                  <ArrowRight className="ml-2" />
+                </Button>
               </div>
-              <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                Beeindruckende Event-Inszenierungen: Von Bühnenbauten über Präsentationsflächen bis zu kompletten Event-Ausstattungen. 
-                Wir machen Ihre Veranstaltung zum unvergesslichen Erlebnis.
-              </p>
-              <div className="space-y-2.5 md:space-y-3 mb-6">
-                {[
-                  'Bühnenbau & Podeste',
-                  'Event-Architektur',
-                  'Licht- und Tontechnik-Integration',
-                  'Dekoration & Ausstattung',
-                  'Sicherheitskonzepte'
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center gap-2.5 md:gap-3">
-                    <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
-                    <span className="text-sm md:text-base leading-relaxed">{item}</span>
+              <Card>
+                <CardContent className="p-5 md:p-8">
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Unsere Ausbau-Leistungen</h4>
+                  <div className="space-y-4">
+                    {[
+                      { name: 'Shop-Ausbau', desc: 'Verkaufsflächen, Theken, Präsentationswände' },
+                      { name: 'Büro-Ausbau', desc: 'Trennwände, Akustiklösungen, Deckenausbau' },
+                      { name: 'Showroom-Gestaltung', desc: 'Produktpräsentationen, Beleuchtungskonzepte' },
+                      { name: 'Innenausbau', desc: 'Individuelle Raumgestaltung nach Ihren Wünschen' }
+                    ].map((category, index) => (
+                      <div key={index} className="border-l-4 border-primary pl-4">
+                        <p className="font-semibold">{category.name}</p>
+                        <p className="text-sm text-muted-foreground">{category.desc}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                Event planen
-                <ArrowRight className="ml-2" />
-              </Button>
+                </CardContent>
+              </Card>
             </div>
-          </div>
 
-          <div id="ladenbau" className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12 md:mb-16 scroll-mt-20">
-            <div>
-              <div className="flex items-center gap-3 mb-4 md:mb-6">
-                <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
-                  <Storefront className="h-6 w-6 md:h-7 md:w-7 text-primary" />
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold leading-tight">Ladenbau & Showrooms</h2>
-              </div>
-              <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                Permanente Verkaufs- und Präsentationsflächen, die Ihre Produkte optimal in Szene setzen. 
-                Vom Konzept bis zur schlüsselfertigen Übergabe – professioneller Ladenbau mit Wiedererkennungswert.
-              </p>
-              <div className="space-y-2.5 md:space-y-3 mb-6">
-                {[
-                  'Individuelle Ladenkonzepte',
-                  'Showroom-Ausstellungssysteme',
-                  'Verkaufsflächen & Produktpräsentation',
-                  'Maßgefertigte Möbel & Regalsysteme',
-                  'LED-Beleuchtung & Digitale Displays',
-                  'Corporate Identity Integration'
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center gap-2.5 md:gap-3">
-                    <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
-                    <span className="text-sm md:text-base leading-relaxed">{item}</span>
+            {/* Ladenbau */}
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+              <div>
+                <div className="flex items-center gap-3 mb-4 md:mb-6">
+                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+                    <Storefront className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                   </div>
-                ))}
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Ladenbau & Showrooms</h3>
+                </div>
+                <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  Permanente Verkaufs- und Präsentationsflächen, die Ihre Produkte optimal in Szene setzen.
+                  Vom Konzept bis zur schlüsselfertigen Übergabe – professioneller Ladenbau mit Wiedererkennungswert.
+                </p>
+                <div className="space-y-2.5 md:space-y-3 mb-6">
+                  {[
+                    'Individuelle Ladenkonzepte',
+                    'Showroom-Ausstellungssysteme',
+                    'Verkaufsflächen & Produktpräsentation',
+                    'Maßgefertigte Möbel & Regalsysteme',
+                    'LED-Beleuchtung & Digitale Displays',
+                    'Corporate Identity Integration'
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-2.5 md:gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
+                      <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  Showroom anfragen
+                  <ArrowRight className="ml-2" />
+                </Button>
               </div>
-              <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                Showroom anfragen
-                <ArrowRight className="ml-2" />
-              </Button>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-6 lg:mt-0">
-              <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                <img 
-                  src="/images/ladenbau/ladenbau-display-regal-led-beleuchtung.jpg"
-                  alt="Maßgefertigtes Display-Regal mit LED-Beleuchtung und integriertem Monitor – Ladenbau von S&S Messebau"
-                  width="800"
-                  height="450"
-                  loading="lazy"
-                  decoding="async"
-                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                <img 
-                  src="/images/ladenbau/showroom-bodenproben-ausstellung.jpg"
-                  alt="Professioneller Showroom mit Bodenproben-Ausstellungssystem – Ladenbau und Messebau von S&S"
-                  width="800"
-                  height="450"
-                  loading="lazy"
-                  decoding="async"
-                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                />
+              <div className="grid grid-cols-2 gap-4 mt-6 lg:mt-0">
+                <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+                  <img
+                    src="/images/ladenbau/ladenbau-display-regal-led-beleuchtung.jpg"
+                    alt="Maßgefertigtes Display-Regal mit LED-Beleuchtung und integriertem Monitor – Ladenbau von S&S Messebau"
+                    width="800"
+                    height="450"
+                    loading="lazy"
+                    decoding="async"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+                  <img
+                    src="/images/ladenbau/showroom-bodenproben-ausstellung.jpg"
+                    alt="Professioneller Showroom mit Bodenproben-Ausstellungssystem – Ladenbau und Messebau von S&S"
+                    width="800"
+                    height="450"
+                    loading="lazy"
+                    decoding="async"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Böden & Ausstattung - World-Class Section */}
-          <div id="boeden-ausstattung" className="scroll-mt-20 space-y-12 md:space-y-16">
-            {/* Hero Section */}
+      {/* Solution Module 3: Ausstattung & Ambiente */}
+      <section className="py-12 md:py-16">
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+          <div id="ausstattung-ambiente" className="scroll-mt-20 space-y-12 md:space-y-16">
+            <div className="text-center mb-8 md:mb-10">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Ausstattung & Ambiente</h2>
+              <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                Das richtige Ambiente verkauft die Marke. Böden, Möbel und Technik – perfekt aufeinander abgestimmt für Ihren Markenraum.
+              </p>
+            </div>
+
+            {/* Böden & Ausstattung Hero */}
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
               <div className="lg:order-2 grid grid-cols-2 gap-4">
                 <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
-                  <img 
+                  <img
                     src="/images/boeden/besprechungsraum-vinylboden-moebel.jpg"
                     alt="Besprechungsraum mit modernem Vinylboden und hochwertigen Möbeln – Komplettausstattung von S&S Messebau"
                     width="800"
@@ -269,7 +353,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   />
                 </div>
                 <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                  <img 
+                  <img
                     src="/images/boeden/holzboden-laminat-verlegung-raum.jpg"
                     alt="Professionell verlegter Holz-Laminatboden in modernem Raum"
                     width="400"
@@ -280,7 +364,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   />
                 </div>
                 <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                  <img 
+                  <img
                     src="/images/boeden/kueche-hochglanz-marmor-led-beleuchtung.jpg"
                     alt="Moderne Küche mit Hochglanz-Fronten, Marmor-Rückwand und hochwertigem Fliesenboden"
                     width="400"
@@ -291,7 +375,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   />
                 </div>
                 <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                  <img 
+                  <img
                     src="/images/boeden/kueche-hochglanz-holz-arbeitsplatte.jpg"
                     alt="Einbauküche mit weißen Hochglanz-Fronten, dunkler Holz-Arbeitsplatte und modernem Fliesenboden"
                     width="400"
@@ -307,15 +391,15 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
                     <Armchair className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold leading-tight">Böden & Ausstattung</h2>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Böden & Ausstattung</h3>
                 </div>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Die perfekte Ergänzung für jeden Stand: Hochwertige Messeböden (Teppich, Vinyl, Parkett), 
-                  stilvolle Möblierung, professionelle Beleuchtung und moderne Technik. Von Messeständen 
+                  Die perfekte Ergänzung für jeden Stand: Hochwertige Messeböden (Teppich, Vinyl, Parkett),
+                  stilvolle Möblierung, professionelle Beleuchtung und moderne Technik. Von Messeständen
                   bis zu kompletten Küchen- und Raumausstattungen – wir liefern die Komplettlösung.
                 </p>
                 <div className="bg-primary/5 rounded-lg p-4 md:p-6 mb-6">
-                  <h3 className="font-semibold text-base md:text-lg mb-3">Unser Versprechen</h3>
+                  <h4 className="font-semibold text-base md:text-lg mb-3">Unser Versprechen</h4>
                   <div className="space-y-2.5 md:space-y-3">
                     {[
                       'Messeboden-Systeme (Teppich, Vinyl, Parkett)',
@@ -344,7 +428,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               <div className="text-center mb-8 md:mb-10">
                 <h3 className="text-2xl md:text-3xl font-bold mb-3">Premium Messeboden-Systeme</h3>
                 <p className="text-muted-foreground text-base md:text-lg max-w-3xl mx-auto">
-                  Wählen Sie aus verschiedenen hochwertigen Bodenbelägen – perfekt abgestimmt auf Ihr Standkonzept, 
+                  Wählen Sie aus verschiedenen hochwertigen Bodenbelägen – perfekt abgestimmt auf Ihr Standkonzept,
                   Ihre Branche und Ihr Budget.
                 </p>
               </div>
@@ -411,7 +495,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               <div className="text-center mb-8 md:mb-10">
                 <h3 className="text-2xl md:text-3xl font-bold mb-3">Hochwertige Möblierung & Technik</h3>
                 <p className="text-muted-foreground text-base md:text-lg max-w-3xl mx-auto">
-                  Von der stilvollen Lounge-Ecke bis zur beleuchteten Produktpräsentation – 
+                  Von der stilvollen Lounge-Ecke bis zur beleuchteten Produktpräsentation –
                   wir statten Ihren Stand komplett aus.
                 </p>
               </div>
@@ -458,8 +542,8 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               {/* Gallery */}
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                  <img 
-                    src="/images/moebel/showroom-ausstellungsmoebel.svg" 
+                  <img
+                    src="/images/moebel/showroom-ausstellungsmoebel.svg"
                     alt="Professioneller Showroom mit Ausstellungsmöbeln und Bodenproben – Möbelbau von S&S Messebau"
                     width="800"
                     height="600"
@@ -469,8 +553,8 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   />
                 </div>
                 <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                  <img 
-                    src="/images/moebel/individuelles-display-regal-led.svg" 
+                  <img
+                    src="/images/moebel/individuelles-display-regal-led.svg"
                     alt="Maßgefertigtes Display-Regal mit LED-Beleuchtung – individueller Möbelbau von S&S Messebau"
                     width="800"
                     height="600"
@@ -488,7 +572,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 <div>
                   <h3 className="text-2xl md:text-3xl font-bold mb-4">Technik & Beleuchtung</h3>
                   <p className="text-muted-foreground text-base md:text-lg mb-6 leading-relaxed">
-                    Professionelle Beleuchtungskonzepte und moderne Präsentationstechnik setzen 
+                    Professionelle Beleuchtungskonzepte und moderne Präsentationstechnik setzen
                     Ihre Produkte perfekt in Szene und schaffen die richtige Atmosphäre.
                   </p>
                   <div className="grid sm:grid-cols-2 gap-4">
@@ -537,9 +621,9 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               <p className="text-lg mb-6 opacity-90 max-w-2xl mx-auto">
                 Lassen Sie uns gemeinsam die ideale Boden- und Möblierungslösung für Ihren Messestand entwickeln.
               </p>
-              <Button 
-                size="lg" 
-                onClick={onOpenInquiry} 
+              <Button
+                size="lg"
+                onClick={onOpenInquiry}
                 className="bg-white text-primary hover:bg-white/90 min-h-[52px] text-base md:text-lg"
               >
                 Jetzt Ausstattung planen
@@ -550,63 +634,80 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         </div>
       </section>
 
-      <section id="showrooms" className="py-12 md:py-16 bg-muted scroll-mt-20">
+      {/* Methoden- & Qualitätsabschnitt */}
+      <section className="py-12 md:py-16 bg-muted">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Showrooms & Brand Spaces</h2>
-              <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                Neben unserem Messebau-Know-how realisieren wir professionelle Showrooms, Brand Spaces und Markenerlebnisräume – Planung und Ausführung aus einer Hand durch unseren großen Pool an Facharbeitern.
+          <div id="methodik" className="scroll-mt-20">
+            <div className="text-center mb-10 md:mb-12">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Der S&S-Ansatz: Methodik trifft Leidenschaft</h2>
+              <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                Vier Prinzipien, die jeden unserer Markenräume prägen.
               </p>
-              <h3 className="text-xl font-semibold mb-4">Das können wir für Sie tun:</h3>
-              <div className="space-y-2.5 md:space-y-3 mb-6">
-                {[
-                  'Showrooms, Brand Spaces und Erlebnisräume',
-                  'Planung und Ausführung durch erfahrene Facharbeiter',
-                  'Einsatz desselben Monteur-Teams wie im Messebau',
-                  'Kostenoptimierte Lösungen für langfristige Projekte',
-                  'Keine unnötigen Kosten – effizient und termingerecht'
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center gap-2.5 md:gap-3">
-                    <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
-                    <span className="text-sm md:text-base leading-relaxed">{item}</span>
-                  </div>
-                ))}
-              </div>
-              <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                Showroom-Projekt anfragen
-                <ArrowRight className="ml-2" />
-              </Button>
             </div>
-            <Card>
-              <CardContent className="p-5 md:p-8">
-                <h3 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Unsere Ausbau-Leistungen</h3>
-                <div className="space-y-4">
-                  {[
-                    { name: 'Shop-Ausbau', desc: 'Verkaufsflächen, Theken, Präsentationswände' },
-                    { name: 'Büro-Ausbau', desc: 'Trennwände, Akustiklösungen, Deckenausbau' },
-                    { name: 'Showroom-Gestaltung', desc: 'Produktpräsentationen, Beleuchtungskonzepte' },
-                    { name: 'Innenausbau', desc: 'Individuelle Raumgestaltung nach Ihren Wünschen' }
-                  ].map((category, index) => (
-                    <div key={index} className="border-l-4 border-primary pl-4">
-                      <p className="font-semibold">{category.name}</p>
-                      <p className="text-sm text-muted-foreground">{category.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+              {[
+                { icon: Lightning, title: 'Flexibilität', desc: 'Keine Schablone – jeder Markenraum wird individuell auf Ihre Ziele zugeschnitten.' },
+                { icon: Crosshair, title: 'Präzision', desc: 'Millimetergenau geplant und gebaut – von der 3D-Visualisierung bis zur Endabnahme.' },
+                { icon: Package, title: 'Modularität', desc: 'Wiederverwendbare Systeme, die sich anpassen – skalierbar von 20 bis 200 m².' },
+                { icon: ChatCircleDots, title: 'Beratung', desc: 'Persönliche Ansprechpartner, die Ihr Projekt von A bis Z begleiten.' },
+              ].map((item, index) => {
+                const Icon = item.icon
+                return (
+                  <Card key={index}>
+                    <CardContent className="p-5 md:p-6 text-center">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 mx-auto mb-4">
+                        <Icon className="h-6 w-6 text-primary" weight="duotone" />
+                      </div>
+                      <h3 className="font-semibold text-base md:text-lg mb-2 leading-tight">{item.title}</h3>
+                      <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
           </div>
         </div>
       </section>
 
+      {/* Erfolgskacheln / Story-Kacheln */}
+      <section className="py-12 md:py-16">
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+          <div id="erfolge" className="scroll-mt-20">
+            <div className="text-center mb-10 md:mb-12">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Unsere Erfolgsbilanz</h2>
+              <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                Zahlen, die für sich sprechen – und für die Qualität unserer Arbeit.
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              {[
+                { metric: '120+ Messeprojekte', desc: 'Erfolgreich realisiert in DACH, Skandinavien und Benelux.' },
+                { metric: '98% Kundenzufriedenheit', desc: 'Gemessen an Wiederbuchungsquote und Kundenfeedback.' },
+                { metric: 'Ø 30% Kostenersparnis', desc: 'Durch modulare Systeme und intelligente Wiederverwendung.' },
+              ].map((item, index) => (
+                <Card key={index} className="hover:shadow-lg transition-shadow">
+                  <CardContent className="p-5 md:p-6 text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 mx-auto mb-4">
+                      <TrendUp className="h-6 w-6 text-primary" weight="duotone" />
+                    </div>
+                    <p className="font-bold text-xl md:text-2xl mb-2 leading-tight text-primary">{item.metric}</p>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Alles aus einer Hand */}
       <section className="py-12 md:py-16">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-10 md:mb-12">
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Alles aus einer Hand</h2>
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                Mit S&S Messebau haben Sie einen Ansprechpartner für alle Gewerke. 
+                Mit S&S Messebau haben Sie einen Ansprechpartner für alle Gewerke.
                 Das spart Abstimmungsaufwand und garantiert reibungslose Abläufe.
               </p>
             </div>
