@@ -282,5 +282,164 @@ S&S Messebau - nachhaltig und wirtschaftlich zugleich.`,
     category: 'Nachhaltigkeit',
     imageUrl: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&h=600&fit=crop',
     publishedAt: Date.now() - 21 * 24 * 60 * 60 * 1000
+  },
+  {
+    id: '4',
+    title: 'Was kostet ein Messestand 20–200 m²? Der große Kostenüberblick für den Mittelstand',
+    slug: 'messestand-kosten-mittelstand',
+    excerpt: 'Transparente Kostenaufstellung für Messestände von 20 bis 200 m². Erfahren Sie, welche Faktoren den Preis beeinflussen und wie Sie Ihr Budget optimal nutzen.',
+    content: `## Was kostet ein Messestand 20–200 m²?
+
+Die Frage nach den Kosten eines Messestands ist eine der häufigsten, die wir von mittelständischen Unternehmen hören. Die Antwort hängt von vielen Faktoren ab – wir machen sie transparent.
+
+### Kostenfaktoren im Überblick
+
+**1. Standgröße und Standtyp:**
+- 20–40 m² Systemstand: ab 6.000 – 24.000 €
+- 40–80 m² Individualstand: ab 24.000 – 96.000 €
+- 80–150 m² Premium: ab 96.000 – 300.000 €
+- 150–200 m² Exklusiv: ab 180.000 – 400.000 €
+
+**2. Standmiete (extern, je nach Messe):**
+- Regionale Messe: 80–150 €/m²
+- Top-Messen (Hannover, Köln): 150–400 €/m²
+
+**3. Design und Konzeption:**
+- 3D-Visualisierung, Grafikdesign, Konzeptentwicklung
+- Bei S&S Messebau: Im Full-Service-Paket enthalten
+
+**4. Technik und Ausstattung:**
+- LED-Beleuchtung, AV-Technik, Möblierung
+- Kühltechnik (Food-Branche): Zusatzkosten
+
+**5. Logistik und Aufbau:**
+- Transport, Auf-/Abbau, Lagerung
+- Durch eigenes Team und regionales Netzwerk optimiert
+
+### Spartipps für den Mittelstand
+
+1. **Systemstände nutzen:** Wiederverwendbare Module senken Folgekosten um 40–60 %
+2. **Frühbucher-Rabatte:** Messegesellschaften bieten bis zu 15 % Frühbucher-Vorteile
+3. **Partnernetzwerk:** Regionale Partner = kürzere Wege = niedrigere Kosten
+4. **Mehrfachnutzung planen:** Ein Standsystem für 3–5 Messen amortisiert sich deutlich
+
+### Fazit
+
+Ein professioneller Messestand ist eine Investition, die sich auszahlt. Mit der richtigen Planung und einem erfahrenen Partner wie S&S Messebau bekommen Sie maximale Wirkung für Ihr Budget.
+
+**Jetzt unverbindliches Angebot anfordern – innerhalb von 48 Stunden mit 3D-Visualisierung!**`,
+    category: 'Kosten',
+    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=600&fit=crop',
+    publishedAt: Date.now() - 3 * 24 * 60 * 60 * 1000
+  },
+  {
+    id: '5',
+    title: 'Messestand für Food-Unternehmen: Worauf es ankommt',
+    slug: 'messestand-food-unternehmen-anuga',
+    excerpt: 'Von der Verkostungsküche bis zur Produktpräsentation – was einen erfolgreichen Messestand für die Food-Branche ausmacht. Mit Praxistipps für Anuga, ISM & Co.',
+    content: `## Messestand für Food-Unternehmen: Worauf es ankommt
+
+Die Food-Branche stellt besondere Anforderungen an den Messebau. Produkte müssen nicht nur sichtbar, sondern auch erlebbar sein – Geruch, Geschmack und Optik spielen eine zentrale Rolle.
+
+### Die wichtigsten Anforderungen
+
+**1. Hygienische Verkostungsküche:**
+- Lebensmittelkonforme Oberflächen
+- Wasseranschluss und Abfluss
+- Kühl- und Warmhaltevorrichtungen
+- Handwaschbecken und Hygienestation
+
+**2. Produktpräsentation:**
+- Beleuchtung mit hohem CRI-Wert (> 90) für naturgetreue Farbwiedergabe
+- Temperierte Vitrinen für empfindliche Produkte
+- Ansprechende Regalsysteme und Displayflächen
+
+**3. Besucherführung:**
+- Offene Standarchitektur für hohen Durchfluss
+- Verkostungsstationen als Anziehungspunkte
+- B2B-Besprechungszonen für Einkäufer
+
+### Referenz: Anuga Köln – 50 m² Food-Stand
+
+**Herausforderung:** Ein Feinkost-Unternehmen wollte auf der Anuga Premium-Produkte präsentieren und gezielt Einkäufer ansprechen.
+
+**Lösung:** Offenes Standkonzept mit integrierter Showküche, LED-beleuchteten Vitrinen und einer separaten Lounge für B2B-Gespräche.
+
+**Ergebnis:** Deutlich mehr qualifizierte Kontakte, mehrere Listungsvereinbarungen mit Großhändlern.
+
+### Messen für Food-Unternehmen
+
+| Messe | Ort | Fokus |
+|-------|-----|-------|
+| Anuga | Köln | Weltweit größte Food-Messe |
+| ISM | Köln | Süßwaren & Snacks |
+| ProSweets | Köln | Zulieferer Süßwarenindustrie |
+| BioFach | Nürnberg | Bio-Lebensmittel |
+| Internorga | Hamburg | Gastronomie & Hotellerie |
+
+### Unser Tipp
+
+Planen Sie Ihren Food-Messestand mindestens 6 Monate im Voraus. Die technischen Anforderungen (Strom, Wasser, Kühlung) müssen frühzeitig bei der Messegesellschaft angemeldet werden.
+
+**S&S Messebau kennt die Food-Branche – fordern Sie jetzt Ihr individuelles Konzept an!**`,
+    category: 'Branchen',
+    imageUrl: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=600&fit=crop',
+    publishedAt: Date.now() - 5 * 24 * 60 * 60 * 1000
+  },
+  {
+    id: '6',
+    title: 'Schnelle Angebotsstellung im Messebau – warum 48h reichen',
+    slug: 'schnelle-angebotsstellung-messebau-48h',
+    excerpt: 'Warum warten, wenn es schnell gehen kann? Wie S&S Messebau innerhalb von 48 Stunden ein vollständiges Angebot mit 3D-Visualisierung liefert.',
+    content: `## Schnelle Angebotsstellung im Messebau – warum 48h reichen
+
+In der Messebranche zählt jeder Tag. Wenn die nächste Messe näher rückt, brauchen Sie schnelle Entscheidungsgrundlagen. Deshalb liefern wir bei S&S Messebau Ihr Angebot innerhalb von 48 Stunden – inklusive 3D-Visualisierung.
+
+### Wie ist das möglich?
+
+**1. Erfahrung und Expertise:**
+- Über Jahre aufgebautes Know-how in allen Branchen
+- Standardisierte Prozesse für effiziente Kalkulation
+- Umfangreiche Material- und Preisdatenbank
+
+**2. Modulare Systemstände:**
+- Bewährte Grundkonfigurationen als Ausgangsbasis
+- Individuelle Anpassungen statt komplettem Neubau
+- Sofort verfügbare 3D-Modelle als Planungsgrundlage
+
+**3. Digitalisierte Abläufe:**
+- CAD-gestützte Planung für schnelle Visualisierung
+- Automatisierte Kalkulation der Kernkomponenten
+- Digitale Kommunikation ohne Umwege
+
+### Der Prozess: Von der Anfrage zum Angebot
+
+**Stunde 0:** Ihre Anfrage geht ein
+**Stunde 1–4:** Erstgespräch und Anforderungsaufnahme
+**Stunde 4–24:** Konzeptentwicklung und 3D-Visualisierung
+**Stunde 24–48:** Detaillierte Kalkulation und Angebotsversand
+
+### Was Sie im 48h-Angebot erhalten:
+
+✅ Fotorealistische 3D-Visualisierung Ihres Stands
+✅ Detaillierte Kostenaufstellung aller Positionen
+✅ Transparente Materialspezifikation
+✅ Zeitplan für Produktion und Aufbau
+✅ Persönlicher Ansprechpartner
+
+### Warum schnelle Angebote wichtig sind
+
+- **Planungssicherheit:** Frühzeitige Budgetklarheit für Ihre Messeplanung
+- **Wettbewerbsvorteil:** Schnelle Entscheidungen ermöglichen frühe Standplatz-Buchung
+- **Kostenoptimierung:** Mehr Zeit für Feinabstimmung = besseres Ergebnis
+
+### Unser Versprechen
+
+Qualität und Geschwindigkeit schließen sich nicht aus. Unser 48h-Angebot ist genauso detailliert und verbindlich wie Angebote, die anderswo Wochen dauern.
+
+**Testen Sie uns: Senden Sie jetzt Ihre Anfrage und erhalten Sie innerhalb von 48 Stunden Ihr individuelles Angebot mit 3D-Visualisierung!**`,
+    category: 'Service',
+    imageUrl: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop',
+    publishedAt: Date.now() - 1 * 24 * 60 * 60 * 1000
   }
 ]

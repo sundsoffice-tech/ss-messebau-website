@@ -1,14 +1,17 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Warehouse, CalendarDot, Storefront, Armchair, ArrowRight, CheckCircle } from '@phosphor-icons/react'
+import { Warehouse, CalendarDot, Storefront, Armchair, ArrowRight, CheckCircle, Leaf, Recycle, TreeEvergreen, Truck, CubeTransparent } from '@phosphor-icons/react'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
+import { StandCalculator } from '@/components/ui/StandCalculator'
+import { useTranslation } from '@/lib/i18n'
 
 interface LeistungenPageProps {
   onOpenInquiry: () => void
 }
 
 export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
+  const { t } = useTranslation()
   useSectionObserver([
     'messebau',
     'touren',
@@ -630,6 +633,71 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
           </div>
         </div>
       </section>
+
+      {/* Lead Magnet: Free 3D Visualization */}
+      <section id="lead-magnet" className="py-12 md:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="flex items-center justify-center gap-2.5 mb-4">
+              <CubeTransparent className="h-10 w-10" weight="duotone" />
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">{t('cta.free3d')}</h2>
+            </div>
+            <p className="text-base md:text-lg opacity-90 mb-6 md:mb-8 leading-relaxed">
+              {t('cta.free3d.desc')}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" onClick={onOpenInquiry} className="bg-white text-primary hover:bg-white/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg font-semibold">
+                {t('cta.free3d.button')}
+                <ArrowRight className="ml-2" />
+              </Button>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-4 mt-6 text-sm opacity-80">
+              <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4" weight="fill" /> {t('cta.free3d.free')}</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4" weight="fill" /> {t('cta.free3d.nonbinding')}</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4" weight="fill" /> {t('cta.free3d.days')}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sustainability Section */}
+      <section id="nachhaltigkeit-leistungen" className="py-12 md:py-16">
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+          <div className="text-center mb-10 md:mb-12">
+            <div className="flex items-center justify-center gap-2.5 mb-3">
+              <Leaf className="h-8 w-8 text-green-600" weight="duotone" />
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">{t('sustainability.title')}</h2>
+            </div>
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              {t('sustainability.subtitle')}
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            {[
+              { icon: Recycle, title: t('sustainability.reuse'), desc: t('sustainability.reuse.desc') },
+              { icon: TreeEvergreen, title: t('sustainability.materials'), desc: t('sustainability.materials.desc') },
+              { icon: Truck, title: t('sustainability.logistics'), desc: t('sustainability.logistics.desc') },
+              { icon: Leaf, title: t('sustainability.savings'), desc: t('sustainability.savings.desc') },
+            ].map((item, index) => {
+              const Icon = item.icon
+              return (
+                <Card key={index}>
+                  <CardContent className="p-5 md:p-6 text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-50 mx-auto mb-4">
+                      <Icon className="h-6 w-6 text-green-600" weight="duotone" />
+                    </div>
+                    <h3 className="font-semibold text-base md:text-lg mb-2 leading-tight">{item.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Stand Calculator */}
+      <StandCalculator onOpenInquiry={onOpenInquiry} />
 
       <InternalLinkSection
         title="Mehr erfahren"
