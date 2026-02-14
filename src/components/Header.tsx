@@ -857,7 +857,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         Banner konfigurieren
                       </Button>
 
-                      {/* Visuelle Trennung */}
+                      {/* Visuelle Trennung zwischen Leistungen und Seiten-Navigation */}
                       <div className="my-3 border-t" />
                       <div className="px-3 mb-2 text-sm font-semibold text-muted-foreground">
                         Seiten
@@ -899,7 +899,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         )
                       })}
 
-                      {/* Separator für SECONDARY_NAV */}
+                      {/* Separator zwischen Haupt- und Zusatz-Navigation */}
                       <div className="mt-2 mb-2 border-t pt-3">
                         <div className="px-3 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                           Weitere
