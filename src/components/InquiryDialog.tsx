@@ -9,6 +9,7 @@ import { ShieldCheck } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { ContactInquiry } from '@/lib/types'
 import { useKV } from '@/hooks/use-kv'
+import { trackFormSubmit } from '@/lib/analytics'
 
 interface InquiryDialogProps {
   open: boolean
@@ -74,6 +75,11 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
     }
 
     setInquiries((current) => [...(current || []), inquiry])
+
+    trackFormSubmit('inquiry', {
+      budget: formData.budget || 'nicht_angegeben',
+      messen_pro_jahr: formData.messesProJahr || 'nicht_angegeben',
+    })
 
     toast.success('Vielen Dank! Wir melden uns innerhalb von 24 Stunden bei Ihnen.')
     

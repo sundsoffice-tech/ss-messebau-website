@@ -3,12 +3,22 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { DEMO_BLOG_POSTS } from '@/lib/demo-data'
 import { Article, ArrowRight, Clock } from '@phosphor-icons/react'
+import { trackHeroCTAClick } from '@/lib/analytics'
+import { useScrollDepthTracking, useDwellTimeTracking, useArticleReadTracking } from '@/hooks/use-analytics'
 
 interface BlogPageProps {
   onOpenInquiry: () => void
 }
 
 export function BlogPage({ onOpenInquiry }: BlogPageProps) {
+  const currentSlug = window.location.hash.startsWith('#/blog/')
+    ? window.location.hash.replace('#/blog/', '')
+    : undefined
+
+  useScrollDepthTracking('blog')
+  useDwellTimeTracking('blog')
+  useArticleReadTracking(currentSlug)
+
   const handleNavigation = (path: string) => {
     window.location.hash = path
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -84,7 +94,7 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
             Unsere Experten beraten Sie gerne persönlich zu allen Aspekten Ihres Messeauftritts.
           </p>
-          <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
+          <Button size="lg" onClick={() => { trackHeroCTAClick('blog_cta'); onOpenInquiry() }} className="bg-accent hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
             Kostenlose Beratung anfragen
             <ArrowRight className="ml-2" />
           </Button>
