@@ -104,6 +104,8 @@ export function parseSectionHash(hash: string): { page: string; section?: string
 
 export const THEMATIC_LINKS: Record<string, { page: string; section: string; label: string }> = {
   'home-to-messebau': { page: '/leistungen', section: 'messebau', label: 'Messebau' },
+  'home-to-touren': { page: '/leistungen', section: 'touren', label: 'Touren & Messeauftritte' },
+  'home-to-trockenbau': { page: '/leistungen', section: 'trockenbau', label: 'Trockenbau & Innenausbau' },
   'home-to-eventbau': { page: '/leistungen', section: 'eventbau', label: 'Eventbau' },
   'home-to-ladenbau': { page: '/leistungen', section: 'ladenbau', label: 'Ladenbau' },
   'home-to-boeden': { page: '/leistungen', section: 'boeden-ausstattung', label: 'Böden & Möbel' },

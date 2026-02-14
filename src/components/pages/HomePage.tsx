@@ -116,7 +116,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           <div className="text-center mb-8 sm:mb-12">
             <h2 id="services-heading" className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Unsere Leistungen</h2>
             <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Von der ersten Idee bis zum professionellen Abbau – wir bieten Ihnen kostenoptimierte Full-Service-Lösungen für Messebau, Touren und Innenausbau.
+              Drei Leistungsbereiche, ein Ansprechpartner: Full-Service Messebau als Kernleistung, skalierbare Tourenlösungen für wiederkehrende Auftritte und professioneller Trockenbau & Innenausbau – alles kostenoptimiert aus einer Hand.
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -124,12 +124,12 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               {
                 icon: Warehouse,
                 title: 'Full-Service Messebau',
-                description: 'Ihr Messeauftritt aus einer Hand – von der Planung bis zur Lagerung.',
+                description: 'Ihre Kernleistung aus einer Hand – von der ersten Idee über Produktion und Logistik bis zur Lagerung für den nächsten Einsatz.',
                 bullets: [
                   'Planung, Entwurf und 3D-Visualisierung',
                   'Produktion, Logistik, Aufbau & Abbau',
                   'Lagerung und Wiederverwendung von Standbauteilen',
-                  'Service und technische Betreuung vor Ort'
+                  'Technische Betreuung und Service vor Ort'
                 ],
                 sectionId: 'messebau',
                 image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&h=320&fit=crop'
@@ -137,12 +137,12 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               {
                 icon: CalendarDot,
                 title: 'Touren & wiederkehrende Messeauftritte',
-                description: 'Skalierbare Lösungen für viele kleine Messen – zentral organisiert ab NRW.',
+                description: 'Skalierbare Systemlösungen für viele kleine Messen und Roadshows – zentral koordiniert ab NRW, bundesweit verfügbar.',
                 bullets: [
-                  'Zentrale Logistik ab NRW, ideal für viele kleine Messen',
-                  'Skalierbare Systemstände, die mehrfach einsetzbar sind',
+                  'Zentrale Logistik ab NRW – kurze Wege, schnelle Reaktion',
+                  'Wiederverwendbare Systemstände, mehrfach einsetzbar',
                   'Kostenoptimierte Routen- und Aufbauplanung',
-                  'Bundesweite Verfügbarkeit für DACH-Region'
+                  'Skalierbare Pakete für die gesamte DACH-Region'
                 ],
                 sectionId: 'touren',
                 image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500&h=320&fit=crop'
@@ -150,10 +150,10 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               {
                 icon: Storefront,
                 title: 'Trockenbau & Innenausbau',
-                description: 'Shops, Büros und Showrooms – Planung und Ausführung aus einer Hand.',
+                description: 'Shops, Büros und Showrooms – Planung und Ausführung mit demselben Facharbeiter-Team, das Sie aus dem Messebau kennen.',
                 bullets: [
                   'Ausbau von Shops, Büros und Showrooms',
-                  'Planung und Ausführung mit eigenem Facharbeiter-Team',
+                  'Planung und Ausführung aus einer Hand',
                   'Einsatz desselben Monteur-Teams wie im Messebau',
                   'Langfristig effiziente und kostenoptimierte Lösungen'
                 ],

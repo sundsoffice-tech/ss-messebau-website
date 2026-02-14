@@ -74,6 +74,22 @@ export const Footer = memo(function Footer() {
                 </li>
                 <li>
                   <button 
+                    onClick={(e) => handleSectionNavigation('/leistungen', 'touren', e)} 
+                    className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
+                  >
+                    Touren & Messeauftritte
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={(e) => handleSectionNavigation('/leistungen', 'trockenbau', e)} 
+                    className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
+                  >
+                    Trockenbau & Innenausbau
+                  </button>
+                </li>
+                <li>
+                  <button 
                     onClick={(e) => handleNavigation('/bannerrahmen', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
