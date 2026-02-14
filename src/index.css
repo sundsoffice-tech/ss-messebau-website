@@ -91,6 +91,12 @@
     outline-offset: 4px;
   }
   
+  /* 
+   * Font family strategy:
+   * - body uses 'Inter' font loaded from external source for consistent branding
+   * - theme.css defines --font-family with system fonts as fallback
+   * - 'Inter' is the primary font, system fonts provide graceful degradation
+   */
   body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
