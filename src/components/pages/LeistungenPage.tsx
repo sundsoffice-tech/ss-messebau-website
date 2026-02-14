@@ -221,12 +221,40 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 <ArrowRight className="ml-2" />
               </Button>
             </div>
-            <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
-              <img 
-                src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop" 
-                alt="Ladenbau"
-                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-              />
+            <div className="grid grid-cols-2 gap-4 mt-6 lg:mt-0">
+              <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+                <img 
+                  src="/images/ladenbau/ladenbau-display-regal-led-beleuchtung.jpg"
+                  alt="Maßgefertigtes Display-Regal mit LED-Beleuchtung und integriertem Monitor – Ladenbau von S&S Messebau"
+                  width="800"
+                  height="450"
+                  loading="lazy"
+                  decoding="async"
+                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+                <img 
+                  src="/images/ladenbau/kueche-hochglanz-marmor-led-beleuchtung.jpg"
+                  alt="Moderne Küche mit Hochglanz-Fronten, Marmor-Rückwand und LED-Beleuchtung"
+                  width="400"
+                  height="300"
+                  loading="lazy"
+                  decoding="async"
+                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+                <img 
+                  src="/images/ladenbau/kueche-hochglanz-holz-arbeitsplatte.jpg"
+                  alt="Einbauküche mit weißen Hochglanz-Fronten und dunkler Holz-Arbeitsplatte"
+                  width="400"
+                  height="300"
+                  loading="lazy"
+                  decoding="async"
+                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
             </div>
           </div>
 
@@ -234,16 +262,40 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
           <div id="boeden-ausstattung" className="scroll-mt-20 space-y-12 md:space-y-16">
             {/* Hero Section */}
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
-              <div className="group aspect-video rounded-lg overflow-hidden lg:order-2 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
-                <img 
-                  src="/images/boeden/vinylboden-raum-einrichtung.svg" 
-                  alt="Moderner Vinylboden in Grau mit stilvoller Einrichtung – Bodenverlegung von S&S Messebau"
-                  width="800"
-                  height="600"
-                  loading="lazy"
-                  decoding="async"
-                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                />
+              <div className="lg:order-2 grid grid-cols-2 gap-4">
+                <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
+                  <img 
+                    src="/images/boeden/showroom-bodenproben-ausstellung.jpg"
+                    alt="Professioneller Showroom mit Bodenproben-Ausstellungssystem – Messebau von S&S"
+                    width="800"
+                    height="450"
+                    loading="lazy"
+                    decoding="async"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+                  <img 
+                    src="/images/boeden/holzboden-laminat-verlegung-raum.jpg"
+                    alt="Professionell verlegter Holz-Laminatboden in modernem Raum"
+                    width="400"
+                    height="300"
+                    loading="lazy"
+                    decoding="async"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+                  <img 
+                    src="/images/boeden/besprechungsraum-vinylboden-moebel.jpg"
+                    alt="Besprechungsraum mit modernem Vinylboden und hochwertigen Möbeln"
+                    width="400"
+                    height="300"
+                    loading="lazy"
+                    decoding="async"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
               </div>
               <div className="lg:order-1">
                 <div className="flex items-center gap-3 mb-4 md:mb-6">
