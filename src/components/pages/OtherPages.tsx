@@ -122,7 +122,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-8 text-center">S&S Messebau vs. Größere Konkurrenz</h2>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full text-base">
                 <thead>
                   <tr className="border-b">
                     <th className="text-left p-4 font-semibold">Aspekt</th>
@@ -155,6 +155,16 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
                     <td className="p-4 font-medium">Preis-Leistung</td>
                     <td className="p-4 bg-primary/5">Effizient durch starkes Partnernetzwerk</td>
                     <td className="p-4">Hohe Kapazität, großer Fuhrpark, höhere Kosten</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-medium">Nachhaltigkeit</td>
+                    <td className="p-4 bg-primary/5">Wiederverwendbare Systeme, 98% Termintreue</td>
+                    <td className="p-4">Oft Einweg-Lösungen, variable Qualität</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-medium">Erfahrung</td>
+                    <td className="p-4 bg-primary/5">500+ Projekte, 50+ Messen bundesweit</td>
+                    <td className="p-4">Große Portfolios, aber weniger persönliche Betreuung</td>
                   </tr>
                 </tbody>
               </table>

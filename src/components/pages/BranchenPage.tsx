@@ -1,11 +1,13 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
 import { ArrowRight, CheckCircle } from '@phosphor-icons/react'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { useEffect, useState } from 'react'
 import { parseDeepLink } from '@/lib/deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
+import { DEMO_REFERENCES } from '@/lib/demo-data'
 
 interface BranchenPageProps {
   onOpenInquiry: () => void
@@ -95,6 +97,25 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                   />
                 </div>
               </div>
+
+              <div className="mt-8 md:mt-10">
+                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Referenzprojekte Food & Feinkost</h3>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                  {DEMO_REFERENCES.filter(r => r.branche === 'food').map((ref) => (
+                    <Card key={ref.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                      <div className="aspect-video relative overflow-hidden bg-muted">
+                        <img src={ref.imageUrl} alt={ref.title} className="object-cover w-full h-full" loading="lazy" decoding="async" />
+                        <Badge className="absolute top-3 left-3 bg-background/95 text-foreground shadow text-xs">{ref.size}</Badge>
+                      </div>
+                      <CardContent className="p-4">
+                        <p className="font-semibold text-sm mb-1">{ref.title}</p>
+                        {ref.messe && <p className="text-xs text-muted-foreground mb-1">{ref.messe}</p>}
+                        <p className="text-xs text-muted-foreground line-clamp-2">{ref.result}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
             </TabsContent>
 
             <TabsContent value="versicherungen" className="space-y-6 md:space-y-8" id="versicherungen">
@@ -136,6 +157,25 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                   />
                 </div>
               </div>
+
+              <div className="mt-8 md:mt-10">
+                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Referenzprojekte Versicherungen</h3>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                  {DEMO_REFERENCES.filter(r => r.branche === 'versicherungen').map((ref) => (
+                    <Card key={ref.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                      <div className="aspect-video relative overflow-hidden bg-muted">
+                        <img src={ref.imageUrl} alt={ref.title} className="object-cover w-full h-full" loading="lazy" decoding="async" />
+                        <Badge className="absolute top-3 left-3 bg-background/95 text-foreground shadow text-xs">{ref.size}</Badge>
+                      </div>
+                      <CardContent className="p-4">
+                        <p className="font-semibold text-sm mb-1">{ref.title}</p>
+                        {ref.messe && <p className="text-xs text-muted-foreground mb-1">{ref.messe}</p>}
+                        <p className="text-xs text-muted-foreground line-clamp-2">{ref.result}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
             </TabsContent>
 
             <TabsContent value="industrie" className="space-y-6 md:space-y-8" id="industrie">
@@ -175,6 +215,25 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                     decoding="async"
                     className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
                   />
+                </div>
+              </div>
+
+              <div className="mt-8 md:mt-10">
+                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Referenzprojekte Industrie</h3>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                  {DEMO_REFERENCES.filter(r => r.branche === 'industrie').map((ref) => (
+                    <Card key={ref.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                      <div className="aspect-video relative overflow-hidden bg-muted">
+                        <img src={ref.imageUrl} alt={ref.title} className="object-cover w-full h-full" loading="lazy" decoding="async" />
+                        <Badge className="absolute top-3 left-3 bg-background/95 text-foreground shadow text-xs">{ref.size}</Badge>
+                      </div>
+                      <CardContent className="p-4">
+                        <p className="font-semibold text-sm mb-1">{ref.title}</p>
+                        {ref.messe && <p className="text-xs text-muted-foreground mb-1">{ref.messe}</p>}
+                        <p className="text-xs text-muted-foreground line-clamp-2">{ref.result}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </div>
             </TabsContent>

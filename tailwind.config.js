@@ -24,6 +24,10 @@ const defaultTheme = {
       fine: { raw: "(pointer: fine)" },
       pwa: { raw: "(display-mode: standalone)" },
     },
+    fontSize: {
+      base: ['1rem', { lineHeight: '1.625' }],
+      lg: ['1.125rem', { lineHeight: '1.625' }],
+    },
     colors: {
       neutral: {
         1: "var(--color-neutral-1)",
