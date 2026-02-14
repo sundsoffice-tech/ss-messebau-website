@@ -87,8 +87,7 @@
   }
   
   [tabindex="-1"]:focus {
-    outline: 2px dashed oklch(0.45 0.15 250);
-    outline-offset: 4px;
+    outline: none;
   }
   
   /* 
