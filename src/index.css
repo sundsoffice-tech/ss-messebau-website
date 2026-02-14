@@ -104,7 +104,7 @@
   }
   
   /* Custom cursor styles - only on desktop with mouse */
-  @media (pointer: fine) and (hover: hover) {
+  @media (pointer: fine) and (hover: hover) and (min-width: 1024px) {
     * {
       cursor: none !important;
     }

@@ -99,15 +99,12 @@ const PRIMARY_NAV = [
 ]
 
 const SECONDARY_NAV = [
-  { label: 'Bannerrahmen', path: '/bannerrahmen', icon: FrameCorners },
   { label: 'Über uns', path: '/ueber-uns', icon: Users },
   { label: 'Ablauf', path: '/ablauf', icon: Path },
   { label: 'Nachhaltigkeit', path: '/nachhaltigkeit', icon: Leaf },
   { label: 'Blog', path: '/blog', icon: Article },
   { label: 'Kontakt', path: '/kontakt', icon: Envelope }
 ]
-
-const ALL_NAV = [...PRIMARY_NAV, ...SECONDARY_NAV]
 
 const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_MENU[0], onNavigate: (sectionId: string) => void }) => {
   const Icon = item.icon
@@ -226,7 +223,12 @@ export function Header({ onOpenInquiry }: HeaderProps) {
       const deltaY = Math.abs(e.touches[0].clientY - startY)
       const absDeltaX = Math.abs(deltaX)
       
-      if (!isDragging && absDeltaX > 30 && absDeltaX > deltaY * 2) {
+      // Vertikales Scrollen hat Vorrang
+      if (!isDragging && deltaY > 30) {
+        return
+      }
+      
+      if (!isDragging && absDeltaX > 50 && absDeltaX > deltaY * 3) {
         isDragging = true
       }
 
@@ -768,13 +770,13 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   }
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[85vw] sm:w-80 px-0" ref={sheetContentRef}>
+              <SheetContent side="left" className="w-[min(85vw,320px)] px-0" ref={sheetContentRef}>
                 <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
                 <SheetDescription className="sr-only">
                   Hauptnavigation für mobile Geräte mit Zugriff auf alle Seiten und Leistungen
                 </SheetDescription>
-                <nav aria-label="Mobile Navigation">
-                  <div className="flex items-center justify-between gap-3 px-4 mb-6 pt-2">
+                <nav aria-label="Mobile Navigation" className="flex flex-col h-full">
+                  <div className="flex items-center justify-between gap-3 px-4 mb-6 pt-2 flex-shrink-0">
                     <div className="flex items-center gap-3">
                       <div className="relative w-10 h-10 flex-shrink-0">
                         <img 
@@ -793,7 +795,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                       <Button 
                         variant="ghost" 
                         size="sm"
-                        className="h-8 w-8 p-0 rounded-full"
+                        className="h-11 w-11 p-0 rounded-full min-h-[44px] min-w-[44px]"
                         aria-label="Menü schließen"
                       >
                         <X className="h-5 w-5" aria-hidden="true" />
@@ -801,8 +803,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     </SheetClose>
                   </div>
                   
-                  <div className="px-3 overflow-y-auto max-h-[calc(100vh-300px)] pb-4">
-                    <div className="flex flex-col gap-2">
+                  <div className="px-3 overflow-y-auto flex-1">
+                    <div className="flex flex-col gap-2 pb-4">
                       <div className="mb-3">
                         <div className="px-3 mb-3 text-sm font-semibold text-muted-foreground">
                           Leistungen
@@ -855,6 +857,12 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         Banner konfigurieren
                       </Button>
 
+                      {/* Visuelle Trennung */}
+                      <div className="my-3 border-t" />
+                      <div className="px-3 mb-2 text-sm font-semibold text-muted-foreground">
+                        Seiten
+                      </div>
+
                       <Button
                         asChild
                         variant={currentPath === '/' ? 'secondary' : 'ghost'}
@@ -870,7 +878,35 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         </a>
                       </Button>
 
-                      {ALL_NAV.slice(2).map((item) => {
+                      {PRIMARY_NAV.slice(2).map((item) => {
+                        const Icon = item.icon
+                        return (
+                          <Button
+                            key={item.path}
+                            asChild
+                            variant={currentPath === item.path ? 'secondary' : 'ghost'}
+                            className="justify-start gap-3 min-h-[48px] w-full text-base"
+                          >
+                            <a
+                              href={`#${item.path}`}
+                              onClick={(e) => handleNavigation(item.path, e)}
+                              aria-current={currentPath === item.path ? 'page' : undefined}
+                            >
+                              <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+                              <span className="text-left">{item.label}</span>
+                            </a>
+                          </Button>
+                        )
+                      })}
+
+                      {/* Separator für SECONDARY_NAV */}
+                      <div className="mt-2 mb-2 border-t pt-3">
+                        <div className="px-3 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                          Weitere
+                        </div>
+                      </div>
+
+                      {SECONDARY_NAV.map((item) => {
                         const Icon = item.icon
                         return (
                           <Button
@@ -893,7 +929,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     </div>
                   </div>
 
-                  <div className="absolute bottom-0 left-0 right-0 px-6 py-4 border-t bg-background">
+                  <div className="flex-shrink-0 px-6 py-4 border-t bg-background">
                     <div className="space-y-2.5 text-sm">
                       <a 
                         href="tel:+4917631570041" 
