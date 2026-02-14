@@ -22,6 +22,8 @@ export function CaseStudyCard({ title, challenge, solution, result, imageUrl, br
         <img
           src={imageUrl}
           alt={title}
+          width="640"
+          height="360"
           className="object-cover w-full h-full"
           loading="lazy"
           decoding="async"

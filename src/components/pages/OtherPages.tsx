@@ -44,7 +44,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
             <div className="aspect-video rounded-lg overflow-hidden">
               <img 
                 src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&fm=webp&q=75"
-                alt="Team"
+                alt="Das S&S Messebau Team bei der gemeinsamen Projektplanung"
                 width="800"
                 height="450"
                 loading="lazy"
@@ -415,9 +415,13 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
             </div>
             <div className="aspect-square rounded-lg overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800" 
-                alt="Nachhaltigkeit"
+                src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&fm=webp&q=75" 
+                alt="Nachhaltige Materialien und umweltbewusster Messebau bei S&S Messebau"
+                width="800"
+                height="800"
                 className="object-cover w-full h-full"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>
