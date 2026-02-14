@@ -177,73 +177,262 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             </div>
           </div>
 
-          <div id="boeden-ausstattung" className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start scroll-mt-20">
-            <div className="group aspect-video rounded-lg overflow-hidden lg:order-2 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
-              <img 
-                src="/images/boeden/vinylboden-raum-einrichtung.svg" 
-                alt="Moderner Vinylboden in Grau mit stilvoller Einrichtung – Bodenverlegung von S&S Messebau"
-                width="800"
-                height="600"
-                loading="lazy"
-                decoding="async"
-                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-              />
-            </div>
-            <div className="lg:order-1">
-              <div className="flex items-center gap-3 mb-4 md:mb-6">
-                <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
-                  <Armchair className="h-6 w-6 md:h-7 md:w-7 text-primary" />
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold leading-tight">Böden & Ausstattung</h2>
+          {/* Böden & Ausstattung - World-Class Section */}
+          <div id="boeden-ausstattung" className="scroll-mt-20 space-y-12 md:space-y-16">
+            {/* Hero Section */}
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+              <div className="group aspect-video rounded-lg overflow-hidden lg:order-2 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
+                <img 
+                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop&q=80" 
+                  alt="Moderner Messestand mit hochwertigem Vinylboden und stilvoller Möblierung – Bodenverlegung von S&S Messebau"
+                  width="800"
+                  height="600"
+                  loading="lazy"
+                  decoding="async"
+                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                />
               </div>
-              <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                Die perfekte Ergänzung für jeden Stand: Hochwertige Messeböden, stilvolle Möblierung, 
-                professionelle Beleuchtung und moderne Technik.
-              </p>
-              <div className="space-y-2.5 md:space-y-3 mb-6">
-                {[
-                  'Messeboden-Systeme (Teppich, Vinyl, Parkett)',
-                  'Lounge-Möbel & Sitzgruppen',
-                  'Theken & Empfangsbereiche',
-                  'LED-Beleuchtungskonzepte',
-                  'Multimedia & Präsentationstechnik'
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center gap-2.5 md:gap-3">
-                    <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
-                    <span className="text-sm md:text-base leading-relaxed">{item}</span>
+              <div className="lg:order-1">
+                <div className="flex items-center gap-3 mb-4 md:mb-6">
+                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+                    <Armchair className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                   </div>
+                  <h2 className="text-2xl md:text-3xl font-bold leading-tight">Böden & Ausstattung</h2>
+                </div>
+                <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  Erst der richtige Boden und die perfekte Ausstattung machen einen Messestand komplett. 
+                  Wir bieten Ihnen Premium-Bodenlösungen und hochwertige Möblierung, die Ihre Marke perfekt repräsentieren.
+                </p>
+                <div className="bg-primary/5 rounded-lg p-4 md:p-6 mb-6">
+                  <h3 className="font-semibold text-base md:text-lg mb-3">Unser Versprechen</h3>
+                  <div className="space-y-2.5 md:space-y-3">
+                    {[
+                      'Schnelle Verlegung auch bei großen Flächen',
+                      'Hochwertige Materialien von führenden Herstellern',
+                      'Passgenaue Zuschnitte ohne Verschnitt',
+                      'Nachhaltige & wiederverwendbare Systeme',
+                      'Komplette Möblierung aus einer Hand'
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center gap-2.5 md:gap-3">
+                        <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
+                        <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  Ausstattung anfragen
+                  <ArrowRight className="ml-2" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Flooring Types Section */}
+            <div className="bg-muted/50 rounded-2xl p-6 md:p-8 lg:p-10">
+              <div className="text-center mb-8 md:mb-10">
+                <h3 className="text-2xl md:text-3xl font-bold mb-3">Premium Messeboden-Systeme</h3>
+                <p className="text-muted-foreground text-base md:text-lg max-w-3xl mx-auto">
+                  Wählen Sie aus verschiedenen hochwertigen Bodenbelägen – perfekt abgestimmt auf Ihr Standkonzept, 
+                  Ihre Branche und Ihr Budget.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  {
+                    name: 'Vinyl-Bodenbelag',
+                    desc: 'Modern, pflegeleicht und in vielen Designs erhältlich. Perfekt für hochfrequentierte Messestände.',
+                    features: ['Wasserabweisend', 'Rutschfest', 'Echtholz-Optik', 'Schnelle Verlegung'],
+                    price: 'ab 35€/qm'
+                  },
+                  {
+                    name: 'Messebau-Teppich',
+                    desc: 'Klassisch und bewährt. Schallabsorbierend und in allen Farben verfügbar.',
+                    features: ['Große Farbauswahl', 'Weiche Haptik', 'Schalldämmend', 'Wirtschaftlich'],
+                    price: 'ab 18€/qm'
+                  },
+                  {
+                    name: 'Klick-Parkett',
+                    desc: 'Hochwertige Holzoptik für Premium-Stände. Wiederverwendbar und nachhaltig.',
+                    features: ['Edle Optik', 'Wiederverwendbar', 'Robust', 'Natürlich'],
+                    price: 'ab 45€/qm'
+                  },
+                  {
+                    name: 'Design-Laminat',
+                    desc: 'Vielseitig und strapazierfähig. Ideal für moderne Standkonzepte.',
+                    features: ['Kratzfest', 'Viele Designs', 'Pflegeleicht', 'Langlebig'],
+                    price: 'ab 28€/qm'
+                  }
+                ].map((floor, index) => (
+                  <Card key={index} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <CardTitle className="text-lg">{floor.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-muted-foreground leading-relaxed">{floor.desc}</p>
+                      <div className="space-y-2">
+                        {floor.features.map((feature, idx) => (
+                          <div key={idx} className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-4 w-4 text-primary shrink-0" weight="fill" />
+                            <span>{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="pt-3 border-t">
+                        <p className="text-sm font-semibold text-primary">{floor.price}</p>
+                        <p className="text-xs text-muted-foreground">inkl. Verlegung & Unterkonstruktion</p>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
-              <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                Ausstattung anfragen
+
+              <div className="mt-8 text-center">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Preise verstehen sich zzgl. MwSt. Individuelle Angebote auf Anfrage.
+                </p>
+              </div>
+            </div>
+
+            {/* Furniture & Equipment Section */}
+            <div>
+              <div className="text-center mb-8 md:mb-10">
+                <h3 className="text-2xl md:text-3xl font-bold mb-3">Hochwertige Möblierung & Technik</h3>
+                <p className="text-muted-foreground text-base md:text-lg max-w-3xl mx-auto">
+                  Von der stilvollen Lounge-Ecke bis zur beleuchteten Produktpräsentation – 
+                  wir statten Ihren Stand komplett aus.
+                </p>
+              </div>
+
+              <div className="grid lg:grid-cols-3 gap-6 md:gap-8 mb-8">
+                {[
+                  {
+                    title: 'Lounge-Möbel & Sitzgruppen',
+                    desc: 'Komfortable Sofas, Sessel und Couchtische für entspannte Kundengespräche',
+                    items: ['Designer-Sofas', 'Lounge-Sessel', 'Stehtische', 'Besprechungstische']
+                  },
+                  {
+                    title: 'Theken & Empfangsbereiche',
+                    desc: 'Repräsentative Empfangstheken mit integrierter Beleuchtung und Stauraum',
+                    items: ['LED-Theken', 'Info-Counter', 'Bar-Lösungen', 'Modulare Systeme']
+                  },
+                  {
+                    title: 'Präsentations-Möbel',
+                    desc: 'Vitrinen, Regale und Display-Systeme für perfekte Produktinszenierung',
+                    items: ['Glasvitrinen', 'Wandregale', 'Produktdisplays', 'LED-Beleuchtung']
+                  }
+                ].map((category, index) => (
+                  <Card key={index} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <CardTitle className="text-lg md:text-xl">{category.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                        {category.desc}
+                      </p>
+                      <div className="space-y-2">
+                        {category.items.map((item, idx) => (
+                          <div key={idx} className="flex items-center gap-2.5 text-sm">
+                            <CheckCircle className="h-4 w-4 text-primary shrink-0" weight="fill" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Gallery */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+                  <img 
+                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop&q=80" 
+                    alt="Moderner Showroom mit hochwertigen Ausstellungsmöbeln und Präsentationsflächen – Möbelbau von S&S Messebau"
+                    width="800"
+                    height="600"
+                    loading="lazy"
+                    decoding="async"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+                  <img 
+                    src="https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?w=800&h=600&fit=crop&q=80" 
+                    alt="Maßgefertigtes Display-Regal mit integrierter LED-Beleuchtung – individueller Möbelbau von S&S Messebau"
+                    width="800"
+                    height="600"
+                    loading="lazy"
+                    decoding="async"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Technical Equipment Section */}
+            <div className="bg-primary/5 rounded-2xl p-6 md:p-8 lg:p-10">
+              <div className="grid lg:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-4">Technik & Beleuchtung</h3>
+                  <p className="text-muted-foreground text-base md:text-lg mb-6 leading-relaxed">
+                    Professionelle Beleuchtungskonzepte und moderne Präsentationstechnik setzen 
+                    Ihre Produkte perfekt in Szene und schaffen die richtige Atmosphäre.
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {[
+                      'LED-Strahler & Spots',
+                      'Akzentbeleuchtung',
+                      'Displays & Monitore',
+                      'Sound-Systeme',
+                      'Interaktive Terminals',
+                      'Video-Walls'
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center gap-2.5 md:gap-3">
+                        <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
+                        <span className="text-sm md:text-base">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-white rounded-lg p-6 shadow-lg">
+                  <h4 className="font-semibold text-lg mb-4">Beliebte Ausstattungs-Pakete</h4>
+                  <div className="space-y-4">
+                    {[
+                      { name: 'Basis-Paket', items: 'Boden, Grundmöblierung, Basis-Beleuchtung', price: 'ab 2.500€' },
+                      { name: 'Komfort-Paket', items: 'Boden, Lounge-Möbel, LED-Konzept, Display', price: 'ab 5.000€' },
+                      { name: 'Premium-Paket', items: 'Alles inklusive + Multimedia & Sonderanfertigungen', price: 'ab 8.500€' }
+                    ].map((pkg, index) => (
+                      <div key={index} className="border-l-4 border-primary pl-4">
+                        <p className="font-semibold">{pkg.name}</p>
+                        <p className="text-sm text-muted-foreground">{pkg.items}</p>
+                        <p className="text-sm font-semibold text-primary mt-1">{pkg.price}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-4">
+                    Preise für 50 qm Stand, zzgl. MwSt. und Logistik
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Section */}
+            <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 md:p-10 text-center text-primary-foreground">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                Bereit für die perfekte Stand-Ausstattung?
+              </h3>
+              <p className="text-lg mb-6 opacity-90 max-w-2xl mx-auto">
+                Lassen Sie uns gemeinsam die ideale Boden- und Möblierungslösung für Ihren Messestand entwickeln.
+              </p>
+              <Button 
+                size="lg" 
+                onClick={onOpenInquiry} 
+                className="bg-white text-primary hover:bg-white/90 min-h-[52px] text-base md:text-lg"
+              >
+                Jetzt Ausstattung planen
                 <ArrowRight className="ml-2" />
               </Button>
-            </div>
-          </div>
-
-          {/* Furniture Examples Gallery */}
-          <div className="grid md:grid-cols-2 gap-6 mt-12">
-            <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-              <img 
-                src="/images/moebel/showroom-ausstellungsmoebel.svg" 
-                alt="Professioneller Showroom mit Ausstellungsmöbeln und Bodenproben – Möbelbau von S&S Messebau"
-                width="800"
-                height="600"
-                loading="lazy"
-                decoding="async"
-                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-              />
-            </div>
-            <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-              <img 
-                src="/images/moebel/individuelles-display-regal-led.svg" 
-                alt="Maßgefertigtes Display-Regal mit LED-Beleuchtung – individueller Möbelbau von S&S Messebau"
-                width="800"
-                height="600"
-                loading="lazy"
-                decoding="async"
-                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-              />
             </div>
           </div>
         </div>
