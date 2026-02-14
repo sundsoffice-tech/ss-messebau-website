@@ -168,10 +168,10 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
                   onClick={() => handleSectionNavigation(service.sectionId)}
                 >
-                  <div className="relative h-48 overflow-hidden">
+                  <div className="relative aspect-[25/16] overflow-hidden">
                     <img 
                       src={`${service.image}&fm=webp&q=75`}
-                      alt={service.title}
+                      alt=""
                       role="presentation"
                       width="500"
                       height="320"
