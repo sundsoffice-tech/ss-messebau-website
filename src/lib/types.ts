@@ -1,12 +1,13 @@
 export interface ContactInquiry {
   id: string
   name: string
-  company?: string
+  company: string
   email: string
   phone?: string
   event?: string
   size?: string
   budget?: string
+  messesProJahr?: string
   message: string
   timestamp: number
 }
