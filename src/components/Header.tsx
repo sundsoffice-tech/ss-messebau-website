@@ -23,7 +23,8 @@ import {
   PaintBrush,
   Truck,
   Wrench,
-  ArrowRight
+  ArrowRight,
+  CalendarDot
 } from '@phosphor-icons/react'
 import {
   DropdownMenu,
@@ -49,6 +50,28 @@ const LEISTUNGEN_MEGA_MENU = [
     gradient: 'from-blue-500/10 to-blue-600/5',
     previewImage: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop',
     sectionId: 'messebau'
+  },
+  {
+    title: 'Touren & Messeauftritte',
+    description: 'Skalierbare Lösungen ab NRW',
+    icon: CalendarDot,
+    color: 'text-teal-600',
+    bgColor: 'bg-teal-50',
+    features: ['Wiederverwendbare Systemstände', 'Zentrale Logistik', 'Kostenoptimierte Planung'],
+    gradient: 'from-teal-500/10 to-teal-600/5',
+    previewImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop',
+    sectionId: 'touren'
+  },
+  {
+    title: 'Trockenbau & Innenausbau',
+    description: 'Shops, Büros und Showrooms',
+    icon: Storefront,
+    color: 'text-amber-600',
+    bgColor: 'bg-amber-50',
+    features: ['Planung & Ausführung', 'Eigenes Facharbeiter-Team', 'Kostenoptimiert'],
+    gradient: 'from-amber-500/10 to-amber-600/5',
+    previewImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
+    sectionId: 'trockenbau'
   },
   {
     title: 'Eventbau & Bühnen',
@@ -500,7 +523,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(900px,calc(100vw-2rem))] z-50 max-h-[calc(100vh-80px)]"
                 >
                   <div className="bg-background border rounded-lg shadow-2xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto max-h-[calc(100vh-100px)]">
-                    <div className="grid grid-cols-2 gap-3 mb-4">
+                    <div className="grid grid-cols-3 gap-3 mb-4">
                       {LEISTUNGEN_MEGA_MENU.map((item) => (
                         <MegaMenuItem 
                           key={item.sectionId}
@@ -667,7 +690,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   className="absolute right-0 top-full mt-2 w-[min(600px,calc(100vw-2rem))] z-50 max-h-[calc(100vh-80px)]"
                 >
                   <div className="bg-background border rounded-lg shadow-2xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto max-h-[calc(100vh-100px)]">
-                    <div className="grid grid-cols-2 gap-3 mb-4">
+                    <div className="grid grid-cols-3 gap-3 mb-4">
                       {LEISTUNGEN_MEGA_MENU.map((item) => (
                         <MegaMenuItem 
                           key={item.sectionId}
