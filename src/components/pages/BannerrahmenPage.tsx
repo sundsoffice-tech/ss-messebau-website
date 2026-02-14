@@ -9,10 +9,10 @@ interface BannerrahmenPageProps {
 export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
   return (
     <div className="min-h-screen">
-      <section className="hero-gradient text-white py-20">
-        <div className="container mx-auto px-4">
+      <section className="hero-gradient text-white py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <h1 className="font-bold mb-6" style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)', lineHeight: '1.2' }}>
               Bannerrahmen & Großformatdruck
             </h1>
             <p className="text-xl mb-8 text-white/90">
@@ -41,7 +41,7 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
       </section>
 
       <section className="py-12 bg-secondary/30">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-5xl mx-auto">
             <Card className="p-4 text-center">
               <Truck className="w-8 h-8 mx-auto mb-2 text-primary" />
@@ -72,9 +72,9 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Unsere Bannerrahmen-Systeme</h2>
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold text-center mb-12" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Unsere Bannerrahmen-Systeme</h2>
           
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <Card className="p-6">
@@ -155,9 +155,9 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
         </div>
       </section>
 
-      <section className="py-16 bg-secondary/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Druckmaterialien & Optionen</h2>
+      <section className="py-12 sm:py-16 bg-secondary/30">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold text-center mb-12" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Druckmaterialien & Optionen</h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             <Card className="p-6">
@@ -215,9 +215,9 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <h2 className="text-3xl font-bold mb-6">Bereit zu starten?</h2>
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
+          <h2 className="font-bold mb-6" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Bereit zu starten?</h2>
           <p className="text-lg text-muted-foreground mb-8">
             Konfigurieren Sie jetzt Ihre Banner online und erhalten Sie binnen 24 Stunden 
             ein individuelles Angebot – oder lassen Sie sich persönlich beraten.

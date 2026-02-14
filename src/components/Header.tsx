@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, memo } from 'react'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet'
 import { 
   List, 
   X,
@@ -720,19 +720,31 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   Hauptnavigation für mobile Geräte mit Zugriff auf alle Seiten und Leistungen
                 </SheetDescription>
                 <nav aria-label="Mobile Navigation">
-                  <div className="flex items-center gap-3 px-4 mb-6 pt-2">
-                    <div className="relative w-10 h-10 flex-shrink-0">
-                      <img 
-                        src={logo} 
-                        alt="S&S Messebau Logo"
-                        loading="eager" 
-                        className="w-full h-full object-contain filter drop-shadow-sm" 
-                      />
+                  <div className="flex items-center justify-between gap-3 px-4 mb-6 pt-2">
+                    <div className="flex items-center gap-3">
+                      <div className="relative w-10 h-10 flex-shrink-0">
+                        <img 
+                          src={logo} 
+                          alt="S&S Messebau Logo"
+                          loading="eager" 
+                          className="w-full h-full object-contain filter drop-shadow-sm" 
+                        />
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-bold text-lg leading-none tracking-tight text-foreground">Menü</span>
+                        <span className="text-[10px] text-muted-foreground tracking-wide leading-none">Navigation</span>
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-bold text-lg leading-none tracking-tight text-foreground">Menü</span>
-                      <span className="text-[10px] text-muted-foreground tracking-wide leading-none">Navigation</span>
-                    </div>
+                    <SheetClose asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="h-8 w-8 p-0 rounded-full"
+                        aria-label="Menü schließen"
+                      >
+                        <X className="h-5 w-5" aria-hidden="true" />
+                      </Button>
+                    </SheetClose>
                   </div>
                   
                   <div className="px-3 overflow-y-auto max-h-[calc(100vh-300px)] pb-4">
