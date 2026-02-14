@@ -803,8 +803,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     </SheetClose>
                   </div>
                   
-                  <div className="px-3 overflow-y-auto flex-1">
-                    <div className="flex flex-col gap-2 pb-4">
+                  <div className="px-3 overflow-y-auto flex-1 pb-4">
+                    <div className="flex flex-col gap-2">
                       <div className="mb-3">
                         <div className="px-3 mb-3 text-sm font-semibold text-muted-foreground">
                           Leistungen
