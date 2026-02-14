@@ -157,11 +157,17 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
+  const [currentPath, setCurrentPath] = useState(() => parseDeepLink(window.location.hash).page)
   const megaMenuRef = useRef<HTMLDivElement>(null)
   const megaMenuTriggerRef = useRef<HTMLButtonElement>(null)
   const sheetContentRef = useRef<HTMLDivElement>(null)
-  const deepLink = parseDeepLink(window.location.hash)
-  const currentPath = deepLink.page
+  const tabletMegaMenuTriggerRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    const updatePath = () => setCurrentPath(parseDeepLink(window.location.hash).page)
+    window.addEventListener('hashchange', updatePath)
+    return () => window.removeEventListener('hashchange', updatePath)
+  }, [])
 
   useEffect(() => {
     let ticking = false
@@ -184,8 +190,10 @@ export function Header({ onOpenInquiry }: HeaderProps) {
         megaMenuOpen &&
         megaMenuRef.current &&
         megaMenuTriggerRef.current &&
+        tabletMegaMenuTriggerRef.current &&
         !megaMenuRef.current.contains(event.target as Node) &&
-        !megaMenuTriggerRef.current.contains(event.target as Node)
+        !megaMenuTriggerRef.current.contains(event.target as Node) &&
+        !tabletMegaMenuTriggerRef.current.contains(event.target as Node)
       ) {
         setMegaMenuOpen(false)
       }
@@ -309,15 +317,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     if (event) {
       event.preventDefault()
     }
-    if (currentPath === '/leistungen' && megaMenuOpen) {
-      setMegaMenuOpen(false)
-    } else if (currentPath === '/leistungen') {
-      setMegaMenuOpen(true)
-    } else if (megaMenuOpen) {
-      handleNavigation('/leistungen')
-    } else {
-      setMegaMenuOpen(true)
-    }
+    setMegaMenuOpen(prev => !prev)
   }
 
   const handleMegaMenuKeyDown = (e: React.KeyboardEvent) => {
@@ -618,18 +618,59 @@ export function Header({ onOpenInquiry }: HeaderProps) {
 
             <div className="relative">
               <Button
+                ref={tabletMegaMenuTriggerRef}
                 variant="ghost"
                 onClick={handleLeistungenClick}
+                onKeyDown={handleMegaMenuKeyDown}
                 className={`transition-colors gap-1 ${
                   currentPath === '/leistungen' || megaMenuOpen
                     ? 'text-primary font-semibold bg-primary/5' 
                     : 'hover:text-primary'
                 }`}
                 size="sm"
+                aria-expanded={megaMenuOpen}
+                aria-haspopup="true"
+                aria-controls="tablet-leistungen-mega-menu"
               >
                 Leistungen
-                <CaretDown className="h-4 w-4 transition-transform duration-200" aria-hidden="true" />
+                <CaretDown className={`h-4 w-4 transition-transform duration-200 ${megaMenuOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </Button>
+
+              {megaMenuOpen && (
+                <div
+                  id="tablet-leistungen-mega-menu"
+                  ref={megaMenuRef}
+                  role="region"
+                  aria-label="Leistungen Übersicht"
+                  onKeyDown={handleMegaMenuKeyDown}
+                  onBlur={handleMegaMenuBlur}
+                  className="absolute left-0 top-full mt-2 w-[min(600px,calc(100vw-2rem))] z-50 max-h-[calc(100vh-80px)]"
+                >
+                  <div className="bg-background border rounded-lg shadow-2xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto max-h-[calc(100vh-100px)]">
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      {LEISTUNGEN_MEGA_MENU.map((item) => (
+                        <MegaMenuItem 
+                          key={item.sectionId}
+                          item={item}
+                          onNavigate={handleSectionNavigation}
+                        />
+                      ))}
+                    </div>
+
+                    <div className="border-t pt-4">
+                      <Button
+                        onClick={(e) => handleNavigation('/leistungen', e)}
+                        variant="ghost"
+                        size="sm"
+                        className="w-full gap-2 text-primary hover:text-primary"
+                      >
+                        Alle Leistungen anzeigen
+                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {PRIMARY_NAV.slice(2, 3).map((item) => (
