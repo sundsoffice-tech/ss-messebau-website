@@ -45,6 +45,7 @@ export function MobileStickyCTA({ onClick }: StickyCTAProps) {
       className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-background/95 backdrop-blur-sm border-t shadow-lg pb-safe" 
       role="group" 
       aria-label="Kontaktoptionen"
+      style={{ contain: 'layout style' }}
     >
       <div className="flex gap-3 p-3">
         <Button

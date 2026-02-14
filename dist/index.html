@@ -47,8 +47,18 @@
     
     <!-- Performance: Kritisches CSS inline -->
     <style>
+      /* Font fallback metrics to prevent CLS during font swap */
+      @font-face {
+        font-family: 'Inter-fallback';
+        src: local('Arial');
+        ascent-override: 90.49%;
+        descent-override: 22.56%;
+        line-gap-override: 0%;
+        size-adjust: 107.06%;
+      }
+      
       body { 
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: 'Inter', 'Inter-fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         margin: 0;
         background: oklch(1 0 0);
         color: oklch(0.25 0.01 260);
@@ -59,6 +69,11 @@
       }
       .hero-overlay {
         background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+      }
+      
+      /* Reserve space for sticky mobile CTA to prevent CLS */
+      @media (max-width: 1023px) {
+        #root { padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)); }
       }
     </style>
     
@@ -77,8 +92,8 @@
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     </noscript>
-  <script type="module" crossorigin src="/assets/index-YU_K61Lx.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-ZBzvLVhf.css">
+  <script type="module" crossorigin src="/assets/index-BjAklI3A.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-Jn0YWXJi.css">
 </head>
 
 <body>

@@ -94,11 +94,11 @@
   /* 
    * Font family strategy:
    * - body uses 'Inter' font loaded from external source for consistent branding
-   * - theme.css defines --font-family with system fonts as fallback
-   * - 'Inter' is the primary font, system fonts provide graceful degradation
+   * - 'Inter-fallback' @font-face in index.html provides metric-matched fallback
+   * - System fonts as last resort
    */
   body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', 'Inter-fallback', sans-serif;
     line-height: 1.6;
     overscroll-behavior-y: contain;
   }

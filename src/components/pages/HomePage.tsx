@@ -167,9 +167,11 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
                   onClick={() => handleSectionNavigation(service.sectionId)}
                 >
-                  <div className="relative aspect-[25/16] overflow-hidden">
+                  <div className="relative aspect-[25/16] overflow-hidden bg-muted">
                     <img 
                       src={`${service.image}&fm=webp&q=75`}
+                      srcSet={`${service.image}&fm=webp&q=75&w=400 400w, ${service.image}&fm=webp&q=75&w=500 500w, ${service.image}&fm=webp&q=75&w=640 640w`}
+                      sizes="(max-width: 1023px) 100vw, 33vw"
                       alt=""
                       role="presentation"
                       width="500"
@@ -278,7 +280,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               >
                 <div className="aspect-video relative overflow-hidden bg-muted">
                   <img 
-                    src={reference.imageUrl}
+                    src={`${reference.imageUrl}&fm=webp&q=75`}
+                    srcSet={`${reference.imageUrl}&fm=webp&q=75&w=400 400w, ${reference.imageUrl}&fm=webp&q=75&w=640 640w, ${reference.imageUrl}&fm=webp&q=75&w=800 800w`}
+                    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
                     alt={reference.title}
                     width="640"
                     height="360"
