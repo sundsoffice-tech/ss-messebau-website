@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, memo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet'
-import { FocusScope } from '@radix-ui/react-focus-scope'
 import { 
   List, 
+  X,
   House, 
   Briefcase, 
   Buildings, 
@@ -216,7 +216,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
       const deltaX = currentX - startX
       const deltaY = Math.abs(e.touches[0].clientY - startY)
       
-      if (!isDragging && Math.abs(deltaX) > 10 && deltaY < 50) {
+      if (!isDragging && Math.abs(deltaX) > 30 && Math.abs(deltaX) > deltaY * 2) {
         isDragging = true
       }
 
@@ -477,7 +477,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   onMouseLeave={() => setMegaMenuOpen(false)}
                   onKeyDown={handleMegaMenuKeyDown}
                   onBlur={handleMegaMenuBlur}
-                  className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[900px] z-50 max-h-[calc(100vh-80px)]"
+                  className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(900px,calc(100vw-2rem))] z-50 max-h-[calc(100vh-80px)]"
                 >
                   <div className="bg-background border rounded-lg shadow-2xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto max-h-[calc(100vh-100px)]">
                     <div className="grid grid-cols-2 gap-3 mb-4">
@@ -619,14 +619,13 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <Button
                 variant="ghost"
                 onClick={handleLeistungenClick}
-                onMouseEnter={() => setMegaMenuOpen(true)}
                 className={`transition-colors gap-1 ${
                   currentPath === '/leistungen' || megaMenuOpen
                     ? 'text-primary font-semibold bg-primary/5' 
                     : 'hover:text-primary'
                 }`}
                 size="sm"
-                aria-expanded={megaMenuOpen}
+                aria-expanded={false}
                 aria-haspopup="true"
               >
                 Leistungen
@@ -709,34 +708,34 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   className="px-3 min-h-[44px] min-w-[44px]"
                   aria-label={mobileMenuOpen ? 'Menü schließen' : 'Menü öffnen'}
                 >
-                  <List className="h-6 w-6" aria-hidden="true" />
+                  {mobileMenuOpen 
+                    ? <X className="h-6 w-6" aria-hidden="true" />
+                    : <List className="h-6 w-6" aria-hidden="true" />
+                  }
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[85vw] sm:w-80 px-0" ref={sheetContentRef}>
                 <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
                 <SheetDescription className="sr-only">
-                  Main navigation for mobile devices with access to all pages and services
+                  Hauptnavigation für mobile Geräte mit Zugriff auf alle Seiten und Leistungen
                 </SheetDescription>
-                <FocusScope loop trapped={mobileMenuOpen}>
-                  <nav aria-label="Mobile Navigation">
-                    <div className="flex items-center px-4 mb-6 pt-2">
-                    <div className="flex items-center gap-3">
-                      <div className="relative w-10 h-10 flex-shrink-0">
-                        <img 
-                          src={logo} 
-                          alt="S&S Messebau Logo"
-                          loading="eager" 
-                          className="w-full h-full object-contain filter drop-shadow-sm" 
-                        />
-                      </div>
-                      <div className="flex flex-col gap-0.5">
-                        <span className="font-bold text-lg leading-none tracking-tight text-foreground">Menü</span>
-                        <span className="text-[10px] text-muted-foreground tracking-wide leading-none">Navigation</span>
-                      </div>
+                <nav aria-label="Mobile Navigation">
+                  <div className="flex items-center gap-3 px-4 mb-6 pt-2">
+                    <div className="relative w-10 h-10 flex-shrink-0">
+                      <img 
+                        src={logo} 
+                        alt="S&S Messebau Logo"
+                        loading="eager" 
+                        className="w-full h-full object-contain filter drop-shadow-sm" 
+                      />
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="font-bold text-lg leading-none tracking-tight text-foreground">Menü</span>
+                      <span className="text-[10px] text-muted-foreground tracking-wide leading-none">Navigation</span>
                     </div>
                   </div>
                   
-                  <div className="px-3 overflow-y-auto max-h-[calc(100vh-180px)]">
+                  <div className="px-3 overflow-y-auto max-h-[calc(100vh-300px)] pb-4">
                     <div className="flex flex-col gap-2">
                       <div className="mb-3">
                         <div className="px-3 mb-3 text-sm font-semibold text-muted-foreground">
@@ -749,20 +748,17 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                               <button
                                 key={item.sectionId}
                                 onClick={() => handleSectionNavigation(item.sectionId)}
-                                className="w-full group relative overflow-hidden rounded-lg border p-4 text-left transition-all hover:border-primary hover:shadow-md min-h-[56px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                className="w-full group relative overflow-hidden rounded-lg border p-3 text-left transition-all min-h-[48px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:border-primary active:shadow-md"
                               >
-                                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-active:opacity-100 transition-opacity`} />
                                 
-                                <div className="relative flex items-center gap-3">
-                                  <div className={`${item.bgColor} ${item.color} p-2.5 rounded-lg flex-shrink-0`}>
-                                    <Icon className="h-5 w-5" weight="duotone" aria-hidden="true" />
+                                <div className="relative flex items-center gap-2.5">
+                                  <div className={`${item.bgColor} ${item.color} p-2 rounded-lg flex-shrink-0`}>
+                                    <Icon className="h-4 w-4" weight="duotone" aria-hidden="true" />
                                   </div>
                                   <div className="flex-1 min-w-0">
-                                    <div className="font-semibold text-base text-foreground mb-0.5 group-hover:text-primary transition-colors">
+                                    <div className="font-semibold text-sm text-foreground group-active:text-primary transition-colors">
                                       {item.title}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground line-clamp-1">
-                                      {item.description}
                                     </div>
                                   </div>
                                 </div>
@@ -852,7 +848,6 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     </div>
                   </div>
                 </nav>
-              </FocusScope>
               </SheetContent>
             </Sheet>
           </div>
