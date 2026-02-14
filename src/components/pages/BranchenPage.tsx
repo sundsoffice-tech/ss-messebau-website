@@ -326,7 +326,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
           { label: 'Unser Ablauf', description: 'Vom Erstgespräch bis zum fertigen Messestand.', hash: '/ablauf' },
           { label: 'Nachhaltiger Messebau', description: 'Systembau mit Wiederverwendung – für umweltbewusste Auftritte.', hash: '/nachhaltigkeit' },
           { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit.', hash: '/ueber-uns' },
-          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit 3D-Visualisierung – jetzt anfragen.', hash: '/kontakt' },
+          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit persönlicher Beratung – jetzt anfragen.', hash: '/kontakt' },
         ]}
       />
     </div>

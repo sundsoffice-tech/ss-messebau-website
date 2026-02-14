@@ -8,7 +8,7 @@ interface PageMeta {
 const PAGE_META: Record<string, PageMeta> = {
   '/': {
     title: 'S&S Messebau – Messestand 20–200 m² | Messebau NRW',
-    description: 'S&S Messebau: Messestände 20–200 m² für Food, Finance & Industrie. 48h-Angebot mit 3D-Visualisierung. Jetzt beraten lassen!'
+    description: 'S&S Messebau: Messestände 20–200 m² für Food, Finance & Industrie. 48h-Angebot mit persönlicher Beratung. Jetzt beraten lassen!'
   },
   '/leistungen': {
     title: 'Leistungen – Messebau, Eventbau & Showrooms | S&S Messebau',
@@ -40,7 +40,7 @@ const PAGE_META: Record<string, PageMeta> = {
   },
   '/kontakt': {
     title: 'Kontakt – Jetzt Messestand anfragen | S&S Messebau',
-    description: 'Kontaktieren Sie S&S Messebau für Ihr Messestand-Projekt. 48h-Angebot mit 3D-Visualisierung. Jetzt unverbindlich anfragen!'
+    description: 'Kontaktieren Sie S&S Messebau für Ihr Messestand-Projekt. 48h-Angebot mit persönlicher Beratung. Jetzt unverbindlich anfragen!'
   },
   '/bannerrahmen': {
     title: 'Bannerrahmen-Systeme für Messe & Event | S&S Messebau',
