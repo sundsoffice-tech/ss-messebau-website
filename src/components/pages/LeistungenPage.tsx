@@ -645,8 +645,8 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                     <img
                       src="/images/moebel/showroom-ausstellungsmoebel.svg"
                       alt="Professioneller Showroom mit Ausstellungsmöbeln und Bodenproben – Möbelbau von S&S Messebau"
-                      width="400"
-                      height="300"
+                      width="800"
+                      height="600"
                       loading="lazy"
                       decoding="async"
                       className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
@@ -656,8 +656,8 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                     <img
                       src="/images/moebel/individuelles-display-regal-led.svg"
                       alt="Maßgefertigtes Display-Regal mit LED-Beleuchtung – individueller Möbelbau von S&S Messebau"
-                      width="400"
-                      height="300"
+                      width="800"
+                      height="600"
                       loading="lazy"
                       decoding="async"
                       className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
