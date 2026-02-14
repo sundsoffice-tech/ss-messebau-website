@@ -16,7 +16,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Über S&S Messebau – Ihr Partner aus NRW</h1>
           <p className="text-xl opacity-90 max-w-3xl">
             Seit vielen Jahren realisieren wir Messestände mit Leidenschaft und Präzision. 
-            Als inhabergeführte GbR aus Mönchengladbach verbinden wir persönliche Betreuung mit professionellem Service.
+            Als inhabergeführte GbR aus Hückelhoven verbinden wir persönliche Betreuung mit professionellem Service.
           </p>
         </div>
       </section>
@@ -479,8 +479,8 @@ export function ImpressumPage() {
             <p>
               S&S Messebau GbR<br />
               Fabrice Noel Schippers & Parampuneet Singh<br />
-              Bonnenbroicherstraße 93<br />
-              41238 Mönchengladbach<br />
+              Marienstraße 37<br />
+              41836 Hückelhoven<br />
               Deutschland
             </p>
           </div>
@@ -496,8 +496,8 @@ export function ImpressumPage() {
           <div>
             <h2 className="text-xl font-semibold text-foreground mb-2">Kontakt</h2>
             <p>
-              Telefon: +49 176 31570041<br />
-              E-Mail: sunds-messebau@gmx.de<br />
+              Mobil: +49 1514 0368754<br />
+              E-Mail: info@sundsmessebau.com<br />
               Internet: www.sundsmessebau.de
             </p>
           </div>
@@ -574,9 +574,9 @@ export function DatenschutzPage() {
               Verantwortlicher für die Datenverarbeitung:<br />
               S&S Messebau GbR<br />
               Fabrice Noel Schippers & Parampuneet Singh<br />
-              Bonnenbroicherstraße 93<br />
-              41238 Mönchengladbach<br />
-              E-Mail: sunds-messebau@gmx.de
+              Marienstraße 37<br />
+              41836 Hückelhoven<br />
+              E-Mail: info@sundsmessebau.com
             </p>
           </div>
         </div>
