@@ -641,7 +641,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 className="bg-accent hover:bg-accent/90 transition-colors"
                 size={scrolled ? 'sm' : 'default'}
               >
-                Projekt anfragen
+                Anfrage
               </Button>
               <Button
                 variant="ghost"
@@ -787,7 +787,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 className="bg-accent hover:bg-accent/90 transition-colors"
                 size="sm"
               >
-                Anfragen
+                Anfrage
               </Button>
               <Button
                 variant="ghost"
@@ -819,7 +819,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               onClick={onOpenInquiry}
               className="bg-accent hover:bg-accent/90 transition-colors text-sm px-3 py-2 min-h-[44px]"
             >
-              Anfragen
+              Anfrage
             </Button>
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>

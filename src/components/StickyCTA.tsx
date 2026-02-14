@@ -22,20 +22,20 @@ export function StickyCTA({ onClick }: StickyCTAProps) {
       <Button
         size="lg"
         onClick={() => openWhatsApp('sticky_desktop')}
-        className="bg-[#25D366] hover:bg-[#20BD5A] text-white shadow-lg hover:shadow-xl transition-all hover:scale-105 gap-2 group"
+        className="border-2 border-[#25D366] bg-transparent text-[#25D366] hover:bg-[#25D366]/10 shadow-lg hover:shadow-xl transition-all hover:scale-105 gap-2 group"
         aria-label="Per WhatsApp kontaktieren unter +49 1514 0368754 (öffnet externe App)"
       >
         <WhatsappLogo className="h-5 w-5 group-hover:animate-pulse" weight="fill" aria-hidden="true" />
-        <span>WhatsApp</span>
+        <span>Chat</span>
       </Button>
       <Button
         size="lg"
         onClick={() => { trackHeroCTAClick('sticky_desktop'); onClick() }}
         className="bg-accent hover:bg-accent/90 shadow-lg hover:shadow-xl transition-all hover:scale-105 gap-2"
-        aria-label="Projekt anfragen - Formular öffnen"
+        aria-label="Anfrage senden - Formular öffnen"
       >
         <PaperPlaneRight className="h-5 w-5" aria-hidden="true" />
-        <span>Projekt anfragen</span>
+        <span>Anfrage</span>
       </Button>
     </div>
   )
@@ -53,20 +53,20 @@ export function MobileStickyCTA({ onClick }: StickyCTAProps) {
         <Button
           size="lg"
           onClick={() => openWhatsApp('sticky_mobile')}
-          className="flex-1 bg-[#25D366] hover:bg-[#20BD5A] text-white gap-2 min-h-[44px] text-base font-medium"
+          className="flex-1 border-2 border-[#25D366] bg-transparent text-[#25D366] hover:bg-[#25D366]/10 gap-2 min-h-[44px] text-base font-medium"
           aria-label="Per WhatsApp kontaktieren unter +49 1514 0368754 (öffnet externe App)"
         >
           <WhatsappLogo className="h-5 w-5" weight="fill" aria-hidden="true" />
-          <span>WhatsApp</span>
+          <span>Chat</span>
         </Button>
         <Button
           size="lg"
           onClick={() => { trackHeroCTAClick('sticky_mobile'); onClick() }}
           className="flex-1 bg-accent hover:bg-accent/90 gap-2 min-h-[44px] text-base font-medium"
-          aria-label="Projekt anfragen - Formular öffnen"
+          aria-label="Anfrage senden - Formular öffnen"
         >
           <PaperPlaneRight className="h-5 w-5" aria-hidden="true" />
-          <span>Anfragen</span>
+          <span>Anfrage</span>
         </Button>
       </div>
     </div>
