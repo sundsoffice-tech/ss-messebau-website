@@ -48,34 +48,17 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         aria-labelledby="hero-heading"
       >
         <div className="absolute inset-0 hero-overlay" />
-        <picture>
-          <source
-            type="image/avif"
-            srcSet="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=640&fm=avif&q=75&auto=format 640w,
-                    https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1024&fm=avif&q=75&auto=format 1024w,
-                    https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1920&fm=avif&q=75&auto=format 1920w"
-            sizes="100vw"
-          />
-          <source
-            type="image/webp"
-            srcSet="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=640&fm=webp&q=75&auto=format 640w,
-                    https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1024&fm=webp&q=75&auto=format 1024w,
-                    https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1920&fm=webp&q=75&auto=format 1920w"
-            sizes="100vw"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1024&q=75&auto=format"
-            alt=""
-            role="presentation"
-            aria-hidden="true"
-            width="1920"
-            height="1080"
-            className="absolute inset-0 w-full h-full object-cover opacity-20"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-          />
-        </picture>
+        <img
+          src="/images/hero-messebau-startseite.jpg"
+          alt="Professioneller Messebau von S&S Messebau – Messestände, Events und Ladenbau aus Mönchengladbach"
+          width="1920"
+          height="1080"
+          className="absolute inset-0 w-full h-full object-cover opacity-20"
+          style={{ objectPosition: 'center 25%' }}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+        />
         
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 py-12 sm:py-16">
           <div className="max-w-3xl">
