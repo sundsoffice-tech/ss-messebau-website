@@ -52,7 +52,7 @@ const PAGE_META: Record<string, PageMeta> = {
   },
   '/impressum': {
     title: 'Impressum | S&S Messebau GbR',
-    description: 'Impressum der S&S Messebau GbR, Mönchengladbach. Angaben gemäß § 5 TMG.'
+    description: 'Impressum der S&S Messebau GbR, Hückelhoven. Angaben gemäß § 5 TMG.'
   },
   '/datenschutz': {
     title: 'Datenschutzerklärung | S&S Messebau GbR',

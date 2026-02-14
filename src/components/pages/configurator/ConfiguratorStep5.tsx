@@ -147,7 +147,7 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
               }`}
             >
               <RadioGroupItem value="abholung" id="abholung" />
-              <span>Abholung in Mönchengladbach (kostenlos)</span>
+              <span>Abholung in Hückelhoven (kostenlos)</span>
             </Label>
           </RadioGroup>
         </div>

@@ -62,7 +62,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         <div className="absolute inset-0 hero-overlay" />
         <img
           src="/images/hero-messebau-startseite.jpg"
-          alt="Professioneller Messebau von S&S Messebau – Messestände, Events und Ladenbau aus Mönchengladbach"
+          alt="Professioneller Messebau von S&S Messebau – Messestände, Events und Ladenbau aus Hückelhoven"
           width="1920"
           height="1080"
           className="absolute inset-0 w-full h-full object-cover opacity-20"
