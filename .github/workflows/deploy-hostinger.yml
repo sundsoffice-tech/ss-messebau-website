@@ -84,6 +84,11 @@ jobs:
           echo "Fetching hostinger branch..."
           git fetch origin hostinger || true
           
+          # Remove dist/ to prevent git conflict when switching branches
+          echo "Cleaning dist/ directory before branch switch..."
+          git rm -rf dist/ 2>/dev/null || true
+          rm -rf dist/
+          
           if git rev-parse --verify origin/hostinger >/dev/null 2>&1; then
             echo "✓ Hostinger branch exists, checking out..."
             git checkout hostinger
