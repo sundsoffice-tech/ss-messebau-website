@@ -2,12 +2,13 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, CheckCircle } from '@phosphor-icons/react'
+import { ArrowRight, CheckCircle, Leaf, Recycle, TreeEvergreen, Truck } from '@phosphor-icons/react'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { useEffect, useState } from 'react'
 import { parseDeepLink } from '@/lib/deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { DEMO_REFERENCES } from '@/lib/demo-data'
+import { CaseStudyCard } from '@/components/ui/CaseStudyCard'
 
 interface BranchenPageProps {
   onOpenInquiry: () => void
@@ -100,19 +101,19 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
 
               <div className="mt-8 md:mt-10">
                 <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Referenzprojekte Food & Feinkost</h3>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                  {DEMO_REFERENCES.filter(r => r.branche === 'food').map((ref) => (
-                    <Card key={ref.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                      <div className="aspect-video relative overflow-hidden bg-muted">
-                        <img src={ref.imageUrl} alt={ref.title} className="object-cover w-full h-full" loading="lazy" decoding="async" />
-                        <Badge className="absolute top-3 left-3 bg-background/95 text-foreground shadow text-xs">{ref.size}</Badge>
-                      </div>
-                      <CardContent className="p-4">
-                        <p className="font-semibold text-sm mb-1">{ref.title}</p>
-                        {ref.messe && <p className="text-xs text-muted-foreground mb-1">{ref.messe}</p>}
-                        <p className="text-xs text-muted-foreground line-clamp-2">{ref.result}</p>
-                      </CardContent>
-                    </Card>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {DEMO_REFERENCES.filter(r => r.branche === 'food').slice(0, 2).map((ref) => (
+                    <CaseStudyCard
+                      key={ref.id}
+                      title={ref.title}
+                      challenge={ref.challenge}
+                      solution={ref.solution}
+                      result={ref.result}
+                      imageUrl={ref.imageUrl}
+                      branche={ref.branche}
+                      size={ref.size}
+                      messe={ref.messe}
+                    />
                   ))}
                 </div>
               </div>
@@ -160,19 +161,19 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
 
               <div className="mt-8 md:mt-10">
                 <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Referenzprojekte Versicherungen</h3>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                  {DEMO_REFERENCES.filter(r => r.branche === 'versicherungen').map((ref) => (
-                    <Card key={ref.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                      <div className="aspect-video relative overflow-hidden bg-muted">
-                        <img src={ref.imageUrl} alt={ref.title} className="object-cover w-full h-full" loading="lazy" decoding="async" />
-                        <Badge className="absolute top-3 left-3 bg-background/95 text-foreground shadow text-xs">{ref.size}</Badge>
-                      </div>
-                      <CardContent className="p-4">
-                        <p className="font-semibold text-sm mb-1">{ref.title}</p>
-                        {ref.messe && <p className="text-xs text-muted-foreground mb-1">{ref.messe}</p>}
-                        <p className="text-xs text-muted-foreground line-clamp-2">{ref.result}</p>
-                      </CardContent>
-                    </Card>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {DEMO_REFERENCES.filter(r => r.branche === 'versicherungen').slice(0, 2).map((ref) => (
+                    <CaseStudyCard
+                      key={ref.id}
+                      title={ref.title}
+                      challenge={ref.challenge}
+                      solution={ref.solution}
+                      result={ref.result}
+                      imageUrl={ref.imageUrl}
+                      branche={ref.branche}
+                      size={ref.size}
+                      messe={ref.messe}
+                    />
                   ))}
                 </div>
               </div>
@@ -220,19 +221,19 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
 
               <div className="mt-8 md:mt-10">
                 <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Referenzprojekte Industrie</h3>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                  {DEMO_REFERENCES.filter(r => r.branche === 'industrie').map((ref) => (
-                    <Card key={ref.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                      <div className="aspect-video relative overflow-hidden bg-muted">
-                        <img src={ref.imageUrl} alt={ref.title} className="object-cover w-full h-full" loading="lazy" decoding="async" />
-                        <Badge className="absolute top-3 left-3 bg-background/95 text-foreground shadow text-xs">{ref.size}</Badge>
-                      </div>
-                      <CardContent className="p-4">
-                        <p className="font-semibold text-sm mb-1">{ref.title}</p>
-                        {ref.messe && <p className="text-xs text-muted-foreground mb-1">{ref.messe}</p>}
-                        <p className="text-xs text-muted-foreground line-clamp-2">{ref.result}</p>
-                      </CardContent>
-                    </Card>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {DEMO_REFERENCES.filter(r => r.branche === 'industrie').slice(0, 2).map((ref) => (
+                    <CaseStudyCard
+                      key={ref.id}
+                      title={ref.title}
+                      challenge={ref.challenge}
+                      solution={ref.solution}
+                      result={ref.result}
+                      imageUrl={ref.imageUrl}
+                      branche={ref.branche}
+                      size={ref.size}
+                      messe={ref.messe}
+                    />
                   ))}
                 </div>
               </div>
@@ -272,6 +273,41 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="nachhaltigkeit-branchen" className="py-12 md:py-16">
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+          <div className="text-center mb-10 md:mb-12">
+            <div className="flex items-center justify-center gap-2.5 mb-3">
+              <Leaf className="h-8 w-8 text-green-600" weight="duotone" />
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">Nachhaltiger Messebau für jede Branche</h2>
+            </div>
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Umweltbewusster Messeauftritt – ohne Kompromisse bei Qualität und Wirkung.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: Recycle, title: 'Wiederverwendbare Systeme', desc: 'Modulare Stände, die mehrfach eingesetzt werden – spart bis zu 60 % Material.' },
+              { icon: TreeEvergreen, title: 'Nachhaltige Materialien', desc: 'FSC-Holz, LED-Beleuchtung und recycelbare Werkstoffe als Standard.' },
+              { icon: Truck, title: 'Effiziente Logistik', desc: 'Regionale Partner, gebündelte Transporte und CO₂-optimierte Planung.' },
+              { icon: Leaf, title: 'Kosteneinsparung', desc: 'Nachhaltige Systeme amortisieren sich ab der 2. Messe deutlich.' },
+            ].map((item, index) => {
+              const Icon = item.icon
+              return (
+                <Card key={index}>
+                  <CardContent className="p-5 md:p-6 text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-50 mx-auto mb-4">
+                      <Icon className="h-6 w-6 text-green-600" weight="duotone" />
+                    </div>
+                    <h3 className="font-semibold text-base md:text-lg mb-2 leading-tight">{item.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
         </div>
       </section>

@@ -12,6 +12,7 @@ import { CursorRipple, useCursorScale } from './components/CursorEffects'
 import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath } from './lib/deep-linking'
 import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 import { usePageMeta } from './hooks/use-page-meta'
+import { I18nContext, getTranslation, getStoredLanguage, storeLanguage, type Language } from './lib/i18n'
 
 // Lazy load page components for code-splitting
 const HomePage = lazy(() => import('./components/pages/HomePage').then(m => ({ default: m.HomePage })))
@@ -33,6 +34,15 @@ const AdminPage = lazy(() => import('./components/pages/AdminPage').then(m => ({
 function App() {
   const [inquiryDialogOpen, setInquiryDialogOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState('/')
+  const [lang, setLangState] = useState<Language>(getStoredLanguage)
+
+  const setLang = (newLang: Language) => {
+    setLangState(newLang)
+    storeLanguage(newLang)
+    document.documentElement.lang = newLang
+  }
+
+  const t = getTranslation(lang)
 
   useSmoothScrollLinks()
   useCursorScale() // Add cursor scale effect
@@ -114,7 +124,7 @@ function App() {
   }
 
   return (
-    <>
+    <I18nContext.Provider value={{ lang, setLang, t }}>
       <CustomCursor isVisible={true} />
       <CursorGlow />
       <CursorRipple />
@@ -144,7 +154,7 @@ function App() {
         <InquiryDialog open={inquiryDialogOpen} onOpenChange={setInquiryDialogOpen} />
         <Toaster position="top-center" richColors />
       </div>
-    </>
+    </I18nContext.Provider>
   )
 }
 

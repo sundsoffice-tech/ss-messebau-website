@@ -24,7 +24,8 @@ import {
   Truck,
   Wrench,
   ArrowRight,
-  CalendarDot
+  CalendarDot,
+  GlobeSimple
 } from '@phosphor-icons/react'
 import {
   DropdownMenu,
@@ -34,6 +35,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
 import { navigateToPageAndSection, parseDeepLink } from '@/lib/deep-linking'
+import { useTranslation } from '@/lib/i18n'
 
 interface HeaderProps {
   onOpenInquiry: () => void
@@ -184,6 +186,9 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   const tabletMegaMenuRef = useRef<HTMLDivElement>(null)
   const tabletMegaMenuTriggerRef = useRef<HTMLButtonElement>(null)
   const sheetContentRef = useRef<HTMLDivElement>(null)
+  const { lang, setLang } = useTranslation()
+
+  const toggleLang = () => setLang(lang === 'de' ? 'en' : 'de')
 
   useEffect(() => {
     const updatePath = () => setCurrentPath(parseDeepLink(window.location.hash).page)
@@ -635,6 +640,16 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               >
                 Projekt anfragen
               </Button>
+              <Button
+                variant="ghost"
+                onClick={toggleLang}
+                size={scrolled ? 'sm' : 'default'}
+                className="font-semibold min-w-[44px]"
+                aria-label={lang === 'de' ? 'Switch to English' : 'Auf Deutsch wechseln'}
+              >
+                <GlobeSimple className="h-4 w-4 mr-1" />
+                {lang === 'de' ? 'EN' : 'DE'}
+              </Button>
             </div>
           </nav>
 
@@ -771,10 +786,30 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               >
                 Anfragen
               </Button>
+              <Button
+                variant="ghost"
+                onClick={toggleLang}
+                size="sm"
+                className="font-semibold min-w-[44px]"
+                aria-label={lang === 'de' ? 'Switch to English' : 'Auf Deutsch wechseln'}
+              >
+                <GlobeSimple className="h-4 w-4 mr-1" />
+                {lang === 'de' ? 'EN' : 'DE'}
+              </Button>
             </div>
           </nav>
 
           <div className="flex items-center gap-2 md:hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleLang}
+              className="font-semibold min-w-[44px] min-h-[44px] px-2"
+              aria-label={lang === 'de' ? 'Switch to English' : 'Auf Deutsch wechseln'}
+            >
+              <GlobeSimple className="h-4 w-4 mr-1" />
+              {lang === 'de' ? 'EN' : 'DE'}
+            </Button>
             <Button
               variant="default"
               size="sm"
