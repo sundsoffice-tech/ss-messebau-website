@@ -10,9 +10,7 @@
 @import '@radix-ui/colors/violet.css' layer(base);
 @import '@radix-ui/colors/violet-dark.css' layer(base);
 
-@import 'tailwindcss/theme' layer(theme);
 
-@import 'tailwindcss/preflight' layer(base);
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
@@ -28,12 +26,12 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--border, currentColor);
   }
 }
 
 @layer base {
-  #root {
+  :root {
     /* Contrast colors for the color palettes we're using */
     --slate-contrast: #fff;
     --blue-contrast: #fff;
@@ -86,7 +84,11 @@
     --size-80: calc(20rem * var(--size-scale));
     --size-96: calc(24rem * var(--size-scale));
 
-    /* Border radii */
+    /* Border radii 
+     * Note: This system (--radius-sm/md/lg) works alongside the separate --radius variable
+     * defined in main.css. The --radius variable is used by shadcn/ui components,
+     * while --radius-sm/md/lg are part of the theme system for custom components.
+     */
     --radius-factor: 1;
     --radius-sm: calc(2px * var(--radius-factor) * var(--size-scale));
     --radius-md: calc(6px * var(--radius-factor) * var(--size-scale));
@@ -173,7 +175,7 @@
     --font-family: var(--font-sans-serif);
   }
 
-  #root.dark-theme {
+  :root.dark-theme {
     --color-bg: var(--color-neutral-1);
     --color-bg-inset: #000000;
     --color-bg-overlay: var(--color-neutral-3);
