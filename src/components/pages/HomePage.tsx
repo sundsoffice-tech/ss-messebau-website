@@ -48,26 +48,17 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         aria-labelledby="hero-heading"
       >
         <div className="absolute inset-0 hero-overlay" />
-        <picture>
-          <source
-            type="image/webp"
-            srcSet="/images/hero-messebau-startseite.webp 640w,
-                    /images/hero-messebau-startseite.webp 1024w,
-                    /images/hero-messebau-startseite.webp 1920w"
-            sizes="100vw"
-          />
-          <img
-            src="/images/hero-messebau-startseite.jpg"
-            alt="Professioneller Messebau von S&S Messebau – Messestände, Events und Ladenbau aus Mönchengladbach"
-            width="1920"
-            height="1080"
-            className="absolute inset-0 w-full h-full object-cover opacity-20"
-            style={{ objectPosition: 'center 25%' }}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-          />
-        </picture>
+        <img
+          src="/images/hero-messebau-startseite.jpg"
+          alt="Professioneller Messebau von S&S Messebau – Messestände, Events und Ladenbau aus Mönchengladbach"
+          width="1920"
+          height="1080"
+          className="absolute inset-0 w-full h-full object-cover opacity-20"
+          style={{ objectPosition: 'center 25%' }}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+        />
         
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 py-12 sm:py-16">
           <div className="max-w-3xl">
