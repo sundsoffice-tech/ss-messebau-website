@@ -432,7 +432,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 className="w-full h-full object-contain filter drop-shadow-sm group-hover:drop-shadow-md transition-all duration-300"
               />
             </div>
-            <div className="hidden xs:block">
+            <div className="hidden sm:block">
               <div className={`font-bold text-foreground transition-all duration-300 tracking-tight leading-tight ${
                 scrolled ? 'text-sm sm:text-lg' : 'text-base sm:text-xl'
               }`}>
@@ -663,7 +663,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   aria-label="Leistungen Übersicht"
                   onKeyDown={handleMegaMenuKeyDown}
                   onBlur={handleMegaMenuBlur}
-                  className="absolute left-0 top-full mt-2 w-[min(600px,calc(100vw-2rem))] z-50 max-h-[calc(100vh-80px)]"
+                  onMouseLeave={() => setMegaMenuOpen(false)}
+                  className="absolute right-0 top-full mt-2 w-[min(600px,calc(100vw-2rem))] z-50 max-h-[calc(100vh-80px)]"
                 >
                   <div className="bg-background border rounded-lg shadow-2xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto max-h-[calc(100vh-100px)]">
                     <div className="grid grid-cols-2 gap-3 mb-4">

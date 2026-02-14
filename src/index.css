@@ -1,6 +1,6 @@
 @layer base {
   * {
-    @apply border-border
+    @apply border-border;
   }
   
   html {
@@ -103,8 +103,8 @@
     overscroll-behavior-y: contain;
   }
   
-  /* Custom cursor styles - only on desktop with mouse */
-  @media (pointer: fine) and (hover: hover) and (min-width: 1024px) {
+  /* Custom cursor styles - only on desktop with mouse (min-width: 1280px to exclude tablets) */
+  @media (pointer: fine) and (hover: hover) and (min-width: 1280px) {
     * {
       cursor: none !important;
     }
