@@ -204,10 +204,11 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               </p>
               <div className="space-y-2.5 md:space-y-3 mb-6">
                 {[
-                  'Showroom-Design',
-                  'Ladeneinrichtungen',
-                  'Pop-Up-Stores',
-                  'Ausstellungsräume',
+                  'Individuelle Ladenkonzepte',
+                  'Showroom-Ausstellungssysteme',
+                  'Verkaufsflächen & Produktpräsentation',
+                  'Maßgefertigte Möbel & Regalsysteme',
+                  'LED-Beleuchtung & Digitale Displays',
                   'Corporate Identity Integration'
                 ].map((item, index) => (
                   <div key={index} className="flex items-center gap-2.5 md:gap-3">
@@ -233,23 +234,12 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
                 />
               </div>
-              <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                 <img 
-                  src="/images/ladenbau/kueche-hochglanz-marmor-led-beleuchtung.jpg"
-                  alt="Moderne Küche mit Hochglanz-Fronten, Marmor-Rückwand und LED-Beleuchtung"
-                  width="400"
-                  height="300"
-                  loading="lazy"
-                  decoding="async"
-                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-                <img 
-                  src="/images/ladenbau/kueche-hochglanz-holz-arbeitsplatte.jpg"
-                  alt="Einbauküche mit weißen Hochglanz-Fronten und dunkler Holz-Arbeitsplatte"
-                  width="400"
-                  height="300"
+                  src="/images/ladenbau/showroom-bodenproben-ausstellung.jpg"
+                  alt="Professioneller Showroom mit Bodenproben-Ausstellungssystem – Ladenbau und Messebau von S&S"
+                  width="800"
+                  height="450"
                   loading="lazy"
                   decoding="async"
                   className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
@@ -265,8 +255,8 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               <div className="lg:order-2 grid grid-cols-2 gap-4">
                 <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
-                    src="/images/boeden/showroom-bodenproben-ausstellung.jpg"
-                    alt="Professioneller Showroom mit Bodenproben-Ausstellungssystem – Messebau von S&S"
+                    src="/images/boeden/besprechungsraum-vinylboden-moebel.jpg"
+                    alt="Besprechungsraum mit modernem Vinylboden und hochwertigen Möbeln – Komplettausstattung von S&S Messebau"
                     width="800"
                     height="450"
                     loading="lazy"
@@ -287,8 +277,19 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 </div>
                 <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                   <img 
-                    src="/images/boeden/besprechungsraum-vinylboden-moebel.jpg"
-                    alt="Besprechungsraum mit modernem Vinylboden und hochwertigen Möbeln"
+                    src="/images/boeden/kueche-hochglanz-marmor-led-beleuchtung.jpg"
+                    alt="Moderne Küche mit Hochglanz-Fronten, Marmor-Rückwand und hochwertigem Fliesenboden"
+                    width="400"
+                    height="300"
+                    loading="lazy"
+                    decoding="async"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+                  <img 
+                    src="/images/boeden/kueche-hochglanz-holz-arbeitsplatte.jpg"
+                    alt="Einbauküche mit weißen Hochglanz-Fronten, dunkler Holz-Arbeitsplatte und modernem Fliesenboden"
                     width="400"
                     height="300"
                     loading="lazy"
@@ -305,18 +306,20 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <h2 className="text-2xl md:text-3xl font-bold leading-tight">Böden & Ausstattung</h2>
                 </div>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Erst der richtige Boden und die perfekte Ausstattung machen einen Messestand komplett. 
-                  Wir bieten Ihnen Premium-Bodenlösungen und hochwertige Möblierung, die Ihre Marke perfekt repräsentieren.
+                  Die perfekte Ergänzung für jeden Stand: Hochwertige Messeböden (Teppich, Vinyl, Parkett), 
+                  stilvolle Möblierung, professionelle Beleuchtung und moderne Technik. Von Messeständen 
+                  bis zu kompletten Küchen- und Raumausstattungen – wir liefern die Komplettlösung.
                 </p>
                 <div className="bg-primary/5 rounded-lg p-4 md:p-6 mb-6">
                   <h3 className="font-semibold text-base md:text-lg mb-3">Unser Versprechen</h3>
                   <div className="space-y-2.5 md:space-y-3">
                     {[
-                      'Schnelle Verlegung auch bei großen Flächen',
-                      'Hochwertige Materialien von führenden Herstellern',
-                      'Passgenaue Zuschnitte ohne Verschnitt',
-                      'Nachhaltige & wiederverwendbare Systeme',
-                      'Komplette Möblierung aus einer Hand'
+                      'Messeboden-Systeme (Teppich, Vinyl, Parkett)',
+                      'Komplette Küchen- und Raumausstattungen',
+                      'Lounge-Möbel & Sitzgruppen',
+                      'Theken & Empfangsbereiche',
+                      'LED-Beleuchtungskonzepte',
+                      'Multimedia & Präsentationstechnik'
                     ].map((item, index) => (
                       <div key={index} className="flex items-center gap-2.5 md:gap-3">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
