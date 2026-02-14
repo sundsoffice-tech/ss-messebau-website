@@ -428,17 +428,22 @@ export function Header({ onOpenInquiry }: HeaderProps) {
 
           <nav className="hidden xl:flex items-center gap-1" aria-label="Hauptnavigation">
             <Button
+              asChild
               variant="ghost"
-              onClick={(e) => handleNavigation('/', e)}
               className={`transition-colors ${
                 currentPath === '/' 
                   ? 'text-primary font-semibold bg-primary/5' 
                   : 'hover:text-primary'
               }`}
               size={scrolled ? 'sm' : 'default'}
-              aria-current={currentPath === '/' ? 'page' : undefined}
             >
-              Start
+              <a 
+                href="#/"
+                onClick={(e) => handleNavigation('/', e)}
+                aria-current={currentPath === '/' ? 'page' : undefined}
+              >
+                Start
+              </a>
             </Button>
 
             <div className="relative">
@@ -522,17 +527,22 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             {PRIMARY_NAV.slice(2).map((item) => (
               <Button
                 key={item.path}
+                asChild
                 variant="ghost"
-                onClick={(e) => handleNavigation(item.path, e)}
                 className={`transition-colors ${
                   currentPath === item.path 
                     ? 'text-primary font-semibold bg-primary/5' 
                     : 'hover:text-primary'
                 }`}
                 size={scrolled ? 'sm' : 'default'}
-                aria-current={currentPath === item.path ? 'page' : undefined}
               >
-                {item.label}
+                <a
+                  href={`#${item.path}`}
+                  onClick={(e) => handleNavigation(item.path, e)}
+                  aria-current={currentPath === item.path ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
               </Button>
             ))}
             
@@ -587,17 +597,22 @@ export function Header({ onOpenInquiry }: HeaderProps) {
 
           <nav className="hidden md:flex xl:hidden items-center gap-1" aria-label="Hauptnavigation">
             <Button
+              asChild
               variant="ghost"
-              onClick={(e) => handleNavigation('/', e)}
               className={`transition-colors ${
                 currentPath === '/' 
                   ? 'text-primary font-semibold bg-primary/5' 
                   : 'hover:text-primary'
               }`}
               size="sm"
-              aria-current={currentPath === '/' ? 'page' : undefined}
             >
-              Start
+              <a
+                href="#/"
+                onClick={(e) => handleNavigation('/', e)}
+                aria-current={currentPath === '/' ? 'page' : undefined}
+              >
+                Start
+              </a>
             </Button>
 
             <div className="relative">
@@ -622,17 +637,22 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             {PRIMARY_NAV.slice(2, 3).map((item) => (
               <Button
                 key={item.path}
+                asChild
                 variant="ghost"
-                onClick={(e) => handleNavigation(item.path, e)}
                 className={`transition-colors ${
                   currentPath === item.path 
                     ? 'text-primary font-semibold bg-primary/5' 
                     : 'hover:text-primary'
                 }`}
                 size="sm"
-                aria-current={currentPath === item.path ? 'page' : undefined}
               >
-                {item.label}
+                <a
+                  href={`#${item.path}`}
+                  onClick={(e) => handleNavigation(item.path, e)}
+                  aria-current={currentPath === item.path ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
               </Button>
             ))}
             
@@ -751,12 +771,17 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                           })}
                         </div>
                         <Button
+                          asChild
                           variant="ghost"
-                          onClick={(e) => handleNavigation('/leistungen', e)}
                           className="w-full mt-3 gap-2 text-primary min-h-[44px] text-base"
                         >
-                          Alle Leistungen anzeigen
-                          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                          <a
+                            href="#/leistungen"
+                            onClick={(e) => handleNavigation('/leistungen', e)}
+                          >
+                            Alle Leistungen anzeigen
+                            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                          </a>
                         </Button>
                       </div>
 
@@ -769,13 +794,18 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                       </Button>
 
                       <Button
+                        asChild
                         variant={currentPath === '/' ? 'secondary' : 'ghost'}
-                        onClick={(e) => handleNavigation('/', e)}
                         className="justify-start gap-3 min-h-[48px] w-full text-base"
-                        aria-current={currentPath === '/' ? 'page' : undefined}
                       >
-                        <House className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-                        <span className="text-left">Start</span>
+                        <a
+                          href="#/"
+                          onClick={(e) => handleNavigation('/', e)}
+                          aria-current={currentPath === '/' ? 'page' : undefined}
+                        >
+                          <House className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+                          <span className="text-left">Start</span>
+                        </a>
                       </Button>
 
                       {ALL_NAV.slice(2).map((item) => {
@@ -783,13 +813,18 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         return (
                           <Button
                             key={item.path}
+                            asChild
                             variant={currentPath === item.path ? 'secondary' : 'ghost'}
-                            onClick={(e) => handleNavigation(item.path, e)}
                             className="justify-start gap-3 min-h-[48px] w-full text-base"
-                            aria-current={currentPath === item.path ? 'page' : undefined}
                           >
-                            <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-                            <span className="text-left">{item.label}</span>
+                            <a
+                              href={`#${item.path}`}
+                              onClick={(e) => handleNavigation(item.path, e)}
+                              aria-current={currentPath === item.path ? 'page' : undefined}
+                            >
+                              <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+                              <span className="text-left">{item.label}</span>
+                            </a>
                           </Button>
                         )
                       })}
