@@ -20,6 +20,8 @@ import { GuaranteeBanner } from '@/components/ui/GuaranteeBanner'
 import { FactBar } from '@/components/ui/FactBar'
 import { LogoWall } from '@/components/ui/LogoWall'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
+import { trackHeroCTAClick, trackReferenceDetailView } from '@/lib/analytics'
+import { useScrollDepthTracking, useDwellTimeTracking } from '@/hooks/use-analytics'
 
 interface HomePageProps {
   onOpenInquiry: () => void
@@ -37,6 +39,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
     'testimonials',
     'cta'
   ])
+
+  useScrollDepthTracking('home')
+  useDwellTimeTracking('home')
 
   const handleNavigation = (path: string) => {
     window.location.hash = path
@@ -82,7 +87,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Button 
                 size="lg" 
-                onClick={onOpenInquiry}
+                onClick={() => { trackHeroCTAClick('hero'); onOpenInquiry() }}
                 className="bg-accent hover:bg-accent/90 px-6 sm:px-8 py-6 text-base sm:text-lg font-medium min-h-[48px]"
                 aria-label="Projekt anfragen - Formular öffnen"
               >
@@ -273,7 +278,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               <Card 
                 key={reference.id} 
                 className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
-                onClick={() => handleNavigation('/referenzen')}
+                onClick={() => { trackReferenceDetailView(reference.id); handleNavigation('/referenzen') }}
               >
                 <div className="aspect-video relative overflow-hidden bg-muted">
                   <img 
@@ -412,7 +417,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg"
-              onClick={onOpenInquiry}
+              onClick={() => { trackHeroCTAClick('cta_section'); onOpenInquiry() }}
               className="bg-accent hover:bg-accent/90 text-accent-foreground"
             >
               Jetzt Projekt anfragen

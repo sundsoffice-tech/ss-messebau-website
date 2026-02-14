@@ -6,6 +6,7 @@ import { StickyCTA, MobileStickyCTA } from './components/StickyCTA'
 import { InquiryDialog } from './components/InquiryDialog'
 import { LoadingScreen } from './components/LoadingScreen'
 import { NavigationLoadingIndicator } from './components/NavigationLoadingIndicator'
+import CookieConsent from './components/CookieConsent'
 import { CustomCursor } from './components/CustomCursor'
 import { CursorGlow } from './components/CursorGlow'
 import { CursorRipple, useCursorScale } from './components/CursorEffects'
@@ -156,6 +157,7 @@ function App() {
         <StickyCTA onClick={() => setInquiryDialogOpen(true)} />
         <MobileStickyCTA onClick={() => setInquiryDialogOpen(true)} />
         <InquiryDialog open={inquiryDialogOpen} onOpenChange={setInquiryDialogOpen} />
+        <CookieConsent />
         <Toaster position="top-center" richColors />
       </div>
     </I18nContext.Provider>

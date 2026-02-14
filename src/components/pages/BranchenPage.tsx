@@ -5,6 +5,8 @@ import { Badge } from '@/components/ui/badge'
 import { ArrowRight, CheckCircle, Leaf, Recycle, TreeEvergreen, Truck } from '@phosphor-icons/react'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { useEffect, useState } from 'react'
+import { trackHeroCTAClick } from '@/lib/analytics'
+import { useScrollDepthTracking, useDwellTimeTracking } from '@/hooks/use-analytics'
 import { parseDeepLink } from '@/lib/deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { DEMO_REFERENCES } from '@/lib/demo-data'
@@ -21,6 +23,8 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
   const { t } = useTranslation()
   
   useSectionObserver(['food', 'versicherungen', 'industrie'])
+  useScrollDepthTracking('branchen')
+  useDwellTimeTracking('branchen')
 
   useEffect(() => {
     const deepLink = parseDeepLink(window.location.hash)
@@ -83,7 +87,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  <Button onClick={() => { trackHeroCTAClick('branchen_food'); onOpenInquiry() }} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                     Food-Stand anfragen
                     <ArrowRight className="ml-2" />
                   </Button>
@@ -143,7 +147,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  <Button onClick={() => { trackHeroCTAClick('branchen_versicherungen'); onOpenInquiry() }} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                     Versicherungs-Stand anfragen
                     <ArrowRight className="ml-2" />
                   </Button>
@@ -203,7 +207,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  <Button onClick={() => { trackHeroCTAClick('branchen_industrie'); onOpenInquiry() }} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                     Industrie-Stand anfragen
                     <ArrowRight className="ml-2" />
                   </Button>

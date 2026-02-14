@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Lightning, ArrowRight } from '@phosphor-icons/react'
+import { track48hBannerClick } from '@/lib/analytics'
 
 interface GuaranteeBannerProps {
   onOpenInquiry: () => void
@@ -18,7 +19,7 @@ export function GuaranteeBanner({ onOpenInquiry }: GuaranteeBannerProps) {
             </div>
           </div>
           <Button
-            onClick={onOpenInquiry}
+            onClick={() => { track48hBannerClick(); onOpenInquiry() }}
             variant="outline"
             size="sm"
             className="border-accent-foreground/30 bg-accent-foreground/15 text-accent-foreground hover:bg-accent-foreground/25 whitespace-nowrap"

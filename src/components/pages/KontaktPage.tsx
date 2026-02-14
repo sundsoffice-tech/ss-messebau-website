@@ -12,6 +12,8 @@ import { useKV } from '@/hooks/use-kv'
 import { useVoiceInput } from '@/hooks/use-voice-input'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
+import { trackFormSubmit } from '@/lib/analytics'
+import { useScrollDepthTracking, useDwellTimeTracking } from '@/hooks/use-analytics'
 
 interface KontaktPageProps {
   onOpenInquiry: () => void
@@ -27,6 +29,8 @@ interface QuickAction {
 
 export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
   useSectionObserver(['kontaktformular', 'anfahrt', 'ki-berater'])
+  useScrollDepthTracking('kontakt')
+  useDwellTimeTracking('kontakt')
 
   const [loading, setLoading] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
@@ -166,6 +170,11 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
     }
 
     setInquiries((current) => [...(current || []), inquiry])
+
+    trackFormSubmit('kontakt', {
+      budget: formData.budget || 'nicht_angegeben',
+      size: formData.size || 'nicht_angegeben',
+    })
 
     toast.success('Vielen Dank! Wir melden uns innerhalb von 24 Stunden bei Ihnen.')
     
