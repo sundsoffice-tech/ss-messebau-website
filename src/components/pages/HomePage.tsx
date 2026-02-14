@@ -351,20 +351,20 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
             {[
               {
                 text: 'Perfekter Stand, pünktlich aufgebaut und sehr professionell. Die Zusammenarbeit war unkompliziert und das Ergebnis überzeugt uns und unsere Messebesucher.',
-                author: 'Michael Schmidt',
-                company: 'Feinkost Meyer GmbH',
+                author: 'M. S.',
+                company: 'Lebensmittelbranche',
                 rating: 5
               },
               {
                 text: 'S&S Messebau hat uns von der ersten Planung bis zum Abbau begleitet. Absolut empfehlenswert für alle, die Wert auf Qualität und persönliche Betreuung legen.',
-                author: 'Julia Bergmann',
-                company: 'Allianz Regional',
+                author: 'J. B.',
+                company: 'Versicherungsbranche',
                 rating: 5
               },
               {
                 text: 'Faire Preise, kreative Lösungen und ein Team, das mitdenkt. Unser Showroom ist genau so geworden, wie wir ihn uns vorgestellt haben.',
-                author: 'Thomas Weber',
-                company: 'TechnoPlast GmbH',
+                author: 'T. W.',
+                company: 'Industrieunternehmen',
                 rating: 5
               }
             ].map((testimonial, index) => (

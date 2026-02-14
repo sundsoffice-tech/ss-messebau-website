@@ -163,7 +163,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
                   </tr>
                   <tr className="border-b">
                     <td className="p-4 font-medium">Erfahrung</td>
-                    <td className="p-4 bg-primary/5">500+ Projekte, 50+ Messen bundesweit</td>
+                    <td className="p-4 bg-primary/5">Branchenübergreifende Erfahrung, bundesweit aktiv</td>
                     <td className="p-4">Große Portfolios, aber weniger persönliche Betreuung</td>
                   </tr>
                 </tbody>

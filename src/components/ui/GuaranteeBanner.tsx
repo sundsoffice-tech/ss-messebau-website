@@ -21,7 +21,7 @@ export function GuaranteeBanner({ onOpenInquiry }: GuaranteeBannerProps) {
             onClick={onOpenInquiry}
             variant="outline"
             size="sm"
-            className="border-accent-foreground/30 text-accent-foreground hover:bg-accent-foreground/10 whitespace-nowrap"
+            className="border-accent-foreground/30 bg-accent-foreground/15 text-accent-foreground hover:bg-accent-foreground/25 whitespace-nowrap"
           >
             Jetzt Angebot anfordern
             <ArrowRight className="ml-1.5 h-4 w-4" />
