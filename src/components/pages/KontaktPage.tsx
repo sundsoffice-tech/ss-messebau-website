@@ -223,7 +223,7 @@ FIRMENINFO S&S MESSEBAU:
   - Eventbau & Bühnen
   - Ladenbau & Showrooms
   - Böden, Möbel, Ausstattung
-• Services: Design, 3D-Visualisierung, Produktion, Logistik, Auf-/Abbau, Lagerung, Wartung
+• Services: Design, Konzeptentwicklung, Produktion, Logistik, Auf-/Abbau, Lagerung, Wartung
 • USPs:
   - Persönliche Betreuung durch erfahrenes Team
   - Starkes Partnernetzwerk (Logistik, Material, Druck)

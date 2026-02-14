@@ -265,7 +265,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
           { label: 'Unser Ablauf', description: 'Transparenter Projektablauf vom Erstgespräch bis Abbau.', hash: '/ablauf' },
           { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für umweltbewusste Auftritte.', hash: '/nachhaltigkeit' },
           { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit.', hash: '/ueber-uns' },
-          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit 3D-Visualisierung anfordern.', hash: '/kontakt' },
+          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit persönlicher Beratung anfordern.', hash: '/kontakt' },
         ]}
       />
     </div>

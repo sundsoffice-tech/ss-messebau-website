@@ -72,7 +72,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 <div className="space-y-5 md:space-y-6">
                   {[
                     { step: '1', title: 'Beratung & Konzept', desc: 'Wir analysieren Ihre Anforderungen und entwickeln erste Ideen' },
-                    { step: '2', title: 'Design & Planung', desc: '3D-Visualisierung, Materialauswahl, technische Planung' },
+                    { step: '2', title: 'Design & Planung', desc: 'Konzeptentwicklung, Materialauswahl, technische Planung' },
                     { step: '3', title: 'Produktion', desc: 'Hochwertige Fertigung in unseren Partnerwerkstätten' },
                     { step: '4', title: 'Aufbau & Betreuung', desc: 'Pünktlicher Aufbau, technischer Support während der Messe' }
                   ].map((item, index) => (
