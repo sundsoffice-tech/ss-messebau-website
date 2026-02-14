@@ -626,8 +626,6 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     : 'hover:text-primary'
                 }`}
                 size="sm"
-                aria-expanded={false}
-                aria-haspopup="true"
               >
                 Leistungen
                 <CaretDown className="h-4 w-4 transition-transform duration-200" aria-hidden="true" />
