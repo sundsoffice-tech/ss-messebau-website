@@ -223,11 +223,13 @@ export function Header({ onOpenInquiry }: HeaderProps) {
       const deltaY = Math.abs(e.touches[0].clientY - startY)
       const absDeltaX = Math.abs(deltaX)
       
-      // Vertical scrolling takes priority
+      // Vertical scrolling takes priority - 30px threshold prevents accidental swipe activation
       if (!isDragging && deltaY > 30) {
         return
       }
       
+      // Horizontal swipe detection: 50px threshold prevents accidental activation,
+      // 3:1 ratio (horizontal vs vertical) ensures clearly horizontal gestures
       if (!isDragging && absDeltaX > 50 && absDeltaX > deltaY * 3) {
         isDragging = true
       }
@@ -770,6 +772,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   }
                 </Button>
               </SheetTrigger>
+              {/* Max width 320px ensures adequate tap area on larger phones while maintaining usability */}
               <SheetContent side="left" className="w-[min(85vw,320px)] px-0" ref={sheetContentRef}>
                 <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
                 <SheetDescription className="sr-only">
