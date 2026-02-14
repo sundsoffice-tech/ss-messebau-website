@@ -8,7 +8,8 @@ export function LoadingScreen() {
   useEffect(() => {
     // Use requestIdleCallback for non-blocking dismissal
     if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(() => setIsLoading(false), { timeout: 200 })
+      const id = (window as any).requestIdleCallback(() => setIsLoading(false), { timeout: 200 })
+      return () => (window as any).cancelIdleCallback(id)
     } else {
       const timer = setTimeout(() => setIsLoading(false), 150)
       return () => clearTimeout(timer)
