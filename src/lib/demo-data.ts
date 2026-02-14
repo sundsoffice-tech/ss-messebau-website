@@ -58,7 +58,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Warme Materialien, einladende Verkostungsstationen, LED-Produktpräsentation und gezielte Gesprächszonen für Einkäufer.',
     result: 'Zahlreiche B2B-Kontakte und Listungsvereinbarungen mit Feinkost-Händlern',
     keyfacts: ['ISM Köln', '35 qm', 'Verkostungstheken', 'Nachhaltige Materialien'],
-    kunde: undefined,
     messe: 'ISM Köln',
     zielsetzung: 'Premium-Produktpräsentation und B2B-Kontaktgenerierung für Markteintritt'
   },
@@ -74,7 +73,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Integrierte Kühlung, kunstvolle Displayvitrinen und beleuchtete Markenwand für maximale Produktinszenierung.',
     result: 'Deutlich mehr Besucherkontakte im Vergleich zum Vorjahr',
     keyfacts: ['ISM Köln', '28 qm', 'Kühlvitrinen', 'Markeninszenierung'],
-    kunde: undefined,
     messe: 'ISM Köln',
     zielsetzung: 'Optimale Produktpräsentation unter Temperaturkontrolle für Premiumschokolade'
   },
@@ -90,7 +88,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Semi-private Beratungsräume, warme Beleuchtung und digitale Produktwände für interaktive Tarifberatung.',
     result: 'Über 250 qualifizierte Leads und Auszeichnung als bester Messestand',
     keyfacts: ['DKM Dortmund', '60 qm', '8 Beratungsplätze', 'Digital Signage'],
-    kunde: undefined,
     messe: 'DKM Dortmund',
     zielsetzung: 'Vertrauensbildende Standgestaltung mit maximaler Beratungskapazität'
   },
@@ -106,7 +103,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Modulares, wiederverwendbares Standsystem mit schnellem Auf- und Abbau, transportoptimiert für den Roadshow-Einsatz.',
     result: 'Deutliche Kosteneinsparung gegenüber Einzelbauten, konsistente Markenpräsenz auf allen Events',
     keyfacts: ['Mehrere Messen/Jahr', '40 qm Systemstand', '2h Aufbauzeit', 'Wiederverwendbar'],
-    kunde: undefined,
     messe: 'Mehrere Messen',
     zielsetzung: 'Kosteneffiziente, konsistente Markenpräsenz über mehrere regionale Finanzmessen'
   },
@@ -122,7 +118,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Verstärkter Schwerlastboden, integrierte Drehstromversorgung und Doppelstock-Meetingbereich für separate Kundengespräche.',
     result: 'Zahlreiche qualifizierte Projektanfragen und Direktaufträge auf der Messe',
     keyfacts: ['Hannover Messe', '100 qm', 'Doppelstock', 'Schwerlastboden 2t'],
-    kunde: undefined,
     messe: 'Hannover Messe',
     zielsetzung: 'Professionelle Maschinenpräsentation mit Schwerlastinfrastruktur und VIP-Meetingbereich'
   },
@@ -138,7 +133,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Transparente Sicherheitsabsperrungen, erhöhte Demo-Plattform und interaktive Touch-Displays für technische Details.',
     result: 'Große Aufmerksamkeit und zahlreiche qualifizierte Leads',
     keyfacts: ['Automatica München', '75 qm', 'Live-Demo-Fläche', 'Safety-Absperrungen'],
-    kunde: undefined,
     messe: 'Automatica München',
     zielsetzung: 'Eindrucksvolle Live-Robotik-Demonstration mit höchsten Sicherheitsstandards'
   }
