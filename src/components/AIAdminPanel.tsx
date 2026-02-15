@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -41,6 +42,7 @@ import { getSuspiciousActivityLog } from '@/lib/chat-sanitizer'
 // ─── API Key Management Tab ──────────────────────────────────
 
 function AIKeyManager() {
+  const { t } = useTranslation()
   const [keys, setKeys] = useState<AIKeyInfo[]>([])
   const [showAddForm, setShowAddForm] = useState(false)
   const [newProvider, setNewProvider] = useState('openai')
@@ -52,7 +54,7 @@ function AIKeyManager() {
 
   const handleAdd = () => {
     if (!newKey.trim()) {
-      toast.error('Bitte geben Sie einen API-Schlüssel ein.')
+      toast.error(t('aiAdmin.keys.errorEmpty'))
       return
     }
     const added = addAIKey(newProvider, newKey.trim())
@@ -60,33 +62,33 @@ function AIKeyManager() {
     setNewKey('')
     setNewProvider('openai')
     setShowAddForm(false)
-    toast.success('API-Schlüssel hinzugefügt')
+    toast.success(t('aiAdmin.keys.addedSuccess'))
   }
 
   const handleRevoke = (id: string) => {
     revokeAIKey(id)
     setKeys(getAIKeys())
-    toast.success('API-Schlüssel widerrufen')
+    toast.success(t('aiAdmin.keys.revokedSuccess'))
   }
 
   const handleDelete = (id: string) => {
     deleteAIKey(id)
     setKeys(prev => prev.filter(k => k.id !== id))
-    toast.success('API-Schlüssel gelöscht')
+    toast.success(t('aiAdmin.keys.deletedSuccess'))
   }
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">API-Schlüssel</h3>
+          <h3 className="text-lg font-semibold">{t('aiAdmin.keys.title')}</h3>
           <p className="text-sm text-muted-foreground">
-            Verwalten Sie Ihre KI-API-Schlüssel sicher. Schlüssel werden nie vollständig angezeigt.
+            {t('aiAdmin.keys.description')}
           </p>
         </div>
         <Button onClick={() => setShowAddForm(!showAddForm)} size="sm" className="gap-2">
           <Plus className="w-4 h-4" />
-          Neuer Schlüssel
+          {t('aiAdmin.keys.newKey')}
         </Button>
       </div>
 
@@ -95,7 +97,7 @@ function AIKeyManager() {
           <CardContent className="p-4 space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="text-sm font-medium mb-1 block">Provider</label>
+                <label className="text-sm font-medium mb-1 block">{t('aiAdmin.keys.providerLabel')}</label>
                 <select
                   value={newProvider}
                   onChange={(e) => setNewProvider(e.target.value)}
@@ -104,11 +106,11 @@ function AIKeyManager() {
                   <option value="openai">OpenAI (GPT)</option>
                   <option value="anthropic">Anthropic (Claude)</option>
                   <option value="google">Google (Gemini)</option>
-                  <option value="other">Sonstiger</option>
+                  <option value="other">{t('aiAdmin.keys.providerOther')}</option>
                 </select>
               </div>
               <div className="sm:col-span-2">
-                <label className="text-sm font-medium mb-1 block">API-Schlüssel</label>
+                <label className="text-sm font-medium mb-1 block">{t('aiAdmin.keys.apiKeyLabel')}</label>
                 <Input
                   type="password"
                   value={newKey}
@@ -119,11 +121,11 @@ function AIKeyManager() {
             </div>
             <div className="flex gap-2 justify-end">
               <Button variant="outline" size="sm" onClick={() => setShowAddForm(false)}>
-                Abbrechen
+                {t('aiAdmin.keys.cancel')}
               </Button>
               <Button size="sm" onClick={handleAdd} className="gap-2">
                 <FloppyDisk className="w-4 h-4" />
-                Speichern
+                {t('aiAdmin.keys.save')}
               </Button>
             </div>
           </CardContent>
@@ -133,7 +135,7 @@ function AIKeyManager() {
       {keys.length === 0 ? (
         <Card className="p-8 text-center">
           <Key className="w-12 h-12 mx-auto mb-3 text-muted-foreground opacity-50" />
-          <p className="text-muted-foreground">Keine API-Schlüssel konfiguriert</p>
+          <p className="text-muted-foreground">{t('aiAdmin.keys.noKeys')}</p>
         </Card>
       ) : (
         <div className="space-y-2">
@@ -152,7 +154,7 @@ function AIKeyManager() {
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-sm">{key.provider}</span>
                       <Badge variant={key.status === 'active' ? 'default' : 'destructive'} className="text-xs">
-                        {key.status === 'active' ? 'Aktiv' : 'Widerrufen'}
+                        {key.status === 'active' ? t('aiAdmin.keys.statusActive') : t('aiAdmin.keys.statusRevoked')}
                       </Badge>
                     </div>
                     <p className="text-xs text-muted-foreground font-mono">{key.maskedKey}</p>
@@ -162,7 +164,7 @@ function AIKeyManager() {
                   {key.status === 'active' && (
                     <Button variant="outline" size="sm" onClick={() => handleRevoke(key.id)} className="text-xs gap-1">
                       <EyeSlash className="w-3.5 h-3.5" />
-                      Widerrufen
+                      {t('aiAdmin.keys.revoke')}
                     </Button>
                   )}
                   <Button variant="outline" size="sm" onClick={() => handleDelete(key.id)} className="text-xs text-destructive gap-1">
@@ -179,10 +181,9 @@ function AIKeyManager() {
         <CardContent className="p-4 flex items-start gap-3">
           <ShieldCheck className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
           <div className="text-sm text-amber-800">
-            <p className="font-medium">Sicherheitshinweis</p>
+            <p className="font-medium">{t('aiAdmin.keys.securityTitle')}</p>
             <p className="mt-1">
-              API-Schlüssel werden nie vollständig im Frontend angezeigt. Die Verwaltung erfolgt serverseitig. 
-              Änderungen werden im Audit-Log protokolliert.
+              {t('aiAdmin.keys.securityText')}
             </p>
           </div>
         </CardContent>
@@ -194,6 +195,7 @@ function AIKeyManager() {
 // ─── Training Data Management Tab ────────────────────────────
 
 function TrainingDataManager() {
+  const { t } = useTranslation()
   const [data, setData] = useState<TrainingDataEntry[]>([])
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -207,7 +209,7 @@ function TrainingDataManager() {
 
   const handleAdd = () => {
     if (!newTitle.trim() || !newContent.trim()) {
-      toast.error('Titel und Inhalt sind erforderlich.')
+      toast.error(t('aiAdmin.training.errorRequired'))
       return
     }
     const entry = addTrainingData(newTitle.trim(), newContent.trim(), newCategory)
@@ -216,7 +218,7 @@ function TrainingDataManager() {
     setNewContent('')
     setNewCategory('faq')
     setShowAddForm(false)
-    toast.success('Wissensdatei hinzugefügt')
+    toast.success(t('aiAdmin.training.addedSuccess'))
   }
 
   const handleToggleActive = (id: string, active: boolean) => {
@@ -227,14 +229,14 @@ function TrainingDataManager() {
   const handleDelete = (id: string) => {
     deleteTrainingData(id)
     setData(prev => prev.filter(d => d.id !== id))
-    toast.success('Wissensdatei gelöscht')
+    toast.success(t('aiAdmin.training.deletedSuccess'))
   }
 
   const handleSaveEdit = (id: string, title: string, content: string, category: string) => {
     updateTrainingData(id, { title, content, category })
     setData(getTrainingData())
     setEditingId(null)
-    toast.success('Wissensdatei aktualisiert')
+    toast.success(t('aiAdmin.training.updatedSuccess'))
   }
 
   const categoryLabel = (value: string) =>
@@ -244,14 +246,14 @@ function TrainingDataManager() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Trainingsdaten & Wissen</h3>
+          <h3 className="text-lg font-semibold">{t('aiAdmin.training.title')}</h3>
           <p className="text-sm text-muted-foreground">
-            Pflegen Sie FAQ-Einträge und Wissensdateien für den KI-Chatbot.
+            {t('aiAdmin.training.description')}
           </p>
         </div>
         <Button onClick={() => setShowAddForm(!showAddForm)} size="sm" className="gap-2">
           <Plus className="w-4 h-4" />
-          Neuer Eintrag
+          {t('aiAdmin.training.newEntry')}
         </Button>
       </div>
 
@@ -260,11 +262,11 @@ function TrainingDataManager() {
           <CardContent className="p-4 space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-sm font-medium mb-1 block">Titel</label>
-                <Input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="z.B. Öffnungszeiten" />
+                <label className="text-sm font-medium mb-1 block">{t('aiAdmin.training.titleLabel')}</label>
+                <Input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder={t('aiAdmin.training.titlePlaceholder')} />
               </div>
               <div>
-                <label className="text-sm font-medium mb-1 block">Kategorie</label>
+                <label className="text-sm font-medium mb-1 block">{t('aiAdmin.training.categoryLabel')}</label>
                 <select
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value)}
@@ -277,22 +279,22 @@ function TrainingDataManager() {
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium mb-1 block">Inhalt</label>
+              <label className="text-sm font-medium mb-1 block">{t('aiAdmin.training.contentLabel')}</label>
               <textarea
                 value={newContent}
                 onChange={(e) => setNewContent(e.target.value)}
-                placeholder="Geben Sie hier das Wissen ein, das der KI-Berater nutzen soll..."
+                placeholder={t('aiAdmin.training.contentPlaceholder')}
                 rows={5}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-y"
               />
             </div>
             <div className="flex gap-2 justify-end">
               <Button variant="outline" size="sm" onClick={() => setShowAddForm(false)}>
-                Abbrechen
+                {t('aiAdmin.training.cancel')}
               </Button>
               <Button size="sm" onClick={handleAdd} className="gap-2">
                 <FloppyDisk className="w-4 h-4" />
-                Speichern
+                {t('aiAdmin.training.save')}
               </Button>
             </div>
           </CardContent>
@@ -302,9 +304,9 @@ function TrainingDataManager() {
       {data.length === 0 ? (
         <Card className="p-8 text-center">
           <Brain className="w-12 h-12 mx-auto mb-3 text-muted-foreground opacity-50" />
-          <p className="text-muted-foreground">Keine Trainingsdaten vorhanden</p>
+          <p className="text-muted-foreground">{t('aiAdmin.training.noData')}</p>
           <p className="text-xs text-muted-foreground mt-1">
-            Fügen Sie FAQ-Einträge und Wissen hinzu, um den KI-Berater zu verbessern.
+            {t('aiAdmin.training.noDataHint')}
           </p>
         </Card>
       ) : (
@@ -325,13 +327,13 @@ function TrainingDataManager() {
                         <span className="font-medium text-sm">{entry.title}</span>
                         <Badge variant="outline" className="text-xs">{categoryLabel(entry.category)}</Badge>
                         <Badge variant={entry.active ? 'default' : 'secondary'} className="text-xs">
-                          {entry.active ? 'Aktiv' : 'Inaktiv'}
+                          {entry.active ? t('aiAdmin.training.statusActive') : t('aiAdmin.training.statusInactive')}
                         </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{entry.content}</p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Erstellt: {new Date(entry.createdAt).toLocaleDateString('de-DE')} · 
-                        Aktualisiert: {new Date(entry.updatedAt).toLocaleDateString('de-DE')}
+                        {t('aiAdmin.training.created')}: {new Date(entry.createdAt).toLocaleDateString('de-DE')} · 
+                        {t('aiAdmin.training.updated')}: {new Date(entry.updatedAt).toLocaleDateString('de-DE')}
                       </p>
                     </div>
                     <div className="flex gap-1 shrink-0">
@@ -365,6 +367,7 @@ function TrainingDataEditForm({
   onSave: (id: string, title: string, content: string, category: string) => void
   onCancel: () => void
 }) {
+  const { t } = useTranslation()
   const [title, setTitle] = useState(entry.title)
   const [content, setContent] = useState(entry.content)
   const [category, setCategory] = useState(entry.category)
@@ -372,7 +375,7 @@ function TrainingDataEditForm({
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Titel" />
+        <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t('aiAdmin.training.editTitlePlaceholder')} />
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
@@ -392,11 +395,11 @@ function TrainingDataEditForm({
       <div className="flex gap-2 justify-end">
         <Button variant="outline" size="sm" onClick={onCancel} className="gap-1">
           <X className="w-3.5 h-3.5" />
-          Abbrechen
+          {t('aiAdmin.training.cancel')}
         </Button>
         <Button size="sm" onClick={() => onSave(entry.id, title, content, category)} className="gap-1">
           <FloppyDisk className="w-3.5 h-3.5" />
-          Speichern
+          {t('aiAdmin.training.save')}
         </Button>
       </div>
     </div>
@@ -406,6 +409,7 @@ function TrainingDataEditForm({
 // ─── Audit Log Tab ───────────────────────────────────────────
 
 function AuditLogViewer() {
+  const { t } = useTranslation()
   const [adminLogs, setAdminLogs] = useState<AIAuditLogEntry[]>([])
   const [chatLogs, setChatLogs] = useState<Array<{ timestamp: number; action: string; details: string }>>([])
   const [securityLogs, setSecurityLogs] = useState<Array<{ timestamp: number; reason: string; inputPreview: string }>>([])
@@ -434,38 +438,38 @@ function AuditLogViewer() {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-semibold">Audit-Log & Sicherheit</h3>
+        <h3 className="text-lg font-semibold">{t('aiAdmin.audit.title')}</h3>
         <p className="text-sm text-muted-foreground">
-          Protokoll aller sicherheitsrelevanten Aktionen und Chat-Aktivitäten.
+          {t('aiAdmin.audit.description')}
         </p>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold">{adminLogs.length}</p>
-          <p className="text-xs text-muted-foreground">Admin-Aktionen</p>
+          <p className="text-xs text-muted-foreground">{t('aiAdmin.audit.adminActions')}</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold">{chatLogs.length}</p>
-          <p className="text-xs text-muted-foreground">Chat-Anfragen</p>
+          <p className="text-xs text-muted-foreground">{t('aiAdmin.audit.chatRequests')}</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-destructive">{securityLogs.length}</p>
-          <p className="text-xs text-muted-foreground">Sicherheitsereignisse</p>
+          <p className="text-xs text-muted-foreground">{t('aiAdmin.audit.securityEvents')}</p>
         </Card>
       </div>
 
       {allLogs.length === 0 ? (
         <Card className="p-8 text-center">
           <ClockClockwise className="w-12 h-12 mx-auto mb-3 text-muted-foreground opacity-50" />
-          <p className="text-muted-foreground">Keine Audit-Einträge vorhanden</p>
+          <p className="text-muted-foreground">{t('aiAdmin.audit.noEntries')}</p>
         </Card>
       ) : (
         <div className="space-y-1">
           {allLogs.map((log, idx) => (
             <div key={log.id || idx} className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 border border-transparent hover:border-border transition-colors">
               <Badge variant="outline" className={`text-xs shrink-0 ${getCategoryColor(log.source)}`}>
-                {log.source === 'admin' ? 'Admin' : log.source === 'chat' ? 'Chat' : 'Sicherheit'}
+                {log.source === 'admin' ? t('aiAdmin.audit.sourceAdmin') : log.source === 'chat' ? t('aiAdmin.audit.sourceChat') : t('aiAdmin.audit.sourceSecurity')}
               </Badge>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium">{log.action}</p>
@@ -490,15 +494,16 @@ function AuditLogViewer() {
 // ─── Main Component ──────────────────────────────────────────
 
 export function AIAdminPanel() {
+  const { t } = useTranslation()
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Brain className="w-5 h-5" />
-          KI-Chatbot Verwaltung
+          {t('aiAdmin.title')}
         </CardTitle>
         <CardDescription>
-          API-Schlüssel, Trainingsdaten und Sicherheitseinstellungen für den KI-Berater verwalten.
+          {t('aiAdmin.description')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -506,15 +511,15 @@ export function AIAdminPanel() {
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="keys" className="gap-2 text-xs sm:text-sm">
               <Key className="w-4 h-4" />
-              API-Schlüssel
+              {t('aiAdmin.tabKeys')}
             </TabsTrigger>
             <TabsTrigger value="training" className="gap-2 text-xs sm:text-sm">
               <Brain className="w-4 h-4" />
-              Trainingsdaten
+              {t('aiAdmin.tabTraining')}
             </TabsTrigger>
             <TabsTrigger value="audit" className="gap-2 text-xs sm:text-sm">
               <ShieldCheck className="w-4 h-4" />
-              Audit-Log
+              {t('aiAdmin.tabAudit')}
             </TabsTrigger>
           </TabsList>
 

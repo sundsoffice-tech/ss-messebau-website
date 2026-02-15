@@ -6,6 +6,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ArrowRight, ArrowLeft, Lightbulb } from '@phosphor-icons/react'
+import { useTranslation } from '@/lib/i18n'
 
 interface Step2Data {
   breite: number
@@ -26,13 +27,14 @@ interface ConfiguratorStep2Props {
 }
 
 export function ConfiguratorStep2({ data, onChange, onNext, onBack }: ConfiguratorStep2Props) {
+  const { t } = useTranslation()
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const validate = () => {
     const newErrors: Record<string, string> = {}
     
-    if (data.breite < 50 || data.breite > 800) newErrors.breite = 'Breite muss zwischen 50 und 800 cm liegen'
-    if (data.hoehe < 50 || data.hoehe > 400) newErrors.hoehe = 'Höhe muss zwischen 50 und 400 cm liegen'
+    if (data.breite < 50 || data.breite > 800) newErrors.breite = t('step2.error.breite')
+    if (data.hoehe < 50 || data.hoehe > 400) newErrors.hoehe = t('step2.error.hoehe')
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -49,14 +51,14 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold mb-2">Technische Details</h2>
-        <p className="text-muted-foreground">Geben Sie die gewünschten Maße und die Ausführung an.</p>
+        <h2 className="text-2xl font-bold mb-2">{t('step2.title')}</h2>
+        <p className="text-muted-foreground">{t('step2.subtitle')}</p>
       </div>
 
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="breite">Breite in cm *</Label>
+            <Label htmlFor="breite">{t('step2.breite.label')}</Label>
             <Input
               id="breite"
               type="number"
@@ -64,13 +66,13 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
               max={800}
               value={data.breite || ''}
               onChange={(e) => onChange({ breite: parseInt(e.target.value) || 0 })}
-              placeholder="z.B. 200"
+              placeholder={t('step2.breite.placeholder')}
               className="mt-1"
             />
             {errors.breite && <p className="text-sm text-destructive mt-1">{errors.breite}</p>}
           </div>
           <div>
-            <Label htmlFor="hoehe">Höhe in cm *</Label>
+            <Label htmlFor="hoehe">{t('step2.hoehe.label')}</Label>
             <Input
               id="hoehe"
               type="number"
@@ -78,7 +80,7 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
               max={400}
               value={data.hoehe || ''}
               onChange={(e) => onChange({ hoehe: parseInt(e.target.value) || 0 })}
-              placeholder="z.B. 300"
+              placeholder={t('step2.hoehe.placeholder')}
               className="mt-1"
             />
             {errors.hoehe && <p className="text-sm text-destructive mt-1">{errors.hoehe}</p>}
@@ -88,23 +90,23 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
         {data.breite > 0 && data.hoehe > 0 && (
           <Alert>
             <AlertDescription>
-              <strong>Fläche: {flaeche} m²</strong>
-              {data.breite > 400 && ' • Großformat, Transport ggf. mehrteilig'}
+              <strong>{t('step2.area')}: {flaeche} m²</strong>
+              {data.breite > 400 && ` • ${t('step2.largeFormat')}`}
             </AlertDescription>
           </Alert>
         )}
 
         <div>
-          <Label className="text-base font-semibold mb-3 block">Profil/Optik *</Label>
+          <Label className="text-base font-semibold mb-3 block">{t('step2.profil.label')}</Label>
           <RadioGroup
             value={data.profil}
             onValueChange={(value) => onChange({ profil: value })}
           >
             <div className="space-y-2">
               {[
-                { value: 'standard', label: 'Standard', desc: 'Aluminium eloxiert, 25mm' },
-                { value: 'premium', label: 'Premium', desc: 'Alu gebürstet, 35mm – hochwertiger' },
-                { value: 'sonder', label: 'Sonder/Individuell', desc: 'Farbe, Holzoptik nach Wunsch' },
+                { value: 'standard', label: t('step2.profil.standard'), desc: t('step2.profil.standard.desc') },
+                { value: 'premium', label: t('step2.profil.premium'), desc: t('step2.profil.premium.desc') },
+                { value: 'sonder', label: t('step2.profil.sonder'), desc: t('step2.profil.sonder.desc') },
               ].map((option) => (
                 <Label
                   key={option.value}
@@ -126,7 +128,7 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label className="text-base font-semibold mb-3 block">Ecken *</Label>
+            <Label className="text-base font-semibold mb-3 block">{t('step2.ecken.label')}</Label>
             <RadioGroup
               value={data.ecken}
               onValueChange={(value) => onChange({ ecken: value })}
@@ -138,7 +140,7 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
                 }`}
               >
                 <RadioGroupItem value="gehrung" id="gehrung" />
-                <span>Gehrung (nahtlos)</span>
+                <span>{t('step2.ecken.gehrung')}</span>
               </Label>
               <Label
                 htmlFor="verbinder"
@@ -147,13 +149,13 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
                 }`}
               >
                 <RadioGroupItem value="verbinder" id="verbinder" />
-                <span>Verbinder (günstiger)</span>
+                <span>{t('step2.ecken.verbinder')}</span>
               </Label>
             </RadioGroup>
           </div>
 
           <div>
-            <Label className="text-base font-semibold mb-3 block">Seitigkeit *</Label>
+            <Label className="text-base font-semibold mb-3 block">{t('step2.seitigkeit.label')}</Label>
             <RadioGroup
               value={data.seitigkeit}
               onValueChange={(value) => onChange({ seitigkeit: value })}
@@ -165,7 +167,7 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
                 }`}
               >
                 <RadioGroupItem value="einseitig" id="einseitig" />
-                <span>Einseitig</span>
+                <span>{t('step2.seitigkeit.einseitig')}</span>
               </Label>
               <Label
                 htmlFor="beidseitig"
@@ -174,7 +176,7 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
                 }`}
               >
                 <RadioGroupItem value="beidseitig" id="beidseitig" />
-                <span>Beidseitig (2 Banner)</span>
+                <span>{t('step2.seitigkeit.beidseitig')}</span>
               </Label>
             </RadioGroup>
           </div>
@@ -188,7 +190,7 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
               onCheckedChange={(checked) => onChange({ led: checked as boolean })}
             />
             <Label htmlFor="led" className="font-semibold cursor-pointer">
-              Hinterleuchtung gewünscht? (LED/Backlit)
+              {t('step2.led.label')}
             </Label>
           </div>
 
@@ -197,12 +199,12 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
               <Alert className="bg-accent/10">
                 <Lightbulb className="w-5 h-5" />
                 <AlertDescription>
-                  LED-Backlit macht Ihre Botschaft leuchtend sichtbar
+                  {t('step2.led.hint')}
                 </AlertDescription>
               </Alert>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label>Stromversorgung</Label>
+                  <Label>{t('step2.led.power')}</Label>
                   <RadioGroup
                     value={data.ledStrom || '230v'}
                     onValueChange={(value) => onChange({ ledStrom: value })}
@@ -214,17 +216,17 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="akku" id="akku" />
-                      <Label htmlFor="akku">Akku</Label>
+                      <Label htmlFor="akku">{t('step2.led.battery')}</Label>
                     </div>
                   </RadioGroup>
                 </div>
                 <div>
-                  <Label htmlFor="ledEinsatz">Einsatzdauer (optional)</Label>
+                  <Label htmlFor="ledEinsatz">{t('step2.led.duration')}</Label>
                   <Input
                     id="ledEinsatz"
                     value={data.ledEinsatz || ''}
                     onChange={(e) => onChange({ ledEinsatz: e.target.value })}
-                    placeholder="z.B. Dauerbetrieb"
+                    placeholder={t('step2.led.duration.placeholder')}
                     className="mt-2"
                   />
                 </div>
@@ -237,10 +239,10 @@ export function ConfiguratorStep2({ data, onChange, onNext, onBack }: Configurat
       <div className="flex justify-between pt-4 border-t">
         <Button onClick={onBack} variant="outline">
           <ArrowLeft className="mr-2 w-5 h-5" />
-          Zurück
+          {t('common.back')}
         </Button>
         <Button onClick={handleNext}>
-          Weiter zu Druck
+          {t('step2.next')}
           <ArrowRight className="ml-2 w-5 h-5" />
         </Button>
       </div>

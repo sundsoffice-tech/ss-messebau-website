@@ -19,6 +19,7 @@ import {
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { saveEmailConfig, testEmailConnection, getEmailStatus } from '@/lib/smtp-service'
+import { useTranslation } from '@/lib/i18n'
 
 interface SMTPConfig {
   provider: 'sendgrid' | 'ses' | 'test'
@@ -29,6 +30,7 @@ interface SMTPConfig {
 }
 
 export function SMTPConfigPanel() {
+  const { t } = useTranslation()
   const [config, setConfig] = useState<SMTPConfig>({
     provider: 'test',
     fromEmail: 'noreply@sunds-messebau.de',
@@ -51,7 +53,7 @@ export function SMTPConfigPanel() {
         setConfig(saved)
       }
     } catch (error) {
-      console.error('Fehler beim Laden der Konfiguration:', error)
+      console.error(t('smtp.loadConfigError'), error)
     }
   }
 
@@ -60,7 +62,7 @@ export function SMTPConfigPanel() {
       const emailStatus = await getEmailStatus()
       setStatus(emailStatus)
     } catch (error) {
-      console.error('Fehler beim Laden des Status:', error)
+      console.error(t('smtp.loadStatusError'), error)
     }
   }
 
@@ -68,10 +70,10 @@ export function SMTPConfigPanel() {
     setLoading(true)
     try {
       await saveEmailConfig(config)
-      toast.success('SMTP-Konfiguration gespeichert')
+      toast.success(t('smtp.savedSuccess'))
       await loadStatus()
     } catch (error) {
-      toast.error('Fehler beim Speichern der Konfiguration')
+      toast.error(t('smtp.saveError'))
       console.error(error)
     } finally {
       setLoading(false)
@@ -83,18 +85,18 @@ export function SMTPConfigPanel() {
     try {
       const result = await testEmailConnection()
       if (result.success) {
-        toast.success('Verbindungstest erfolgreich', {
+        toast.success(t('smtp.testSuccess'), {
           description: result.message,
           duration: 5000,
         })
       } else {
-        toast.error('Verbindungstest fehlgeschlagen', {
+        toast.error(t('smtp.testFailed'), {
           description: result.message,
           duration: 7000,
         })
       }
     } catch (error) {
-      toast.error('Fehler beim Verbindungstest')
+      toast.error(t('smtp.testError'))
       console.error(error)
     } finally {
       setTesting(false)
@@ -107,10 +109,10 @@ export function SMTPConfigPanel() {
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <Gear className="w-6 h-6" />
-            SMTP-Konfiguration
+            {t('smtp.title')}
           </h2>
           <p className="text-muted-foreground mt-1">
-            E-Mail-Provider für echten E-Mail-Versand konfigurieren
+            {t('smtp.subtitle')}
           </p>
         </div>
         {status && (
@@ -120,7 +122,7 @@ export function SMTPConfigPanel() {
             ) : (
               <Warning className="w-4 h-4" weight="fill" />
             )}
-            {status.testMode ? 'Test-Modus' : status.provider.toUpperCase()}
+            {status.testMode ? t('smtp.testMode') : status.provider.toUpperCase()}
           </Badge>
         )}
       </div>
@@ -130,12 +132,11 @@ export function SMTPConfigPanel() {
         <AlertDescription>
           {status?.testMode ? (
             <>
-              <strong>Test-Modus aktiv:</strong> E-Mails werden simuliert und nur in der Konsole angezeigt. 
-              Konfigurieren Sie SendGrid oder AWS SES für echten E-Mail-Versand.
+              <strong>{t('smtp.testModeActive')}</strong> {t('smtp.testModeDesc')}
             </>
           ) : (
             <>
-              <strong>Live-Modus aktiv:</strong> E-Mails werden über {status?.provider.toUpperCase()} versendet.
+              <strong>{t('smtp.liveModeActive')}</strong> {t('smtp.liveModeDesc').replace('{provider}', status?.provider.toUpperCase())}
             </>
           )}
         </AlertDescription>
@@ -143,15 +144,15 @@ export function SMTPConfigPanel() {
 
       <Tabs defaultValue="provider" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="provider">Provider</TabsTrigger>
-          <TabsTrigger value="sendgrid">SendGrid</TabsTrigger>
-          <TabsTrigger value="ses">AWS SES</TabsTrigger>
+          <TabsTrigger value="provider">{t('smtp.tabProvider')}</TabsTrigger>
+          <TabsTrigger value="sendgrid">{t('smtp.tabSendgrid')}</TabsTrigger>
+          <TabsTrigger value="ses">{t('smtp.tabSes')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="provider" className="space-y-4">
           <Card className="p-6 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="provider">E-Mail Provider</Label>
+              <Label htmlFor="provider">{t('smtp.emailProvider')}</Label>
               <Select
                 value={config.provider}
                 onValueChange={(value: any) => setConfig({ ...config, provider: value })}
@@ -160,20 +161,20 @@ export function SMTPConfigPanel() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="test">Test-Modus (Simulation)</SelectItem>
-                  <SelectItem value="sendgrid">SendGrid</SelectItem>
-                  <SelectItem value="ses">AWS SES</SelectItem>
+                  <SelectItem value="test">{t('smtp.providerTest')}</SelectItem>
+                  <SelectItem value="sendgrid">{t('smtp.providerSendgrid')}</SelectItem>
+                  <SelectItem value="ses">{t('smtp.providerSes')}</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-sm text-muted-foreground">
-                {config.provider === 'test' && 'E-Mails werden nur simuliert (keine echten E-Mails)'}
-                {config.provider === 'sendgrid' && 'Einfacher Setup, zuverlässig, 100 E-Mails/Tag kostenlos'}
-                {config.provider === 'ses' && 'AWS Service, günstig, erfordert AWS-Account'}
+                {config.provider === 'test' && t('smtp.providerTestDesc')}
+                {config.provider === 'sendgrid' && t('smtp.providerSendgridDesc')}
+                {config.provider === 'ses' && t('smtp.providerSesDesc')}
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="fromEmail">Absender E-Mail</Label>
+              <Label htmlFor="fromEmail">{t('smtp.fromEmail')}</Label>
               <Input
                 id="fromEmail"
                 type="email"
@@ -182,12 +183,12 @@ export function SMTPConfigPanel() {
                 placeholder="noreply@sunds-messebau.de"
               />
               <p className="text-sm text-muted-foreground">
-                Diese E-Mail-Adresse muss bei Ihrem Provider verifiziert sein
+                {t('smtp.fromEmailHint')}
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="fromName">Absender Name</Label>
+              <Label htmlFor="fromName">{t('smtp.fromName')}</Label>
               <Input
                 id="fromName"
                 value={config.fromName}
@@ -199,11 +200,11 @@ export function SMTPConfigPanel() {
             <div className="flex gap-2">
               <Button onClick={handleSave} disabled={loading}>
                 <FloppyDisk className="w-4 h-4 mr-2" />
-                Speichern
+                {t('smtp.save')}
               </Button>
               <Button onClick={handleTest} variant="outline" disabled={testing}>
                 <PaperPlaneTilt className="w-4 h-4 mr-2" />
-                Verbindung testen
+                {t('smtp.testConnection')}
               </Button>
             </div>
           </Card>
@@ -212,27 +213,27 @@ export function SMTPConfigPanel() {
         <TabsContent value="sendgrid" className="space-y-4">
           <Card className="p-6 space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">SendGrid Setup</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('smtp.sendgridSetup')}</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                SendGrid ist ein zuverlässiger E-Mail-Service mit 100 kostenlosen E-Mails pro Tag.
+                {t('smtp.sendgridDesc')}
               </p>
             </div>
 
             <Alert>
               <Info className="w-4 h-4" />
               <AlertDescription className="text-sm space-y-2">
-                <p><strong>Setup-Schritte:</strong></p>
+                <p><strong>{t('smtp.setupSteps')}</strong></p>
                 <ol className="list-decimal list-inside space-y-1 ml-2">
-                  <li>Account erstellen auf <a href="https://signup.sendgrid.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">signup.sendgrid.com</a></li>
-                  <li>E-Mail-Adresse verifizieren (Single Sender Verification)</li>
-                  <li>API Key erstellen unter Settings → API Keys</li>
-                  <li>API Key hier einfügen und speichern</li>
+                  <li>{t('smtp.sendgridStep1')} <a href="https://signup.sendgrid.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">signup.sendgrid.com</a></li>
+                  <li>{t('smtp.sendgridStep2')}</li>
+                  <li>{t('smtp.sendgridStep3')}</li>
+                  <li>{t('smtp.sendgridStep4')}</li>
                 </ol>
               </AlertDescription>
             </Alert>
 
             <div className="space-y-2">
-              <Label htmlFor="sendgridKey">SendGrid API Key</Label>
+              <Label htmlFor="sendgridKey">{t('smtp.sendgridApiKey')}</Label>
               <div className="flex gap-2">
                 <Input
                   id="sendgridKey"
@@ -250,7 +251,7 @@ export function SMTPConfigPanel() {
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">
-                API Key beginnt mit "SG." und hat Full Access Berechtigung
+                {t('smtp.sendgridApiKeyHint')}
               </p>
             </div>
 
@@ -263,11 +264,11 @@ export function SMTPConfigPanel() {
                 disabled={loading || !config.apiKey}
               >
                 <FloppyDisk className="w-4 h-4 mr-2" />
-                SendGrid aktivieren
+                {t('smtp.activateSendgrid')}
               </Button>
               <Button onClick={handleTest} variant="outline" disabled={testing || !config.apiKey}>
                 <PaperPlaneTilt className="w-4 h-4 mr-2" />
-                Testen
+                {t('smtp.test')}
               </Button>
             </div>
           </Card>
@@ -276,28 +277,28 @@ export function SMTPConfigPanel() {
         <TabsContent value="ses" className="space-y-4">
           <Card className="p-6 space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">AWS SES Setup</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('smtp.sesSetup')}</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Amazon Simple Email Service - kostengünstig für hohe Volumina.
+                {t('smtp.sesDesc')}
               </p>
             </div>
 
             <Alert>
               <Info className="w-4 h-4" />
               <AlertDescription className="text-sm space-y-2">
-                <p><strong>Setup-Schritte:</strong></p>
+                <p><strong>{t('smtp.setupSteps')}</strong></p>
                 <ol className="list-decimal list-inside space-y-1 ml-2">
-                  <li>AWS Account erstellen auf <a href="https://aws.amazon.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">aws.amazon.com</a></li>
-                  <li>SES Service in gewünschter Region aktivieren</li>
-                  <li>E-Mail-Adresse verifizieren (Verified Identities)</li>
-                  <li>Production Access beantragen (wenn nötig)</li>
-                  <li>IAM Credentials erstellen mit SES-Berechtigung</li>
+                  <li>{t('smtp.sesStep1')} <a href="https://aws.amazon.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">aws.amazon.com</a></li>
+                  <li>{t('smtp.sesStep2')}</li>
+                  <li>{t('smtp.sesStep3')}</li>
+                  <li>{t('smtp.sesStep4')}</li>
+                  <li>{t('smtp.sesStep5')}</li>
                 </ol>
               </AlertDescription>
             </Alert>
 
             <div className="space-y-2">
-              <Label htmlFor="sesKey">AWS Access Key ID</Label>
+              <Label htmlFor="sesKey">{t('smtp.awsAccessKeyId')}</Label>
               <Input
                 id="sesKey"
                 type={showApiKey ? 'text' : 'password'}
@@ -308,7 +309,7 @@ export function SMTPConfigPanel() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="sesRegion">AWS Region</Label>
+              <Label htmlFor="sesRegion">{t('smtp.awsRegion')}</Label>
               <Select
                 value={config.region || 'eu-central-1'}
                 onValueChange={(value) => setConfig({ ...config, region: value })}
@@ -328,8 +329,7 @@ export function SMTPConfigPanel() {
             <Alert variant="destructive">
               <Warning className="w-4 h-4" />
               <AlertDescription className="text-sm">
-                <strong>Hinweis:</strong> AWS SES Integration erfordert zusätzliche Konfiguration 
-                (Secret Access Key, Signatur). Für einfachere Integration empfehlen wir SendGrid.
+                <strong>{t('smtp.sesWarningLabel')}</strong> {t('smtp.sesWarning')}
               </AlertDescription>
             </Alert>
 
@@ -342,7 +342,7 @@ export function SMTPConfigPanel() {
                 disabled={loading || !config.apiKey}
               >
                 <FloppyDisk className="w-4 h-4 mr-2" />
-                AWS SES aktivieren
+                {t('smtp.activateSes')}
               </Button>
             </div>
           </Card>
@@ -350,18 +350,16 @@ export function SMTPConfigPanel() {
       </Tabs>
 
       <Card className="p-6 bg-muted/50">
-        <h3 className="font-semibold mb-3">💡 Empfehlung</h3>
+        <h3 className="font-semibold mb-3">{t('smtp.recommendation')}</h3>
         <div className="space-y-2 text-sm">
           <p>
-            <strong>Für den Start:</strong> Verwenden Sie <strong>SendGrid</strong> - einfacher Setup, 
-            100 kostenlose E-Mails/Tag, perfekt für Banner-Bestellungen.
+            <strong>{t('smtp.recStart')}</strong> {t('smtp.recStartDesc')}
           </p>
           <p>
-            <strong>Für hohes Volumen:</strong> AWS SES ist günstiger bei &gt;10.000 E-Mails/Monat, 
-            aber komplexer in der Einrichtung.
+            <strong>{t('smtp.recVolume')}</strong> {t('smtp.recVolumeDesc')}
           </p>
           <p className="text-muted-foreground">
-            Im Test-Modus werden E-Mails simuliert und nur in der Browser-Konsole angezeigt.
+            {t('smtp.recTestMode')}
           </p>
         </div>
       </Card>

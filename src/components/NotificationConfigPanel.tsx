@@ -25,8 +25,10 @@ import {
   type WebhookConfig,
   type NotificationType,
 } from '@/lib/notification-service'
+import { useTranslation } from '@/lib/i18n'
 
 export function NotificationConfigPanel() {
+  const { t } = useTranslation()
   const [config, setConfig] = useState<NotificationConfig>({
     recipients: ['info@sundsmessebau.com'],
     webhooks: [],
@@ -47,7 +49,7 @@ export function NotificationConfigPanel() {
       const saved = await getNotificationConfig()
       setConfig(saved)
     } catch (error) {
-      console.error('Fehler beim Laden:', error)
+      console.error(t('notifConfig.loadError'), error)
     }
   }
 
@@ -55,9 +57,9 @@ export function NotificationConfigPanel() {
     setLoading(true)
     try {
       await saveNotificationConfig(config)
-      toast.success('Benachrichtigungskonfiguration gespeichert')
+      toast.success(t('notifConfig.savedSuccess'))
     } catch (error) {
-      toast.error('Fehler beim Speichern')
+      toast.error(t('notifConfig.saveError'))
       console.error(error)
     } finally {
       setLoading(false)
@@ -68,11 +70,11 @@ export function NotificationConfigPanel() {
     const email = newRecipient.trim()
     if (!email) return
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      toast.error('Bitte geben Sie eine gültige E-Mail-Adresse ein')
+      toast.error(t('notifConfig.invalidEmail'))
       return
     }
     if (config.recipients.includes(email)) {
-      toast.error('Diese E-Mail-Adresse ist bereits vorhanden')
+      toast.error(t('notifConfig.duplicateEmail'))
       return
     }
     setConfig((prev) => ({
@@ -84,7 +86,7 @@ export function NotificationConfigPanel() {
 
   const removeRecipient = (email: string) => {
     if (config.recipients.length <= 1) {
-      toast.error('Mindestens ein Empfänger muss konfiguriert sein')
+      toast.error(t('notifConfig.minRecipient'))
       return
     }
     setConfig((prev) => ({
@@ -99,17 +101,17 @@ export function NotificationConfigPanel() {
     try {
       const parsed = new URL(url)
       if (!['https:', 'http:'].includes(parsed.protocol)) {
-        toast.error('Nur HTTPS und HTTP URLs sind erlaubt')
+        toast.error(t('notifConfig.onlyHttps'))
         return
       }
     } catch {
-      toast.error('Bitte geben Sie eine gültige URL ein')
+      toast.error(t('notifConfig.invalidUrl'))
       return
     }
     const webhook: WebhookConfig = {
       url,
       enabled: true,
-      channel: newWebhookChannel.trim() || 'allgemein',
+      channel: newWebhookChannel.trim() || t('notifConfig.defaultChannel'),
       types: ['inquiry', 'kontakt', 'banner'],
     }
     setConfig((prev) => ({
@@ -157,19 +159,19 @@ export function NotificationConfigPanel() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: '🧪 Test-Nachricht von S&S Messebau Benachrichtigungssystem',
+          text: t('notifConfig.testWebhookMessage'),
           type: 'test',
           inquiryId: 'test_' + Date.now(),
           data: { name: 'Test', email: 'test@example.com' },
         }),
       })
       if (response.ok) {
-        toast.success('Test-Webhook erfolgreich gesendet')
+        toast.success(t('notifConfig.testWebhookSuccess'))
       } else {
-        toast.error(`Webhook-Test fehlgeschlagen: ${response.status}`)
+        toast.error(t('notifConfig.testWebhookFailed').replace('{status}', String(response.status)))
       }
     } catch (error) {
-      toast.error('Webhook-Test fehlgeschlagen: Verbindungsfehler')
+      toast.error(t('notifConfig.testWebhookError'))
     } finally {
       setTestingWebhook(null)
     }
@@ -184,9 +186,9 @@ export function NotificationConfigPanel() {
             <Envelope className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h3 className="font-semibold text-lg">E-Mail-Empfänger</h3>
+            <h3 className="font-semibold text-lg">{t('notifConfig.emailRecipients')}</h3>
             <p className="text-sm text-muted-foreground">
-              Alle Formular-Benachrichtigungen werden an diese Adressen gesendet
+              {t('notifConfig.emailRecipientsDesc')}
             </p>
           </div>
         </div>
@@ -220,7 +222,7 @@ export function NotificationConfigPanel() {
           />
           <Button variant="outline" onClick={addRecipient}>
             <Plus className="w-4 h-4 mr-1" />
-            Hinzufügen
+            {t('notifConfig.addRecipient')}
           </Button>
         </div>
       </Card>
@@ -232,9 +234,9 @@ export function NotificationConfigPanel() {
             <CheckCircle className="w-5 h-5 text-accent" />
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold text-lg">Kunden-Bestätigung</h3>
+            <h3 className="font-semibold text-lg">{t('notifConfig.customerConfirmation')}</h3>
             <p className="text-sm text-muted-foreground">
-              Automatische Empfangsbestätigung an den Kunden senden
+              {t('notifConfig.customerConfirmationDesc')}
             </p>
           </div>
           <Checkbox
@@ -249,7 +251,7 @@ export function NotificationConfigPanel() {
         </div>
         <Alert>
           <AlertDescription className="text-sm">
-            Wenn aktiviert, erhält jeder Kunde eine automatische E-Mail-Bestätigung nach dem Absenden eines Formulars.
+            {t('notifConfig.customerConfirmationInfo')}
           </AlertDescription>
         </Alert>
       </Card>
@@ -261,9 +263,9 @@ export function NotificationConfigPanel() {
             <WebhooksLogo className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-semibold text-lg">Webhooks</h3>
+            <h3 className="font-semibold text-lg">{t('notifConfig.webhooks')}</h3>
             <p className="text-sm text-muted-foreground">
-              Echtzeit-Benachrichtigungen an Slack, Teams oder andere Dienste
+              {t('notifConfig.webhooksDesc')}
             </p>
           </div>
         </div>
@@ -279,7 +281,7 @@ export function NotificationConfigPanel() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <Badge variant={webhook.enabled ? 'default' : 'secondary'}>
-                        {webhook.enabled ? 'Aktiv' : 'Inaktiv'}
+                        {webhook.enabled ? t('notifConfig.webhookActive') : t('notifConfig.webhookInactive')}
                       </Badge>
                       <span className="text-sm font-medium">{webhook.channel}</span>
                     </div>
@@ -315,7 +317,7 @@ export function NotificationConfigPanel() {
                 </div>
 
                 <div className="flex gap-4">
-                  <Label className="text-xs text-muted-foreground">Formulartypen:</Label>
+                  <Label className="text-xs text-muted-foreground">{t('notifConfig.formTypes')}</Label>
                   {(['inquiry', 'kontakt', 'banner'] as NotificationType[]).map((type) => (
                     <div key={type} className="flex items-center gap-1.5">
                       <Checkbox
@@ -327,7 +329,7 @@ export function NotificationConfigPanel() {
                         htmlFor={`webhook-${index}-${type}`}
                         className="text-xs cursor-pointer"
                       >
-                        {type === 'inquiry' ? 'Anfragen' : type === 'kontakt' ? 'Kontakt' : 'Banner'}
+                        {type === 'inquiry' ? t('notifConfig.typeInquiry') : type === 'kontakt' ? t('notifConfig.typeContact') : t('notifConfig.typeBanner')}
                       </Label>
                     </div>
                   ))}
@@ -346,18 +348,18 @@ export function NotificationConfigPanel() {
               className="flex-1"
             />
             <Input
-              placeholder="Kanal"
+              placeholder={t('notifConfig.channelPlaceholder')}
               value={newWebhookChannel}
               onChange={(e) => setNewWebhookChannel(e.target.value)}
               className="w-32"
             />
             <Button variant="outline" onClick={addWebhook}>
               <Plus className="w-4 h-4 mr-1" />
-              Webhook
+              {t('notifConfig.addWebhook')}
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            Unterstützt Slack Incoming Webhooks, Microsoft Teams Connectors und benutzerdefinierte Endpoints.
+            {t('notifConfig.webhookSupport')}
           </p>
         </div>
       </Card>
@@ -366,7 +368,7 @@ export function NotificationConfigPanel() {
       <div className="flex justify-end">
         <Button onClick={handleSave} disabled={loading} size="lg">
           <FloppyDisk className="w-5 h-5 mr-2" />
-          {loading ? 'Wird gespeichert...' : 'Konfiguration speichern'}
+          {loading ? t('notifConfig.saving') : t('notifConfig.saveConfig')}
         </Button>
       </div>
     </div>

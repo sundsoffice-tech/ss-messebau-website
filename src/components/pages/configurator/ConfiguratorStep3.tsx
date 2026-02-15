@@ -4,6 +4,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ArrowRight, ArrowLeft, Lightbulb } from '@phosphor-icons/react'
+import { useTranslation } from '@/lib/i18n'
 
 interface Step1Data {
   einsatzort: string
@@ -44,21 +45,22 @@ interface ConfiguratorStep3Props {
 }
 
 export function ConfiguratorStep3({ data, step1Data, step2Data, onChange, onNext, onBack }: ConfiguratorStep3Props) {
+  const { t } = useTranslation()
   const showOutdoorHint = step1Data.indoorOutdoor === 'outdoor' && data.material === 'frontlit'
   const showBacklitHint = step2Data.led && data.material !== 'backlit'
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold mb-2">Benötigen Sie auch den Druck?</h2>
+        <h2 className="text-2xl font-bold mb-2">{t('step3.title')}</h2>
         <p className="text-muted-foreground">
-          Wir können Banner in verschiedenen Materialien bedrucken oder Sie liefern eigene Banner.
+          {t('step3.subtitle')}
         </p>
       </div>
 
       <div className="space-y-4">
         <div>
-          <Label className="text-base font-semibold mb-3 block">Banner benötigt? *</Label>
+          <Label className="text-base font-semibold mb-3 block">{t('step3.bannerNeeded.label')}</Label>
           <RadioGroup
             value={data.bannerBenoetigt ? 'ja' : 'nein'}
             onValueChange={(value) => onChange({ bannerBenoetigt: value === 'ja' })}
@@ -70,7 +72,7 @@ export function ConfiguratorStep3({ data, step1Data, step2Data, onChange, onNext
               }`}
             >
               <RadioGroupItem value="ja" id="banner-ja" />
-              <span>Ja, S&S soll Banner drucken</span>
+              <span>{t('step3.bannerNeeded.yes')}</span>
             </Label>
             <Label
               htmlFor="banner-nein"
@@ -79,7 +81,7 @@ export function ConfiguratorStep3({ data, step1Data, step2Data, onChange, onNext
               }`}
             >
               <RadioGroupItem value="nein" id="banner-nein" />
-              <span>Nein, ich habe eigene Banner</span>
+              <span>{t('step3.bannerNeeded.no')}</span>
             </Label>
           </RadioGroup>
         </div>
@@ -87,17 +89,17 @@ export function ConfiguratorStep3({ data, step1Data, step2Data, onChange, onNext
         {data.bannerBenoetigt && (
           <div className="space-y-4 animate-in fade-in">
             <div>
-              <Label className="text-base font-semibold mb-3 block">Material *</Label>
+              <Label className="text-base font-semibold mb-3 block">{t('step3.material.label')}</Label>
               <RadioGroup
                 value={data.material || 'frontlit'}
                 onValueChange={(value) => onChange({ material: value })}
               >
                 <div className="space-y-2">
                   {[
-                    { value: 'frontlit', label: 'Frontlit 450g', desc: 'Standard, Indoor/leichtes Outdoor' },
-                    { value: 'blockout', label: 'Blockout 510g', desc: 'Blickdicht, beidseitiger Druck' },
-                    { value: 'mesh', label: 'Mesh 350g', desc: 'Windurchlässig, Outdoor' },
-                    { value: 'backlit', label: 'Backlit 450g', desc: 'Transluzent für LED-Beleuchtung' },
+                    { value: 'frontlit', label: t('step3.material.frontlit.label'), desc: t('step3.material.frontlit.desc') },
+                    { value: 'blockout', label: t('step3.material.blockout.label'), desc: t('step3.material.blockout.desc') },
+                    { value: 'mesh', label: t('step3.material.mesh.label'), desc: t('step3.material.mesh.desc') },
+                    { value: 'backlit', label: t('step3.material.backlit.label'), desc: t('step3.material.backlit.desc') },
                   ].map((option) => (
                     <Label
                       key={option.value}
@@ -120,7 +122,7 @@ export function ConfiguratorStep3({ data, step1Data, step2Data, onChange, onNext
                 <Alert className="mt-2 bg-accent/10">
                   <Lightbulb className="w-5 h-5" />
                   <AlertDescription>
-                    Für Outdoor empfehlen wir Mesh (windurchlässig) oder Blockout (extra stabil)
+                    {t('step3.hints.outdoor')}
                   </AlertDescription>
                 </Alert>
               )}
@@ -129,24 +131,24 @@ export function ConfiguratorStep3({ data, step1Data, step2Data, onChange, onNext
                 <Alert className="mt-2 bg-accent/10">
                   <Lightbulb className="w-5 h-5" />
                   <AlertDescription>
-                    Für LED-Hinterleuchtung ist transluzentes Backlit-Material optimal
+                    {t('step3.hints.backlit')}
                   </AlertDescription>
                 </Alert>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label className="text-base font-semibold">Konfektion</Label>
+              <Label className="text-base font-semibold">{t('step3.konfektion.label')}</Label>
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
                   <Checkbox id="keder" defaultChecked disabled />
                   <Label htmlFor="keder" className="text-muted-foreground">
-                    Keder 6mm (Standard für Rahmen)
+                    {t('step3.konfektion.keder')}
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox id="saum" />
-                  <Label htmlFor="saum">Saum ringsum</Label>
+                  <Label htmlFor="saum">{t('step3.konfektion.saum')}</Label>
                 </div>
               </div>
             </div>
@@ -158,19 +160,19 @@ export function ConfiguratorStep3({ data, step1Data, step2Data, onChange, onNext
                 onCheckedChange={(checked) => onChange({ brandschutz: checked as boolean })}
               />
               <Label htmlFor="brandschutz" className="font-semibold cursor-pointer">
-                B1-Brandschutz-Zertifikat erforderlich?
+                {t('step3.fireProtection.label')}
               </Label>
             </div>
             {step1Data.einsatzort === 'messe' && !data.brandschutz && (
               <Alert className="bg-accent/10">
                 <AlertDescription className="text-sm">
-                  Die meisten Messen verlangen B1-Brandschutz. Wir liefern Zertifikat mit.
+                  {t('step3.fireProtection.hint')}
                 </AlertDescription>
               </Alert>
             )}
 
             <div>
-              <Label className="text-base font-semibold mb-3 block">Druckqualität *</Label>
+              <Label className="text-base font-semibold mb-3 block">{t('step3.printQuality.label')}</Label>
               <RadioGroup
                 value={data.druckqualitaet || 'standard'}
                 onValueChange={(value) => onChange({ druckqualitaet: value })}
@@ -183,9 +185,9 @@ export function ConfiguratorStep3({ data, step1Data, step2Data, onChange, onNext
                 >
                   <RadioGroupItem value="standard" id="qual-standard" className="mt-1" />
                   <div>
-                    <div className="font-medium">Standard (720dpi)</div>
+                    <div className="font-medium">{t('step3.printQuality.standard.label')}</div>
                     <div className="text-sm text-muted-foreground">
-                      Für normale Betrachtung – für 95% der Fälle ausreichend
+                      {t('step3.printQuality.standard.desc')}
                     </div>
                   </div>
                 </Label>
@@ -197,8 +199,8 @@ export function ConfiguratorStep3({ data, step1Data, step2Data, onChange, onNext
                 >
                   <RadioGroupItem value="high" id="qual-high" className="mt-1" />
                   <div>
-                    <div className="font-medium">High (1440dpi)</div>
-                    <div className="text-sm text-muted-foreground">Für Nahbetrachtung/Premium</div>
+                    <div className="font-medium">{t('step3.printQuality.high.label')}</div>
+                    <div className="text-sm text-muted-foreground">{t('step3.printQuality.high.desc')}</div>
                   </div>
                 </Label>
               </RadioGroup>
@@ -206,8 +208,7 @@ export function ConfiguratorStep3({ data, step1Data, step2Data, onChange, onNext
 
             <Alert>
               <AlertDescription>
-                <strong>Hinweis zu Druckdaten:</strong> Sie laden Ihre Druckdaten im nächsten Schritt hoch. 
-                Format: PDF, AI, EPS (CMYK, 100dpi, Endformat + 2cm Beschnitt)
+                <strong>{t('step3.printDataNotice.title')}</strong> {t('step3.printDataNotice.text')}
               </AlertDescription>
             </Alert>
           </div>
@@ -217,10 +218,10 @@ export function ConfiguratorStep3({ data, step1Data, step2Data, onChange, onNext
       <div className="flex justify-between pt-4 border-t">
         <Button onClick={onBack} variant="outline">
           <ArrowLeft className="mr-2 w-5 h-5" />
-          Zurück
+          {t('step3.back')}
         </Button>
         <Button onClick={onNext}>
-          Weiter zu Daten
+          {t('step3.next')}
           <ArrowRight className="ml-2 w-5 h-5" />
         </Button>
       </div>

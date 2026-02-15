@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { toast } from 'sonner'
 import { Phone, Envelope, MapPin, PaperPlaneRight, ChatCircleDots, Sparkle, Calculator, ClockClockwise, Lightbulb, X, CheckCircle, ArrowRight, Microphone, Stop, Info } from '@phosphor-icons/react'
+import { useTranslation } from '@/lib/i18n'
 import { ContactInquiry, ChatMessage } from '@/lib/types'
 import { useKV } from '@/hooks/use-kv'
 import { useVoiceInput } from '@/hooks/use-voice-input'
@@ -31,6 +32,7 @@ interface QuickAction {
 }
 
 export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
+  const { t } = useTranslation()
   useSectionObserver(['kontaktformular', 'anfahrt', 'ki-berater'])
   useScrollDepthTracking('kontakt')
   useDwellTimeTracking('kontakt')
@@ -38,7 +40,7 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
   const [inquiries, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMessages, setChatMessages] = useKV<ChatMessage[]>('kontakt-chat-history', [
-    { role: 'assistant', content: 'Guten Tag! Ich unterstütze Sie gerne bei allen Fragen rund um Ihren Messeauftritt.\n\nStellen Sie mir Fragen zu:\n• Budget und Kosten\n• Planung und Ablauf\n• Materialien und Systeme\n• Logistik und Organisation\n\nWie kann ich Ihnen weiterhelfen?' }
+    { role: 'assistant', content: t('kontakt.chat.welcome') }
   ])
   const [chatInput, setChatInput] = useState('')
   const [chatLoading, setChatLoading] = useState(false)
@@ -109,44 +111,44 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
     {
       id: 'budget-calc',
       icon: <Calculator className="h-5 w-5" />,
-      label: 'Budget berechnen',
-      prompt: 'Ich möchte ein ungefähres Budget für meinen Messestand berechnen lassen.',
-      category: 'Planung'
+      label: t('kontakt.quick.budgetCalc.label'),
+      prompt: t('kontakt.quick.budgetCalc.prompt'),
+      category: t('kontakt.quick.budgetCalc.category')
     },
     {
       id: 'timeline',
       icon: <ClockClockwise className="h-5 w-5" />,
-      label: 'Timeline & Ablauf',
-      prompt: 'Wie lange dauert es von der Anfrage bis zum fertigen Stand? Welche Schritte sind nötig?',
-      category: 'Planung'
+      label: t('kontakt.quick.timeline.label'),
+      prompt: t('kontakt.quick.timeline.prompt'),
+      category: t('kontakt.quick.timeline.category')
     },
     {
       id: 'materials',
       icon: <Lightbulb className="h-5 w-5" />,
-      label: 'Materialberatung',
-      prompt: 'Welche Materialien und Systeme empfehlen Sie für nachhaltigen Messebau?',
-      category: 'Beratung'
+      label: t('kontakt.quick.materials.label'),
+      prompt: t('kontakt.quick.materials.prompt'),
+      category: t('kontakt.quick.materials.category')
     },
     {
       id: 'sizes',
       icon: <Sparkle className="h-5 w-5" />,
-      label: 'Standgrößen',
-      prompt: 'Was sind typische Standgrößen und was kann man damit realisieren?',
-      category: 'Grundlagen'
+      label: t('kontakt.quick.sizes.label'),
+      prompt: t('kontakt.quick.sizes.prompt'),
+      category: t('kontakt.quick.sizes.category')
     },
     {
       id: 'logistics',
       icon: <ArrowRight className="h-5 w-5" />,
-      label: 'Logistik & Transport',
-      prompt: 'Wie funktioniert die Logistik bei einem Messeprojekt?',
-      category: 'Organisation'
+      label: t('kontakt.quick.logistics.label'),
+      prompt: t('kontakt.quick.logistics.prompt'),
+      category: t('kontakt.quick.logistics.category')
     },
     {
       id: 'references',
       icon: <CheckCircle className="h-5 w-5" />,
-      label: 'Referenzprojekte',
-      prompt: 'Können Sie mir Beispiele für erfolgreiche Messestände zeigen?',
-      category: 'Inspiration'
+      label: t('kontakt.quick.references.label'),
+      prompt: t('kontakt.quick.references.prompt'),
+      category: t('kontakt.quick.references.category')
     }
   ]
 
@@ -290,7 +292,7 @@ ANTWORTRICHTLINIEN:
       setTypingText('')
       
     } catch {
-      toast.error('Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.')
+      toast.error(t('kontakt.chat.error'))
       setChatMessages((prev) => {
         const filtered = (prev || []).filter((_, idx) => idx !== (prev || []).length - 1)
         return filtered
@@ -307,7 +309,7 @@ ANTWORTRICHTLINIEN:
 
   const clearChat = () => {
     setChatMessages([
-      { role: 'assistant', content: 'Chat wurde zurückgesetzt.\n\nWie kann ich Ihnen weiterhelfen?' }
+      { role: 'assistant', content: t('kontakt.chat.reset') }
     ])
     setShowQuickActions(true)
   }
@@ -316,9 +318,9 @@ ANTWORTRICHTLINIEN:
     <div>
       <section id="kontakt-hero" className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Kontakt – Messestand jetzt anfragen</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">{t('kontakt.hero.title')}</h1>
           <p className="text-base sm:text-xl opacity-90 max-w-3xl">
-            Haben Sie Fragen oder ein konkretes Projekt? Kontaktieren Sie uns – wir freuen uns auf Ihre Nachricht!
+            {t('kontakt.hero.subtitle')}
           </p>
         </div>
       </section>
@@ -327,7 +329,7 @@ ANTWORTRICHTLINIEN:
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
             <div className="order-2 lg:order-1">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Schreiben Sie uns</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">{t('kontakt.form.heading')}</h2>
               <form onSubmit={form.handleSubmit} className="space-y-4 sm:space-y-6">
                 <div className="space-y-4">
                   {form.config.fields.map((fieldConfig) => {
@@ -353,14 +355,14 @@ ANTWORTRICHTLINIEN:
                   disabled={form.loading}
                   className="w-full bg-accent hover:bg-accent/90 h-12 sm:h-11 text-base font-semibold"
                 >
-                  {form.loading ? 'Wird gesendet...' : 'Nachricht absenden'}
+                  {form.loading ? t('kontakt.form.sending') : t('kontakt.form.send')}
                   <PaperPlaneRight className="ml-2" weight="fill" />
                 </Button>
               </form>
             </div>
 
             <div className="order-1 lg:order-2" id="anfahrt">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Kontaktdaten</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">{t('kontakt.contact.title')}</h2>
               <div className="space-y-4 mb-6 sm:mb-8">
                 <Card>
                   <CardContent className="p-4 sm:p-6">
@@ -369,11 +371,11 @@ ANTWORTRICHTLINIEN:
                         <MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="font-semibold mb-1 text-sm sm:text-base">Adresse</h3>
+                        <h3 className="font-semibold mb-1 text-sm sm:text-base">{t('kontakt.contact.address')}</h3>
                         <p className="text-sm sm:text-base text-muted-foreground">
-                          Marienstraße 37<br />
-                          41836 Hückelhoven<br />
-                          Deutschland
+                          {t('kontakt.contact.address.line1')}<br />
+                          {t('kontakt.contact.address.line2')}<br />
+                          {t('kontakt.contact.address.line3')}
                         </p>
                       </div>
                     </div>
@@ -387,7 +389,7 @@ ANTWORTRICHTLINIEN:
                         <Phone className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="font-semibold mb-1 text-sm sm:text-base">Telefon</h3>
+                        <h3 className="font-semibold mb-1 text-sm sm:text-base">{t('kontakt.contact.phone')}</h3>
                         <div className="text-sm sm:text-base text-muted-foreground">
                           <a href="tel:+4915140368754" className="hover:text-primary font-medium">+49 1514 0368754</a>
                         </div>
@@ -403,7 +405,7 @@ ANTWORTRICHTLINIEN:
                         <Envelope className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="font-semibold mb-1 text-sm sm:text-base">E-Mail</h3>
+                        <h3 className="font-semibold mb-1 text-sm sm:text-base">{t('kontakt.contact.email')}</h3>
                         <p className="text-sm sm:text-base text-muted-foreground break-all">
                           <a href="mailto:info@sundsmessebau.com" className="hover:text-primary font-medium">
                             info@sundsmessebau.com
@@ -423,9 +425,9 @@ ANTWORTRICHTLINIEN:
                         <Sparkle className="h-6 w-6 sm:h-7 sm:w-7" weight="fill" />
                       </div>
                       <div className="min-w-0">
-                        <CardTitle className="text-lg sm:text-xl mb-1">KI-Messebau-Berater</CardTitle>
+                        <CardTitle className="text-lg sm:text-xl mb-1">{t('kontakt.ai.title')}</CardTitle>
                         <CardDescription className="text-xs sm:text-sm">
-                          Sofortige Antworten rund um die Uhr
+                          {t('kontakt.ai.subtitle')}
                         </CardDescription>
                       </div>
                     </div>
@@ -433,27 +435,26 @@ ANTWORTRICHTLINIEN:
                 </CardHeader>
                 <CardContent className="space-y-3 sm:space-y-4">
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Stellen Sie Fragen zu Budget, Planung und Materialien – per Text oder Spracheingabe. 
-                    Unser intelligenter Berater unterstützt Sie bei allen Aspekten Ihres Messeprojekts.
+                    {t('kontakt.ai.description')}
                   </p>
 
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2">
                       <Calculator className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary shrink-0" weight="fill" />
-                      <span className="font-medium text-[11px] sm:text-xs leading-tight">Budget-Kalkulation</span>
+                      <span className="font-medium text-[11px] sm:text-xs leading-tight">{t('kontakt.ai.feature.budget')}</span>
                     </div>
                     <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2">
                       <ClockClockwise className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary shrink-0" weight="fill" />
-                      <span className="font-medium text-[11px] sm:text-xs leading-tight">Timeline-Planung</span>
+                      <span className="font-medium text-[11px] sm:text-xs leading-tight">{t('kontakt.ai.feature.timeline')}</span>
                     </div>
                     <div className="flex items-center gap-2 bg-background/60 rounded-lg p-2">
                       <Lightbulb className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary shrink-0" weight="fill" />
-                      <span className="font-medium text-[11px] sm:text-xs leading-tight">Materialberatung</span>
+                      <span className="font-medium text-[11px] sm:text-xs leading-tight">{t('kontakt.ai.feature.materials')}</span>
                     </div>
                     {isVoiceSupported && (
                       <div className="flex items-center gap-2 bg-gradient-to-r from-accent/20 to-primary/20 rounded-lg p-2 border border-accent/30">
                         <Microphone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent shrink-0" weight="fill" />
-                        <span className="font-semibold text-[11px] sm:text-xs leading-tight">Spracheingabe</span>
+                        <span className="font-semibold text-[11px] sm:text-xs leading-tight">{t('kontakt.ai.feature.voice')}</span>
                       </div>
                     )}
                   </div>
@@ -467,12 +468,12 @@ ANTWORTRICHTLINIEN:
                       {chatOpen ? (
                         <>
                           <X className="mr-2 h-5 w-5" />
-                          <span className="text-sm">Minimieren</span>
+                          <span className="text-sm">{t('kontakt.ai.minimize')}</span>
                         </>
                       ) : (
                         <>
                           <ChatCircleDots className="mr-2 h-5 w-5" weight="fill" />
-                          <span className="text-sm">Chat starten</span>
+                          <span className="text-sm">{t('kontakt.ai.start')}</span>
                         </>
                       )}
                     </Button>
@@ -494,7 +495,7 @@ ANTWORTRICHTLINIEN:
                     className="w-full h-10 text-sm"
                   >
                     <Info className="mr-2 h-4 w-4" />
-                    Mehr über den KI-Berater erfahren
+                    {t('kontakt.ai.learnMore')}
                   </Button>
 
                   {chatOpen && (
@@ -510,7 +511,7 @@ ANTWORTRICHTLINIEN:
                               <div className="w-0.5 sm:w-1 h-4 sm:h-6 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '400ms', animationDuration: '600ms' }} />
                             </div>
                             <span className="text-xs sm:text-sm font-semibold text-red-700">
-                              Sprechen Sie jetzt...
+                              {t('kontakt.ai.listening')}
                             </span>
                           </div>
                         </div>
@@ -552,7 +553,7 @@ ANTWORTRICHTLINIEN:
                                   <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                                   <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                                   <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                                  <span className="text-xs sm:text-sm text-muted-foreground ml-2">Analysiere Anfrage...</span>
+                                  <span className="text-xs sm:text-sm text-muted-foreground ml-2">{t('kontakt.ai.analyzing')}</span>
                                 </div>
                               </div>
                             </div>
@@ -565,7 +566,7 @@ ANTWORTRICHTLINIEN:
                         <div className="p-3 sm:p-4 border-t bg-muted/30">
                           <p className="text-xs font-semibold text-muted-foreground mb-2 sm:mb-3 flex items-center gap-2">
                             <Lightbulb className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                            Schnellaktionen
+                            {t('kontakt.ai.quickActions')}
                           </p>
                           <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
                             {quickActions.map((action) => (
@@ -596,7 +597,7 @@ ANTWORTRICHTLINIEN:
                                 handleChatSubmit()
                               }
                             }}
-                            placeholder={isListening ? "Ich höre zu..." : "Ihre Frage eingeben..."}
+                            placeholder={isListening ? t('kontakt.ai.placeholder.listening') : t('kontakt.ai.placeholder.default')}
                             disabled={chatLoading || isListening}
                             className="flex-1 h-11 sm:h-10 text-sm"
                           />
@@ -607,7 +608,7 @@ ANTWORTRICHTLINIEN:
                               size="icon"
                               variant={isListening ? "destructive" : "outline"}
                               className={`h-11 w-11 sm:h-10 sm:w-10 shrink-0 ${isListening ? "animate-pulse" : ""}`}
-                              title={isListening ? "Aufnahme stoppen" : "Spracheingabe starten"}
+                              title={isListening ? t('kontakt.ai.voiceStop') : t('kontakt.ai.voiceStart')}
                             >
                               {isListening ? (
                                 <Stop weight="fill" className="h-5 w-5" />
@@ -627,12 +628,12 @@ ANTWORTRICHTLINIEN:
                         </div>
                         <div className="flex items-center justify-between mt-2 text-[10px] sm:text-xs text-muted-foreground">
                           <span>
-                            Powered by GPT-4
+                            {t('kontakt.ai.poweredBy')}
                           </span>
                           {isVoiceSupported && (
                             <span className="flex items-center gap-1">
                               <Microphone className="h-3 w-3" />
-                              Spracheingabe aktiv
+                              {t('kontakt.ai.voiceActive')}
                             </span>
                           )}
                         </div>
@@ -656,21 +657,21 @@ ANTWORTRICHTLINIEN:
               style={{ border: 0 }}
               allowFullScreen
               loading="lazy"
-              title="S&S Messebau Standort"
+              title={t('kontakt.map.title')}
             />
           </div>
         </div>
       </section>
 
       <InternalLinkSection
-        title="Mehr von S&S Messebau"
+        title={t('kontakt.links.title')}
         links={[
-          { label: 'Leistungen im Detail', description: 'Messebau, Eventbau, Showrooms & Brand Spaces im Überblick.', hash: '/leistungen' },
-          { label: 'Branchen-Expertise', description: 'Spezialisiert auf Food, Finance & Industrie.', hash: '/branchen' },
-          { label: 'Referenzen ansehen', description: 'Erfolgreiche Messebau-Projekte von 20–200 m².', hash: '/referenzen' },
-          { label: 'Unser Ablauf', description: 'Transparenter Projektablauf vom Erstgespräch bis Abbau.', hash: '/ablauf' },
-          { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für umweltbewusste Auftritte.', hash: '/nachhaltigkeit' },
-          { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit.', hash: '/ueber-uns' },
+          { label: t('kontakt.links.services.label'), description: t('kontakt.links.services.desc'), hash: '/leistungen' },
+          { label: t('kontakt.links.industries.label'), description: t('kontakt.links.industries.desc'), hash: '/branchen' },
+          { label: t('kontakt.links.references.label'), description: t('kontakt.links.references.desc'), hash: '/referenzen' },
+          { label: t('kontakt.links.process.label'), description: t('kontakt.links.process.desc'), hash: '/ablauf' },
+          { label: t('kontakt.links.sustainability.label'), description: t('kontakt.links.sustainability.desc'), hash: '/nachhaltigkeit' },
+          { label: t('kontakt.links.about.label'), description: t('kontakt.links.about.desc'), hash: '/ueber-uns' },
         ]}
       />
     </div>

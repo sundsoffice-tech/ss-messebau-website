@@ -6,6 +6,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ArrowRight, ArrowLeft, Info } from '@phosphor-icons/react'
 import { FileUpload, UploadedFile } from '@/components/FileUpload'
 import { useState, useEffect } from 'react'
+import { useTranslation } from '@/lib/i18n'
 
 interface Step4Data {
   druckdatenVorhanden: boolean
@@ -23,6 +24,7 @@ interface ConfiguratorStep4Props {
 }
 
 export function ConfiguratorStep4({ data, onChange, onNext, onBack }: ConfiguratorStep4Props) {
+  const { t } = useTranslation()
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
 
   useEffect(() => {
@@ -53,15 +55,15 @@ export function ConfiguratorStep4({ data, onChange, onNext, onBack }: Configurat
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold mb-2">Druckdaten hochladen</h2>
+        <h2 className="text-2xl font-bold mb-2">{t('step4.title')}</h2>
         <p className="text-muted-foreground">
-          Laden Sie Ihre Druckdaten hoch oder buchen Sie unseren Grafikservice.
+          {t('step4.subtitle')}
         </p>
       </div>
 
       <div className="space-y-4">
         <div>
-          <Label className="text-base font-semibold mb-3 block">Druckdaten vorhanden? *</Label>
+          <Label className="text-base font-semibold mb-3 block">{t('step4.printDataAvailable')}</Label>
           <RadioGroup
             value={data.druckdatenVorhanden ? 'ja' : 'nein'}
             onValueChange={(value) => onChange({ druckdatenVorhanden: value === 'ja' })}
@@ -73,7 +75,7 @@ export function ConfiguratorStep4({ data, onChange, onNext, onBack }: Configurat
               }`}
             >
               <RadioGroupItem value="ja" id="druck-ja" />
-              <span>Ja, ich lade Daten hoch</span>
+              <span>{t('step4.yesUpload')}</span>
             </Label>
             <Label
               htmlFor="druck-nein"
@@ -82,7 +84,7 @@ export function ConfiguratorStep4({ data, onChange, onNext, onBack }: Configurat
               }`}
             >
               <RadioGroupItem value="nein" id="druck-nein" />
-              <span>Nein, ich benötige Grafikservice</span>
+              <span>{t('step4.noGraphicService')}</span>
             </Label>
           </RadioGroup>
         </div>
@@ -100,8 +102,7 @@ export function ConfiguratorStep4({ data, onChange, onNext, onBack }: Configurat
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription className="text-sm">
-                <strong>Druckdaten-Anforderungen:</strong> Format CMYK, mindestens 100dpi Auflösung, 
-                Endformat plus 2cm Beschnitt pro Seite. Bei Fragen hilft unser Team gerne weiter.
+                <strong>{t('step4.printRequirements.title')}</strong> {t('step4.printRequirements.text')}
               </AlertDescription>
             </Alert>
           </div>
@@ -110,37 +111,36 @@ export function ConfiguratorStep4({ data, onChange, onNext, onBack }: Configurat
             <Alert className="border-primary bg-primary/5">
               <Info className="h-4 w-4 text-primary" />
               <AlertDescription className="text-primary">
-                <strong>Grafikservice:</strong> Unser Designteam erstellt Ihre Druckdaten nach Ihren Vorgaben. 
-                Die Kosten werden im Angebot separat ausgewiesen (ab 49€ für einfache Layouts).
+                <strong>{t('step4.graphicService.title')}</strong> {t('step4.graphicService.text')}
               </AlertDescription>
             </Alert>
             
             <div>
               <Label htmlFor="designwunsch" className="text-base font-semibold">
-                Beschreiben Sie Ihre Designvorstellung *
+                {t('step4.designDescription.label')}
               </Label>
               <p className="text-sm text-muted-foreground mb-2">
-                Je detaillierter, desto besser können wir Ihre Vorstellung umsetzen.
+                {t('step4.designDescription.hint')}
               </p>
               <Textarea
                 id="designwunsch"
                 value={data.designwunsch || ''}
                 onChange={(e) => onChange({ designwunsch: e.target.value })}
-                placeholder="Beispiel: Firmenlogo zentriert oben, Slogan darunter in Rot, Produktfotos unten, Hintergrund in Firmenfarben Blau/Weiß, moderne Optik..."
+                placeholder={t('step4.designDescription.placeholder')}
                 className="mt-2 h-40"
                 maxLength={1000}
               />
               <p className="text-xs text-muted-foreground mt-1">
-                {data.designwunsch?.length || 0} / 1000 Zeichen
+                {data.designwunsch?.length || 0} / 1000 {t('step4.characters')}
               </p>
             </div>
 
             <div>
               <Label htmlFor="logo-upload" className="text-base font-semibold">
-                Logo & CI-Elemente hochladen (optional)
+                {t('step4.logoUpload.label')}
               </Label>
               <p className="text-sm text-muted-foreground mb-2">
-                Falls vorhanden, laden Sie Ihr Firmenlogo und weitere Grafiken hoch.
+                {t('step4.logoUpload.hint')}
               </p>
               <FileUpload
                 files={uploadedFiles}
@@ -155,22 +155,22 @@ export function ConfiguratorStep4({ data, onChange, onNext, onBack }: Configurat
 
         <div>
           <Label htmlFor="kommentar" className="text-base font-semibold">
-            Besondere Anforderungen oder Hinweise? (optional)
+            {t('step4.comment.label')}
           </Label>
           <p className="text-sm text-muted-foreground mb-2">
-            z.B. spezielle Deadline, Muster gewünscht, telefonische Rücksprache erforderlich
+            {t('step4.comment.hint')}
           </p>
           <Textarea
             id="kommentar"
             value={data.kommentar || ''}
             onChange={(e) => onChange({ kommentar: e.target.value })}
-            placeholder="Ihre Hinweise..."
+            placeholder={t('step4.comment.placeholder')}
             className="mt-2"
             rows={4}
             maxLength={500}
           />
           <p className="text-xs text-muted-foreground mt-1">
-            {data.kommentar?.length || 0} / 500 Zeichen
+            {data.kommentar?.length || 0} / 500 {t('step4.characters')}
           </p>
         </div>
       </div>
@@ -178,14 +178,14 @@ export function ConfiguratorStep4({ data, onChange, onNext, onBack }: Configurat
       <div className="flex justify-between pt-6 border-t">
         <Button onClick={onBack} variant="outline" size="lg">
           <ArrowLeft className="mr-2 w-5 h-5" />
-          Zurück
+          {t('step4.back')}
         </Button>
         <Button 
           onClick={onNext} 
           size="lg"
           disabled={!canProceed()}
         >
-          Weiter zu Lieferung
+          {t('step4.next')}
           <ArrowRight className="ml-2 w-5 h-5" />
         </Button>
       </div>

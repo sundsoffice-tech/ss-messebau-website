@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ArrowRight, ArrowLeft } from '@phosphor-icons/react'
+import { useTranslation } from '@/lib/i18n'
 
 interface Step5Data {
   firma: string
@@ -26,14 +27,15 @@ interface ConfiguratorStep5Props {
 }
 
 export function ConfiguratorStep5({ data, onChange, onNext, onBack }: ConfiguratorStep5Props) {
+  const { t } = useTranslation()
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const validate = () => {
     const newErrors: Record<string, string> = {}
     
-    if (!data.strasse) newErrors.strasse = 'Bitte geben Sie die Straße an'
-    if (!data.plz || data.plz.length !== 5) newErrors.plz = 'Bitte geben Sie eine gültige PLZ an'
-    if (!data.ort) newErrors.ort = 'Bitte geben Sie den Ort an'
+    if (!data.strasse) newErrors.strasse = t('step5.error.street')
+    if (!data.plz || data.plz.length !== 5) newErrors.plz = t('step5.error.zip')
+    if (!data.ort) newErrors.ort = t('step5.error.city')
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -48,36 +50,36 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold mb-2">Lieferung planen</h2>
-        <p className="text-muted-foreground">Wann und wohin sollen wir liefern?</p>
+        <h2 className="text-2xl font-bold mb-2">{t('step5.title')}</h2>
+        <p className="text-muted-foreground">{t('step5.subtitle')}</p>
       </div>
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="firma">Firma (optional)</Label>
+          <Label htmlFor="firma">{t('step5.company')}</Label>
           <Input
             id="firma"
             value={data.firma}
             onChange={(e) => onChange({ firma: e.target.value })}
-            placeholder="Firmenname"
+            placeholder={t('step5.companyPlaceholder')}
             className="mt-1"
           />
         </div>
 
         <div className="grid grid-cols-3 gap-3">
           <div className="col-span-2">
-            <Label htmlFor="strasse">Straße + Nr. *</Label>
+            <Label htmlFor="strasse">{t('step5.street')}</Label>
             <Input
               id="strasse"
               value={data.strasse}
               onChange={(e) => onChange({ strasse: e.target.value })}
-              placeholder="Musterstraße 123"
+              placeholder={t('step5.streetPlaceholder')}
               className="mt-1"
             />
             {errors.strasse && <p className="text-sm text-destructive mt-1">{errors.strasse}</p>}
           </div>
           <div>
-            <Label htmlFor="plz">PLZ *</Label>
+            <Label htmlFor="plz">{t('step5.zip')}</Label>
             <Input
               id="plz"
               value={data.plz}
@@ -91,19 +93,19 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
         </div>
 
         <div>
-          <Label htmlFor="ort">Ort *</Label>
+          <Label htmlFor="ort">{t('step5.city')}</Label>
           <Input
             id="ort"
             value={data.ort}
             onChange={(e) => onChange({ ort: e.target.value })}
-            placeholder="Musterstadt"
+            placeholder={t('step5.cityPlaceholder')}
             className="mt-1"
           />
           {errors.ort && <p className="text-sm text-destructive mt-1">{errors.ort}</p>}
         </div>
 
         <div>
-          <Label htmlFor="wunschDatum">Wunsch-Lieferdatum (optional)</Label>
+          <Label htmlFor="wunschDatum">{t('step5.deliveryDate')}</Label>
           <Input
             id="wunschDatum"
             type="date"
@@ -111,7 +113,7 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
             onChange={(e) => onChange({ wunschDatum: e.target.value })}
             className="mt-1"
           />
-          <p className="text-sm text-muted-foreground mt-1">Standard-Lieferzeit: 5-10 Werktage</p>
+          <p className="text-sm text-muted-foreground mt-1">{t('step5.deliveryTime')}</p>
         </div>
 
         <div className="flex items-center space-x-2">
@@ -121,12 +123,12 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
             onCheckedChange={(checked) => onChange({ express: checked as boolean })}
           />
           <Label htmlFor="express" className="cursor-pointer">
-            Express-Produktion gewünscht? (3-5 Werktage, Aufpreis im Angebot)
+            {t('step5.expressLabel')}
           </Label>
         </div>
 
         <div>
-          <Label className="text-base font-semibold mb-3 block">Lieferart *</Label>
+          <Label className="text-base font-semibold mb-3 block">{t('step5.deliveryMethod')}</Label>
           <RadioGroup
             value={data.lieferart}
             onValueChange={(value) => onChange({ lieferart: value })}
@@ -138,7 +140,7 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
               }`}
             >
               <RadioGroupItem value="spedition" id="spedition" />
-              <span>Speditionslieferung (Standard)</span>
+              <span>{t('step5.shipping')}</span>
             </Label>
             <Label
               htmlFor="abholung"
@@ -147,7 +149,7 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
               }`}
             >
               <RadioGroupItem value="abholung" id="abholung" />
-              <span>Abholung in Hückelhoven (kostenlos)</span>
+              <span>{t('step5.pickup')}</span>
             </Label>
           </RadioGroup>
         </div>
@@ -156,10 +158,10 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
       <div className="flex justify-between pt-4 border-t">
         <Button onClick={onBack} variant="outline">
           <ArrowLeft className="mr-2 w-5 h-5" />
-          Zurück
+          {t('step5.back')}
         </Button>
         <Button onClick={handleNext}>
-          Weiter zu Kontaktdaten
+          {t('step5.next')}
           <ArrowRight className="ml-2 w-5 h-5" />
         </Button>
       </div>

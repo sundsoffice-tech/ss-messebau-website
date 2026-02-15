@@ -1,5 +1,6 @@
 import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { useTranslation } from '@/lib/i18n'
 import { Check, File as FileIcon } from '@phosphor-icons/react'
 import type { BannerConfig } from '../BannerBestellenPage'
 
@@ -9,6 +10,8 @@ interface ConfigSummaryProps {
 }
 
 export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
+  const { t } = useTranslation()
+
   const flaeche =
     config.step2.breite && config.step2.hoehe
       ? ((config.step2.breite * config.step2.hoehe) / 10000).toFixed(2)
@@ -16,19 +19,19 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
 
   const getRahmenartLabel = (value: string) => {
     const labels: Record<string, string> = {
-      haengerahmen: 'Hängerahmen',
-      standrahmen: 'Standrahmen',
-      verkleidung: 'Verkleidungsrahmen',
-      beidseitig: 'Beidseitiger Rahmen',
+      haengerahmen: t('configSummary.rahmenart.haengerahmen'),
+      standrahmen: t('configSummary.rahmenart.standrahmen'),
+      verkleidung: t('configSummary.rahmenart.verkleidung'),
+      beidseitig: t('configSummary.rahmenart.beidseitig'),
     }
     return labels[value] || value
   }
 
   const getProfilLabel = (value: string) => {
     const labels: Record<string, string> = {
-      standard: 'Standard-Profil',
-      premium: 'Premium-Profil',
-      sonder: 'Sonder-Profil',
+      standard: t('configSummary.profil.standard'),
+      premium: t('configSummary.profil.premium'),
+      sonder: t('configSummary.profil.sonder'),
     }
     return labels[value] || value
   }
@@ -36,10 +39,10 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
   const getMaterialLabel = (value?: string) => {
     if (!value) return ''
     const labels: Record<string, string> = {
-      frontlit: 'Frontlit 450g',
-      blockout: 'Blockout 510g',
-      mesh: 'Mesh 350g',
-      backlit: 'Backlit 450g',
+      frontlit: t('configSummary.material.frontlit'),
+      blockout: t('configSummary.material.blockout'),
+      mesh: t('configSummary.material.mesh'),
+      backlit: t('configSummary.material.backlit'),
     }
     return labels[value] || value
   }
@@ -48,7 +51,7 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
 
   return (
     <Card className="p-4 sm:p-6 lg:sticky lg:top-6">
-      <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Ihre Konfiguration</h3>
+      <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">{t('configSummary.title')}</h3>
 
       <div className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm">
         {currentStep >= 1 && config.step1.einsatzort && (
@@ -81,7 +84,7 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
           <div className="flex items-start gap-2">
             <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0 mt-0.5" weight="bold" />
             <div className="min-w-0">
-              <p className="font-medium text-sm sm:text-base">LED-Hinterleuchtung</p>
+              <p className="font-medium text-sm sm:text-base">{t('configSummary.ledBacklight')}</p>
               <p className="text-muted-foreground text-[11px] sm:text-xs">{config.step2.ledStrom || '230V'}</p>
             </div>
           </div>
@@ -91,10 +94,10 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
           <div className="flex items-start gap-2">
             <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0 mt-0.5" weight="bold" />
             <div className="min-w-0">
-              <p className="font-medium text-sm sm:text-base">Banner-Druck</p>
+              <p className="font-medium text-sm sm:text-base">{t('configSummary.bannerPrint')}</p>
               <p className="text-muted-foreground text-[11px] sm:text-xs break-words">
                 {getMaterialLabel(config.step3.material)}
-                {config.step3.brandschutz && ' • B1-Brandschutz'}
+                {config.step3.brandschutz && ` • ${t('configSummary.fireProtection')}`}
               </p>
             </div>
           </div>
@@ -104,10 +107,10 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
           <div className="flex items-start gap-2">
             <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0 mt-0.5" weight="bold" />
             <div className="min-w-0">
-              <p className="font-medium text-sm sm:text-base">Druckdaten</p>
+              <p className="font-medium text-sm sm:text-base">{t('configSummary.printData')}</p>
               <p className="text-muted-foreground text-[11px] sm:text-xs flex items-center gap-1">
                 <FileIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
-                {fileCount} {fileCount === 1 ? 'Datei' : 'Dateien'} hochgeladen
+                {fileCount} {fileCount === 1 ? t('configSummary.fileSingular') : t('configSummary.filePlural')} {t('configSummary.uploaded')}
               </p>
             </div>
           </div>
@@ -117,9 +120,9 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
           <div className="flex items-start gap-2">
             <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0 mt-0.5" weight="bold" />
             <div className="min-w-0">
-              <p className="font-medium text-sm sm:text-base">Grafikservice</p>
+              <p className="font-medium text-sm sm:text-base">{t('configSummary.graphicService')}</p>
               <p className="text-muted-foreground text-[11px] sm:text-xs">
-                Design wird erstellt
+                {t('configSummary.designBeingCreated')}
               </p>
             </div>
           </div>
@@ -129,8 +132,8 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
           <div className="flex items-start gap-2">
             <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0 mt-0.5" weight="bold" />
             <div className="min-w-0">
-              <p className="font-medium text-sm sm:text-base">Montage-Service</p>
-              <p className="text-muted-foreground text-[11px] sm:text-xs break-words">{config.step1.montageOrt || 'Wird angegeben'}</p>
+              <p className="font-medium text-sm sm:text-base">{t('configSummary.installationService')}</p>
+              <p className="text-muted-foreground text-[11px] sm:text-xs break-words">{config.step1.montageOrt || t('configSummary.toBeDetermined')}</p>
             </div>
           </div>
         )}
@@ -139,8 +142,8 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
           <div className="flex items-start gap-2">
             <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0 mt-0.5" weight="bold" />
             <div className="min-w-0">
-              <p className="font-medium text-sm sm:text-base">Express-Service</p>
-              <p className="text-muted-foreground text-[11px] sm:text-xs">3-5 Werktage</p>
+              <p className="font-medium text-sm sm:text-base">{t('configSummary.expressService')}</p>
+              <p className="text-muted-foreground text-[11px] sm:text-xs">{t('configSummary.expressDelivery')}</p>
             </div>
           </div>
         )}
@@ -149,16 +152,16 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
       <Separator className="my-3 sm:my-4" />
 
       <div className="bg-secondary/50 rounded-lg p-3 sm:p-4">
-        <p className="text-xs sm:text-sm font-semibold mb-1">Individuelles Angebot</p>
+        <p className="text-xs sm:text-sm font-semibold mb-1">{t('configSummary.customQuote')}</p>
         <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed">
-          Sie erhalten binnen 24 Stunden ein auf Ihre Konfiguration zugeschnittenes Angebot per E-Mail.
+          {t('configSummary.customQuoteDescription')}
         </p>
       </div>
 
       {currentStep >= 2 && config.step2.breite > 0 && config.step2.hoehe > 0 && (
         <div className="mt-3 sm:mt-4 text-[11px] sm:text-xs text-muted-foreground">
-          <p className="font-medium mb-1">Geschätzte Lieferzeit:</p>
-          <p>{config.step5?.express ? '3-5 Werktage' : '5-10 Werktage'} ab Druckfreigabe</p>
+          <p className="font-medium mb-1">{t('configSummary.estimatedDelivery')}</p>
+          <p>{config.step5?.express ? t('configSummary.expressDelivery') : t('configSummary.standardDelivery')} {t('configSummary.afterPrintApproval')}</p>
         </div>
       )}
     </Card>

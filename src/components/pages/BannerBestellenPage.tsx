@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { useKV } from '@/hooks/use-kv'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
@@ -116,12 +117,22 @@ interface BannerBestellenPageProps {
 }
 
 export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps) {
+  const { t } = useTranslation()
   const [currentStep, setCurrentStep] = useState(1)
   const [config, setConfig] = useKV<BannerConfig>('banner_config_draft', initialConfig)
   const [submitted, setSubmitted] = useState(false)
 
   const totalSteps = 6
   const progress = (currentStep / totalSteps) * 100
+
+  const stepLabels = useMemo(() => [
+    t('bannerBestellen.stepEinsatz'),
+    t('bannerBestellen.stepMasse'),
+    t('bannerBestellen.stepDruck'),
+    t('bannerBestellen.stepDaten'),
+    t('bannerBestellen.stepLieferung'),
+    t('bannerBestellen.stepKontakt'),
+  ], [t])
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -213,7 +224,7 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
 
       setSubmitted(true)
     } catch (error) {
-      console.error('Fehler beim Speichern:', error)
+      console.error('Error saving configuration:', error)
     }
   }
 
@@ -226,16 +237,16 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
       <div className="container mx-auto px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="mb-6 sm:mb-8 text-center px-2">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Banner online konfigurieren</h1>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">{t('bannerBestellen.title')}</h1>
             <p className="text-sm sm:text-base text-muted-foreground">
-              Schritt {currentStep} von {totalSteps}
+              {t('bannerBestellen.stepProgress').replace('{current}', String(currentStep)).replace('{total}', String(totalSteps))}
             </p>
           </div>
 
           <div className="mb-6 sm:mb-8 px-2">
             <Progress value={progress} className="h-1.5 sm:h-2" />
             <div className="mt-3 sm:mt-4 hidden md:flex justify-between text-sm">
-              {['Einsatz', 'Maße', 'Druck', 'Daten', 'Lieferung', 'Kontakt'].map((label, idx) => (
+              {stepLabels.map((label, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleStepChange(idx + 1)}
@@ -261,7 +272,7 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
             </div>
             
             <div className="mt-3 flex md:hidden justify-center gap-1.5">
-              {['Einsatz', 'Maße', 'Druck', 'Daten', 'Lieferung', 'Kontakt'].map((label, idx) => (
+              {stepLabels.map((label, idx) => (
                 <div
                   key={idx}
                   className={`h-1.5 flex-1 rounded-full transition-all ${

@@ -8,6 +8,7 @@ import { Envelope, Eye, Trash, CheckCircle, PaperPlaneTilt } from '@phosphor-ico
 import { toast } from 'sonner'
 import { sendQueuedEmail } from '@/lib/email-service'
 import type { FileAttachment } from '@/types/email'
+import { useTranslation } from '@/lib/i18n'
 
 interface EmailQueueItem {
   id: string
@@ -25,6 +26,7 @@ interface EmailQueueItem {
 }
 
 export function EmailQueueManager() {
+  const { t } = useTranslation()
   const [emailQueue, setEmailQueue] = useState<EmailQueueItem[]>([])
   const [loading, setLoading] = useState(false)
   const [previewEmail, setPreviewEmail] = useState<EmailQueueItem | null>(null)
@@ -55,8 +57,8 @@ export function EmailQueueManager() {
       emails.sort((a, b) => new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime())
       setEmailQueue(emails)
     } catch (error) {
-      console.error('Fehler beim Laden der E-Mail-Queue:', error)
-      toast.error('E-Mail-Queue konnte nicht geladen werden')
+      console.error(t('emailQueue.loadError'), error)
+      toast.error(t('emailQueue.loadErrorToast'))
     } finally {
       setLoading(false)
     }
@@ -68,41 +70,41 @@ export function EmailQueueManager() {
   }
 
   const handleSendEmail = async (email: EmailQueueItem) => {
-    const loadingToast = toast.loading('E-Mails werden versendet...', {
-      description: `An: ${email.to} & ${email.customerEmail}`,
+    const loadingToast = toast.loading(t('emailQueue.sending'), {
+      description: t('emailQueue.sendingTo').replace('{to}', email.to).replace('{customer}', email.customerEmail),
     })
 
     try {
       const result = await sendQueuedEmail(email.id)
 
       if (result.success) {
-        toast.success('E-Mails erfolgreich versendet!', {
+        toast.success(t('emailQueue.sentSuccess'), {
           id: loadingToast,
-          description: `✓ An Firma (${email.to}) und Kunde (${email.customerEmail})`,
+          description: t('emailQueue.sentSuccessDesc').replace('{to}', email.to).replace('{customer}', email.customerEmail),
           duration: 5000,
         })
 
         await loadEmailQueue()
       } else {
-        toast.error('E-Mail-Versand fehlgeschlagen', {
+        toast.error(t('emailQueue.sendFailed'), {
           id: loadingToast,
-          description: result.error || 'Unbekannter Fehler',
+          description: result.error || t('emailQueue.unknownError'),
           duration: 7000,
         })
       }
     } catch (error) {
-      toast.error('Fehler beim E-Mail-Versand', {
+      toast.error(t('emailQueue.sendError'), {
         id: loadingToast,
-        description: error instanceof Error ? error.message : 'Unbekannter Fehler',
+        description: error instanceof Error ? error.message : t('emailQueue.unknownError'),
         duration: 7000,
       })
     }
   }
 
   const handleDelete = async (emailId: string) => {
-    if (confirm('E-Mail aus der Queue löschen?')) {
+    if (confirm(t('emailQueue.confirmDelete'))) {
       await window.spark.kv.delete(emailId)
-      toast.success('E-Mail gelöscht')
+      toast.success(t('emailQueue.deleted'))
       await loadEmailQueue()
     }
   }
@@ -110,8 +112,8 @@ export function EmailQueueManager() {
   const handleSendAll = async () => {
     if (emailQueue.length === 0) return
 
-    if (confirm(`Alle ${emailQueue.length} E-Mails versenden?`)) {
-      const loadingToast = toast.loading(`Versende ${emailQueue.length} E-Mails...`)
+    if (confirm(t('emailQueue.confirmSendAll').replace('{count}', String(emailQueue.length)))) {
+      const loadingToast = toast.loading(t('emailQueue.sendingAll').replace('{count}', String(emailQueue.length)))
       
       let successCount = 0
       let errorCount = 0
@@ -123,24 +125,24 @@ export function EmailQueueManager() {
             successCount++
           } else {
             errorCount++
-            console.error('Fehler beim Versenden:', email.id, result.error)
+            console.error(t('emailQueue.sendErrorLog'), email.id, result.error)
           }
           await new Promise((resolve) => setTimeout(resolve, 1000))
         } catch (error) {
           errorCount++
-          console.error('Fehler beim Versenden:', email.id, error)
+          console.error(t('emailQueue.sendErrorLog'), email.id, error)
         }
       }
 
       if (errorCount === 0) {
-        toast.success(`${successCount} E-Mails erfolgreich versendet!`, {
+        toast.success(t('emailQueue.allSentSuccess').replace('{count}', String(successCount)), {
           id: loadingToast,
           duration: 5000,
         })
       } else {
-        toast.warning(`${successCount} versendet, ${errorCount} fehlgeschlagen`, {
+        toast.warning(t('emailQueue.partialSend').replace('{success}', String(successCount)).replace('{errors}', String(errorCount)), {
           id: loadingToast,
-          description: 'Prüfen Sie die Konsole für Details',
+          description: t('emailQueue.checkConsole'),
           duration: 7000,
         })
       }
@@ -158,27 +160,27 @@ export function EmailQueueManager() {
             E-Mail Queue
           </h2>
           <p className="text-muted-foreground mt-1">
-            Auftragsbestätigungen bereit zum Versand
+            {t('emailQueue.subtitle')}
           </p>
         </div>
         {emailQueue.length > 0 && (
           <Button onClick={handleSendAll} size="lg">
             <PaperPlaneTilt className="w-4 h-4 mr-2" />
-            Alle versenden ({emailQueue.length})
+            {t('emailQueue.sendAll').replace('{count}', String(emailQueue.length))}
           </Button>
         )}
       </div>
 
       {loading ? (
         <Card className="p-12 text-center">
-          <p className="text-muted-foreground">Lade E-Mails...</p>
+          <p className="text-muted-foreground">{t('emailQueue.loading')}</p>
         </Card>
       ) : emailQueue.length === 0 ? (
         <Card className="p-12 text-center">
           <CheckCircle className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-          <p className="text-muted-foreground text-lg">Keine E-Mails in der Queue</p>
+          <p className="text-muted-foreground text-lg">{t('emailQueue.empty')}</p>
           <p className="text-sm text-muted-foreground mt-2">
-            Neue Banner-Bestellungen werden hier angezeigt
+            {t('emailQueue.emptyHint')}
           </p>
         </Card>
       ) : (
@@ -194,17 +196,17 @@ export function EmailQueueManager() {
                   
                   <div className="space-y-1 text-sm">
                     <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground">An Firma:</span>
+                      <span className="text-muted-foreground">{t('emailQueue.toCompany')}</span>
                       <span className="font-mono">{email.to}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground">An Kunde:</span>
+                      <span className="text-muted-foreground">{t('emailQueue.toCustomer')}</span>
                       <span className="font-mono">{email.customerEmail}</span>
                     </div>
                     {email.attachments.length > 0 && (
                       <div className="flex items-center gap-2">
                         <Badge variant="secondary">
-                          📎 {email.attachments.length} Anhang{email.attachments.length > 1 ? 'e' : ''}
+                          📎 {email.attachments.length} {email.attachments.length > 1 ? t('emailQueue.attachments') : t('emailQueue.attachment')}
                         </Badge>
                       </div>
                     )}
@@ -224,7 +226,7 @@ export function EmailQueueManager() {
                     onClick={() => handlePreview(email, 'company')}
                   >
                     <Eye className="w-4 h-4 mr-1" />
-                    Firma
+                    {t('emailQueue.previewCompany')}
                   </Button>
                   <Button
                     variant="outline"
@@ -232,14 +234,14 @@ export function EmailQueueManager() {
                     onClick={() => handlePreview(email, 'customer')}
                   >
                     <Eye className="w-4 h-4 mr-1" />
-                    Kunde
+                    {t('emailQueue.previewCustomer')}
                   </Button>
                   <Button
                     onClick={() => handleSendEmail(email)}
                     size="sm"
                   >
                     <PaperPlaneTilt className="w-4 h-4 mr-1" />
-                    Senden
+                    {t('emailQueue.send')}
                   </Button>
                   <Button
                     variant="destructive"
@@ -259,7 +261,7 @@ export function EmailQueueManager() {
         <DialogContent className="max-w-4xl max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>
-              E-Mail Vorschau - {previewType === 'company' ? 'An Firma' : 'An Kunde'}
+              {t('emailQueue.previewTitle').replace('{type}', previewType === 'company' ? t('emailQueue.previewToCompany') : t('emailQueue.previewToCustomer'))}
             </DialogTitle>
           </DialogHeader>
           
@@ -267,20 +269,20 @@ export function EmailQueueManager() {
             <div className="space-y-4">
               <div className="space-y-2 text-sm">
                 <div className="flex gap-2">
-                  <span className="font-semibold min-w-[100px]">An:</span>
+                  <span className="font-semibold min-w-[100px]">{t('emailQueue.to')}</span>
                   <span className="font-mono">
                     {previewType === 'company' ? previewEmail.to : previewEmail.customerEmail}
                   </span>
                 </div>
                 <div className="flex gap-2">
-                  <span className="font-semibold min-w-[100px]">Betreff:</span>
+                  <span className="font-semibold min-w-[100px]">{t('emailQueue.subject')}</span>
                   <span>
                     {previewType === 'company' ? previewEmail.subject : previewEmail.customerSubject}
                   </span>
                 </div>
                 {previewType === 'company' && previewEmail.attachments.length > 0 && (
                   <div className="flex gap-2">
-                    <span className="font-semibold min-w-[100px]">Anhänge:</span>
+                    <span className="font-semibold min-w-[100px]">{t('emailQueue.attachmentsLabel')}</span>
                     <div className="flex flex-wrap gap-1">
                       {previewEmail.attachments.map((file, idx) => (
                         <Badge key={idx} variant="secondary">
@@ -307,7 +309,7 @@ export function EmailQueueManager() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setPreviewEmail(null)}>
-              Schließen
+              {t('emailQueue.close')}
             </Button>
             {previewEmail && (
               <Button onClick={() => {
@@ -315,7 +317,7 @@ export function EmailQueueManager() {
                 setPreviewEmail(null)
               }}>
                 <PaperPlaneTilt className="w-4 h-4 mr-2" />
-                Jetzt senden
+                {t('emailQueue.sendNow')}
               </Button>
             )}
           </DialogFooter>
