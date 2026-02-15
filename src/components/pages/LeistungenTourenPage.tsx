@@ -110,7 +110,7 @@ export function LeistungenTourenPage({ onOpenInquiry }: { onOpenInquiry: () => v
       rating: 5,
     },
     {
-      text: 'Unser modulares Standsystem passt sich an jede Messeflche an – ob 12 m² oder 80 m². S&S kümmert sich um alles: Transport, Aufbau, Abbau und Einlagerung. Besser geht es nicht.',
+      text: 'Unser modulares Standsystem passt sich an jede Messefläche an – ob 12 m² oder 80 m². S&S kümmert sich um alles: Transport, Aufbau, Abbau und Einlagerung. Besser geht es nicht.',
       author: 'Sandra Klein',
       company: 'HealthVision AG',
       rating: 5,
