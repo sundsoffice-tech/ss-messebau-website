@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 interface PageMeta {
   title: string
   description: string
+  ogType?: string
 }
 
 const PAGE_META: Record<string, PageMeta> = {
@@ -11,8 +12,33 @@ const PAGE_META: Record<string, PageMeta> = {
     description: 'S&S Messebau: Messestände 20–200 m² für Food, Finance & Industrie. 48h-Angebot mit persönlicher Beratung. Jetzt beraten lassen!'
   },
   '/leistungen': {
-    title: 'Leistungen – Messebau, Eventbau & Showrooms | S&S Messebau',
-    description: 'Full-Service Messebau von 20–200 m²: Messestände, Eventbau, Showrooms & Brand Spaces. Planung bis Abbau aus einer Hand.'
+    title: 'Leistungen – Messebau, Eventbau, Showrooms & mehr | S&S Messebau',
+    description: 'Full-Service Messebau: Messestände, Eventbau, Showrooms, Ladenbau, Bannerrahmen & Ausstattung – alles aus einer Hand. Übersicht aller Leistungen.',
+    ogType: 'website'
+  },
+  '/leistungen/messebau': {
+    title: 'Messebau – Individuelle Messestände 20–200 m² | S&S Messebau',
+    description: 'Professioneller Messebau von 20–200 m²: Design, Planung & Umsetzung. 48h-Angebotsgarantie. Jetzt Messestand anfragen!'
+  },
+  '/leistungen/eventbau': {
+    title: 'Eventbau & Bühnen – Eindrucksvolle Event-Locations | S&S Messebau',
+    description: 'Bühnenaufbau, Event-Ausstattung & Technik-Integration. Von Konferenzen bis Produktlaunches – alles aus einer Hand.'
+  },
+  '/leistungen/touren': {
+    title: 'Touren & Messeauftritte – Skalierbare Systemstände | S&S Messebau',
+    description: 'Kostenoptimierte Systemstände für Messeserien und Roadshows. Zentrale Logistik ab NRW. Wiederverwendbare Lösungen.'
+  },
+  '/leistungen/showrooms': {
+    title: 'Showrooms & Brand Spaces – Markenerlebnisräume | S&S Messebau',
+    description: 'Permanente Showrooms und Brand Spaces – Planung, Bau und Ausstattung durch unser Facharbeiter-Team.'
+  },
+  '/leistungen/ladenbau': {
+    title: 'Ladenbau – Verkaufsräume, die überzeugen | S&S Messebau',
+    description: 'Individuelle Ladeneinrichtungen, Präsentationssysteme und Showroom-Design. Professioneller Ladenbau.'
+  },
+  '/leistungen/boeden': {
+    title: 'Böden & Ausstattung – Komplettlösungen | S&S Messebau',
+    description: 'Hochwertige Messeboden-Systeme, Möbel und Beleuchtung – Komplettlösungen für Messe, Event und Showroom.'
   },
   '/branchen': {
     title: 'Branchen-Expertise – Food, Finance & Industrie | S&S Messebau',
@@ -87,6 +113,11 @@ export function usePageMeta(page: string) {
     const ogDescription = document.querySelector('meta[property="og:description"]')
     if (ogDescription) {
       ogDescription.setAttribute('content', meta.description)
+    }
+
+    const ogType = document.querySelector('meta[property="og:type"]')
+    if (ogType) {
+      ogType.setAttribute('content', meta.ogType || 'website')
     }
 
     const twitterTitle = document.querySelector('meta[name="twitter:title"]')

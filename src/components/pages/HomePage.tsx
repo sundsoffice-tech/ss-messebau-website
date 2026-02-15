@@ -30,7 +30,7 @@ interface HomePageProps {
 
 export function HomePage({ onOpenInquiry }: HomePageProps) {
   const { t } = useTranslation()
-  const { navigateToSectionOnPage } = useDeepLinking('/')
+  useDeepLinking('/')
   
   useSectionObserver([
     'hero',
@@ -50,8 +50,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleSectionNavigation = (sectionId: string) => {
-    navigateToSectionOnPage('/leistungen', sectionId)
+  const handleSectionNavigation = (_sectionId: string) => {
+    window.location.hash = '/leistungen'
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (

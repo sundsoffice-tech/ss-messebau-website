@@ -349,7 +349,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   const handleSectionNavigation = (sectionId: string) => {
     setMobileMenuOpen(false)
     setMegaMenuOpen(false)
-    navigateToPageAndSection('/leistungen', sectionId)
+    window.location.hash = '/leistungen'
   }
 
   const handleLeistungenClick = (event?: React.MouseEvent) => {

@@ -17,7 +17,7 @@ import { I18nContext, getTranslation, getStoredLanguage, storeLanguage, type Lan
 
 // Lazy load page components for code-splitting
 const HomePage = lazy(() => import('./components/pages/HomePage').then(m => ({ default: m.HomePage })))
-const LeistungenPage = lazy(() => import('./components/pages/LeistungenPage').then(m => ({ default: m.LeistungenPage })))
+const LeistungenHubPage = lazy(() => import('./components/pages/LeistungenHubPage').then(m => ({ default: m.LeistungenHubPage })))
 const BranchenPage = lazy(() => import('./components/pages/BranchenPage').then(m => ({ default: m.BranchenPage })))
 const ReferenzenPage = lazy(() => import('./components/pages/ReferenzenPage').then(m => ({ default: m.ReferenzenPage })))
 const KontaktPage = lazy(() => import('./components/pages/KontaktPage').then(m => ({ default: m.KontaktPage })))
@@ -94,7 +94,7 @@ function App() {
       case '/':
         return <HomePage onOpenInquiry={onOpenInquiry} />
       case '/leistungen':
-        return <LeistungenPage onOpenInquiry={onOpenInquiry} />
+        return <LeistungenHubPage onOpenInquiry={onOpenInquiry} />
       case '/branchen':
         return <BranchenPage onOpenInquiry={onOpenInquiry} />
       case '/referenzen':
