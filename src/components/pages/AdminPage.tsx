@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -31,6 +32,7 @@ interface AdminPageProps {
 }
 
 export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
+  const { t } = useTranslation()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userInfo, setUserInfo] = useState<GitHubUserInfo | null>(null)
   const [stats, setStats] = useState({
@@ -78,15 +80,15 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
       <div className="min-h-screen bg-secondary/20 flex items-center justify-center py-12">
         <Card className="p-12 max-w-md text-center">
           <Lock className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-          <h1 className="text-2xl font-bold mb-2">Admin-Bereich</h1>
+          <h1 className="text-2xl font-bold mb-2">{t('admin.area')}</h1>
           <p className="text-muted-foreground mb-6">
             {userInfo 
-              ? 'Sie haben keine Berechtigung für diesen Bereich.'
-              : 'Bitte melden Sie sich als Administrator an.'}
+              ? t('admin.noPermission')
+              : t('admin.pleaseLogin')}
           </p>
           {userInfo && (
             <div className="bg-secondary/50 p-4 rounded-lg text-sm">
-              <p className="font-medium">Angemeldet als:</p>
+              <p className="font-medium">{t('admin.loggedInAs')}</p>
               <p className="text-muted-foreground">{userInfo.login || userInfo.email}</p>
             </div>
           )}
@@ -94,7 +96,7 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
             className="mt-6"
             onClick={() => window.location.hash = '/'}
           >
-            Zurück zur Startseite
+            {t('admin.backToHome')}
           </Button>
         </Card>
       </div>
@@ -107,14 +109,14 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+              <h1 className="text-3xl font-bold">{t('admin.dashboard')}</h1>
               <p className="text-muted-foreground mt-1">
-                Willkommen zurück, {userInfo?.login || 'Administrator'}
+                {t('admin.welcomeBack') + (userInfo?.login || t('admin.administrator'))}
               </p>
             </div>
             <Badge variant="secondary" className="gap-2">
               <CheckCircle className="w-4 h-4" />
-              Angemeldet
+              {t('admin.loggedIn')}
             </Badge>
           </div>
 
@@ -126,7 +128,7 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.emailQueue}</p>
-                  <p className="text-sm text-muted-foreground">E-Mails in Queue</p>
+                  <p className="text-sm text-muted-foreground">{t('admin.emailsInQueue')}</p>
                 </div>
               </div>
             </Card>
@@ -138,7 +140,7 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.orders}</p>
-                  <p className="text-sm text-muted-foreground">Banner-Bestellungen</p>
+                  <p className="text-sm text-muted-foreground">{t('admin.bannerOrders')}</p>
                 </div>
               </div>
             </Card>
@@ -150,7 +152,7 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.inquiries}</p>
-                  <p className="text-sm text-muted-foreground">Anfragen</p>
+                  <p className="text-sm text-muted-foreground">{t('admin.inquiries')}</p>
                 </div>
               </div>
             </Card>
@@ -161,7 +163,7 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
           <TabsList>
             <TabsTrigger value="emails" className="gap-2">
               <Envelope className="w-4 h-4" />
-              E-Mail Queue
+              {t('admin.emailQueue')}
               {stats.emailQueue > 0 && (
                 <Badge variant="destructive" className="ml-1">
                   {stats.emailQueue}
@@ -170,19 +172,19 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
             </TabsTrigger>
             <TabsTrigger value="smtp" className="gap-2">
               <Gear className="w-4 h-4" />
-              SMTP-Konfiguration
+              {t('admin.smtpConfig')}
             </TabsTrigger>
             <TabsTrigger value="orders" className="gap-2">
               <ShoppingCart className="w-4 h-4" />
-              Bestellungen
+              {t('admin.orders')}
             </TabsTrigger>
             <TabsTrigger value="notifications" className="gap-2">
               <Bell className="w-4 h-4" />
-              Benachrichtigungen
+              {t('admin.notifications')}
             </TabsTrigger>
             <TabsTrigger value="ai" className="gap-2">
               <Brain className="w-4 h-4" />
-              KI-Chatbot
+              {t('admin.aiChatbot')}
             </TabsTrigger>
           </TabsList>
 
@@ -212,6 +214,7 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
 }
 
 function OrdersManager() {
+  const { t } = useTranslation()
   const [orders, setOrders] = useState<Array<{ id: string; data: BannerConfig; timestamp: string }>>([])
   const [loading, setLoading] = useState(false)
 
@@ -241,7 +244,7 @@ function OrdersManager() {
       )
       setOrders(loadedOrders)
     } catch (error) {
-      console.error('Fehler beim Laden der Bestellungen:', error)
+      console.error('Failed to load orders:', error)
     } finally {
       setLoading(false)
     }
@@ -250,7 +253,7 @@ function OrdersManager() {
   if (loading) {
     return (
       <Card className="p-12 text-center">
-        <p className="text-muted-foreground">Lade Bestellungen...</p>
+        <p className="text-muted-foreground">{t('admin.loadingOrders')}</p>
       </Card>
     )
   }
@@ -259,7 +262,7 @@ function OrdersManager() {
     return (
       <Card className="p-12 text-center">
         <ShoppingCart className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-        <p className="text-muted-foreground text-lg">Keine Bestellungen vorhanden</p>
+        <p className="text-muted-foreground text-lg">{t('admin.noOrders')}</p>
       </Card>
     )
   }
@@ -272,32 +275,32 @@ function OrdersManager() {
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="font-semibold text-lg">
-                  {order.step6?.firmaKontakt || 'Unbekannt'}
+                  {order.step6?.firmaKontakt || t('admin.unknown')}
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   {order.step6?.ansprechpartner}
                 </p>
               </div>
-              <Badge>{order.status || 'neu'}</Badge>
+              <Badge>{order.status || t('admin.statusNew')}</Badge>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
-                <p className="text-muted-foreground">Rahmenart</p>
+                <p className="text-muted-foreground">{t('admin.frameType')}</p>
                 <p className="font-medium">{order.step1?.rahmenart}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Menge</p>
-                <p className="font-medium">{order.step1?.menge} Stück</p>
+                <p className="text-muted-foreground">{t('admin.quantity')}</p>
+                <p className="font-medium">{order.step1?.menge} {t('admin.pieces')}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Maße</p>
+                <p className="text-muted-foreground">{t('admin.dimensions')}</p>
                 <p className="font-medium">
                   {order.step2?.breite} × {order.step2?.hoehe} mm
                 </p>
               </div>
               <div>
-                <p className="text-muted-foreground">Datum</p>
+                <p className="text-muted-foreground">{t('admin.date')}</p>
                 <p className="font-medium">
                   {order.timestamp 
                     ? new Date(order.timestamp).toLocaleDateString('de-DE')
@@ -308,11 +311,11 @@ function OrdersManager() {
 
             <div className="flex gap-2">
               <Button variant="outline" size="sm">
-                Details anzeigen
+                {t('admin.showDetails')}
               </Button>
               <Button variant="outline" size="sm">
                 <Envelope className="w-4 h-4 mr-1" />
-                Kontaktieren
+                {t('admin.contact')}
               </Button>
             </div>
           </div>
