@@ -319,6 +319,7 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
                 {currentStep === 2 && config && (
                   <ConfiguratorStep2
                     data={config.step2}
+                    step1Data={config.step1}
                     onChange={(data) => updateConfig('step2', data)}
                     onNext={handleNext}
                     onBack={handleBack}

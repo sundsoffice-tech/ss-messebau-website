@@ -101,6 +101,11 @@ function formatConfigForEmail(config: BannerConfig): string {
         <div class="label">Montage:</div>
         <div class="value">✅ Ja ${step1.montageOrt ? `- Ort: ${step1.montageOrt}` : ''} ${step1.montageZeitraum ? `(${step1.montageZeitraum})` : ''}</div>
       </div>` : ''}
+      ${step1.multiBannerMode ? `
+      <div class="row">
+        <div class="label">Multi-Banner-Modus:</div>
+        <div class="value">${step1.multiBannerMode === 'individual' ? '🔀 Individuell konfiguriert' : '📋 Alle identisch'}</div>
+      </div>` : ''}
     </div>
 
     <div class="section">
@@ -114,13 +119,22 @@ function formatConfigForEmail(config: BannerConfig): string {
         <div class="value">${formatProfil(step2.profil)}</div>
       </div>
       <div class="row">
+        <div class="label">Profilfarbe:</div>
+        <div class="value">${formatProfilFarbe(step2.profilFarbe)}${step2.ralCode ? ` (${step2.ralCode})` : ''}</div>
+      </div>
+      <div class="row">
         <div class="label">Ecken:</div>
-        <div class="value">${step2.ecken === 'gehrung' ? 'Gehrung' : 'Verbinder'}</div>
+        <div class="value">${formatEcken(step2.ecken)}</div>
       </div>
       <div class="row">
         <div class="label">Seitigkeit:</div>
         <div class="value">${step2.seitigkeit === 'einseitig' ? 'Einseitig' : 'Zweiseitig'}</div>
       </div>
+      ${step2.zubehoer && step2.zubehoer.length > 0 ? `
+      <div class="row">
+        <div class="label">Zubehör:</div>
+        <div class="value">${step2.zubehoer.map(formatZubehoer).join(', ')}</div>
+      </div>` : ''}
       ${step2.led ? `
       <div class="row">
         <div class="label">LED/Backlit:</div>
@@ -248,6 +262,16 @@ function formatConfigForEmail(config: BannerConfig): string {
 
 function formatRahmenart(art: string): string {
   const map: Record<string, string> = {
+    eco: 'Eco-Rahmen (25mm)',
+    slim: 'Slim-Rahmen (28mm)',
+    heavy: 'Heavy-Duty-Rahmen (45mm)',
+    double: 'Doppelseitiger Rahmen (50mm)',
+    cabinet: 'Cabinet-Rahmen (60mm)',
+    lightbox: 'Lightbox-Rahmen (80mm)',
+    cord: 'Cord-/Seilrahmen (30mm)',
+    curved: 'Curved-Rahmen (35mm)',
+    freestanding: 'Freistehender Rahmen',
+    hanging: 'Hängerahmen',
     haengerahmen: 'Hängerahmen',
     standrahmen: 'Standrahmen',
     verkleidungsrahmen: 'Verkleidungsrahmen',
@@ -257,11 +281,54 @@ function formatRahmenart(art: string): string {
 
 function formatProfil(profil: string): string {
   const map: Record<string, string> = {
+    'eco-25': 'Eco 25mm',
+    'slim-28': 'Slim 28mm',
+    'heavy-45': 'Heavy 45mm',
+    'double-50': 'Double 50mm',
+    'cabinet-60': 'Cabinet 60mm',
+    'lightbox-80': 'Lightbox 80mm',
+    'cord-30': 'Cord 30mm',
+    'curved-35': 'Curved 35mm',
     standard: 'Standard',
     premium: 'Premium',
     sonder: 'Sonder',
   }
   return map[profil] || profil
+}
+
+function formatProfilFarbe(farbe: string): string {
+  const map: Record<string, string> = {
+    silber: 'Silber (eloxiert)',
+    schwarz: 'Schwarz (matt)',
+    weiss: 'Weiß (RAL 9016)',
+    gold: 'Gold (eloxiert)',
+    'ral-custom': 'RAL-Wunschfarbe',
+  }
+  return map[farbe] || farbe
+}
+
+function formatEcken(ecken: string): string {
+  const map: Record<string, string> = {
+    gehrung: 'Gehrung (nahtlos)',
+    verbinder: 'Verbinder',
+    rund: 'Runde Ecke / Protector',
+    hexagonal: 'Hexagonal (120°)',
+    'multi-connector': 'Multi-Connector (T/X)',
+  }
+  return map[ecken] || ecken
+}
+
+function formatZubehoer(item: string): string {
+  const map: Record<string, string> = {
+    standplatte: 'Standplatte',
+    wandhalter: 'Wandhalter',
+    deckenmontage: 'Deckenmontage-Set',
+    akustikmaterial: 'Akustikmaterial',
+    extensionset: 'Extension-Set',
+    connector: 'Connector',
+    deskclamp: 'Desk-Clamp',
+  }
+  return map[item] || item
 }
 
 function formatMaterial(material: string): string {

@@ -4,24 +4,31 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Checkbox } from '@/components/ui/checkbox'
-import { ArrowRight, Storefront, Building, Confetti, Sun } from '@phosphor-icons/react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { ArrowRight, Storefront, Building, Confetti, Sun, Copy, ArrowsClockwise, Info } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
+import type { BannerConfig } from '../BannerBestellenPage'
 
-interface Step1Data {
-  einsatzort: string
-  rahmenart: string
-  menge: number
-  indoorOutdoor: string
-  montage: boolean
-  montageOrt?: string
-  montageZeitraum?: string
-}
+type Step1Data = BannerConfig['step1']
 
 interface ConfiguratorStep1Props {
   data: Step1Data
   onChange: (data: Partial<Step1Data>) => void
   onNext: () => void
 }
+
+const EFKA_FRAME_TYPES = [
+  { value: 'eco', category: 'standard' },
+  { value: 'slim', category: 'standard' },
+  { value: 'heavy', category: 'heavy' },
+  { value: 'double', category: 'heavy' },
+  { value: 'cabinet', category: 'special' },
+  { value: 'lightbox', category: 'special' },
+  { value: 'cord', category: 'flexible' },
+  { value: 'curved', category: 'flexible' },
+  { value: 'freestanding', category: 'mounting' },
+  { value: 'hanging', category: 'mounting' },
+] as const
 
 export function ConfiguratorStep1({ data, onChange, onNext }: ConfiguratorStep1Props) {
   const { t } = useTranslation()
@@ -43,6 +50,37 @@ export function ConfiguratorStep1({ data, onChange, onNext }: ConfiguratorStep1P
     if (validate()) {
       onNext()
     }
+  }
+
+  const handleMengeChange = (menge: number) => {
+    const updates: Partial<Step1Data> = { menge }
+    if (menge <= 1) {
+      updates.multiBannerMode = undefined
+      updates.bannerConfigs = undefined
+    }
+    onChange(updates)
+  }
+
+  const handleMultiBannerModeChange = (mode: 'identical' | 'individual') => {
+    if (mode === 'individual') {
+      const configs = Array.from({ length: data.menge }, (_, i) => ({
+        id: `banner-${i + 1}`,
+        label: t('step1.multiBanner.tab').replace('{n}', String(i + 1)),
+        overrides: {},
+      }))
+      onChange({ multiBannerMode: mode, bannerConfigs: configs })
+    } else {
+      onChange({ multiBannerMode: mode, bannerConfigs: undefined })
+    }
+  }
+
+  const handleDuplicateBanner = (index: number) => {
+    if (!data.bannerConfigs) return
+    const source = data.bannerConfigs[index]
+    const newConfigs = data.bannerConfigs.map((cfg, i) =>
+      i !== index ? { ...cfg, overrides: { ...source.overrides } } : cfg
+    )
+    onChange({ bannerConfigs: newConfigs })
   }
 
   return (
@@ -91,28 +129,23 @@ export function ConfiguratorStep1({ data, onChange, onNext }: ConfiguratorStep1P
           <Label className="text-base font-semibold mb-3 block">{t('step1.rahmenart.label')}</Label>
           <RadioGroup
             value={data.rahmenart}
-            onValueChange={(value) => onChange({ rahmenart: value })}
+            onValueChange={(value) => onChange({ rahmenart: value as Step1Data['rahmenart'] })}
           >
-            <div className="space-y-2">
-              {[
-                { value: 'haengerahmen', label: t('step1.rahmenart.haengerahmen'), desc: t('step1.rahmenart.haengerahmen.desc') },
-                { value: 'standrahmen', label: t('step1.rahmenart.standrahmen'), desc: t('step1.rahmenart.standrahmen.desc') },
-                { value: 'verkleidung', label: t('step1.rahmenart.verkleidung'), desc: t('step1.rahmenart.verkleidung.desc') },
-                { value: 'beidseitig', label: t('step1.rahmenart.beidseitig'), desc: t('step1.rahmenart.beidseitig.desc') },
-              ].map((option) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {EFKA_FRAME_TYPES.map((frame) => (
                 <Label
-                  key={option.value}
-                  htmlFor={`rahmen-${option.value}`}
+                  key={frame.value}
+                  htmlFor={`rahmen-${frame.value}`}
                   className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors ${
-                    data.rahmenart === option.value
+                    data.rahmenart === frame.value
                       ? 'border-primary bg-primary/5'
                       : 'border-border hover:border-primary/50'
                   }`}
                 >
-                  <RadioGroupItem value={option.value} id={`rahmen-${option.value}`} className="mt-1" />
-                  <div>
-                    <div className="font-medium">{option.label}</div>
-                    <div className="text-sm text-muted-foreground">{option.desc}</div>
+                  <RadioGroupItem value={frame.value} id={`rahmen-${frame.value}`} className="mt-1" />
+                  <div className="min-w-0">
+                    <div className="font-medium">{t(`step1.rahmenart.${frame.value}`)}</div>
+                    <div className="text-sm text-muted-foreground">{t(`step1.rahmenart.${frame.value}.desc`)}</div>
                   </div>
                 </Label>
               ))}
@@ -129,12 +162,91 @@ export function ConfiguratorStep1({ data, onChange, onNext }: ConfiguratorStep1P
             min={1}
             max={50}
             value={data.menge}
-            onChange={(e) => onChange({ menge: parseInt(e.target.value) || 1 })}
+            onChange={(e) => handleMengeChange(parseInt(e.target.value) || 1)}
             className="mt-2"
           />
           <p className="text-sm text-muted-foreground mt-1">{t('step1.menge.hint')}</p>
           {errors.menge && <p className="text-sm text-destructive mt-1">{errors.menge}</p>}
         </div>
+
+        {data.menge > 1 && (
+          <div className="border-2 border-dashed border-primary/30 rounded-lg p-4 animate-in fade-in slide-in-from-top-2">
+            <Label className="text-base font-semibold mb-3 block">{t('step1.multiBanner.label')}</Label>
+            <RadioGroup
+              value={data.multiBannerMode || 'identical'}
+              onValueChange={(value) => handleMultiBannerModeChange(value as 'identical' | 'individual')}
+            >
+              <div className="space-y-2">
+                <Label
+                  htmlFor="multi-identical"
+                  className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${
+                    (!data.multiBannerMode || data.multiBannerMode === 'identical')
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:border-primary/50'
+                  }`}
+                >
+                  <RadioGroupItem value="identical" id="multi-identical" className="mt-0.5" />
+                  <div>
+                    <div className="font-medium">{t('step1.multiBanner.identical')}</div>
+                    <div className="text-sm text-muted-foreground">{t('step1.multiBanner.identical.desc')}</div>
+                  </div>
+                </Label>
+                <Label
+                  htmlFor="multi-individual"
+                  className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${
+                    data.multiBannerMode === 'individual'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:border-primary/50'
+                  }`}
+                >
+                  <RadioGroupItem value="individual" id="multi-individual" className="mt-0.5" />
+                  <div>
+                    <div className="font-medium">{t('step1.multiBanner.individual')}</div>
+                    <div className="text-sm text-muted-foreground">{t('step1.multiBanner.individual.desc')}</div>
+                  </div>
+                </Label>
+              </div>
+            </RadioGroup>
+
+            {data.multiBannerMode === 'individual' && data.bannerConfigs && (
+              <div className="mt-4 space-y-2">
+                <Alert className="bg-accent/10">
+                  <Info className="w-4 h-4" />
+                  <AlertDescription className="text-sm">
+                    {t('step1.multiBanner.individual.desc')}
+                  </AlertDescription>
+                </Alert>
+                <div className="flex flex-wrap gap-2">
+                  {data.bannerConfigs.map((cfg, idx) => (
+                    <div key={cfg.id} className="flex items-center gap-1">
+                      <span className="text-sm font-medium px-3 py-1.5 bg-primary/10 rounded-md">
+                        {cfg.label}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleDuplicateBanner(idx)}
+                        className="p-1 text-muted-foreground hover:text-primary transition-colors"
+                        title={t('step1.multiBanner.applyAll')}
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => data.bannerConfigs && handleDuplicateBanner(0)}
+                  className="mt-2"
+                >
+                  <ArrowsClockwise className="w-4 h-4 mr-1" />
+                  {t('step1.multiBanner.applyAll')}
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
 
         <div>
           <Label className="text-base font-semibold mb-3 block">{t('step1.indoorOutdoor.label')}</Label>
