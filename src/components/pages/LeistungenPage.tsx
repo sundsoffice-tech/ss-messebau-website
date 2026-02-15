@@ -25,7 +25,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       {/* Hero Section – Narrative Claim */}
       <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>Wir schaffen Räume, die Ihre Marke verkaufen.</h1>
+          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4.5vw, 3.5rem)', lineHeight: '1.2' }}>Wir schaffen Räume, die Ihre Marke verkaufen.</h1>
           <p className="text-base sm:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
             S&S Messebau – Ihre Erlebnis-Architekten. Wir sind nicht einfach Standbauer, sondern strategische Partner
             für Markenräume, die begeistern, überzeugen und verkaufen. Von der Messe über den Showroom bis zum Event.
@@ -36,7 +36,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       {/* Solution Module 1: Brand Activation */}
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div id="brand-activation" className="scroll-mt-20 space-y-12 md:space-y-16">
+          <div id="brand-activation" className="scroll-mt-20 space-y-8 sm:space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
               <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Brand Activation</h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -181,26 +181,27 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <ArrowRight className="ml-2" />
                 </Button>
               </div>
-              <Card>
+              <Card className="mt-8 lg:mt-0">
                 <CardContent className="p-5 md:p-8">
-                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Touren & Roadshows: Ihre Vorteile</h4>
-                  <div className="space-y-3">
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">So funktioniert Ihr Touren-Paket</h4>
+                  <div className="space-y-5 md:space-y-6">
                     {[
-                      'Modulare Systeme für flexible Standgrößen',
-                      'Zentrale Logistik ab NRW',
-                      'Kostenoptimierung durch Wiederverwendung',
-                      'Bei mehreren Messen amortisiert sich die Investition schnell'
+                      { step: '1', title: 'Bedarf analysieren', desc: 'Wir erfassen Ihre Messeplanung und empfehlen das passende System' },
+                      { step: '2', title: 'Modulares System entwickeln', desc: 'Wiederverwendbare Standbauteile, abgestimmt auf Ihre Standgrößen' },
+                      { step: '3', title: 'Logistik koordinieren', desc: 'Zentrale Planung aller Termine, Transporte und Montagen ab NRW' },
+                      { step: '4', title: 'Rollout & Optimierung', desc: 'Kontinuierliche Verbesserung nach jedem Einsatz' }
                     ].map((item, index) => (
-                      <div key={index} className="flex items-center gap-2.5 md:gap-3">
-                        <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
-                        <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                      <div key={index} className="flex gap-3 md:gap-4">
+                        <div className="flex h-9 w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm md:text-base">
+                          {item.step}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold mb-1 text-sm md:text-base">{item.title}</h4>
+                          <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                        </div>
                       </div>
                     ))}
                   </div>
-                  <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full min-h-[48px] text-base mt-6">
-                    Touren-Paket anfragen – Individuelle Kalkulation
-                    <ArrowRight className="ml-2" />
-                  </Button>
                 </CardContent>
               </Card>
             </div>
@@ -211,7 +212,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       {/* Solution Module 2: Tech & Data Experience */}
       <section className="py-12 sm:py-16 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div id="digital-experience" className="scroll-mt-20 space-y-12 md:space-y-16">
+          <div id="digital-experience" className="scroll-mt-20 space-y-8 sm:space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
               <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-primary/10 rounded-full">
                 <Sparkle className="h-5 w-5 text-primary" weight="fill" />
@@ -490,7 +491,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       {/* Solution Module 3: Ausstattung & Ambiente */}
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div id="ausstattung-ambiente" className="scroll-mt-20 space-y-12 md:space-y-16">
+          <div id="ausstattung-ambiente" className="scroll-mt-20 space-y-8 sm:space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
               <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Ausstattung & Ambiente</h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
