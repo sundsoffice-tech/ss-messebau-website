@@ -3,20 +3,21 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { CheckCircle, Leaf, Recycle, TrendUp, ArrowRight } from '@phosphor-icons/react'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
+import { useTranslation } from '@/lib/i18n'
 
 export { KIBeraterPage } from './KIBeraterPage'
 
 export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
   useSectionObserver(['story', 'team', 'werte', 'arbeitsweise', 'vergleich'])
+  const { t } = useTranslation()
 
   return (
     <div>
       <section id="ueber-uns-hero" className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>Über S&S Messebau – Ihr Partner aus NRW</h1>
+          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>{t('about.hero.title')}</h1>
           <p className="text-base sm:text-lg opacity-90 max-w-3xl leading-relaxed">
-            Seit vielen Jahren realisieren wir Messestände mit Leidenschaft und Präzision. 
-            Als inhabergeführte GbR aus Hückelhoven verbinden wir persönliche Betreuung mit professionellem Service.
+            {t('about.hero.subtitle')}
           </p>
         </div>
       </section>
@@ -25,26 +26,23 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
             <div>
-              <h2 className="font-bold mb-4 sm:mb-6" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Unsere Geschichte</h2>
+              <h2 className="font-bold mb-4 sm:mb-6" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.story.title')}</h2>
               <div className="space-y-4 text-base sm:text-lg text-muted-foreground">
                 <p>
-                  Was als kleines Messebau-Unternehmen begann, ist heute ein etablierter 
-                  Full-Service-Anbieter für Messebau, Eventbau und Ladenbau im gesamten Bundesgebiet.
+                  {t('about.story.p1')}
                 </p>
                 <p>
-                  Als GbR setzen wir auf kurze Entscheidungswege und persönliche Betreuung. Bei uns spricht 
-                  Ihr Ansprechpartner direkt mit den Geschäftsführern – keine langen Hierarchien, keine Verzögerungen.
+                  {t('about.story.p2')}
                 </p>
                 <p>
-                  Durch ein starkes Netzwerk von langjährigen Partnern in Produktion, Logistik und Technik 
-                  bieten wir die Professionalität großer Messebauer zu fairen Mittelstands-Konditionen.
+                  {t('about.story.p3')}
                 </p>
               </div>
             </div>
             <div className="aspect-video rounded-lg overflow-hidden">
               <img 
                 src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&fm=webp&q=75"
-                alt="Das S&S Messebau Team bei der gemeinsamen Projektplanung"
+                alt={t('about.story.imageAlt')}
                 width="800"
                 height="450"
                 loading="lazy"
@@ -58,31 +56,21 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 
       <section id="team" className="py-12 sm:py-16 bg-muted scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Unser Team</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.team.title')}</h2>
           <p className="text-base sm:text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-8 sm:mb-12">
-            Als inhabergeführte GbR sind Fabrice Noel Schippers und Parampuneet Singh Ihre direkten Ansprechpartner 
-            für alle Projektphasen – von der ersten Idee bis zum Abbau.
+            {t('about.team.desc')}
           </p>
         </div>
       </section>
 
       <section id="werte" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Unsere Werte</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.werte.title')}</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {[
-                {
-                  title: 'Fairness',
-                  desc: 'Transparente Preise, ehrliche Beratung, zuverlässige Umsetzung.'
-                },
-                {
-                  title: 'Nachhaltigkeit',
-                  desc: 'Wiederverwendbare Systeme, lokale Partner, langlebige Qualität.'
-                },
-                {
-                  title: 'Partnerschaft',
-                  desc: 'Langfristige Kundenbeziehungen statt einmaliger Transaktionen.'
-                }
+                { title: t('about.werte.v1.title'), desc: t('about.werte.v1.desc') },
+                { title: t('about.werte.v2.title'), desc: t('about.werte.v2.desc') },
+                { title: t('about.werte.v3.title'), desc: t('about.werte.v3.desc') }
               ].map((value, index) => (
                 <Card key={index}>
                   <CardContent className="p-6 text-center">
@@ -97,14 +85,14 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 
       <section id="arbeitsweise" className="py-12 sm:py-16 bg-muted scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>So arbeiten wir</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.arbeitsweise.title')}</h2>
             <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
               {[
-                { title: 'Persönlich', desc: 'Ein fester Ansprechpartner für Ihr gesamtes Projekt' },
-                { title: 'Flexibel', desc: 'Anpassungsfähig auf Änderungen und besondere Wünsche' },
-                { title: 'Zuverlässig', desc: 'Termingerechte Lieferung und professionelle Umsetzung' },
-                { title: 'Transparent', desc: 'Klare Kommunikation über Kosten, Zeitpläne und Prozesse' },
-                { title: 'Qualitätsorientiert', desc: 'Hochwertige Materialien und sorgfältige Verarbeitung' }
+                { title: t('about.arbeitsweise.w1.title'), desc: t('about.arbeitsweise.w1.desc') },
+                { title: t('about.arbeitsweise.w2.title'), desc: t('about.arbeitsweise.w2.desc') },
+                { title: t('about.arbeitsweise.w3.title'), desc: t('about.arbeitsweise.w3.desc') },
+                { title: t('about.arbeitsweise.w4.title'), desc: t('about.arbeitsweise.w4.desc') },
+                { title: t('about.arbeitsweise.w5.title'), desc: t('about.arbeitsweise.w5.desc') }
               ].map((item, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <CheckCircle className="h-6 w-6 text-primary shrink-0 mt-1" weight="fill" />
@@ -120,51 +108,51 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 
       <section id="vergleich" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>S&S Messebau vs. Größere Konkurrenz</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.compare.title')}</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-base">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-4 font-semibold">Aspekt</th>
-                    <th className="text-left p-4 font-semibold bg-primary/5">S&S Messebau</th>
-                    <th className="text-left p-4 font-semibold">Größere Konkurrenz</th>
+                    <th className="text-left p-4 font-semibold">{t('about.compare.aspect')}</th>
+                    <th className="text-left p-4 font-semibold bg-primary/5">{t('about.compare.ss')}</th>
+                    <th className="text-left p-4 font-semibold">{t('about.compare.competition')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">Angebots-Tempo</td>
-                    <td className="p-4 bg-primary/5">48h-Angebot – schnell und verbindlich</td>
-                    <td className="p-4">Oft 1–2 Wochen Wartezeit</td>
+                    <td className="p-4 font-medium">{t('about.compare.r1.aspect')}</td>
+                    <td className="p-4 bg-primary/5">{t('about.compare.r1.ss')}</td>
+                    <td className="p-4">{t('about.compare.r1.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">Spezialisierung</td>
-                    <td className="p-4 bg-primary/5">Branchenexperte 20–200 m² (Food, Finance, Industrie)</td>
-                    <td className="p-4">Alle Größen, Fokus auf Konzerne</td>
+                    <td className="p-4 font-medium">{t('about.compare.r2.aspect')}</td>
+                    <td className="p-4 bg-primary/5">{t('about.compare.r2.ss')}</td>
+                    <td className="p-4">{t('about.compare.r2.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">Struktur</td>
-                    <td className="p-4 bg-primary/5">Inhabergeführt, kurze Wege</td>
-                    <td className="p-4">GmbHs mit komplexen Teams</td>
+                    <td className="p-4 font-medium">{t('about.compare.r3.aspect')}</td>
+                    <td className="p-4 bg-primary/5">{t('about.compare.r3.ss')}</td>
+                    <td className="p-4">{t('about.compare.r3.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">Betreuung</td>
-                    <td className="p-4 bg-primary/5">Ein fester Ansprechpartner</td>
-                    <td className="p-4">Wechselnde Projektmanager</td>
+                    <td className="p-4 font-medium">{t('about.compare.r4.aspect')}</td>
+                    <td className="p-4 bg-primary/5">{t('about.compare.r4.ss')}</td>
+                    <td className="p-4">{t('about.compare.r4.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">Preis-Leistung</td>
-                    <td className="p-4 bg-primary/5">Effizient durch starkes Partnernetzwerk</td>
-                    <td className="p-4">Hohe Kapazität, großer Fuhrpark, höhere Kosten</td>
+                    <td className="p-4 font-medium">{t('about.compare.r5.aspect')}</td>
+                    <td className="p-4 bg-primary/5">{t('about.compare.r5.ss')}</td>
+                    <td className="p-4">{t('about.compare.r5.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">Nachhaltigkeit</td>
-                    <td className="p-4 bg-primary/5">Wiederverwendbare Systeme, 98% Termintreue</td>
-                    <td className="p-4">Oft Einweg-Lösungen, variable Qualität</td>
+                    <td className="p-4 font-medium">{t('about.compare.r6.aspect')}</td>
+                    <td className="p-4 bg-primary/5">{t('about.compare.r6.ss')}</td>
+                    <td className="p-4">{t('about.compare.r6.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">Erfahrung</td>
-                    <td className="p-4 bg-primary/5">Branchenübergreifende Erfahrung, bundesweit aktiv</td>
-                    <td className="p-4">Große Portfolios, aber weniger persönliche Betreuung</td>
+                    <td className="p-4 font-medium">{t('about.compare.r7.aspect')}</td>
+                    <td className="p-4 bg-primary/5">{t('about.compare.r7.ss')}</td>
+                    <td className="p-4">{t('about.compare.r7.competition')}</td>
                   </tr>
                 </tbody>
               </table>
@@ -174,16 +162,16 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 
       <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Lernen Sie uns kennen</h2>
+          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.cta.title')}</h2>
           <p className="text-base sm:text-lg mb-6 sm:mb-8 opacity-90 max-w-2xl mx-auto">
-            Kontaktieren Sie uns für ein unverbindliches Kennenlerngespräch.
+            {t('about.cta.text')}
           </p>
           <Button 
             size="lg"
             onClick={onOpenInquiry}
             className="bg-accent hover:bg-accent/90 text-accent-foreground"
           >
-            Jetzt Kontakt aufnehmen
+            {t('about.cta.button')}
             <ArrowRight className="ml-2" />
           </Button>
         </div>
@@ -193,13 +181,14 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 }
 
 export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
+  const { t } = useTranslation()
   return (
     <div>
       <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>Ablauf – So entsteht Ihr Messestand</h1>
+          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>{t('ablauf.hero.title')}</h1>
           <p className="text-base sm:text-lg opacity-90 max-w-3xl leading-relaxed">
-            Von der ersten Idee bis zur Nachsorge – so läuft ein Messeprojekt mit S&S Messebau ab.
+            {t('ablauf.hero.subtitle')}
           </p>
         </div>
       </section>
@@ -210,38 +199,38 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
             {[
               { 
                 step: '1', 
-                title: 'Erstgespräch & Briefing', 
-                desc: 'Wir lernen Ihre Anforderungen, Ziele und Ihr Budget kennen. Gemeinsam definieren wir den Rahmen Ihres Projekts.' 
+                title: t('ablauf.step1.title'), 
+                desc: t('ablauf.step1.desc') 
               },
               { 
                 step: '2', 
-                title: 'Konzept & Design', 
-                desc: 'Unsere Designer entwickeln erste Entwürfe und Konzepte. Bei Beauftragung auch 3D-Visualisierungen – je nach Projektumfang.' 
+                title: t('ablauf.step2.title'), 
+                desc: t('ablauf.step2.desc') 
               },
               { 
                 step: '3', 
-                title: 'Angebot & Planung', 
-                desc: 'Sie erhalten ein detailliertes Angebot mit allen Positionen. Nach Freigabe starten wir die technische Detailplanung.' 
+                title: t('ablauf.step3.title'), 
+                desc: t('ablauf.step3.desc') 
               },
               { 
                 step: '4', 
-                title: 'Produktion', 
-                desc: 'Unsere Partner produzieren Ihren Stand mit hochwertigen Materialien. Sie erhalten regelmäßige Updates.' 
+                title: t('ablauf.step4.title'), 
+                desc: t('ablauf.step4.desc') 
               },
               { 
                 step: '5', 
-                title: 'Logistik & Aufbau', 
-                desc: 'Pünktlicher Transport zur Messe und professioneller Aufbau durch unser erfahrenes Team.' 
+                title: t('ablauf.step5.title'), 
+                desc: t('ablauf.step5.desc') 
               },
               { 
                 step: '6', 
-                title: 'Betreuung & Service', 
-                desc: 'Während der Messetage stehen wir bei technischen Fragen zur Verfügung.' 
+                title: t('ablauf.step6.title'), 
+                desc: t('ablauf.step6.desc') 
               },
               { 
                 step: '7', 
-                title: 'Abbau & Nachsorge', 
-                desc: 'Professioneller Abbau und optional Lagerung für die nächste Messe. Gemeinsame Auswertung des Messeerfolgs.' 
+                title: t('ablauf.step7.title'), 
+                desc: t('ablauf.step7.desc') 
               }
             ].map((item, index) => (
               <div key={index} className="flex gap-4 sm:gap-6 mb-6 sm:mb-8 last:mb-0">
@@ -263,49 +252,49 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 
       <section id="faq" className="py-12 sm:py-16 bg-muted scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Häufige Fragen</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('ablauf.faq.title')}</h2>
           <div className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible className="w-full">
               {[
                 {
-                  q: 'Was kostet ein Messestand?',
-                  a: 'Die Kosten variieren je nach Größe und Ausstattung. Ein 50 qm Systemstand liegt bei ca. 25.000-35.000 €, individuelle Stände bei 600-1.200 €/qm. Kontaktieren Sie uns für ein individuelles Angebot.'
+                  q: t('ablauf.faq.q1'),
+                  a: t('ablauf.faq.a1')
                 },
                 {
-                  q: 'Wie lange dauert die Planung und Produktion?',
-                  a: 'Von Briefing bis Fertigstellung rechnen Sie mit 8-12 Wochen. Bei Eilprojekten können wir auch schneller arbeiten.'
+                  q: t('ablauf.faq.q2'),
+                  a: t('ablauf.faq.a2')
                 },
                 {
-                  q: 'Bauen Sie auch im Ausland auf?',
-                  a: 'Ja, wir realisieren Projekte bundesweit und in ganz Europa. Durch unser Partnernetzwerk sind auch internationale Projekte möglich.'
+                  q: t('ablauf.faq.q3'),
+                  a: t('ablauf.faq.a3')
                 },
                 {
-                  q: 'Können wir den Stand mehrfach verwenden?',
-                  a: 'Absolut! Unsere Systeme sind für Mehrfachnutzung konzipiert. Wir lagern Ihre Elemente und passen sie für Folgemessen an.'
+                  q: t('ablauf.faq.q4'),
+                  a: t('ablauf.faq.a4')
                 },
                 {
-                  q: 'Was passiert, wenn während der Messe etwas kaputt geht?',
-                  a: 'Wir bieten Service vor Ort und stehen bei technischen Problemen zur Verfügung. Kleinere Reparaturen führen wir sofort durch.'
+                  q: t('ablauf.faq.q5'),
+                  a: t('ablauf.faq.a5')
                 },
                 {
-                  q: 'Bieten Sie auch nur Teilleistungen an?',
-                  a: 'Ja, Sie können einzelne Leistungen buchen – z.B. nur Design, nur Aufbau, oder nur Möbel. Wir sind flexibel.'
+                  q: t('ablauf.faq.q6'),
+                  a: t('ablauf.faq.a6')
                 },
                 {
-                  q: 'Welche Zahlungsbedingungen gelten?',
-                  a: 'Üblicherweise 50% Anzahlung bei Auftragserteilung, 40% vor Messestart, 10% nach Abbau. Individuelle Vereinbarungen sind möglich.'
+                  q: t('ablauf.faq.q7'),
+                  a: t('ablauf.faq.a7')
                 },
                 {
-                  q: 'Können wir den Stand vorher sehen?',
-                  a: 'Bei Beauftragung erstellen wir auf Wunsch 3D-Visualisierungen Ihres Messestands – je nach Projektumfang.'
+                  q: t('ablauf.faq.q8'),
+                  a: t('ablauf.faq.a8')
                 },
                 {
-                  q: 'Was ist im Aufbau enthalten?',
-                  a: 'Kompletter Aufbau inklusive Möbel, Beleuchtung, Technik. Nicht enthalten: Messeanschlüsse (Strom, Internet), Catering.'
+                  q: t('ablauf.faq.q9'),
+                  a: t('ablauf.faq.a9')
                 },
                 {
-                  q: 'Wie nachhaltig sind Ihre Stände?',
-                  a: 'Wir setzen auf wiederverwendbare Systeme, lokale Partner und langlebige Materialien. Details finden Sie auf unserer Nachhaltigkeits-Seite.'
+                  q: t('ablauf.faq.q10'),
+                  a: t('ablauf.faq.a10')
                 }
               ].map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
@@ -320,12 +309,12 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Bereit, Ihr Projekt zu starten?</h2>
+          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('ablauf.cta.title')}</h2>
           <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
-            Lassen Sie uns über Ihr nächstes Messeprojekt sprechen.
+            {t('ablauf.cta.text')}
           </p>
           <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90">
-            Erstgespräch vereinbaren
+            {t('ablauf.cta.button')}
             <ArrowRight className="ml-2" />
           </Button>
         </div>
@@ -335,17 +324,17 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 }
 
 export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
+  const { t } = useTranslation()
   return (
     <div>
       <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
             <Leaf className="h-10 w-10 sm:h-12 sm:w-12" />
-            <h1 className="font-bold leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>Nachhaltiger Messebau – Systembau & Wiederverwendung</h1>
+            <h1 className="font-bold leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>{t('nachhaltigkeit.hero.title')}</h1>
           </div>
           <p className="text-base sm:text-lg opacity-90 max-w-3xl leading-relaxed">
-            Messebau muss nicht Wegwerfkultur sein. Mit wiederverwendbaren Systemen, 
-            lokalem Partnernetzwerk und intelligenter Planung schonen wir Umwelt und Budget.
+            {t('nachhaltigkeit.hero.subtitle')}
           </p>
         </div>
       </section>
@@ -356,18 +345,18 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
             {[
               {
                 icon: Recycle,
-                title: 'Wiederverwendbare Systeme',
-                desc: 'Unsere modularen Standsysteme werden mehrfach genutzt. Nach der Messe lagern wir Ihre Elemente für den nächsten Einsatz.'
+                title: t('nachhaltigkeit.systeme.title1'),
+                desc: t('nachhaltigkeit.systeme.desc1')
               },
               {
                 icon: TrendUp,
-                title: 'Lokales Partnernetzwerk',
-                desc: 'Kurze Transportwege durch regionale Partner in NRW und bundesweit. Das spart CO2 und Kosten.'
+                title: t('nachhaltigkeit.systeme.title2'),
+                desc: t('nachhaltigkeit.systeme.desc2')
               },
               {
                 icon: CheckCircle,
-                title: 'Langlebige Qualität',
-                desc: 'Hochwertige Materialien, die viele Messeeinsätze überstehen. Keine Billig-Lösungen für einmaligen Gebrauch.'
+                title: t('nachhaltigkeit.systeme.title3'),
+                desc: t('nachhaltigkeit.systeme.desc3')
               }
             ].map((item, index) => {
               const Icon = item.icon
@@ -393,30 +382,30 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
             <div>
-              <h2 className="font-bold mb-4 sm:mb-6" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Der Business-Vorteil</h2>
+              <h2 className="font-bold mb-4 sm:mb-6" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('nachhaltigkeit.business.title')}</h2>
               <p className="text-base sm:text-lg text-muted-foreground mb-4 sm:mb-6">
-                Nachhaltigkeit rechnet sich – und zwar schnell.
+                {t('nachhaltigkeit.business.subtitle')}
               </p>
               <div className="space-y-4">
                 <div className="p-4 rounded-lg bg-muted">
-                  <h4 className="font-semibold mb-2">Erste Messe (Neuanschaffung)</h4>
-                  <p className="text-muted-foreground">50 qm System: ca. 30.000 €</p>
+                  <h4 className="font-semibold mb-2">{t('nachhaltigkeit.business.first.title')}</h4>
+                  <p className="text-muted-foreground">{t('nachhaltigkeit.business.first.price')}</p>
                 </div>
                 <div className="p-4 rounded-lg bg-primary/5 border-2 border-primary/20">
-                  <h4 className="font-semibold mb-2">Zweite Messe (Wiederverwendung)</h4>
-                  <p className="text-muted-foreground">Nur Logistik & Anpassungen: ca. 8.000 €</p>
-                  <p className="text-sm text-primary font-semibold mt-2">→ 73% Ersparnis!</p>
+                  <h4 className="font-semibold mb-2">{t('nachhaltigkeit.business.second.title')}</h4>
+                  <p className="text-muted-foreground">{t('nachhaltigkeit.business.second.price')}</p>
+                  <p className="text-sm text-primary font-semibold mt-2">{t('nachhaltigkeit.business.second.savings')}</p>
                 </div>
                 <div className="p-4 rounded-lg bg-primary/5 border-2 border-primary/20">
-                  <h4 className="font-semibold mb-2">Dritte+ Messe</h4>
-                  <p className="text-muted-foreground">Weiterhin nur 6.000-8.000 € pro Messe</p>
+                  <h4 className="font-semibold mb-2">{t('nachhaltigkeit.business.third.title')}</h4>
+                  <p className="text-muted-foreground">{t('nachhaltigkeit.business.third.price')}</p>
                 </div>
               </div>
             </div>
             <div className="aspect-square rounded-lg overflow-hidden">
               <img 
                 src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&fm=webp&q=75" 
-                alt="Nachhaltige Materialien und umweltbewusster Messebau bei S&S Messebau"
+                alt={t('nachhaltigkeit.business.imageAlt')}
                 width="800"
                 height="800"
                 className="object-cover w-full h-full"
@@ -430,17 +419,17 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
 
       <section id="vorteile" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Unsere nachhaltigen Maßnahmen</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('nachhaltigkeit.measures.title')}</h2>
             <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
               {[
-                'FSC-zertifiziertes Holz aus nachhaltiger Forstwirtschaft',
-                'LED-Beleuchtung (90% weniger Stromverbrauch)',
-                'Recycelbare Materialien wo immer möglich',
-                'Optimierte Transportplanung für weniger Fahrten',
-                'Professionelle Lagerung statt Entsorgung',
-                'Reparatur statt Neukauf bei Beschädigungen',
-                'Digitale Planungsprozesse (papierlos)',
-                'Lokale Lieferanten bevorzugt'
+                t('nachhaltigkeit.measures.m1'),
+                t('nachhaltigkeit.measures.m2'),
+                t('nachhaltigkeit.measures.m3'),
+                t('nachhaltigkeit.measures.m4'),
+                t('nachhaltigkeit.measures.m5'),
+                t('nachhaltigkeit.measures.m6'),
+                t('nachhaltigkeit.measures.m7'),
+                t('nachhaltigkeit.measures.m8')
               ].map((item, index) => (
                 <div key={index} className="flex items-center gap-3 p-4 rounded-lg bg-muted">
                   <CheckCircle className="h-6 w-6 text-primary shrink-0" weight="fill" />
@@ -453,12 +442,12 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
 
       <section className="py-12 sm:py-16 bg-muted">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Nachhaltig UND wirtschaftlich</h2>
+          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('nachhaltigkeit.cta.title')}</h2>
           <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
-            Lassen Sie sich von uns zeigen, wie nachhaltige Messebau-Lösungen Ihr Budget schonen.
+            {t('nachhaltigkeit.cta.text')}
           </p>
           <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90">
-            Nachhaltige Lösung anfragen
+            {t('nachhaltigkeit.cta.button')}
             <ArrowRight className="ml-2" />
           </Button>
         </div>
@@ -468,55 +457,54 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
 }
 
 export function ImpressumPage() {
+  const { t } = useTranslation()
   return (
     <div className="py-12 sm:py-16">
       <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-bold mb-6 sm:mb-8" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', lineHeight: '1.2' }}>Impressum</h1>
+        <h1 className="font-bold mb-6 sm:mb-8" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', lineHeight: '1.2' }}>{t('imprint.title')}</h1>
         
         <div className="space-y-6 text-muted-foreground">
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">Angaben gemäß § 5 TMG</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-2">{t('imprint.tmg')}</h2>
             <p>
-              S&S Messebau GbR<br />
-              Fabrice Noel Schippers & Parampuneet Singh<br />
-              Marienstraße 37<br />
-              41836 Hückelhoven<br />
-              Deutschland
+              {t('imprint.address').split('\n').map((line, i, arr) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">Vertretungsberechtigte Gesellschafter</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-2">{t('imprint.partners.title')}</h2>
             <p>
-              Fabrice Noel Schippers<br />
-              Parampuneet Singh
+              {t('imprint.partners.names').split('\n').map((line, i, arr) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">Kontakt</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-2">{t('imprint.contact.title')}</h2>
             <p>
-              Mobil: +49 1514 0368754<br />
-              E-Mail: info@sundsmessebau.com<br />
-              Internet: www.sundsmessebau.de
+              {t('imprint.contact.details').split('\n').map((line, i, arr) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">Umsatzsteuer-ID</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-2">{t('imprint.vat.title')}</h2>
             <p>
-              Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz:<br />
-              Wird auf Anfrage mitgeteilt
+              {t('imprint.vat.text').split('\n').map((line, i, arr) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">Haftungsausschluss</h2>
-            <h3 className="font-semibold text-foreground mt-4 mb-2">Haftung für Inhalte</h3>
+            <h2 className="text-xl font-semibold text-foreground mb-2">{t('imprint.liability.title')}</h2>
+            <h3 className="font-semibold text-foreground mt-4 mb-2">{t('imprint.liability.subtitle')}</h3>
             <p className="mb-4">
-              Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den 
-              allgemeinen Gesetzen verantwortlich. Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. 
-              Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.
+              {t('imprint.liability.text')}
             </p>
           </div>
         </div>
@@ -526,57 +514,48 @@ export function ImpressumPage() {
 }
 
 export function DatenschutzPage() {
+  const { t } = useTranslation()
   return (
     <div className="py-12 sm:py-16">
       <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-bold mb-6 sm:mb-8" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', lineHeight: '1.2' }}>Datenschutzerklärung</h1>
+        <h1 className="font-bold mb-6 sm:mb-8" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', lineHeight: '1.2' }}>{t('privacy.title')}</h1>
         
         <div className="space-y-6 text-muted-foreground">
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">1. Datenschutz auf einen Blick</h2>
-            <h3 className="font-semibold text-foreground mt-4 mb-2">Allgemeine Hinweise</h3>
+            <h2 className="text-xl font-semibold text-foreground mb-2">{t('privacy.s1.title')}</h2>
+            <h3 className="font-semibold text-foreground mt-4 mb-2">{t('privacy.s1.subtitle')}</h3>
             <p>
-              Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten 
-              passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie 
-              persönlich identifiziert werden können.
+              {t('privacy.s1.text')}
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">2. Datenerfassung auf dieser Website</h2>
-            <h3 className="font-semibold text-foreground mt-4 mb-2">Kontaktformular</h3>
+            <h2 className="text-xl font-semibold text-foreground mb-2">{t('privacy.s2.title')}</h2>
+            <h3 className="font-semibold text-foreground mt-4 mb-2">{t('privacy.s2.subtitle')}</h3>
             <p className="mb-4">
-              Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular 
-              inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall 
-              von Anschlussfragen bei uns gespeichert.
+              {t('privacy.s2.text1')}
             </p>
             <p>
-              Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.
+              {t('privacy.s2.text2')}
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">3. Ihre Rechte</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-2">{t('privacy.s3.title')}</h2>
             <p className="mb-4">
-              Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, 
-              deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung oder 
-              Löschung dieser Daten.
+              {t('privacy.s3.text1')}
             </p>
             <p>
-              Hierzu sowie zu weiteren Fragen zum Thema personenbezogene Daten können Sie sich jederzeit unter der 
-              im Impressum angegebenen Adresse an uns wenden.
+              {t('privacy.s3.text2')}
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">4. Kontakt</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-2">{t('privacy.s4.title')}</h2>
             <p>
-              Verantwortlicher für die Datenverarbeitung:<br />
-              S&S Messebau GbR<br />
-              Fabrice Noel Schippers & Parampuneet Singh<br />
-              Marienstraße 37<br />
-              41836 Hückelhoven<br />
-              E-Mail: info@sundsmessebau.com
+              {t('privacy.s4.text').split('\n').map((line, i, arr) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </p>
           </div>
         </div>
