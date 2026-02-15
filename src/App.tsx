@@ -112,7 +112,7 @@ function App() {
       case '/leistungen/brandspaces':
         // Redirect old paths to new combined path
         window.location.hash = '/leistungen/showroom-ladenbau'
-        return <LeistungenShowroomsPage onOpenInquiry={onOpenInquiry} />
+        return null
       case '/leistungen/touren':
         return <LeistungenTourenPage onOpenInquiry={onOpenInquiry} />
       case '/leistungen/boeden-ausstattung':

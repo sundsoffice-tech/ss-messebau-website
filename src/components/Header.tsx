@@ -73,7 +73,7 @@ const LEISTUNGEN_MEGA_MENU = [
     color: 'text-amber-600',
     bgColor: 'bg-amber-50',
     featureKeys: ['header.mega.showroomLadenbau.f1', 'header.mega.showroomLadenbau.f2', 'header.mega.showroomLadenbau.f3'],
-    gradient: 'from-amber-500/10 to-orange-600/5',
+    gradient: 'from-amber-500/10 to-amber-600/5',
     previewImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
     sectionId: 'showroom-ladenbau',
     pagePath: '/leistungen/showroom-ladenbau'
