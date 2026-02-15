@@ -78,7 +78,7 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
         size: data.size || 'nicht_angegeben',
       })
 
-      toast.success(form.config.successKey ? 'Vielen Dank! Wir melden uns innerhalb von 24 Stunden bei Ihnen.' : '')
+      toast.success(t(form.config.successKey))
       form.reset()
     },
   })

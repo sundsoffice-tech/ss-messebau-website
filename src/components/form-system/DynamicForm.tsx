@@ -44,8 +44,8 @@ export function DynamicForm({
 
   return (
     <form onSubmit={form.handleSubmit} className={`space-y-4 ${className || ''}`}>
-      {Array.from(groups.entries()).map(([_group, fields]) => (
-        <fieldset key={_group} className="space-y-4">
+      {Array.from(groups.entries()).map(([group, fields]) => (
+        <fieldset key={group} className="space-y-4">
           {fields.map((fieldConfig) => {
             const token = FIELD_TOKENS[fieldConfig.token]
             if (!token) return null
