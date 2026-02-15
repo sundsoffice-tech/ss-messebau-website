@@ -319,18 +319,28 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
     }
 
     const queueId = `email_queue_${configId}`
-    await window.spark.kv.set(queueId, emailData)
 
-    if (sendImmediately) {
-      const sendResult = await sendQueuedEmail(queueId)
-      
-      if (sendResult.success) {
-        return { success: true, queueId }
-      } else {
-        return { success: false, queueId, error: sendResult.error }
-      }
+    // Enqueue via backend API
+    try {
+      const { emailApi } = await import('./api-client')
+      await emailApi.enqueue({
+        queue_id: queueId,
+        to_email: emailData.to,
+        subject: emailData.subject,
+        html_body: emailData.htmlBody,
+        text_body: emailData.textBody,
+        customer_email: emailData.customerEmail,
+        customer_subject: emailData.customerSubject,
+        customer_html_body: emailData.customerHtmlBody,
+        customer_text_body: emailData.customerTextBody,
+        attachments: emailData.attachments,
+        order_id: configId,
+      })
+    } catch {
+      // Fallback: store in localStorage if API unavailable
+      await window.spark.kv.set(queueId, emailData)
     }
-    
+
     return { success: true, queueId }
   } catch (error) {
     console.error('❌ Fehler beim E-Mail-Versand:', error)

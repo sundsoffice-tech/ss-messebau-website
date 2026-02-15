@@ -59,10 +59,18 @@ export function SMTPConfigPanel() {
 
   const loadStatus = async () => {
     try {
-      const emailStatus = await getEmailStatus()
-      setStatus(emailStatus)
-    } catch (error) {
-      console.error(t('smtp.loadStatusError'), error)
+      // Try backend API first for server-side status
+      const { emailApi } = await import('@/lib/api-client')
+      const apiStatus = await emailApi.status()
+      setStatus(apiStatus)
+    } catch {
+      // Fallback to local status
+      try {
+        const emailStatus = await getEmailStatus()
+        setStatus(emailStatus)
+      } catch (error) {
+        console.error(t('smtp.loadStatusError'), error)
+      }
     }
   }
 

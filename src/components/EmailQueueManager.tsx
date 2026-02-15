@@ -6,30 +6,14 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { Envelope, Eye, Trash, CheckCircle, PaperPlaneTilt } from '@phosphor-icons/react'
 import { toast } from 'sonner'
-import { sendQueuedEmail } from '@/lib/email-service'
-import type { FileAttachment } from '@/types/email'
+import { emailApi, type EmailQueueRecord } from '@/lib/api-client'
 import { useTranslation } from '@/lib/i18n'
-
-interface EmailQueueItem {
-  id: string
-  to: string
-  subject: string
-  htmlBody: string
-  textBody: string
-  customerEmail: string
-  customerSubject: string
-  customerHtmlBody: string
-  customerTextBody: string
-  attachments: FileAttachment[]
-  configId: string
-  timestamp?: string
-}
 
 export function EmailQueueManager() {
   const { t } = useTranslation()
-  const [emailQueue, setEmailQueue] = useState<EmailQueueItem[]>([])
+  const [emailQueue, setEmailQueue] = useState<EmailQueueRecord[]>([])
   const [loading, setLoading] = useState(false)
-  const [previewEmail, setPreviewEmail] = useState<EmailQueueItem | null>(null)
+  const [previewEmail, setPreviewEmail] = useState<EmailQueueRecord | null>(null)
   const [previewType, setPreviewType] = useState<'company' | 'customer'>('company')
 
   useEffect(() => {
@@ -39,23 +23,8 @@ export function EmailQueueManager() {
   const loadEmailQueue = async () => {
     setLoading(true)
     try {
-      const keys = await window.spark.kv.keys()
-      const emailKeys = keys.filter((key) => key.startsWith('email_queue_'))
-
-      const emails: EmailQueueItem[] = []
-      for (const key of emailKeys) {
-        const data = await window.spark.kv.get<EmailQueueItem>(key)
-        if (data) {
-          emails.push({
-            id: key,
-            ...data,
-            timestamp: data.timestamp || new Date().toISOString(),
-          })
-        }
-      }
-
-      emails.sort((a, b) => new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime())
-      setEmailQueue(emails)
+      const res = await emailApi.list()
+      setEmailQueue(res.emails)
     } catch (error) {
       console.error(t('emailQueue.loadError'), error)
       toast.error(t('emailQueue.loadErrorToast'))
@@ -64,26 +33,25 @@ export function EmailQueueManager() {
     }
   }
 
-  const handlePreview = (email: EmailQueueItem, type: 'company' | 'customer') => {
+  const handlePreview = (email: EmailQueueRecord, type: 'company' | 'customer') => {
     setPreviewEmail(email)
     setPreviewType(type)
   }
 
-  const handleSendEmail = async (email: EmailQueueItem) => {
+  const handleSendEmail = async (email: EmailQueueRecord) => {
     const loadingToast = toast.loading(t('emailQueue.sending'), {
-      description: t('emailQueue.sendingTo').replace('{to}', email.to).replace('{customer}', email.customerEmail),
+      description: t('emailQueue.sendingTo').replace('{to}', email.to_email).replace('{customer}', email.customer_email),
     })
 
     try {
-      const result = await sendQueuedEmail(email.id)
+      const result = await emailApi.send(email.queue_id)
 
       if (result.success) {
         toast.success(t('emailQueue.sentSuccess'), {
           id: loadingToast,
-          description: t('emailQueue.sentSuccessDesc').replace('{to}', email.to).replace('{customer}', email.customerEmail),
+          description: t('emailQueue.sentSuccessDesc').replace('{to}', email.to_email).replace('{customer}', email.customer_email),
           duration: 5000,
         })
-
         await loadEmailQueue()
       } else {
         toast.error(t('emailQueue.sendFailed'), {
@@ -101,36 +69,41 @@ export function EmailQueueManager() {
     }
   }
 
-  const handleDelete = async (emailId: string) => {
+  const handleDelete = async (emailId: string | number) => {
     if (confirm(t('emailQueue.confirmDelete'))) {
-      await window.spark.kv.delete(emailId)
-      toast.success(t('emailQueue.deleted'))
-      await loadEmailQueue()
+      try {
+        await emailApi.delete(emailId)
+        toast.success(t('emailQueue.deleted'))
+        await loadEmailQueue()
+      } catch {
+        toast.error('Fehler beim Löschen')
+      }
     }
   }
 
   const handleSendAll = async () => {
-    if (emailQueue.length === 0) return
+    const unsent = emailQueue.filter(e => !e.sent)
+    if (unsent.length === 0) return
 
-    if (confirm(t('emailQueue.confirmSendAll').replace('{count}', String(emailQueue.length)))) {
-      const loadingToast = toast.loading(t('emailQueue.sendingAll').replace('{count}', String(emailQueue.length)))
+    if (confirm(t('emailQueue.confirmSendAll').replace('{count}', String(unsent.length)))) {
+      const loadingToast = toast.loading(t('emailQueue.sendingAll').replace('{count}', String(unsent.length)))
       
       let successCount = 0
       let errorCount = 0
 
-      for (const email of emailQueue) {
+      for (const email of unsent) {
         try {
-          const result = await sendQueuedEmail(email.id)
+          const result = await emailApi.send(email.queue_id)
           if (result.success) {
             successCount++
           } else {
             errorCount++
-            console.error(t('emailQueue.sendErrorLog'), email.id, result.error)
+            console.error(t('emailQueue.sendErrorLog'), email.queue_id, result.error)
           }
           await new Promise((resolve) => setTimeout(resolve, 1000))
         } catch (error) {
           errorCount++
-          console.error(t('emailQueue.sendErrorLog'), email.id, error)
+          console.error(t('emailQueue.sendErrorLog'), email.queue_id, error)
         }
       }
 
@@ -151,6 +124,8 @@ export function EmailQueueManager() {
     }
   }
 
+  const unsentEmails = emailQueue.filter(e => !e.sent)
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -163,10 +138,10 @@ export function EmailQueueManager() {
             {t('emailQueue.subtitle')}
           </p>
         </div>
-        {emailQueue.length > 0 && (
+        {unsentEmails.length > 0 && (
           <Button onClick={handleSendAll} size="lg">
             <PaperPlaneTilt className="w-4 h-4 mr-2" />
-            {t('emailQueue.sendAll').replace('{count}', String(emailQueue.length))}
+            {t('emailQueue.sendAll').replace('{count}', String(unsentEmails.length))}
           </Button>
         )}
       </div>
@@ -192,18 +167,23 @@ export function EmailQueueManager() {
                   <div className="flex items-center gap-2">
                     <Envelope className="w-5 h-5 text-primary" />
                     <h3 className="font-semibold">{email.subject}</h3>
+                    {email.sent ? (
+                      <Badge variant="default" className="ml-2">✓ Gesendet</Badge>
+                    ) : (
+                      <Badge variant="secondary" className="ml-2">Ausstehend</Badge>
+                    )}
                   </div>
                   
                   <div className="space-y-1 text-sm">
                     <div className="flex items-center gap-2">
                       <span className="text-muted-foreground">{t('emailQueue.toCompany')}</span>
-                      <span className="font-mono">{email.to}</span>
+                      <span className="font-mono">{email.to_email}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-muted-foreground">{t('emailQueue.toCustomer')}</span>
-                      <span className="font-mono">{email.customerEmail}</span>
+                      <span className="font-mono">{email.customer_email}</span>
                     </div>
-                    {email.attachments.length > 0 && (
+                    {email.attachments && email.attachments.length > 0 && (
                       <div className="flex items-center gap-2">
                         <Badge variant="secondary">
                           📎 {email.attachments.length} {email.attachments.length > 1 ? t('emailQueue.attachments') : t('emailQueue.attachment')}
@@ -212,9 +192,9 @@ export function EmailQueueManager() {
                     )}
                   </div>
                   
-                  {email.timestamp && (
+                  {email.created_at && (
                     <p className="text-xs text-muted-foreground">
-                      {new Date(email.timestamp).toLocaleString('de-DE')}
+                      {new Date(email.created_at).toLocaleString('de-DE')}
                     </p>
                   )}
                 </div>
@@ -236,17 +216,19 @@ export function EmailQueueManager() {
                     <Eye className="w-4 h-4 mr-1" />
                     {t('emailQueue.previewCustomer')}
                   </Button>
-                  <Button
-                    onClick={() => handleSendEmail(email)}
-                    size="sm"
-                  >
-                    <PaperPlaneTilt className="w-4 h-4 mr-1" />
-                    {t('emailQueue.send')}
-                  </Button>
+                  {!email.sent && (
+                    <Button
+                      onClick={() => handleSendEmail(email)}
+                      size="sm"
+                    >
+                      <PaperPlaneTilt className="w-4 h-4 mr-1" />
+                      {t('emailQueue.send')}
+                    </Button>
+                  )}
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => handleDelete(email.id)}
+                    onClick={() => handleDelete(email.queue_id)}
                   >
                     <Trash className="w-4 h-4" />
                   </Button>
@@ -271,27 +253,15 @@ export function EmailQueueManager() {
                 <div className="flex gap-2">
                   <span className="font-semibold min-w-[100px]">{t('emailQueue.to')}</span>
                   <span className="font-mono">
-                    {previewType === 'company' ? previewEmail.to : previewEmail.customerEmail}
+                    {previewType === 'company' ? previewEmail.to_email : previewEmail.customer_email}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="font-semibold min-w-[100px]">{t('emailQueue.subject')}</span>
                   <span>
-                    {previewType === 'company' ? previewEmail.subject : previewEmail.customerSubject}
+                    {previewType === 'company' ? previewEmail.subject : previewEmail.customer_subject}
                   </span>
                 </div>
-                {previewType === 'company' && previewEmail.attachments.length > 0 && (
-                  <div className="flex gap-2">
-                    <span className="font-semibold min-w-[100px]">{t('emailQueue.attachmentsLabel')}</span>
-                    <div className="flex flex-wrap gap-1">
-                      {previewEmail.attachments.map((file, idx) => (
-                        <Badge key={idx} variant="secondary">
-                          📎 {file.name}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
 
               <ScrollArea className="h-[500px] border rounded-lg">
@@ -299,8 +269,8 @@ export function EmailQueueManager() {
                   className="p-4"
                   dangerouslySetInnerHTML={{
                     __html: previewType === 'company' 
-                      ? previewEmail.htmlBody 
-                      : previewEmail.customerHtmlBody,
+                      ? previewEmail.html_body 
+                      : previewEmail.customer_html_body,
                   }}
                 />
               </ScrollArea>
@@ -311,7 +281,7 @@ export function EmailQueueManager() {
             <Button variant="outline" onClick={() => setPreviewEmail(null)}>
               {t('emailQueue.close')}
             </Button>
-            {previewEmail && (
+            {previewEmail && !previewEmail.sent && (
               <Button onClick={() => {
                 handleSendEmail(previewEmail)
                 setPreviewEmail(null)

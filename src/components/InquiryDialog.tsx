@@ -37,6 +37,23 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
 
       setInquiries((current) => [...(current || []), inquiry])
 
+      // Save inquiry to backend API
+      try {
+        const { inquiriesApi } = await import('@/lib/api-client')
+        await inquiriesApi.create({
+          inquiry_id: inquiry.id,
+          type: 'inquiry',
+          name: data.name,
+          email: data.email,
+          company: data.company,
+          phone: data.phone,
+          message: data.message,
+          form_data: data,
+        })
+      } catch {
+        console.warn('API unavailable, inquiry saved locally only')
+      }
+
       // Send notification via centralized service
       await sendFormNotification({
         type: 'inquiry',
