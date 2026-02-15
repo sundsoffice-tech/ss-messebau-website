@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { Envelope, Eye, Trash, CheckCircle, PaperPlaneTilt } from '@phosphor-icons/react'
 import { toast } from 'sonner'
@@ -264,16 +263,16 @@ export function EmailQueueManager() {
                 </div>
               </div>
 
-              <ScrollArea className="h-[500px] border rounded-lg">
-                <div
-                  className="p-4"
-                  dangerouslySetInnerHTML={{
-                    __html: previewType === 'company' 
-                      ? previewEmail.html_body 
-                      : previewEmail.customer_html_body,
-                  }}
+              <div className="h-[500px] border rounded-lg overflow-hidden">
+                <iframe
+                  sandbox=""
+                  title={previewType === 'company' ? t('emailQueue.previewToCompany') : t('emailQueue.previewToCustomer')}
+                  srcDoc={previewType === 'company' 
+                    ? previewEmail.html_body 
+                    : previewEmail.customer_html_body}
+                  className="w-full h-full border-0"
                 />
-              </ScrollArea>
+              </div>
             </div>
           )}
 

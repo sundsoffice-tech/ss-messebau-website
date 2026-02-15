@@ -31,7 +31,7 @@ interface QuickAction {
   category: string
 }
 
-export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
+export function KontaktPage({ onOpenInquiry: _onOpenInquiry }: KontaktPageProps) {
   const { t } = useTranslation()
   useSectionObserver(['kontaktformular', 'anfahrt', 'ki-berater'])
   useScrollDepthTracking('kontakt')

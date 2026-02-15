@@ -31,10 +31,10 @@ import { authApi, ordersApi, inquiriesApi, type AuthUser, type OrderRecord, type
 import { toast } from 'sonner'
 
 interface AdminPageProps {
-  _onOpenInquiry: () => void
+  onOpenInquiry: () => void
 }
 
-export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
+export function AdminPage({ onOpenInquiry: _onOpenInquiry }: AdminPageProps) {
   const { t } = useTranslation()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userInfo, setUserInfo] = useState<AuthUser | null>(null)

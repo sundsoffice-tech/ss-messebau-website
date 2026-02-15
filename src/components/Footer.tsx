@@ -1,12 +1,18 @@
-import { memo } from 'react'
+import { memo, useState, useEffect } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { Phone, Envelope, MapPin } from '@phosphor-icons/react'
 import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
 import { navigateToPageAndSection } from '@/lib/deep-linking'
 import { useTranslation } from '@/lib/i18n'
+import { authApi } from '@/lib/api-client'
 
 export const Footer = memo(function Footer() {
   const { t } = useTranslation()
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(() => {
+    authApi.me().then(res => setIsAdmin(res.authenticated)).catch(() => {})
+  }, [])
   const handleNavigation = (path: string, event?: React.MouseEvent) => {
     if (event) {
       event.preventDefault()
@@ -211,12 +217,14 @@ export const Footer = memo(function Footer() {
               >
                 {t('footer.legal.privacy')}
               </button>
+              {isAdmin && (
               <button 
                 onClick={(e) => handleNavigation('/admin', e)} 
                 className="hover:text-primary focus-visible:text-primary transition-colors min-h-[44px] py-2 focus-visible:outline-none focus-visible:underline"
               >
                 {t('footer.legal.admin')}
               </button>
+              )}
             </div>
           </nav>
         </div>
