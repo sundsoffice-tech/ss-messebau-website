@@ -141,44 +141,226 @@ export const DEMO_REFERENCES: Reference[] = [
 export const DEMO_BLOG_POSTS: BlogPost[] = [
   {
     id: '1',
-    title: 'Die perfekte Messestand-Checkliste: Nichts vergessen!',
+    title: 'Die perfekte Messestand-Checkliste: Nichts vergessen',
     slug: 'messestand-checkliste',
-    excerpt: 'Von der ersten Planung bis zum letzten Abbau-Tag: Diese Checkliste stellt sicher, dass Ihr Messeauftritt reibungslos verläuft.',
-    content: `Ein erfolgreicher Messeauftritt erfordert sorgfältige Planung. Unsere Checkliste hilft Ihnen, den Überblick zu behalten.
+    excerpt: 'In zehn Jahren Messebau haben wir hunderte Aussteller begleitet. Hier ist unsere praktische Schritt-für-Schritt-Anleitung mit Checkliste, Fristen und den häufigsten Fehlern – damit ihr garantiert nichts mehr vergesst.',
+    content: `## Einleitung
 
-**6-12 Monate vorher:**
-- Messeanmeldung und Standplatz-Buchung
-- Budget festlegen
-- Messebauer kontaktieren (S&S Messebau!)
-- Erste Standkonzepte entwickeln
+Wer schon mal einen Messestand geplant hat, kennt dieses Gefühl: Zwei Wochen vor der Messe sitzt man im Büro und fragt sich panisch – hab ich auch wirklich *alles* erledigt? Die Stromversorgung bestellt? Die Druckdaten eingereicht? Das Auf- und Abbauticket organisiert? Was haben wir noch vergessen?
 
-**3-6 Monate vorher:**
-- Standdesign finalisieren
-- Material- und Ausstattungsplanung
-- Marketing-Materialien konzipieren
-- Personal-Planung für Messetage
+In zehn Jahren Messebau haben wir bei S&S hunderte von Ausstellern begleitet. Dabei haben wir gelernt, dass der Unterschied zwischen einem reibungslosen und einem chaotischen Messeauftritt meistens nicht am Standdesign liegt – sondern an einer strukturierten Planung und einer klaren Checkliste. Dieser Artikel ist unser Ratgeber für euch: eine praktische Schritt-für-Schritt-Anleitung, damit ihr *garantiert* nichts mehr vergessen werdet.
 
-**4-8 Wochen vorher:**
-- Produktionsstart
-- Technische Anmeldungen (Strom, Wasser, Internet)
-- Catering organisieren
-- Messepersonal briefen
+---
 
-**1 Woche vorher:**
-- Letzte Material-Checks
-- Transportlogistik bestätigen
-- Ansprechpartner-Listen erstellen
+## Die großen Phasen der Messeplanung
 
-**Während der Messe:**
-- Tägliche Stand-Checks
-- Lead-Erfassung
-- Team-Debriefings
+Messeplanung funktioniert nach einem bewährten Muster. Die Profis teilen das in grobe Phasen auf, und genau das empfehlen wir euch auch:
 
-**Nach der Messe:**
-- Professioneller Abbau
-- Material-Lagerung oder Rücktransport
-- Lead-Follow-Up
-- Erfolgs-Auswertung`,
+**Phase 1:** Messe wählen und Stand reservieren (ca. 12–9 Monate vorher)
+**Phase 2:** Konzept und Design entwickeln (ca. 9–6 Monate vorher)
+**Phase 3:** Produktion und Technik (ca. 6–3 Monate vorher)
+**Phase 4:** Transport und Logistik (ca. 3–1 Woche vorher)
+**Phase 5:** Aufbau und Live-Messe (Tage vor bis während der Messe)
+**Phase 6:** Abbau und Nachbereitung (nach der Messe)
+
+Was nach viel Zeit klingt, verfliegt schneller als gedacht. Deswegen: **Fangt früh an.** Das ist das erste und wichtigste Learning.
+
+---
+
+## Die kritischen Fristen, die ihr auf dem Radar haben müsst
+
+In unserer täglichen Arbeit sehen wir immer wieder, dass Aussteller bei den Fristen den Überblick verlieren. Deshalb hier die **Top-Fristen in chronologischer Ordnung**:
+
+### 12–9 Monate vor der Messe: Standfläche reservieren
+
+Die erste Frist ist gleichzeitig eine der wichtigsten. Ihr müsst euch bei der Messegesellschaft anmelden und euer Standplatz reservieren. Wenn ihr das verpasst, wird es eng – ihr bekommt möglicherweise nur noch Ausweichplätze oder zahlt Zuschläge.
+
+### 6–8 Wochen vor Aufbau: Standbaupläne einreichen
+
+Falls euer Messestand genehmigungspflichtig ist (z. B. bei Standhöhen über zwei Metern oder Sonderaufbauten), müsst ihr die Baupläne einreichen. Das läuft über das Standbauerportal der Messegesellschaft. **Wichtig:** Prüft immer die spezifischen Anforderungen eurer Messe – bei Frankfurt ist die Deadline anders als bei München oder Köln.
+
+**Unser Tipp:** Reicht die Pläne großzügig früher ein. Wenn die Genehmigungsstelle Änderungen fordert, habt ihr noch Zeit zum Umplanen.
+
+### 8–6 Wochen vor Aufbau: Stromanschlüsse bestellen
+
+Strom ist nicht gleich Strom. Ihr braucht nicht nur die richtige Amperezahl, sondern auch die richtige Anschlussart (Drehstrom, Starkstrom, normale 230V). Und hier ist Vorsicht angebracht: **Wer zu spät bestellt, zahlt Expresszuschläge** – das kostet schnell 30 bis 50 Prozent mehr.
+
+Gleiches gilt für Wasser, Abwasser und Druckluft, falls ihr die braucht.
+
+### 4–6 Wochen vor Aufbau: Technische Services und Abhängungen
+
+Rigging (Abhängung von oben), LED-Wände, Datenverbindungen – all das muss über die Messegesellschaft oder autorisierte Dienstleister gebucht werden. Auch hier: **Die Fristen sind streng.** Wenn ihr eine LED-Wand nachträglich zwei Wochen vor der Messe dazubuchen wollt, ist es zu spät.
+
+### 3–4 Wochen vor Aufbau: Logistik und Transporte organisieren
+
+Wer transportiert eure Ausstellungsmaterialien von der Werkstatt zur Messe? Braucht ihr ein Speditionsunternehmen oder klärt ihr das intern? Fahrzeugzulassungen, Parkausweise, Zufahrtsberechtigungen – alles muss koordiniert sein. Besonders bei großen Messen wie Frankfurt oder der bauma funktioniert hier sehr viel über digitale Portale.
+
+### 2 Wochen vor Aufbau: Druckdaten und Grafiken finalisieren
+
+Grafiken für den Stand müssen rechtzeitig produziert sein. Ob Foliendruck, Stoffbanner oder hochwertige Sandwich-Platten – alles hat Vorlaufzeiten. **Wir reden da von mindestens 10–14 Tagen.** Wer Änderungen am Design noch zwei Tage vor Aufbau macht, wird scheitern.
+
+### 1 Woche vor Aufbau: Aufbau- und Abbautickets organisieren
+
+Das wird oft übersehen, ist aber essential: Ihr braucht offizielle Aufbau- und Abbauausweise für euer Team. Diese Tickets berechtigen euer Personal, früher in die Messehallen zu kommen und den Stand aufzubauen. Ohne gültiges Ticket gibt es Ärger mit der Security – wir haben das schon mehrfach erlebt.
+
+---
+
+## Die Checkliste: Von der ersten Planung bis zum Abbau
+
+Hier ist eure praktische Arbeitsvorlage. Druckt sie aus oder speichert sie digital – und hakt jeden Punkt ab.
+
+### 12–9 Monate vor Messe
+
+- Messeziele definieren (Lead-Generierung, Produktlaunch, Branding?)
+- Budget festlegen (alle Kosten einkalkuliert?)
+- Passende Messe aussuchen (Zielgruppe vor Ort?)
+- Standfläche und -größe reservieren
+- Messegesellschaft-Account eröffnen und sich ins Portal einloggen
+
+### 9–6 Monate vor Messe
+
+- Messebauer/Agentur beauftragen (Angebote einholen, Referenzen checken)
+- Konzept und Layout skizzieren
+- Erstes Design-Briefing durchführen
+- Exponate und Produktauswahl definieren
+- Personaleinsatz planen (Wer wird vor Ort sein?)
+- Druckdaten-Zeitplan abstimmen
+
+### 6–3 Monate vor Messe
+
+- Finales Standdesign absegnen
+- Grafiken und Druckdaten an Produktion geben
+- Technische Anforderungen prüfen (Strom, Wasser, Datenverbindung)
+- Standbaupläne erstellen (falls genehmigungspflichtig)
+- Logistikpartner beauftragen oder Transport planen
+- Versicherung überprüfen/anpassen
+- Messe-Teaser-Marketing starten
+
+### 3–1 Monate vor Messe
+
+- Stromanschlüsse online bestellen (nicht zu spät!)
+- Rigging und technische Services buchen
+- Parkausweise und Fahrzeugzulassungen klären
+- Standbaupläne einreichen (falls erforderlich)
+- Druckdaten abholen / Grafiken kontrollieren
+- Personal briefen und bei Bedarf schulen
+- Checklisten für Transport vorbereiten
+
+### 1–2 Wochen vor Messe
+
+- Aufbau- und Abbautickets besorgen
+- Transport-Logistik final bestätigen
+- Messematerial final packen und checken
+- Team absprechen: Wer ist wann wo?
+- Kontakt zu Messebauer aufbauen (Erreichbarkeit während Aufbau?)
+- Kundeneinladungen final versenden
+
+### Während Aufbau
+
+- Pünktlich am Messegelände ankommen (großzügig Zeit einplanen!)
+- Stand mit Messebauer zusammen kontrollieren
+- Alle technischen Anschlüsse testen
+- Grafiken und Exponate positionieren
+- Personal einweisen und Brief geben
+- Beleuchtung, Musik und Technik finale Kontrolle
+
+### Während der Messe
+
+- Daily Brief mit dem Team (Ziele pro Tag?)
+- Leads dokumentieren
+- Persönliche Gespräche führen (klingt banal, wird oft vergessen!)
+- Kleine Probleme direkt melden
+
+### Nach der Messe
+
+- Abbautickets kontrollieren
+- Stand mit Messebauer zusammen abbauen
+- Alle Materialien zurück in den Transport
+- Follow-up-Kontakte (das ist der Erfolgsfaktor!)
+- Nachbereitung und Erfolgs-Analyse durchführen
+- Feedback sammeln vom Team
+
+---
+
+## Die häufigsten Fehler – und wie ihr sie vermeidet
+
+Nachdem wir hunderte von Messeständen aufgebaut haben, kennen wir die typischen Fehler von Ausstellern. Hier sind die Klassiker:
+
+### 1. Zu spät anfangen
+
+Der größte Fehler. Wir sehen Unternehmen, die drei Monate vor der Messe noch nicht mal einen Standbauer haben. Dann wird alles zur Hektik, erste Kompromisse entstehen, und der Erfolg ist gefährdet.
+
+**Lösung:** Startet bereits nach der vorherigen Messe mit der Planung. Ernsthaft.
+
+### 2. Unrealistische Budgets
+
+"Wir wollen einen super Stand, kosten darf es aber maximal 5.000 Euro" – das funktioniert nicht. Ein professioneller Messestand mit ordentlichem Design kostet Geld. Wer sparen möchte, sollte das von Anfang an kalkulieren und entsprechend kleiner planen.
+
+**Lösung:** Budget früh realistisch festlegen und 10–15 Prozent Puffer einkalkulieren.
+
+### 3. Mit den Fristen jonglieren
+
+Zu spät Strom bestellt? Expresszuschlag. Zu spät Grafiken bestellt? Kein Drucktermin mehr frei. Diese Fehler häufen sich und kosten viel Geld.
+
+**Lösung:** Nutzt unsere Checkliste und arbeitet mit dem Rückwärtsterminplan. Das heißt: Enddatum ist klar, dann rechnet ihr rückwärts, wann jede Phase fertig sein muss.
+
+### 4. Standpersonal nicht vorbereiten
+
+Ein schöner Stand, aber das Personal steht nur rum und wartet, bis Besucher auf sie zukommen? Verschwendet Potenzial.
+
+**Lösung:** Nehmt euch Zeit für Standbriefing. Welche Besucher sind eure Zielgruppe? Wie sprechen wir sie an? Welche Qualifikationen brauchen wir?
+
+### 5. Keine klaren Ziele für die Messe
+
+"Wir wollen einfach mal sehen, was rumkommt" – das ist unprofessionell. Eine Messe kostet euer Unternehmen schnell 20.000 bis 50.000 Euro (Stand, Personal, Anreise). Das sollte ROI haben.
+
+**Lösung:** Definiert vorher klar: Wollen wir 50 qualifizierte Leads? Wollen wir unser neues Produkt vorstellen? Wollen wir eine bestimmte Kundengruppe erreichen? Mit klaren Zielen plant ihr zielgerichteter.
+
+### 6. Logistik unterschätzen
+
+Transport ist nicht einfach – besonders, wenn die Messe weit weg ist. Dann kommen noch Zollformalitäten, Fahrzeugzulassungen und Zeitfenster ins Spiel.
+
+**Lösung:** Beauftragt eine professionelle Spedition oder Logistikpartner, wenn die Messe größer ausfällt. Das kostet extra, spart aber Chaos und versteckte Kosten.
+
+### 7. Grafiken und Druckdaten unterschätzen
+
+Ein Banner sieht auf dem Monitor in 72 dpi ganz anders aus als in 300 dpi gedruckt. Farben wirken anders. Schriften sind unleserlich. Viele Aussteller sind hinterher überrascht von der Druckqualität.
+
+**Lösung:** Lasst Probedrucke machen, wenn das möglich ist. Und vertraut bei Druckdaten auf professionelle Grafikagenturen – das ist ihr Handwerk.
+
+### 8. Keine Nachbereitung
+
+Ihr habt 200 Visitenkarten gesammelt und denkt: "Jemand kümmert sich drum." Das funktioniert nicht. Nach der Messe müssen die Leads zeitnah kontaktiert werden – innerhalb von 48 Stunden ist ideal.
+
+**Lösung:** Plant die Nachbearbeitung VOR der Messe. Wer ist verantwortlich? Wie werden Leads dokumentiert und weitergeleitet?
+
+---
+
+## Tipps aus unserer täglichen Praxis
+
+Nach zehn Jahren Messebau möchten wir euch noch ein paar Insider-Tipps mitgeben:
+
+**Über-Kommunikation ist dein Freund.** Haltet euer Team auf dem Laufenden. Was macht der Messebauer gerade? Wie sieht der aktuelle Planungsstand aus? Ein kurzes Daily Standup per Zoom spart euch Missverständnisse und viel Chaos später.
+
+**Redundanzen bauen.** Wer ist der Backup, wenn der Verantwortliche ausfällt? Besonders bei kritischen Aufgaben wie Genehmigungen oder Logistik sollte mindestens eine Person informiert sein.
+
+**Vor-Ort-Unterstützung planen.** Wenn möglich, sollte jemand aus eurem Team VOR Ort sein, wenn der Aufbau startet. Das spart Missverständnisse und Fehler lassen sich ad hoc korrigieren.
+
+**Post-Messe-Energie sparen.** Nach der Messe seid ihr erschöpft – richtig. Aber die ersten 48 Stunden sind golden für Leads. Wenn nötig, reorganisiert euer Team, damit gutes Personal für die Nachbearbeitung zur Verfügung steht.
+
+**Messe als Routine etablieren.** Wenn ihr regelmäßig auf Messen seid, entwickelt ihr über die Zeit einen guten Prozess. Das klingt banal, aber Unternehmen, die jedes Jahr auf den gleichen Messen sind, haben weniger Stress als Einzelkämpfer.
+
+---
+
+## Fazit: Mit System zum Erfolg
+
+Ein erfolgreicher Messeauftritt ist kein Zufall. Es ist das Ergebnis von strukturierter Planung, klaren Fristen und einer guten Checkliste. Mit unserem Leitfaden seid ihr bestens vorbereitet.
+
+Der wichtigste Punkt: **Fangt früh an.** Wer neun Monate vor der Messe startet und sich an diese Phasen hält, wird deutlich entspannter in die Messe gehen – und deutlich bessere Ergebnisse erzielen.
+
+Falls ihr noch Fragen habt oder professionelle Unterstützung beim Standbau braucht – wir von S&S Messebau beraten euch gerne. Wir kennen die Prozesse, die Fristen und die Fallstricke. Und genau deshalb bauen wir stressfreie Messeauftritte.
+
+Viel Erfolg auf eurer nächsten Messe!`,
     category: 'Planung',
     imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop',
     publishedAt: Date.now() - 7 * 24 * 60 * 60 * 1000
