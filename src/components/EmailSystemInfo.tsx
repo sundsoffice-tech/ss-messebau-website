@@ -12,9 +12,11 @@ import {
   Warning
 } from '@phosphor-icons/react'
 import { getEmailStatus } from '@/lib/smtp-service'
+import { useTranslation } from '@/lib/i18n'
 
 export function EmailSystemInfo() {
   const [status, setStatus] = useState<any>(null)
+  const { t } = useTranslation()
 
   useEffect(() => {
     loadStatus()
@@ -38,18 +40,18 @@ export function EmailSystemInfo() {
           </div>
           <div>
             <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
-              📧 E-Mail-Versand
+              📧 {t('emailsys.title')}
               {status && (
                 <Badge variant={status.testMode ? 'secondary' : 'default'} className="gap-1">
                   {status.testMode ? (
                     <>
                       <Warning className="w-3 h-3" weight="fill" />
-                      Test-Modus
+                      {t('emailsys.testMode')}
                     </>
                   ) : (
                     <>
                       <CheckCircle className="w-3 h-3" weight="fill" />
-                      Live ({status.provider.toUpperCase()})
+                      {t('emailsys.live')} ({status.provider.toUpperCase()})
                     </>
                   )}
                 </Badge>
@@ -57,9 +59,9 @@ export function EmailSystemInfo() {
             </h3>
             <p className="text-sm text-muted-foreground">
               {status?.testMode ? (
-                <>E-Mails werden simuliert. Konfigurieren Sie SendGrid/AWS SES im Admin-Dashboard für echten Versand.</>
+                <>{t('emailsys.testDesc')}</>
               ) : (
-                <>Auftragsbestätigungen werden automatisch an <strong>info@sunds-messebau.de</strong> und den Kunden versendet.</>
+                <>{t('emailsys.liveDesc').replace('{email}', 'info@sunds-messebau.de')}</>
               )}
             </p>
           </div>
@@ -68,24 +70,24 @@ export function EmailSystemInfo() {
         <div className="bg-background/50 rounded-lg p-4 space-y-3">
           <h4 className="font-semibold text-sm flex items-center gap-2">
             <CheckCircle className="w-4 h-4 text-primary" weight="fill" />
-            Automatischer Versand
+            {t('emailsys.autoSend')}
           </h4>
           <div className="space-y-2 text-sm">
             <div className="flex items-start gap-2">
               <CaretRight className="w-4 h-4 text-primary mt-0.5 shrink-0" weight="bold" />
-              <span>E-Mail an <strong>info@sunds-messebau.de</strong> mit vollständigen Bestelldetails</span>
+              <span>{t('emailsys.toCompany').replace('{email}', 'info@sunds-messebau.de')}</span>
             </div>
             <div className="flex items-start gap-2">
               <CaretRight className="w-4 h-4 text-primary mt-0.5 shrink-0" weight="bold" />
-              <span>Bestätigung an Kunden mit Bestellnummer und nächsten Schritten</span>
+              <span>{t('emailsys.toCustomer')}</span>
             </div>
             <div className="flex items-start gap-2">
               <CaretRight className="w-4 h-4 text-primary mt-0.5 shrink-0" weight="bold" />
-              <span>Hochgeladene Druckdaten werden als Anhang mitgesendet</span>
+              <span>{t('emailsys.attachments')}</span>
             </div>
             <div className="flex items-start gap-2">
               <CaretRight className="w-4 h-4 text-primary mt-0.5 shrink-0" weight="bold" />
-              <span>Professionelles HTML-E-Mail-Design mit Firmenbranding</span>
+              <span>{t('emailsys.htmlEmail')}</span>
             </div>
           </div>
         </div>
@@ -94,8 +96,7 @@ export function EmailSystemInfo() {
           <Alert>
             <Info className="w-4 h-4" />
             <AlertDescription className="text-sm">
-              <strong>Hinweis:</strong> Im Test-Modus werden E-Mails nur simuliert und in der Browser-Konsole angezeigt. 
-              Öffnen Sie das Admin-Dashboard, um SendGrid oder AWS SES zu konfigurieren.
+              <strong>{t('emailsys.testHintLabel')}:</strong> {t('emailsys.testHint')}
             </AlertDescription>
           </Alert>
         )}
@@ -104,8 +105,7 @@ export function EmailSystemInfo() {
           <Alert>
             <CheckCircle className="w-4 h-4" />
             <AlertDescription className="text-sm">
-              <strong>Live-Modus aktiv:</strong> E-Mails werden über {status?.provider.toUpperCase()} versendet. 
-              Alle Nachrichten werden an echte E-Mail-Adressen zugestellt.
+              <strong>{t('emailsys.liveHintLabel')}:</strong> {t('emailsys.liveHint').replace('{provider}', status?.provider?.toUpperCase() || '')}
             </AlertDescription>
           </Alert>
         )}
@@ -116,12 +116,12 @@ export function EmailSystemInfo() {
             size="sm"
             onClick={() => window.location.hash = '/admin'}
           >
-            Admin Dashboard öffnen
+            {t('emailsys.adminBtn')}
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
           <Badge variant="secondary" className="gap-1">
             <CheckCircle className="w-3 h-3" weight="fill" />
-            Integriert
+            {t('emailsys.integrated')}
           </Badge>
         </div>
       </div>

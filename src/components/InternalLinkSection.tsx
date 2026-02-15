@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { ArrowRight } from '@phosphor-icons/react'
+import { useTranslation } from '@/lib/i18n'
 
 interface InternalLink {
   label: string
@@ -13,18 +14,21 @@ interface InternalLinkSectionProps {
 }
 
 export const InternalLinkSection = memo(function InternalLinkSection({ 
-  title = 'Weiterführende Seiten', 
+  title, 
   links 
 }: InternalLinkSectionProps) {
+  const { t } = useTranslation()
+  const resolvedTitle = title || t('links.title')
+
   const handleNavigation = (hash: string, event: React.MouseEvent) => {
     event.preventDefault()
     window.location.hash = hash
   }
 
   return (
-    <nav aria-label={title} className="py-10 md:py-14">
+    <nav aria-label={resolvedTitle} className="py-10 md:py-14">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-xl md:text-2xl font-bold mb-6">{title}</h2>
+        <h2 className="text-xl md:text-2xl font-bold mb-6">{resolvedTitle}</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {links.map((link) => (
             <a

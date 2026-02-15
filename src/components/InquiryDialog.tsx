@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 import { ContactInquiry } from '@/lib/types'
 import { useKV } from '@/hooks/use-kv'
 import { trackFormSubmit } from '@/lib/analytics'
+import { useTranslation } from '@/lib/i18n'
 
 interface InquiryDialogProps {
   open: boolean
@@ -20,6 +21,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
   const [inquiries, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const { t } = useTranslation()
 
   const [formData, setFormData] = useState({
     name: '',
@@ -35,23 +37,23 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
     const newErrors: Record<string, string> = {}
     
     if (!formData.name.trim()) {
-      newErrors.name = 'Bitte geben Sie Ihren Namen ein'
+      newErrors.name = t('inquiry.name.error')
     }
     
     if (!formData.email.trim()) {
-      newErrors.email = 'Bitte geben Sie Ihre E-Mail-Adresse ein'
+      newErrors.email = t('inquiry.email.error')
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Bitte geben Sie eine gültige E-Mail-Adresse ein'
+      newErrors.email = t('inquiry.email.invalid')
     }
     
     if (!formData.company.trim()) {
-      newErrors.company = 'Bitte geben Sie Ihren Firmennamen ein'
+      newErrors.company = t('inquiry.company.error')
     }
     
     if (!formData.message.trim()) {
-      newErrors.message = 'Bitte beschreiben Sie Ihr Projekt'
+      newErrors.message = t('inquiry.message.error')
     } else if (formData.message.trim().length < 10) {
-      newErrors.message = 'Bitte geben Sie mindestens 10 Zeichen ein'
+      newErrors.message = t('inquiry.message.minLength')
     }
     
     setErrors(newErrors)
@@ -63,7 +65,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
     setLoading(true)
 
     if (!validateForm()) {
-      toast.error('Bitte überprüfen Sie Ihre Eingaben')
+      toast.error(t('inquiry.validation'))
       setLoading(false)
       return
     }
@@ -81,7 +83,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
       messen_pro_jahr: formData.messesProJahr || 'nicht_angegeben',
     })
 
-    toast.success('Vielen Dank! Wir melden uns innerhalb von 24 Stunden bei Ihnen.')
+    toast.success(t('inquiry.success'))
     
     setFormData({
       name: '',
@@ -108,19 +110,19 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle className="text-xl sm:text-2xl">Unverbindliche Projektberatung</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl">{t('inquiry.title')}</DialogTitle>
           <DialogDescription className="text-sm sm:text-base">
-            Wir melden uns innerhalb von 24 Stunden mit ersten Ideen und einer groben Kosteneinschätzung zu Ihrem Messestand oder Ausbauprojekt.
+            {t('inquiry.desc')}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 mt-4">
           <fieldset className="space-y-4">
-            <legend className="text-base font-semibold mb-2 text-foreground">Ihre Kontaktdaten</legend>
+            <legend className="text-base font-semibold mb-2 text-foreground">{t('inquiry.contact')}</legend>
             
             <div className="space-y-2">
               <Label htmlFor="name" className="text-sm font-medium">
-                Name <span className="text-destructive" aria-label="Pflichtfeld">*</span>
+                {t('inquiry.name')} <span className="text-destructive" aria-label={t('inquiry.required')}>*</span>
               </Label>
               <Input
                 id="name"
@@ -131,7 +133,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
                   setFormData({ ...formData, name: e.target.value })
                   clearError('name')
                 }}
-                placeholder="Max Mustermann"
+                placeholder={t('inquiry.name.placeholder')}
                 className="min-h-[44px] text-base"
                 required
                 aria-required="true"
@@ -151,7 +153,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
 
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium">
-                E-Mail <span className="text-destructive" aria-label="Pflichtfeld">*</span>
+                {t('inquiry.email')} <span className="text-destructive" aria-label={t('inquiry.required')}>*</span>
               </Label>
               <Input
                 id="email"
@@ -163,7 +165,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
                   setFormData({ ...formData, email: e.target.value })
                   clearError('email')
                 }}
-                placeholder="max@mustermann.de"
+                placeholder={t('inquiry.email.placeholder')}
                 className="min-h-[44px] text-base"
                 required
                 aria-required="true"
@@ -183,7 +185,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
 
             <div className="space-y-2">
               <Label htmlFor="company" className="text-sm font-medium">
-                Firma <span className="text-destructive" aria-label="Pflichtfeld">*</span>
+                {t('inquiry.company')} <span className="text-destructive" aria-label={t('inquiry.required')}>*</span>
               </Label>
               <Input
                 id="company"
@@ -194,7 +196,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
                   setFormData({ ...formData, company: e.target.value })
                   clearError('company')
                 }}
-                placeholder="Mustermann GmbH"
+                placeholder={t('inquiry.company.placeholder')}
                 className="min-h-[44px] text-base"
                 required
                 aria-required="true"
@@ -214,7 +216,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
 
             <div className="space-y-2">
               <Label htmlFor="message" className="text-sm font-medium">
-                Kurz Ihr Projekt <span className="text-destructive" aria-label="Pflichtfeld">*</span>
+                {t('inquiry.message')} <span className="text-destructive" aria-label={t('inquiry.required')}>*</span>
               </Label>
               <Textarea
                 id="message"
@@ -223,7 +225,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
                   setFormData({ ...formData, message: e.target.value })
                   clearError('message')
                 }}
-                placeholder="z.B. Messe/Ort, Zeitraum, ca. m², besondere Wünsche …"
+                placeholder={t('inquiry.message.placeholder')}
                 rows={4}
                 className="text-base resize-none"
                 required
@@ -241,7 +243,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
                 </p>
               ) : (
                 <p id="message-hint" className="text-xs text-muted-foreground">
-                  Tipp: Messe, Ort, Zeitraum, ungefähre Standfläche und besondere Wünsche helfen uns, schneller ein passendes Angebot zu erstellen.
+                  {t('inquiry.message.hint')}
                 </p>
               )}
             </div>
@@ -249,11 +251,11 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
 
           <fieldset className="space-y-4">
             <legend className="text-base font-semibold mb-2 text-foreground">
-              Optionale Angaben <span className="text-xs font-normal text-muted-foreground ml-2">– helfen uns bei der Ersteinschätzung</span>
+              {t('inquiry.optional')} <span className="text-xs font-normal text-muted-foreground ml-2">{t('inquiry.optional.hint')}</span>
             </legend>
 
             <div className="space-y-2">
-              <Label htmlFor="phone" className="text-sm font-medium">Telefon</Label>
+              <Label htmlFor="phone" className="text-sm font-medium">{t('inquiry.phone')}</Label>
               <Input
                 id="phone"
                 type="tel"
@@ -261,44 +263,44 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
                 inputMode="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="+49 123 456789"
+                placeholder={t('inquiry.phone.placeholder')}
                 className="min-h-[44px] text-base"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="budget" className="text-sm font-medium">Budget</Label>
+                <Label htmlFor="budget" className="text-sm font-medium">{t('inquiry.budget')}</Label>
                 <Select
                   value={formData.budget}
                   onValueChange={(value) => setFormData({ ...formData, budget: value })}
                 >
                   <SelectTrigger id="budget" className="min-h-[44px] text-base w-full">
-                    <SelectValue placeholder="Bitte wählen" />
+                    <SelectValue placeholder={t('inquiry.budget.placeholder')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="bis-10000">bis 10.000 €</SelectItem>
-                    <SelectItem value="10000-30000">10.000 – 30.000 €</SelectItem>
-                    <SelectItem value="ueber-30000">über 30.000 €</SelectItem>
-                    <SelectItem value="unbekannt">Noch unklar</SelectItem>
+                    <SelectItem value="bis-10000">{t('inquiry.budget.small')}</SelectItem>
+                    <SelectItem value="10000-30000">{t('inquiry.budget.medium')}</SelectItem>
+                    <SelectItem value="ueber-30000">{t('inquiry.budget.large')}</SelectItem>
+                    <SelectItem value="unbekannt">{t('inquiry.budget.unknown')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="messesProJahr" className="text-sm font-medium">Messen pro Jahr</Label>
+                <Label htmlFor="messesProJahr" className="text-sm font-medium">{t('inquiry.fairs')}</Label>
                 <Select
                   value={formData.messesProJahr}
                   onValueChange={(value) => setFormData({ ...formData, messesProJahr: value })}
                 >
                   <SelectTrigger id="messesProJahr" className="min-h-[44px] text-base w-full">
-                    <SelectValue placeholder="Bitte wählen" />
+                    <SelectValue placeholder={t('inquiry.budget.placeholder')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1-2">1–2 Messen</SelectItem>
-                    <SelectItem value="3-5">3–5 Messen</SelectItem>
-                    <SelectItem value="6-10">6–10 Messen</SelectItem>
-                    <SelectItem value="mehr-als-10">Mehr als 10</SelectItem>
+                    <SelectItem value="1-2">{t('inquiry.fairs.1')}</SelectItem>
+                    <SelectItem value="3-5">{t('inquiry.fairs.2')}</SelectItem>
+                    <SelectItem value="6-10">{t('inquiry.fairs.3')}</SelectItem>
+                    <SelectItem value="mehr-als-10">{t('inquiry.fairs.4')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -313,28 +315,28 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
                 onClick={() => onOpenChange(false)}
                 disabled={loading}
                 className="min-h-[48px] w-full sm:w-auto text-base"
-                aria-label="Dialog schließen"
+                aria-label={t('inquiry.cancelAria')}
               >
-                Abbrechen
+                {t('inquiry.cancel')}
               </Button>
               <Button
                 type="submit"
                 disabled={loading}
                 className="bg-accent hover:bg-accent/90 min-h-[48px] w-full sm:flex-1 text-base font-medium"
-                aria-label={loading ? 'Anfrage wird gesendet' : 'Projektberatung anfragen'}
+                aria-label={loading ? t('inquiry.submittingAria') : t('inquiry.submitAria')}
               >
-                {loading ? 'Wird gesendet...' : 'Projektberatung anfragen'}
+                {loading ? t('inquiry.submitting') : t('inquiry.submit')}
               </Button>
             </div>
 
             <p className="text-xs text-muted-foreground text-center leading-relaxed">
-              Wir erstellen jedes Angebot individuell. Unser Fokus: keine unnötigen Kosten und langfristig effiziente Lösungen.
+              {t('inquiry.note')}
             </p>
 
             <div className="flex items-start gap-2 text-xs text-muted-foreground justify-center">
               <ShieldCheck className="h-4 w-4 shrink-0 mt-0.5 text-primary" weight="fill" aria-hidden="true" />
               <p>
-                Wir nutzen Ihre Daten ausschließlich zur Bearbeitung Ihrer Anfrage.{' '}
+                {t('inquiry.privacy')}{' '}
                 <a
                   href="#/datenschutz"
                   onClick={(e) => {
@@ -343,7 +345,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
                   }}
                   className="underline hover:text-primary transition-colors"
                 >
-                  Datenschutzerklärung
+                  {t('inquiry.privacyLink')}
                 </a>
               </p>
             </div>
