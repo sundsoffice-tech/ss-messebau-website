@@ -97,7 +97,11 @@ export function NotificationConfigPanel() {
     const url = newWebhookUrl.trim()
     if (!url) return
     try {
-      new URL(url)
+      const parsed = new URL(url)
+      if (!['https:', 'http:'].includes(parsed.protocol)) {
+        toast.error('Nur HTTPS und HTTP URLs sind erlaubt')
+        return
+      }
     } catch {
       toast.error('Bitte geben Sie eine gültige URL ein')
       return

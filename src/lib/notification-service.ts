@@ -28,6 +28,15 @@ const DEFAULT_NOTIFICATION_CONFIG: NotificationConfig = {
   sendCustomerConfirmation: true,
 }
 
+function escapeHtml(str: string): string {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 export async function getNotificationConfig(): Promise<NotificationConfig> {
   try {
     const config = await window.spark.kv.get<NotificationConfig>('notification_config')
@@ -44,11 +53,11 @@ export async function saveNotificationConfig(config: NotificationConfig): Promis
 function generateSubject(type: NotificationType, data: Record<string, any>): string {
   switch (type) {
     case 'inquiry':
-      return `Neue Anfrage von ${data.name || 'Unbekannt'} – ${data.company || ''}`
+      return `Neue Anfrage von ${escapeHtml(data.name || 'Unbekannt')} – ${escapeHtml(data.company || '')}`
     case 'kontakt':
-      return `Neue Kontaktanfrage von ${data.name || 'Unbekannt'}`
+      return `Neue Kontaktanfrage von ${escapeHtml(data.name || 'Unbekannt')}`
     case 'banner':
-      return `Neue Banner-Bestellung: ${data.firmaKontakt || data.company || 'Unbekannt'}`
+      return `Neue Banner-Bestellung: ${escapeHtml(data.firmaKontakt || data.company || 'Unbekannt')}`
     default:
       return 'Neue Formularanfrage'
   }
@@ -59,8 +68,8 @@ function generateCompanyEmailHtml(type: NotificationType, data: Record<string, a
     .filter(([, v]) => v !== undefined && v !== '' && v !== false)
     .map(([k, v]) => `
       <div style="display:flex;margin:8px 0;">
-        <div style="font-weight:bold;min-width:180px;color:#555;">${formatLabel(k)}:</div>
-        <div style="color:#333;">${typeof v === 'boolean' ? (v ? '✅ Ja' : '❌ Nein') : String(v)}</div>
+        <div style="font-weight:bold;min-width:180px;color:#555;">${escapeHtml(formatLabel(k))}:</div>
+        <div style="color:#333;">${typeof v === 'boolean' ? (v ? '✅ Ja' : '❌ Nein') : escapeHtml(String(v))}</div>
       </div>
     `)
     .join('')
@@ -75,14 +84,14 @@ function generateCompanyEmailHtml(type: NotificationType, data: Record<string, a
   <div style="max-width:700px;margin:0 auto;padding:20px;">
     <div style="background:linear-gradient(135deg,#3B4CC0 0%,#2A3A9F 100%);color:white;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
       <h1 style="margin:0;">📨 Neue ${typeLabel}</h1>
-      <p style="margin:10px 0 0;opacity:0.9;">S&S Messebau GbR</p>
+      <p style="margin:10px 0 0;opacity:0.9;">S&amp;S Messebau GbR</p>
     </div>
     <div style="background:#f9f9f9;padding:20px;border-radius:0 0 8px 8px;border:1px solid #e0e0e0;border-top:none;">
-      <p style="color:#888;font-size:13px;">ID: ${inquiryId}</p>
+      <p style="color:#888;font-size:13px;">ID: ${escapeHtml(inquiryId)}</p>
       ${rows}
     </div>
     <div style="background:#333;color:white;padding:20px;text-align:center;border-radius:0 0 8px 8px;margin-top:20px;">
-      <p style="margin:0 0 10px;"><strong>S&S Messebau GbR</strong></p>
+      <p style="margin:0 0 10px;"><strong>S&amp;S Messebau GbR</strong></p>
       <p style="margin:0;font-size:14px;opacity:0.9;">
         Marienstraße 37 | 41836 Hückelhoven<br>
         Mobil: +49 1514 0368754 | info@sundsmessebau.com
@@ -94,7 +103,7 @@ function generateCompanyEmailHtml(type: NotificationType, data: Record<string, a
 }
 
 function generateCustomerConfirmationHtml(type: NotificationType, data: Record<string, any>, inquiryId: string): string {
-  const name = data.ansprechpartner || data.name || 'Kunde'
+  const name = escapeHtml(data.ansprechpartner || data.name || 'Kunde')
   const typeLabel = type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'
 
   return `
@@ -109,18 +118,18 @@ function generateCustomerConfirmationHtml(type: NotificationType, data: Record<s
     </div>
     <div style="background:white;padding:30px;border:1px solid #e0e0e0;">
       <p>Sehr geehrte/r ${name},</p>
-      <p>vielen Dank für Ihre ${typeLabel} bei S&S Messebau GbR!</p>
+      <p>vielen Dank für Ihre ${typeLabel} bei S&amp;S Messebau GbR!</p>
       <p>Wir haben Ihre Nachricht erfolgreich erhalten und werden uns <strong>innerhalb von 24 Stunden</strong> bei Ihnen melden.</p>
       <div style="background:#f5f7fa;padding:20px;border-radius:8px;margin:20px 0;border-left:4px solid #3B4CC0;">
-        <p style="margin:0;"><strong>Referenz-Nr.:</strong> #${inquiryId.slice(-8)}</p>
+        <p style="margin:0;"><strong>Referenz-Nr.:</strong> #${escapeHtml(inquiryId.slice(-8))}</p>
       </div>
       <p style="margin-top:30px;">
         Mit freundlichen Grüßen<br>
-        <strong>Ihr S&S Messebau Team</strong>
+        <strong>Ihr S&amp;S Messebau Team</strong>
       </p>
     </div>
     <div style="background:#333;color:white;padding:20px;text-align:center;border-radius:0 0 8px 8px;">
-      <p style="margin:0 0 10px;"><strong>S&S Messebau GbR</strong></p>
+      <p style="margin:0 0 10px;"><strong>S&amp;S Messebau GbR</strong></p>
       <p style="margin:0;font-size:14px;opacity:0.9;">
         Marienstraße 37 | 41836 Hückelhoven<br>
         Mobil: +49 1514 0368754 | info@sundsmessebau.com
@@ -174,8 +183,15 @@ function formatLabel(key: string): string {
 
 async function sendWebhook(webhook: WebhookConfig, type: NotificationType, data: Record<string, any>, inquiryId: string): Promise<boolean> {
   try {
+    // Validate webhook URL protocol
+    const parsed = new URL(webhook.url)
+    if (!['https:', 'http:'].includes(parsed.protocol)) {
+      console.error('Webhook-Fehler: Ungültiges Protokoll', parsed.protocol)
+      return false
+    }
+
     const payload = {
-      text: `📨 Neue ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'} von ${data.name || data.firmaKontakt || 'Unbekannt'} (#${inquiryId.slice(-8)})`,
+      text: `📨 Neue ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'} von ${escapeHtml(data.name || data.firmaKontakt || 'Unbekannt')} (#${inquiryId.slice(-8)})`,
       type,
       inquiryId,
       data,
