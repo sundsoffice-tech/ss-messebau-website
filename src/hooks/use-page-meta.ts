@@ -6,6 +6,8 @@ interface PageMeta {
   ogType?: string
 }
 
+const DEFAULT_OG_IMAGE = 'https://sunds-messebau.de/og-image.jpg'
+
 const PAGE_META: Record<string, PageMeta> = {
   '/': {
     title: 'S&S Messebau – Messestand 20–200 m² | Messebau NRW',
@@ -132,6 +134,11 @@ export function usePageMeta(page: string) {
       ogType.setAttribute('content', meta.ogType || 'website')
     }
 
+    const ogImage = document.querySelector('meta[property="og:image"]')
+    if (ogImage) {
+      ogImage.setAttribute('content', DEFAULT_OG_IMAGE)
+    }
+
     const twitterTitle = document.querySelector('meta[name="twitter:title"]')
     if (twitterTitle) {
       twitterTitle.setAttribute('content', meta.title)
@@ -140,6 +147,11 @@ export function usePageMeta(page: string) {
     const twitterDescription = document.querySelector('meta[name="twitter:description"]')
     if (twitterDescription) {
       twitterDescription.setAttribute('content', meta.description)
+    }
+
+    const twitterImage = document.querySelector('meta[name="twitter:image"]')
+    if (twitterImage) {
+      twitterImage.setAttribute('content', DEFAULT_OG_IMAGE)
     }
   }, [page])
 }

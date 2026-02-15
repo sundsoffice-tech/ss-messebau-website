@@ -33,7 +33,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
+import logo from '@/assets/logo/ss-messebau-logo.png'
 import { parseDeepLink } from '@/lib/deep-linking'
 import { useTranslation } from '@/lib/i18n'
 
@@ -459,29 +459,30 @@ export function Header({ onOpenInquiry }: HeaderProps) {
           <a
             href="#/"
             onClick={(e) => handleNavigation('/', e)}
-            className="flex items-center gap-2 sm:gap-3 transition-all hover:opacity-80 focus-visible:opacity-80 flex-shrink-0 min-h-[44px] min-w-[44px] -ml-2 pl-2 group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="flex items-center gap-2 sm:gap-3 flex-shrink-0 min-h-[44px] min-w-[44px] -ml-2 pl-2 group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label="S&S Messebau - Zur Startseite"
             aria-current={currentPath === '/' ? 'page' : undefined}
           >
-            <div className={`relative flex-shrink-0 transition-all duration-300 ${
+            <div className={`relative flex-shrink-0 bg-primary/8 rounded-xl group-hover:bg-primary/12 transition-all duration-500 ease-out ${
               scrolled ? 'w-8 h-8 sm:w-10 sm:h-10' : 'w-9 h-9 sm:w-12 sm:h-12'
             }`}>
               <img 
                 src={logo} 
-                alt="S&S Messebau Logo"
+                alt=""
                 width="48"
                 height="48"
                 loading="eager"
-                className="w-full h-full object-contain filter drop-shadow-sm group-hover:drop-shadow-md transition-all duration-300"
+                className="w-full h-full object-contain p-1 group-hover:scale-105 transition-all duration-500 ease-out"
               />
             </div>
             <div className="hidden sm:block">
-              <div className={`font-bold text-foreground transition-all duration-300 tracking-tight leading-tight ${
+              <div className={`font-bold transition-all duration-500 ease-out tracking-tight leading-tight ${
                 scrolled ? 'text-sm sm:text-lg' : 'text-base sm:text-xl'
               }`}>
-                S&S Messebau
+                <span className="text-primary">S&S</span>{' '}
+                <span className="text-foreground">Messebau</span>
               </div>
-              <div className={`text-muted-foreground hidden sm:block transition-all duration-300 tracking-wide ${
+              <div className={`text-muted-foreground hidden sm:block transition-all duration-500 ease-out uppercase tracking-widest ${
                 scrolled ? 'text-[10px]' : 'text-xs'
               }`}>
                 {t('header.subtitle')}
@@ -856,17 +857,20 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 <nav aria-label={t('header.nav.mobileNav')} className="flex flex-col h-full">
                   <div className="flex items-center justify-between gap-3 px-4 mb-6 pt-2 flex-shrink-0">
                     <div className="flex items-center gap-3">
-                      <div className="relative w-10 h-10 flex-shrink-0">
+                      <div className="relative w-10 h-10 flex-shrink-0 bg-primary/8 rounded-xl">
                         <img 
                           src={logo} 
-                          alt="S&S Messebau Logo"
+                          alt=""
                           loading="eager" 
-                          className="w-full h-full object-contain filter drop-shadow-sm" 
+                          className="w-full h-full object-contain p-1" 
                         />
                       </div>
                       <div className="flex flex-col gap-0.5">
-                        <span className="font-bold text-lg leading-none tracking-tight text-foreground">{t('header.nav.menu')}</span>
-                        <span className="text-[10px] text-muted-foreground tracking-wide leading-none">{t('header.nav.navigation')}</span>
+                        <span className="font-bold text-lg leading-none tracking-tight">
+                          <span className="text-primary">S&S</span>{' '}
+                          <span className="text-foreground">{t('header.nav.menu')}</span>
+                        </span>
+                        <span className="text-[10px] text-muted-foreground uppercase tracking-widest leading-none">{t('header.nav.navigation')}</span>
                       </div>
                     </div>
                     <SheetClose asChild>
