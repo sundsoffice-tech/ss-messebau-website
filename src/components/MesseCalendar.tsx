@@ -14,6 +14,7 @@ function formatDateRange(startDate: string, endDate: string): string {
 }
 
 function EventCard({ event }: { event: MesseEvent }) {
+  const { t } = useTranslation()
   const daysUntil = getDaysUntil(event.startDate)
   const isActive = daysUntil === 0
 
@@ -23,7 +24,7 @@ function EventCard({ event }: { event: MesseEvent }) {
         <div className="absolute top-3 right-3">
           <Badge className="bg-accent text-accent-foreground gap-1">
             <Star className="h-3 w-3" weight="fill" />
-            S&S vor Ort
+            {t('aktuelles.calendar.ssPresent')}
           </Badge>
         </div>
       )}
@@ -49,11 +50,11 @@ function EventCard({ event }: { event: MesseEvent }) {
           {!isActive && (
             <span className="flex items-center gap-1 text-primary font-medium">
               <Clock className="h-4 w-4 shrink-0" />
-              in {daysUntil} Tagen
+              {t('aktuelles.calendar.inDays').replace('{days}', String(daysUntil))}
             </span>
           )}
           {isActive && (
-            <Badge className="bg-green-600 text-white">Läuft jetzt</Badge>
+            <Badge className="bg-green-600 text-white">{t('aktuelles.calendar.ongoing')}</Badge>
           )}
         </div>
         {event.website && (
@@ -63,7 +64,7 @@ function EventCard({ event }: { event: MesseEvent }) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-1"
           >
-            Zur Messewebsite
+            {t('aktuelles.calendar.visitWebsite')}
             <ArrowSquareOut className="h-3.5 w-3.5" />
           </a>
         )}
