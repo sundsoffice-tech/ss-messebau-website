@@ -3,8 +3,10 @@ import { Separator } from '@/components/ui/separator'
 import { Phone, Envelope, MapPin } from '@phosphor-icons/react'
 import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
 import { navigateToPageAndSection } from '@/lib/deep-linking'
+import { useTranslation } from '@/lib/i18n'
 
 export const Footer = memo(function Footer() {
+  const { t } = useTranslation()
   const handleNavigation = (path: string, event?: React.MouseEvent) => {
     if (event) {
       event.preventDefault()
@@ -39,21 +41,20 @@ export const Footer = memo(function Footer() {
               </div>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Full-Service Messebau, Eventbau und Ladenbau aus Hückelhoven. 
-              Persönliche Betreuung, starkes Netzwerk, faire Preise.
+              {t('footer.company.desc')}
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-3 sm:mb-4 text-base">Leistungen</h3>
-            <nav aria-label="Leistungen Navigation">
+            <h3 className="font-semibold mb-3 sm:mb-4 text-base">{t('footer.services')}</h3>
+            <nav aria-label={t('footer.servicesNav')}>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <button 
                     onClick={(e) => handleSectionNavigation('/leistungen', 'messebau', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Messebau
+                    {t('footer.services.messebau')}
                   </button>
                 </li>
                 <li>
@@ -61,7 +62,7 @@ export const Footer = memo(function Footer() {
                     onClick={(e) => handleSectionNavigation('/leistungen', 'eventbau', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Eventbau
+                    {t('footer.services.eventbau')}
                   </button>
                 </li>
                 <li>
@@ -69,7 +70,7 @@ export const Footer = memo(function Footer() {
                     onClick={(e) => handleSectionNavigation('/leistungen', 'ladenbau', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Ladenbau
+                    {t('footer.services.ladenbau')}
                   </button>
                 </li>
                 <li>
@@ -77,7 +78,7 @@ export const Footer = memo(function Footer() {
                     onClick={(e) => handleSectionNavigation('/leistungen', 'touren', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Touren & Messeauftritte
+                    {t('footer.services.touren')}
                   </button>
                 </li>
                 <li>
@@ -85,7 +86,7 @@ export const Footer = memo(function Footer() {
                     onClick={(e) => handleSectionNavigation('/leistungen', 'showrooms', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Showrooms & Brand Spaces
+                    {t('footer.services.showrooms')}
                   </button>
                 </li>
                 <li>
@@ -93,7 +94,7 @@ export const Footer = memo(function Footer() {
                     onClick={(e) => handleNavigation('/bannerrahmen', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Bannerrahmen
+                    {t('footer.services.banner')}
                   </button>
                 </li>
                 <li>
@@ -101,7 +102,7 @@ export const Footer = memo(function Footer() {
                     onClick={(e) => handleNavigation('/nachhaltigkeit', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Nachhaltigkeit
+                    {t('footer.services.sustainability')}
                   </button>
                 </li>
               </ul>
@@ -109,15 +110,15 @@ export const Footer = memo(function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-3 sm:mb-4 text-base">Unternehmen</h3>
-            <nav aria-label="Unternehmen Navigation">
+            <h3 className="font-semibold mb-3 sm:mb-4 text-base">{t('footer.company')}</h3>
+            <nav aria-label={t('footer.companyNav')}>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <button 
                     onClick={(e) => handleNavigation('/ueber-uns', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Über uns
+                    {t('footer.company.about')}
                   </button>
                 </li>
                 <li>
@@ -125,7 +126,7 @@ export const Footer = memo(function Footer() {
                     onClick={(e) => handleNavigation('/referenzen', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Referenzen
+                    {t('footer.company.references')}
                   </button>
                 </li>
                 <li>
@@ -133,7 +134,7 @@ export const Footer = memo(function Footer() {
                     onClick={(e) => handleNavigation('/blog', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Blog
+                    {t('footer.company.blog')}
                   </button>
                 </li>
                 <li>
@@ -141,7 +142,7 @@ export const Footer = memo(function Footer() {
                     onClick={(e) => handleNavigation('/kontakt', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    Kontakt
+                    {t('footer.company.contact')}
                   </button>
                 </li>
               </ul>
@@ -149,7 +150,7 @@ export const Footer = memo(function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-3 sm:mb-4 text-base">Kontakt</h3>
+            <h3 className="font-semibold mb-3 sm:mb-4 text-base">{t('footer.contact')}</h3>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2 text-muted-foreground">
                 <MapPin className="h-5 w-5 shrink-0 mt-0.5" aria-hidden="true" />
@@ -163,7 +164,7 @@ export const Footer = memo(function Footer() {
                 <a 
                   href="tel:+4915140368754" 
                   className="hover:text-primary focus-visible:text-primary transition-colors py-2 focus-visible:outline-none focus-visible:underline"
-                  aria-label="Anrufen: +49 1514 0368754"
+                  aria-label={t('footer.contact.call') + ': +49 1514 0368754'}
                 >
                   +49 1514 0368754
                 </a>
@@ -173,7 +174,7 @@ export const Footer = memo(function Footer() {
                 <a 
                   href="mailto:info@sundsmessebau.com" 
                   className="hover:text-primary focus-visible:text-primary transition-colors py-2 break-all focus-visible:outline-none focus-visible:underline"
-                  aria-label="E-Mail senden an info@sundsmessebau.com"
+                  aria-label={t('footer.contact.email') + ' info@sundsmessebau.com'}
                 >
                   info@sundsmessebau.com
                 </a>
@@ -186,27 +187,27 @@ export const Footer = memo(function Footer() {
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <div className="text-center sm:text-left">
-            © {new Date().getFullYear()} S&S Messebau GbR. Alle Rechte vorbehalten.
+            © {new Date().getFullYear()} S&S Messebau GbR. {t('footer.rights')}.
           </div>
-          <nav aria-label="Rechtliche Links">
+          <nav aria-label={t('footer.legal.nav')}>
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
               <button 
                 onClick={(e) => handleNavigation('/impressum', e)} 
                 className="hover:text-primary focus-visible:text-primary transition-colors min-h-[44px] py-2 focus-visible:outline-none focus-visible:underline"
               >
-                Impressum
+                {t('footer.legal.imprint')}
               </button>
               <button 
                 onClick={(e) => handleNavigation('/datenschutz', e)} 
                 className="hover:text-primary focus-visible:text-primary transition-colors min-h-[44px] py-2 focus-visible:outline-none focus-visible:underline"
               >
-                Datenschutz
+                {t('footer.legal.privacy')}
               </button>
               <button 
                 onClick={(e) => handleNavigation('/admin', e)} 
                 className="hover:text-primary focus-visible:text-primary transition-colors min-h-[44px] py-2 focus-visible:outline-none focus-visible:underline"
               >
-                Admin
+                {t('footer.legal.admin')}
               </button>
             </div>
           </nav>
