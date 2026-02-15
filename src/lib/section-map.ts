@@ -11,6 +11,7 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
     { id: 'advantages', label: 'Unsere Vorteile', page: '/' },
     { id: '48h-garantie', label: '48h-Angebotsgarantie', page: '/' },
     { id: 'references', label: 'Referenzen', page: '/' },
+    { id: 'process', label: 'Ablauf', page: '/' },
     { id: 'testimonials', label: 'Kundenstimmen', page: '/' },
     { id: 'cta', label: 'Kontakt', page: '/' }
   ],

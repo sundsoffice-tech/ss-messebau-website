@@ -50,8 +50,8 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleServiceNavigation = (_sectionId: string) => {
-    window.location.hash = '/leistungen'
+  const handleServiceNavigation = (sectionId: string) => {
+    window.location.hash = `/leistungen/${sectionId}`
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
