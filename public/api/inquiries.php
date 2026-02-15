@@ -95,6 +95,13 @@ function handleCreateInquiry(): void {
         return;
     }
 
+    $email = $input['email'] ?? '';
+    if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Invalid email address']);
+        return;
+    }
+
     $db = getDB();
     $stmt = $db->prepare('
         INSERT INTO inquiries (inquiry_id, type, name, email, company, phone, message, form_data)

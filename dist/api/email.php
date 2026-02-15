@@ -52,6 +52,12 @@ function handleEnqueue(): void {
         return;
     }
 
+    if (!filter_var($input['to_email'], FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Invalid to_email address']);
+        return;
+    }
+
     $db = getDB();
     $stmt = $db->prepare('
         INSERT OR REPLACE INTO email_queue (queue_id, to_email, subject, html_body, text_body,
