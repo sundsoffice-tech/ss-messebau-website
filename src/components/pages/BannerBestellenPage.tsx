@@ -189,8 +189,26 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
       await window.spark.kv.set(configId, configToSave)
 
       if (config) {
+        // Send via legacy email service (preserves detailed HTML templates)
         const { sendOrderConfirmationEmail } = await import('@/lib/email-service')
         await sendOrderConfirmationEmail({ config, configId })
+
+        // Also send via centralized notification service (webhooks, additional recipients)
+        const { sendFormNotification } = await import('@/lib/notification-service')
+        await sendFormNotification({
+          type: 'banner',
+          data: {
+            firmaKontakt: config.step6.firmaKontakt,
+            ansprechpartner: config.step6.ansprechpartner,
+            email: config.step6.email,
+            telefon: config.step6.telefon,
+            rahmenart: config.step1.rahmenart,
+            menge: config.step1.menge,
+            maße: `${config.step2.breite} × ${config.step2.hoehe} mm`,
+          },
+          inquiryId: configId,
+          customerEmail: config.step6.email,
+        })
       }
 
       setSubmitted(true)

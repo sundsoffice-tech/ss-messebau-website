@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { toast } from 'sonner'
@@ -14,6 +12,10 @@ import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { trackFormSubmit } from '@/lib/analytics'
 import { useScrollDepthTracking, useDwellTimeTracking } from '@/hooks/use-analytics'
+import { useFormSystem } from '@/hooks/use-form-system'
+import { FormField } from '@/components/form-system/FormField'
+import { sendFormNotification } from '@/lib/notification-service'
+import { FIELD_TOKENS } from '@/lib/form-system/field-registry'
 
 interface KontaktPageProps {
   onOpenInquiry: () => void
@@ -32,7 +34,7 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
   useScrollDepthTracking('kontakt')
   useDwellTimeTracking('kontakt')
 
-  const [loading, setLoading] = useState(false)
+  const [inquiries, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMessages, setChatMessages] = useKV<ChatMessage[]>('kontakt-chat-history', [
     { role: 'assistant', content: 'Guten Tag! Ich unterstütze Sie gerne bei allen Fragen rund um Ihren Messeauftritt.\n\nStellen Sie mir Fragen zu:\n• Budget und Kosten\n• Planung und Ablauf\n• Materialien und Systeme\n• Logistik und Organisation\n\nWie kann ich Ihnen weiterhelfen?' }
@@ -44,6 +46,42 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
   const [isTyping, setIsTyping] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const chatEndRef = useRef<HTMLDivElement>(null)
+
+  const form = useFormSystem({
+    context: 'kontakt',
+    onSubmit: async (data) => {
+      const inquiry: ContactInquiry = {
+        id: `inq-${Date.now()}`,
+        name: data.name,
+        company: data.company,
+        email: data.email,
+        phone: data.phone,
+        event: data.event,
+        size: data.size,
+        budget: data.budget,
+        message: data.message,
+        timestamp: Date.now(),
+      }
+
+      setInquiries((current) => [...(current || []), inquiry])
+
+      // Send notification via centralized service
+      await sendFormNotification({
+        type: 'kontakt',
+        data,
+        inquiryId: inquiry.id,
+        customerEmail: data.email,
+      })
+
+      trackFormSubmit('kontakt', {
+        budget: data.budget || 'nicht_angegeben',
+        size: data.size || 'nicht_angegeben',
+      })
+
+      toast.success(t(form.config.successKey))
+      form.reset()
+    },
+  })
   
   const {
     isListening,
@@ -64,18 +102,6 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
     onError: (error) => {
       toast.error(error)
     }
-  })
-
-  const [formData, setFormData] = useState({
-    name: '',
-    company: '',
-    email: '',
-    phone: '',
-    event: '',
-    size: '',
-    budget: '',
-    wunschtermin: '',
-    message: ''
   })
 
   const quickActions: QuickAction[] = [
@@ -145,53 +171,6 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
       return () => clearTimeout(timer)
     }
   }, [isTyping, typingText])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-
-    if (!formData.name || !formData.email || !formData.message) {
-      toast.error('Bitte füllen Sie alle Pflichtfelder aus')
-      setLoading(false)
-      return
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(formData.email)) {
-      toast.error('Bitte geben Sie eine gültige E-Mail-Adresse ein')
-      setLoading(false)
-      return
-    }
-
-    const inquiry: ContactInquiry = {
-      id: `inq-${Date.now()}`,
-      ...formData,
-      timestamp: Date.now()
-    }
-
-    setInquiries((current) => [...(current || []), inquiry])
-
-    trackFormSubmit('kontakt', {
-      budget: formData.budget || 'nicht_angegeben',
-      size: formData.size || 'nicht_angegeben',
-    })
-
-    toast.success('Vielen Dank! Wir melden uns innerhalb von 24 Stunden bei Ihnen.')
-    
-    setFormData({
-      name: '',
-      company: '',
-      email: '',
-      phone: '',
-      event: '',
-      size: '',
-      budget: '',
-      wunschtermin: '',
-      message: ''
-    })
-    
-    setLoading(false)
-  }
 
   const handleChatSubmit = async (customPrompt?: string) => {
     const userMessage = customPrompt || chatInput.trim()
@@ -336,134 +315,32 @@ Antworte jetzt:`
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
             <div className="order-2 lg:order-1">
               <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Schreiben Sie uns</h2>
-              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+              <form onSubmit={form.handleSubmit} className="space-y-4 sm:space-y-6">
                 <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="contact-name" className="text-sm sm:text-base">Name *</Label>
-                    <Input
-                      id="contact-name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Max Mustermann"
-                      required
-                      className="h-11 sm:h-10"
-                      autoComplete="name"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="contact-company" className="text-sm sm:text-base">Firma</Label>
-                    <Input
-                      id="contact-company"
-                      value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      placeholder="Mustermann GmbH"
-                      className="h-11 sm:h-10"
-                      autoComplete="organization"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="contact-email" className="text-sm sm:text-base">E-Mail *</Label>
-                    <Input
-                      id="contact-email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="max@mustermann.de"
-                      required
-                      className="h-11 sm:h-10"
-                      autoComplete="email"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="contact-phone" className="text-sm sm:text-base">Telefon</Label>
-                    <Input
-                      id="contact-phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      placeholder="+49 123 456789"
-                      className="h-11 sm:h-10"
-                      autoComplete="tel"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="contact-event" className="text-sm sm:text-base">Messe / Event</Label>
-                    <Input
-                      id="contact-event"
-                      value={formData.event}
-                      onChange={(e) => setFormData({ ...formData, event: e.target.value })}
-                      placeholder="z.B. Anuga"
-                      className="h-11 sm:h-10"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="contact-size" className="text-sm sm:text-base">Standgröße (m²)</Label>
-                    <Input
-                      id="contact-size"
-                      value={formData.size}
-                      onChange={(e) => setFormData({ ...formData, size: e.target.value })}
-                      placeholder="z.B. 50 qm"
-                      className="h-11 sm:h-10"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="contact-budget" className="text-sm sm:text-base">Budgetkorridor</Label>
-                  <select
-                    id="contact-budget"
-                    value={formData.budget}
-                    onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                    className="flex h-11 sm:h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  >
-                    <option value="">Bitte wählen...</option>
-                    <option value="bis 15.000 €">bis 15.000 €</option>
-                    <option value="15.000 – 30.000 €">15.000 – 30.000 €</option>
-                    <option value="30.000 – 50.000 €">30.000 – 50.000 €</option>
-                    <option value="50.000 – 80.000 €">50.000 – 80.000 €</option>
-                    <option value="80.000 – 120.000 €">80.000 – 120.000 €</option>
-                    <option value="über 120.000 €">über 120.000 €</option>
-                    <option value="noch unklar">Noch unklar / Beratung gewünscht</option>
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="contact-wunschtermin" className="text-sm sm:text-base">Wunschtermin / Messedatum</Label>
-                  <Input
-                    id="contact-wunschtermin"
-                    type="date"
-                    value={formData.wunschtermin}
-                    onChange={(e) => setFormData({ ...formData, wunschtermin: e.target.value })}
-                    min={new Date().toISOString().split('T')[0]}
-                    className="h-11 sm:h-10"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="contact-message" className="text-sm sm:text-base">Ihre Nachricht *</Label>
-                  <Textarea
-                    id="contact-message"
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Beschreiben Sie uns Ihr Projekt..."
-                    rows={4}
-                    required
-                    className="resize-y min-h-[100px]"
-                  />
+                  {form.config.fields.map((fieldConfig) => {
+                    const token = FIELD_TOKENS[fieldConfig.token]
+                    if (!token) return null
+                    return (
+                      <FormField
+                        key={token.key}
+                        tokenKey={fieldConfig.token}
+                        value={form.values[token.key]}
+                        error={form.errors[token.key]}
+                        required={fieldConfig.required}
+                        onChange={(val) => form.setValue(token.key, val)}
+                        hintKey={token.key === 'message' ? 'form.message.hint' : undefined}
+                      />
+                    )
+                  })}
                 </div>
 
                 <Button
                   type="submit"
                   size="lg"
-                  disabled={loading}
+                  disabled={form.loading}
                   className="w-full bg-accent hover:bg-accent/90 h-12 sm:h-11 text-base font-semibold"
                 >
-                  {loading ? 'Wird gesendet...' : 'Nachricht absenden'}
+                  {form.loading ? 'Wird gesendet...' : 'Nachricht absenden'}
                   <PaperPlaneRight className="ml-2" weight="fill" />
                 </Button>
               </form>
