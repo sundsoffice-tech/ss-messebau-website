@@ -1,7 +1,7 @@
 import { memo, useState, useEffect } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { Phone, Envelope, MapPin } from '@phosphor-icons/react'
-import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
+import logo from '@/assets/logo/ss-messebau-logo.png'
 import { useTranslation } from '@/lib/i18n'
 import { authApi } from '@/lib/api-client'
 
@@ -26,20 +26,28 @@ export const Footer = memo(function Footer() {
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <img 
-                src={logo} 
-                alt="S&S Messebau Logo"
-                width="40"
-                height="40"
-                loading="lazy"
-                className="h-10 w-auto"
-              />
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex-shrink-0">
+                <img 
+                  src={logo} 
+                  alt=""
+                  width="48"
+                  height="48"
+                  loading="lazy"
+                  className="w-full h-full object-contain p-1.5"
+                />
+              </div>
               <div>
-                <div className="font-bold">S&S Messebau</div>
-                <div className="text-xs text-muted-foreground">GbR</div>
+                <div className="font-bold">
+                  <span className="text-primary">S&S</span>{' '}
+                  <span className="text-foreground">Messebau</span>
+                </div>
+                <div className="text-xs text-muted-foreground uppercase tracking-widest">
+                  GbR · Full-Service Messebau
+                </div>
               </div>
             </div>
+            <div className="w-12 h-0.5 bg-primary/20 rounded-full mb-4" />
             <p className="text-sm text-muted-foreground leading-relaxed">
               {t('footer.company.desc')}
             </p>

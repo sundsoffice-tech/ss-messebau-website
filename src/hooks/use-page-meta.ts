@@ -132,6 +132,11 @@ export function usePageMeta(page: string) {
       ogType.setAttribute('content', meta.ogType || 'website')
     }
 
+    const ogImage = document.querySelector('meta[property="og:image"]')
+    if (ogImage) {
+      ogImage.setAttribute('content', 'https://sunds-messebau.de/og-image.jpg')
+    }
+
     const twitterTitle = document.querySelector('meta[name="twitter:title"]')
     if (twitterTitle) {
       twitterTitle.setAttribute('content', meta.title)
@@ -140,6 +145,11 @@ export function usePageMeta(page: string) {
     const twitterDescription = document.querySelector('meta[name="twitter:description"]')
     if (twitterDescription) {
       twitterDescription.setAttribute('content', meta.description)
+    }
+
+    const twitterImage = document.querySelector('meta[name="twitter:image"]')
+    if (twitterImage) {
+      twitterImage.setAttribute('content', 'https://sunds-messebau.de/og-image.jpg')
     }
   }, [page])
 }
