@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Checkbox } from '@/components/ui/checkbox'
 import { ArrowLeft, PaperPlaneTilt } from '@phosphor-icons/react'
+import { useFormSystem } from '@/hooks/use-form-system'
+import { FormField } from '@/components/form-system/FormField'
+import { FIELD_TOKENS } from '@/lib/form-system/field-registry'
+import { useTranslation } from '@/lib/i18n'
 
 interface Step6Data {
   firmaKontakt: string
@@ -23,132 +23,71 @@ interface ConfiguratorStep6Props {
 }
 
 export function ConfiguratorStep6({ data, onChange, onBack, onSubmit }: ConfiguratorStep6Props) {
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const [submitting, setSubmitting] = useState(false)
+  const { t } = useTranslation()
 
-  const validate = () => {
-    const newErrors: Record<string, string> = {}
-    
-    if (!data.firmaKontakt || data.firmaKontakt.length < 2) newErrors.firmaKontakt = 'Bitte geben Sie Ihre Firma an'
-    if (!data.ansprechpartner || data.ansprechpartner.length < 3) newErrors.ansprechpartner = 'Bitte geben Sie Ihren Namen an'
-    if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) newErrors.email = 'Bitte geben Sie eine gültige E-Mail an'
-    if (!data.telefon || data.telefon.length < 8) newErrors.telefon = 'Bitte geben Sie eine gültige Telefonnummer an'
-    if (!data.dsgvo) newErrors.dsgvo = 'Bitte akzeptieren Sie die Datenschutzbestimmungen'
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = async () => {
-    if (validate()) {
-      setSubmitting(true)
+  const form = useFormSystem({
+    context: 'banner',
+    initialValues: data,
+    onSubmit: async () => {
       await onSubmit()
-      setSubmitting(false)
-    }
+    },
+  })
+
+  // Sync parent data into form values when data changes externally
+  const handleFieldChange = (key: string, value: any) => {
+    form.setValue(key, value)
+    onChange({ [key]: value } as Partial<Step6Data>)
   }
+
+  // Use the form config fields, but separate checkboxes for special styling
+  const inputFields = form.config.fields.filter(
+    (f) => f.token !== 'dsgvo' && f.token !== 'newsletter'
+  )
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold mb-2">Fast geschafft!</h2>
+        <h2 className="text-2xl font-bold mb-2">{t('banner.step6.title')}</h2>
         <p className="text-muted-foreground">
-          Noch Ihre Kontaktdaten, dann erhalten Sie binnen 24h Ihr individuelles Angebot.
+          {t('banner.step6.desc')}
         </p>
       </div>
 
       <div className="space-y-4">
-        <div>
-          <Label htmlFor="firmaKontakt">Firma *</Label>
-          <Input
-            id="firmaKontakt"
-            value={data.firmaKontakt}
-            onChange={(e) => onChange({ firmaKontakt: e.target.value })}
-            placeholder="Ihre Firma"
-            className="mt-1"
-          />
-          {errors.firmaKontakt && <p className="text-sm text-destructive mt-1">{errors.firmaKontakt}</p>}
-        </div>
-
-        <div>
-          <Label htmlFor="ansprechpartner">Vor- und Nachname *</Label>
-          <Input
-            id="ansprechpartner"
-            value={data.ansprechpartner}
-            onChange={(e) => onChange({ ansprechpartner: e.target.value })}
-            placeholder="Max Mustermann"
-            className="mt-1"
-          />
-          {errors.ansprechpartner && <p className="text-sm text-destructive mt-1">{errors.ansprechpartner}</p>}
-        </div>
-
-        <div>
-          <Label htmlFor="email">E-Mail *</Label>
-          <Input
-            id="email"
-            type="email"
-            value={data.email}
-            onChange={(e) => onChange({ email: e.target.value })}
-            placeholder="max@musterfirma.de"
-            className="mt-1"
-          />
-          <p className="text-sm text-muted-foreground mt-1">An diese Adresse senden wir die Angebotsbestätigung</p>
-          {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
-        </div>
-
-        <div>
-          <Label htmlFor="telefon">Telefon *</Label>
-          <Input
-            id="telefon"
-            type="tel"
-            value={data.telefon}
-            onChange={(e) => onChange({ telefon: e.target.value })}
-            placeholder="+49 123 456789"
-            className="mt-1"
-          />
-          <p className="text-sm text-muted-foreground mt-1">Für Rückfragen zu technischen Details</p>
-          {errors.telefon && <p className="text-sm text-destructive mt-1">{errors.telefon}</p>}
-        </div>
-
-        <div>
-          <Label htmlFor="ustId">Umsatzsteuer-ID (optional)</Label>
-          <Input
-            id="ustId"
-            value={data.ustId || ''}
-            onChange={(e) => onChange({ ustId: e.target.value })}
-            placeholder="DE123456789"
-            className="mt-1"
-          />
-        </div>
+        {inputFields.map((fieldConfig) => {
+          const token = FIELD_TOKENS[fieldConfig.token]
+          if (!token) return null
+          return (
+            <FormField
+              key={token.key}
+              tokenKey={fieldConfig.token}
+              value={form.values[token.key]}
+              error={form.errors[token.key]}
+              required={fieldConfig.required}
+              onChange={(val) => handleFieldChange(token.key, val)}
+              hintKey={
+                token.key === 'email' ? 'banner.step6.emailHint' :
+                token.key === 'telefon' ? 'banner.step6.phoneHint' :
+                undefined
+              }
+            />
+          )
+        })}
 
         <div className="border-t pt-4 space-y-3">
-          <div className="flex items-start space-x-2">
-            <Checkbox
-              id="dsgvo"
-              checked={data.dsgvo}
-              onCheckedChange={(checked) => onChange({ dsgvo: checked as boolean })}
-              className="mt-1"
-            />
-            <Label htmlFor="dsgvo" className="cursor-pointer leading-relaxed">
-              Ich habe die{' '}
-              <a href="/#/datenschutz" className="text-primary hover:underline" target="_blank">
-                Datenschutzerklärung
-              </a>{' '}
-              gelesen und stimme der Verarbeitung meiner Daten zu. *
-            </Label>
-          </div>
-          {errors.dsgvo && <p className="text-sm text-destructive">{errors.dsgvo}</p>}
-
-          <div className="flex items-start space-x-2">
-            <Checkbox
-              id="newsletter"
-              checked={data.newsletter}
-              onCheckedChange={(checked) => onChange({ newsletter: checked as boolean })}
-              className="mt-1"
-            />
-            <Label htmlFor="newsletter" className="cursor-pointer leading-relaxed">
-              Ich möchte Infos zu Produkten und Angeboten erhalten (jederzeit kündbar)
-            </Label>
-          </div>
+          <FormField
+            tokenKey="dsgvo"
+            value={form.values.dsgvo}
+            error={form.errors.dsgvo}
+            required={true}
+            onChange={(val) => handleFieldChange('dsgvo', val)}
+          />
+          <FormField
+            tokenKey="newsletter"
+            value={form.values.newsletter}
+            error={form.errors.newsletter}
+            onChange={(val) => handleFieldChange('newsletter', val)}
+          />
         </div>
       </div>
 
@@ -157,8 +96,8 @@ export function ConfiguratorStep6({ data, onChange, onBack, onSubmit }: Configur
           <ArrowLeft className="mr-2 w-5 h-5" />
           Zurück
         </Button>
-        <Button onClick={handleSubmit} size="lg" disabled={submitting}>
-          {submitting ? 'Wird gesendet...' : 'Konfiguration senden'}
+        <Button onClick={() => form.handleSubmit()} size="lg" disabled={form.loading}>
+          {form.loading ? t('banner.step6.submitting') : t('banner.step6.submit')}
           <PaperPlaneTilt className="ml-2 w-5 h-5" />
         </Button>
       </div>

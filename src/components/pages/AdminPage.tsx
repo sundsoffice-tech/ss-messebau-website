@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { EmailQueueManager } from '@/components/EmailQueueManager'
 import { SMTPConfigPanel } from '@/components/SMTPConfigPanel'
+import { NotificationConfigPanel } from '@/components/NotificationConfigPanel'
 import { Badge } from '@/components/ui/badge'
 import { 
   Envelope, 
@@ -11,7 +12,8 @@ import {
   User, 
   Lock,
   CheckCircle,
-  Gear
+  Gear,
+  Bell
 } from '@phosphor-icons/react'
 import type { BannerConfig } from './BannerBestellenPage'
 
@@ -172,6 +174,10 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
               <ShoppingCart className="w-4 h-4" />
               Bestellungen
             </TabsTrigger>
+            <TabsTrigger value="notifications" className="gap-2">
+              <Bell className="w-4 h-4" />
+              Benachrichtigungen
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="emails">
@@ -184,6 +190,10 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
 
           <TabsContent value="orders">
             <OrdersManager />
+          </TabsContent>
+
+          <TabsContent value="notifications">
+            <NotificationConfigPanel />
           </TabsContent>
         </Tabs>
       </div>

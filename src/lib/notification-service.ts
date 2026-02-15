@@ -1,0 +1,241 @@
+import { sendEmail } from './smtp-service'
+
+export type NotificationType = 'inquiry' | 'kontakt' | 'banner'
+
+export interface WebhookConfig {
+  url: string
+  enabled: boolean
+  channel: string
+  types: NotificationType[]
+}
+
+export interface NotificationConfig {
+  recipients: string[]
+  webhooks: WebhookConfig[]
+  sendCustomerConfirmation: boolean
+}
+
+export interface FormNotificationPayload {
+  type: NotificationType
+  data: Record<string, any>
+  inquiryId: string
+  customerEmail?: string
+}
+
+const DEFAULT_NOTIFICATION_CONFIG: NotificationConfig = {
+  recipients: ['info@sundsmessebau.com'],
+  webhooks: [],
+  sendCustomerConfirmation: true,
+}
+
+export async function getNotificationConfig(): Promise<NotificationConfig> {
+  try {
+    const config = await window.spark.kv.get<NotificationConfig>('notification_config')
+    return config || DEFAULT_NOTIFICATION_CONFIG
+  } catch {
+    return DEFAULT_NOTIFICATION_CONFIG
+  }
+}
+
+export async function saveNotificationConfig(config: NotificationConfig): Promise<void> {
+  await window.spark.kv.set('notification_config', config)
+}
+
+function generateSubject(type: NotificationType, data: Record<string, any>): string {
+  switch (type) {
+    case 'inquiry':
+      return `Neue Anfrage von ${data.name || 'Unbekannt'} – ${data.company || ''}`
+    case 'kontakt':
+      return `Neue Kontaktanfrage von ${data.name || 'Unbekannt'}`
+    case 'banner':
+      return `Neue Banner-Bestellung: ${data.firmaKontakt || data.company || 'Unbekannt'}`
+    default:
+      return 'Neue Formularanfrage'
+  }
+}
+
+function generateCompanyEmailHtml(type: NotificationType, data: Record<string, any>, inquiryId: string): string {
+  const rows = Object.entries(data)
+    .filter(([, v]) => v !== undefined && v !== '' && v !== false)
+    .map(([k, v]) => `
+      <div style="display:flex;margin:8px 0;">
+        <div style="font-weight:bold;min-width:180px;color:#555;">${formatLabel(k)}:</div>
+        <div style="color:#333;">${typeof v === 'boolean' ? (v ? '✅ Ja' : '❌ Nein') : String(v)}</div>
+      </div>
+    `)
+    .join('')
+
+  const typeLabel = type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'
+
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;">
+  <div style="max-width:700px;margin:0 auto;padding:20px;">
+    <div style="background:linear-gradient(135deg,#3B4CC0 0%,#2A3A9F 100%);color:white;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
+      <h1 style="margin:0;">📨 Neue ${typeLabel}</h1>
+      <p style="margin:10px 0 0;opacity:0.9;">S&S Messebau GbR</p>
+    </div>
+    <div style="background:#f9f9f9;padding:20px;border-radius:0 0 8px 8px;border:1px solid #e0e0e0;border-top:none;">
+      <p style="color:#888;font-size:13px;">ID: ${inquiryId}</p>
+      ${rows}
+    </div>
+    <div style="background:#333;color:white;padding:20px;text-align:center;border-radius:0 0 8px 8px;margin-top:20px;">
+      <p style="margin:0 0 10px;"><strong>S&S Messebau GbR</strong></p>
+      <p style="margin:0;font-size:14px;opacity:0.9;">
+        Marienstraße 37 | 41836 Hückelhoven<br>
+        Mobil: +49 1514 0368754 | info@sundsmessebau.com
+      </p>
+    </div>
+  </div>
+</body>
+</html>`.trim()
+}
+
+function generateCustomerConfirmationHtml(type: NotificationType, data: Record<string, any>, inquiryId: string): string {
+  const name = data.ansprechpartner || data.name || 'Kunde'
+  const typeLabel = type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'
+
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;">
+  <div style="max-width:600px;margin:0 auto;padding:20px;">
+    <div style="background:linear-gradient(135deg,#3B4CC0 0%,#2A3A9F 100%);color:white;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
+      <h1 style="margin:0;">✅ ${typeLabel} eingegangen!</h1>
+      <p style="margin:10px 0 0;opacity:0.9;">Vielen Dank für Ihre Nachricht</p>
+    </div>
+    <div style="background:white;padding:30px;border:1px solid #e0e0e0;">
+      <p>Sehr geehrte/r ${name},</p>
+      <p>vielen Dank für Ihre ${typeLabel} bei S&S Messebau GbR!</p>
+      <p>Wir haben Ihre Nachricht erfolgreich erhalten und werden uns <strong>innerhalb von 24 Stunden</strong> bei Ihnen melden.</p>
+      <div style="background:#f5f7fa;padding:20px;border-radius:8px;margin:20px 0;border-left:4px solid #3B4CC0;">
+        <p style="margin:0;"><strong>Referenz-Nr.:</strong> #${inquiryId.slice(-8)}</p>
+      </div>
+      <p style="margin-top:30px;">
+        Mit freundlichen Grüßen<br>
+        <strong>Ihr S&S Messebau Team</strong>
+      </p>
+    </div>
+    <div style="background:#333;color:white;padding:20px;text-align:center;border-radius:0 0 8px 8px;">
+      <p style="margin:0 0 10px;"><strong>S&S Messebau GbR</strong></p>
+      <p style="margin:0;font-size:14px;opacity:0.9;">
+        Marienstraße 37 | 41836 Hückelhoven<br>
+        Mobil: +49 1514 0368754 | info@sundsmessebau.com
+      </p>
+    </div>
+  </div>
+</body>
+</html>`.trim()
+}
+
+function convertHtmlToText(html: string): string {
+  return html
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/div>/gi, '\n')
+    .replace(/<\/p>/gi, '\n\n')
+    .replace(/<\/h[1-6]>/gi, '\n\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\n\s*\n\s*\n/g, '\n\n')
+    .trim()
+}
+
+function formatLabel(key: string): string {
+  const map: Record<string, string> = {
+    name: 'Name',
+    email: 'E-Mail',
+    company: 'Firma',
+    phone: 'Telefon',
+    message: 'Nachricht',
+    budget: 'Budget',
+    messesProJahr: 'Messen/Jahr',
+    firmaKontakt: 'Firma',
+    ansprechpartner: 'Ansprechpartner',
+    telefon: 'Telefon',
+    ustId: 'USt-ID',
+    dsgvo: 'Datenschutz',
+    newsletter: 'Newsletter',
+    event: 'Messe/Event',
+    size: 'Standgröße',
+    wunschtermin: 'Wunschtermin',
+  }
+  return map[key] || key
+}
+
+async function sendWebhook(webhook: WebhookConfig, type: NotificationType, data: Record<string, any>, inquiryId: string): Promise<boolean> {
+  try {
+    const payload = {
+      text: `📨 Neue ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'} von ${data.name || data.firmaKontakt || 'Unbekannt'} (#${inquiryId.slice(-8)})`,
+      type,
+      inquiryId,
+      data,
+    }
+
+    const response = await fetch(webhook.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+
+    return response.ok
+  } catch (error) {
+    console.error('Webhook-Fehler:', error)
+    return false
+  }
+}
+
+export async function sendFormNotification(payload: FormNotificationPayload): Promise<{ success: boolean; error?: string }> {
+  try {
+    const config = await getNotificationConfig()
+    const { type, data, inquiryId, customerEmail } = payload
+
+    const subject = generateSubject(type, data)
+    const htmlBody = generateCompanyEmailHtml(type, data, inquiryId)
+    const textBody = convertHtmlToText(htmlBody)
+
+    // Send to all configured recipients
+    for (const recipient of config.recipients) {
+      await sendEmail({
+        to: recipient,
+        subject,
+        htmlBody,
+        textBody,
+        replyTo: customerEmail || data.email,
+      })
+    }
+
+    // Send customer confirmation if enabled
+    const recipientEmail = customerEmail || data.email
+    if (config.sendCustomerConfirmation && recipientEmail) {
+      const customerHtml = generateCustomerConfirmationHtml(type, data, inquiryId)
+      await sendEmail({
+        to: recipientEmail,
+        subject: `Eingangsbestätigung: Ihre ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Bestellung'} #${inquiryId.slice(-8)}`,
+        htmlBody: customerHtml,
+        textBody: convertHtmlToText(customerHtml),
+      })
+    }
+
+    // Send webhooks
+    for (const webhook of config.webhooks) {
+      if (webhook.enabled && webhook.types.includes(type)) {
+        await sendWebhook(webhook, type, data, inquiryId)
+      }
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error('Notification-Fehler:', error)
+    return { success: false, error: error instanceof Error ? error.message : 'Unbekannter Fehler' }
+  }
+}
