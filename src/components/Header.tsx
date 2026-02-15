@@ -559,7 +559,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         <MegaMenuItem 
                           key={item.sectionId}
                           item={item}
-                          onNavigate={handleLeistungenNavigation}
+                          onNavigate={handleSectionNavigation}
                         />
                       ))}
                     </div>
@@ -736,7 +736,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         <MegaMenuItem 
                           key={item.sectionId}
                           item={item}
-                          onNavigate={handleLeistungenNavigation}
+                          onNavigate={handleSectionNavigation}
                         />
                       ))}
                     </div>
