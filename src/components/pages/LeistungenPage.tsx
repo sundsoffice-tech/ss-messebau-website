@@ -25,10 +25,9 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       {/* Hero Section – Narrative Claim */}
       <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4.5vw, 3.5rem)', lineHeight: '1.2' }}>Wir schaffen Räume, die Ihre Marke verkaufen.</h1>
+          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4.5vw, 3.5rem)', lineHeight: '1.2' }}>{t('leistungen.hero.title')}</h1>
           <p className="text-base sm:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
-            S&S Messebau – Ihre Erlebnis-Architekten. Wir sind nicht einfach Standbauer, sondern strategische Partner
-            für Markenräume, die begeistern, überzeugen und verkaufen. Von der Messe über den Showroom bis zum Event.
+            {t('leistungen.hero.subtitle')}
           </p>
         </div>
       </section>
@@ -38,9 +37,9 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="brand-activation" className="scroll-mt-20 space-y-8 sm:space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
-              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Brand Activation</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('leistungen.brand.title')}</h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                So aktiviert S&S Ihre Marke auf Messen und Events – mit Messeständen, Bühnenbauten und skalierbaren Touren-Paketen.
+                {t('leistungen.brand.subtitle')}
               </p>
             </div>
 
@@ -51,19 +50,18 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
                     <Warehouse className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Messebau</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">{t('leistungen.messebau.title')}</h3>
                 </div>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Professionelle Messestände von 20 bis 200 qm für Messen bundesweit und international.
-                  Ob Systemstand oder individuelle Konstruktion – wir realisieren Ihren perfekten Messeauftritt.
+                  {t('leistungen.messebau.desc')}
                 </p>
                 <div className="space-y-2.5 md:space-y-3 mb-6">
                   {[
-                    'Konzeption & 3D-Design',
-                    'Produktion & Bau',
-                    'Logistik & Transport',
-                    'Auf- und Abbau vor Ort',
-                    'Lagerung für Wiederverwendung'
+                    t('leistungen.messebau.b1'),
+                    t('leistungen.messebau.b2'),
+                    t('leistungen.messebau.b3'),
+                    t('leistungen.messebau.b4'),
+                    t('leistungen.messebau.b5')
                   ].map((item, index) => (
                     <div key={index} className="flex items-center gap-2.5 md:gap-3">
                       <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
@@ -72,19 +70,19 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   ))}
                 </div>
                 <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                  Messestand anfragen
+                  {t('leistungen.messebau.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
               </div>
               <Card className="mt-8 lg:mt-0">
                 <CardContent className="p-5 md:p-8">
-                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Unser Messebau-Ablauf</h4>
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.messebau.processTitle')}</h4>
                   <div className="space-y-5 md:space-y-6">
                     {[
-                      { step: '1', title: 'Beratung & Konzept', desc: 'Wir analysieren Ihre Anforderungen und entwickeln erste Ideen' },
-                      { step: '2', title: 'Design & Planung', desc: 'Konzeptentwicklung, Materialauswahl, technische Planung' },
-                      { step: '3', title: 'Produktion', desc: 'Hochwertige Fertigung in unseren Partnerwerkstätten' },
-                      { step: '4', title: 'Aufbau & Betreuung', desc: 'Pünktlicher Aufbau, technischer Support während der Messe' }
+                      { step: '1', title: t('leistungen.messebau.step1.title'), desc: t('leistungen.messebau.step1.desc') },
+                      { step: '2', title: t('leistungen.messebau.step2.title'), desc: t('leistungen.messebau.step2.desc') },
+                      { step: '3', title: t('leistungen.messebau.step3.title'), desc: t('leistungen.messebau.step3.desc') },
+                      { step: '4', title: t('leistungen.messebau.step4.title'), desc: t('leistungen.messebau.step4.desc') }
                     ].map((item, index) => (
                       <div key={index} className="flex gap-3 md:gap-4">
                         <div className="flex h-9 w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm md:text-base">
@@ -105,14 +103,14 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
               <Card className="lg:order-2 mt-8 lg:mt-0">
                 <CardContent className="p-5 md:p-8">
-                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Event-Typ-Beispiele</h4>
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.eventbau.typesTitle')}</h4>
                   <div className="space-y-3 md:space-y-4">
                     {[
-                      'Firmenjubiläen & Galas',
-                      'Produktpräsentationen',
-                      'Konferenzen & Tagungen',
-                      'Outdoor-Events & Festivals',
-                      'Pop-Up-Stores'
+                      t('leistungen.eventbau.b1'),
+                      t('leistungen.eventbau.b2'),
+                      t('leistungen.eventbau.b3'),
+                      t('leistungen.eventbau.b4'),
+                      t('leistungen.eventbau.b5')
                     ].map((item, index) => (
                       <div key={index} className="flex items-center gap-2.5 md:gap-3 p-3 md:p-3.5 rounded-lg bg-muted">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
@@ -127,19 +125,18 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
                     <CalendarDot className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Eventbau & Bühnen</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">{t('leistungen.eventbau.title')}</h3>
                 </div>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Beeindruckende Event-Inszenierungen: Von Bühnenbauten über Präsentationsflächen bis zu kompletten Event-Ausstattungen.
-                  Wir machen Ihre Veranstaltung zum unvergesslichen Erlebnis.
+                  {t('leistungen.eventbau.desc')}
                 </p>
                 <div className="space-y-2.5 md:space-y-3 mb-6">
                   {[
-                    'Bühnenbau & Podeste',
-                    'Event-Architektur',
-                    'Licht- und Tontechnik-Integration',
-                    'Dekoration & Ausstattung',
-                    'Sicherheitskonzepte'
+                    t('leistungen.eventbau.b6'),
+                    t('leistungen.eventbau.b7'),
+                    t('leistungen.eventbau.b8'),
+                    t('leistungen.eventbau.b9'),
+                    t('leistungen.eventbau.b10')
                   ].map((item, index) => (
                     <div key={index} className="flex items-center gap-2.5 md:gap-3">
                       <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
@@ -148,7 +145,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   ))}
                 </div>
                 <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                  Event planen
+                  {t('leistungen.eventbau.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
               </div>
@@ -157,18 +154,18 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             {/* Touren */}
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
               <div>
-                <h3 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">Touren & wiederkehrende Messeauftritte</h3>
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('leistungen.touren.title')}</h3>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Sie bestreiten mehrere kleinere Messen pro Jahr oder führen Roadshows durch? Wir bieten Ihnen skalierbare, wiederverwendbare Systemlösungen, die zentral ab NRW koordiniert werden.
+                  {t('leistungen.touren.desc')}
                 </p>
-                <h4 className="text-xl font-semibold mb-4">Ihre Vorteile:</h4>
+                <h4 className="text-xl font-semibold mb-4">{t('leistungen.touren.advantagesTitle')}</h4>
                 <div className="space-y-2.5 md:space-y-3 mb-6">
                   {[
-                    'Zentrale Logistik ab NRW – kurze Wege, schnelle Reaktionszeiten',
-                    'Modulare Systemstände für flexible Standgrößen',
-                    'Wiederverwendbare Komponenten senken Ihre Kosten',
-                    'Kostenoptimierte Routen- und Transportplanung',
-                    'Bundesweite Verfügbarkeit für DACH-Region'
+                    t('leistungen.touren.b1'),
+                    t('leistungen.touren.b2'),
+                    t('leistungen.touren.b3'),
+                    t('leistungen.touren.b4'),
+                    t('leistungen.touren.b5')
                   ].map((item, index) => (
                     <div key={index} className="flex items-center gap-2.5 md:gap-3">
                       <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
@@ -177,19 +174,19 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   ))}
                 </div>
                 <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                  Touren-Paket anfragen
+                  {t('leistungen.touren.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
               </div>
               <Card className="mt-8 lg:mt-0">
                 <CardContent className="p-5 md:p-8">
-                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">So funktioniert Ihr Touren-Paket</h4>
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.touren.processTitle')}</h4>
                   <div className="space-y-5 md:space-y-6">
                     {[
-                      { step: '1', title: 'Bedarf analysieren', desc: 'Wir erfassen Ihre Messeplanung und empfehlen das passende System' },
-                      { step: '2', title: 'Modulares System entwickeln', desc: 'Wiederverwendbare Standbauteile, abgestimmt auf Ihre Standgrößen' },
-                      { step: '3', title: 'Logistik koordinieren', desc: 'Zentrale Planung aller Termine, Transporte und Montagen ab NRW' },
-                      { step: '4', title: 'Rollout & Optimierung', desc: 'Kontinuierliche Verbesserung nach jedem Einsatz' }
+                      { step: '1', title: t('leistungen.touren.step1.title'), desc: t('leistungen.touren.step1.desc') },
+                      { step: '2', title: t('leistungen.touren.step2.title'), desc: t('leistungen.touren.step2.desc') },
+                      { step: '3', title: t('leistungen.touren.step3.title'), desc: t('leistungen.touren.step3.desc') },
+                      { step: '4', title: t('leistungen.touren.step4.title'), desc: t('leistungen.touren.step4.desc') }
                     ].map((item, index) => (
                       <div key={index} className="flex gap-3 md:gap-4">
                         <div className="flex h-9 w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm md:text-base">
@@ -216,12 +213,11 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             <div className="text-center mb-8 md:mb-10">
               <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-primary/10 rounded-full">
                 <Sparkle className="h-5 w-5 text-primary" weight="fill" />
-                <span className="text-sm font-semibold text-primary">Innovation & Präzision</span>
+                <span className="text-sm font-semibold text-primary">{t('leistungen.digital.badge')}</span>
               </div>
-              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Tech & Data Experience</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('leistungen.digital.title')}</h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Bei S&S ist digitale Erlebnisarchitektur selbstverständlich. Wir kombinieren modernste Technologien mit präzisem Handwerk – 
-                für mehr Sichtbarkeit, messbare Erfolge und unvergessliche Markenerlebnisse.
+                {t('leistungen.digital.subtitle')}
               </p>
             </div>
 
@@ -232,22 +228,21 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
                     <Cube className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">AR/VR & Virtuelle Standbegehung</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">{t('leistungen.digital.arvr.title')}</h3>
                 </div>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Erleben Sie Ihren Messestand schon vor dem ersten Aufbau. Mit Virtual Reality und Augmented Reality 
-                  visualisieren wir Ihr Konzept und ermöglichen virtuelle Standbegehungen – für optimale Planungssicherheit.
+                  {t('leistungen.digital.arvr.desc')}
                 </p>
                 <div className="bg-primary/5 rounded-lg p-4 md:p-6 mb-6">
-                  <h4 className="font-semibold text-base md:text-lg mb-3">Unsere VR/AR Leistungen</h4>
+                  <h4 className="font-semibold text-base md:text-lg mb-3">{t('leistungen.digital.arvr.servicesTitle')}</h4>
                   <div className="space-y-2.5 md:space-y-3">
                     {[
-                      'VR-Showrooms für immersive Produktpräsentationen',
-                      'Virtuelle Standbegehung vor der Messe',
-                      'AR-Produktvisualisierung direkt am Stand',
-                      '360°-Touren für Remote-Teilnehmer',
-                      'Digitale Zwillinge Ihrer Messestände',
-                      'Interaktive 3D-Konfiguration in Echtzeit'
+                      t('leistungen.digital.arvr.b1'),
+                      t('leistungen.digital.arvr.b2'),
+                      t('leistungen.digital.arvr.b3'),
+                      t('leistungen.digital.arvr.b4'),
+                      t('leistungen.digital.arvr.b5'),
+                      t('leistungen.digital.arvr.b6')
                     ].map((item, index) => (
                       <div key={index} className="flex items-center gap-2.5 md:gap-3">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
@@ -257,26 +252,25 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   </div>
                 </div>
                 <div className="bg-accent/10 border-l-4 border-accent p-4 mb-6 rounded">
-                  <p className="text-sm md:text-base font-semibold mb-2 text-accent">💡 Use Case: VR-Showroom für internationales Publikum</p>
+                  <p className="text-sm md:text-base font-semibold mb-2 text-accent">{t('leistungen.digital.arvr.useCaseTitle')}</p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Ein Technologie-Unternehmen konnte durch unseren VR-Showroom seine Produktpalette bereits vor Messebeginn 
-                    weltweit präsentieren. Ergebnis: 40% mehr qualifizierte Leads und messbar höhere Besucherzahlen am physischen Stand.
+                    {t('leistungen.digital.arvr.useCaseText')}
                   </p>
                 </div>
                 <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                  VR/AR-Lösung anfragen
+                  {t('leistungen.digital.arvr.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
               </div>
               <Card className="mt-8 lg:mt-0">
                 <CardContent className="p-5 md:p-8">
-                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Ihr Weg zur digitalen Präsenz</h4>
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.digital.arvr.processTitle')}</h4>
                   <div className="space-y-5 md:space-y-6">
                     {[
-                      { step: '1', title: '3D-Modellierung', desc: 'Wir erstellen ein detailgetreues 3D-Modell Ihres Stands' },
-                      { step: '2', title: 'VR-Integration', desc: 'Umwandlung in eine begehbare Virtual-Reality-Erfahrung' },
-                      { step: '3', title: 'Testing & Freigabe', desc: 'Sie testen und optimieren vor der physischen Umsetzung' },
-                      { step: '4', title: 'Live-Einsatz', desc: 'VR-Station am Stand oder als Remote-Erlebnis' }
+                      { step: '1', title: t('leistungen.digital.arvr.step1.title'), desc: t('leistungen.digital.arvr.step1.desc') },
+                      { step: '2', title: t('leistungen.digital.arvr.step2.title'), desc: t('leistungen.digital.arvr.step2.desc') },
+                      { step: '3', title: t('leistungen.digital.arvr.step3.title'), desc: t('leistungen.digital.arvr.step3.desc') },
+                      { step: '4', title: t('leistungen.digital.arvr.step4.title'), desc: t('leistungen.digital.arvr.step4.desc') }
                     ].map((item, index) => (
                       <div key={index} className="flex gap-3 md:gap-4">
                         <div className="flex h-9 w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm md:text-base">
@@ -300,20 +294,19 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
                     <ChartLine className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Besuchertracking & Analytics</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">{t('leistungen.digital.tracking.title')}</h3>
                 </div>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Machen Sie Ihren Messeerfolg messbar. Mit intelligenten Tracking-Systemen analysieren wir Besucherströme, 
-                  Verweildauer und Interaktionspunkte – für datenbasierte Optimierung und ROI-Nachweise.
+                  {t('leistungen.digital.tracking.desc')}
                 </p>
                 <div className="space-y-2.5 md:space-y-3 mb-6">
                   {[
-                    'Heatmaps: Wo halten sich Besucher am längsten auf?',
-                    'Besucherzählung & demografische Analyse',
-                    'Interaktionsrate an digitalen Touchpoints',
-                    'Lead-Qualifizierung durch Verhaltensanalyse',
-                    'Live-Dashboards während der Messe',
-                    'Post-Event Reports mit Handlungsempfehlungen'
+                    t('leistungen.digital.tracking.b1'),
+                    t('leistungen.digital.tracking.b2'),
+                    t('leistungen.digital.tracking.b3'),
+                    t('leistungen.digital.tracking.b4'),
+                    t('leistungen.digital.tracking.b5'),
+                    t('leistungen.digital.tracking.b6')
                   ].map((item, index) => (
                     <div key={index} className="flex items-center gap-2.5 md:gap-3">
                       <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
@@ -322,26 +315,25 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   ))}
                 </div>
                 <div className="bg-accent/10 border-l-4 border-accent p-4 mb-6 rounded">
-                  <p className="text-sm md:text-base font-semibold mb-2 text-accent">📊 Use Case: Heatmap-Analyse optimiert Standlayout</p>
+                  <p className="text-sm md:text-base font-semibold mb-2 text-accent">{t('leistungen.digital.tracking.useCaseTitle')}</p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Ein Automobilzulieferer nutzte unsere Heatmap-Analyse und stellte fest, dass 70% der Besucher die linke 
-                    Standhälfte ignorierten. Nach Layout-Anpassung: +55% mehr Interaktionen und 30% höhere Lead-Conversion.
+                    {t('leistungen.digital.tracking.useCaseText')}
                   </p>
                 </div>
                 <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                  Analytics-Lösung anfragen
+                  {t('leistungen.digital.tracking.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
               </div>
               <Card className="lg:order-1 mt-8 lg:mt-0">
                 <CardContent className="p-5 md:p-8">
-                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Messbare Erfolge</h4>
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.digital.tracking.metricsTitle')}</h4>
                   <div className="space-y-4">
                     {[
-                      { metric: 'Besucherströme', desc: 'Erfassen Sie, wie Besucher durch Ihren Stand navigieren', icon: Eye },
-                      { metric: 'Verweildauer', desc: 'Messen Sie die Aufmerksamkeitsspanne pro Zone', icon: TrendUp },
-                      { metric: 'Hot Zones', desc: 'Identifizieren Sie die beliebtesten Bereiche', icon: Crosshair },
-                      { metric: 'Conversion-Pfade', desc: 'Verstehen Sie den Weg vom Besucher zum Lead', icon: Lightning }
+                      { metric: t('leistungen.digital.tracking.metric1.title'), desc: t('leistungen.digital.tracking.metric1.desc'), icon: Eye },
+                      { metric: t('leistungen.digital.tracking.metric2.title'), desc: t('leistungen.digital.tracking.metric2.desc'), icon: TrendUp },
+                      { metric: t('leistungen.digital.tracking.metric3.title'), desc: t('leistungen.digital.tracking.metric3.desc'), icon: Crosshair },
+                      { metric: t('leistungen.digital.tracking.metric4.title'), desc: t('leistungen.digital.tracking.metric4.desc'), icon: Lightning }
                     ].map((item, index) => {
                       const Icon = item.icon
                       return (
@@ -366,18 +358,17 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
                     <DeviceMobile className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Interaktive Präsentationstechnik</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">{t('leistungen.digital.interactive.title')}</h3>
                 </div>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Von Touchscreens über Videowalls bis zu KI-gestützten Assistenten – wir integrieren modernste 
-                  Präsentationstechnik nahtlos in Ihr Standkonzept.
+                  {t('leistungen.digital.interactive.desc')}
                 </p>
                 <div className="grid sm:grid-cols-2 gap-4 mb-6">
                   {[
-                    { title: 'Touchscreen-Terminals', desc: 'Interaktive Produktkataloge & Konfiguratoren' },
-                    { title: 'LED-Videowalls', desc: 'Großformatige Displays für maximale Aufmerksamkeit' },
-                    { title: 'KI-Chatbots', desc: 'Digitale Assistenten für Erstberatung' },
-                    { title: 'Live-Produktdemos', desc: 'Integrierte Präsentationssysteme' }
+                    { title: t('leistungen.digital.interactive.card1.title'), desc: t('leistungen.digital.interactive.card1.desc') },
+                    { title: t('leistungen.digital.interactive.card2.title'), desc: t('leistungen.digital.interactive.card2.desc') },
+                    { title: t('leistungen.digital.interactive.card3.title'), desc: t('leistungen.digital.interactive.card3.desc') },
+                    { title: t('leistungen.digital.interactive.card4.title'), desc: t('leistungen.digital.interactive.card4.desc') }
                   ].map((item, index) => (
                     <div key={index} className="bg-primary/5 p-4 rounded-lg">
                       <p className="font-semibold text-sm md:text-base mb-1">{item.title}</p>
@@ -386,14 +377,13 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   ))}
                 </div>
                 <div className="bg-accent/10 border-l-4 border-accent p-4 mb-6 rounded">
-                  <p className="text-sm md:text-base font-semibold mb-2 text-accent">🤖 Use Case: KI-Produktberater steigert Qualifizierung</p>
+                  <p className="text-sm md:text-base font-semibold mb-2 text-accent">{t('leistungen.digital.interactive.useCaseTitle')}</p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Ein B2B-Software-Anbieter setzte unseren KI-Chatbot ein, der Besucherfragen vorqualifizierte. 
-                    Das Vertriebsteam konnte sich auf hochwertige Gespräche fokussieren – Effizienz +65%.
+                    {t('leistungen.digital.interactive.useCaseText')}
                   </p>
                 </div>
                 <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                  Interaktive Technik anfragen
+                  {t('leistungen.digital.interactive.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
               </div>
@@ -402,18 +392,17 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <CardContent className="p-5 md:p-8">
                     <div className="flex items-center gap-3 mb-4">
                       <Brain className="h-8 w-8 text-primary" weight="bold" />
-                      <h4 className="text-lg md:text-xl font-semibold">Smart Stand Lösungen</h4>
+                      <h4 className="text-lg md:text-xl font-semibold">{t('leistungen.digital.smart.title')}</h4>
                     </div>
                     <p className="text-sm md:text-base text-muted-foreground mb-4 leading-relaxed">
-                      IoT-vernetzte Stände mit intelligenter Steuerung von Licht, Klima und Content – 
-                      für ein perfekt orchestriertes Markenerlebnis.
+                      {t('leistungen.digital.smart.desc')}
                     </p>
                     <div className="space-y-2.5">
                       {[
-                        'Automatische Beleuchtungsanpassung',
-                        'Content-Management-Systeme',
-                        'Sensor-gesteuerte Interaktionen',
-                        'Zentrale Steuerung aller Systeme'
+                        t('leistungen.digital.smart.b1'),
+                        t('leistungen.digital.smart.b2'),
+                        t('leistungen.digital.smart.b3'),
+                        t('leistungen.digital.smart.b4')
                       ].map((item, index) => (
                         <div key={index} className="flex items-center gap-2">
                           <CheckCircle className="h-4 w-4 text-primary shrink-0" weight="fill" />
@@ -425,10 +414,9 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 </Card>
                 
                 <div className="bg-gradient-to-br from-primary to-primary/80 rounded-xl p-6 text-primary-foreground">
-                  <h4 className="font-bold text-lg mb-2">Innovation als Standard</h4>
+                  <h4 className="font-bold text-lg mb-2">{t('leistungen.digital.innovation.title')}</h4>
                   <p className="text-sm opacity-90 leading-relaxed">
-                    Bei S&S Messebau ist digitale Exzellenz kein Aufpreis, sondern fester Bestandteil unserer DNA. 
-                    Wir denken digital first – für messbare Erfolge und zukunftssichere Markenräume.
+                    {t('leistungen.digital.innovation.desc')}
                   </p>
                 </div>
               </div>
@@ -441,18 +429,18 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
                     <Storefront className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Showrooms & Brand Spaces</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">{t('leistungen.digital.showrooms.title')}</h3>
                 </div>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Permanente Markenräume mit digitaler Integration – vom klassischen Showroom bis zum vollvernetzten Brand Space.
+                  {t('leistungen.digital.showrooms.desc')}
                 </p>
                 <div className="space-y-2.5 md:space-y-3 mb-6">
                   {[
-                    'Showrooms mit integrierter Digital-Experience',
-                    'Interaktive Produktpräsentationen',
-                    'Smart Lighting & automatisierte Szenarien',
-                    'Content-Management für wechselnde Inhalte',
-                    'Analytics für Showroom-Besucher'
+                    t('leistungen.digital.showrooms.b1'),
+                    t('leistungen.digital.showrooms.b2'),
+                    t('leistungen.digital.showrooms.b3'),
+                    t('leistungen.digital.showrooms.b4'),
+                    t('leistungen.digital.showrooms.b5')
                   ].map((item, index) => (
                     <div key={index} className="flex items-center gap-2.5 md:gap-3">
                       <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
@@ -461,19 +449,19 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   ))}
                 </div>
                 <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                  Showroom-Projekt anfragen
+                  {t('leistungen.digital.showrooms.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
               </div>
               <Card>
                 <CardContent className="p-5 md:p-8">
-                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">Unsere Ausbau-Leistungen</h4>
+                  <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.digital.showrooms.servicesTitle')}</h4>
                   <div className="space-y-4">
                     {[
-                      { name: 'Shop-Ausbau', desc: 'Verkaufsflächen mit digitaler Integration' },
-                      { name: 'Büro-Ausbau', desc: 'Smart Office Lösungen & Akustikkonzepte' },
-                      { name: 'Showroom-Gestaltung', desc: 'Interaktive Produktpräsentationen' },
-                      { name: 'Brand Spaces', desc: 'Vollvernetzte Markenerlebnisräume' }
+                      { name: t('leistungen.digital.showrooms.service1.name'), desc: t('leistungen.digital.showrooms.service1.desc') },
+                      { name: t('leistungen.digital.showrooms.service2.name'), desc: t('leistungen.digital.showrooms.service2.desc') },
+                      { name: t('leistungen.digital.showrooms.service3.name'), desc: t('leistungen.digital.showrooms.service3.desc') },
+                      { name: t('leistungen.digital.showrooms.service4.name'), desc: t('leistungen.digital.showrooms.service4.desc') }
                     ].map((category, index) => (
                       <div key={index} className="border-l-4 border-primary pl-4">
                         <p className="font-semibold">{category.name}</p>
@@ -493,9 +481,9 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="ausstattung-ambiente" className="scroll-mt-20 space-y-8 sm:space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
-              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Ausstattung & Ambiente</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('leistungen.ausstattung.title')}</h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Das richtige Ambiente verkauft die Marke. Böden, Möbel und Technik – perfekt aufeinander abgestimmt für Ihren Markenraum.
+                {t('leistungen.ausstattung.subtitle')}
               </p>
             </div>
 
@@ -505,7 +493,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img
                     src="/images/boeden/besprechungsraum-vinylboden-moebel.jpg"
-                    alt="Besprechungsraum mit modernem Vinylboden und hochwertigen Möbeln – Komplettausstattung von S&S Messebau"
+                    alt={t('leistungen.ausstattung.boeden.alt1')}
                     width="800"
                     height="450"
                     loading="lazy"
@@ -516,7 +504,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                   <img
                     src="/images/boeden/holzboden-laminat-verlegung-raum.jpg"
-                    alt="Professionell verlegter Holz-Laminatboden in modernem Raum"
+                    alt={t('leistungen.ausstattung.boeden.alt2')}
                     width="400"
                     height="300"
                     loading="lazy"
@@ -527,7 +515,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                   <img
                     src="/images/boeden/kueche-hochglanz-marmor-led-beleuchtung.jpg"
-                    alt="Moderne Küche mit Hochglanz-Fronten, Marmor-Rückwand und hochwertigem Fliesenboden"
+                    alt={t('leistungen.ausstattung.boeden.alt3')}
                     width="400"
                     height="300"
                     loading="lazy"
@@ -538,7 +526,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                 <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                   <img
                     src="/images/boeden/kueche-hochglanz-holz-arbeitsplatte.jpg"
-                    alt="Einbauküche mit weißen Hochglanz-Fronten, dunkler Holz-Arbeitsplatte und modernem Fliesenboden"
+                    alt={t('leistungen.ausstattung.boeden.alt4')}
                     width="400"
                     height="300"
                     loading="lazy"
@@ -552,23 +540,21 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-lg bg-primary/10 shrink-0">
                     <Armchair className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">Böden & Ausstattung</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold leading-tight">{t('leistungen.ausstattung.boeden.title')}</h3>
                 </div>
                 <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                  Die perfekte Ergänzung für jeden Stand: Hochwertige Messeböden (Teppich, Vinyl, Parkett),
-                  stilvolle Möblierung, professionelle Beleuchtung und moderne Technik. Von Messeständen
-                  bis zu kompletten Küchen- und Raumausstattungen – wir liefern die Komplettlösung.
+                  {t('leistungen.ausstattung.boeden.desc')}
                 </p>
                 <div className="bg-primary/5 rounded-lg p-4 md:p-6 mb-6">
-                  <h4 className="font-semibold text-base md:text-lg mb-3">Unser Versprechen</h4>
+                  <h4 className="font-semibold text-base md:text-lg mb-3">{t('leistungen.ausstattung.boeden.promiseTitle')}</h4>
                   <div className="space-y-2.5 md:space-y-3">
                     {[
-                      'Messeboden-Systeme (Teppich, Vinyl, Parkett)',
-                      'Komplette Küchen- und Raumausstattungen',
-                      'Lounge-Möbel & Sitzgruppen',
-                      'Theken & Empfangsbereiche',
-                      'LED-Beleuchtungskonzepte',
-                      'Multimedia & Präsentationstechnik'
+                      t('leistungen.ausstattung.boeden.b1'),
+                      t('leistungen.ausstattung.boeden.b2'),
+                      t('leistungen.ausstattung.boeden.b3'),
+                      t('leistungen.ausstattung.boeden.b4'),
+                      t('leistungen.ausstattung.boeden.b5'),
+                      t('leistungen.ausstattung.boeden.b6')
                     ].map((item, index) => (
                       <div key={index} className="flex items-center gap-2.5 md:gap-3">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0" weight="fill" />
@@ -578,7 +564,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   </div>
                 </div>
                 <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                  Ausstattung anfragen
+                  {t('leistungen.ausstattung.boeden.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
               </div>
@@ -587,19 +573,18 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             {/* Flooring Types Section */}
             <div className="bg-muted/50 rounded-2xl p-6 md:p-8 lg:p-10">
               <div className="text-center mb-8 md:mb-10">
-                <h3 className="text-2xl md:text-3xl font-bold mb-3">Premium Messeboden-Systeme</h3>
+                <h3 className="text-2xl md:text-3xl font-bold mb-3">{t('leistungen.ausstattung.flooring.title')}</h3>
                 <p className="text-muted-foreground text-base md:text-lg max-w-3xl mx-auto">
-                  Von klassischem Messebau-Teppich bis zu hochwertigen Klick-Parkett-Systemen –
-                  alle Systeme sind schnell verlegbar, strapazierfähig und wiederverwendbar.
+                  {t('leistungen.ausstattung.flooring.subtitle')}
                 </p>
               </div>
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                  { name: 'Vinyl & Laminat', desc: 'Modern, pflegeleicht, große Designauswahl' },
-                  { name: 'Messebau-Teppich', desc: 'Klassisch, schalldämmend, wirtschaftlich' },
-                  { name: 'Klick-Parkett', desc: 'Hochwertig, wiederverwendbar, nachhaltig' },
-                  { name: 'Design-Beläge', desc: 'Individuell, vielseitig, markant' }
+                  { name: t('leistungen.ausstattung.flooring.type1.name'), desc: t('leistungen.ausstattung.flooring.type1.desc') },
+                  { name: t('leistungen.ausstattung.flooring.type2.name'), desc: t('leistungen.ausstattung.flooring.type2.desc') },
+                  { name: t('leistungen.ausstattung.flooring.type3.name'), desc: t('leistungen.ausstattung.flooring.type3.desc') },
+                  { name: t('leistungen.ausstattung.flooring.type4.name'), desc: t('leistungen.ausstattung.flooring.type4.desc') }
                 ].map((floor, index) => (
                   <div key={index} className="bg-white rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow text-center">
                     <p className="font-semibold text-base md:text-lg mb-2">{floor.name}</p>
@@ -610,9 +595,9 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
 
               <div className="mt-8 text-center">
                 <p className="text-sm text-muted-foreground">
-                  Individuelle Kalkulation nach Standgröße –{' '}
+                  {t('leistungen.ausstattung.flooring.calcPrefix')}{' '}
                   <button onClick={onOpenInquiry} className="text-primary font-semibold hover:underline">
-                    Jetzt anfragen
+                    {t('leistungen.ausstattung.flooring.calcLink')}
                   </button>
                 </p>
               </div>
@@ -622,17 +607,17 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             <div>
               <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
                 <div>
-                  <h3 className="text-2xl md:text-3xl font-bold mb-3">Hochwertige Möblierung & Technik</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-3">{t('leistungen.ausstattung.furniture.title')}</h3>
                   <p className="text-muted-foreground text-base md:text-lg mb-6 leading-relaxed">
-                    Von Lounge-Ecken über beleuchtete Theken bis zu Präsentationssystemen.
+                    {t('leistungen.ausstattung.furniture.subtitle')}
                   </p>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     {[
-                      { title: 'Lounge & Besprechung', desc: 'Designer-Sofas, Lounge-Sessel, Stehtische' },
-                      { title: 'Theken & Empfang', desc: 'LED-Theken, Info-Counter, Bar-Lösungen' },
-                      { title: 'Präsentation & Display', desc: 'Glasvitrinen, Wandregale, LED-Beleuchtung' },
-                      { title: 'Technik & Medien', desc: 'LED-Strahler, Displays, Sound-Systeme' }
+                      { title: t('leistungen.ausstattung.furniture.card1.title'), desc: t('leistungen.ausstattung.furniture.card1.desc') },
+                      { title: t('leistungen.ausstattung.furniture.card2.title'), desc: t('leistungen.ausstattung.furniture.card2.desc') },
+                      { title: t('leistungen.ausstattung.furniture.card3.title'), desc: t('leistungen.ausstattung.furniture.card3.desc') },
+                      { title: t('leistungen.ausstattung.furniture.card4.title'), desc: t('leistungen.ausstattung.furniture.card4.desc') }
                     ].map((item, index) => (
                       <div key={index} className="bg-primary/5 p-4 rounded-lg">
                         <h4 className="font-semibold text-sm md:text-base mb-1">{item.title}</h4>
@@ -645,7 +630,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                     <img
                       src="/images/moebel/showroom-ausstellungsmoebel.svg"
-                      alt="Professioneller Showroom mit Ausstellungsmöbeln und Bodenproben – Möbelbau von S&S Messebau"
+                      alt={t('leistungen.ausstattung.furniture.alt1')}
                       width="800"
                       height="600"
                       loading="lazy"
@@ -656,7 +641,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                     <img
                       src="/images/moebel/individuelles-display-regal-led.svg"
-                      alt="Maßgefertigtes Display-Regal mit LED-Beleuchtung – individueller Möbelbau von S&S Messebau"
+                      alt={t('leistungen.ausstattung.furniture.alt2')}
                       width="800"
                       height="600"
                       loading="lazy"
@@ -671,16 +656,15 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             {/* Transparente Kalkulation & Kostenersparnis */}
             <div className="bg-primary/5 rounded-2xl p-6 md:p-8 lg:p-10">
               <div className="max-w-3xl mx-auto text-center">
-                <h3 className="text-2xl md:text-3xl font-bold mb-4">Transparente Kalkulation, faire Preise</h3>
+                <h3 className="text-2xl md:text-3xl font-bold mb-4">{t('leistungen.ausstattung.kalkulation.title')}</h3>
                 <p className="text-muted-foreground text-base md:text-lg mb-8 leading-relaxed">
-                  Jeder Messestand ist einzigartig – darum kalkulieren wir individuell
-                  nach Ihren Anforderungen. Transparentes Angebot, keine versteckten Kosten.
+                  {t('leistungen.ausstattung.kalkulation.desc')}
                 </p>
                 <div className="inline-flex items-center gap-4 bg-white rounded-xl p-6 shadow-lg">
                   <TrendUp className="h-10 w-10 text-primary shrink-0" weight="duotone" />
                   <div className="text-left">
-                    <p className="font-bold text-xl md:text-2xl text-primary">Bis zu 30% Kostenersparnis</p>
-                    <p className="text-sm text-muted-foreground">durch modulare Systeme und Wiederverwendung</p>
+                    <p className="font-bold text-xl md:text-2xl text-primary">{t('leistungen.ausstattung.kalkulation.saving')}</p>
+                    <p className="text-sm text-muted-foreground">{t('leistungen.ausstattung.kalkulation.savingDesc')}</p>
                   </div>
                 </div>
               </div>
@@ -689,17 +673,17 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
             {/* CTA Section */}
             <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 md:p-10 text-center text-primary-foreground">
               <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                Bereit für die perfekte Stand-Ausstattung?
+                {t('leistungen.ausstattung.cta.title')}
               </h3>
               <p className="text-lg mb-6 opacity-90 max-w-2xl mx-auto">
-                Lassen Sie uns gemeinsam die ideale Boden- und Möblierungslösung für Ihren Messestand entwickeln.
+                {t('leistungen.ausstattung.cta.desc')}
               </p>
               <Button
                 size="lg"
                 onClick={onOpenInquiry}
                 className="bg-white text-primary hover:bg-white/90 min-h-[52px] text-base md:text-lg"
               >
-                Jetzt Ausstattung planen
+                {t('leistungen.ausstattung.cta.button')}
                 <ArrowRight className="ml-2" />
               </Button>
             </div>
@@ -712,17 +696,17 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="methodik" className="scroll-mt-20">
             <div className="text-center mb-10 md:mb-12">
-              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Der S&S-Ansatz: Methodik trifft Leidenschaft</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('leistungen.methodik.title')}</h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Vier Prinzipien, die jeden unserer Markenräume prägen.
+                {t('leistungen.methodik.subtitle')}
               </p>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
               {[
-                { icon: Lightning, title: 'Flexibilität', desc: 'Keine Schablone – jeder Markenraum wird individuell auf Ihre Ziele zugeschnitten.' },
-                { icon: Crosshair, title: 'Präzision', desc: 'Millimetergenau geplant und gebaut – von der 3D-Visualisierung bis zur Endabnahme.' },
-                { icon: Package, title: 'Modularität', desc: 'Wiederverwendbare Systeme, die sich anpassen – skalierbar von 20 bis 200 m².' },
-                { icon: ChatCircleDots, title: 'Beratung', desc: 'Persönliche Ansprechpartner, die Ihr Projekt von A bis Z begleiten.' },
+                { icon: Lightning, title: t('leistungen.methodik.card1.title'), desc: t('leistungen.methodik.card1.desc') },
+                { icon: Crosshair, title: t('leistungen.methodik.card2.title'), desc: t('leistungen.methodik.card2.desc') },
+                { icon: Package, title: t('leistungen.methodik.card3.title'), desc: t('leistungen.methodik.card3.desc') },
+                { icon: ChatCircleDots, title: t('leistungen.methodik.card4.title'), desc: t('leistungen.methodik.card4.desc') },
               ].map((item, index) => {
                 const Icon = item.icon
                 return (
@@ -747,9 +731,9 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="erfolge" className="scroll-mt-20">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Unsere Erfolgsbilanz</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('leistungen.erfolge.title')}</h2>
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                Kosteneffizient durch modulare Systeme und Wiederverwendung – das bestätigen unsere Kunden mit einer Wiederbuchungsquote von 98%.
+                {t('leistungen.erfolge.desc')}
               </p>
             </div>
           </div>
@@ -761,21 +745,20 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-10 md:mb-12">
-              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Alles aus einer Hand</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('leistungen.allesauseinerhand.title')}</h2>
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                Mit S&S Messebau haben Sie einen Ansprechpartner für alle Gewerke.
-                Das spart Abstimmungsaufwand und garantiert reibungslose Abläufe.
+                {t('leistungen.allesauseinerhand.subtitle')}
               </p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
               {[
-                { title: 'Konzeption & Design', desc: 'Individuelle Entwürfe und Konzeptentwicklung für Ihren Stand' },
-                { title: 'Produktion & Bau', desc: 'Hochwertige Verarbeitung durch erfahrene Partner' },
-                { title: 'Logistik', desc: 'Bundesweiter Transport und termingerechte Anlieferung' },
-                { title: 'Auf- & Abbau', desc: 'Professionelles Team kümmert sich vor Ort um alles' },
-                { title: 'Lagerung', desc: 'Sichere Einlagerung für Wiederverwendung bei Folgemessen' },
-                { title: 'Service vor Ort', desc: 'Technischer Support während der gesamten Messezeit' }
+                { title: t('leistungen.allesauseinerhand.card1.title'), desc: t('leistungen.allesauseinerhand.card1.desc') },
+                { title: t('leistungen.allesauseinerhand.card2.title'), desc: t('leistungen.allesauseinerhand.card2.desc') },
+                { title: t('leistungen.allesauseinerhand.card3.title'), desc: t('leistungen.allesauseinerhand.card3.desc') },
+                { title: t('leistungen.allesauseinerhand.card4.title'), desc: t('leistungen.allesauseinerhand.card4.desc') },
+                { title: t('leistungen.allesauseinerhand.card5.title'), desc: t('leistungen.allesauseinerhand.card5.desc') },
+                { title: t('leistungen.allesauseinerhand.card6.title'), desc: t('leistungen.allesauseinerhand.card6.desc') }
               ].map((item, index) => (
                 <Card key={index}>
                   <CardHeader className="pb-3">
@@ -886,25 +869,25 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       <StandCalculator onOpenInquiry={onOpenInquiry} />
 
       <InternalLinkSection
-        title="Mehr erfahren"
+        title={t('leistungen.links.title')}
         links={[
-          { label: 'Branchen-Expertise', description: 'Messebau für Food, Finance & Industrie – mit Branchenkenntnis.', hash: '/branchen' },
-          { label: 'Referenzen ansehen', description: 'Realisierte Messebau-Projekte von 20–200 m² im Überblick.', hash: '/referenzen' },
-          { label: 'Unser Ablauf', description: 'Vom Erstgespräch bis zum Abbau – so arbeiten wir.', hash: '/ablauf' },
-          { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für umweltbewusste Auftritte.', hash: '/nachhaltigkeit' },
-          { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit – lernen Sie uns kennen.', hash: '/ueber-uns' },
-          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit persönlicher Beratung anfordern.', hash: '/kontakt' },
+          { label: t('leistungen.links.branchen.label'), description: t('leistungen.links.branchen.desc'), hash: '/branchen' },
+          { label: t('leistungen.links.referenzen.label'), description: t('leistungen.links.referenzen.desc'), hash: '/referenzen' },
+          { label: t('leistungen.links.ablauf.label'), description: t('leistungen.links.ablauf.desc'), hash: '/ablauf' },
+          { label: t('leistungen.links.nachhaltigkeit.label'), description: t('leistungen.links.nachhaltigkeit.desc'), hash: '/nachhaltigkeit' },
+          { label: t('leistungen.links.ueber.label'), description: t('leistungen.links.ueber.desc'), hash: '/ueber-uns' },
+          { label: t('leistungen.links.kontakt.label'), description: t('leistungen.links.kontakt.desc'), hash: '/kontakt' },
         ]}
       />
 
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Interessiert? Lassen Sie uns sprechen.</h2>
+          <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('leistungen.bottomCta.title')}</h2>
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
-            Beschreiben Sie uns Ihr Projekt und wir erstellen Ihnen ein individuelles Angebot.
+            {t('leistungen.bottomCta.desc')}
           </p>
           <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
-            Unverbindliches Angebot einholen
+            {t('leistungen.bottomCta.button')}
             <ArrowRight className="ml-2" />
           </Button>
         </div>
