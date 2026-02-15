@@ -73,8 +73,8 @@ function generateId(): string {
 }
 
 function maskKey(key: string): string {
-  if (key.length <= 4) return '****'
-  return '•'.repeat(key.length - 4) + key.slice(-4)
+  if (key.length <= 4) return '••••••••'
+  return '••••••••' + key.slice(-4)
 }
 
 function getFromStorage<T>(key: string, fallback: T): T {

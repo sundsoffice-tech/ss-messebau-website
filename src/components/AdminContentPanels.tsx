@@ -42,7 +42,7 @@ import {
 // ─── Blog Manager ────────────────────────────────────────────
 
 export function BlogManager() {
-  const { t } = useTranslation()
+  const { t, lang } = useTranslation()
   const [posts, setPosts] = useState<AdminBlogPost[]>([])
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -121,7 +121,7 @@ export function BlogManager() {
                       </div>
                       <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{post.excerpt}</p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Slug: /{post.slug} · {t('adminContent.blog.published')}: {new Date(post.publishedAt).toLocaleDateString('de-DE')}
+                        Slug: /{post.slug} · {t('adminContent.blog.published')}: {new Date(post.publishedAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-DE')}
                       </p>
                     </div>
                     <div className="flex gap-1 shrink-0">
@@ -253,7 +253,7 @@ function BlogPostForm({
 // ─── Messe Manager ───────────────────────────────────────────
 
 export function MesseManager() {
-  const { t } = useTranslation()
+  const { t, lang } = useTranslation()
   const [events, setEvents] = useState<AdminMesseEvent[]>([])
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -344,7 +344,7 @@ export function MesseManager() {
                           {event.location}
                         </span>
                         <span>
-                          {new Date(event.startDate).toLocaleDateString('de-DE')} – {new Date(event.endDate).toLocaleDateString('de-DE')}
+                          {new Date(event.startDate).toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-DE')} – {new Date(event.endDate).toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-DE')}
                         </span>
                         {event.website && (
                           <span className="flex items-center gap-1">
@@ -497,7 +497,7 @@ function MesseEventForm({
 // ─── API Keys Manager ────────────────────────────────────────
 
 export function ExternalApiKeysManager() {
-  const { t } = useTranslation()
+  const { t, lang } = useTranslation()
   const [keys, setKeys] = useState<AdminApiKey[]>([])
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -574,8 +574,8 @@ export function ExternalApiKeysManager() {
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">{entry.description}</p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        {t('adminContent.apiKeys.created')}: {new Date(entry.createdAt).toLocaleDateString('de-DE')} · 
-                        {t('adminContent.apiKeys.updated')}: {new Date(entry.updatedAt).toLocaleDateString('de-DE')}
+                        {t('adminContent.apiKeys.created')}: {new Date(entry.createdAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-DE')} · 
+                        {t('adminContent.apiKeys.updated')}: {new Date(entry.updatedAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-DE')}
                       </p>
                     </div>
                     <div className="flex gap-1 shrink-0">
