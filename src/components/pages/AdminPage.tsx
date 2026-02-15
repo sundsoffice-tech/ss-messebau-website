@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from '@/lib/i18n'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,23 @@ import { NotificationConfigPanel } from '@/components/NotificationConfigPanel'
 import { AIAdminPanel } from '@/components/AIAdminPanel'
 import { BlogManager, MesseManager, ExternalApiKeysManager } from '@/components/AdminContentPanels'
 import { Badge } from '@/components/ui/badge'
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from '@/components/ui/alert-dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { 
   Envelope, 
   ShoppingCart, 
@@ -26,6 +43,7 @@ import {
   SignOut,
   ChatText,
   Trash,
+  MagnifyingGlass,
 } from '@phosphor-icons/react'
 import { authApi, ordersApi, inquiriesApi, type AuthUser, type OrderRecord, type InquiryRecord } from '@/lib/api-client'
 import { toast } from 'sonner'
@@ -414,14 +432,41 @@ function AdminSetupForm({ onSuccess }: { onSuccess: () => void }) {
 
 // ─── Orders Manager (API-backed) ────────────────────────────
 
+const ORDER_STATUSES = ['Neu', 'In Bearbeitung', 'Abgeschlossen', 'Storniert'] as const
+const DEFAULT_STATUS = 'Neu'
+
+function getStatusBadge(status: string) {
+  switch (status) {
+    case 'In Bearbeitung':
+      return <Badge variant="outline" className="text-blue-600 border-blue-600">{status}</Badge>
+    case 'Abgeschlossen':
+      return <Badge variant="default">{status}</Badge>
+    case 'Storniert':
+      return <Badge variant="destructive">{status}</Badge>
+    case 'Neu':
+    default:
+      return <Badge variant="secondary">{status || DEFAULT_STATUS}</Badge>
+  }
+}
+
+const ITEMS_PER_PAGE = 25
+
 function OrdersManager() {
   const { t } = useTranslation()
   const [orders, setOrders] = useState<OrderRecord[]>([])
   const [loading, setLoading] = useState(false)
+  const [deleteId, setDeleteId] = useState<number | null>(null)
+  const [search, setSearch] = useState('')
+  const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     loadOrders()
   }, [])
+
+  useEffect(() => {
+    setPage(1)
+  }, [search, statusFilter])
 
   const loadOrders = async () => {
     setLoading(true)
@@ -435,16 +480,53 @@ function OrdersManager() {
     }
   }
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Bestellung wirklich löschen?')) return
+  const confirmDelete = async () => {
+    if (deleteId === null) return
     try {
-      await ordersApi.delete(id)
+      await ordersApi.delete(deleteId)
       toast.success('Bestellung gelöscht')
       loadOrders()
     } catch {
       toast.error('Fehler beim Löschen')
+    } finally {
+      setDeleteId(null)
     }
   }
+
+  const handleStatusChange = async (id: number, status: string) => {
+    try {
+      await ordersApi.updateStatus(id, status)
+      toast.success('Status aktualisiert')
+      setOrders((prev) =>
+        prev.map((o) => (o.id === id ? { ...o, status } : o))
+      )
+    } catch {
+      toast.error('Fehler beim Statuswechsel')
+    }
+  }
+
+  const filteredOrders = useMemo(() => {
+    let result = orders
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      result = result.filter(
+        (o) =>
+          (o.company || '').toLowerCase().includes(q) ||
+          (o.customer_name || '').toLowerCase().includes(q) ||
+          (o.customer_email || '').toLowerCase().includes(q)
+      )
+    }
+    if (statusFilter !== 'all') {
+      result = result.filter((o) => (o.status || DEFAULT_STATUS) === statusFilter)
+    }
+    return result
+  }, [orders, search, statusFilter])
+
+  const totalPages = Math.max(1, Math.ceil(filteredOrders.length / ITEMS_PER_PAGE))
+  const paginatedOrders = filteredOrders.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE
+  )
 
   if (loading) {
     return (
@@ -465,7 +547,30 @@ function OrdersManager() {
 
   return (
     <div className="space-y-4">
-      {orders.map((order) => {
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <MagnifyingGlass aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Suche nach Firma, Name, E-Mail..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Status filtern" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Alle Status</SelectItem>
+            {ORDER_STATUSES.map((s) => (
+              <SelectItem key={s} value={s}>{s}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {paginatedOrders.map((order) => {
         const data = order.order_data as Record<string, any>
         return (
           <Card key={order.id} className="p-6">
@@ -479,7 +584,22 @@ function OrdersManager() {
                     {order.customer_name} – {order.customer_email}
                   </p>
                 </div>
-                <Badge>{order.status || t('admin.statusNew')}</Badge>
+                <div className="flex items-center gap-2">
+                  {getStatusBadge(order.status || DEFAULT_STATUS)}
+                  <Select
+                    value={order.status || DEFAULT_STATUS}
+                    onValueChange={(v) => handleStatusChange(order.id, v)}
+                  >
+                    <SelectTrigger className="w-[160px] h-8 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ORDER_STATUSES.map((s) => (
+                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
@@ -518,7 +638,7 @@ function OrdersManager() {
                 <Button
                   variant="destructive"
                   size="sm"
-                  onClick={() => handleDelete(order.id)}
+                  onClick={() => setDeleteId(order.id)}
                 >
                   <Trash className="w-4 h-4 mr-1" />
                   {t('admin.delete') || 'Löschen'}
@@ -528,6 +648,45 @@ function OrdersManager() {
           </Card>
         )
       })}
+
+      {filteredOrders.length > ITEMS_PER_PAGE && (
+        <div className="flex items-center justify-center gap-4 pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page <= 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            Zurück
+          </Button>
+          <span className="text-sm text-muted-foreground">
+            Seite {page} von {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page >= totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Weiter
+          </Button>
+        </div>
+      )}
+
+      <AlertDialog open={deleteId !== null} onOpenChange={(open) => { if (!open) setDeleteId(null) }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Bestellung löschen</AlertDialogTitle>
+            <AlertDialogDescription>
+              Möchten Sie diese Bestellung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>Löschen</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
@@ -538,10 +697,17 @@ function InquiriesManager() {
   const { t } = useTranslation()
   const [inquiries, setInquiries] = useState<InquiryRecord[]>([])
   const [loading, setLoading] = useState(false)
+  const [deleteId, setDeleteId] = useState<number | null>(null)
+  const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     loadInquiries()
   }, [])
+
+  useEffect(() => {
+    setPage(1)
+  }, [search])
 
   const loadInquiries = async () => {
     setLoading(true)
@@ -555,16 +721,36 @@ function InquiriesManager() {
     }
   }
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Anfrage wirklich löschen?')) return
+  const confirmDelete = async () => {
+    if (deleteId === null) return
     try {
-      await inquiriesApi.delete(id)
+      await inquiriesApi.delete(deleteId)
       toast.success('Anfrage gelöscht')
       loadInquiries()
     } catch {
       toast.error('Fehler beim Löschen')
+    } finally {
+      setDeleteId(null)
     }
   }
+
+  const filteredInquiries = useMemo(() => {
+    if (!search.trim()) return inquiries
+    const q = search.toLowerCase()
+    return inquiries.filter(
+      (inq) =>
+        (inq.name || '').toLowerCase().includes(q) ||
+        (inq.email || '').toLowerCase().includes(q) ||
+        (inq.company || '').toLowerCase().includes(q) ||
+        (inq.message || '').toLowerCase().includes(q)
+    )
+  }, [inquiries, search])
+
+  const totalPages = Math.max(1, Math.ceil(filteredInquiries.length / ITEMS_PER_PAGE))
+  const paginatedInquiries = filteredInquiries.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE
+  )
 
   if (loading) {
     return (
@@ -585,7 +771,17 @@ function InquiriesManager() {
 
   return (
     <div className="space-y-4">
-      {inquiries.map((inq) => (
+      <div className="relative">
+        <MagnifyingGlass aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <Input
+          placeholder="Suche nach Name, E-Mail, Firma, Nachricht..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-9"
+        />
+      </div>
+
+      {paginatedInquiries.map((inq) => (
         <Card key={inq.id} className="p-6">
           <div className="flex items-start justify-between">
             <div className="space-y-1">
@@ -610,7 +806,7 @@ function InquiriesManager() {
               <Button
                 variant="destructive"
                 size="sm"
-                onClick={() => handleDelete(inq.id)}
+                onClick={() => setDeleteId(inq.id)}
               >
                 <Trash className="w-4 h-4" />
               </Button>
@@ -618,6 +814,45 @@ function InquiriesManager() {
           </div>
         </Card>
       ))}
+
+      {filteredInquiries.length > ITEMS_PER_PAGE && (
+        <div className="flex items-center justify-center gap-4 pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page <= 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            Zurück
+          </Button>
+          <span className="text-sm text-muted-foreground">
+            Seite {page} von {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page >= totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Weiter
+          </Button>
+        </div>
+      )}
+
+      <AlertDialog open={deleteId !== null} onOpenChange={(open) => { if (!open) setDeleteId(null) }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Anfrage löschen</AlertDialogTitle>
+            <AlertDialogDescription>
+              Möchten Sie diese Anfrage wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>Löschen</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
