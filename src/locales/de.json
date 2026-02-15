@@ -1452,5 +1452,20 @@
   "emailQueue.close": "Schließen",
   "emailQueue.sendNow": "Jetzt senden",
   "notifConfig.defaultChannel": "allgemein",
-  "notifConfig.testWebhookMessage": "🧪 Test-Nachricht von S&S Messebau Benachrichtigungssystem"
+  "notifConfig.testWebhookMessage": "🧪 Test-Nachricht von S&S Messebau Benachrichtigungssystem",
+  "nav.aktuelles": "Aktuelles",
+  "footer.company.aktuelles": "Aktuelles & Messen",
+  "aktuelles.hero.title": "Aktuelles & Messekalender",
+  "aktuelles.hero.subtitle": "Kommende Messen, Events und aktuelle Neuigkeiten rund um S&S Messebau – immer informiert bleiben.",
+  "aktuelles.calendar.title": "Messekalender",
+  "aktuelles.calendar.subtitle": "Kommende Messen und Events – mit Hinweis, wo S&S Messebau vor Ort ist.",
+  "aktuelles.calendar.nextFair": "Nächste Messe in",
+  "aktuelles.calendar.days": "Tagen",
+  "aktuelles.calendar.noEvents": "Derzeit sind keine kommenden Messen eingetragen.",
+  "aktuelles.news.title": "Neuigkeiten",
+  "aktuelles.news.subtitle": "Aktuelle Nachrichten und Updates von S&S Messebau.",
+  "aktuelles.news.noNews": "Derzeit gibt es keine aktuellen Nachrichten.",
+  "aktuelles.cta.heading": "Treffen wir uns auf der nächsten Messe?",
+  "aktuelles.cta.text": "Planen Sie Ihren nächsten Messeauftritt mit S&S Messebau – wir beraten Sie gerne persönlich.",
+  "aktuelles.cta.button": "Jetzt Messestand anfragen"
 }
