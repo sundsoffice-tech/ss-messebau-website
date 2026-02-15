@@ -1,0 +1,464 @@
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import {
+  Storefront,
+  ArrowRight,
+  Phone,
+  CheckCircle,
+  Star,
+  Users,
+  Shield,
+  Eye,
+  PaintBrush,
+  Cube,
+  Sparkle,
+  Package,
+  Armchair,
+  Envelope,
+} from '@phosphor-icons/react'
+
+export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
+  const processSteps = [
+    {
+      step: 1,
+      title: 'Erstgespräch & Bedarfsanalyse',
+      desc: 'Wir lernen Ihre Marke, Ihre Zielgruppe und Ihre Raumgegebenheiten kennen. Gemeinsam definieren wir Ziele, Budget und den gewünschten Erlebnischarakter Ihres Showrooms.',
+    },
+    {
+      step: 2,
+      title: 'Konzept & 3D-Visualisierung',
+      desc: 'Unsere Designer entwickeln ein maßgeschneidertes Raumkonzept mit fotorealistischen 3D-Visualisierungen – inklusive Material-, Farb- und Beleuchtungsvorschlägen.',
+    },
+    {
+      step: 3,
+      title: 'Produktion & Fertigung',
+      desc: 'Alle Einbauten und Sonderanfertigungen werden in unserer hauseigenen Werkstatt in höchster Qualität gefertigt. Ein Probeaufbau sichert die Passgenauigkeit.',
+    },
+    {
+      step: 4,
+      title: 'Montage & Installation',
+      desc: 'Unser erfahrenes Montageteam baut Ihren Showroom vor Ort auf – termingerecht, sauber und mit Liebe zum Detail.',
+    },
+    {
+      step: 5,
+      title: 'Übergabe & Nachbetreuung',
+      desc: 'Nach der Fertigstellung übergeben wir Ihren Showroom schlüsselfertig. Auf Wunsch bieten wir Wartung, saisonale Umgestaltungen und Erweiterungen.',
+    },
+  ]
+
+  const faqs = [
+    {
+      q: 'Was kostet ein individueller Showroom?',
+      a: 'Die Kosten variieren je nach Raumgröße, Designkomplexität und Ausstattung. Einen kleinen Empfangsbereich realisieren wir ab ca. 5.000 €, umfangreiche Brand Spaces ab ca. 20.000 €. Wir erstellen Ihnen kurzfristig ein detailliertes, unverbindliches Angebot.',
+    },
+    {
+      q: 'Wie lange dauert die Umsetzung eines Showrooms?',
+      a: 'Für einen individuellen Showroom empfehlen wir eine Vorlaufzeit von 6–10 Wochen. Bei kleineren Projekten oder Umgestaltungen sind auch kürzere Zeiträume möglich.',
+    },
+    {
+      q: 'Können bestehende Räume umgestaltet werden?',
+      a: 'Ja, wir modernisieren und erweitern bestehende Showrooms, Ausstellungsräume und Empfangsbereiche. Das spart Kosten und schont Ressourcen.',
+    },
+    {
+      q: 'Bieten Sie auch interaktive Elemente an?',
+      a: 'Selbstverständlich. Wir integrieren Touchscreens, digitale Displays, Produktkonfiguratoren und interaktive Medienstationen in Ihren Showroom – für ein modernes Markenerlebnis.',
+    },
+    {
+      q: 'In welchen Regionen bauen Sie Showrooms?',
+      a: 'Wir sind bundesweit tätig und realisieren Showrooms und Brand Spaces in ganz Deutschland – von NRW über Frankfurt und München bis Hamburg und Berlin.',
+    },
+    {
+      q: 'Was ist im Full-Service für Showrooms enthalten?',
+      a: 'Unser Full-Service umfasst: Beratung, Konzeption, 3D-Design, Produktion, Beleuchtungsplanung, Möblierung, Bodengestaltung, Montage und auf Wunsch regelmäßige Wartung und saisonale Anpassungen.',
+    },
+  ]
+
+  const testimonials = [
+    {
+      text: 'S&S Messebau hat unseren Showroom im Firmensitz komplett neu gestaltet. Das Ergebnis übertrifft alle Erwartungen – unsere Kunden sind begeistert und die Markenwahrnehmung hat sich spürbar verbessert.',
+      author: 'Thomas Richter',
+      company: 'LuxTech Industries GmbH',
+      rating: 5,
+    },
+    {
+      text: 'Vom ersten Entwurf bis zur Übergabe war die Zusammenarbeit erstklassig. Besonders die Liebe zum Detail bei den Materialien und der Beleuchtung hat uns überzeugt.',
+      author: 'Sandra Klein',
+      company: 'ModaVista AG',
+      rating: 5,
+    },
+    {
+      text: 'Unser Ausstellungsraum wurde termingerecht und in Premium-Qualität realisiert. Die interaktiven Elemente kommen bei Besuchern hervorragend an. Klare Empfehlung!',
+      author: 'Jürgen Hoffmann',
+      company: 'PräzisionsMechanik Hoffmann',
+      rating: 5,
+    },
+  ]
+
+  const relatedPages = [
+    { label: 'Messebau & Messestände', hash: '/leistungen/messebau' },
+    { label: 'Eventbau & Veranstaltungen', hash: '/leistungen/eventbau' },
+    { label: 'Böden & Ausstattung', hash: '/leistungen/boeden-ausstattung' },
+    { label: 'Alle Leistungen im Überblick', hash: '/leistungen' },
+    { label: 'Kontakt & Beratung', hash: '/kontakt' },
+  ]
+
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-amber-600 via-amber-500 to-orange-500 text-white py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1
+              className="font-bold mb-6"
+              style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)', lineHeight: '1.2' }}
+            >
+              Showrooms &amp; Brand Spaces – Ihre Marke erleben lassen
+            </h1>
+            <p className="text-xl mb-8 text-white/90">
+              Permanente Markenwelten, die begeistern: S&amp;S Messebau konzipiert und realisiert
+              individuelle Showrooms, Brand Spaces und Ausstellungsräume – von der ersten Idee
+              bis zur schlüsselfertigen Übergabe. Für ein Markenerlebnis, das bleibt.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                onClick={onOpenInquiry}
+                className="bg-white text-amber-700 hover:bg-white/90"
+              >
+                Jetzt Showroom anfragen
+                <ArrowRight className="ml-2" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={onOpenInquiry}
+                className="border-white text-white hover:bg-white/10"
+              >
+                <Phone className="mr-2" />
+                Kostenlose Beratung
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* USP Badge Section */}
+      <section className="py-12 bg-secondary/30">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-5xl mx-auto">
+            <Card className="p-4 text-center">
+              <PaintBrush className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <p className="font-semibold text-sm">Individuelle Gestaltung</p>
+              <p className="text-xs text-muted-foreground">Maßgeschneiderte Konzepte</p>
+            </Card>
+            <Card className="p-4 text-center">
+              <Storefront className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <p className="font-semibold text-sm">Markenwelten</p>
+              <p className="text-xs text-muted-foreground">Immersive Brand Spaces</p>
+            </Card>
+            <Card className="p-4 text-center">
+              <Sparkle className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <p className="font-semibold text-sm">Premium-Materialien</p>
+              <p className="text-xs text-muted-foreground">Höchste Qualitätsstandards</p>
+            </Card>
+            <Card className="p-4 text-center">
+              <Package className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <p className="font-semibold text-sm">Bundesweit</p>
+              <p className="text-xs text-muted-foreground">Montage in ganz Deutschland</p>
+            </Card>
+            <Card className="p-4 text-center">
+              <Shield className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <p className="font-semibold text-sm">Full-Service</p>
+              <p className="text-xs text-muted-foreground">Alles aus einer Hand</p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Leistungsübersicht Section */}
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2
+            className="font-bold text-center mb-4"
+            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+          >
+            Showroom-Bau – Unsere Leistungen im Detail
+          </h2>
+          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
+            Als erfahrener Partner für Showroom-Gestaltung und Markenwelten aus NRW bieten wir
+            Ihnen das komplette Leistungsspektrum – von der Konzeption bis zur schlüsselfertigen
+            Übergabe Ihres Ausstellungsraums.
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {[
+              {
+                icon: Eye,
+                title: 'Konzeption & Beratung',
+                desc: 'Strategische Planung Ihres Showrooms mit Markenanalyse, Zielgruppendefinition und Erlebniskonzept. Wir entwickeln eine Raumstrategie, die Ihre Marke optimal erlebbar macht.',
+              },
+              {
+                icon: PaintBrush,
+                title: 'Raumgestaltung & 3D-Design',
+                desc: 'Kreative Raumkonzepte mit fotorealistischen 3D-Visualisierungen. Sie erleben Ihren Showroom virtuell, bevor die Produktion beginnt.',
+              },
+              {
+                icon: Sparkle,
+                title: 'Beleuchtungsdesign',
+                desc: 'Professionelle Lichtplanung für die perfekte Inszenierung Ihrer Produkte und Markenwelt. Von Akzentbeleuchtung bis zu dynamischen Lichtszenarien.',
+              },
+              {
+                icon: Cube,
+                title: 'Materialkonzepte',
+                desc: 'Hochwertige Materialauswahl passend zu Ihrer Markenidentität. Edle Oberflächen, nachhaltige Werkstoffe und individuelle Sonderanfertigungen.',
+              },
+              {
+                icon: CheckCircle,
+                title: 'Interaktive Elemente',
+                desc: 'Integration von Touchscreens, digitalen Displays, Produktkonfiguratoren und multimedialen Erlebnisstationen für ein modernes Besuchererlebnis.',
+              },
+              {
+                icon: Armchair,
+                title: 'Möblierung & Ausstattung',
+                desc: 'Komplette Einrichtung Ihres Showrooms mit maßgefertigten Möbeln, Vitrinen, Präsentationssystemen und Empfangsmöbeln.',
+              },
+            ].map((item, index) => (
+              <Card key={index} className="p-6">
+                <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary/10 mb-4">
+                  <item.icon className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="text-lg font-bold mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground">{item.desc}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Einsatzbereiche Section */}
+      <section className="py-12 sm:py-16 bg-secondary/30">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2
+            className="font-bold text-center mb-4"
+            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+          >
+            Einsatzbereiche für Showrooms
+          </h2>
+          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
+            Unsere Showroom-Lösungen sind vielseitig einsetzbar – überall dort, wo Ihre Marke
+            erlebbar werden soll.
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {[
+              {
+                icon: Storefront,
+                title: 'Firmenhauptsitz',
+                desc: 'Repräsentative Markenwelten im eigenen Unternehmen – für Kunden, Partner und Mitarbeiter.',
+              },
+              {
+                icon: Eye,
+                title: 'Verkaufsräume',
+                desc: 'Verkaufsfördernde Raumkonzepte, die Produkte optimal inszenieren und zum Kauf inspirieren.',
+              },
+              {
+                icon: Cube,
+                title: 'Ausstellungsräume',
+                desc: 'Permanente oder temporäre Ausstellungen für Produkte, Innovationen und Unternehmensgeschichte.',
+              },
+              {
+                icon: Sparkle,
+                title: 'Produktpräsentationen',
+                desc: 'Inszenierte Produktwelten für Launches, Fachhändler-Events und Kundenpräsentationen.',
+              },
+              {
+                icon: Armchair,
+                title: 'Empfangsbereiche',
+                desc: 'Eindrucksvolle Eingangs- und Empfangsbereiche, die den ersten Eindruck Ihrer Marke prägen.',
+              },
+            ].map((item, index) => (
+              <Card key={index}>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-center h-14 w-14 rounded-lg bg-primary/10 mb-4">
+                    <item.icon className="w-7 h-7 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Ablauf/Prozess Section */}
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2
+            className="font-bold text-center mb-4"
+            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+          >
+            Ihr Weg zum perfekten Showroom
+          </h2>
+          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
+            In fünf klar definierten Schritten realisieren wir Ihren Showroom –
+            transparent, termingerecht und mit höchstem Qualitätsanspruch.
+          </p>
+
+          <div className="max-w-4xl mx-auto space-y-6">
+            {processSteps.map((item, index) => (
+              <div key={item.step} className="flex gap-4 sm:gap-6">
+                <div className="flex flex-col items-center">
+                  <div className="flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-lg sm:text-xl">
+                    {item.step}
+                  </div>
+                  {index < processSteps.length - 1 && (
+                    <div className="w-0.5 h-full bg-border mt-2" />
+                  )}
+                </div>
+                <div className="pb-6 sm:pb-8">
+                  <h3 className="text-xl sm:text-2xl font-semibold mb-2">{item.title}</h3>
+                  <p className="text-base sm:text-lg text-muted-foreground">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-12 sm:py-16 bg-secondary/30">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2
+            className="font-bold text-center mb-4"
+            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+          >
+            Häufige Fragen zum Showroom-Bau
+          </h2>
+          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
+            Antworten auf die wichtigsten Fragen rund um Showroom-Gestaltung, Kosten und Ablauf.
+          </p>
+
+          <div className="max-w-3xl mx-auto">
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left">{faq.q}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    {faq.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </div>
+      </section>
+
+      {/* Kundenstimmen Section */}
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2
+            className="font-bold text-center mb-4"
+            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+          >
+            Das sagen unsere Kunden
+          </h2>
+          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
+            Vertrauen Sie auf die Erfahrung zufriedener Showroom-Kunden.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index}>
+                <CardContent className="p-6">
+                  <div className="flex gap-1 mb-4">
+                    {Array.from({ length: testimonial.rating }).map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-500" weight="fill" />
+                    ))}
+                  </div>
+                  <p className="text-muted-foreground mb-4 italic">
+                    &ldquo;{testimonial.text}&rdquo;
+                  </p>
+                  <Separator className="my-4" />
+                  <div>
+                    <p className="font-semibold">{testimonial.author}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Interne Verlinkung Section */}
+      <section className="py-12 sm:py-16 bg-secondary/30">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2
+            className="font-bold text-center mb-4"
+            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+          >
+            Weitere Leistungen entdecken
+          </h2>
+          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
+            Entdecken Sie unser gesamtes Leistungsspektrum für Ihren Markenauftritt.
+          </p>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            {relatedPages.map((page, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                className="justify-between min-h-[48px]"
+                onClick={() => window.location.hash = page.hash}
+              >
+                {page.label}
+                <ArrowRight className="ml-2 shrink-0" />
+              </Button>
+            ))}
+            <Button
+              variant="ghost"
+              className="justify-between min-h-[48px] text-muted-foreground"
+              onClick={() => window.location.hash = '/leistungen'}
+            >
+              ← Zurück zur Übersicht
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
+          <h2
+            className="font-bold mb-6"
+            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+          >
+            Bereit für Ihren eigenen Showroom?
+          </h2>
+          <p className="text-lg text-muted-foreground mb-8">
+            Lassen Sie uns gemeinsam Ihre Markenwelt gestalten. Kontaktieren Sie uns für
+            eine unverbindliche Beratung und ein individuelles Angebot für Ihren Showroom.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" onClick={onOpenInquiry}>
+              <Envelope className="mr-2" />
+              Angebot anfordern
+            </Button>
+            <Button size="lg" variant="outline" onClick={onOpenInquiry}>
+              <Phone className="mr-2" />
+              Rückruf vereinbaren
+            </Button>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}

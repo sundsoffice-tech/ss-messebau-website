@@ -51,7 +51,8 @@ const LEISTUNGEN_MEGA_MENU = [
     featureKeys: ['header.mega.messebau.f1', 'header.mega.messebau.f2', 'header.mega.messebau.f3'],
     gradient: 'from-blue-500/10 to-blue-600/5',
     previewImage: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop',
-    sectionId: 'messebau'
+    sectionId: 'messebau',
+    pagePath: '/leistungen/messebau'
   },
   {
     titleKey: 'header.mega.touren',
@@ -62,7 +63,8 @@ const LEISTUNGEN_MEGA_MENU = [
     featureKeys: ['header.mega.touren.f1', 'header.mega.touren.f2', 'header.mega.touren.f3'],
     gradient: 'from-teal-500/10 to-teal-600/5',
     previewImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop',
-    sectionId: 'touren'
+    sectionId: 'touren',
+    pagePath: '/leistungen/touren'
   },
   {
     titleKey: 'header.mega.showrooms',
@@ -73,7 +75,8 @@ const LEISTUNGEN_MEGA_MENU = [
     featureKeys: ['header.mega.showrooms.f1', 'header.mega.showrooms.f2', 'header.mega.showrooms.f3'],
     gradient: 'from-amber-500/10 to-amber-600/5',
     previewImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
-    sectionId: 'showrooms'
+    sectionId: 'showrooms',
+    pagePath: '/leistungen/showrooms'
   },
   {
     titleKey: 'header.mega.eventbau',
@@ -84,7 +87,8 @@ const LEISTUNGEN_MEGA_MENU = [
     featureKeys: ['header.mega.eventbau.f1', 'header.mega.eventbau.f2', 'header.mega.eventbau.f3'],
     gradient: 'from-purple-500/10 to-purple-600/5',
     previewImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop',
-    sectionId: 'eventbau'
+    sectionId: 'eventbau',
+    pagePath: '/leistungen/eventbau'
   },
   {
     titleKey: 'header.mega.ladenbau',
@@ -106,7 +110,8 @@ const LEISTUNGEN_MEGA_MENU = [
     featureKeys: ['header.mega.boeden.f1', 'header.mega.boeden.f2', 'header.mega.boeden.f3'],
     gradient: 'from-green-500/10 to-green-600/5',
     previewImage: '/images/boeden/besprechungsraum-vinylboden-moebel.jpg',
-    sectionId: 'boeden-ausstattung'
+    sectionId: 'boeden-ausstattung',
+    pagePath: '/leistungen/boeden-ausstattung'
   }
 ]
 
@@ -133,12 +138,12 @@ const SECONDARY_NAV = [
   { labelKey: 'nav.contact', path: '/kontakt', icon: Envelope }
 ]
 
-const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_MENU[0], onNavigate: (sectionId: string) => void }) => {
+const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_MENU[0], onNavigate: (sectionId: string, pagePath?: string) => void }) => {
   const Icon = item.icon
   const { t } = useTranslation()
   return (
     <button
-      onClick={() => onNavigate(item.sectionId)}
+      onClick={() => onNavigate(item.sectionId, item.pagePath)}
       className="group relative overflow-hidden rounded-lg border text-left transition-all hover:border-primary hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
       aria-label={`${t(item.titleKey)} - ${t(item.descriptionKey)}`}
     >
@@ -346,10 +351,14 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     window.location.hash = path
   }
 
-  const handleSectionNavigation = (sectionId: string) => {
+  const handleSectionNavigation = (sectionId: string, pagePath?: string) => {
     setMobileMenuOpen(false)
     setMegaMenuOpen(false)
-    navigateToPageAndSection('/leistungen', sectionId)
+    if (pagePath) {
+      window.location.hash = pagePath
+    } else {
+      navigateToPageAndSection('/leistungen', sectionId)
+    }
   }
 
   const handleLeistungenClick = (event?: React.MouseEvent) => {
@@ -883,7 +892,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                             return (
                               <button
                                 key={item.sectionId}
-                                onClick={() => handleSectionNavigation(item.sectionId)}
+                                onClick={() => handleSectionNavigation(item.sectionId, item.pagePath)}
                                 className="w-full group relative overflow-hidden rounded-lg border p-3 text-left transition-all min-h-[48px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:border-primary active:shadow-md"
                               >
                                 <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-active:opacity-100 transition-opacity`} />
