@@ -11,22 +11,22 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 
   return (
     <div>
-      <section id="ueber-uns-hero" className="py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Über S&S Messebau – Ihr Partner aus NRW</h1>
-          <p className="text-xl opacity-90 max-w-3xl">
+      <section id="ueber-uns-hero" className="py-12 sm:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>Über S&S Messebau – Ihr Partner aus NRW</h1>
+          <p className="text-base sm:text-lg opacity-90 max-w-3xl leading-relaxed">
             Seit vielen Jahren realisieren wir Messestände mit Leidenschaft und Präzision. 
             Als inhabergeführte GbR aus Hückelhoven verbinden wir persönliche Betreuung mit professionellem Service.
           </p>
         </div>
       </section>
 
-      <section id="story" className="py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <section id="story" className="py-12 sm:py-16 scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-6">Unsere Geschichte</h2>
-              <div className="space-y-4 text-lg text-muted-foreground">
+              <h2 className="font-bold mb-4 sm:mb-6" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Unsere Geschichte</h2>
+              <div className="space-y-4 text-base sm:text-lg text-muted-foreground">
                 <p>
                   Was als kleines Messebau-Unternehmen begann, ist heute ein etablierter 
                   Full-Service-Anbieter für Messebau, Eventbau und Ladenbau im gesamten Bundesgebiet.
@@ -56,20 +56,20 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         </div>
       </section>
 
-      <section id="team" className="py-16 bg-muted scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-8 text-center">Unser Team</h2>
-          <p className="text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-12">
+      <section id="team" className="py-12 sm:py-16 bg-muted scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Unser Team</h2>
+          <p className="text-base sm:text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-8 sm:mb-12">
             Als inhabergeführte GbR sind Fabrice Noel Schippers und Parampuneet Singh Ihre direkten Ansprechpartner 
             für alle Projektphasen – von der ersten Idee bis zum Abbau.
           </p>
         </div>
       </section>
 
-      <section id="werte" className="py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-8 text-center">Unsere Werte</h2>
-            <div className="grid md:grid-cols-3 gap-8">
+      <section id="werte" className="py-12 sm:py-16 scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Unsere Werte</h2>
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {[
                 {
                   title: 'Fairness',
@@ -95,10 +95,10 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         </div>
       </section>
 
-      <section id="arbeitsweise" className="py-16 bg-muted scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-8 text-center">So arbeiten wir</h2>
-            <div className="grid md:grid-cols-2 gap-6">
+      <section id="arbeitsweise" className="py-12 sm:py-16 bg-muted scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>So arbeiten wir</h2>
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
               {[
                 { title: 'Persönlich', desc: 'Ein fester Ansprechpartner für Ihr gesamtes Projekt' },
                 { title: 'Flexibel', desc: 'Anpassungsfähig auf Änderungen und besondere Wünsche' },
@@ -118,9 +118,9 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         </div>
       </section>
 
-      <section id="vergleich" className="py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-8 text-center">S&S Messebau vs. Größere Konkurrenz</h2>
+      <section id="vergleich" className="py-12 sm:py-16 scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>S&S Messebau vs. Größere Konkurrenz</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-base">
                 <thead>
@@ -172,10 +172,10 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         </div>
       </section>
 
-      <section className="py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Lernen Sie uns kennen</h2>
-          <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Lernen Sie uns kennen</h2>
+          <p className="text-base sm:text-lg mb-6 sm:mb-8 opacity-90 max-w-2xl mx-auto">
             Kontaktieren Sie uns für ein unverbindliches Kennenlerngespräch.
           </p>
           <Button 
@@ -195,17 +195,17 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
   return (
     <div>
-      <section className="py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Ablauf – So entsteht Ihr Messestand</h1>
-          <p className="text-xl opacity-90 max-w-3xl">
+      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>Ablauf – So entsteht Ihr Messestand</h1>
+          <p className="text-base sm:text-lg opacity-90 max-w-3xl leading-relaxed">
             Von der ersten Idee bis zur Nachsorge – so läuft ein Messeprojekt mit S&S Messebau ab.
           </p>
         </div>
       </section>
 
-      <section id="timeline" className="py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
+      <section id="timeline" className="py-12 sm:py-16 scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             {[
               { 
@@ -244,16 +244,16 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
                 desc: 'Professioneller Abbau und optional Lagerung für die nächste Messe. Gemeinsame Auswertung des Messeerfolgs.' 
               }
             ].map((item, index) => (
-              <div key={index} className="flex gap-6 mb-8 last:mb-0">
+              <div key={index} className="flex gap-4 sm:gap-6 mb-6 sm:mb-8 last:mb-0">
                 <div className="flex flex-col items-center">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-xl">
+                  <div className="flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-lg sm:text-xl">
                     {item.step}
                   </div>
                   {index < 6 && <div className="w-0.5 h-full bg-border mt-2" />}
                 </div>
-                <div className="pb-8">
-                  <h3 className="text-2xl font-semibold mb-3">{item.title}</h3>
-                  <p className="text-lg text-muted-foreground">{item.desc}</p>
+                <div className="pb-6 sm:pb-8">
+                  <h3 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-3">{item.title}</h3>
+                  <p className="text-base sm:text-lg text-muted-foreground">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -261,9 +261,9 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         </div>
       </section>
 
-      <section id="faq" className="py-16 bg-muted scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-8 text-center">Häufige Fragen</h2>
+      <section id="faq" className="py-12 sm:py-16 bg-muted scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Häufige Fragen</h2>
           <div className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible className="w-full">
               {[
@@ -318,10 +318,10 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Bereit, Ihr Projekt zu starten?</h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Bereit, Ihr Projekt zu starten?</h2>
+          <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
             Lassen Sie uns über Ihr nächstes Messeprojekt sprechen.
           </p>
           <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90">
@@ -337,22 +337,22 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
 export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
   return (
     <div>
-      <section className="py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex items-center gap-4 mb-6">
-            <Leaf className="h-12 w-12" />
-            <h1 className="text-4xl md:text-5xl font-bold">Nachhaltiger Messebau – Systembau & Wiederverwendung</h1>
+      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <Leaf className="h-10 w-10 sm:h-12 sm:w-12" />
+            <h1 className="font-bold leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>Nachhaltiger Messebau – Systembau & Wiederverwendung</h1>
           </div>
-          <p className="text-xl opacity-90 max-w-3xl">
+          <p className="text-base sm:text-lg opacity-90 max-w-3xl leading-relaxed">
             Messebau muss nicht Wegwerfkultur sein. Mit wiederverwendbaren Systemen, 
             lokalem Partnernetzwerk und intelligenter Planung schonen wir Umwelt und Budget.
           </p>
         </div>
       </section>
 
-      <section id="systeme" className="py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+      <section id="systeme" className="py-12 sm:py-16 scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-12 sm:mb-16">
             {[
               {
                 icon: Recycle,
@@ -389,12 +389,12 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
         </div>
       </section>
 
-      <section id="partnernetzwerk" className="py-16 bg-muted scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <section id="partnernetzwerk" className="py-12 sm:py-16 bg-muted scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-6">Der Business-Vorteil</h2>
-              <p className="text-lg text-muted-foreground mb-6">
+              <h2 className="font-bold mb-4 sm:mb-6" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Der Business-Vorteil</h2>
+              <p className="text-base sm:text-lg text-muted-foreground mb-4 sm:mb-6">
                 Nachhaltigkeit rechnet sich – und zwar schnell.
               </p>
               <div className="space-y-4">
@@ -428,10 +428,10 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
         </div>
       </section>
 
-      <section id="vorteile" className="py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-8 text-center">Unsere nachhaltigen Maßnahmen</h2>
-            <div className="grid md:grid-cols-2 gap-6">
+      <section id="vorteile" className="py-12 sm:py-16 scroll-mt-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Unsere nachhaltigen Maßnahmen</h2>
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
               {[
                 'FSC-zertifiziertes Holz aus nachhaltiger Forstwirtschaft',
                 'LED-Beleuchtung (90% weniger Stromverbrauch)',
@@ -451,10 +451,10 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
         </div>
       </section>
 
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto max-w-7xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Nachhaltig UND wirtschaftlich</h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+      <section className="py-12 sm:py-16 bg-muted">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Nachhaltig UND wirtschaftlich</h2>
+          <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
             Lassen Sie sich von uns zeigen, wie nachhaltige Messebau-Lösungen Ihr Budget schonen.
           </p>
           <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90">
@@ -469,9 +469,9 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
 
 export function ImpressumPage() {
   return (
-    <div className="py-16">
-      <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-        <h1 className="text-4xl font-bold mb-8">Impressum</h1>
+    <div className="py-12 sm:py-16">
+      <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <h1 className="font-bold mb-6 sm:mb-8" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', lineHeight: '1.2' }}>Impressum</h1>
         
         <div className="space-y-6 text-muted-foreground">
           <div>
@@ -527,9 +527,9 @@ export function ImpressumPage() {
 
 export function DatenschutzPage() {
   return (
-    <div className="py-16">
-      <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-        <h1 className="text-4xl font-bold mb-8">Datenschutzerklärung</h1>
+    <div className="py-12 sm:py-16">
+      <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <h1 className="font-bold mb-6 sm:mb-8" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', lineHeight: '1.2' }}>Datenschutzerklärung</h1>
         
         <div className="space-y-6 text-muted-foreground">
           <div>
