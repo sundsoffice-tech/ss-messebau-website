@@ -61,8 +61,9 @@ function handleGetInquiries(): void {
             $params[':type'] = $type;
         }
         if ($search) {
-            $conditions[] = '(name LIKE :search OR email LIKE :search OR company LIKE :search)';
-            $params[':search'] = '%' . $search . '%';
+            $escapedSearch = str_replace(['%', '_'], ['\\%', '\\_'], $search);
+            $conditions[] = "(name LIKE :search OR email LIKE :search OR company LIKE :search) ESCAPE '\\'";
+            $params[':search'] = '%' . $escapedSearch . '%';
         }
 
         if (!empty($conditions)) {

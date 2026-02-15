@@ -65,8 +65,9 @@ function handleGetOrders(): void {
             $params[':status'] = $status;
         }
         if ($search) {
-            $conditions[] = '(customer_name LIKE :search OR customer_email LIKE :search OR company LIKE :search OR config_id LIKE :search)';
-            $params[':search'] = '%' . $search . '%';
+            $escapedSearch = str_replace(['%', '_'], ['\\%', '\\_'], $search);
+            $conditions[] = "(customer_name LIKE :search OR customer_email LIKE :search OR company LIKE :search OR config_id LIKE :search) ESCAPE '\\'";
+            $params[':search'] = '%' . $escapedSearch . '%';
         }
 
         if (!empty($conditions)) {

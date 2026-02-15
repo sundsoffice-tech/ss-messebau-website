@@ -336,8 +336,9 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
         attachments: emailData.attachments,
         order_id: configId,
       })
-    } catch {
+    } catch (apiError) {
       // Fallback: store in localStorage if API unavailable
+      console.warn('Failed to enqueue via API, using localStorage fallback:', apiError)
       await window.spark.kv.set(queueId, emailData)
     }
 

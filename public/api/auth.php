@@ -9,10 +9,12 @@ require_once __DIR__ . '/db.php';
 
 function startSession(): void {
     if (session_status() === PHP_SESSION_NONE) {
+        $isSecure = isset($_SERVER['HTTPS']) || 
+            (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
         session_set_cookie_params([
             'lifetime' => SESSION_LIFETIME,
             'path' => '/',
-            'secure' => isset($_SERVER['HTTPS']),
+            'secure' => $isSecure,
             'httponly' => true,
             'samesite' => 'Lax',
         ]);

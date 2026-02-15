@@ -203,9 +203,9 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
       try {
         const { ordersApi } = await import('@/lib/api-client')
         await ordersApi.create(configId, configToSave)
-      } catch {
+      } catch (error) {
         // Fallback: order already saved to localStorage above
-        console.warn('API unavailable, order saved locally only')
+        console.warn('API unavailable, order saved locally only', error)
       }
 
       if (config) {

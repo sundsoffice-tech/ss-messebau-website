@@ -226,7 +226,7 @@ function sendViaSendGrid(string $to, string $subject, string $htmlBody, string $
         ],
         CURLOPT_POSTFIELDS => json_encode($payload),
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => 30,
+        CURLOPT_TIMEOUT => 15,
     ]);
 
     $response = curl_exec($ch);

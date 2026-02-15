@@ -81,8 +81,8 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
           message: data.message,
           form_data: data,
         })
-      } catch {
-        console.warn('API unavailable, inquiry saved locally only')
+      } catch (error) {
+        console.warn('API unavailable, inquiry saved locally only', error)
       }
 
       // Send notification via centralized service
