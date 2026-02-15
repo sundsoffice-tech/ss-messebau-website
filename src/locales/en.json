@@ -1702,5 +1702,15 @@
   "footer.services.showroomLadenbau": "Showroom & Shop Fitting",
   "hub.showroomLadenbau.title": "Showroom & Shop Fitting | Brandspaces",
   "hub.showroomLadenbau.desc": "Showrooms, retail spaces and brand experience rooms – individual room concepts, sales spaces and brand spaces from a single source.",
-  "hub.showroomLadenbau.cta": "Learn more"
+  "hub.showroomLadenbau.cta": "Learn more",
+  "guarantee.title": "48h Quote Guarantee – fast and reliable",
+  "guarantee.subtitle": "Non-binding initial consultation – personal and transparent",
+  "guarantee.cta": "Request Quote Now",
+  "logowall.title": "Cross-Industry Exhibition Expertise",
+  "logowall.food.label": "Food & Delicatessen",
+  "logowall.food.detail": "Anuga, ISM & more",
+  "logowall.insurance.label": "Insurance",
+  "logowall.insurance.detail": "DKM & Finance Fairs",
+  "logowall.industry.label": "Industry & Technology",
+  "logowall.industry.detail": "Hannover Messe & Automatica"
 }

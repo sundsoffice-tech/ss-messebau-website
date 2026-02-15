@@ -18,7 +18,7 @@ const steps = [
 export function ProcessTimeline({ onOpenInquiry }: ProcessTimelineProps) {
   const { t } = useTranslation()
   return (
-    <section className="py-12 sm:py-16">
+    <section id="process" className="py-12 sm:py-16">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>
