@@ -199,6 +199,15 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
       
       await window.spark.kv.set(configId, configToSave)
 
+      // Save order to backend API
+      try {
+        const { ordersApi } = await import('@/lib/api-client')
+        await ordersApi.create(configId, configToSave)
+      } catch (error) {
+        // Fallback: order already saved to localStorage above
+        console.warn('API unavailable, order saved locally only', error)
+      }
+
       if (config) {
         // Send via legacy email service (preserves detailed HTML templates)
         const { sendOrderConfirmationEmail } = await import('@/lib/email-service')

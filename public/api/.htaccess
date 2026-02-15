@@ -1,0 +1,53 @@
+# ============================================
+# S&S Messebau API - .htaccess
+# ============================================
+
+# Enable CORS for API requests
+<IfModule mod_headers.c>
+    # Allow credentials (cookies/sessions)
+    Header always set Access-Control-Allow-Credentials "true"
+
+    # Dynamically set Access-Control-Allow-Origin from request
+    SetEnvIf Origin "^https?://(localhost(:[0-9]+)?|sundsmessebau\.com|www\.sundsmessebau\.com)$" ORIGIN=$0
+    Header always set Access-Control-Allow-Origin "%{ORIGIN}e" env=ORIGIN
+
+    Header always set Access-Control-Allow-Methods "GET, POST, PATCH, DELETE, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+    Header always set Access-Control-Max-Age "86400"
+</IfModule>
+
+# Handle preflight OPTIONS requests
+RewriteEngine On
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# Ensure PHP files are executed (not served as static)
+<IfModule mod_php.c>
+    php_flag engine on
+</IfModule>
+
+# Deny access to data directory
+<IfModule mod_rewrite.c>
+    RewriteRule ^data/ - [F,L]
+</IfModule>
+
+# Deny access to config.php directly (only include)
+<Files "config.php">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</Files>
+
+# Deny access to db.php directly
+<Files "db.php">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</Files>
+
+# Deny access to SQLite database files
+<FilesMatch "\.(sqlite|sqlite3|db)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>

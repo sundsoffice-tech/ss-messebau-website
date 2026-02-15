@@ -68,6 +68,23 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
 
       setInquiries((current) => [...(current || []), inquiry])
 
+      // Save inquiry to backend API
+      try {
+        const { inquiriesApi } = await import('@/lib/api-client')
+        await inquiriesApi.create({
+          inquiry_id: inquiry.id,
+          type: 'kontakt',
+          name: data.name,
+          email: data.email,
+          company: data.company,
+          phone: data.phone,
+          message: data.message,
+          form_data: data,
+        })
+      } catch (error) {
+        console.warn('API unavailable, inquiry saved locally only', error)
+      }
+
       // Send notification via centralized service
       await sendFormNotification({
         type: 'kontakt',
