@@ -99,6 +99,22 @@ export const Footer = memo(function Footer() {
                 </li>
                 <li>
                   <button 
+                    onClick={(e) => handleNavigation('/leistungen/boeden-ausstattung', e)} 
+                    className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
+                  >
+                    {t('footer.services.boeden')}
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={(e) => handleNavigation('/leistungen/digital-experience', e)} 
+                    className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
+                  >
+                    {t('footer.services.digital')}
+                  </button>
+                </li>
+                <li>
+                  <button 
                     onClick={(e) => handleNavigation('/bannerrahmen', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >

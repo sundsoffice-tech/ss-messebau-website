@@ -405,6 +405,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           { label: t('home.links.sustainability.label'), description: t('home.links.sustainability.desc'), hash: '/nachhaltigkeit' },
           { label: t('home.links.about.label'), description: t('home.links.about.desc'), hash: '/ueber-uns' },
           { label: t('home.links.blog.label'), description: t('home.links.blog.desc'), hash: '/blog' },
+          { label: t('home.links.banner.label'), description: t('home.links.banner.desc'), hash: '/bannerrahmen' },
           { label: t('home.links.contact.label'), description: t('home.links.contact.desc'), hash: '/kontakt' },
         ]}
       />

@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import {
   Accordion,
   AccordionContent,
@@ -137,12 +138,19 @@ export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => 
     { label: 'Messebau & Standkonzepte', hash: '/leistungen/messebau' },
     { label: 'Eventbau & Veranstaltungen', hash: '/leistungen/eventbau' },
     { label: 'Showrooms & Ausstellungsräume', hash: '/leistungen/showrooms' },
+    { label: 'Bannerrahmen-Systeme', hash: '/bannerrahmen' },
     { label: 'Alle Leistungen im Überblick', hash: '/leistungen' },
     { label: 'Kontakt & Beratung', hash: '/kontakt' },
   ]
 
   return (
     <div className="min-h-screen">
+      <div className="container mx-auto max-w-7xl">
+        <Breadcrumbs items={[
+          { label: 'Leistungen', path: '/leistungen' },
+          { label: 'Digital Experience', current: true },
+        ]} />
+      </div>
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-primary text-white py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

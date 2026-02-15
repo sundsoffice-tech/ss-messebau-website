@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Check, Package, Truck, Shield, Wrench, Star, ArrowRight } from '@phosphor-icons/react'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { useTranslation } from '@/lib/i18n'
 
 interface BannerrahmenPageProps {
@@ -12,6 +13,12 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
 
   return (
     <div className="min-h-screen">
+      <div className="container mx-auto max-w-7xl">
+        <Breadcrumbs items={[
+          { label: 'Leistungen', path: '/leistungen' },
+          { label: 'Bannerrahmen', current: true },
+        ]} />
+      </div>
       <section className="hero-gradient text-white py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
