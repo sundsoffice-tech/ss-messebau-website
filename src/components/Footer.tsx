@@ -11,7 +11,9 @@ export const Footer = memo(function Footer() {
   const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
-    authApi.me().then(res => setIsAdmin(res.authenticated)).catch(() => {})
+    authApi.me().then(res => setIsAdmin(res.authenticated)).catch(() => {
+      // Auth check failed silently – admin link stays hidden
+    })
   }, [])
   const handleNavigation = (path: string, event?: React.MouseEvent) => {
     if (event) {
