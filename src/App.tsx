@@ -100,7 +100,7 @@ function App() {
       case '/':
         return <HomePage onOpenInquiry={onOpenInquiry} />
       case '/leistungen':
-        return <LeistungenPage onOpenInquiry={onOpenInquiry} />
+        return <LeistungenHubPage onOpenInquiry={onOpenInquiry} />
       case '/leistungen/messebau':
         return <LeistungenMessebauPage onOpenInquiry={onOpenInquiry} />
       case '/leistungen/eventbau':
