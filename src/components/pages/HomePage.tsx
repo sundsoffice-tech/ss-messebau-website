@@ -50,7 +50,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleSectionNavigation = (_sectionId: string) => {
+  const handleServiceNavigation = (_sectionId: string) => {
     window.location.hash = '/leistungen'
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -170,7 +170,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 <Card 
                   key={index} 
                   className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
-                  onClick={() => handleSectionNavigation(service.sectionId)}
+                  onClick={() => handleServiceNavigation(service.sectionId)}
                 >
                   <div className="relative aspect-[25/16] overflow-hidden bg-muted">
                     <img 

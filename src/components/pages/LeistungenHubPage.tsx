@@ -17,20 +17,20 @@ interface LeistungenHubPageProps {
 }
 
 const services = [
-  { key: 'messebau', icon: Package, hash: '/leistungen' },
-  { key: 'eventbau', icon: Microphone, hash: '/leistungen' },
-  { key: 'touren', icon: CalendarDot, hash: '/leistungen' },
-  { key: 'showrooms', icon: Storefront, hash: '/leistungen' },
-  { key: 'ladenbau', icon: ShoppingBag, hash: '/leistungen' },
-  { key: 'boeden', icon: Armchair, hash: '/leistungen' },
-  { key: 'bannerrahmen', icon: FrameCorners, hash: '/bannerrahmen' },
+  { key: 'messebau', icon: Package, path: '/leistungen' },
+  { key: 'eventbau', icon: Microphone, path: '/leistungen' },
+  { key: 'touren', icon: CalendarDot, path: '/leistungen' },
+  { key: 'showrooms', icon: Storefront, path: '/leistungen' },
+  { key: 'ladenbau', icon: ShoppingBag, path: '/leistungen' },
+  { key: 'boeden', icon: Armchair, path: '/leistungen' },
+  { key: 'bannerrahmen', icon: FrameCorners, path: '/bannerrahmen' },
 ] as const
 
 export function LeistungenHubPage({ onOpenInquiry }: LeistungenHubPageProps) {
   const { t } = useTranslation()
 
-  const handleTileClick = (hash: string) => {
-    window.location.hash = hash
+  const handleTileClick = (path: string) => {
+    window.location.hash = path
   }
 
   return (
@@ -69,7 +69,7 @@ export function LeistungenHubPage({ onOpenInquiry }: LeistungenHubPageProps) {
                   }`}
                   data-track="hub-tile-click"
                   data-service={service.key}
-                  onClick={() => handleTileClick(service.hash)}
+                  onClick={() => handleTileClick(service.path)}
                 >
                   <CardContent className="flex flex-col gap-4 p-6 sm:p-8">
                     <div

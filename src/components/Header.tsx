@@ -34,7 +34,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
-import { navigateToPageAndSection, parseDeepLink } from '@/lib/deep-linking'
+import { parseDeepLink } from '@/lib/deep-linking'
 import { useTranslation } from '@/lib/i18n'
 
 interface HeaderProps {
@@ -346,7 +346,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
     window.location.hash = path
   }
 
-  const handleSectionNavigation = (sectionId: string) => {
+  const handleLeistungenNavigation = () => {
     setMobileMenuOpen(false)
     setMegaMenuOpen(false)
     window.location.hash = '/leistungen'
@@ -538,7 +538,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         <MegaMenuItem 
                           key={item.sectionId}
                           item={item}
-                          onNavigate={handleSectionNavigation}
+                          onNavigate={handleLeistungenNavigation}
                         />
                       ))}
                     </div>
@@ -715,7 +715,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         <MegaMenuItem 
                           key={item.sectionId}
                           item={item}
-                          onNavigate={handleSectionNavigation}
+                          onNavigate={handleLeistungenNavigation}
                         />
                       ))}
                     </div>
@@ -883,7 +883,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                             return (
                               <button
                                 key={item.sectionId}
-                                onClick={() => handleSectionNavigation(item.sectionId)}
+                                onClick={() => handleLeistungenNavigation()}
                                 className="w-full group relative overflow-hidden rounded-lg border p-3 text-left transition-all min-h-[48px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:border-primary active:shadow-md"
                               >
                                 <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-active:opacity-100 transition-opacity`} />
