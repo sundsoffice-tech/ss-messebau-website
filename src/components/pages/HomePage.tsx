@@ -161,7 +161,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   t('home.services.showrooms.b3'),
                   t('home.services.showrooms.b4')
                 ],
-                sectionId: 'showrooms',
+                sectionId: 'showroom-ladenbau',
                 image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=320&fit=crop'
               }
             ].map((service, index) => {

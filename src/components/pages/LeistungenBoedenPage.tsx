@@ -130,7 +130,7 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
 
   const relatedPages = [
     { label: 'Messebau & Standgestaltung', hash: '/leistungen/messebau' },
-    { label: 'Showrooms & Ausstellungsräume', hash: '/leistungen/showrooms' },
+    { label: 'Showroom & Ladenbau', hash: '/leistungen/showroom-ladenbau' },
     { label: 'Bannerrahmen-Systeme', hash: '/bannerrahmen' },
     { label: 'Alle Leistungen im Überblick', hash: '/leistungen' },
     { label: 'Kontakt & Beratung', hash: '/kontakt' },

@@ -33,7 +33,7 @@ const BannerBestellenPage = lazy(() => import('./components/pages/BannerBestelle
 const AktuellesPage = lazy(() => import('./components/pages/AktuellesPage').then(m => ({ default: m.AktuellesPage })))
 const LeistungenMessebauPage = lazy(() => import('./components/pages/LeistungenMessebauPage').then(m => ({ default: m.LeistungenMessebauPage })))
 const LeistungenEventbauPage = lazy(() => import('./components/pages/LeistungenEventbauPage').then(m => ({ default: m.LeistungenEventbauPage })))
-const LeistungenShowroomsPage = lazy(() => import('./components/pages/LeistungenShowroomsPage').then(m => ({ default: m.LeistungenShowroomsPage })))
+const LeistungenShowroomsPage = lazy(() => import('./components/pages/LeistungenShowroomsPage').then(m => ({ default: m.LeistungenShowroomLadenbauPage })))
 const LeistungenTourenPage = lazy(() => import('./components/pages/LeistungenTourenPage').then(m => ({ default: m.LeistungenTourenPage })))
 const LeistungenBoedenPage = lazy(() => import('./components/pages/LeistungenBoedenPage').then(m => ({ default: m.LeistungenBoedenPage })))
 const LeistungenDigitalPage = lazy(() => import('./components/pages/LeistungenDigitalPage').then(m => ({ default: m.LeistungenDigitalPage })))
@@ -105,7 +105,13 @@ function App() {
         return <LeistungenMessebauPage onOpenInquiry={onOpenInquiry} />
       case '/leistungen/eventbau':
         return <LeistungenEventbauPage onOpenInquiry={onOpenInquiry} />
+      case '/leistungen/showroom-ladenbau':
+        return <LeistungenShowroomsPage onOpenInquiry={onOpenInquiry} />
       case '/leistungen/showrooms':
+      case '/leistungen/ladenbau':
+      case '/leistungen/brandspaces':
+        // Redirect old paths to new combined path
+        window.location.hash = '/leistungen/showroom-ladenbau'
         return <LeistungenShowroomsPage onOpenInquiry={onOpenInquiry} />
       case '/leistungen/touren':
         return <LeistungenTourenPage onOpenInquiry={onOpenInquiry} />

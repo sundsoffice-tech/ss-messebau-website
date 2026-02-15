@@ -17,9 +17,8 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
   '/leistungen': [
     { id: 'messebau', label: 'Messebau', page: '/leistungen' },
     { id: 'touren', label: 'Touren & Messeauftritte', page: '/leistungen' },
-    { id: 'showrooms', label: 'Showrooms & Brand Spaces', page: '/leistungen' },
+    { id: 'showroom-ladenbau', label: 'Showroom & Ladenbau | Brandspaces', page: '/leistungen' },
     { id: 'eventbau', label: 'Eventbau & Bühnen', page: '/leistungen' },
-    { id: 'ladenbau', label: 'Ladenbau & Showrooms', page: '/leistungen' },
     { id: 'boeden-ausstattung', label: 'Böden & Ausstattung', page: '/leistungen' }
   ],
   '/branchen': [
@@ -112,9 +111,9 @@ export function parseSectionHash(hash: string): { page: string; section?: string
 export const THEMATIC_LINKS: Record<string, { page: string; section: string; label: string }> = {
   'home-to-messebau': { page: '/leistungen', section: 'messebau', label: 'Messebau' },
   'home-to-touren': { page: '/leistungen', section: 'touren', label: 'Touren & Messeauftritte' },
-  'home-to-trockenbau': { page: '/leistungen', section: 'showrooms', label: 'Showrooms & Brand Spaces' },
+  'home-to-trockenbau': { page: '/leistungen/showroom-ladenbau', section: 'showroom-ladenbau', label: 'Showroom & Ladenbau | Brandspaces' },
   'home-to-eventbau': { page: '/leistungen', section: 'eventbau', label: 'Eventbau' },
-  'home-to-ladenbau': { page: '/leistungen', section: 'ladenbau', label: 'Ladenbau' },
+  'home-to-ladenbau': { page: '/leistungen/showroom-ladenbau', section: 'showroom-ladenbau', label: 'Showroom & Ladenbau' },
   'home-to-boeden': { page: '/leistungen', section: 'boeden-ausstattung', label: 'Böden & Möbel' },
   
   'nav-to-food': { page: '/branchen', section: 'food', label: 'Food & Feinkost' },
