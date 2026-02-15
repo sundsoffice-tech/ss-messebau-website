@@ -34,6 +34,7 @@ export function EmailQueueManager() {
 
   useEffect(() => {
     loadEmailQueue()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showAll])
 
   const loadEmailQueue = async () => {
