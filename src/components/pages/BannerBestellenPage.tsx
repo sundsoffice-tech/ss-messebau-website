@@ -17,22 +17,27 @@ import { SerializedFile } from '@/lib/file-utils'
 export interface BannerConfig {
   step1: {
     einsatzort: string
-    rahmenart: string
+    rahmenart: 'eco' | 'slim' | 'heavy' | 'double' | 'cabinet' | 'lightbox' | 'cord' | 'curved' | 'freestanding' | 'hanging'
     menge: number
     indoorOutdoor: string
     montage: boolean
     montageOrt?: string
     montageZeitraum?: string
+    multiBannerMode?: 'identical' | 'individual'
+    bannerConfigs?: Array<{ id: string; label: string; overrides: Partial<BannerConfigStep2> }>
   }
   step2: {
     breite: number
     hoehe: number
-    profil: string
-    ecken: string
+    profil: 'eco-25' | 'slim-28' | 'heavy-45' | 'double-50' | 'cabinet-60' | 'lightbox-80' | 'cord-30' | 'curved-35'
+    ecken: 'gehrung' | 'verbinder' | 'rund' | 'hexagonal' | 'multi-connector'
     seitigkeit: string
     led: boolean
     ledStrom?: string
     ledEinsatz?: string
+    profilFarbe: 'silber' | 'schwarz' | 'weiss' | 'gold' | 'ral-custom'
+    ralCode?: string
+    zubehoer: ('standplatte' | 'wandhalter' | 'deckenmontage' | 'akustikmaterial' | 'extensionset' | 'connector' | 'deskclamp')[]
   }
   step3: {
     bannerBenoetigt: boolean
@@ -71,10 +76,12 @@ export interface BannerConfig {
   }
 }
 
+export type BannerConfigStep2 = BannerConfig['step2']
+
 const initialConfig: BannerConfig = {
   step1: {
     einsatzort: '',
-    rahmenart: 'haengerahmen',
+    rahmenart: 'eco',
     menge: 1,
     indoorOutdoor: 'indoor',
     montage: false,
@@ -82,10 +89,12 @@ const initialConfig: BannerConfig = {
   step2: {
     breite: 0,
     hoehe: 0,
-    profil: 'standard',
+    profil: 'eco-25',
     ecken: 'gehrung',
     seitigkeit: 'einseitig',
     led: false,
+    profilFarbe: 'silber',
+    zubehoer: [],
   },
   step3: {
     bannerBenoetigt: true,
@@ -310,6 +319,7 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
                 {currentStep === 2 && config && (
                   <ConfiguratorStep2
                     data={config.step2}
+                    step1Data={config.step1}
                     onChange={(data) => updateConfig('step2', data)}
                     onNext={handleNext}
                     onBack={handleBack}

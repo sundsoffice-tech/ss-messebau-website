@@ -18,22 +18,19 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
       : '0'
 
   const getRahmenartLabel = (value: string) => {
-    const labels: Record<string, string> = {
-      haengerahmen: t('configSummary.rahmenart.haengerahmen'),
-      standrahmen: t('configSummary.rahmenart.standrahmen'),
-      verkleidung: t('configSummary.rahmenart.verkleidung'),
-      beidseitig: t('configSummary.rahmenart.beidseitig'),
-    }
-    return labels[value] || value
+    return t(`configSummary.rahmenart.${value}`) || value
   }
 
   const getProfilLabel = (value: string) => {
-    const labels: Record<string, string> = {
-      standard: t('configSummary.profil.standard'),
-      premium: t('configSummary.profil.premium'),
-      sonder: t('configSummary.profil.sonder'),
-    }
-    return labels[value] || value
+    return t(`configSummary.profil.${value}`) || value
+  }
+
+  const getEckenLabel = (value: string) => {
+    return t(`configSummary.ecken.${value}`) || value
+  }
+
+  const getProfilFarbeLabel = (value: string) => {
+    return t(`configSummary.profilFarbe.${value}`) || value
   }
 
   const getMaterialLabel = (value?: string) => {
@@ -45,6 +42,10 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
       backlit: t('configSummary.material.backlit'),
     }
     return labels[value] || value
+  }
+
+  const getZubehoerLabel = (value: string) => {
+    return t(`configSummary.zubehoer.${value}`) || value
   }
 
   const fileCount = config.step4?.serializedFiles?.length || 0
@@ -61,6 +62,9 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
               <p className="font-medium text-sm sm:text-base">{getRahmenartLabel(config.step1.rahmenart)}</p>
               <p className="text-muted-foreground text-[11px] sm:text-xs">
                 {config.step1.menge}x • {config.step1.indoorOutdoor === 'indoor' ? 'Indoor' : 'Outdoor'}
+                {config.step1.multiBannerMode === 'individual' && (
+                  <> • {t('configSummary.multiBanner.individual')}</>
+                )}
               </p>
             </div>
           </div>
@@ -75,6 +79,31 @@ export function ConfigSummary({ config, currentStep }: ConfigSummaryProps) {
               </p>
               <p className="text-muted-foreground text-[11px] sm:text-xs">
                 {flaeche} m² • {getProfilLabel(config.step2.profil)}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {currentStep >= 2 && (
+          <div className="flex items-start gap-2">
+            <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0 mt-0.5" weight="bold" />
+            <div className="min-w-0">
+              <p className="font-medium text-sm sm:text-base">{getEckenLabel(config.step2.ecken)}</p>
+              <p className="text-muted-foreground text-[11px] sm:text-xs">
+                {t('configSummary.profilFarbe')}: {getProfilFarbeLabel(config.step2.profilFarbe)}
+                {config.step2.ralCode && ` (${config.step2.ralCode})`}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {currentStep >= 2 && config.step2.zubehoer && config.step2.zubehoer.length > 0 && (
+          <div className="flex items-start gap-2">
+            <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0 mt-0.5" weight="bold" />
+            <div className="min-w-0">
+              <p className="font-medium text-sm sm:text-base">{t('configSummary.zubehoer')}</p>
+              <p className="text-muted-foreground text-[11px] sm:text-xs">
+                {config.step2.zubehoer.map(getZubehoerLabel).join(', ')}
               </p>
             </div>
           </div>
