@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { X, UploadSimple, File as FileIcon, Check, Warning } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n'
 
 export interface UploadedFile {
   id: string
@@ -32,6 +33,7 @@ export function FileUpload({
 }: FileUploadProps) {
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { t } = useTranslation()
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes'
@@ -43,12 +45,12 @@ export function FileUpload({
 
   const validateFile = (file: File): string | null => {
     if (file.size > maxFileSize) {
-      return `Datei zu groß (max. ${formatFileSize(maxFileSize)})`
+      return `${t('upload.tooLarge')} (${t('upload.maxSize')} ${formatFileSize(maxFileSize)})`
     }
 
     const extension = '.' + file.name.split('.').pop()?.toLowerCase()
     if (!acceptedTypes.some(type => extension === type.toLowerCase())) {
-      return `Dateityp nicht unterstützt (erlaubt: ${acceptedTypes.join(', ')})`
+      return `${t('upload.unsupported')} (${t('upload.allowedTypes')}: ${acceptedTypes.join(', ')})`
     }
 
     return null
@@ -80,7 +82,7 @@ export function FileUpload({
     const fileArray = Array.from(fileList)
     
     if (files.length + fileArray.length > maxFiles) {
-      alert(`Maximal ${maxFiles} Dateien erlaubt`)
+      alert(`${t('upload.maxFilesAlert').replace('{count}', String(maxFiles))}`)
       return
     }
 
@@ -171,13 +173,13 @@ export function FileUpload({
           )} 
         />
         <p className="font-medium mb-1">
-          {isDragging ? 'Dateien hier ablegen...' : 'Dateien hier ablegen oder klicken'}
+          {isDragging ? t('upload.dropHere') : t('upload.dropOrClick')}
         </p>
         <p className="text-sm text-muted-foreground mb-3">
-          {acceptedTypes.join(', ')} - max. {formatFileSize(maxFileSize)} pro Datei
+          {acceptedTypes.join(', ')} - {t('upload.maxSize')} {formatFileSize(maxFileSize)} {t('upload.perFile')}
         </p>
         <p className="text-xs text-muted-foreground mb-3">
-          Bis zu {maxFiles} Dateien gleichzeitig möglich
+          {t('upload.maxFiles').replace('{count}', String(maxFiles))}
         </p>
         <Button 
           variant="outline" 
@@ -188,7 +190,7 @@ export function FileUpload({
             fileInputRef.current?.click()
           }}
         >
-          Dateien auswählen
+          {t('upload.browse')}
         </Button>
         <input
           ref={fileInputRef}
@@ -204,11 +206,11 @@ export function FileUpload({
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm">
             <span className="font-medium">
-              {files.length} {files.length === 1 ? 'Datei' : 'Dateien'} ({formatFileSize(totalSize)})
+              {files.length} {files.length === 1 ? t('upload.file') : t('upload.files')} ({formatFileSize(totalSize)})
             </span>
             {files.some(f => f.status === 'success') && (
               <span className="text-xs text-muted-foreground">
-                {files.filter(f => f.status === 'success').length} erfolgreich hochgeladen
+                {files.filter(f => f.status === 'success').length} {t('upload.successCount')}
               </span>
             )}
           </div>
@@ -261,7 +263,7 @@ export function FileUpload({
                     <div className="space-y-1">
                       <Progress value={uploadedFile.progress} className="h-1" />
                       <p className="text-xs text-muted-foreground">
-                        {Math.round(uploadedFile.progress)}% hochgeladen...
+                        {Math.round(uploadedFile.progress)}% {t('upload.uploading')}
                       </p>
                     </div>
                   )}
@@ -269,7 +271,7 @@ export function FileUpload({
                   {uploadedFile.status === 'success' && (
                     <div className="flex items-center gap-1 text-green-600">
                       <Check className="w-4 h-4" />
-                      <span className="text-xs font-medium">Erfolgreich hochgeladen</span>
+                      <span className="text-xs font-medium">{t('upload.success')}</span>
                     </div>
                   )}
 

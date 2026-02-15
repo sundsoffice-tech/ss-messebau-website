@@ -1,16 +1,17 @@
 import { useEffect, useState, useRef } from 'react'
+import { useTranslation } from '@/lib/i18n'
 
 interface Fact {
   value: number
   suffix: string
-  label: string
+  labelKey: string
 }
 
 const facts: Fact[] = [
-  { value: 48, suffix: 'h', label: 'Angebot – schnell & verbindlich' },
-  { value: 200, suffix: 'm²', label: 'Standgrößen bis' },
-  { value: 3, suffix: '', label: 'Branchen-Schwerpunkte' },
-  { value: 98, suffix: '%', label: 'Termintreu' },
+  { value: 48, suffix: 'h', labelKey: 'facts.48h' },
+  { value: 200, suffix: 'm²', labelKey: 'facts.200m' },
+  { value: 3, suffix: '', labelKey: 'facts.3sectors' },
+  { value: 98, suffix: '%', labelKey: 'facts.98pct' },
 ]
 
 function AnimatedNumber({ value, suffix, isVisible }: { value: number; suffix: string; isVisible: boolean }) {
@@ -40,6 +41,7 @@ function AnimatedNumber({ value, suffix, isVisible }: { value: number; suffix: s
 }
 
 export function FactBar() {
+  const { t } = useTranslation()
   const ref = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
 
@@ -62,11 +64,11 @@ export function FactBar() {
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center">
           {facts.map((fact) => (
-            <div key={fact.label}>
+            <div key={fact.labelKey}>
               <p className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-1">
                 <AnimatedNumber value={fact.value} suffix={fact.suffix} isVisible={isVisible} />
               </p>
-              <p className="text-xs sm:text-sm opacity-80">{fact.label}</p>
+              <p className="text-xs sm:text-sm opacity-80">{t(fact.labelKey)}</p>
             </div>
           ))}
         </div>

@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { getConsent, setConsent } from '@/lib/analytics';
+import { useTranslation } from '@/lib/i18n';
 
 /**
  * GDPR-compliant cookie consent banner.
  * Shown only when the user has not yet made a decision.
  */
 export default function CookieConsent() {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -30,19 +32,17 @@ export default function CookieConsent() {
   return (
     <div
       role="dialog"
-      aria-label="Cookie-Einstellungen"
+      aria-label={t('cookie.ariaLabel')}
       className="fixed bottom-0 inset-x-0 z-[9999] bg-white/95 backdrop-blur border-t border-gray-200 shadow-lg p-4 md:p-6"
     >
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-start md:items-center gap-4">
         <p className="text-sm text-gray-700 flex-1">
-          Wir nutzen Cookies und Google Analytics 4, um unsere Website zu
-          verbessern und anonyme Nutzungsstatistiken zu erheben. Ihre Daten
-          werden nicht an Dritte weitergegeben.{' '}
+          {t('cookie.text')}{' '}
           <a
             href="#/datenschutz"
             className="underline text-indigo-700 hover:text-indigo-900"
           >
-            Datenschutzerklärung
+            {t('cookie.privacy')}
           </a>
         </p>
         <div className="flex gap-3 shrink-0">
@@ -50,13 +50,13 @@ export default function CookieConsent() {
             onClick={decline}
             className="px-4 py-2 text-sm rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
           >
-            Ablehnen
+            {t('cookie.decline')}
           </button>
           <button
             onClick={accept}
             className="px-4 py-2 text-sm rounded-lg bg-indigo-700 text-white hover:bg-indigo-800 transition-colors"
           >
-            Akzeptieren
+            {t('cookie.accept')}
           </button>
         </div>
       </div>
