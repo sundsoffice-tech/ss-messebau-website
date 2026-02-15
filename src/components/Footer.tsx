@@ -139,6 +139,14 @@ export const Footer = memo(function Footer() {
                 </li>
                 <li>
                   <button 
+                    onClick={(e) => handleNavigation('/aktuelles', e)} 
+                    className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
+                  >
+                    {t('footer.company.aktuelles')}
+                  </button>
+                </li>
+                <li>
+                  <button 
                     onClick={(e) => handleNavigation('/kontakt', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >

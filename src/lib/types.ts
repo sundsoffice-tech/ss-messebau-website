@@ -44,3 +44,24 @@ export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
 }
+
+export interface MesseEvent {
+  id: string
+  name: string
+  location: string
+  startDate: string // ISO date string
+  endDate: string   // ISO date string
+  category: 'food' | 'industrie' | 'versicherungen' | 'allgemein'
+  website?: string
+  description: string
+  ssPresent: boolean // S&S Messebau vor Ort
+}
+
+export interface NewsItem {
+  id: string
+  title: string
+  excerpt: string
+  date: string // ISO date string
+  category: string
+  link?: string
+}

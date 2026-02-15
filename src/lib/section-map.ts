@@ -52,6 +52,10 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
   '/blog': [
     { id: 'artikel', label: 'Blog-Artikel', page: '/blog' }
   ],
+  '/aktuelles': [
+    { id: 'messekalender', label: 'Messekalender', page: '/aktuelles' },
+    { id: 'news', label: 'News', page: '/aktuelles' }
+  ],
   '/kontakt': [
     { id: 'kontaktformular', label: 'Kontaktformular', page: '/kontakt' },
     { id: 'anfahrt', label: 'Anfahrt', page: '/kontakt' },

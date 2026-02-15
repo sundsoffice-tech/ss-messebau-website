@@ -30,6 +30,7 @@ const DatenschutzPage = lazy(() => import('./components/pages/OtherPages').then(
 const KIBeraterPage = lazy(() => import('./components/pages/OtherPages').then(m => ({ default: m.KIBeraterPage })))
 const BannerrahmenPage = lazy(() => import('./components/pages/BannerrahmenPage').then(m => ({ default: m.BannerrahmenPage })))
 const BannerBestellenPage = lazy(() => import('./components/pages/BannerBestellenPage').then(m => ({ default: m.BannerBestellenPage })))
+const AktuellesPage = lazy(() => import('./components/pages/AktuellesPage').then(m => ({ default: m.AktuellesPage })))
 const AdminPage = lazy(() => import('./components/pages/AdminPage').then(m => ({ default: m.AdminPage })))
 
 function App() {
@@ -106,6 +107,8 @@ function App() {
         return <NachhaltigkeitPage onOpenInquiry={onOpenInquiry} />
       case '/blog':
         return <BlogPage onOpenInquiry={onOpenInquiry} />
+      case '/aktuelles':
+        return <AktuellesPage onOpenInquiry={onOpenInquiry} />
       case '/kontakt':
         return <KontaktPage onOpenInquiry={onOpenInquiry} />
       case '/ki-berater':

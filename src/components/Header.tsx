@@ -128,6 +128,7 @@ const SECONDARY_NAV = [
   { labelKey: 'nav.about', path: '/ueber-uns', icon: Users },
   { labelKey: 'nav.process', path: '/ablauf', icon: Path },
   { labelKey: 'nav.sustainability', path: '/nachhaltigkeit', icon: Leaf },
+  { labelKey: 'nav.aktuelles', path: '/aktuelles', icon: CalendarDot },
   { labelKey: 'nav.blog', path: '/blog', icon: Article },
   { labelKey: 'nav.contact', path: '/kontakt', icon: Envelope }
 ]

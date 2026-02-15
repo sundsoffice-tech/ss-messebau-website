@@ -38,6 +38,10 @@ const PAGE_META: Record<string, PageMeta> = {
     title: 'Blog & Ratgeber – Messebau-Tipps | S&S Messebau',
     description: 'Praxis-Tipps rund um Messebau, Standgestaltung und erfolgreiche Messeauftritte. Blog von S&S Messebau.'
   },
+  '/aktuelles': {
+    title: 'Aktuelles – Messekalender & News | S&S Messebau',
+    description: 'Aktuelle Messen, Events und News rund um S&S Messebau. Messekalender mit Countdown und Branchen-Übersicht.'
+  },
   '/kontakt': {
     title: 'Kontakt – Jetzt Messestand anfragen | S&S Messebau',
     description: 'Kontaktieren Sie S&S Messebau für Ihr Messestand-Projekt. 48h-Angebot mit persönlicher Beratung. Jetzt unverbindlich anfragen!'
