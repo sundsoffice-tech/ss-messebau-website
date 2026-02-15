@@ -643,7 +643,7 @@ Nicht gleich mit LED-Wand und interaktiven Displays starten. Beginnt mit Basis-T
 
 ### 7. Messen sorgfältig auswählen
 
-Eine falsch gewählte Messe, auf der keine eurer Zielkunden sind, ist teuer – egal, wie günstig der Stand war. Besucht Messen vorher als Besucher (nicht Aussteller) und prüft, ob die Zielgruppe passt.
+Eine falsch gewählte Messe, auf der keiner eurer Zielkunden ist, ist teuer – egal, wie günstig der Stand war. Besucht Messen vorher als Besucher (nicht Aussteller) und prüft, ob die Zielgruppe passt.
 
 ---
 
