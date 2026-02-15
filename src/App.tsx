@@ -31,6 +31,12 @@ const KIBeraterPage = lazy(() => import('./components/pages/OtherPages').then(m 
 const BannerrahmenPage = lazy(() => import('./components/pages/BannerrahmenPage').then(m => ({ default: m.BannerrahmenPage })))
 const BannerBestellenPage = lazy(() => import('./components/pages/BannerBestellenPage').then(m => ({ default: m.BannerBestellenPage })))
 const AktuellesPage = lazy(() => import('./components/pages/AktuellesPage').then(m => ({ default: m.AktuellesPage })))
+const LeistungenMessebauPage = lazy(() => import('./components/pages/LeistungenMessebauPage').then(m => ({ default: m.LeistungenMessebauPage })))
+const LeistungenEventbauPage = lazy(() => import('./components/pages/LeistungenEventbauPage').then(m => ({ default: m.LeistungenEventbauPage })))
+const LeistungenShowroomsPage = lazy(() => import('./components/pages/LeistungenShowroomsPage').then(m => ({ default: m.LeistungenShowroomsPage })))
+const LeistungenTourenPage = lazy(() => import('./components/pages/LeistungenTourenPage').then(m => ({ default: m.LeistungenTourenPage })))
+const LeistungenBoedenPage = lazy(() => import('./components/pages/LeistungenBoedenPage').then(m => ({ default: m.LeistungenBoedenPage })))
+const LeistungenDigitalPage = lazy(() => import('./components/pages/LeistungenDigitalPage').then(m => ({ default: m.LeistungenDigitalPage })))
 const AdminPage = lazy(() => import('./components/pages/AdminPage').then(m => ({ default: m.AdminPage })))
 
 function App() {
@@ -95,6 +101,18 @@ function App() {
         return <HomePage onOpenInquiry={onOpenInquiry} />
       case '/leistungen':
         return <LeistungenPage onOpenInquiry={onOpenInquiry} />
+      case '/leistungen/messebau':
+        return <LeistungenMessebauPage onOpenInquiry={onOpenInquiry} />
+      case '/leistungen/eventbau':
+        return <LeistungenEventbauPage onOpenInquiry={onOpenInquiry} />
+      case '/leistungen/showrooms':
+        return <LeistungenShowroomsPage onOpenInquiry={onOpenInquiry} />
+      case '/leistungen/touren':
+        return <LeistungenTourenPage onOpenInquiry={onOpenInquiry} />
+      case '/leistungen/boeden-ausstattung':
+        return <LeistungenBoedenPage onOpenInquiry={onOpenInquiry} />
+      case '/leistungen/digital-experience':
+        return <LeistungenDigitalPage onOpenInquiry={onOpenInquiry} />
       case '/branchen':
         return <BranchenPage onOpenInquiry={onOpenInquiry} />
       case '/referenzen':

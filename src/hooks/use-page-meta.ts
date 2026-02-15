@@ -14,6 +14,30 @@ const PAGE_META: Record<string, PageMeta> = {
     title: 'Leistungen – Messebau, Eventbau & Showrooms | S&S Messebau',
     description: 'Full-Service Messebau von 20–200 m²: Messestände, Eventbau, Showrooms & Brand Spaces. Planung bis Abbau aus einer Hand.'
   },
+  '/leistungen/messebau': {
+    title: 'Messebau – Professionelle Messestände 20–200 m² | S&S Messebau NRW',
+    description: 'Messebau Full-Service: Individuelle Messestände von 20–200 m² für Food, Finance & Industrie. Konzeption, Bau & Betreuung aus einer Hand. 48h-Angebot!'
+  },
+  '/leistungen/eventbau': {
+    title: 'Eventbau & Bühnenbau – Unvergessliche Events | S&S Messebau',
+    description: 'Eventbau & Bühnenbau vom Profi: Bühnen, Podeste, Event-Architektur & komplette Veranstaltungsausstattung. Full-Service aus NRW – jetzt planen!'
+  },
+  '/leistungen/showrooms': {
+    title: 'Showrooms & Brand Spaces – Markenwelten gestalten | S&S Messebau',
+    description: 'Showroom-Bau & Brand Spaces: Permanente Markenerlebnisse mit Premium-Materialien und individueller Gestaltung. Konzeption bis Übergabe aus einer Hand.'
+  },
+  '/leistungen/touren': {
+    title: 'Touren & Roadshows – Bundesweite Messeauftritte | S&S Messebau',
+    description: 'Touren-Pakete für wiederkehrende Messeauftritte: Modulare Systeme, zentrale Logistik ab NRW, kostenoptimiert. Jetzt Touren-Paket anfragen!'
+  },
+  '/leistungen/boeden-ausstattung': {
+    title: 'Böden & Ausstattung – Premium-Messeböden & Möblierung | S&S Messebau',
+    description: 'Messeböden & Standausstattung: Teppich, Vinyl, Parkett, Möblierung & Beleuchtung. Nachhaltige Premium-Qualität für Ihren Messestand.'
+  },
+  '/leistungen/digital-experience': {
+    title: 'Digital Experience – AR/VR & Interaktive Messelösungen | S&S Messebau',
+    description: 'Digitale Messelösungen: AR/VR-Erlebnisse, interaktive Displays, Lead-Tracking & Datenanalyse. Technologie trifft Markenerlebnis – jetzt beraten lassen!'
+  },
   '/branchen': {
     title: 'Branchen-Expertise – Food, Finance & Industrie | S&S Messebau',
     description: 'S&S Messebau: Branchenspezifische Messestände für Food, Versicherungen & Industrie. Erfahrung auf Anuga, DKM, Hannover Messe.'

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Check, Package, Truck, Shield, Wrench } from '@phosphor-icons/react'
+import { Check, Package, Truck, Shield, Wrench, Star, ArrowRight } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
 
 interface BannerrahmenPageProps {
@@ -212,16 +212,103 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
         </div>
       </section>
 
+      {/* FAQ Section */}
       <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold text-center mb-12" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Häufige Fragen zu Bannerrahmen</h2>
+          <div className="max-w-3xl mx-auto space-y-6">
+            {[
+              { q: 'Welche Größen sind bei Bannerrahmen möglich?', a: 'Unsere Bannerrahmen sind in nahezu allen Größen erhältlich – von kompakten 0,5 × 1 m bis zu großflächigen Formaten wie 5 × 3 m. Sondermaße realisieren wir auf Anfrage.' },
+              { q: 'Wie schnell kann ein Bannerrahmen geliefert werden?', a: 'Standardformate liefern wir innerhalb von 5–7 Werktagen. Bei Eilaufträgen sind Express-Lieferungen innerhalb von 48 Stunden möglich.' },
+              { q: 'Sind die Bannerrahmen für den Außenbereich geeignet?', a: 'Ja, wir bieten wetterfeste Bannerrahmen und Materialien, die speziell für den Outdoor-Einsatz konzipiert sind – inklusive Windschlitzen und UV-beständigem Druck.' },
+              { q: 'Kann ich nur das Banner oder auch den Rahmen einzeln bestellen?', a: 'Beides ist möglich. Sie können komplette Sets oder einzelne Banner zum Wechseln bestellen – ideal für wechselnde Kampagnen und Messen.' },
+              { q: 'Bieten Sie auch Montage-Service an?', a: 'Ja, unser Full-Service umfasst bundesweite Montage, Demontage und bei Bedarf auch die Einlagerung Ihrer Bannerrahmen-Systeme.' }
+            ].map((faq, i) => (
+              <Card key={i} className="p-6">
+                <h3 className="font-bold mb-2">{faq.q}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof / Kundenstimmen */}
+      <section className="py-12 sm:py-16 bg-secondary/30">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold text-center mb-12" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Das sagen unsere Kunden</h2>
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {[
+              { text: 'Die Bannerrahmen von S&S sind top verarbeitet und lassen sich supereinfach montieren. Wir nutzen sie auf allen unseren Messen.', author: 'Thomas K.', role: 'Marketing-Leiter, Food-Branche' },
+              { text: 'Schnelle Lieferung, perfekte Qualität und ein Grafikservice, der mitdenkt. Unser Go-to-Partner für alle Bannerprojekte.', author: 'Sandra M.', role: 'Eventmanagerin, Versicherungsbranche' },
+              { text: 'Wir haben die Bannerrahmen mit LED-Hinterleuchtung bestellt – der Wow-Effekt auf der Messe war enorm. Klare Empfehlung!', author: 'Michael R.', role: 'Geschäftsführer, Industrieunternehmen' }
+            ].map((testimonial, i) => (
+              <Card key={i} className="p-6">
+                <div className="flex mb-3">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <Star key={s} className="w-4 h-4 text-yellow-500" weight="fill" />
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground mb-4 italic leading-relaxed">„{testimonial.text}"</p>
+                <div>
+                  <p className="font-semibold text-sm">{testimonial.author}</p>
+                  <p className="text-xs text-muted-foreground">{testimonial.role}</p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Cross-Links / Verwandte Bereiche */}
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold text-center mb-8" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2rem)', lineHeight: '1.2' }}>Verwandte Leistungsbereiche</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            <button onClick={() => window.location.hash = '/leistungen/messebau'} className="group text-left">
+              <Card className="p-5 h-full transition-all group-hover:border-primary group-hover:shadow-lg">
+                <Package className="w-8 h-8 text-primary mb-3" />
+                <h3 className="font-bold mb-1">Messebau</h3>
+                <p className="text-xs text-muted-foreground">Professionelle Messestände von 20–200 m²</p>
+              </Card>
+            </button>
+            <button onClick={() => window.location.hash = '/leistungen/boeden-ausstattung'} className="group text-left">
+              <Card className="p-5 h-full transition-all group-hover:border-primary group-hover:shadow-lg">
+                <Wrench className="w-8 h-8 text-primary mb-3" />
+                <h3 className="font-bold mb-1">Böden & Ausstattung</h3>
+                <p className="text-xs text-muted-foreground">Premium-Bodenbeläge und Möblierung</p>
+              </Card>
+            </button>
+            <button onClick={() => window.location.hash = '/banner-bestellen'} className="group text-left">
+              <Card className="p-5 h-full transition-all group-hover:border-primary group-hover:shadow-lg border-primary/50">
+                <Shield className="w-8 h-8 text-primary mb-3" />
+                <h3 className="font-bold mb-1">Banner bestellen</h3>
+                <p className="text-xs text-muted-foreground">Jetzt Banner online konfigurieren</p>
+              </Card>
+            </button>
+            <button onClick={() => window.location.hash = '/leistungen'} className="group text-left">
+              <Card className="p-5 h-full transition-all group-hover:border-primary group-hover:shadow-lg">
+                <ArrowRight className="w-8 h-8 text-primary mb-3" />
+                <h3 className="font-bold mb-1">Alle Leistungen</h3>
+                <p className="text-xs text-muted-foreground">Übersicht aller Leistungsbereiche</p>
+              </Card>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
           <h2 className="font-bold mb-6" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('bannerrahmen.cta.title')}</h2>
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg mb-8 opacity-90">
             {t('bannerrahmen.cta.description')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
               onClick={() => window.location.hash = '/banner-bestellen'}
+              className="bg-white text-primary hover:bg-white/90"
             >
               {t('bannerrahmen.cta.configureCta')}
             </Button>
@@ -229,6 +316,7 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
               size="lg"
               variant="outline"
               onClick={onOpenInquiry}
+              className="border-white text-white hover:bg-white/10"
             >
               {t('bannerrahmen.cta.consultationCta')}
             </Button>

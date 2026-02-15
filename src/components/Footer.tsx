@@ -59,7 +59,7 @@ export const Footer = memo(function Footer() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <button 
-                    onClick={(e) => handleSectionNavigation('/leistungen', 'messebau', e)} 
+                    onClick={(e) => handleNavigation('/leistungen/messebau', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
                     {t('footer.services.messebau')}
@@ -67,7 +67,7 @@ export const Footer = memo(function Footer() {
                 </li>
                 <li>
                   <button 
-                    onClick={(e) => handleSectionNavigation('/leistungen', 'eventbau', e)} 
+                    onClick={(e) => handleNavigation('/leistungen/eventbau', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
                     {t('footer.services.eventbau')}
@@ -83,7 +83,7 @@ export const Footer = memo(function Footer() {
                 </li>
                 <li>
                   <button 
-                    onClick={(e) => handleSectionNavigation('/leistungen', 'touren', e)} 
+                    onClick={(e) => handleNavigation('/leistungen/touren', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
                     {t('footer.services.touren')}
@@ -91,7 +91,7 @@ export const Footer = memo(function Footer() {
                 </li>
                 <li>
                   <button 
-                    onClick={(e) => handleSectionNavigation('/leistungen', 'showrooms', e)} 
+                    onClick={(e) => handleNavigation('/leistungen/showrooms', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
                     {t('footer.services.showrooms')}
