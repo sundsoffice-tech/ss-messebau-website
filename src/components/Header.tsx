@@ -43,67 +43,67 @@ interface HeaderProps {
 
 const LEISTUNGEN_MEGA_MENU = [
   {
-    title: 'Messebau',
-    description: 'Professionelle Messestände von 20-200 qm',
+    titleKey: 'header.mega.messebau',
+    descriptionKey: 'header.mega.messebau.desc',
     icon: Package,
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
-    features: ['Design & Konzeption', 'Standbau & Montage', 'Full-Service-Betreuung'],
+    featureKeys: ['header.mega.messebau.f1', 'header.mega.messebau.f2', 'header.mega.messebau.f3'],
     gradient: 'from-blue-500/10 to-blue-600/5',
     previewImage: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop',
     sectionId: 'messebau'
   },
   {
-    title: 'Touren & Messeauftritte',
-    description: 'Skalierbare Lösungen ab NRW',
+    titleKey: 'header.mega.touren',
+    descriptionKey: 'header.mega.touren.desc',
     icon: CalendarDot,
     color: 'text-teal-600',
     bgColor: 'bg-teal-50',
-    features: ['Wiederverwendbare Systemstände', 'Zentrale Logistik', 'Kostenoptimierte Planung'],
+    featureKeys: ['header.mega.touren.f1', 'header.mega.touren.f2', 'header.mega.touren.f3'],
     gradient: 'from-teal-500/10 to-teal-600/5',
     previewImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop',
     sectionId: 'touren'
   },
   {
-    title: 'Showrooms & Brand Spaces',
-    description: 'Markenerlebnisräume und Showrooms',
+    titleKey: 'header.mega.showrooms',
+    descriptionKey: 'header.mega.showrooms.desc',
     icon: Storefront,
     color: 'text-amber-600',
     bgColor: 'bg-amber-50',
-    features: ['Planung & Ausführung', 'Eigenes Facharbeiter-Team', 'Kostenoptimiert'],
+    featureKeys: ['header.mega.showrooms.f1', 'header.mega.showrooms.f2', 'header.mega.showrooms.f3'],
     gradient: 'from-amber-500/10 to-amber-600/5',
     previewImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
     sectionId: 'showrooms'
   },
   {
-    title: 'Eventbau & Bühnen',
-    description: 'Eindrucksvolle Event-Locations',
+    titleKey: 'header.mega.eventbau',
+    descriptionKey: 'header.mega.eventbau.desc',
     icon: Microphone,
     color: 'text-purple-600',
     bgColor: 'bg-purple-50',
-    features: ['Bühnenaufbau', 'Event-Ausstattung', 'Technik-Integration'],
+    featureKeys: ['header.mega.eventbau.f1', 'header.mega.eventbau.f2', 'header.mega.eventbau.f3'],
     gradient: 'from-purple-500/10 to-purple-600/5',
     previewImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop',
     sectionId: 'eventbau'
   },
   {
-    title: 'Ladenbau & Showrooms',
-    description: 'Verkaufsräume die überzeugen',
+    titleKey: 'header.mega.ladenbau',
+    descriptionKey: 'header.mega.ladenbau.desc',
     icon: Storefront,
     color: 'text-orange-600',
     bgColor: 'bg-orange-50',
-    features: ['Ladeneinrichtung', 'Showroom-Design', 'Präsentationssysteme'],
+    featureKeys: ['header.mega.ladenbau.f1', 'header.mega.ladenbau.f2', 'header.mega.ladenbau.f3'],
     gradient: 'from-orange-500/10 to-orange-600/5',
     previewImage: '/images/ladenbau/showroom-bodenproben-ausstellung.jpg',
     sectionId: 'ladenbau'
   },
   {
-    title: 'Böden & Ausstattung',
-    description: 'Hochwertige Komplettlösungen',
+    titleKey: 'header.mega.boeden',
+    descriptionKey: 'header.mega.boeden.desc',
     icon: Armchair,
     color: 'text-green-600',
     bgColor: 'bg-green-50',
-    features: ['Messeboden-Systeme', 'Möbel & Ausstattung', 'Beleuchtung'],
+    featureKeys: ['header.mega.boeden.f1', 'header.mega.boeden.f2', 'header.mega.boeden.f3'],
     gradient: 'from-green-500/10 to-green-600/5',
     previewImage: '/images/boeden/besprechungsraum-vinylboden-moebel.jpg',
     sectionId: 'boeden-ausstattung'
@@ -111,39 +111,40 @@ const LEISTUNGEN_MEGA_MENU = [
 ]
 
 const LEISTUNGEN_SERVICES = [
-  { label: 'Design & Konzeption', icon: PaintBrush },
-  { label: 'Logistik & Transport', icon: Truck },
-  { label: 'Montage & Service', icon: Wrench }
+  { labelKey: 'header.services.design', icon: PaintBrush },
+  { labelKey: 'header.services.logistics', icon: Truck },
+  { labelKey: 'header.services.assembly', icon: Wrench }
 ]
 
 const PRIMARY_NAV = [
-  { label: 'Start', path: '/', icon: House },
-  { label: 'Leistungen', path: '/leistungen', icon: Briefcase },
-  { label: 'Branchen', path: '/branchen', icon: Buildings },
-  { label: 'Referenzen', path: '/referenzen', icon: Images },
+  { labelKey: 'header.nav.start', path: '/', icon: House },
+  { labelKey: 'nav.services', path: '/leistungen', icon: Briefcase },
+  { labelKey: 'nav.industries', path: '/branchen', icon: Buildings },
+  { labelKey: 'nav.references', path: '/referenzen', icon: Images },
 ]
 
 // SECONDARY_NAV: Additional pages, rendered separately in mobile with visual separator
 const SECONDARY_NAV = [
-  { label: 'Über uns', path: '/ueber-uns', icon: Users },
-  { label: 'Ablauf', path: '/ablauf', icon: Path },
-  { label: 'Nachhaltigkeit', path: '/nachhaltigkeit', icon: Leaf },
-  { label: 'Blog', path: '/blog', icon: Article },
-  { label: 'Kontakt', path: '/kontakt', icon: Envelope }
+  { labelKey: 'nav.about', path: '/ueber-uns', icon: Users },
+  { labelKey: 'nav.process', path: '/ablauf', icon: Path },
+  { labelKey: 'nav.sustainability', path: '/nachhaltigkeit', icon: Leaf },
+  { labelKey: 'nav.blog', path: '/blog', icon: Article },
+  { labelKey: 'nav.contact', path: '/kontakt', icon: Envelope }
 ]
 
 const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_MENU[0], onNavigate: (sectionId: string) => void }) => {
   const Icon = item.icon
+  const { t } = useTranslation()
   return (
     <button
       onClick={() => onNavigate(item.sectionId)}
       className="group relative overflow-hidden rounded-lg border text-left transition-all hover:border-primary hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-      aria-label={`${item.title} - ${item.description}`}
+      aria-label={`${t(item.titleKey)} - ${t(item.descriptionKey)}`}
     >
       <div className="aspect-[2/1] relative overflow-hidden">
         <img
           src={item.previewImage}
-          alt={`Vorschaubild für ${item.title}`}
+          alt={`${t('header.mega.previewAlt')} ${t(item.titleKey)}`}
           width="400"
           height="200"
           loading="lazy"
@@ -158,17 +159,17 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
       
       <div className="p-3">
         <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
-          {item.title}
+          {t(item.titleKey)}
         </h3>
         <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
-          {item.description}
+          {t(item.descriptionKey)}
         </p>
         
-        <ul className="space-y-1" aria-label={`${item.title} Features`}>
-          {item.features.map((feature) => (
-            <li key={feature} className="text-xs text-muted-foreground flex items-center gap-2">
+        <ul className="space-y-1" aria-label={`${t(item.titleKey)} Features`}>
+          {item.featureKeys.map((key) => (
+            <li key={key} className="text-xs text-muted-foreground flex items-center gap-2">
               <div className="w-1 h-1 rounded-full bg-primary flex-shrink-0" aria-hidden="true" />
-              {feature}
+              {t(key)}
             </li>
           ))}
         </ul>
@@ -189,7 +190,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
   const tabletMegaMenuRef = useRef<HTMLDivElement>(null)
   const tabletMegaMenuTriggerRef = useRef<HTMLButtonElement>(null)
   const sheetContentRef = useRef<HTMLDivElement>(null)
-  const { lang, setLang } = useTranslation()
+  const { lang, setLang, t } = useTranslation()
 
   const toggleLang = () => setLang(lang === 'de' ? 'en' : 'de')
 
@@ -472,12 +473,12 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <div className={`text-muted-foreground hidden sm:block transition-all duration-300 tracking-wide ${
                 scrolled ? 'text-[10px]' : 'text-xs'
               }`}>
-                Full-Service Messebau
+                {t('header.subtitle')}
               </div>
             </div>
           </a>
 
-          <nav className="hidden xl:flex items-center gap-1" aria-label="Hauptnavigation">
+          <nav className="hidden xl:flex items-center gap-1" aria-label={t('header.nav.mainNav')}>
             <Button
               asChild
               variant="ghost"
@@ -493,7 +494,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 onClick={(e) => handleNavigation('/', e)}
                 aria-current={currentPath === '/' ? 'page' : undefined}
               >
-                Start
+                {t('header.nav.start')}
               </a>
             </Button>
 
@@ -515,7 +516,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 aria-haspopup="true"
                 aria-controls="leistungen-mega-menu"
               >
-                Leistungen
+                {t('header.nav.leistungen')}
                 <CaretDown className={`h-4 w-4 transition-transform duration-200 ${megaMenuOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </Button>
 
@@ -524,7 +525,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   id="leistungen-mega-menu"
                   ref={megaMenuRef}
                   role="region"
-                  aria-label="Leistungen Übersicht"
+                  aria-label={t('header.mega.servicesOverview')}
                   onMouseLeave={() => setMegaMenuOpen(false)}
                   onKeyDown={handleMegaMenuKeyDown}
                   onBlur={handleMegaMenuBlur}
@@ -548,12 +549,12 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                             const Icon = service.icon
                             return (
                               <button
-                                key={service.label}
+                                key={service.labelKey}
                                 onClick={(e) => handleNavigation('/leistungen', e)}
                                 className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md px-2 py-1"
                               >
                                 <Icon className="h-4 w-4" aria-hidden="true" />
-                                <span>{service.label}</span>
+                                <span>{t(service.labelKey)}</span>
                               </button>
                             )
                           })}
@@ -565,7 +566,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                           size="sm"
                           className="gap-2 text-primary hover:text-primary"
                         >
-                          Alle Leistungen anzeigen
+                          {t('header.nav.allServices')}
                           <ArrowRight className="h-4 w-4" aria-hidden="true" />
                         </Button>
                       </div>
@@ -592,7 +593,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   onClick={(e) => handleNavigation(item.path, e)}
                   aria-current={currentPath === item.path ? 'page' : undefined}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </a>
               </Button>
             ))}
@@ -603,9 +604,9 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   variant="ghost" 
                   size={scrolled ? 'sm' : 'default'}
                   className="gap-1 transition-all duration-200 hover:bg-accent/50"
-                  aria-label="Weitere Seiten"
+                  aria-label={t('header.nav.morePages')}
                 >
-                  Mehr
+                  {t('header.nav.more')}
                   <CaretDown className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
@@ -619,7 +620,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                       className="gap-3 cursor-pointer px-3 py-2.5 rounded-md transition-all duration-200 hover:bg-accent/80 hover:pl-4 focus:bg-accent/80 focus:pl-4 group"
                     >
                       <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" aria-hidden="true" />
-                      <span className="text-sm font-medium">{item.label}</span>
+                      <span className="text-sm font-medium">{t(item.labelKey)}</span>
                     </DropdownMenuItem>
                   )
                 })}
@@ -633,7 +634,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
                 size={scrolled ? 'sm' : 'default'}
               >
-                Banner konfigurieren
+                {t('header.nav.banner')}
               </Button>
               <Button
                 variant="default"
@@ -641,7 +642,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 className="bg-accent hover:bg-accent/90 transition-colors"
                 size={scrolled ? 'sm' : 'default'}
               >
-                Anfrage
+                {t('header.nav.inquiry')}
               </Button>
               <Button
                 variant="ghost"
@@ -656,7 +657,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             </div>
           </nav>
 
-          <nav className="hidden md:flex xl:hidden items-center gap-1" aria-label="Hauptnavigation">
+          <nav className="hidden md:flex xl:hidden items-center gap-1" aria-label={t('header.nav.mainNav')}>
             <Button
               asChild
               variant="ghost"
@@ -672,7 +673,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 onClick={(e) => handleNavigation('/', e)}
                 aria-current={currentPath === '/' ? 'page' : undefined}
               >
-                Start
+                {t('header.nav.start')}
               </a>
             </Button>
 
@@ -692,7 +693,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 aria-haspopup="true"
                 aria-controls="tablet-leistungen-mega-menu"
               >
-                Leistungen
+                {t('header.nav.leistungen')}
                 <CaretDown className={`h-4 w-4 transition-transform duration-200 ${megaMenuOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </Button>
 
@@ -701,7 +702,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   id="tablet-leistungen-mega-menu"
                   ref={tabletMegaMenuRef}
                   role="region"
-                  aria-label="Leistungen Übersicht"
+                  aria-label={t('header.mega.servicesOverview')}
                   onKeyDown={handleMegaMenuKeyDown}
                   onBlur={handleMegaMenuBlur}
                   onMouseLeave={() => setMegaMenuOpen(false)}
@@ -725,7 +726,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         size="sm"
                         className="w-full gap-2 text-primary hover:text-primary"
                       >
-                        Alle Leistungen anzeigen
+                        {t('header.nav.allServices')}
                         <ArrowRight className="h-4 w-4" aria-hidden="true" />
                       </Button>
                     </div>
@@ -751,15 +752,15 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   onClick={(e) => handleNavigation(item.path, e)}
                   aria-current={currentPath === item.path ? 'page' : undefined}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </a>
               </Button>
             ))}
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-1 transition-all duration-200 hover:bg-accent/50" aria-label="Weitere Seiten">
-                  Mehr
+                <Button variant="ghost" size="sm" className="gap-1 transition-all duration-200 hover:bg-accent/50" aria-label={t('header.nav.morePages')}>
+                  {t('header.nav.more')}
                   <CaretDown className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
@@ -773,7 +774,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                       className="gap-3 cursor-pointer px-3 py-2.5 rounded-md transition-all duration-200 hover:bg-accent/80 hover:pl-4 focus:bg-accent/80 focus:pl-4 group"
                     >
                       <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" aria-hidden="true" />
-                      <span className="text-sm font-medium">{item.label}</span>
+                      <span className="text-sm font-medium">{t(item.labelKey)}</span>
                     </DropdownMenuItem>
                   )
                 })}
@@ -787,7 +788,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                 className="bg-accent hover:bg-accent/90 transition-colors"
                 size="sm"
               >
-                Anfrage
+                {t('header.nav.inquiry')}
               </Button>
               <Button
                 variant="ghost"
@@ -819,7 +820,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               onClick={onOpenInquiry}
               className="bg-accent hover:bg-accent/90 transition-colors text-sm px-3 py-2 min-h-[44px]"
             >
-              Anfrage
+              {t('header.nav.inquiry')}
             </Button>
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -827,7 +828,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                   variant="ghost" 
                   size="sm" 
                   className="px-3 min-h-[44px] min-w-[44px]"
-                  aria-label={mobileMenuOpen ? 'Menü schließen' : 'Menü öffnen'}
+                  aria-label={mobileMenuOpen ? t('header.nav.menuClose') : t('header.nav.menuOpen')}
                 >
                   {mobileMenuOpen 
                     ? <X className="h-6 w-6" aria-hidden="true" />
@@ -837,11 +838,11 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               </SheetTrigger>
               {/* Max width 320px ensures adequate tap area on larger phones while maintaining usability */}
               <SheetContent side="left" className="w-[min(85vw,320px)] px-0" ref={sheetContentRef}>
-                <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
+                <SheetTitle className="sr-only">{t('header.nav.mobileNav')}</SheetTitle>
                 <SheetDescription className="sr-only">
-                  Hauptnavigation für mobile Geräte mit Zugriff auf alle Seiten und Leistungen
+                  {t('header.nav.mobileNavDesc')}
                 </SheetDescription>
-                <nav aria-label="Mobile Navigation" className="flex flex-col h-full">
+                <nav aria-label={t('header.nav.mobileNav')} className="flex flex-col h-full">
                   <div className="flex items-center justify-between gap-3 px-4 mb-6 pt-2 flex-shrink-0">
                     <div className="flex items-center gap-3">
                       <div className="relative w-10 h-10 flex-shrink-0">
@@ -853,8 +854,8 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         />
                       </div>
                       <div className="flex flex-col gap-0.5">
-                        <span className="font-bold text-lg leading-none tracking-tight text-foreground">Menü</span>
-                        <span className="text-[10px] text-muted-foreground tracking-wide leading-none">Navigation</span>
+                        <span className="font-bold text-lg leading-none tracking-tight text-foreground">{t('header.nav.menu')}</span>
+                        <span className="text-[10px] text-muted-foreground tracking-wide leading-none">{t('header.nav.navigation')}</span>
                       </div>
                     </div>
                     <SheetClose asChild>
@@ -862,7 +863,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         variant="ghost" 
                         size="sm"
                         className="p-0 rounded-full min-h-[44px] min-w-[44px]"
-                        aria-label="Menü schließen"
+                        aria-label={t('header.nav.menuClose')}
                       >
                         <X className="h-5 w-5" aria-hidden="true" />
                       </Button>
@@ -873,7 +874,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                     <div className="flex flex-col gap-2">
                       <div className="mb-3">
                         <div className="px-3 mb-3 text-sm font-semibold text-muted-foreground">
-                          Leistungen
+                          {t('header.nav.leistungen')}
                         </div>
                         <div className="space-y-2">
                           {LEISTUNGEN_MEGA_MENU.map((item) => {
@@ -892,7 +893,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                                   </div>
                                   <div className="flex-1 min-w-0">
                                     <div className="font-semibold text-sm text-foreground group-active:text-primary transition-colors">
-                                      {item.title}
+                                      {t(item.titleKey)}
                                     </div>
                                   </div>
                                 </div>
@@ -909,7 +910,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                             href="#/leistungen"
                             onClick={(e) => handleNavigation('/leistungen', e)}
                           >
-                            Alle Leistungen anzeigen
+                            {t('header.nav.allServices')}
                             <ArrowRight className="h-4 w-4" aria-hidden="true" />
                           </a>
                         </Button>
@@ -920,13 +921,13 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         className="w-full mb-3 bg-primary hover:bg-primary/90 transition-colors min-h-[48px] text-base font-medium"
                       >
                         <FrameCorners className="h-5 w-5 mr-2" aria-hidden="true" />
-                        Banner konfigurieren
+                        {t('header.nav.banner')}
                       </Button>
 
                       {/* Visual separation between services and page navigation */}
                       <div className="my-3 border-t" />
                       <div className="px-3 mb-2 text-sm font-semibold text-muted-foreground">
-                        Seiten
+                        {t('header.nav.pages')}
                       </div>
 
                       <Button
@@ -940,7 +941,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                           aria-current={currentPath === '/' ? 'page' : undefined}
                         >
                           <House className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-                          <span className="text-left">Start</span>
+                          <span className="text-left">{t('header.nav.start')}</span>
                         </a>
                       </Button>
 
@@ -959,7 +960,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                               aria-current={currentPath === item.path ? 'page' : undefined}
                             >
                               <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-                              <span className="text-left">{item.label}</span>
+                              <span className="text-left">{t(item.labelKey)}</span>
                             </a>
                           </Button>
                         )
@@ -968,7 +969,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                       {/* Separator between primary and secondary navigation */}
                       <div className="mt-2 mb-2 border-t pt-3">
                         <div className="px-3 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                          Weitere
+                          {t('header.nav.further')}
                         </div>
                       </div>
 
@@ -987,7 +988,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                               aria-current={currentPath === item.path ? 'page' : undefined}
                             >
                               <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-                              <span className="text-left">{item.label}</span>
+                              <span className="text-left">{t(item.labelKey)}</span>
                             </a>
                           </Button>
                         )
@@ -1000,7 +1001,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                       <a 
                         href="tel:+4915140368754" 
                         className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label="Anrufen: +49 1514 0368754"
+                        aria-label={t('header.nav.call') + ': +49 1514 0368754'}
                       >
                         <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
                         <span>+49 1514 0368754</span>
@@ -1008,7 +1009,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                       <a 
                         href="mailto:info@sundsmessebau.com" 
                         className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label="E-Mail senden an info@sundsmessebau.com"
+                        aria-label={t('header.nav.email') + ' info@sundsmessebau.com'}
                       >
                         <Envelope className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
                         <span className="truncate">info@sundsmessebau.com</span>
