@@ -16,25 +16,17 @@ const PAGE_META: Record<string, PageMeta> = {
     description: 'Full-Service Messebau: Messestände, Eventbau, Showrooms, Ladenbau, Bannerrahmen & Ausstattung – alles aus einer Hand. Übersicht aller Leistungen.',
     ogType: 'website'
   },
-  '/leistungen/messebau': {
-    title: 'Messebau – Individuelle Messestände 20–200 m² | S&S Messebau',
-    description: 'Professioneller Messebau von 20–200 m²: Design, Planung & Umsetzung. 48h-Angebotsgarantie. Jetzt Messestand anfragen!'
-  },
-  '/leistungen/eventbau': {
-    title: 'Eventbau & Bühnen – Eindrucksvolle Event-Locations | S&S Messebau',
-    description: 'Bühnenaufbau, Event-Ausstattung & Technik-Integration. Von Konferenzen bis Produktlaunches – alles aus einer Hand.'
-  },
-  '/leistungen/touren': {
-    title: 'Touren & Messeauftritte – Skalierbare Systemstände | S&S Messebau',
-    description: 'Kostenoptimierte Systemstände für Messeserien und Roadshows. Zentrale Logistik ab NRW. Wiederverwendbare Lösungen.'
+  '/leistungen/showroom-ladenbau': {
+    title: 'Showroom & Ladenbau | Brandspaces – Individuelle Raumkonzepte | S&S Messebau',
+    description: 'Showrooms, Ladenbau und Brand Spaces aus einer Hand: Individuelle Raumkonzepte, Verkaufsräume und Markenerlebnisräume. Full-Service von Konzeption bis Montage.'
   },
   '/leistungen/showrooms': {
-    title: 'Showrooms & Brand Spaces – Markenerlebnisräume | S&S Messebau',
-    description: 'Permanente Showrooms und Brand Spaces – Planung, Bau und Ausstattung durch unser Facharbeiter-Team.'
+    title: 'Showroom & Ladenbau | Brandspaces – Individuelle Raumkonzepte | S&S Messebau',
+    description: 'Showrooms, Ladenbau und Brand Spaces aus einer Hand: Individuelle Raumkonzepte, Verkaufsräume und Markenerlebnisräume. Full-Service von Konzeption bis Montage.'
   },
   '/leistungen/ladenbau': {
-    title: 'Ladenbau – Verkaufsräume, die überzeugen | S&S Messebau',
-    description: 'Individuelle Ladeneinrichtungen, Präsentationssysteme und Showroom-Design. Professioneller Ladenbau.'
+    title: 'Showroom & Ladenbau | Brandspaces – Individuelle Raumkonzepte | S&S Messebau',
+    description: 'Showrooms, Ladenbau und Brand Spaces aus einer Hand: Individuelle Raumkonzepte, Verkaufsräume und Markenerlebnisräume. Full-Service von Konzeption bis Montage.'
   },
   '/leistungen/boeden': {
     title: 'Böden & Ausstattung – Komplettlösungen | S&S Messebau',
@@ -47,10 +39,6 @@ const PAGE_META: Record<string, PageMeta> = {
   '/leistungen/eventbau': {
     title: 'Eventbau & Bühnenbau – Unvergessliche Events | S&S Messebau',
     description: 'Eventbau & Bühnenbau vom Profi: Bühnen, Podeste, Event-Architektur & komplette Veranstaltungsausstattung. Full-Service aus NRW – jetzt planen!'
-  },
-  '/leistungen/showrooms': {
-    title: 'Showrooms & Brand Spaces – Markenwelten gestalten | S&S Messebau',
-    description: 'Showroom-Bau & Brand Spaces: Permanente Markenerlebnisse mit Premium-Materialien und individueller Gestaltung. Konzeption bis Übergabe aus einer Hand.'
   },
   '/leistungen/touren': {
     title: 'Touren & Roadshows – Bundesweite Messeauftritte | S&S Messebau',

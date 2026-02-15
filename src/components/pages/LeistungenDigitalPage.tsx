@@ -137,7 +137,7 @@ export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => 
   const relatedPages = [
     { label: 'Messebau & Standkonzepte', hash: '/leistungen/messebau' },
     { label: 'Eventbau & Veranstaltungen', hash: '/leistungen/eventbau' },
-    { label: 'Showrooms & Ausstellungsräume', hash: '/leistungen/showrooms' },
+    { label: 'Showroom & Ladenbau', hash: '/leistungen/showroom-ladenbau' },
     { label: 'Bannerrahmen-Systeme', hash: '/bannerrahmen' },
     { label: 'Alle Leistungen im Überblick', hash: '/leistungen' },
     { label: 'Kontakt & Beratung', hash: '/kontakt' },

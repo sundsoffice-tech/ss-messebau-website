@@ -67,10 +67,10 @@ export const Footer = memo(function Footer() {
                 </li>
                 <li>
                   <button 
-                    onClick={(e) => handleNavigation('/leistungen', e)} 
+                    onClick={(e) => handleNavigation('/leistungen/showroom-ladenbau', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
-                    {t('footer.services.ladenbau')}
+                    {t('footer.services.showroomLadenbau')}
                   </button>
                 </li>
                 <li>
@@ -79,14 +79,6 @@ export const Footer = memo(function Footer() {
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
                     {t('footer.services.touren')}
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={(e) => handleNavigation('/leistungen/showrooms', e)} 
-                    className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
-                  >
-                    {t('footer.services.showrooms')}
                   </button>
                 </li>
                 <li>

@@ -67,16 +67,16 @@ const LEISTUNGEN_MEGA_MENU = [
     pagePath: '/leistungen/touren'
   },
   {
-    titleKey: 'header.mega.showrooms',
-    descriptionKey: 'header.mega.showrooms.desc',
+    titleKey: 'header.mega.showroomLadenbau',
+    descriptionKey: 'header.mega.showroomLadenbau.desc',
     icon: Storefront,
     color: 'text-amber-600',
     bgColor: 'bg-amber-50',
-    featureKeys: ['header.mega.showrooms.f1', 'header.mega.showrooms.f2', 'header.mega.showrooms.f3'],
+    featureKeys: ['header.mega.showroomLadenbau.f1', 'header.mega.showroomLadenbau.f2', 'header.mega.showroomLadenbau.f3'],
     gradient: 'from-amber-500/10 to-amber-600/5',
     previewImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
-    sectionId: 'showrooms',
-    pagePath: '/leistungen/showrooms'
+    sectionId: 'showroom-ladenbau',
+    pagePath: '/leistungen/showroom-ladenbau'
   },
   {
     titleKey: 'header.mega.eventbau',
@@ -89,17 +89,6 @@ const LEISTUNGEN_MEGA_MENU = [
     previewImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop',
     sectionId: 'eventbau',
     pagePath: '/leistungen/eventbau'
-  },
-  {
-    titleKey: 'header.mega.ladenbau',
-    descriptionKey: 'header.mega.ladenbau.desc',
-    icon: Storefront,
-    color: 'text-orange-600',
-    bgColor: 'bg-orange-50',
-    featureKeys: ['header.mega.ladenbau.f1', 'header.mega.ladenbau.f2', 'header.mega.ladenbau.f3'],
-    gradient: 'from-orange-500/10 to-orange-600/5',
-    previewImage: '/images/ladenbau/showroom-bodenproben-ausstellung.jpg',
-    sectionId: 'ladenbau'
   },
   {
     titleKey: 'header.mega.boeden',

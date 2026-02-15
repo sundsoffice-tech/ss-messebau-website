@@ -23,14 +23,15 @@ import {
   Package,
   Armchair,
   Envelope,
+  ShoppingBag,
 } from '@phosphor-icons/react'
 
-export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
+export function LeistungenShowroomLadenbauPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
   const processSteps = [
     {
       step: 1,
       title: 'Erstgespräch & Bedarfsanalyse',
-      desc: 'Wir lernen Ihre Marke, Ihre Zielgruppe und Ihre Raumgegebenheiten kennen. Gemeinsam definieren wir Ziele, Budget und den gewünschten Erlebnischarakter Ihres Showrooms.',
+      desc: 'Wir lernen Ihre Marke, Ihre Zielgruppe und Ihre Raumgegebenheiten kennen. Gemeinsam definieren wir Ziele, Budget und den gewünschten Erlebnischarakter Ihres Showrooms oder Ladenlokals.',
     },
     {
       step: 2,
@@ -45,39 +46,43 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
     {
       step: 4,
       title: 'Montage & Installation',
-      desc: 'Unser erfahrenes Montageteam baut Ihren Showroom vor Ort auf – termingerecht, sauber und mit Liebe zum Detail.',
+      desc: 'Unser erfahrenes Montageteam baut Ihren Showroom oder Laden vor Ort auf – termingerecht, sauber und mit Liebe zum Detail.',
     },
     {
       step: 5,
       title: 'Übergabe & Nachbetreuung',
-      desc: 'Nach der Fertigstellung übergeben wir Ihren Showroom schlüsselfertig. Auf Wunsch bieten wir Wartung, saisonale Umgestaltungen und Erweiterungen.',
+      desc: 'Nach der Fertigstellung übergeben wir Ihr Projekt schlüsselfertig. Auf Wunsch bieten wir Wartung, saisonale Umgestaltungen und Erweiterungen.',
     },
   ]
 
   const faqs = [
     {
-      q: 'Was kostet ein individueller Showroom?',
+      q: 'Was kostet ein individueller Showroom oder Ladenlokal?',
       a: 'Die Kosten variieren je nach Raumgröße, Designkomplexität und Ausstattung. Einen kleinen Empfangsbereich realisieren wir ab ca. 5.000 €, umfangreiche Brand Spaces ab ca. 20.000 €. Wir erstellen Ihnen kurzfristig ein detailliertes, unverbindliches Angebot.',
     },
     {
-      q: 'Wie lange dauert die Umsetzung eines Showrooms?',
-      a: 'Für einen individuellen Showroom empfehlen wir eine Vorlaufzeit von 6–10 Wochen. Bei kleineren Projekten oder Umgestaltungen sind auch kürzere Zeiträume möglich.',
+      q: 'Wie lange dauert die Umsetzung?',
+      a: 'Für einen individuellen Showroom oder Ladenbau empfehlen wir eine Vorlaufzeit von 6–10 Wochen. Bei kleineren Projekten oder Umgestaltungen sind auch kürzere Zeiträume möglich.',
     },
     {
       q: 'Können bestehende Räume umgestaltet werden?',
-      a: 'Ja, wir modernisieren und erweitern bestehende Showrooms, Ausstellungsräume und Empfangsbereiche. Das spart Kosten und schont Ressourcen.',
+      a: 'Ja, wir modernisieren und erweitern bestehende Showrooms, Verkaufsräume, Ausstellungsräume und Empfangsbereiche. Das spart Kosten und schont Ressourcen.',
     },
     {
       q: 'Bieten Sie auch interaktive Elemente an?',
-      a: 'Selbstverständlich. Wir integrieren Touchscreens, digitale Displays, Produktkonfiguratoren und interaktive Medienstationen in Ihren Showroom – für ein modernes Markenerlebnis.',
+      a: 'Selbstverständlich. Wir integrieren Touchscreens, digitale Displays, Produktkonfiguratoren und interaktive Medienstationen in Ihren Showroom oder Verkaufsraum – für ein modernes Markenerlebnis.',
     },
     {
-      q: 'In welchen Regionen bauen Sie Showrooms?',
-      a: 'Wir sind bundesweit tätig und realisieren Showrooms und Brand Spaces in ganz Deutschland – von NRW über Frankfurt und München bis Hamburg und Berlin.',
+      q: 'In welchen Regionen sind Sie tätig?',
+      a: 'Wir sind bundesweit tätig und realisieren Showrooms, Ladenbau und Brand Spaces in ganz Deutschland – von NRW über Frankfurt und München bis Hamburg und Berlin.',
     },
     {
-      q: 'Was ist im Full-Service für Showrooms enthalten?',
-      a: 'Unser Full-Service umfasst: Beratung, Konzeption, 3D-Design, Produktion, Beleuchtungsplanung, Möblierung, Bodengestaltung, Montage und auf Wunsch regelmäßige Wartung und saisonale Anpassungen.',
+      q: 'Was ist im Full-Service enthalten?',
+      a: 'Unser Full-Service umfasst: Beratung, Konzeption, 3D-Design, Produktion, Ladeneinrichtung, Beleuchtungsplanung, Möblierung, Bodengestaltung, Montage und auf Wunsch regelmäßige Wartung und saisonale Anpassungen.',
+    },
+    {
+      q: 'Was unterscheidet Showroom, Ladenbau und Brand Space?',
+      a: 'Ein Showroom dient der Produktpräsentation und Markeninszenierung. Ladenbau fokussiert sich auf verkaufsoptimierten Innenausbau. Brand Spaces vereinen beides und schaffen vollumfängliche Markenerlebnisräume. Wir bündeln alle drei Disziplinen aus einer Hand.',
     },
   ]
 
@@ -116,7 +121,7 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
       <div className="container mx-auto max-w-7xl">
         <Breadcrumbs items={[
           { label: 'Leistungen', path: '/leistungen' },
-          { label: 'Showrooms', current: true },
+          { label: 'Showroom & Ladenbau', current: true },
         ]} />
       </div>
       {/* Hero Section */}
@@ -127,12 +132,12 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
               className="font-bold mb-6"
               style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)', lineHeight: '1.2' }}
             >
-              Showrooms &amp; Brand Spaces – Ihre Marke erleben lassen
+              Showroom &amp; Ladenbau | Brandspaces
             </h1>
             <p className="text-xl mb-8 text-white/90">
-              Permanente Markenwelten, die begeistern: S&amp;S Messebau konzipiert und realisiert
-              individuelle Showrooms, Brand Spaces und Ausstellungsräume – von der ersten Idee
-              bis zur schlüsselfertigen Übergabe. Für ein Markenerlebnis, das bleibt.
+              Individuelle Raumkonzepte, Shops &amp; Markenräume aus einer Hand: S&amp;S Messebau
+              konzipiert und realisiert Showrooms, Ladenlokale, Brand Spaces und Ausstellungsräume
+              – von der ersten Idee bis zur schlüsselfertigen Übergabe.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -140,7 +145,7 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
                 onClick={onOpenInquiry}
                 className="bg-white text-amber-700 hover:bg-white/90"
               >
-                Jetzt Showroom anfragen
+                Jetzt Projekt anfragen
                 <ArrowRight className="ml-2" />
               </Button>
               <Button
@@ -160,7 +165,7 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
       {/* USP Badge Section */}
       <section className="py-12 bg-secondary/30">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-6 max-w-6xl mx-auto">
             <Card className="p-4 text-center">
               <PaintBrush className="w-8 h-8 mx-auto mb-2 text-primary" />
               <p className="font-semibold text-sm">Individuelle Gestaltung</p>
@@ -169,7 +174,12 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
             <Card className="p-4 text-center">
               <Storefront className="w-8 h-8 mx-auto mb-2 text-primary" />
               <p className="font-semibold text-sm">Markenwelten</p>
-              <p className="text-xs text-muted-foreground">Immersive Brand Spaces</p>
+              <p className="text-xs text-muted-foreground">Showrooms & Brand Spaces</p>
+            </Card>
+            <Card className="p-4 text-center">
+              <ShoppingBag className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <p className="font-semibold text-sm">Ladenbau</p>
+              <p className="text-xs text-muted-foreground">Verkaufsräume & Shops</p>
             </Card>
             <Card className="p-4 text-center">
               <Sparkle className="w-8 h-8 mx-auto mb-2 text-primary" />
@@ -197,12 +207,12 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
             className="font-bold text-center mb-4"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
           >
-            Showroom-Bau – Unsere Leistungen im Detail
+            Showroom & Ladenbau – Unsere Leistungen im Detail
           </h2>
           <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Als erfahrener Partner für Showroom-Gestaltung und Markenwelten aus NRW bieten wir
+            Als erfahrener Partner für Showrooms, Ladenbau und Markenwelten aus NRW bieten wir
             Ihnen das komplette Leistungsspektrum – von der Konzeption bis zur schlüsselfertigen
-            Übergabe Ihres Ausstellungsraums.
+            Übergabe.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -210,12 +220,12 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
               {
                 icon: Eye,
                 title: 'Konzeption & Beratung',
-                desc: 'Strategische Planung Ihres Showrooms mit Markenanalyse, Zielgruppendefinition und Erlebniskonzept. Wir entwickeln eine Raumstrategie, die Ihre Marke optimal erlebbar macht.',
+                desc: 'Strategische Planung Ihres Showrooms oder Ladenlokals mit Markenanalyse, Zielgruppendefinition und Erlebniskonzept.',
               },
               {
                 icon: PaintBrush,
                 title: 'Raumgestaltung & 3D-Design',
-                desc: 'Kreative Raumkonzepte mit fotorealistischen 3D-Visualisierungen. Sie erleben Ihren Showroom virtuell, bevor die Produktion beginnt.',
+                desc: 'Kreative Raumkonzepte mit fotorealistischen 3D-Visualisierungen. Sie erleben Ihren Raum virtuell, bevor die Produktion beginnt.',
               },
               {
                 icon: Sparkle,
@@ -228,6 +238,11 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
                 desc: 'Hochwertige Materialauswahl passend zu Ihrer Markenidentität. Edle Oberflächen, nachhaltige Werkstoffe und individuelle Sonderanfertigungen.',
               },
               {
+                icon: ShoppingBag,
+                title: 'Ladeneinrichtung & Präsentationssysteme',
+                desc: 'Verkaufsoptimierte Ladeneinrichtungen, Regalsysteme, Warenpräsentationen und Verkaufstheken – abgestimmt auf Ihre Branche und Zielgruppe.',
+              },
+              {
                 icon: CheckCircle,
                 title: 'Interaktive Elemente',
                 desc: 'Integration von Touchscreens, digitalen Displays, Produktkonfiguratoren und multimedialen Erlebnisstationen für ein modernes Besuchererlebnis.',
@@ -235,7 +250,7 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
               {
                 icon: Armchair,
                 title: 'Möblierung & Ausstattung',
-                desc: 'Komplette Einrichtung Ihres Showrooms mit maßgefertigten Möbeln, Vitrinen, Präsentationssystemen und Empfangsmöbeln.',
+                desc: 'Komplette Einrichtung mit maßgefertigten Möbeln, Vitrinen, Präsentationssystemen und Empfangsmöbeln.',
               },
             ].map((item, index) => (
               <Card key={index} className="p-6">
@@ -257,11 +272,11 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
             className="font-bold text-center mb-4"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
           >
-            Einsatzbereiche für Showrooms
+            Einsatzbereiche für Showroom &amp; Ladenbau
           </h2>
           <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Unsere Showroom-Lösungen sind vielseitig einsetzbar – überall dort, wo Ihre Marke
-            erlebbar werden soll.
+            Unsere Showroom- und Ladenbau-Lösungen sind vielseitig einsetzbar – überall dort,
+            wo Ihre Marke erlebbar werden soll.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -272,9 +287,9 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
                 desc: 'Repräsentative Markenwelten im eigenen Unternehmen – für Kunden, Partner und Mitarbeiter.',
               },
               {
-                icon: Eye,
-                title: 'Verkaufsräume',
-                desc: 'Verkaufsfördernde Raumkonzepte, die Produkte optimal inszenieren und zum Kauf inspirieren.',
+                icon: ShoppingBag,
+                title: 'Verkaufs- & Ladenlokale',
+                desc: 'Verkaufsfördernde Raumkonzepte und Ladeneinrichtungen, die Produkte optimal inszenieren und zum Kauf inspirieren.',
               },
               {
                 icon: Cube,
@@ -313,10 +328,10 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
             className="font-bold text-center mb-4"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
           >
-            Ihr Weg zum perfekten Showroom
+            Ihr Weg zum perfekten Raum
           </h2>
           <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            In fünf klar definierten Schritten realisieren wir Ihren Showroom –
+            In fünf klar definierten Schritten realisieren wir Ihren Showroom oder Ladenbau –
             transparent, termingerecht und mit höchstem Qualitätsanspruch.
           </p>
 
@@ -348,10 +363,10 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
             className="font-bold text-center mb-4"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
           >
-            Häufige Fragen zum Showroom-Bau
+            Häufige Fragen zu Showroom &amp; Ladenbau
           </h2>
           <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Antworten auf die wichtigsten Fragen rund um Showroom-Gestaltung, Kosten und Ablauf.
+            Antworten auf die wichtigsten Fragen rund um Showrooms, Ladenbau, Kosten und Ablauf.
           </p>
 
           <div className="max-w-3xl mx-auto">
@@ -449,11 +464,11 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
             className="font-bold mb-6"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
           >
-            Bereit für Ihren eigenen Showroom?
+            Bereit für Ihren Showroom oder Ladenbau?
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
             Lassen Sie uns gemeinsam Ihre Markenwelt gestalten. Kontaktieren Sie uns für
-            eine unverbindliche Beratung und ein individuelles Angebot für Ihren Showroom.
+            eine unverbindliche Beratung und ein individuelles Angebot.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" onClick={onOpenInquiry}>
@@ -470,3 +485,6 @@ export function LeistungenShowroomsPage({ onOpenInquiry }: { onOpenInquiry: () =
     </div>
   )
 }
+
+/** @deprecated Use LeistungenShowroomLadenbauPage instead */
+export const LeistungenShowroomsPage = LeistungenShowroomLadenbauPage

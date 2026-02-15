@@ -126,7 +126,7 @@ export function LeistungenMessebauPage({ onOpenInquiry }: { onOpenInquiry: () =>
 
   const relatedPages = [
     { label: 'Eventbau & Veranstaltungen', hash: '/leistungen/eventbau' },
-    { label: 'Showrooms & Ausstellungsräume', hash: '/leistungen/showrooms' },
+    { label: 'Showroom & Ladenbau', hash: '/leistungen/showroom-ladenbau' },
     { label: 'Bannerrahmen-Systeme', hash: '/bannerrahmen' },
     { label: 'Kontakt & Beratung', hash: '/kontakt' },
     { label: 'Alle Leistungen im Überblick', hash: '/leistungen' },

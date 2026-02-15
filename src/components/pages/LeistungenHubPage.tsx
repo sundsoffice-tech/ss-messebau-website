@@ -6,7 +6,6 @@ import {
   Microphone,
   CalendarDot,
   Storefront,
-  ShoppingBag,
   Armchair,
   FrameCorners,
 } from '@phosphor-icons/react'
@@ -20,8 +19,7 @@ const services = [
   { key: 'messebau', icon: Package, path: '/leistungen' },
   { key: 'eventbau', icon: Microphone, path: '/leistungen' },
   { key: 'touren', icon: CalendarDot, path: '/leistungen' },
-  { key: 'showrooms', icon: Storefront, path: '/leistungen' },
-  { key: 'ladenbau', icon: ShoppingBag, path: '/leistungen' },
+  { key: 'showroomLadenbau', icon: Storefront, path: '/leistungen/showroom-ladenbau' },
   { key: 'boeden', icon: Armchair, path: '/leistungen' },
   { key: 'bannerrahmen', icon: FrameCorners, path: '/bannerrahmen' },
 ] as const
