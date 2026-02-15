@@ -1,4 +1,4 @@
-import { ChevronRight, House } from '@phosphor-icons/react'
+import { CaretRight, House } from '@phosphor-icons/react'
 import { memo } from 'react'
 
 interface BreadcrumbItem {
@@ -37,7 +37,7 @@ export const Breadcrumbs = memo(function Breadcrumbs({ items }: BreadcrumbsProps
           
           return (
             <li key={index} className="flex items-center gap-2">
-              <ChevronRight className="h-4 w-4 text-muted-foreground/50" aria-hidden="true" />
+              <CaretRight className="h-4 w-4 text-muted-foreground/50" aria-hidden="true" />
               
               {isLast || !item.path ? (
                 <span 

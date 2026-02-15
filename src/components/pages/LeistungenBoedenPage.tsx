@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import {
   Accordion,
   AccordionContent,
@@ -137,6 +138,12 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
 
   return (
     <div className="min-h-screen">
+      <div className="container mx-auto max-w-7xl">
+        <Breadcrumbs items={[
+          { label: 'Leistungen', path: '/leistungen' },
+          { label: 'Böden & Ausstattung', current: true },
+        ]} />
+      </div>
       {/* Hero Section */}
       <section className="hero-gradient text-white py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

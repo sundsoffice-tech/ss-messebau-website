@@ -112,6 +112,18 @@ const LEISTUNGEN_MEGA_MENU = [
     previewImage: '/images/boeden/besprechungsraum-vinylboden-moebel.jpg',
     sectionId: 'boeden-ausstattung',
     pagePath: '/leistungen/boeden-ausstattung'
+  },
+  {
+    titleKey: 'header.mega.bannerrahmen',
+    descriptionKey: 'header.mega.bannerrahmen.desc',
+    icon: FrameCorners,
+    color: 'text-rose-600',
+    bgColor: 'bg-rose-50',
+    featureKeys: ['header.mega.bannerrahmen.f1', 'header.mega.bannerrahmen.f2', 'header.mega.bannerrahmen.f3'],
+    gradient: 'from-rose-500/10 to-rose-600/5',
+    previewImage: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop',
+    sectionId: 'bannerrahmen',
+    pagePath: '/bannerrahmen'
   }
 ]
 
