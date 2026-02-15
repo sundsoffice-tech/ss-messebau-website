@@ -13,6 +13,7 @@ import {
   Target
 } from '@phosphor-icons/react'
 import { DEMO_REFERENCES } from '@/lib/demo-data'
+import { useTranslation } from '@/lib/i18n'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { USPBadges } from '@/components/ui/USPBadge'
@@ -28,6 +29,7 @@ interface HomePageProps {
 }
 
 export function HomePage({ onOpenInquiry }: HomePageProps) {
+  const { t } = useTranslation()
   const { navigateToSectionOnPage } = useDeepLinking('/')
   
   useSectionObserver([
@@ -62,7 +64,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         <div className="absolute inset-0 hero-overlay" />
         <img
           src="/images/hero-messebau-startseite.jpg"
-          alt="Professioneller Messebau von S&S Messebau – Messestände, Events und Ladenbau aus Hückelhoven"
+          alt={t('home.hero.alt')}
           width="1920"
           height="1080"
           className="absolute inset-0 w-full h-full object-cover opacity-20"
@@ -74,12 +76,12 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 py-12 sm:py-16">
           <div className="max-w-3xl">
-            <Badge className="mb-4 sm:mb-6 bg-accent text-accent-foreground text-sm">S&S Messebau – Ihr Messestand-Partner aus NRW</Badge>
+            <Badge className="mb-4 sm:mb-6 bg-accent text-accent-foreground text-sm">{t('home.hero.badge')}</Badge>
             <h1 id="hero-heading" className="font-bold text-white mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>
-              Messestände 20–200 m², die Ihre Marke verkaufen.
+              {t('home.hero.title')}
             </h1>
             <p className="text-white/90 mb-5 sm:mb-6 leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', lineHeight: '1.5' }}>
-              S&S Messebau – 48h-Angebot mit persönlicher Beratung. Full-Service Messebau, Eventbau & Showrooms für Food, Finance und Industrie – bundesweit aus NRW.
+              {t('home.hero.subtitle')}
             </p>
             <div className="mb-5 sm:mb-6">
               <USPBadges />
@@ -89,9 +91,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 size="lg" 
                 onClick={() => { trackHeroCTAClick('hero'); onOpenInquiry() }}
                 className="bg-accent hover:bg-accent/90 px-6 sm:px-8 py-6 text-base sm:text-lg font-medium min-h-[48px]"
-                aria-label="Projekt anfragen - Formular öffnen"
+                aria-label={t('home.hero.ctaAria')}
               >
-                Projekt anfragen
+                {t('home.hero.cta')}
                 <ArrowRight className="ml-2" aria-hidden="true" />
               </Button>
               <Button 
@@ -99,9 +101,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 variant="outline"
                 onClick={() => handleNavigation('/leistungen')}
                 className="px-6 sm:px-8 py-6 text-base sm:text-lg font-medium bg-white/10 text-white border-white/30 hover:bg-white/20 min-h-[48px]"
-                aria-label="Zu den Leistungen navigieren"
+                aria-label={t('home.hero.secondaryAria')}
               >
-                Leistungen entdecken
+                {t('home.hero.secondary')}
               </Button>
             </div>
           </div>
@@ -115,48 +117,48 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
       <section id="services" className="py-12 sm:py-16 bg-muted" aria-labelledby="services-heading">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 id="services-heading" className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Unsere Leistungen</h2>
+            <h2 id="services-heading" className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('home.services.title')}</h2>
             <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Drei Leistungsbereiche, ein Ansprechpartner: Full-Service Messebau als Kernleistung, skalierbare Tourenlösungen für wiederkehrende Auftritte und professionelle Showrooms & Brand Spaces – alles kostenoptimiert aus einer Hand.
+              {t('home.services.subtitle')}
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 icon: Warehouse,
-                title: 'Full-Service Messebau',
-                description: 'Ihre Kernleistung aus einer Hand – von der ersten Idee über Produktion und Logistik bis zur Lagerung für den nächsten Einsatz.',
+                title: t('home.services.messebau.title'),
+                description: t('home.services.messebau.desc'),
                 bullets: [
-                  'Planung, Entwurf und Konzeptentwicklung',
-                  'Produktion, Logistik, Aufbau & Abbau',
-                  'Lagerung und Wiederverwendung von Standbauteilen',
-                  'Technische Betreuung und Service vor Ort'
+                  t('home.services.messebau.b1'),
+                  t('home.services.messebau.b2'),
+                  t('home.services.messebau.b3'),
+                  t('home.services.messebau.b4')
                 ],
                 sectionId: 'messebau',
                 image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&h=320&fit=crop'
               },
               {
                 icon: CalendarDot,
-                title: 'Touren & wiederkehrende Messeauftritte',
-                description: 'Skalierbare Systemlösungen für viele kleine Messen und Roadshows – zentral koordiniert ab NRW, bundesweit verfügbar.',
+                title: t('home.services.touren.title'),
+                description: t('home.services.touren.desc'),
                 bullets: [
-                  'Zentrale Logistik ab NRW – kurze Wege, schnelle Reaktion',
-                  'Wiederverwendbare Systemstände, mehrfach einsetzbar',
-                  'Kostenoptimierte Routen- und Aufbauplanung',
-                  'Skalierbare Pakete für die gesamte DACH-Region'
+                  t('home.services.touren.b1'),
+                  t('home.services.touren.b2'),
+                  t('home.services.touren.b3'),
+                  t('home.services.touren.b4')
                 ],
                 sectionId: 'touren',
                 image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500&h=320&fit=crop'
               },
               {
                 icon: Storefront,
-                title: 'Showrooms & Brand Spaces',
-                description: 'Showrooms, Markenerlebnisräume und Brand Spaces – Planung und Ausführung mit demselben Facharbeiter-Team, das Sie aus dem Messebau kennen.',
+                title: t('home.services.showrooms.title'),
+                description: t('home.services.showrooms.desc'),
                 bullets: [
-                  'Showrooms, Brand Spaces und Erlebnisräume',
-                  'Planung und Ausführung aus einer Hand',
-                  'Einsatz desselben Monteur-Teams wie im Messebau',
-                  'Langfristig effiziente und kostenoptimierte Lösungen'
+                  t('home.services.showrooms.b1'),
+                  t('home.services.showrooms.b2'),
+                  t('home.services.showrooms.b3'),
+                  t('home.services.showrooms.b4')
                 ],
                 sectionId: 'showrooms',
                 image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=320&fit=crop'
@@ -207,9 +209,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                     <Button 
                       variant="ghost" 
                       className="w-full justify-between group/btn hover:bg-primary/5 mt-2"
-                      aria-label={`Mehr erfahren über ${service.title}`}
+                      aria-label={`${t('home.services.moreAbout')} ${service.title}`}
                     >
-                      <span>Mehr erfahren</span>
+                      <span>{t('home.services.more')}</span>
                       <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                     </Button>
                   </CardContent>
@@ -223,9 +225,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
       <section id="advantages" className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Warum S&S Messebau?</h2>
+            <h2 className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('home.advantages.title')}</h2>
             <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Drei entscheidende Vorteile, die uns zum idealen Partner für Ihren Messeauftritt machen.
+              {t('home.advantages.subtitle')}
             </p>
           </div>
 
@@ -233,18 +235,18 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
             {[
               {
                 icon: CheckCircle,
-                title: '48h-Angebot mit persönlicher Beratung',
-                description: 'Innerhalb von 48 Stunden erhalten Sie ein kalkuliertes Angebot inklusive individueller Konzeptberatung für Ihren Messestand – für schnelle Entscheidungen.'
+                title: t('home.advantages.offer.title'),
+                description: t('home.advantages.offer.desc')
               },
               {
                 icon: Target,
-                title: 'Spezialist für 20–200 m²',
-                description: 'Fokussiert auf Messestände für mittelständische Unternehmen. Perfekt für Food, Finance und Industriebranchen – ohne Agentur-Overhead.'
+                title: t('home.advantages.specialist.title'),
+                description: t('home.advantages.specialist.desc')
               },
               {
                 icon: Handshake,
-                title: 'Branchenexperte mit Netzwerk',
-                description: 'Tiefe Branchenkenntnis in Food (Anuga, ISM), Versicherungen (DKM) und Industrie (Hannover Messe) – plus starkes Partnernetzwerk für beste Qualität.'
+                title: t('home.advantages.expert.title'),
+                description: t('home.advantages.expert.desc')
               }
             ].map((advantage, index) => {
               const Icon = advantage.icon
@@ -267,9 +269,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
       <section id="references" className="py-12 sm:py-16 bg-muted">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Referenzen</h2>
+            <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('home.references.title')}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Ausgewählte Projekte aus Food, Finance & Industrie – von 20 bis 200 m².
+              {t('home.references.subtitle')}
             </p>
           </div>
 
@@ -302,12 +304,12 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                     </Badge>
                   )}
                   <div className="absolute bottom-4 left-4 right-4 transform translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    <p className="text-white text-sm font-medium drop-shadow-lg">Mehr erfahren →</p>
+                    <p className="text-white text-sm font-medium drop-shadow-lg">{t('home.references.more')}</p>
                   </div>
                 </div>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="secondary">{reference.branche === 'food' ? 'Food & Feinkost' : reference.branche === 'versicherungen' ? 'Versicherungen' : 'Industrie'}</Badge>
+                    <Badge variant="secondary">{reference.branche === 'food' ? t('home.references.food') : reference.branche === 'versicherungen' ? t('home.references.insurance') : t('home.references.industry')}</Badge>
                   </div>
                   <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">{reference.title}</h3>
                   <p className="text-sm text-muted-foreground line-clamp-2">{reference.description}</p>
@@ -318,7 +320,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
 
           <div className="text-center mt-8">
             <Button variant="outline" onClick={() => handleNavigation('/referenzen')}>
-              Alle {DEMO_REFERENCES.length} Referenzen ansehen
+              {t('home.references.viewAll').replace('{count}', String(DEMO_REFERENCES.length))}
               <ArrowRight className="ml-2" />
             </Button>
           </div>
@@ -332,9 +334,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
       <section id="testimonials" className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Das sagen unsere Kunden</h2>
+            <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('home.testimonials.title')}</h2>
             <p className="text-lg text-muted-foreground mb-4">
-              Echte Bewertungen von echten Kunden
+              {t('home.testimonials.subtitle')}
             </p>
             <Button 
               variant="outline" 
@@ -347,7 +349,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 rel="noopener noreferrer"
               >
                 <Star className="h-4 w-4 text-yellow-500" weight="fill" />
-                Alle Google-Bewertungen ansehen
+                {t('home.testimonials.google')}
               </a>
             </Button>
           </div>
@@ -355,21 +357,21 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                text: 'Perfekter Stand, pünktlich aufgebaut und sehr professionell. Die Zusammenarbeit war unkompliziert und das Ergebnis überzeugt uns und unsere Messebesucher.',
-                author: 'M. S.',
-                company: 'Lebensmittelbranche',
+                text: t('home.testimonials.t1.text'),
+                author: t('home.testimonials.t1.author'),
+                company: t('home.testimonials.t1.company'),
                 rating: 5
               },
               {
-                text: 'S&S Messebau hat uns von der ersten Planung bis zum Abbau begleitet. Absolut empfehlenswert für alle, die Wert auf Qualität und persönliche Betreuung legen.',
-                author: 'J. B.',
-                company: 'Versicherungsbranche',
+                text: t('home.testimonials.t2.text'),
+                author: t('home.testimonials.t2.author'),
+                company: t('home.testimonials.t2.company'),
                 rating: 5
               },
               {
-                text: 'Faire Preise, kreative Lösungen und ein Team, das mitdenkt. Unser Showroom ist genau so geworden, wie wir ihn uns vorgestellt haben.',
-                author: 'T. W.',
-                company: 'Industrieunternehmen',
+                text: t('home.testimonials.t3.text'),
+                author: t('home.testimonials.t3.author'),
+                company: t('home.testimonials.t3.company'),
                 rating: 5
               }
             ].map((testimonial, index) => (
@@ -394,25 +396,25 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
       </section>
 
       <InternalLinkSection
-        title="Alles über S&S Messebau"
+        title={t('home.links.title')}
         links={[
-          { label: 'Leistungen im Detail', description: 'Messebau, Eventbau, Showrooms & Brand Spaces – alle Services.', hash: '/leistungen' },
-          { label: 'Branchen-Expertise', description: 'Spezialisiert auf Food, Finance & Industrie.', hash: '/branchen' },
-          { label: 'Referenzen ansehen', description: 'Realisierte Projekte von 20–200 m² im Überblick.', hash: '/referenzen' },
-          { label: 'Unser Ablauf', description: 'Vom Erstgespräch bis zum Abbau – so arbeiten wir.', hash: '/ablauf' },
-          { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für die Umwelt.', hash: '/nachhaltigkeit' },
-          { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit.', hash: '/ueber-uns' },
-          { label: 'Blog & Ratgeber', description: 'Tipps und Insights rund um den Messeauftritt.', hash: '/blog' },
-          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit persönlicher Beratung anfordern.', hash: '/kontakt' },
+          { label: t('home.links.services.label'), description: t('home.links.services.desc'), hash: '/leistungen' },
+          { label: t('home.links.branchen.label'), description: t('home.links.branchen.desc'), hash: '/branchen' },
+          { label: t('home.links.references.label'), description: t('home.links.references.desc'), hash: '/referenzen' },
+          { label: t('home.links.process.label'), description: t('home.links.process.desc'), hash: '/ablauf' },
+          { label: t('home.links.sustainability.label'), description: t('home.links.sustainability.desc'), hash: '/nachhaltigkeit' },
+          { label: t('home.links.about.label'), description: t('home.links.about.desc'), hash: '/ueber-uns' },
+          { label: t('home.links.blog.label'), description: t('home.links.blog.desc'), hash: '/blog' },
+          { label: t('home.links.contact.label'), description: t('home.links.contact.desc'), hash: '/kontakt' },
         ]}
       />
 
       <section id="cta" className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Kontakt</h2>
-          <p className="text-xl font-semibold mb-4 opacity-95">Bereit für Ihren perfekten Messeauftritt?</p>
+          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('home.cta.title')}</h2>
+          <p className="text-xl font-semibold mb-4 opacity-95">{t('home.cta.subtitle')}</p>
           <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
-            Kontaktieren Sie uns für ein unverbindliches Erstgespräch. Wir beraten Sie gerne zu Ihrem Projekt.
+            {t('home.cta.desc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
@@ -420,7 +422,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               onClick={() => { trackHeroCTAClick('cta_section'); onOpenInquiry() }}
               className="bg-accent hover:bg-accent/90 text-accent-foreground"
             >
-              Jetzt Projekt anfragen
+              {t('home.cta.button')}
               <ArrowRight className="ml-2" />
             </Button>
             <Button 
@@ -429,7 +431,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               onClick={() => handleNavigation('/kontakt')}
               className="bg-transparent text-primary-foreground border-primary-foreground/30 hover:bg-primary-foreground/10"
             >
-              Kontakt aufnehmen
+              {t('home.cta.contact')}
             </Button>
           </div>
         </div>

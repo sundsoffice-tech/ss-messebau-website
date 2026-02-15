@@ -7,12 +7,14 @@ import { Reference } from '@/lib/types'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { CheckCircle, ArrowRight } from '@phosphor-icons/react'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
+import { useTranslation } from '@/lib/i18n'
 
 interface ReferenzenPageProps {
   onOpenInquiry: () => void
 }
 
 export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
+  const { t } = useTranslation()
   const [selectedBranche, setSelectedBranche] = useState<string>('alle')
   const [selectedType, setSelectedType] = useState<string>('alle')
   const [selectedReference, setSelectedReference] = useState<Reference | null>(null)
@@ -25,18 +27,18 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
 
   const getBrancheLabel = (branche: string) => {
     switch (branche) {
-      case 'food': return 'Food & Feinkost'
-      case 'versicherungen': return 'Versicherungen'
-      case 'industrie': return 'Industrie'
+      case 'food': return t('referenzen.filter.food')
+      case 'versicherungen': return t('referenzen.filter.insurance')
+      case 'industrie': return t('referenzen.filter.industry')
       default: return branche
     }
   }
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'messebau': return 'Messebau'
-      case 'eventbau': return 'Eventbau'
-      case 'ladenbau': return 'Ladenbau'
+      case 'messebau': return t('referenzen.filter.messebau')
+      case 'eventbau': return t('referenzen.filter.eventbau')
+      case 'ladenbau': return t('referenzen.filter.ladenbau')
       default: return type
     }
   }
@@ -45,10 +47,9 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
     <div>
       <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Messebau-Referenzen – Projekte von 20–200 m²</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">{t('referenzen.hero.title')}</h1>
           <p className="text-base sm:text-xl opacity-90 max-w-3xl">
-            Überzeugen Sie sich von der Qualität unserer Arbeit. Hier finden Sie eine Auswahl erfolgreicher Projekte, 
-            die wir für unsere Kunden realisiert haben.
+            {t('referenzen.hero.subtitle')}
           </p>
         </div>
       </section>
@@ -57,13 +58,13 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="space-y-4 sm:space-y-6">
             <div>
-              <p className="text-xs sm:text-sm text-muted-foreground mb-2 font-medium">Filter nach Branche</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-2 font-medium">{t('referenzen.filter.branche')}</p>
               <div className="flex flex-wrap gap-2">
                 {[
-                  { value: 'alle', label: 'Alle Branchen' },
-                  { value: 'food', label: 'Food & Feinkost' },
-                  { value: 'versicherungen', label: 'Versicherungen' },
-                  { value: 'industrie', label: 'Industrie' }
+                  { value: 'alle', label: t('referenzen.filter.allBranchen') },
+                  { value: 'food', label: t('referenzen.filter.food') },
+                  { value: 'versicherungen', label: t('referenzen.filter.insurance') },
+                  { value: 'industrie', label: t('referenzen.filter.industry') }
                 ].map((option) => (
                   <Button
                     key={option.value}
@@ -79,13 +80,13 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
             </div>
 
             <div>
-              <p className="text-xs sm:text-sm text-muted-foreground mb-2 font-medium">Filter nach Typ</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-2 font-medium">{t('referenzen.filter.type')}</p>
               <div className="flex flex-wrap gap-2">
                 {[
-                  { value: 'alle', label: 'Alle Typen' },
-                  { value: 'messebau', label: 'Messebau' },
-                  { value: 'eventbau', label: 'Eventbau' },
-                  { value: 'ladenbau', label: 'Ladenbau' }
+                  { value: 'alle', label: t('referenzen.filter.allTypes') },
+                  { value: 'messebau', label: t('referenzen.filter.messebau') },
+                  { value: 'eventbau', label: t('referenzen.filter.eventbau') },
+                  { value: 'ladenbau', label: t('referenzen.filter.ladenbau') }
                 ].map((option) => (
                   <Button
                     key={option.value}
@@ -108,10 +109,10 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
           {filteredReferences.length === 0 ? (
             <div className="text-center py-12 sm:py-16">
               <p className="text-base sm:text-lg text-muted-foreground mb-6">
-                Keine Projekte in dieser Kategorie gefunden. Kontaktieren Sie uns für Ihr individuelles Projekt!
+                {t('referenzen.empty')}
               </p>
               <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 h-11 sm:h-10">
-                Projekt anfragen
+                {t('referenzen.emptyCta')}
               </Button>
             </div>
           ) : (
@@ -138,7 +139,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                     </Badge>
                     <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 transform translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
                       <p className="text-white text-xs sm:text-sm font-semibold drop-shadow-lg flex items-center gap-2">
-                        Details ansehen
+                        {t('referenzen.details')}
                         <ArrowRight className="h-4 w-4" />
                       </p>
                     </div>
@@ -185,19 +186,19 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-muted rounded-lg">
                     {selectedReference.kunde && (
                       <div>
-                        <p className="text-xs text-muted-foreground font-medium mb-0.5">Kunde</p>
+                        <p className="text-xs text-muted-foreground font-medium mb-0.5">{t('referenzen.detail.kunde')}</p>
                         <p className="text-sm font-semibold">{selectedReference.kunde}</p>
                       </div>
                     )}
                     {selectedReference.messe && (
                       <div>
-                        <p className="text-xs text-muted-foreground font-medium mb-0.5">Messe / Ort</p>
+                        <p className="text-xs text-muted-foreground font-medium mb-0.5">{t('referenzen.detail.messe')}</p>
                         <p className="text-sm font-semibold">{selectedReference.messe}</p>
                       </div>
                     )}
                     {selectedReference.zielsetzung && (
                       <div>
-                        <p className="text-xs text-muted-foreground font-medium mb-0.5">Zielsetzung</p>
+                        <p className="text-xs text-muted-foreground font-medium mb-0.5">{t('referenzen.detail.goal')}</p>
                         <p className="text-sm font-semibold">{selectedReference.zielsetzung}</p>
                       </div>
                     )}
@@ -205,22 +206,22 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                 )}
 
                 <div>
-                  <h3 className="font-semibold text-base sm:text-lg mb-2">Ausgangslage</h3>
+                  <h3 className="font-semibold text-base sm:text-lg mb-2">{t('referenzen.detail.challenge')}</h3>
                   <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{selectedReference.challenge}</p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-base sm:text-lg mb-2">Unsere Lösung</h3>
+                  <h3 className="font-semibold text-base sm:text-lg mb-2">{t('referenzen.detail.solution')}</h3>
                   <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{selectedReference.solution}</p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-base sm:text-lg mb-2">Ergebnis</h3>
+                  <h3 className="font-semibold text-base sm:text-lg mb-2">{t('referenzen.detail.result')}</h3>
                   <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{selectedReference.result}</p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-base sm:text-lg mb-3">Projekt-Facts</h3>
+                  <h3 className="font-semibold text-base sm:text-lg mb-3">{t('referenzen.detail.facts')}</h3>
                   <div className="space-y-2">
                     {selectedReference.keyfacts.map((fact, index) => (
                       <div key={index} className="flex items-start gap-2 sm:gap-3">
@@ -236,7 +237,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                     setSelectedReference(null)
                     onOpenInquiry()
                   }} className="w-full bg-accent hover:bg-accent/90 h-11 sm:h-10">
-                    Ähnliches Projekt anfragen
+                    {t('referenzen.detail.cta')}
                   </Button>
                 </div>
               </div>
@@ -247,25 +248,25 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
 
       <section className="py-12 sm:py-16 bg-muted">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Bereit für Ihr eigenes Erfolgsprojekt?</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">{t('referenzen.cta.title')}</h2>
           <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
-            Lassen Sie uns gemeinsam Ihren perfekten Messeauftritt planen.
+            {t('referenzen.cta.subtitle')}
           </p>
           <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 h-12 sm:h-11">
-            Jetzt Projekt besprechen
+            {t('referenzen.cta.button')}
           </Button>
         </div>
       </section>
 
       <InternalLinkSection
-        title="Mehr von S&S Messebau"
+        title={t('referenzen.links.title')}
         links={[
-          { label: 'Leistungen im Detail', description: 'Messebau, Eventbau, Showrooms & Brand Spaces im Überblick.', hash: '/leistungen' },
-          { label: 'Branchen-Expertise', description: 'Spezialisiert auf Food, Finance & Industrie.', hash: '/branchen' },
-          { label: 'Unser Ablauf', description: 'Transparenter Projektablauf vom Erstgespräch bis Abbau.', hash: '/ablauf' },
-          { label: 'Nachhaltiger Messebau', description: 'Systembau und Wiederverwendung für umweltbewusste Auftritte.', hash: '/nachhaltigkeit' },
-          { label: 'Über S&S Messebau', description: 'Inhabergeführt, persönlich, bundesweit.', hash: '/ueber-uns' },
-          { label: 'Kontakt aufnehmen', description: '48h-Angebot mit persönlicher Beratung anfordern.', hash: '/kontakt' },
+          { label: t('referenzen.links.services.label'), description: t('referenzen.links.services.desc'), hash: '/leistungen' },
+          { label: t('referenzen.links.branchen.label'), description: t('referenzen.links.branchen.desc'), hash: '/branchen' },
+          { label: t('referenzen.links.process.label'), description: t('referenzen.links.process.desc'), hash: '/ablauf' },
+          { label: t('referenzen.links.sustainability.label'), description: t('referenzen.links.sustainability.desc'), hash: '/nachhaltigkeit' },
+          { label: t('referenzen.links.about.label'), description: t('referenzen.links.about.desc'), hash: '/ueber-uns' },
+          { label: t('referenzen.links.contact.label'), description: t('referenzen.links.contact.desc'), hash: '/kontakt' },
         ]}
       />
     </div>
