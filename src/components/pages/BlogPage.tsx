@@ -5,12 +5,14 @@ import { DEMO_BLOG_POSTS } from '@/lib/demo-data'
 import { Article, ArrowRight, Clock } from '@phosphor-icons/react'
 import { trackHeroCTAClick } from '@/lib/analytics'
 import { useScrollDepthTracking, useDwellTimeTracking, useArticleReadTracking } from '@/hooks/use-analytics'
+import { useTranslation } from '@/lib/i18n'
 
 interface BlogPageProps {
   onOpenInquiry: () => void
 }
 
 export function BlogPage({ onOpenInquiry }: BlogPageProps) {
+  const { t, lang } = useTranslation()
   const currentSlug = window.location.hash.startsWith('#/blog/')
     ? window.location.hash.replace('#/blog/', '')
     : undefined
@@ -25,7 +27,7 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
   }
 
   const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString('de-DE', {
+    return new Date(timestamp).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-US', {
       day: '2-digit',
       month: 'long',
       year: 'numeric'
@@ -38,10 +40,10 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <div className="flex items-center gap-2.5 md:gap-3 mb-3 md:mb-4">
             <Article className="h-8 w-8 md:h-10 md:w-10 shrink-0" />
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">Blog & Ratgeber – Messebau-Tipps von S&S Messebau</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">{t('blog.hero.title')}</h1>
           </div>
           <p className="text-base md:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
-            Hilfreiche Tipps, Checklisten und Fachwissen rund um Messebau, Eventplanung und erfolgreiche Messeauftritte.
+            {t('blog.hero.subtitle')}
           </p>
         </div>
       </section>
@@ -78,7 +80,7 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
                     onClick={() => handleNavigation(`/blog/${post.slug}`)}
                     className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors min-h-[44px] text-sm md:text-base"
                   >
-                    Weiterlesen
+                    {t('blog.readMore')}
                     <ArrowRight className="ml-2" />
                   </Button>
                 </CardContent>
@@ -90,12 +92,12 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
 
       <section className="py-12 md:py-16 bg-muted">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Haben Sie Fragen zu Ihrem Messeprojekt?</h2>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">{t('blog.cta.heading')}</h2>
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
-            Unsere Experten beraten Sie gerne persönlich zu allen Aspekten Ihres Messeauftritts.
+            {t('blog.cta.text')}
           </p>
           <Button size="lg" onClick={() => { trackHeroCTAClick('blog_cta'); onOpenInquiry() }} className="bg-accent hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
-            Kostenlose Beratung anfragen
+            {t('blog.cta.button')}
             <ArrowRight className="ml-2" />
           </Button>
         </div>
