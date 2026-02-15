@@ -2,7 +2,6 @@ import { memo, useState, useEffect } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { Phone, Envelope, MapPin } from '@phosphor-icons/react'
 import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
-import { navigateToPageAndSection } from '@/lib/deep-linking'
 import { useTranslation } from '@/lib/i18n'
 import { authApi } from '@/lib/api-client'
 
@@ -20,13 +19,6 @@ export const Footer = memo(function Footer() {
       event.preventDefault()
     }
     window.location.hash = path
-  }
-
-  const handleSectionNavigation = (page: string, sectionId: string, event?: React.MouseEvent) => {
-    if (event) {
-      event.preventDefault()
-    }
-    navigateToPageAndSection(page, sectionId)
   }
 
   return (
@@ -75,7 +67,7 @@ export const Footer = memo(function Footer() {
                 </li>
                 <li>
                   <button 
-                    onClick={(e) => handleSectionNavigation('/leistungen', 'ladenbau', e)} 
+                    onClick={(e) => handleNavigation('/leistungen', e)} 
                     className="hover:text-primary focus-visible:text-primary transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
                   >
                     {t('footer.services.ladenbau')}

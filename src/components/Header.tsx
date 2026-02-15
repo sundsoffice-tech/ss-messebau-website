@@ -34,7 +34,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import logo from '@/assets/images/IMG-20230807-WA0009_(1).png'
-import { navigateToPageAndSection, parseDeepLink } from '@/lib/deep-linking'
+import { parseDeepLink } from '@/lib/deep-linking'
 import { useTranslation } from '@/lib/i18n'
 
 interface HeaderProps {
@@ -547,7 +547,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         <MegaMenuItem 
                           key={item.sectionId}
                           item={item}
-                          onNavigate={handleSectionNavigation}
+                          onNavigate={handleLeistungenNavigation}
                         />
                       ))}
                     </div>
@@ -724,7 +724,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
                         <MegaMenuItem 
                           key={item.sectionId}
                           item={item}
-                          onNavigate={handleSectionNavigation}
+                          onNavigate={handleLeistungenNavigation}
                         />
                       ))}
                     </div>
