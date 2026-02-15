@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { EmailQueueManager } from '@/components/EmailQueueManager'
 import { SMTPConfigPanel } from '@/components/SMTPConfigPanel'
 import { NotificationConfigPanel } from '@/components/NotificationConfigPanel'
+import { AIAdminPanel } from '@/components/AIAdminPanel'
 import { Badge } from '@/components/ui/badge'
 import { 
   Envelope, 
@@ -13,7 +14,8 @@ import {
   Lock,
   CheckCircle,
   Gear,
-  Bell
+  Bell,
+  Brain
 } from '@phosphor-icons/react'
 import type { BannerConfig } from './BannerBestellenPage'
 
@@ -178,6 +180,10 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
               <Bell className="w-4 h-4" />
               Benachrichtigungen
             </TabsTrigger>
+            <TabsTrigger value="ai" className="gap-2">
+              <Brain className="w-4 h-4" />
+              KI-Chatbot
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="emails">
@@ -194,6 +200,10 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
 
           <TabsContent value="notifications">
             <NotificationConfigPanel />
+          </TabsContent>
+
+          <TabsContent value="ai">
+            <AIAdminPanel />
           </TabsContent>
         </Tabs>
       </div>
