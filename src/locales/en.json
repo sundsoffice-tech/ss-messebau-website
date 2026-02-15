@@ -1149,5 +1149,13 @@
   "configSummary.customQuote": "Custom Quote",
   "configSummary.customQuoteDescription": "You will receive a customized quote tailored to your configuration via email within 24 hours.",
   "configSummary.estimatedDelivery": "Estimated Delivery Time:",
-  "configSummary.afterPrintApproval": "after print approval"
+  "configSummary.afterPrintApproval": "after print approval",
+  "bannerBestellen.title": "Configure banner online",
+  "bannerBestellen.stepProgress": "Step {current} of {total}",
+  "bannerBestellen.stepEinsatz": "Usage",
+  "bannerBestellen.stepMasse": "Dimensions",
+  "bannerBestellen.stepDruck": "Print",
+  "bannerBestellen.stepDaten": "Data",
+  "bannerBestellen.stepLieferung": "Delivery",
+  "bannerBestellen.stepKontakt": "Contact"
 }

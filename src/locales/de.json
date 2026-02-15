@@ -1149,5 +1149,13 @@
   "configSummary.customQuote": "Individuelles Angebot",
   "configSummary.customQuoteDescription": "Sie erhalten binnen 24 Stunden ein auf Ihre Konfiguration zugeschnittenes Angebot per E-Mail.",
   "configSummary.estimatedDelivery": "Geschätzte Lieferzeit:",
-  "configSummary.afterPrintApproval": "ab Druckfreigabe"
+  "configSummary.afterPrintApproval": "ab Druckfreigabe",
+  "bannerBestellen.title": "Banner online konfigurieren",
+  "bannerBestellen.stepProgress": "Schritt {current} von {total}",
+  "bannerBestellen.stepEinsatz": "Einsatz",
+  "bannerBestellen.stepMasse": "Maße",
+  "bannerBestellen.stepDruck": "Druck",
+  "bannerBestellen.stepDaten": "Daten",
+  "bannerBestellen.stepLieferung": "Lieferung",
+  "bannerBestellen.stepKontakt": "Kontakt"
 }
