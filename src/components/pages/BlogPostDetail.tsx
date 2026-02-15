@@ -30,15 +30,12 @@ export function BlogPostDetail({ post, onNavigate, onOpenInquiry }: BlogPostDeta
   }, [post.content])
 
   const relatedPosts = useMemo(() => {
-    return DEMO_BLOG_POSTS
-      .filter(p => p.id !== post.id)
-      .filter(p => p.category === post.category)
-      .slice(0, 3)
-      .concat(
-        DEMO_BLOG_POSTS
-          .filter(p => p.id !== post.id && p.category !== post.category)
-      )
-      .slice(0, 3)
+    const sameCategory = DEMO_BLOG_POSTS.filter(p => p.id !== post.id && p.category === post.category).slice(0, 3)
+    const needed = 3 - sameCategory.length
+    const differentCategory = needed > 0
+      ? DEMO_BLOG_POSTS.filter(p => p.id !== post.id && p.category !== post.category).slice(0, needed)
+      : []
+    return [...sameCategory, ...differentCategory]
   }, [post.id, post.category])
 
   return (
