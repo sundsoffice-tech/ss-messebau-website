@@ -16,6 +16,7 @@ import { useFormSystem } from '@/hooks/use-form-system'
 import { FormField } from '@/components/form-system/FormField'
 import { sendFormNotification } from '@/lib/notification-service'
 import { FIELD_TOKENS } from '@/lib/form-system/field-registry'
+import { sendChatMessage } from '@/lib/chat-service'
 
 interface KontaktPageProps {
   onOpenInquiry: () => void
@@ -192,7 +193,7 @@ export function KontaktPage({ _onOpenInquiry }: KontaktPageProps) {
         `${m.role === 'user' ? 'Kunde' : 'Berater'}: ${m.content}`
       ).join('\n\n')
 
-      const prompt = `Du bist ein professioneller Berater für S&S Messebau GbR aus Hückelhoven. Du hilfst Kunden bei allen Fragen rund um Messebau, Eventbau und Ladenbau.
+      const systemPrompt = `Du bist ein professioneller Berater für S&S Messebau GbR aus Hückelhoven. Du hilfst Kunden bei allen Fragen rund um Messebau, Eventbau und Ladenbau.
 
 FIRMENINFO S&S MESSEBAU:
 ━━━━━━━━━━━━━━━━━━━━━━━
@@ -238,9 +239,6 @@ TYPISCHER PROJEKTABLAUF:
 GESPRÄCHSHISTORIE:
 ${contextMessages}
 
-AKTUELLE KUNDENFRAGE:
-${userMessage}
-
 ANTWORTRICHTLINIEN:
 ✓ Antworte präzise, freundlich und professionell auf Deutsch
 ✓ Nutze maximal 1-2 passende Emojis pro Antwort für visuellen Akzent
@@ -248,11 +246,26 @@ ANTWORTRICHTLINIEN:
 ✓ Bei komplexen Projekten: Empfehle persönliche Beratung
 ✓ Bei Unsicherheit: Transparent kommunizieren und Rückruf anbieten
 ✓ Strukturiere längere Antworten mit Absätzen und Aufzählungen
-✓ Verweise bei Bedarf auf: Kontaktmöglichkeiten, Referenzen
+✓ Verweise bei Bedarf auf: Kontaktmöglichkeiten, Referenzen`
 
-Antworte jetzt:`
+      const chatResponse = await sendChatMessage({
+        message: userMessage,
+        context: contextMessages,
+        systemPrompt,
+      })
 
-      const response = await window.spark.llm(prompt, 'gpt-4o', false)
+      if (!chatResponse.success) {
+        toast.error(chatResponse.message)
+        setChatMessages((prev) => {
+          const filtered = (prev || []).filter((_, idx) => idx !== (prev || []).length - 1)
+          return filtered
+        })
+        setIsTyping(false)
+        setChatLoading(false)
+        return
+      }
+
+      const response = chatResponse.message
       
       setTypingText(response)
       setChatMessages((prev) => [...(prev || []), { role: 'assistant', content: '' }])
@@ -277,7 +290,7 @@ Antworte jetzt:`
       setTypingText('')
       
     } catch {
-      toast.error('Fehler beim Abrufen der Antwort. Bitte versuchen Sie es erneut.')
+      toast.error('Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.')
       setChatMessages((prev) => {
         const filtered = (prev || []).filter((_, idx) => idx !== (prev || []).length - 1)
         return filtered
