@@ -7,6 +7,7 @@ import { EmailQueueManager } from '@/components/EmailQueueManager'
 import { SMTPConfigPanel } from '@/components/SMTPConfigPanel'
 import { NotificationConfigPanel } from '@/components/NotificationConfigPanel'
 import { AIAdminPanel } from '@/components/AIAdminPanel'
+import { BlogManager, MesseManager, ExternalApiKeysManager } from '@/components/AdminContentPanels'
 import { Badge } from '@/components/ui/badge'
 import { 
   Envelope, 
@@ -16,7 +17,10 @@ import {
   CheckCircle,
   Gear,
   Bell,
-  Brain
+  Brain,
+  Article,
+  CalendarDot,
+  Key,
 } from '@phosphor-icons/react'
 import type { BannerConfig } from './BannerBestellenPage'
 
@@ -159,8 +163,20 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
           </div>
         </div>
 
-        <Tabs defaultValue="emails" className="space-y-6">
-          <TabsList>
+        <Tabs defaultValue="blog" className="space-y-6">
+          <TabsList className="flex-wrap h-auto gap-1">
+            <TabsTrigger value="blog" className="gap-2">
+              <Article className="w-4 h-4" />
+              {t('admin.blog')}
+            </TabsTrigger>
+            <TabsTrigger value="messe" className="gap-2">
+              <CalendarDot className="w-4 h-4" />
+              {t('admin.messe')}
+            </TabsTrigger>
+            <TabsTrigger value="apikeys" className="gap-2">
+              <Key className="w-4 h-4" />
+              {t('admin.apiKeys')}
+            </TabsTrigger>
             <TabsTrigger value="emails" className="gap-2">
               <Envelope className="w-4 h-4" />
               {t('admin.emailQueue')}
@@ -187,6 +203,18 @@ export function AdminPage({ _onOpenInquiry }: AdminPageProps) {
               {t('admin.aiChatbot')}
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="blog">
+            <BlogManager />
+          </TabsContent>
+
+          <TabsContent value="messe">
+            <MesseManager />
+          </TabsContent>
+
+          <TabsContent value="apikeys">
+            <ExternalApiKeysManager />
+          </TabsContent>
 
           <TabsContent value="emails">
             <EmailQueueManager />

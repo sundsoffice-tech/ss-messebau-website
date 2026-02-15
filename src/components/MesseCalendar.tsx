@@ -2,7 +2,8 @@ import { useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { CalendarDot, MapPin, Clock, Star, ArrowSquareOut } from '@phosphor-icons/react'
-import { getUpcomingEvents, getNextEvent, getDaysUntil, CATEGORY_LABELS } from '@/lib/messe-data'
+import { getUpcomingEvents, getDaysUntil, CATEGORY_LABELS } from '@/lib/messe-data'
+import { getMesseEvents } from '@/lib/admin-content-service'
 import type { MesseEvent } from '@/lib/types'
 import { useTranslation } from '@/lib/i18n'
 
@@ -75,8 +76,28 @@ function EventCard({ event }: { event: MesseEvent }) {
 
 export function MesseCalendar() {
   const { t } = useTranslation()
-  const upcomingEvents = useMemo(() => getUpcomingEvents(), [])
-  const nextEvent = useMemo(() => getNextEvent(), [])
+
+  // Merge demo events with admin-managed events
+  const upcomingEvents = useMemo(() => {
+    const demoEvents = getUpcomingEvents()
+    const adminEvents = getMesseEvents()
+      .filter(e => new Date(e.endDate) >= new Date())
+      .map(e => ({
+        id: e.id,
+        name: e.name,
+        location: e.location,
+        startDate: e.startDate,
+        endDate: e.endDate,
+        category: e.category,
+        website: e.website,
+        description: e.description,
+        ssPresent: e.ssPresent,
+      }))
+    return [...demoEvents, ...adminEvents]
+      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+  }, [])
+
+  const nextEvent = upcomingEvents[0] || null
   const daysToNext = nextEvent ? getDaysUntil(nextEvent.startDate) : null
 
   return (
