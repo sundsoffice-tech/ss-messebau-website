@@ -23,10 +23,10 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
   return (
     <div>
       {/* Hero Section – Narrative Claim */}
-      <section className="py-12 md:py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">Wir schaffen Räume, die Ihre Marke verkaufen.</h1>
-          <p className="text-base md:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
+      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>Wir schaffen Räume, die Ihre Marke verkaufen.</h1>
+          <p className="text-base sm:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
             S&S Messebau – Ihre Erlebnis-Architekten. Wir sind nicht einfach Standbauer, sondern strategische Partner
             für Markenräume, die begeistern, überzeugen und verkaufen. Von der Messe über den Showroom bis zum Event.
           </p>
@@ -34,11 +34,11 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       </section>
 
       {/* Solution Module 1: Brand Activation */}
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="brand-activation" className="scroll-mt-20 space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Brand Activation</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Brand Activation</h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 So aktiviert S&S Ihre Marke auf Messen und Events – mit Messeständen, Bühnenbauten und skalierbaren Touren-Paketen.
               </p>
@@ -209,15 +209,15 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       </section>
 
       {/* Solution Module 2: Tech & Data Experience */}
-      <section className="py-12 md:py-16 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="digital-experience" className="scroll-mt-20 space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
               <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-primary/10 rounded-full">
                 <Sparkle className="h-5 w-5 text-primary" weight="fill" />
                 <span className="text-sm font-semibold text-primary">Innovation & Präzision</span>
               </div>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Tech & Data Experience</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Tech & Data Experience</h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Bei S&S ist digitale Erlebnisarchitektur selbstverständlich. Wir kombinieren modernste Technologien mit präzisem Handwerk – 
                 für mehr Sichtbarkeit, messbare Erfolge und unvergessliche Markenerlebnisse.
@@ -488,11 +488,11 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       </section>
 
       {/* Solution Module 3: Ausstattung & Ambiente */}
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="ausstattung-ambiente" className="scroll-mt-20 space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Ausstattung & Ambiente</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Ausstattung & Ambiente</h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Das richtige Ambiente verkauft die Marke. Böden, Möbel und Technik – perfekt aufeinander abgestimmt für Ihren Markenraum.
               </p>
@@ -707,11 +707,11 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       </section>
 
       {/* Methoden- & Qualitätsabschnitt */}
-      <section className="py-12 md:py-16 bg-muted">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 bg-muted">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="methodik" className="scroll-mt-20">
             <div className="text-center mb-10 md:mb-12">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Der S&S-Ansatz: Methodik trifft Leidenschaft</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Der S&S-Ansatz: Methodik trifft Leidenschaft</h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Vier Prinzipien, die jeden unserer Markenräume prägen.
               </p>
@@ -742,11 +742,11 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       </section>
 
       {/* Erfolgsbilanz – inline integriert */}
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="erfolge" className="scroll-mt-20">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Unsere Erfolgsbilanz</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Unsere Erfolgsbilanz</h2>
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
                 Kosteneffizient durch modulare Systeme und Wiederverwendung – das bestätigen unsere Kunden mit einer Wiederbuchungsquote von 98%.
               </p>
@@ -756,11 +756,11 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       </section>
 
       {/* Alles aus einer Hand */}
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-10 md:mb-12">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Alles aus einer Hand</h2>
+              <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Alles aus einer Hand</h2>
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
                 Mit S&S Messebau haben Sie einen Ansprechpartner für alle Gewerke.
                 Das spart Abstimmungsaufwand und garantiert reibungslose Abläufe.
@@ -791,12 +791,12 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       </section>
 
       {/* Lead Magnet: 3D Visualization When Commissioned */}
-      <section id="lead-magnet" className="py-12 md:py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+      <section id="lead-magnet" className="py-12 sm:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <div className="flex items-center justify-center gap-2.5 mb-4">
               <CubeTransparent className="h-10 w-10" weight="duotone" />
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">{t('cta.free3d')}</h2>
+              <h2 className="font-bold leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('cta.free3d')}</h2>
             </div>
             <p className="text-base md:text-lg opacity-90 mb-6 md:mb-8 leading-relaxed">
               {t('cta.free3d.desc')}
@@ -817,13 +817,13 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       </section>
 
       {/* Sustainability Section – Emotional, non-duplicating */}
-      <section id="nachhaltigkeit-leistungen" className="py-12 md:py-16 bg-green-50/50">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+      <section id="nachhaltigkeit-leistungen" className="py-12 sm:py-16 bg-green-50/50">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Emotional Intro */}
           <div className="text-center mb-10 md:mb-12">
             <div className="flex items-center justify-center gap-2.5 mb-3">
               <Leaf className="h-8 w-8 text-green-600" weight="duotone" />
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">{t('leistungen.sustainability.title')}</h2>
+              <h2 className="font-bold leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('leistungen.sustainability.title')}</h2>
             </div>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               {t('leistungen.sustainability.intro')}
@@ -896,9 +896,9 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
         ]}
       />
 
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">Interessiert? Lassen Sie uns sprechen.</h2>
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>Interessiert? Lassen Sie uns sprechen.</h2>
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
             Beschreiben Sie uns Ihr Projekt und wir erstellen Ihnen ein individuelles Angebot.
           </p>
