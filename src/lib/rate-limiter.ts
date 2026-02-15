@@ -23,11 +23,11 @@ const DEFAULT_CONFIG: RateLimitConfig = {
   cooldownMs: 30_000, // 30 seconds cooldown
 }
 
-const KV_KEY = 'chat_rate_limit'
+const RATE_LIMIT_STORAGE_KEY = 'chat_rate_limit'
 
 function getState(): RateLimitState {
   try {
-    const raw = localStorage.getItem(KV_KEY)
+    const raw = localStorage.getItem(RATE_LIMIT_STORAGE_KEY)
     if (raw) {
       return JSON.parse(raw)
     }
@@ -39,7 +39,7 @@ function getState(): RateLimitState {
 
 function saveState(state: RateLimitState): void {
   try {
-    localStorage.setItem(KV_KEY, JSON.stringify(state))
+    localStorage.setItem(RATE_LIMIT_STORAGE_KEY, JSON.stringify(state))
   } catch {
     // localStorage might be unavailable
   }
@@ -103,7 +103,7 @@ export function checkRateLimit(config: RateLimitConfig = DEFAULT_CONFIG): RateLi
  */
 export function resetRateLimit(): void {
   try {
-    localStorage.removeItem(KV_KEY)
+    localStorage.removeItem(RATE_LIMIT_STORAGE_KEY)
   } catch {
     // ignore
   }

@@ -33,16 +33,16 @@ interface ChatAuditEntry {
   inputPreview?: string
 }
 
-const AUDIT_KEY = 'chat_audit_log'
+const CHAT_AUDIT_STORAGE_KEY = 'chat_audit_log'
 
 function addAuditEntry(entry: ChatAuditEntry): void {
   try {
-    const raw = localStorage.getItem(AUDIT_KEY)
+    const raw = localStorage.getItem(CHAT_AUDIT_STORAGE_KEY)
     const logs: ChatAuditEntry[] = raw ? JSON.parse(raw) : []
     logs.push(entry)
     // Keep only last 200 entries
     const trimmed = logs.slice(-200)
-    localStorage.setItem(AUDIT_KEY, JSON.stringify(trimmed))
+    localStorage.setItem(CHAT_AUDIT_STORAGE_KEY, JSON.stringify(trimmed))
   } catch {
     // ignore storage errors
   }
@@ -53,7 +53,7 @@ function addAuditEntry(entry: ChatAuditEntry): void {
  */
 export function getChatAuditLog(): ChatAuditEntry[] {
   try {
-    const raw = localStorage.getItem(AUDIT_KEY)
+    const raw = localStorage.getItem(CHAT_AUDIT_STORAGE_KEY)
     return raw ? JSON.parse(raw) : []
   } catch {
     return []
