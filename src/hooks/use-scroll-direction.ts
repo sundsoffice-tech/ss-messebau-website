@@ -7,12 +7,15 @@ const SCROLL_DELTA_THRESHOLD = 10 // Minimum scroll distance to trigger visibili
 export function useScrollDirection() {
   const [isVisible, setIsVisible] = useState(true)
   const lastScrollY = useRef(0)
+  const lastProcessedScrollY = useRef(0)
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
-      const previousScrollY = lastScrollY.current
-      const scrollDelta = Math.abs(currentScrollY - previousScrollY)
+      const scrollDelta = Math.abs(currentScrollY - lastProcessedScrollY.current)
+      
+      // Always update last scroll position for accurate direction tracking
+      lastScrollY.current = currentScrollY
       
       // Only update visibility if scroll delta is significant to prevent jittery behavior
       if (scrollDelta >= SCROLL_DELTA_THRESHOLD) {
@@ -21,7 +24,7 @@ export function useScrollDirection() {
           setIsVisible(true)
         } 
         // Hide when scrolling down, show when scrolling up
-        else if (currentScrollY > previousScrollY) {
+        else if (currentScrollY > lastProcessedScrollY.current) {
           // Scrolling down
           setIsVisible(false)
         } else {
@@ -29,8 +32,8 @@ export function useScrollDirection() {
           setIsVisible(true)
         }
         
-        // Update ref for next comparison
-        lastScrollY.current = currentScrollY
+        // Update last processed position for next delta calculation
+        lastProcessedScrollY.current = currentScrollY
       }
     }
 
