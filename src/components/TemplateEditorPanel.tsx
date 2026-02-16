@@ -114,20 +114,18 @@ export function TemplateEditorPanel() {
       return
     }
     try {
-      // Extract variables from content
+      // Extract variables from content using Set for O(n) complexity
       const variableRegex = /\{\{(\w+)\}\}/g
-      const foundVars: string[] = []
+      const foundVarsSet = new Set<string>()
       const content = (editingTemplate.htmlContent || '') + (editingTemplate.subject || '')
       let match
       while ((match = variableRegex.exec(content)) !== null) {
-        if (!foundVars.includes(`{{${match[1]}}}`)) {
-          foundVars.push(`{{${match[1]}}}`)
-        }
+        foundVarsSet.add(`{{${match[1]}}}`)
       }
 
       const templateData = {
         ...editingTemplate,
-        variables: foundVars,
+        variables: Array.from(foundVarsSet),
       }
 
       if (editingTemplate.id) {
@@ -172,9 +170,7 @@ export function TemplateEditorPanel() {
     }
 
     let html = template.htmlContent || '<p>Kein Inhalt</p>'
-    for (const [key, value] of Object.entries(sampleVars)) {
-      html = html.replace(new RegExp(`\\{\\{${key}\\}\\}`, 'g'), value)
-    }
+    html = html.replace(/\{\{(\w+)\}\}/g, (_, key) => sampleVars[key] || `{{${key}}}`)
     setPreviewHtml(html)
     setPreviewDialogOpen(true)
   }
