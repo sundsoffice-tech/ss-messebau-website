@@ -120,9 +120,9 @@ export async function sendChatMessage(request: ChatRequest): Promise<ChatRespons
 
   // 3. Build prompt with training context
   const trainingContext = await getTrainingContext()
-  const fullPrompt = request.systemPrompt + trainingContext + '\n\nAKTUELLE KUNDENFRAGE:\n' + sanitizeResult.sanitized + '\n\nAntworte jetzt:'
+  const fullSystemPrompt = request.systemPrompt + trainingContext
 
-  // 4. Call LLM via server-side proxy (window.spark.llm)
+  // 4. Call LLM via server-side proxy (/api/chat.php)
   try {
     addAuditEntry({
       timestamp: Date.now(),
@@ -131,10 +131,26 @@ export async function sendChatMessage(request: ChatRequest): Promise<ChatRespons
       inputPreview: sanitizeResult.sanitized.slice(0, 50),
     })
 
-    const response = await window.spark.llm(fullPrompt, 'gpt-4o', false)
+    const response = await fetch('/api/chat.php', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: sanitizeResult.sanitized,
+        systemPrompt: fullSystemPrompt,
+        context: request.context,
+      }),
+    })
+
+    const data = await response.json()
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || 'API request failed')
+    }
+
     return {
       success: true,
-      message: response,
+      message: data.message,
       rateLimitInfo: rateLimitResult,
     }
   } catch (error) {
