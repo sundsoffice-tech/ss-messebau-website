@@ -5,8 +5,9 @@ const TOP_THRESHOLD = 100 // Show buttons when within 100px of page top
 const SCROLL_DELTA_THRESHOLD = 10 // Minimum scroll distance to trigger visibility change
 
 export function useScrollDirection() {
-  const [isVisible, setIsVisible] = useState(true)
-  const lastProcessedScrollY = useRef(0)
+  // Initialize visibility based on current scroll position
+  const [isVisible, setIsVisible] = useState(() => window.scrollY < TOP_THRESHOLD)
+  const lastProcessedScrollY = useRef(window.scrollY)
 
   useEffect(() => {
     const handleScroll = () => {
