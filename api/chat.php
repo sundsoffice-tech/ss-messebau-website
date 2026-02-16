@@ -34,134 +34,148 @@ if (empty($input['message'])) {
     exit;
 }
 
-$message = $input['message'];
-$systemPrompt = $input['systemPrompt'] ?? 'You are a helpful assistant.';
-$context = $input['context'] ?? '';
-
-// Load server-side training data as additional context
+// Wrap main logic in try-catch to ensure valid JSON is always returned
 try {
-    $trainingStmt = $db->query('SELECT title, content FROM ai_training_data WHERE active = 1 ORDER BY created_at DESC');
-    $trainingEntries = $trainingStmt->fetchAll();
-    if (!empty($trainingEntries)) {
-        $trainingContext = "\n\nZUSÄTZLICHES WISSEN (Admin-gepflegt):\n";
-        foreach ($trainingEntries as $te) {
-            // Sanitize training data to prevent prompt injection patterns
-            $title = substr(preg_replace('/[\x00-\x1f]/', '', $te['title']), 0, 200);
-            $content = substr(preg_replace('/[\x00-\x1f]/', '', $te['content']), 0, 5000);
-            $trainingContext .= "[{$title}]\n{$content}\n\n";
+    $message = $input['message'];
+    $systemPrompt = $input['systemPrompt'] ?? 'You are a helpful assistant.';
+    $context = $input['context'] ?? '';
+
+    // Initialize database connection
+    $db = getDB();
+
+    // Load server-side training data as additional context
+    try {
+        $trainingStmt = $db->query('SELECT title, content FROM ai_training_data WHERE active = 1 ORDER BY created_at DESC');
+        $trainingEntries = $trainingStmt->fetchAll();
+        if (!empty($trainingEntries)) {
+            $trainingContext = "\n\nZUSÄTZLICHES WISSEN (Admin-gepflegt):\n";
+            foreach ($trainingEntries as $te) {
+                // Sanitize training data to prevent prompt injection patterns
+                $title = substr(preg_replace('/[\x00-\x1f]/', '', $te['title']), 0, 200);
+                $content = substr(preg_replace('/[\x00-\x1f]/', '', $te['content']), 0, 5000);
+                $trainingContext .= "[{$title}]\n{$content}\n\n";
+            }
+            $systemPrompt .= $trainingContext;
         }
-        $systemPrompt .= $trainingContext;
+    } catch (\Throwable $e) {
+        // Training data is optional, continue without it if query fails
+        // Catches query execution errors (table missing, schema issues, etc.)
+        error_log('Failed to load training data: ' . $e->getMessage());
     }
-} catch (Exception $e) {
-    // Training data is optional, continue without it
-    error_log('Failed to load training data: ' . $e->getMessage());
-}
 
-// Get active OpenAI API key from database
-$db = getDB();
-$stmt = $db->prepare('SELECT api_key, id FROM ai_keys WHERE provider = :provider AND status = :status ORDER BY created_at DESC LIMIT 1');
-$stmt->execute([
-    ':provider' => 'openai',
-    ':status' => 'active',
-]);
-$keyRecord = $stmt->fetch();
+    // Get active OpenAI API key from database
+    $stmt = $db->prepare('SELECT api_key, id FROM ai_keys WHERE provider = :provider AND status = :status ORDER BY created_at DESC LIMIT 1');
+    $stmt->execute([
+        ':provider' => 'openai',
+        ':status' => 'active',
+    ]);
+    $keyRecord = $stmt->fetch();
 
-if (!$keyRecord) {
-    // Fallback to environment variable
-    $apiKey = getenv('OPENAI_API_KEY');
-    if (!$apiKey) {
+    if (!$keyRecord) {
+        // Fallback to environment variable
+        $apiKey = getenv('OPENAI_API_KEY');
+        if (!$apiKey) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => 'No active OpenAI API key configured'
+            ]);
+            exit;
+        }
+        $keyRecordId = null;
+    } else {
+        $apiKey = $keyRecord['api_key'];
+        $keyRecordId = $keyRecord['id'];
+    }
+
+    // Build the messages for OpenAI
+    $messages = [];
+
+    if (!empty($systemPrompt)) {
+        $messages[] = [
+            'role' => 'system',
+            'content' => $systemPrompt
+        ];
+    }
+
+    if (!empty($context)) {
+        $messages[] = [
+            'role' => 'system',
+            'content' => $context
+        ];
+    }
+
+    $messages[] = [
+        'role' => 'user',
+        'content' => $message
+    ];
+
+    // Make request to OpenAI
+    $ch = curl_init('https://api.openai.com/v1/chat/completions');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $apiKey,
+        ],
+        CURLOPT_POSTFIELDS => json_encode([
+            'model' => 'gpt-4o',
+            'messages' => $messages,
+            'temperature' => 0.7,
+            'max_tokens' => 1000,
+        ]),
+        CURLOPT_TIMEOUT => OPENAI_TIMEOUT,
+    ]);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
+
+    if ($curlError) {
         http_response_code(500);
         echo json_encode([
             'success' => false,
-            'error' => 'No active OpenAI API key configured'
+            'error' => 'Failed to connect to OpenAI: ' . $curlError
         ]);
         exit;
     }
-    $keyRecordId = null;
-} else {
-    $apiKey = $keyRecord['api_key'];
-    $keyRecordId = $keyRecord['id'];
-}
 
-// Build the messages for OpenAI
-$messages = [];
+    $responseData = json_decode($response, true);
 
-if (!empty($systemPrompt)) {
-    $messages[] = [
-        'role' => 'system',
-        'content' => $systemPrompt
-    ];
-}
-
-if (!empty($context)) {
-    $messages[] = [
-        'role' => 'system',
-        'content' => $context
-    ];
-}
-
-$messages[] = [
-    'role' => 'user',
-    'content' => $message
-];
-
-// Make request to OpenAI
-$ch = curl_init('https://api.openai.com/v1/chat/completions');
-curl_setopt_array($ch, [
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_POST => true,
-    CURLOPT_HTTPHEADER => [
-        'Content-Type: application/json',
-        'Authorization: Bearer ' . $apiKey,
-    ],
-    CURLOPT_POSTFIELDS => json_encode([
-        'model' => 'gpt-4o',
-        'messages' => $messages,
-        'temperature' => 0.7,
-        'max_tokens' => 1000,
-    ]),
-    CURLOPT_TIMEOUT => OPENAI_TIMEOUT,
-]);
-
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$curlError = curl_error($ch);
-curl_close($ch);
-
-if ($curlError) {
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => 'Failed to connect to OpenAI: ' . $curlError
-    ]);
-    exit;
-}
-
-$responseData = json_decode($response, true);
-
-if ($httpCode !== 200) {
-    $errorMessage = 'OpenAI API error';
-    if (isset($responseData['error']['message'])) {
-        $errorMessage = $responseData['error']['message'];
+    if ($httpCode !== 200) {
+        $errorMessage = 'OpenAI API error';
+        if (isset($responseData['error']['message'])) {
+            $errorMessage = $responseData['error']['message'];
+        }
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'error' => $errorMessage
+        ]);
+        exit;
     }
+
+    // Update last_used_at for the key
+    if ($keyRecordId !== null) {
+        $updateStmt = $db->prepare('UPDATE ai_keys SET last_used_at = datetime("now") WHERE id = :id');
+        $updateStmt->execute([':id' => $keyRecordId]);
+    }
+
+    // Extract the assistant's message
+    $aiMessage = $responseData['choices'][0]['message']['content'] ?? 'No response from AI';
+
+    echo json_encode([
+        'success' => true,
+        'message' => $aiMessage
+    ]);
+} catch (\Throwable $e) {
+    // Global error handler - ensure we always return valid JSON
+    error_log('Chat API fatal error: ' . $e->getMessage());
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'error' => $errorMessage
+        'error' => 'An unexpected error occurred. Please try again later.'
     ]);
-    exit;
 }
-
-// Update last_used_at for the key
-if ($keyRecordId !== null) {
-    $updateStmt = $db->prepare('UPDATE ai_keys SET last_used_at = datetime("now") WHERE id = :id');
-    $updateStmt->execute([':id' => $keyRecordId]);
-}
-
-// Extract the assistant's message
-$aiMessage = $responseData['choices'][0]['message']['content'] ?? 'No response from AI';
-
-echo json_encode([
-    'success' => true,
-    'message' => $aiMessage
-]);
