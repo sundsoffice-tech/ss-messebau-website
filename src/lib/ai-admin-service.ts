@@ -86,51 +86,138 @@ function addAuditLog(action: string, details: string, category: AIAuditLogEntry[
 
 // ─── API Key Operations ──────────────────────────────────────
 
-export function getAIKeys(): AIKeyInfo[] {
-  return getFromStorage<AIKeyInfo[]>(KV_KEYS.aiKeys, [])
-}
-
-export function addAIKey(provider: string, key: string): AIKeyInfo {
-  const keys = getAIKeys()
-  const newKey: AIKeyInfo = {
-    id: generateId(),
-    provider,
-    maskedKey: maskKey(key),
-    createdAt: Date.now(),
-    lastUsedAt: null,
-    status: 'active',
+export async function getAIKeys(): Promise<AIKeyInfo[]> {
+  try {
+    const response = await fetch('/api/ai-keys.php', {
+      method: 'GET',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch keys')
+    }
+    
+    const data = await response.json()
+    return data.keys || []
+  } catch (error) {
+    console.error('Failed to fetch AI keys from server, using localStorage fallback:', error)
+    // Fallback to localStorage
+    return getFromStorage<AIKeyInfo[]>(KV_KEYS.aiKeys, [])
   }
-  keys.push(newKey)
-  saveToStorage(KV_KEYS.aiKeys, keys)
-
-  // Store the actual key separately with encryption indicator
-  // In production, this would be stored server-side only
-  saveToStorage(`ai_key_${newKey.id}`, { encrypted: true, provider })
-
-  addAuditLog('key_added', `API-Schlüssel für ${provider} hinzugefügt`, 'key')
-  return newKey
 }
 
-export function revokeAIKey(keyId: string): void {
-  const keys = getAIKeys()
-  const key = keys.find(k => k.id === keyId)
-  if (key) {
-    key.status = 'revoked'
+export async function addAIKey(provider: string, key: string): Promise<AIKeyInfo> {
+  try {
+    const response = await fetch('/api/ai-keys.php', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ provider, key }),
+    })
+    
+    if (!response.ok) {
+      throw new Error('Failed to add key')
+    }
+    
+    const data = await response.json()
+    addAuditLog('key_added', `API-Schlüssel für ${provider} hinzugefügt`, 'key')
+    
+    // Refresh cache from server to avoid race conditions
+    const updatedKeys = await getAIKeys()
+    saveToStorage(KV_KEYS.aiKeys, updatedKeys)
+    
+    return data.key
+  } catch (error) {
+    console.error('Failed to add AI key to server, using localStorage fallback:', error)
+    // Fallback to localStorage-only
+    const keys = getFromStorage<AIKeyInfo[]>(KV_KEYS.aiKeys, [])
+    const newKey: AIKeyInfo = {
+      id: generateId(),
+      provider,
+      maskedKey: maskKey(key),
+      createdAt: Date.now(),
+      lastUsedAt: null,
+      status: 'active',
+    }
+    keys.push(newKey)
     saveToStorage(KV_KEYS.aiKeys, keys)
-    addAuditLog('key_revoked', `API-Schlüssel ${key.maskedKey} (${key.provider}) widerrufen`, 'key')
+    saveToStorage(`ai_key_${newKey.id}`, { encrypted: true, provider })
+    addAuditLog('key_added', `API-Schlüssel für ${provider} hinzugefügt (lokal)`, 'key')
+    return newKey
   }
 }
 
-export function deleteAIKey(keyId: string): void {
-  const keys = getAIKeys()
-  const key = keys.find(k => k.id === keyId)
-  if (key) {
-    const updated = keys.filter(k => k.id !== keyId)
-    saveToStorage(KV_KEYS.aiKeys, updated)
-    try {
-      localStorage.removeItem(`spark_kv_ai_key_${keyId}`)
-    } catch { /* ignore */ }
-    addAuditLog('key_deleted', `API-Schlüssel ${key.maskedKey} (${key.provider}) gelöscht`, 'key')
+export async function revokeAIKey(keyId: string): Promise<void> {
+  try {
+    const response = await fetch('/api/ai-keys.php', {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ keyId }),
+    })
+    
+    if (!response.ok) {
+      throw new Error('Failed to revoke key')
+    }
+    
+    // Update localStorage cache
+    const keys = getFromStorage<AIKeyInfo[]>(KV_KEYS.aiKeys, [])
+    const key = keys.find(k => k.id === keyId)
+    if (key) {
+      key.status = 'revoked'
+      saveToStorage(KV_KEYS.aiKeys, keys)
+      addAuditLog('key_revoked', `API-Schlüssel ${key.maskedKey} (${key.provider}) widerrufen`, 'key')
+    }
+  } catch (error) {
+    console.error('Failed to revoke AI key on server, using localStorage fallback:', error)
+    // Fallback to localStorage
+    const keys = getFromStorage<AIKeyInfo[]>(KV_KEYS.aiKeys, [])
+    const key = keys.find(k => k.id === keyId)
+    if (key) {
+      key.status = 'revoked'
+      saveToStorage(KV_KEYS.aiKeys, keys)
+      addAuditLog('key_revoked', `API-Schlüssel ${key.maskedKey} (${key.provider}) widerrufen (lokal)`, 'key')
+    }
+  }
+}
+
+export async function deleteAIKey(keyId: string): Promise<void> {
+  try {
+    const response = await fetch(`/api/ai-keys.php?keyId=${encodeURIComponent(keyId)}`, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    
+    if (!response.ok) {
+      throw new Error('Failed to delete key')
+    }
+    
+    // Update localStorage cache
+    const keys = getFromStorage<AIKeyInfo[]>(KV_KEYS.aiKeys, [])
+    const key = keys.find(k => k.id === keyId)
+    if (key) {
+      const updated = keys.filter(k => k.id !== keyId)
+      saveToStorage(KV_KEYS.aiKeys, updated)
+      try {
+        localStorage.removeItem(`spark_kv_ai_key_${keyId}`)
+      } catch { /* ignore */ }
+      addAuditLog('key_deleted', `API-Schlüssel ${key.maskedKey} (${key.provider}) gelöscht`, 'key')
+    }
+  } catch (error) {
+    console.error('Failed to delete AI key on server, using localStorage fallback:', error)
+    // Fallback to localStorage
+    const keys = getFromStorage<AIKeyInfo[]>(KV_KEYS.aiKeys, [])
+    const key = keys.find(k => k.id === keyId)
+    if (key) {
+      const updated = keys.filter(k => k.id !== keyId)
+      saveToStorage(KV_KEYS.aiKeys, updated)
+      try {
+        localStorage.removeItem(`spark_kv_ai_key_${keyId}`)
+      } catch { /* ignore */ }
+      addAuditLog('key_deleted', `API-Schlüssel ${key.maskedKey} (${key.provider}) gelöscht (lokal)`, 'key')
+    }
   }
 }
 

@@ -47,34 +47,63 @@ function AIKeyManager() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [newProvider, setNewProvider] = useState('openai')
   const [newKey, setNewKey] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    setKeys(getAIKeys())
+    const loadKeys = async () => {
+      setLoading(true)
+      const loadedKeys = await getAIKeys()
+      setKeys(loadedKeys)
+      setLoading(false)
+    }
+    loadKeys()
   }, [])
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!newKey.trim()) {
       toast.error(t('aiAdmin.keys.errorEmpty'))
       return
     }
-    const added = addAIKey(newProvider, newKey.trim())
-    setKeys(prev => [...prev, added])
-    setNewKey('')
-    setNewProvider('openai')
-    setShowAddForm(false)
-    toast.success(t('aiAdmin.keys.addedSuccess'))
+    setLoading(true)
+    try {
+      const added = await addAIKey(newProvider, newKey.trim())
+      setKeys(prev => [...prev, added])
+      setNewKey('')
+      setNewProvider('openai')
+      setShowAddForm(false)
+      toast.success(t('aiAdmin.keys.addedSuccess'))
+    } catch (error) {
+      toast.error('Failed to add key: ' + (error instanceof Error ? error.message : 'unknown error'))
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleRevoke = (id: string) => {
-    revokeAIKey(id)
-    setKeys(getAIKeys())
-    toast.success(t('aiAdmin.keys.revokedSuccess'))
+  const handleRevoke = async (id: string) => {
+    setLoading(true)
+    try {
+      await revokeAIKey(id)
+      const updatedKeys = await getAIKeys()
+      setKeys(updatedKeys)
+      toast.success(t('aiAdmin.keys.revokedSuccess'))
+    } catch (error) {
+      toast.error('Failed to revoke key: ' + (error instanceof Error ? error.message : 'unknown error'))
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleDelete = (id: string) => {
-    deleteAIKey(id)
-    setKeys(prev => prev.filter(k => k.id !== id))
-    toast.success(t('aiAdmin.keys.deletedSuccess'))
+  const handleDelete = async (id: string) => {
+    setLoading(true)
+    try {
+      await deleteAIKey(id)
+      setKeys(prev => prev.filter(k => k.id !== id))
+      toast.success(t('aiAdmin.keys.deletedSuccess'))
+    } catch (error) {
+      toast.error('Failed to delete key: ' + (error instanceof Error ? error.message : 'unknown error'))
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -86,7 +115,7 @@ function AIKeyManager() {
             {t('aiAdmin.keys.description')}
           </p>
         </div>
-        <Button onClick={() => setShowAddForm(!showAddForm)} size="sm" className="gap-2">
+        <Button onClick={() => setShowAddForm(!showAddForm)} size="sm" className="gap-2" disabled={loading}>
           <Plus className="w-4 h-4" />
           {t('aiAdmin.keys.newKey')}
         </Button>
@@ -102,6 +131,7 @@ function AIKeyManager() {
                   value={newProvider}
                   onChange={(e) => setNewProvider(e.target.value)}
                   className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                  disabled={loading}
                 >
                   <option value="openai">OpenAI (GPT)</option>
                   <option value="anthropic">Anthropic (Claude)</option>
@@ -116,14 +146,15 @@ function AIKeyManager() {
                   value={newKey}
                   onChange={(e) => setNewKey(e.target.value)}
                   placeholder="sk-..."
+                  disabled={loading}
                 />
               </div>
             </div>
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" size="sm" onClick={() => setShowAddForm(false)}>
+              <Button variant="outline" size="sm" onClick={() => setShowAddForm(false)} disabled={loading}>
                 {t('aiAdmin.keys.cancel')}
               </Button>
-              <Button size="sm" onClick={handleAdd} className="gap-2">
+              <Button size="sm" onClick={handleAdd} className="gap-2" disabled={loading}>
                 <FloppyDisk className="w-4 h-4" />
                 {t('aiAdmin.keys.save')}
               </Button>
@@ -135,7 +166,7 @@ function AIKeyManager() {
       {keys.length === 0 ? (
         <Card className="p-8 text-center">
           <Key className="w-12 h-12 mx-auto mb-3 text-muted-foreground opacity-50" />
-          <p className="text-muted-foreground">{t('aiAdmin.keys.noKeys')}</p>
+          <p className="text-muted-foreground">{loading ? 'Loading...' : t('aiAdmin.keys.noKeys')}</p>
         </Card>
       ) : (
         <div className="space-y-2">
@@ -162,12 +193,12 @@ function AIKeyManager() {
                 </div>
                 <div className="flex gap-1 shrink-0">
                   {key.status === 'active' && (
-                    <Button variant="outline" size="sm" onClick={() => handleRevoke(key.id)} className="text-xs gap-1">
+                    <Button variant="outline" size="sm" onClick={() => handleRevoke(key.id)} className="text-xs gap-1" disabled={loading}>
                       <EyeSlash className="w-3.5 h-3.5" />
                       {t('aiAdmin.keys.revoke')}
                     </Button>
                   )}
-                  <Button variant="outline" size="sm" onClick={() => handleDelete(key.id)} className="text-xs text-destructive gap-1">
+                  <Button variant="outline" size="sm" onClick={() => handleDelete(key.id)} className="text-xs text-destructive gap-1" disabled={loading}>
                     <Trash className="w-3.5 h-3.5" />
                   </Button>
                 </div>

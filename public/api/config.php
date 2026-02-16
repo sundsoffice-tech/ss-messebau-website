@@ -20,6 +20,9 @@ define('FROM_NAME', 'S&S Messebau GbR');
 // Session settings
 define('SESSION_LIFETIME', 86400); // 24 hours
 
+// AI/LLM settings
+define('OPENAI_TIMEOUT', 30); // timeout in seconds for OpenAI API calls
+
 // CORS allowed origins (adjust for production)
 define('ALLOWED_ORIGINS', [
     'http://localhost:5173',
