@@ -236,4 +236,8 @@ E-Mail: info@sunds-messebau.de
 
 ## 📄 License
 
-The Spark Template files and resources from GitHub are licensed under the terms of the MIT license, Copyright GitHub, Inc.
+This project is proprietary software for S&S Messebau GbR.
+
+## 🌐 Hosting
+
+Diese Website wird auf **Hostinger** gehostet. Alle Konfigurationen, Build-Prozesse und Deployment-Workflows sind für Hostinger optimiert. Details zur Deployment-Konfiguration finden Sie in [HOSTINGER_DEPLOYMENT.md](HOSTINGER_DEPLOYMENT.md).

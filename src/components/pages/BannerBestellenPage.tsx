@@ -206,7 +206,8 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
         status: 'neu',
       }
       
-      await window.spark.kv.set(configId, configToSave)
+      const { kvAdapter } = await import('@/lib/local-storage-adapter')
+      await kvAdapter.set(configId, configToSave)
 
       // Save order to backend API
       try {

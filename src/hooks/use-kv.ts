@@ -2,12 +2,12 @@ import { useState, useEffect, useCallback } from 'react'
 
 type SetterFn<T> = (prev: T) => T
 
-// Shared prefix with spark-kv-adapter
-const KV_PREFIX = 'spark_kv_'
+// Shared prefix with local-storage-adapter
+const KV_PREFIX = 'ss_kv_'
 
 /**
- * A localStorage-based replacement for @github/spark's useKV hook.
- * Provides persistent key-value storage with the same API signature.
+ * React hook for persistent key-value storage backed by localStorage.
+ * Used for client-side state persistence (e.g. form drafts, chat history).
  */
 export function useKV<T>(key: string, defaultValue: T): [T, (value: T | SetterFn<T>) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
