@@ -152,7 +152,7 @@ export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => 
         ]} />
       </div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-primary text-white py-12 sm:py-16">
+      <section id="hero" className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-primary text-white py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1
@@ -223,7 +223,7 @@ export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => 
       </section>
 
       {/* Leistungsübersicht Section */}
-      <section className="py-12 sm:py-16">
+      <section id="leistungen" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -283,7 +283,7 @@ export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => 
       </section>
 
       {/* Technologie-Bereiche Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section id="technologien" className="py-12 sm:py-16 bg-secondary/30 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -313,7 +313,7 @@ export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => 
       </section>
 
       {/* Ablauf/Prozess Section */}
-      <section className="py-12 sm:py-16">
+      <section id="prozess" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -348,7 +348,7 @@ export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => 
       </section>
 
       {/* FAQ Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section id="faq" className="py-12 sm:py-16 bg-secondary/30 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -376,7 +376,7 @@ export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => 
       </section>
 
       {/* Kundenstimmen Section */}
-      <section className="py-12 sm:py-16">
+      <section id="referenzen" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
