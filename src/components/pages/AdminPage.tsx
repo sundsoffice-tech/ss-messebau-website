@@ -12,6 +12,12 @@ import { AIAdminPanel } from '@/components/AIAdminPanel'
 import { BlogManager, MesseManager, ExternalApiKeysManager } from '@/components/AdminContentPanels'
 import { Badge } from '@/components/ui/badge'
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogHeader,
@@ -44,6 +50,7 @@ import {
   ChatText,
   Trash,
   MagnifyingGlass,
+  Eye,
 } from '@phosphor-icons/react'
 import { authApi, ordersApi, inquiriesApi, type AuthUser, type OrderRecord, type InquiryRecord } from '@/lib/api-client'
 import { toast } from 'sonner'
@@ -456,6 +463,7 @@ function OrdersManager() {
   const [orders, setOrders] = useState<OrderRecord[]>([])
   const [loading, setLoading] = useState(false)
   const [deleteId, setDeleteId] = useState<number | null>(null)
+  const [detailOrder, setDetailOrder] = useState<OrderRecord | null>(null)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [page, setPage] = useState(1)
@@ -628,10 +636,21 @@ function OrdersManager() {
               </div>
 
               <div className="flex gap-2">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={() => setDetailOrder(order)}>
+                  <Eye className="w-4 h-4 mr-1" />
                   {t('admin.showDetails')}
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    if (order.customer_email) {
+                      window.location.href = `mailto:${order.customer_email}?subject=Bestellung ${order.config_id}`
+                    } else {
+                      toast.error('Keine E-Mail-Adresse vorhanden')
+                    }
+                  }}
+                >
                   <Envelope className="w-4 h-4 mr-1" />
                   {t('admin.contact')}
                 </Button>
@@ -687,6 +706,8 @@ function OrdersManager() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <OrderDetailDialog order={detailOrder} onClose={() => setDetailOrder(null)} />
     </div>
   )
 }
@@ -698,6 +719,7 @@ function InquiriesManager() {
   const [inquiries, setInquiries] = useState<InquiryRecord[]>([])
   const [loading, setLoading] = useState(false)
   const [deleteId, setDeleteId] = useState<number | null>(null)
+  const [detailInquiry, setDetailInquiry] = useState<InquiryRecord | null>(null)
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
 
@@ -799,7 +821,21 @@ function InquiriesManager() {
               </p>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => setDetailInquiry(inq)}>
+                <Eye className="w-4 h-4 mr-1" />
+                {t('admin.showDetails')}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  if (inq.email) {
+                    window.location.href = `mailto:${inq.email}?subject=Re: ${inq.type === 'inquiry' ? 'Anfrage' : 'Kontaktanfrage'} ${inq.inquiry_id}`
+                  } else {
+                    toast.error('Keine E-Mail-Adresse vorhanden')
+                  }
+                }}
+              >
                 <Envelope className="w-4 h-4 mr-1" />
                 {t('admin.contact')}
               </Button>
@@ -853,6 +889,228 @@ function InquiriesManager() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <InquiryDetailDialog inquiry={detailInquiry} onClose={() => setDetailInquiry(null)} />
     </div>
   )
+}
+
+// ─── Detail Row Helper ──────────────────────────────────────
+
+function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
+  if (value === undefined || value === null || value === '') return null
+  return (
+    <div className="flex flex-col sm:flex-row sm:gap-4 py-1.5 border-b border-border/50 last:border-0">
+      <dt className="text-sm font-medium text-muted-foreground min-w-[160px] shrink-0">{label}</dt>
+      <dd className="text-sm break-all">{typeof value === 'boolean' ? (value ? '✅ Ja' : '❌ Nein') : value}</dd>
+    </div>
+  )
+}
+
+// ─── Order Detail Dialog ────────────────────────────────────
+
+function OrderDetailDialog({ order, onClose }: { order: OrderRecord | null; onClose: () => void }) {
+  if (!order) return null
+  const data = order.order_data as Record<string, any>
+  const step1 = data?.step1 || {}
+  const step2 = data?.step2 || {}
+  const step3 = data?.step3 || {}
+  const step4 = data?.step4 || {}
+  const step5 = data?.step5 || {}
+  const step6 = data?.step6 || {}
+
+  return (
+    <Dialog open={!!order} onOpenChange={(open) => { if (!open) onClose() }}>
+      <DialogContent className="sm:max-w-[700px] max-h-[85vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Bestelldetails – {order.company || order.customer_name}</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-6">
+          {/* Kontakt */}
+          <section>
+            <h3 className="font-semibold text-sm text-primary mb-2">📋 Kunde &amp; Kontakt</h3>
+            <dl className="space-y-0">
+              <DetailRow label="Firma" value={step6.firmaKontakt} />
+              <DetailRow label="Ansprechpartner" value={step6.ansprechpartner} />
+              <DetailRow label="E-Mail" value={step6.email} />
+              <DetailRow label="Telefon" value={step6.telefon} />
+              <DetailRow label="USt-ID" value={step6.ustId} />
+              <DetailRow label="Newsletter" value={step6.newsletter} />
+            </dl>
+          </section>
+
+          {/* Einsatz & System */}
+          <section>
+            <h3 className="font-semibold text-sm text-primary mb-2">📦 Einsatz &amp; System</h3>
+            <dl className="space-y-0">
+              <DetailRow label="Einsatzort" value={step1.einsatzort} />
+              <DetailRow label="Rahmenart" value={step1.rahmenart} />
+              <DetailRow label="Menge" value={step1.menge ? `${step1.menge} Stück` : undefined} />
+              <DetailRow label="Indoor/Outdoor" value={step1.indoorOutdoor} />
+              <DetailRow label="Montage" value={step1.montage} />
+              <DetailRow label="Montageort" value={step1.montageOrt} />
+              <DetailRow label="Montagezeitraum" value={step1.montageZeitraum} />
+              <DetailRow label="Multi-Banner-Modus" value={step1.multiBannerMode} />
+            </dl>
+          </section>
+
+          {/* Maße & Ausführung */}
+          <section>
+            <h3 className="font-semibold text-sm text-primary mb-2">📐 Maße &amp; Ausführung</h3>
+            <dl className="space-y-0">
+              <DetailRow label="Abmessungen" value={step2.breite && step2.hoehe ? `${step2.breite} × ${step2.hoehe} mm` : undefined} />
+              <DetailRow label="Profil" value={step2.profil} />
+              <DetailRow label="Profilfarbe" value={step2.profilFarbe} />
+              <DetailRow label="RAL-Code" value={step2.ralCode} />
+              <DetailRow label="Ecken" value={step2.ecken} />
+              <DetailRow label="Seitigkeit" value={step2.seitigkeit} />
+              <DetailRow label="Zubehör" value={step2.zubehoer?.length ? step2.zubehoer.join(', ') : undefined} />
+              <DetailRow label="LED/Backlit" value={step2.led} />
+              <DetailRow label="LED Strom" value={step2.ledStrom} />
+              <DetailRow label="LED Einsatz" value={step2.ledEinsatz} />
+            </dl>
+          </section>
+
+          {/* Banner & Druck */}
+          <section>
+            <h3 className="font-semibold text-sm text-primary mb-2">🖨️ Banner &amp; Druck</h3>
+            <dl className="space-y-0">
+              <DetailRow label="Banner benötigt" value={step3.bannerBenoetigt} />
+              <DetailRow label="Material" value={step3.material} />
+              <DetailRow label="Konfektion" value={step3.konfektion?.length ? step3.konfektion.join(', ') : undefined} />
+              <DetailRow label="Brandschutz" value={step3.brandschutz} />
+              <DetailRow label="Druckqualität" value={step3.druckqualitaet} />
+            </dl>
+          </section>
+
+          {/* Druckdaten & Upload */}
+          <section>
+            <h3 className="font-semibold text-sm text-primary mb-2">📁 Druckdaten &amp; Upload</h3>
+            <dl className="space-y-0">
+              <DetailRow label="Druckdaten vorhanden" value={step4.druckdatenVorhanden} />
+              <DetailRow label="Grafikservice" value={step4.grafikservice} />
+              <DetailRow label="Designwunsch" value={step4.designwunsch} />
+              <DetailRow label="Kommentar" value={step4.kommentar} />
+              {step4.serializedFiles?.length > 0 && (
+                <div className="py-1.5">
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Hochgeladene Dateien ({step4.serializedFiles.length})</p>
+                  <div className="space-y-1">
+                    {step4.serializedFiles.map((f: any, i: number) => (
+                      <div key={i} className="text-sm bg-muted/50 px-3 py-1.5 rounded">
+                        📎 {f.name} – {f.size ? `${Math.round(f.size / 1024)} KB` : ''}
+                        {f.type ? ` (${f.type})` : ''}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </dl>
+          </section>
+
+          {/* Lieferung & Termin */}
+          <section>
+            <h3 className="font-semibold text-sm text-primary mb-2">🚚 Lieferung &amp; Termin</h3>
+            <dl className="space-y-0">
+              <DetailRow label="Firma" value={step5.firma} />
+              <DetailRow label="Straße" value={step5.strasse} />
+              <DetailRow label="PLZ / Ort" value={step5.plz && step5.ort ? `${step5.plz} ${step5.ort}` : undefined} />
+              <DetailRow label="Land" value={step5.land} />
+              <DetailRow label="Wunschlieferdatum" value={step5.wunschDatum ? new Date(step5.wunschDatum).toLocaleDateString('de-DE') : undefined} />
+              <DetailRow label="Lieferart" value={step5.lieferart} />
+              <DetailRow label="Express" value={step5.express} />
+              <DetailRow label="Zeitfenster" value={step5.zeitfenster} />
+            </dl>
+          </section>
+
+          {/* Meta */}
+          <section>
+            <h3 className="font-semibold text-sm text-muted-foreground mb-2">Meta</h3>
+            <dl className="space-y-0">
+              <DetailRow label="Bestell-ID" value={order.config_id} />
+              <DetailRow label="Status" value={order.status} />
+              <DetailRow label="Erstellt" value={order.created_at ? new Date(order.created_at).toLocaleString('de-DE') : undefined} />
+              <DetailRow label="Aktualisiert" value={order.updated_at ? new Date(order.updated_at).toLocaleString('de-DE') : undefined} />
+            </dl>
+          </section>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+// ─── Inquiry Detail Dialog ──────────────────────────────────
+
+function InquiryDetailDialog({ inquiry, onClose }: { inquiry: InquiryRecord | null; onClose: () => void }) {
+  if (!inquiry) return null
+  const formData = inquiry.form_data || {}
+
+  return (
+    <Dialog open={!!inquiry} onOpenChange={(open) => { if (!open) onClose() }}>
+      <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Anfrage-Details – {inquiry.name || 'Unbekannt'}</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-6">
+          <section>
+            <h3 className="font-semibold text-sm text-primary mb-2">📋 Kontaktdaten</h3>
+            <dl className="space-y-0">
+              <DetailRow label="Name" value={inquiry.name} />
+              <DetailRow label="E-Mail" value={inquiry.email} />
+              <DetailRow label="Firma" value={inquiry.company} />
+              <DetailRow label="Telefon" value={inquiry.phone} />
+              <DetailRow label="Typ" value={inquiry.type} />
+            </dl>
+          </section>
+
+          {inquiry.message && (
+            <section>
+              <h3 className="font-semibold text-sm text-primary mb-2">💬 Nachricht</h3>
+              <p className="text-sm whitespace-pre-wrap bg-muted/50 p-3 rounded">{inquiry.message}</p>
+            </section>
+          )}
+
+          {Object.keys(formData).length > 0 && (
+            <section>
+              <h3 className="font-semibold text-sm text-primary mb-2">📝 Formulardetails</h3>
+              <dl className="space-y-0">
+                {Object.entries(formData)
+                  .filter(([key]) => !['name', 'email', 'company', 'phone', 'message'].includes(key))
+                  .filter(([, val]) => val !== undefined && val !== '' && val !== null)
+                  .map(([key, val]) => (
+                    <DetailRow key={key} label={formatFormDataKey(key)} value={String(val)} />
+                  ))}
+              </dl>
+            </section>
+          )}
+
+          <section>
+            <h3 className="font-semibold text-sm text-muted-foreground mb-2">Meta</h3>
+            <dl className="space-y-0">
+              <DetailRow label="Anfrage-ID" value={inquiry.inquiry_id} />
+              <DetailRow label="Erstellt" value={inquiry.created_at ? new Date(inquiry.created_at).toLocaleString('de-DE') : undefined} />
+            </dl>
+          </section>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function formatFormDataKey(key: string): string {
+  const map: Record<string, string> = {
+    budget: 'Budget',
+    messesProJahr: 'Messen/Jahr',
+    event: 'Messe/Event',
+    size: 'Standgröße',
+    wunschtermin: 'Wunschtermin',
+    dsgvo: 'Datenschutz',
+    newsletter: 'Newsletter',
+    telefon: 'Telefon',
+    firmaKontakt: 'Firma',
+    ansprechpartner: 'Ansprechpartner',
+    ustId: 'USt-ID',
+  }
+  return map[key] || key
 }

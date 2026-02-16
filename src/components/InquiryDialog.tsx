@@ -55,12 +55,16 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
       }
 
       // Send notification via centralized service
-      await sendFormNotification({
+      const notifResult = await sendFormNotification({
         type: 'inquiry',
         data,
         inquiryId: inquiry.id,
         customerEmail: data.email,
       })
+
+      if (!notifResult.success) {
+        toast.error('E-Mail konnte nicht gesendet werden: ' + (notifResult.error || 'Unbekannter Fehler'))
+      }
 
       trackFormSubmit('inquiry', {
         budget: data.budget || 'nicht_angegeben',

@@ -21,7 +21,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($action) {
     case 'config':
         if ($method === 'GET') {
-            if (!requireAuth()) return;
+            // GET config is read-only, no auth needed (forms use this to get recipients/webhooks)
             handleGetConfig();
         } elseif ($method === 'POST') {
             if (!requireAuth()) return;

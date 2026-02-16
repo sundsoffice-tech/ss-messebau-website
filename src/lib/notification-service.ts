@@ -209,7 +209,7 @@ export async function sendFormNotification(payload: FormNotificationPayload): Pr
         customerTextBodyField = convertHtmlToText(customerHtml)
       }
 
-      await emailApi.enqueue({
+      await emailApi.autoSend({
         queue_id: queueId,
         to_email: recipient,
         subject,
@@ -220,14 +220,6 @@ export async function sendFormNotification(payload: FormNotificationPayload): Pr
         customer_html_body: customerHtmlBodyField,
         customer_text_body: customerTextBodyField,
       })
-
-      // Trigger immediate send
-      try {
-        await emailApi.send(queueId)
-      } catch {
-        // Email is queued, will be sent later
-        console.warn('Email queued but immediate send failed for:', queueId)
-      }
     }
 
     // Send webhooks via backend (server-side)
@@ -251,5 +243,36 @@ export async function sendFormNotification(payload: FormNotificationPayload): Pr
   } catch (error) {
     console.error('Notification-Fehler:', error)
     return { success: false, error: error instanceof Error ? error.message : 'Unbekannter Fehler' }
+  }
+}
+
+export interface WebhookOnlyPayload {
+  type: NotificationType
+  data: Record<string, unknown>
+  inquiryId: string
+}
+
+export async function sendWebhooksOnly(payload: WebhookOnlyPayload): Promise<void> {
+  try {
+    const config = await getNotificationConfig()
+    const { type, data, inquiryId } = payload
+
+    for (const webhook of config.webhooks) {
+      if (webhook.enabled && webhook.types.includes(type)) {
+        try {
+          const webhookPayload = {
+            text: `📨 Neue ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'} von ${escapeHtml(String(data.name || data.firmaKontakt || 'Unbekannt'))} (#${inquiryId.slice(-8)})`,
+            type,
+            inquiryId,
+            data,
+          }
+          await notificationsApi.sendWebhook(webhook.url, webhookPayload)
+        } catch (error) {
+          console.error('Webhook-Fehler:', error)
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Webhook-Versand fehlgeschlagen:', error)
   }
 }

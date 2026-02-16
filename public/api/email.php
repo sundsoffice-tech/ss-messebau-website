@@ -27,6 +27,10 @@ switch ($action) {
         if ($method !== 'POST') { http_response_code(405); echo json_encode(['error' => 'Method not allowed']); exit; }
         handleSend();
         break;
+    case 'auto_send':
+        if ($method !== 'POST') { http_response_code(405); echo json_encode(['error' => 'Method not allowed']); exit; }
+        handleAutoSend();
+        break;
     case 'list':
         handleList();
         break;
@@ -51,7 +55,7 @@ switch ($action) {
         break;
     default:
         http_response_code(400);
-        echo json_encode(['error' => 'Unknown action. Use: enqueue, send, list, delete, status, config']);
+        echo json_encode(['error' => 'Unknown action. Use: enqueue, auto_send, send, list, delete, status, config']);
 }
 
 function handleEnqueue(): void {
@@ -98,6 +102,84 @@ function handleEnqueue(): void {
         'success' => true,
         'queue_id' => $input['queue_id'],
     ]);
+}
+
+function handleAutoSend(): void {
+    // auto_send does NOT require auth – combines enqueue + immediate send for form submissions
+    $input = json_decode(file_get_contents('php://input'), true);
+
+    if (empty($input['queue_id']) || empty($input['to_email']) || empty($input['subject'])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'queue_id, to_email, and subject are required']);
+        return;
+    }
+
+    if (!filter_var($input['to_email'], FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Invalid to_email address']);
+        return;
+    }
+
+    $db = getDB();
+    $stmt = $db->prepare('
+        INSERT OR REPLACE INTO email_queue (queue_id, to_email, subject, html_body, text_body,
+            customer_email, customer_subject, customer_html_body, customer_text_body,
+            attachments, order_id, sent)
+        VALUES (:queue_id, :to_email, :subject, :html_body, :text_body,
+            :customer_email, :customer_subject, :customer_html_body, :customer_text_body,
+            :attachments, :order_id, 0)
+    ');
+
+    $stmt->execute([
+        ':queue_id' => $input['queue_id'],
+        ':to_email' => $input['to_email'],
+        ':subject' => $input['subject'],
+        ':html_body' => $input['html_body'] ?? '',
+        ':text_body' => $input['text_body'] ?? '',
+        ':customer_email' => $input['customer_email'] ?? '',
+        ':customer_subject' => $input['customer_subject'] ?? '',
+        ':customer_html_body' => $input['customer_html_body'] ?? '',
+        ':customer_text_body' => $input['customer_text_body'] ?? '',
+        ':attachments' => json_encode($input['attachments'] ?? []),
+        ':order_id' => $input['order_id'] ?? '',
+    ]);
+
+    $queueId = $input['queue_id'];
+
+    // Immediately send company email
+    $companyResult = sendViaSendGrid($input['to_email'], $input['subject'], $input['html_body'] ?? '', $input['text_body'] ?? '');
+
+    if (!$companyResult['success']) {
+        $updateStmt = $db->prepare("UPDATE email_queue SET error = :error WHERE queue_id = :queue_id");
+        $updateStmt->execute([':error' => $companyResult['error'], ':queue_id' => $queueId]);
+        echo json_encode(['success' => false, 'queue_id' => $queueId, 'error' => 'Company email: ' . $companyResult['error']]);
+        return;
+    }
+
+    // Send customer email if present
+    $customerEmail = $input['customer_email'] ?? '';
+    $customerHtmlBody = $input['customer_html_body'] ?? '';
+    if (!empty($customerEmail) && !empty($customerHtmlBody)) {
+        if (filter_var($customerEmail, FILTER_VALIDATE_EMAIL)) {
+            $customerResult = sendViaSendGrid(
+                $customerEmail,
+                $input['customer_subject'] ?? '',
+                $customerHtmlBody,
+                $input['customer_text_body'] ?? ''
+            );
+
+            if (!$customerResult['success']) {
+                echo json_encode(['success' => false, 'queue_id' => $queueId, 'error' => 'Customer email: ' . $customerResult['error']]);
+                return;
+            }
+        }
+    }
+
+    // Mark as sent
+    $updateStmt = $db->prepare("UPDATE email_queue SET sent = 1, sent_at = datetime('now'), error = NULL WHERE queue_id = :queue_id");
+    $updateStmt->execute([':queue_id' => $queueId]);
+
+    echo json_encode(['success' => true, 'queue_id' => $queueId]);
 }
 
 function handleSend(): void {

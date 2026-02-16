@@ -86,12 +86,16 @@ export function KontaktPage({ onOpenInquiry: _onOpenInquiry }: KontaktPageProps)
       }
 
       // Send notification via centralized service
-      await sendFormNotification({
+      const notifResult = await sendFormNotification({
         type: 'kontakt',
         data,
         inquiryId: inquiry.id,
         customerEmail: data.email,
       })
+
+      if (!notifResult.success) {
+        toast.error('E-Mail konnte nicht gesendet werden: ' + (notifResult.error || 'Unbekannter Fehler'))
+      }
 
       trackFormSubmit('kontakt', {
         budget: data.budget || 'nicht_angegeben',

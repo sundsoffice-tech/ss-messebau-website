@@ -356,8 +356,8 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
 
     const queueId = `email_queue_${configId}`
 
-    // Enqueue via backend API
-    await emailApi.enqueue({
+    // Enqueue and send via backend API (auto_send = enqueue + immediate delivery)
+    const result = await emailApi.autoSend({
       queue_id: queueId,
       to_email: 'info@sundsmessebau.com',
       subject: emailSubject,
@@ -370,6 +370,10 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
       attachments: config.step4.serializedFiles || [],
       order_id: configId,
     })
+
+    if (!result.success) {
+      return { success: false, queueId, error: result.error || 'Versand fehlgeschlagen' }
+    }
 
     return { success: true, queueId }
   } catch (error) {

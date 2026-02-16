@@ -14,6 +14,7 @@ import { ConfiguratorStep6 } from './configurator/ConfiguratorStep6'
 import { ConfigSummary } from './configurator/ConfigSummary'
 import { ThankYouPage } from './configurator/ThankYouPage'
 import { SerializedFile } from '@/lib/file-utils'
+import { toast } from 'sonner'
 
 export interface BannerConfig {
   step1: {
@@ -219,31 +220,39 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
       }
 
       if (config) {
-        // Send via legacy email service (preserves detailed HTML templates)
+        // Send detailed email via email-service (company + customer confirmation)
         const { sendOrderConfirmationEmail } = await import('@/lib/email-service')
-        await sendOrderConfirmationEmail({ config, configId })
+        const emailResult = await sendOrderConfirmationEmail({ config, configId })
 
-        // Also send via centralized notification service (webhooks, additional recipients)
-        const { sendFormNotification } = await import('@/lib/notification-service')
-        await sendFormNotification({
-          type: 'banner',
-          data: {
-            firmaKontakt: config.step6.firmaKontakt,
-            ansprechpartner: config.step6.ansprechpartner,
-            email: config.step6.email,
-            telefon: config.step6.telefon,
-            rahmenart: config.step1.rahmenart,
-            menge: config.step1.menge,
-            maße: `${config.step2.breite} × ${config.step2.hoehe} mm`,
-          },
-          inquiryId: configId,
-          customerEmail: config.step6.email,
-        })
+        if (!emailResult.success) {
+          toast.error('E-Mail konnte nicht gesendet werden: ' + (emailResult.error || 'Unbekannter Fehler'))
+        }
+
+        // Send webhooks only via notification service (no duplicate email)
+        try {
+          const { sendWebhooksOnly } = await import('@/lib/notification-service')
+          await sendWebhooksOnly({
+            type: 'banner',
+            data: {
+              firmaKontakt: config.step6.firmaKontakt,
+              ansprechpartner: config.step6.ansprechpartner,
+              email: config.step6.email,
+              telefon: config.step6.telefon,
+              rahmenart: config.step1.rahmenart,
+              menge: config.step1.menge,
+              maße: `${config.step2.breite} × ${config.step2.hoehe} mm`,
+            },
+            inquiryId: configId,
+          })
+        } catch {
+          // Webhooks are best-effort
+        }
       }
 
       setSubmitted(true)
     } catch (error) {
       console.error('Error saving configuration:', error)
+      toast.error('Beim Speichern der Bestellung ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.')
     }
   }
 
