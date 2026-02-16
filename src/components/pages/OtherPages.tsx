@@ -41,8 +41,8 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
             </div>
             <div className="aspect-video rounded-lg overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&fm=webp&q=75"
-                alt={t('about.story.imageAlt')}
+                src="/images/49546524-e641-43fd-8c29-79a94e05bf99.jpeg"
+                alt="Hockey EM Event-Shop – Eingangsbereich mit EuroHockey-Branding und Mannequins"
                 width="800"
                 height="450"
                 loading="lazy"

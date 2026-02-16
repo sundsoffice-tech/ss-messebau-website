@@ -151,8 +151,8 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                 </div>
                 <div className="group aspect-square rounded-lg overflow-hidden lg:order-1 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
-                    src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&h=800&fit=crop&fm=webp&q=75"
-                    alt={t('branchen.insurance.alt')}
+                    src="/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg"
+                    alt="Messestand Elektro Leven – Klassisch mit Beratung, 25qm"
                     width="800"
                     height="800"
                     loading="lazy"
