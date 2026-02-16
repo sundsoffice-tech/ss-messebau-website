@@ -20,15 +20,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 startSession();
 
 // Simple rate limiting: max 10 requests per minute per session
+define('CHAT_RATE_LIMIT_MAX', 10);
+define('CHAT_RATE_LIMIT_WINDOW', 60); // seconds
 $now = time();
 if (!isset($_SESSION['chat_requests'])) {
     $_SESSION['chat_requests'] = [];
 }
-// Remove entries older than 60 seconds
+// Remove entries older than the rate limit window
 $_SESSION['chat_requests'] = array_filter($_SESSION['chat_requests'], function($ts) use ($now) {
-    return ($now - $ts) < 60;
+    return ($now - $ts) < CHAT_RATE_LIMIT_WINDOW;
 });
-if (count($_SESSION['chat_requests']) >= 10) {
+if (count($_SESSION['chat_requests']) >= CHAT_RATE_LIMIT_MAX) {
     http_response_code(429);
     echo json_encode(['success' => false, 'error' => 'Zu viele Anfragen. Bitte warten Sie einen Moment.']);
     exit;

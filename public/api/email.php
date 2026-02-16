@@ -385,7 +385,9 @@ function handleSaveEmailConfig(): void {
 
     if (!empty($apiKey)) {
         $db = getDB();
-        $maskedKey = substr($apiKey, 0, 5) . '...' . substr($apiKey, -4);
+        $maskedKey = strlen($apiKey) > 9
+            ? substr($apiKey, 0, 5) . '...' . substr($apiKey, -4)
+            : str_repeat('*', strlen($apiKey));
 
         // Upsert: replace existing sendgrid key
         $stmt = $db->prepare("DELETE FROM external_api_keys WHERE service_name = 'sendgrid'");

@@ -65,9 +65,9 @@ export function ConfiguratorStep5({ data, step6Data, onChange, onNext, onBack }:
 
   const handleCopyContact = () => {
     onChange({
-      firma: step6Data.firmaKontakt || data.firma,
-      ansprechpartnerLieferung: step6Data.ansprechpartner || data.ansprechpartnerLieferung,
-      emailLieferung: step6Data.email || data.emailLieferung,
+      firma: step6Data.firmaKontakt || '',
+      ansprechpartnerLieferung: step6Data.ansprechpartner || '',
+      emailLieferung: step6Data.email || '',
     })
   }
 
