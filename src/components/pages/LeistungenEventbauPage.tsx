@@ -170,7 +170,7 @@ export function LeistungenEventbauPage({ onOpenInquiry }: { onOpenInquiry: () =>
               <Button
                 size="lg"
                 onClick={onOpenInquiry}
-                className="bg-white text-primary hover:bg-white/90"
+                className="bg-white text-primary hover:bg-white/80"
               >
                 Jetzt Event anfragen
                 <ArrowRight className="ml-2" />
@@ -179,7 +179,7 @@ export function LeistungenEventbauPage({ onOpenInquiry }: { onOpenInquiry: () =>
                 size="lg"
                 variant="outline"
                 onClick={onOpenInquiry}
-                className="border-white text-white hover:bg-white/10"
+                className="border-white text-white hover:bg-white/25"
               >
                 <Phone className="mr-2" />
                 Kostenlose Beratung

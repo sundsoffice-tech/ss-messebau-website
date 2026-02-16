@@ -128,7 +128,7 @@ export function LeistungenHubPage({ onOpenInquiry }: LeistungenHubPageProps) {
           </p>
           <Button
             size="lg"
-            className="mt-6 bg-accent hover:bg-accent/90 min-h-[48px] text-base"
+            className="mt-6 bg-accent text-accent-foreground hover:bg-accent/90 min-h-[48px] text-base"
             onClick={onOpenInquiry}
           >
             {t('hub.cta.button')}

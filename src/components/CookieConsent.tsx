@@ -40,7 +40,7 @@ export default function CookieConsent() {
           {t('cookie.text')}{' '}
           <a
             href="#/datenschutz"
-            className="underline text-indigo-700 hover:text-indigo-900"
+            className="underline text-primary hover:text-primary/80"
           >
             {t('cookie.privacy')}
           </a>
@@ -54,7 +54,7 @@ export default function CookieConsent() {
           </button>
           <button
             onClick={accept}
-            className="px-4 py-2 text-sm rounded-lg bg-indigo-700 text-white hover:bg-indigo-800 transition-colors"
+            className="px-4 py-2 text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             {t('cookie.accept')}
           </button>

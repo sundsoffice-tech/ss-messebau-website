@@ -45,7 +45,7 @@ export function ProcessTimeline({ onOpenInquiry }: ProcessTimelineProps) {
         </div>
 
         <div className="text-center mt-8 sm:mt-10">
-          <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90">
+          <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90">
             {t('process.cta')}
             <ArrowRight className="ml-2" />
           </Button>

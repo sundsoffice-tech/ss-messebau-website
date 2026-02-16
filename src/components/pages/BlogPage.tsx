@@ -85,7 +85,7 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
             {t('blog.cta.text')}
           </p>
-          <Button size="lg" onClick={() => { trackHeroCTAClick('blog_cta'); onOpenInquiry() }} className="bg-accent hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
+          <Button size="lg" onClick={() => { trackHeroCTAClick('blog_cta'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
             {t('blog.cta.button')}
             <ArrowRight className="ml-2" />
           </Button>

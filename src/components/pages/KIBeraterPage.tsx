@@ -94,7 +94,7 @@ export function KIBeraterPage({ onOpenInquiry }: KIBeraterPageProps) {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
                       <h3 className="text-2xl font-bold">{t('advisor.voice.title')}</h3>
-                      <span className="text-xs bg-accent text-white px-3 py-1.5 rounded-full font-bold tracking-wide">{t('advisor.voice.badge')}</span>
+                      <span className="text-xs bg-accent text-accent-foreground px-3 py-1.5 rounded-full font-bold tracking-wide">{t('advisor.voice.badge')}</span>
                     </div>
                     <p className="text-muted-foreground mb-5 text-base leading-relaxed">
                       {t('advisor.voice.description')}

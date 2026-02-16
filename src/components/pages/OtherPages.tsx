@@ -313,7 +313,7 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
           <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
             {t('ablauf.cta.text')}
           </p>
-          <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90">
+          <Button size="lg" onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90">
             {t('ablauf.cta.button')}
             <ArrowRight className="ml-2" />
           </Button>
@@ -446,7 +446,7 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
           <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
             {t('nachhaltigkeit.cta.text')}
           </p>
-          <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90">
+          <Button size="lg" onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90">
             {t('nachhaltigkeit.cta.button')}
             <ArrowRight className="ml-2" />
           </Button>
