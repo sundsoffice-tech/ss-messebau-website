@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 export function useScrollDirection() {
   const [isVisible, setIsVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
+  const lastScrollY = useRef(0)
+  const lastProcessedScrollY = useRef(0)
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
-      const scrollDelta = Math.abs(currentScrollY - lastScrollY)
+      const scrollDelta = Math.abs(currentScrollY - lastProcessedScrollY.current)
       
-      // Only update if scroll delta is significant (> 10px) to prevent jittery behavior
+      // Only update visibility if scroll delta is significant (> 10px) to prevent jittery behavior
       if (scrollDelta < 10) {
         return
       }
@@ -19,7 +20,7 @@ export function useScrollDirection() {
         setIsVisible(true)
       } 
       // Hide when scrolling down, show when scrolling up
-      else if (currentScrollY > lastScrollY) {
+      else if (currentScrollY > lastScrollY.current) {
         // Scrolling down
         setIsVisible(false)
       } else {
@@ -27,17 +28,19 @@ export function useScrollDirection() {
         setIsVisible(true)
       }
       
-      setLastScrollY(currentScrollY)
+      // Update both refs after processing
+      lastScrollY.current = currentScrollY
+      lastProcessedScrollY.current = currentScrollY
     }
 
     // Add scroll event listener with passive flag for better performance
-    const scrollOptions = { passive: true }
-    window.addEventListener('scroll', handleScroll, scrollOptions)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     
     return () => {
-      window.removeEventListener('scroll', handleScroll, scrollOptions)
+      // Remove listener (passive option not needed for removal)
+      window.removeEventListener('scroll', handleScroll)
     }
-  }, [lastScrollY])
+  }, [])
 
   return isVisible
 }
