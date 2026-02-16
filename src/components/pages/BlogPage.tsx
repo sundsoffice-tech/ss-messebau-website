@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { DEMO_BLOG_POSTS } from '@/lib/demo-data'
 import { getBlogPosts } from '@/lib/admin-content-service'
@@ -24,21 +24,30 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
   useDwellTimeTracking('blog')
   useArticleReadTracking(currentSlug)
 
+  // Fetch admin-managed blog posts asynchronously
+  const [adminPosts, setAdminPosts] = useState<BlogPost[]>([])
+  useEffect(() => {
+    const loadPosts = async () => {
+      const posts = await getBlogPosts()
+      setAdminPosts(posts.map(p => ({
+        id: p.id,
+        title: p.title,
+        slug: p.slug,
+        excerpt: p.excerpt,
+        content: p.content,
+        category: p.category,
+        imageUrl: p.imageUrl,
+        publishedAt: p.publishedAt,
+      })))
+    }
+    loadPosts()
+  }, [])
+
   // Merge demo blog posts with admin-managed posts
   const allPosts = useMemo<BlogPost[]>(() => {
-    const adminPosts = getBlogPosts().map(p => ({
-      id: p.id,
-      title: p.title,
-      slug: p.slug,
-      excerpt: p.excerpt,
-      content: p.content,
-      category: p.category,
-      imageUrl: p.imageUrl,
-      publishedAt: p.publishedAt,
-    }))
     return [...DEMO_BLOG_POSTS, ...adminPosts]
       .sort((a, b) => b.publishedAt - a.publishedAt)
-  }, [])
+  }, [adminPosts])
 
   const handleNavigation = (path: string) => {
     window.location.hash = path
