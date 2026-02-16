@@ -1826,6 +1826,7 @@
   "admin.compose.sent": "E-Mail erfolgreich gesendet",
   "admin.compose.sendError": "Fehler beim Senden der E-Mail",
   "admin.compose.recipientRequired": "Empfänger-E-Mail ist erforderlich",
+  "admin.compose.invalidEmail": "Ungültiges E-Mail-Format",
   "admin.compose.subjectRequired": "Betreff ist erforderlich",
   "admin.compose.bodyRequired": "Nachrichtentext ist erforderlich",
 

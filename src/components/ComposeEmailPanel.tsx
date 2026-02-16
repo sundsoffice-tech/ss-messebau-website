@@ -104,8 +104,15 @@ export function ComposeEmailPanel() {
   }
 
   const handleSend = async () => {
-    if (!to.trim()) {
+    const trimmedTo = to.trim()
+    if (!trimmedTo) {
       toast.error(t('admin.compose.recipientRequired'))
+      return
+    }
+    // Validate email format to prevent header injection
+    const emailRegex = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/
+    if (!emailRegex.test(trimmedTo)) {
+      toast.error(t('admin.compose.invalidEmail'))
       return
     }
     if (!subject.trim()) {
@@ -120,7 +127,7 @@ export function ComposeEmailPanel() {
     setSending(true)
     try {
       const result = await composeApi.send({
-        to: to.trim(),
+        to: trimmedTo,
         subject: subject.trim(),
         html_body: htmlBody,
         text_body: htmlBody.replace(/<[^>]+>/g, ''),

@@ -388,9 +388,11 @@ export function TemplateEditorPanel() {
           <DialogHeader>
             <DialogTitle>{t('admin.templates.previewTitle')}</DialogTitle>
           </DialogHeader>
-          <div
-            className="border rounded-lg p-4 bg-white"
-            dangerouslySetInnerHTML={{ __html: previewHtml }}
+          <iframe
+            sandbox=""
+            srcDoc={previewHtml}
+            className="border rounded-lg bg-white w-full min-h-[400px]"
+            title={t('admin.templates.previewTitle')}
           />
         </DialogContent>
       </Dialog>
