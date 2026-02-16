@@ -174,7 +174,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 >
                   <div className="relative aspect-[25/16] overflow-hidden bg-muted">
                     <img 
-                      src={service.image}
+                      src={service.image.includes('unsplash.com') ? `${service.image}&fm=webp&q=75` : service.image}
+                      srcSet={service.image.includes('unsplash.com') ? `${service.image}&fm=webp&q=75&w=400 400w, ${service.image}&fm=webp&q=75&w=500 500w, ${service.image}&fm=webp&q=75&w=640 640w` : undefined}
+                      sizes={service.image.includes('unsplash.com') ? "(max-width: 1023px) 100vw, 33vw" : undefined}
                       alt=""
                       role="presentation"
                       width="500"
@@ -283,7 +285,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               >
                 <div className="aspect-video relative overflow-hidden bg-muted">
                   <img 
-                    src={reference.imageUrl}
+                    src={reference.imageUrl.includes('unsplash.com') ? `${reference.imageUrl}&fm=webp&q=75` : reference.imageUrl}
+                    srcSet={reference.imageUrl.includes('unsplash.com') ? `${reference.imageUrl}&fm=webp&q=75&w=400 400w, ${reference.imageUrl}&fm=webp&q=75&w=640 640w, ${reference.imageUrl}&fm=webp&q=75&w=800 800w` : undefined}
+                    sizes={reference.imageUrl.includes('unsplash.com') ? "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw" : undefined}
                     alt={reference.title}
                     width="640"
                     height="360"
