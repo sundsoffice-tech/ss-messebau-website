@@ -2162,7 +2162,7 @@ Ein professioneller Food-Stand auf einer Messe ist deutlich komplexer als ein kl
 
 Wenn ihr ein Food-Unternehmen seid und auf Messen gehen wollt: **Macht es richtig.** Die Anforderungen sind klar, die Kontrollen sind streng – aber eine saubere, professionelle Ausführung zahlt sich in Umsatz und Vertrauen sofort aus.
 
-Wenn ihr konkrete Planung braucht, helfen wir von S&S Messebau gerne: Wir haben Erfahrung mit Food-Ständen und wissen, wo die Fallstricke sind. Von der Genehmigung bis zur Montage.`,
+Wenn ihr konkrete Planung braucht, helfen wir von S&S Messebau gerne: Wir kennen die Anforderungen von Food-Ständen und wissen, wo die Fallstricke sind. Von der Genehmigung bis zur Montage.`,
     category: 'Branchen',
     imageUrl: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=600&fit=crop',
     publishedAt: new Date('2026-02-15').getTime()
