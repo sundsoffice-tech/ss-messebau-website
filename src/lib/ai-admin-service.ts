@@ -123,10 +123,9 @@ export async function addAIKey(provider: string, key: string): Promise<AIKeyInfo
     const data = await response.json()
     addAuditLog('key_added', `API-Schlüssel für ${provider} hinzugefügt`, 'key')
     
-    // Also store in localStorage as cache
-    const keys = getFromStorage<AIKeyInfo[]>(KV_KEYS.aiKeys, [])
-    keys.push(data.key)
-    saveToStorage(KV_KEYS.aiKeys, keys)
+    // Refresh cache from server to avoid race conditions
+    const updatedKeys = await getAIKeys()
+    saveToStorage(KV_KEYS.aiKeys, updatedKeys)
     
     return data.key
   } catch (error) {

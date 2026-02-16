@@ -90,6 +90,12 @@ function handleAddKey(): void {
             ':status' => 'active',
         ]);
 
+        // Fetch the inserted record to get the actual timestamp
+        $insertedId = $db->lastInsertId();
+        $fetchStmt = $db->prepare('SELECT created_at FROM ai_keys WHERE id = :id');
+        $fetchStmt->execute([':id' => $insertedId]);
+        $record = $fetchStmt->fetch();
+
         echo json_encode([
             'success' => true,
             'key' => [
@@ -97,7 +103,7 @@ function handleAddKey(): void {
                 'provider' => $provider,
                 'maskedKey' => maskKey($apiKey),
                 'status' => 'active',
-                'createdAt' => time() * 1000,
+                'createdAt' => strtotime($record['created_at']) * 1000,
                 'lastUsedAt' => null,
             ],
         ]);

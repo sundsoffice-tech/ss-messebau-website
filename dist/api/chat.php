@@ -101,7 +101,7 @@ curl_setopt_array($ch, [
         'temperature' => 0.7,
         'max_tokens' => 1000,
     ]),
-    CURLOPT_TIMEOUT => 30,
+    CURLOPT_TIMEOUT => OPENAI_TIMEOUT,
 ]);
 
 $response = curl_exec($ch);
