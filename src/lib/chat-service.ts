@@ -134,7 +134,15 @@ export async function sendChatMessage(request: ChatRequest): Promise<ChatRespons
       }),
     })
 
-    const data = await response.json()
+    // Better error diagnostics: parse text first, then JSON
+    const responseText = await response.text()
+    let data
+    try {
+      data = JSON.parse(responseText)
+    } catch (parseError) {
+      console.error('Failed to parse response as JSON:', responseText)
+      throw new Error('Invalid JSON response from server')
+    }
 
     if (!response.ok || !data.success) {
       throw new Error(data.error || 'API request failed')
