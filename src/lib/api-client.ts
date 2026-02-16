@@ -207,6 +207,27 @@ export const emailApi = {
       }
     ),
 
+  autoSend: (data: {
+    queue_id: string
+    to_email: string
+    subject: string
+    html_body: string
+    text_body?: string
+    customer_email?: string
+    customer_subject?: string
+    customer_html_body?: string
+    customer_text_body?: string
+    attachments?: unknown[]
+    order_id?: string
+  }) =>
+    apiFetch<{ success: boolean; queue_id: string; error?: string }>(
+      'email.php?action=auto_send',
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }
+    ),
+
   send: (queueId: string) =>
     apiFetch<{ success: boolean; error?: string }>('email.php?action=send', {
       method: 'POST',
