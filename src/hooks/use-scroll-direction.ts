@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 
+// Constants for scroll behavior
+const TOP_THRESHOLD = 100 // Show buttons when within 100px of page top
+const SCROLL_DELTA_THRESHOLD = 10 // Minimum scroll distance to trigger visibility change
+
 export function useScrollDirection() {
   const [isVisible, setIsVisible] = useState(true)
   const lastScrollY = useRef(0)
@@ -10,10 +14,10 @@ export function useScrollDirection() {
       const previousScrollY = lastScrollY.current
       const scrollDelta = Math.abs(currentScrollY - previousScrollY)
       
-      // Only update visibility if scroll delta is significant (> 10px) to prevent jittery behavior
-      if (scrollDelta >= 10) {
-        // Show buttons when at the top of the page (within 100px)
-        if (currentScrollY < 100) {
+      // Only update visibility if scroll delta is significant to prevent jittery behavior
+      if (scrollDelta >= SCROLL_DELTA_THRESHOLD) {
+        // Show buttons when at the top of the page
+        if (currentScrollY < TOP_THRESHOLD) {
           setIsVisible(true)
         } 
         // Hide when scrolling down, show when scrolling up
