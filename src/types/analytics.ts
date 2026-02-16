@@ -83,10 +83,24 @@ export interface AnalyticsKPIs {
   form_submits: number
   phone_clicks: number
   whatsapp_clicks: number
+  downloads: number
   top_pages: Array<{ url: string; count: number }>
   top_referrers: Array<{ referrer: string; count: number }>
   top_sources: Array<{ source: string; count: number }>
+  top_campaigns: Array<{ campaign: string; count: number }>
   events_by_day: Array<{ date: string; count: number }>
+  events_by_hour: Array<{ hour: number; count: number }>
+  bounce_rate: number
+  avg_session_events: number
+}
+
+/** Realtime event for live ticker */
+export interface RealtimeEvent {
+  event: TrackingEventName
+  ts: string
+  url: string
+  referrer?: string
+  utm_source?: string
 }
 
 export interface AnalyticsStatusInfo {
