@@ -13,6 +13,7 @@ import { CursorRipple, useCursorScale } from './components/CursorEffects'
 import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath } from './lib/deep-linking'
 import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 import { usePageMeta } from './hooks/use-page-meta'
+import { usePageViewTracking } from './hooks/use-page-view-tracking'
 import { I18nContext, getTranslation, getStoredLanguage, storeLanguage, type Language } from './lib/i18n'
 
 // Lazy load page components for code-splitting
@@ -59,6 +60,7 @@ function App() {
   useSmoothScrollLinks()
   useCursorScale() // Add cursor scale effect
   usePageMeta(currentPage)
+  usePageViewTracking() // First-party analytics page view tracking
 
   useEffect(() => {
     const handleHashChange = () => {
