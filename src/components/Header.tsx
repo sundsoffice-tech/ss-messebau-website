@@ -86,7 +86,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-purple-50',
     featureKeys: ['header.mega.eventbau.f1', 'header.mega.eventbau.f2', 'header.mega.eventbau.f3'],
     gradient: 'from-purple-500/10 to-purple-600/5',
-    previewImage: '/images/referenzen/messebau-25qm/messestand-25qm-premium-design-dunkel.jpg',
+    previewImage: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg',
     sectionId: 'eventbau',
     pagePath: '/leistungen/eventbau'
   },
