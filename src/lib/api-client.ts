@@ -509,3 +509,115 @@ export const aiApi = {
       method: 'DELETE',
     }),
 }
+
+// ─── Automation Rules ────────────────────────────────────────
+
+import type {
+  AutomationRule,
+  EmailTemplate,
+  EmailTrackingRecord,
+} from '@/types/automation'
+
+export const automationApi = {
+  listRules: () =>
+    apiFetch<{ rules: AutomationRule[]; total: number }>('automation.php?action=list'),
+
+  getRule: (id: string) =>
+    apiFetch<AutomationRule>(`automation.php?action=get&id=${id}`),
+
+  createRule: (data: Omit<AutomationRule, 'id' | 'createdAt' | 'updatedAt'>) =>
+    apiFetch<{ success: boolean; rule: AutomationRule }>('automation.php?action=create', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  updateRule: (id: string, data: Partial<AutomationRule>) =>
+    apiFetch<{ success: boolean }>('automation.php?action=update', {
+      method: 'PATCH',
+      body: JSON.stringify({ id, ...data }),
+    }),
+
+  deleteRule: (id: string) =>
+    apiFetch<{ success: boolean }>(`automation.php?action=delete&id=${id}`, {
+      method: 'DELETE',
+    }),
+
+  toggleRule: (id: string, enabled: boolean) =>
+    apiFetch<{ success: boolean }>('automation.php?action=toggle', {
+      method: 'PATCH',
+      body: JSON.stringify({ id, enabled }),
+    }),
+}
+
+// ─── Email Templates ─────────────────────────────────────────
+
+export const templatesApi = {
+  list: (category?: string) => {
+    const qs = category ? `&category=${encodeURIComponent(category)}` : ''
+    return apiFetch<{ templates: EmailTemplate[]; total: number }>(
+      `templates.php?action=list${qs}`
+    )
+  },
+
+  get: (id: string) =>
+    apiFetch<EmailTemplate>(`templates.php?action=get&id=${id}`),
+
+  create: (data: Omit<EmailTemplate, 'id' | 'version' | 'createdAt' | 'updatedAt'>) =>
+    apiFetch<{ success: boolean; template: EmailTemplate }>('templates.php?action=create', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (id: string, data: Partial<EmailTemplate>) =>
+    apiFetch<{ success: boolean }>('templates.php?action=update', {
+      method: 'PATCH',
+      body: JSON.stringify({ id, ...data }),
+    }),
+
+  delete: (id: string) =>
+    apiFetch<{ success: boolean }>(`templates.php?action=delete&id=${id}`, {
+      method: 'DELETE',
+    }),
+
+  preview: (htmlContent: string, variables: Record<string, string>) =>
+    apiFetch<{ html: string }>('templates.php?action=preview', {
+      method: 'POST',
+      body: JSON.stringify({ htmlContent, variables }),
+    }),
+}
+
+// ─── Compose / Direct Email ──────────────────────────────────
+
+export const composeApi = {
+  send: (data: {
+    to: string
+    subject: string
+    html_body: string
+    text_body?: string
+    related_order_id?: string
+    related_inquiry_id?: string
+    template_id?: string
+  }) =>
+    apiFetch<{ success: boolean; error?: string }>('email.php?action=compose_send', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+}
+
+// ─── Email Tracking ──────────────────────────────────────────
+
+export const trackingApi = {
+  list: (params?: { status?: string; order_id?: string; inquiry_id?: string }) => {
+    const qs = new URLSearchParams()
+    if (params?.status) qs.set('status', params.status)
+    if (params?.order_id) qs.set('order_id', params.order_id)
+    if (params?.inquiry_id) qs.set('inquiry_id', params.inquiry_id)
+    const query = qs.toString()
+    return apiFetch<{ records: EmailTrackingRecord[]; total: number }>(
+      `email.php?action=tracking${query ? '&' + query : ''}`
+    )
+  },
+
+  get: (id: string) =>
+    apiFetch<EmailTrackingRecord>(`email.php?action=tracking_detail&id=${id}`),
+}
