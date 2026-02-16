@@ -175,4 +175,35 @@ function initSchema(PDO $pdo): void {
             created_at TEXT DEFAULT (datetime('now'))
         )
     ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS analytics_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event TEXT NOT NULL,
+            ts TEXT NOT NULL,
+            session_id TEXT NOT NULL,
+            url TEXT,
+            referrer TEXT,
+            utm_source TEXT,
+            utm_medium TEXT,
+            utm_campaign TEXT,
+            utm_content TEXT,
+            utm_term TEXT,
+            props TEXT,
+            created_at TEXT DEFAULT (datetime('now'))
+        )
+    ");
+
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_ts ON analytics_events(ts)");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_event ON analytics_events(event)");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_session ON analytics_events(session_id)");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS analytics_config (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            config_key TEXT UNIQUE NOT NULL,
+            config_value TEXT NOT NULL,
+            updated_at TEXT DEFAULT (datetime('now'))
+        )
+    ");
 }

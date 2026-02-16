@@ -13,6 +13,7 @@ import { AutomationPanel } from '@/components/AutomationPanel'
 import { TemplateEditorPanel } from '@/components/TemplateEditorPanel'
 import { ComposeEmailPanel } from '@/components/ComposeEmailPanel'
 import { EmailTrackingPanel } from '@/components/EmailTrackingPanel'
+import { AnalyticsAdminPanel } from '@/components/AnalyticsAdminPanel'
 import { BlogManager, MesseManager, ExternalApiKeysManager } from '@/components/AdminContentPanels'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -59,6 +60,7 @@ import {
   PencilSimple,
   PaperPlaneTilt,
   ChartLine,
+  ChartBar,
 } from '@phosphor-icons/react'
 import { authApi, ordersApi, inquiriesApi, type AuthUser, type OrderRecord, type InquiryRecord } from '@/lib/api-client'
 import { toast } from 'sonner'
@@ -273,6 +275,10 @@ export function AdminPage({ onOpenInquiry: _onOpenInquiry }: AdminPageProps) {
               <Brain className="w-4 h-4" />
               {t('admin.aiChatbot')}
             </TabsTrigger>
+            <TabsTrigger value="analytics" className="gap-2">
+              <ChartBar className="w-4 h-4" />
+              Analytics
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="orders">
@@ -325,6 +331,10 @@ export function AdminPage({ onOpenInquiry: _onOpenInquiry }: AdminPageProps) {
 
           <TabsContent value="ai">
             <AIAdminPanel />
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <AnalyticsAdminPanel />
           </TabsContent>
         </Tabs>
       </div>
