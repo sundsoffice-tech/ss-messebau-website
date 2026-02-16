@@ -26,7 +26,8 @@ switch ($action) {
         handleAudit($method);
         break;
     case 'training_context':
-        // Used by chat.php to get training data – internal use
+        // Used by chat.php to get training data – internal use only
+        if (!requireAuth()) return;
         handleTrainingContext();
         break;
     default:

@@ -165,6 +165,21 @@ function handleSendWebhook(): void {
 }
 
 function sendWebhookRequest(string $url, string $payload): array {
+    // SSRF protection: block private and reserved IP ranges
+    $parsed = parse_url($url);
+    $host = $parsed['host'] ?? '';
+    $ip = gethostbyname($host);
+
+    if ($ip === $host && !filter_var($host, FILTER_VALIDATE_IP)) {
+        return ['success' => false, 'error' => 'Could not resolve hostname'];
+    }
+
+    if (
+        filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false
+    ) {
+        return ['success' => false, 'error' => 'Webhook URL must not target private or reserved IP ranges'];
+    }
+
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_POST => true,
