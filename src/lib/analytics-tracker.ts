@@ -317,7 +317,8 @@ export async function exportAnalyticsData(
 }
 
 export async function fetchRealtimeEvents(limit = 20): Promise<RealtimeEvent[]> {
-  const resp = await fetch(`${API_BASE}/analytics-realtime.php?limit=${limit}`, {
+  const params = new URLSearchParams({ limit: String(limit) })
+  const resp = await fetch(`${API_BASE}/analytics-realtime.php?${params}`, {
     credentials: 'include',
   })
   if (!resp.ok) throw new Error('Failed to fetch realtime events')
