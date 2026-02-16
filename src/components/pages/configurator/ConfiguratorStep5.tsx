@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Checkbox } from '@/components/ui/checkbox'
-import { ArrowRight, ArrowLeft } from '@phosphor-icons/react'
+import { ArrowRight, ArrowLeft, CopySimple } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
 
 interface Step5Data {
@@ -13,20 +13,33 @@ interface Step5Data {
   plz: string
   ort: string
   land: string
+  ansprechpartnerLieferung?: string
+  emailLieferung?: string
   wunschDatum?: string
   express: boolean
   lieferart: string
   zeitfenster?: string
 }
 
+interface Step6Data {
+  firmaKontakt: string
+  ansprechpartner: string
+  email: string
+  telefon: string
+  ustId?: string
+  dsgvo: boolean
+  newsletter: boolean
+}
+
 interface ConfiguratorStep5Props {
   data: Step5Data
+  step6Data: Step6Data
   onChange: (data: Partial<Step5Data>) => void
   onNext: () => void
   onBack: () => void
 }
 
-export function ConfiguratorStep5({ data, onChange, onNext, onBack }: ConfiguratorStep5Props) {
+export function ConfiguratorStep5({ data, step6Data, onChange, onNext, onBack }: ConfiguratorStep5Props) {
   const { t } = useTranslation()
   const [errors, setErrors] = useState<Record<string, string>>({})
 
@@ -36,6 +49,9 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
     if (!data.strasse) newErrors.strasse = t('step5.error.street')
     if (!data.plz || data.plz.length !== 5) newErrors.plz = t('step5.error.zip')
     if (!data.ort) newErrors.ort = t('step5.error.city')
+    if (data.emailLieferung && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.emailLieferung)) {
+      newErrors.emailLieferung = t('step5.error.email')
+    }
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -47,6 +63,14 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
     }
   }
 
+  const handleCopyContact = () => {
+    onChange({
+      firma: step6Data.firmaKontakt || data.firma,
+      ansprechpartnerLieferung: step6Data.ansprechpartner || data.ansprechpartnerLieferung,
+      emailLieferung: step6Data.email || data.emailLieferung,
+    })
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -55,6 +79,19 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
       </div>
 
       <div className="space-y-4">
+        {(step6Data.firmaKontakt || step6Data.ansprechpartner || step6Data.email) && (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleCopyContact}
+            className="gap-2"
+          >
+            <CopySimple className="w-4 h-4" />
+            {t('step5.copyContact')}
+          </Button>
+        )}
+
         <div>
           <Label htmlFor="firma">{t('step5.company')}</Label>
           <Input
@@ -64,6 +101,31 @@ export function ConfiguratorStep5({ data, onChange, onNext, onBack }: Configurat
             placeholder={t('step5.companyPlaceholder')}
             className="mt-1"
           />
+        </div>
+
+        <div>
+          <Label htmlFor="ansprechpartnerLieferung">{t('step5.contactPerson')}</Label>
+          <Input
+            id="ansprechpartnerLieferung"
+            value={data.ansprechpartnerLieferung || ''}
+            onChange={(e) => onChange({ ansprechpartnerLieferung: e.target.value })}
+            placeholder={t('step5.contactPersonPlaceholder')}
+            className="mt-1"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="emailLieferung">{t('step5.email')}</Label>
+          <Input
+            id="emailLieferung"
+            type="email"
+            value={data.emailLieferung || ''}
+            onChange={(e) => onChange({ emailLieferung: e.target.value })}
+            placeholder={t('step5.emailPlaceholder')}
+            className="mt-1"
+          />
+          {errors.emailLieferung && <p className="text-sm text-destructive mt-1">{errors.emailLieferung}</p>}
+          <p className="text-sm text-muted-foreground mt-1">{t('step5.emailHint')}</p>
         </div>
 
         <div className="grid grid-cols-3 gap-3">

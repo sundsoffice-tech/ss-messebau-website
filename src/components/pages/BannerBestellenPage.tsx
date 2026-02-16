@@ -62,6 +62,8 @@ export interface BannerConfig {
     plz: string
     ort: string
     land: string
+    ansprechpartnerLieferung?: string
+    emailLieferung?: string
     wunschDatum?: string
     express: boolean
     lieferart: string
@@ -356,6 +358,7 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
                 {currentStep === 5 && config && (
                   <ConfiguratorStep5
                     data={config.step5}
+                    step6Data={config.step6}
                     onChange={(data) => updateConfig('step5', data)}
                     onNext={handleNext}
                     onBack={handleBack}

@@ -15,10 +15,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// Require authentication for chat
-if (!requireAuth()) {
+// AI Chat is publicly accessible (no auth required for visitors)
+// Rate limiting and input validation are applied instead
+startSession();
+
+// Simple rate limiting: max 10 requests per minute per session
+$now = time();
+if (!isset($_SESSION['chat_requests'])) {
+    $_SESSION['chat_requests'] = [];
+}
+// Remove entries older than 60 seconds
+$_SESSION['chat_requests'] = array_filter($_SESSION['chat_requests'], function($ts) use ($now) {
+    return ($now - $ts) < 60;
+});
+if (count($_SESSION['chat_requests']) >= 10) {
+    http_response_code(429);
+    echo json_encode(['success' => false, 'error' => 'Zu viele Anfragen. Bitte warten Sie einen Moment.']);
     exit;
 }
+$_SESSION['chat_requests'][] = $now;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);

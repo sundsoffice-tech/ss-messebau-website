@@ -282,8 +282,26 @@ function handleDeleteEmail(): void {
     echo json_encode(['success' => true, 'deleted' => $stmt->rowCount()]);
 }
 
+function getActiveSendGridKey(): string {
+    // Check database first for persistently stored key
+    try {
+        $db = getDB();
+        $stmt = $db->prepare('SELECT encrypted_key FROM external_api_keys WHERE service_name = :service ORDER BY updated_at DESC LIMIT 1');
+        $stmt->execute([':service' => 'sendgrid']);
+        $row = $stmt->fetch();
+        if ($row && !empty($row['encrypted_key'])) {
+            return $row['encrypted_key'];
+        }
+    } catch (\Throwable $e) {
+        error_log('SendGrid key DB lookup failed: ' . $e->getMessage());
+    }
+    // Fallback to config.php / environment variable
+    return SENDGRID_API_KEY;
+}
+
 function handleStatus(): void {
-    $apiKeySet = !empty(SENDGRID_API_KEY);
+    $apiKey = getActiveSendGridKey();
+    $apiKeySet = !empty($apiKey);
 
     echo json_encode([
         'provider' => $apiKeySet ? 'sendgrid' : 'test',
@@ -294,7 +312,8 @@ function handleStatus(): void {
 }
 
 function sendViaSendGrid(string $to, string $subject, string $htmlBody, string $textBody): array {
-    if (empty(SENDGRID_API_KEY)) {
+    $apiKey = getActiveSendGridKey();
+    if (empty($apiKey)) {
         // Test mode: log and return success
         error_log("📧 [TEST MODE] Email to: $to, Subject: $subject");
         return ['success' => true];
@@ -311,6 +330,10 @@ function sendViaSendGrid(string $to, string $subject, string $htmlBody, string $
             'email' => FROM_EMAIL,
             'name' => FROM_NAME,
         ],
+        'reply_to' => [
+            'email' => COMPANY_EMAIL,
+            'name' => FROM_NAME,
+        ],
         'content' => [
             ['type' => 'text/plain', 'value' => $textBody ?: strip_tags($htmlBody)],
             ['type' => 'text/html', 'value' => $htmlBody],
@@ -321,7 +344,7 @@ function sendViaSendGrid(string $to, string $subject, string $htmlBody, string $
     curl_setopt_array($ch, [
         CURLOPT_POST => true,
         CURLOPT_HTTPHEADER => [
-            'Authorization: Bearer ' . SENDGRID_API_KEY,
+            'Authorization: Bearer ' . $apiKey,
             'Content-Type: application/json',
         ],
         CURLOPT_POSTFIELDS => json_encode($payload),
@@ -346,18 +369,41 @@ function sendViaSendGrid(string $to, string $subject, string $htmlBody, string $
 }
 
 function handleGetEmailConfig(): void {
-    $apiKeySet = !empty(SENDGRID_API_KEY);
+    $apiKey = getActiveSendGridKey();
+    $apiKeySet = !empty($apiKey);
     echo json_encode([
         'provider' => $apiKeySet ? 'sendgrid' : 'test',
         'fromEmail' => FROM_EMAIL,
         'fromName' => FROM_NAME,
+        'hasApiKey' => $apiKeySet,
     ]);
 }
 
 function handleSaveEmailConfig(): void {
-    // SMTP config is managed via environment variables / config.php on the server.
-    // This endpoint acknowledges the request but the actual key management
-    // is done server-side through config.php or environment variables.
+    $input = json_decode(file_get_contents('php://input'), true);
+    $apiKey = $input['apiKey'] ?? '';
+
+    if (!empty($apiKey)) {
+        $db = getDB();
+        $maskedKey = substr($apiKey, 0, 5) . '...' . substr($apiKey, -4);
+
+        // Upsert: replace existing sendgrid key
+        $stmt = $db->prepare("DELETE FROM external_api_keys WHERE service_name = 'sendgrid'");
+        $stmt->execute();
+
+        $stmt = $db->prepare("INSERT INTO external_api_keys (service_name, encrypted_key, masked_key, description) VALUES ('sendgrid', :key, :masked, 'SendGrid API Key')");
+        $stmt->execute([
+            ':key' => $apiKey,
+            ':masked' => $maskedKey,
+        ]);
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'SendGrid API-Key gespeichert.',
+        ]);
+        return;
+    }
+
     echo json_encode([
         'success' => true,
         'message' => 'Email-Konfiguration wird serverseitig über Umgebungsvariablen verwaltet.',
