@@ -117,6 +117,39 @@ function handleKPIs(PDO $db, string $from, string $to, ?string $eventType): void
     $stmt->execute($baseParams);
     $eventsByDay = $stmt->fetchAll();
 
+    // Top UTM campaigns
+    $stmt = $db->prepare("
+        SELECT utm_campaign as campaign, COUNT(*) as cnt FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND utm_campaign IS NOT NULL AND utm_campaign != ''
+        GROUP BY utm_campaign ORDER BY cnt DESC LIMIT 10
+    ");
+    $stmt->execute($baseParams);
+    $topCampaigns = $stmt->fetchAll();
+
+    // Events by hour (0-23)
+    $stmt = $db->prepare("
+        SELECT CAST(strftime('%H', ts) AS INTEGER) as hour, COUNT(*) as cnt FROM analytics_events
+        WHERE ts >= :from AND ts <= :to
+        GROUP BY hour ORDER BY hour ASC
+    ");
+    $stmt->execute($baseParams);
+    $eventsByHour = $stmt->fetchAll();
+
+    // Bounce rate (sessions with only 1 event)
+    $stmt = $db->prepare("
+        SELECT COUNT(*) FROM (
+            SELECT session_id, COUNT(*) as event_count FROM analytics_events
+            WHERE ts >= :from AND ts <= :to
+            GROUP BY session_id HAVING event_count = 1
+        )
+    ");
+    $stmt->execute($baseParams);
+    $singleEventSessions = (int)$stmt->fetchColumn();
+    $bounceRate = $uniqueSessions > 0 ? round(($singleEventSessions / $uniqueSessions) * 100, 1) : 0;
+
+    // Average events per session
+    $avgSessionEvents = $uniqueSessions > 0 ? round($totalEvents / $uniqueSessions, 1) : 0;
+
     echo json_encode([
         'total_events' => $totalEvents,
         'unique_sessions' => $uniqueSessions,
@@ -125,10 +158,15 @@ function handleKPIs(PDO $db, string $from, string $to, ?string $eventType): void
         'form_submits' => $countByType('form_submit'),
         'phone_clicks' => $countByType('phone_click'),
         'whatsapp_clicks' => $countByType('whatsapp_click'),
+        'downloads' => $countByType('download'),
         'top_pages' => array_map(fn($r) => ['url' => $r['url'], 'count' => (int)$r['cnt']], $topPages),
         'top_referrers' => array_map(fn($r) => ['referrer' => $r['referrer'], 'count' => (int)$r['cnt']], $topReferrers),
         'top_sources' => array_map(fn($r) => ['source' => $r['source'], 'count' => (int)$r['cnt']], $topSources),
+        'top_campaigns' => array_map(fn($r) => ['campaign' => $r['campaign'], 'count' => (int)$r['cnt']], $topCampaigns),
         'events_by_day' => array_map(fn($r) => ['date' => $r['date'], 'count' => (int)$r['cnt']], $eventsByDay),
+        'events_by_hour' => array_map(fn($r) => ['hour' => (int)$r['hour'], 'count' => (int)$r['cnt']], $eventsByHour),
+        'bounce_rate' => $bounceRate,
+        'avg_session_events' => $avgSessionEvents,
     ]);
 }
 

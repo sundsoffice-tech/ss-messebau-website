@@ -17,6 +17,13 @@ import {
   DownloadSimple,
   Eye,
   ShieldCheck,
+  Lightning,
+  TrendUp,
+  Globe,
+  ClipboardText,
+  Phone,
+  ChatCircleDots,
+  FileArrowDown,
 } from '@phosphor-icons/react'
 import {
   fetchTrackingConfig,
@@ -25,6 +32,7 @@ import {
   fetchAnalyticsStatus,
   runAnalyticsCleanup,
   exportAnalyticsData,
+  fetchRealtimeEvents,
 } from '@/lib/analytics-tracker'
 import type {
   TrackingConfig,
@@ -32,8 +40,9 @@ import type {
   AnalyticsKPIs,
   AnalyticsStatusInfo,
   ExportFormat,
+  RealtimeEvent,
 } from '@/types/analytics'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area } from 'recharts'
 
 /* ------------------------------------------------------------------ */
 /*  Event labels                                                       */
@@ -261,12 +270,43 @@ function KPIDashboardTab() {
       </Card>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <KPICard label="Events gesamt" value={kpis.total_events} />
-        <KPICard label="Sessions" value={kpis.unique_sessions} />
-        <KPICard label="Seitenaufrufe" value={kpis.page_views} />
-        <KPICard label="CTA-Klicks" value={kpis.cta_clicks} />
-        <KPICard label="Formulare" value={kpis.form_submits} />
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <KPICard label="Events gesamt" value={kpis.total_events} icon={<ChartLine className="w-4 h-4" />} />
+        <KPICard label="Sessions" value={kpis.unique_sessions} icon={<Eye className="w-4 h-4" />} />
+        <KPICard label="Seitenaufrufe" value={kpis.page_views} icon={<Globe className="w-4 h-4" />} />
+        <KPICard label="CTA-Klicks" value={kpis.cta_clicks} icon={<TrendUp className="w-4 h-4" />} />
+        <KPICard label="Formulare" value={kpis.form_submits} icon={<ClipboardText className="w-4 h-4" />} />
+        <KPICard label="Telefon" value={kpis.phone_clicks} icon={<Phone className="w-4 h-4" />} />
+        <KPICard label="WhatsApp" value={kpis.whatsapp_clicks} icon={<ChatCircleDots className="w-4 h-4" />} />
+        <KPICard label="Downloads" value={kpis.downloads} icon={<FileArrowDown className="w-4 h-4" />} />
+      </div>
+
+      {/* Engagement Metrics */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-muted-foreground">Bounce Rate</p>
+              <p className="text-2xl font-bold">{kpis.bounce_rate}%</p>
+            </div>
+            <div className={`p-2 rounded-lg ${kpis.bounce_rate > 70 ? 'bg-red-100' : kpis.bounce_rate > 40 ? 'bg-amber-100' : 'bg-green-100'}`}>
+              <TrendUp className={`w-5 h-5 ${kpis.bounce_rate > 70 ? 'text-red-600' : kpis.bounce_rate > 40 ? 'text-amber-600' : 'text-green-600'}`} />
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">Sessions mit nur 1 Event</p>
+        </Card>
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-muted-foreground">Ø Events / Session</p>
+              <p className="text-2xl font-bold">{kpis.avg_session_events}</p>
+            </div>
+            <div className="p-2 rounded-lg bg-blue-100">
+              <Lightning className="w-5 h-5 text-blue-600" />
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">Durchschnittliche Interaktionen</p>
+        </Card>
       </div>
 
       {/* Events per Day Chart */}
@@ -277,7 +317,13 @@ function KPIDashboardTab() {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={kpis.events_by_day}>
+              <AreaChart data={kpis.events_by_day}>
+                <defs>
+                  <linearGradient id="colorEvents" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   dataKey="date"
@@ -291,7 +337,32 @@ function KPIDashboardTab() {
                 <Tooltip
                   labelFormatter={(v: string) => new Date(v).toLocaleDateString('de-DE')}
                 />
-                <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} name="Events" />
+                <Area type="monotone" dataKey="count" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorEvents)" name="Events" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Hourly Distribution */}
+      {kpis.events_by_hour.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">Verteilung nach Uhrzeit</CardTitle>
+            <CardDescription>Wann sind Besucher am aktivsten?</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={hourlyData(kpis.events_by_hour)}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="hour"
+                  tick={{ fontSize: 11 }}
+                  tickFormatter={(v: number) => `${v}:00`}
+                />
+                <YAxis tick={{ fontSize: 11 }} />
+                <Tooltip labelFormatter={(v: number) => `${v}:00 – ${v}:59 Uhr`} />
+                <Bar dataKey="count" fill="hsl(var(--primary))" radius={[3, 3, 0, 0]} name="Events" opacity={0.8} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -341,6 +412,69 @@ function KPIDashboardTab() {
         </Card>
       </div>
 
+      {/* Referrers & Campaigns */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">Top Referrer</CardTitle>
+            <CardDescription>Woher kommen Besucher?</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {kpis.top_referrers.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Keine Referrer-Daten</p>
+            ) : (
+              <div className="space-y-2">
+                {kpis.top_referrers.map((r, i) => {
+                  const maxCount = kpis.top_referrers[0]?.count ?? 1
+                  const pct = Math.round((r.count / maxCount) * 100)
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center justify-between text-sm mb-0.5">
+                        <span className="truncate flex-1 mr-2 text-xs">{r.referrer}</span>
+                        <span className="text-xs text-muted-foreground">{r.count}</span>
+                      </div>
+                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div className="h-full bg-primary/60 rounded-full" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">Top Kampagnen</CardTitle>
+            <CardDescription>UTM Campaign Performance</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {kpis.top_campaigns.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Keine Kampagnen-Daten</p>
+            ) : (
+              <div className="space-y-2">
+                {kpis.top_campaigns.map((c, i) => {
+                  const maxCount = kpis.top_campaigns[0]?.count ?? 1
+                  const pct = Math.round((c.count / maxCount) * 100)
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center justify-between text-sm mb-0.5">
+                        <span className="truncate flex-1 mr-2 font-medium text-xs">{c.campaign}</span>
+                        <Badge variant="outline" className="text-xs">{c.count}</Badge>
+                      </div>
+                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div className="h-full bg-green-500/60 rounded-full" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Funnel: page_view → cta_click → form_submit */}
       <Card>
         <CardHeader className="pb-2">
@@ -369,13 +503,20 @@ function KPIDashboardTab() {
   )
 }
 
-function KPICard({ label, value }: { label: string; value: number }) {
+function KPICard({ label, value, icon }: { label: string; value: number; icon?: React.ReactNode }) {
   return (
     <Card className="p-3 text-center">
+      {icon && <div className="flex justify-center mb-1 text-muted-foreground">{icon}</div>}
       <p className="text-2xl font-bold">{value.toLocaleString('de-DE')}</p>
       <p className="text-xs text-muted-foreground">{label}</p>
     </Card>
   )
+}
+
+/** Fill all 24 hours so the chart has no gaps */
+function hourlyData(data: Array<{ hour: number; count: number }>): Array<{ hour: number; count: number }> {
+  const map = new Map(data.map(d => [d.hour, d.count]))
+  return Array.from({ length: 24 }, (_, i) => ({ hour: i, count: map.get(i) ?? 0 }))
 }
 
 function FunnelStep({ label, value, pct }: { label: string; value: number; pct: number }) {
@@ -559,6 +700,122 @@ function SystemStatusTab() {
 }
 
 /* ================================================================== */
+/*  5) Realtime Tab                                                    */
+/* ================================================================== */
+
+const REALTIME_EVENT_ICONS: Record<string, string> = {
+  page_view: '📄',
+  cta_click: '🖱️',
+  form_submit: '📋',
+  phone_click: '📞',
+  whatsapp_click: '💬',
+  download: '⬇️',
+  scroll_depth: '📜',
+  page_engagement: '⏱️',
+  blog_article_read: '📰',
+}
+
+function RealtimeTab() {
+  const [events, setEvents] = useState<RealtimeEvent[]>([])
+  const [loading, setLoading] = useState(true)
+  const [autoRefresh, setAutoRefresh] = useState(true)
+
+  const load = useCallback(() => {
+    fetchRealtimeEvents(30)
+      .then(setEvents)
+      .catch(() => toast.error('Realtime-Daten konnten nicht geladen werden'))
+      .finally(() => setLoading(false))
+  }, [])
+
+  useEffect(() => { load() }, [load])
+
+  // Auto-refresh every 10 seconds
+  useEffect(() => {
+    if (!autoRefresh) return
+    const interval = setInterval(load, 10000)
+    return () => clearInterval(interval)
+  }, [autoRefresh, load])
+
+  const formatTime = (ts: string) => {
+    try {
+      const d = new Date(ts)
+      const now = new Date()
+      const diffMs = now.getTime() - d.getTime()
+      if (diffMs < 0) return d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+      const diffSec = Math.floor(diffMs / 1000)
+      if (diffSec < 60) return `vor ${diffSec}s`
+      const diffMin = Math.floor(diffSec / 60)
+      if (diffMin < 60) return `vor ${diffMin}min`
+      return d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+    } catch {
+      return ts
+    }
+  }
+
+  if (loading) {
+    return <Card className="p-8 text-center"><p className="text-muted-foreground">Lade Live-Events…</p></Card>
+  }
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className={`w-2.5 h-2.5 rounded-full ${autoRefresh ? 'bg-green-500 animate-pulse' : 'bg-muted-foreground'}`} />
+              <span className="text-sm font-medium">
+                {autoRefresh ? 'Live – aktualisiert alle 10s' : 'Pausiert'}
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setAutoRefresh(!autoRefresh)}
+                className="text-xs gap-1"
+              >
+                {autoRefresh ? 'Pausieren' : 'Fortsetzen'}
+              </Button>
+              <Button variant="outline" size="sm" onClick={load} className="text-xs gap-1">
+                <ArrowClockwise className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {events.length === 0 ? (
+        <Card className="p-8 text-center">
+          <Lightning className="w-12 h-12 mx-auto mb-3 text-muted-foreground opacity-50" />
+          <p className="text-muted-foreground">Noch keine Events vorhanden</p>
+        </Card>
+      ) : (
+        <div className="space-y-1">
+          {events.map((ev, i) => (
+            <div
+              key={`${ev.ts}-${i}`}
+              className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 border border-transparent hover:border-border transition-colors"
+            >
+              <span className="text-lg shrink-0">{REALTIME_EVENT_ICONS[ev.event] ?? '📊'}</span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-xs">{EVENT_LABELS[ev.event as TrackingEventName] ?? ev.event}</Badge>
+                  {ev.utm_source && (
+                    <Badge variant="secondary" className="text-xs">via {ev.utm_source}</Badge>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground truncate mt-0.5">{ev.url}</p>
+              </div>
+              <span className="text-xs text-muted-foreground shrink-0">{formatTime(ev.ts)}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ================================================================== */
 /*  Main Component                                                     */
 /* ================================================================== */
 
@@ -576,27 +833,35 @@ export function AnalyticsAdminPanel() {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="dashboard" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="dashboard" className="gap-2 text-xs sm:text-sm">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="dashboard" className="gap-2 text-xs sm:text-sm" aria-label="Dashboard">
               <Eye className="w-4 h-4" />
-              Dashboard
+              <span className="hidden sm:inline">Dashboard</span>
             </TabsTrigger>
-            <TabsTrigger value="config" className="gap-2 text-xs sm:text-sm">
+            <TabsTrigger value="realtime" className="gap-2 text-xs sm:text-sm" aria-label="Live Events">
+              <Lightning className="w-4 h-4" />
+              <span className="hidden sm:inline">Live</span>
+            </TabsTrigger>
+            <TabsTrigger value="config" className="gap-2 text-xs sm:text-sm" aria-label="Steuerung">
               <Gear className="w-4 h-4" />
-              Steuerung
+              <span className="hidden sm:inline">Steuerung</span>
             </TabsTrigger>
-            <TabsTrigger value="export" className="gap-2 text-xs sm:text-sm">
+            <TabsTrigger value="export" className="gap-2 text-xs sm:text-sm" aria-label="Export">
               <Export className="w-4 h-4" />
-              Export
+              <span className="hidden sm:inline">Export</span>
             </TabsTrigger>
-            <TabsTrigger value="status" className="gap-2 text-xs sm:text-sm">
+            <TabsTrigger value="status" className="gap-2 text-xs sm:text-sm" aria-label="System Status">
               <Heartbeat className="w-4 h-4" />
-              System
+              <span className="hidden sm:inline">System</span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard">
             <KPIDashboardTab />
+          </TabsContent>
+
+          <TabsContent value="realtime">
+            <RealtimeTab />
           </TabsContent>
 
           <TabsContent value="config">

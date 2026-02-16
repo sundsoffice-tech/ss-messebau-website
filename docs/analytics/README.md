@@ -15,6 +15,7 @@ analytics-tracker.ts        collect.php                    analytics_events
  ↓ event queue              analytics-export.php
  ↓ batch POST               analytics-cleanup.php
                             analytics-status.php
+                            analytics-realtime.php
 ```
 
 ## Consent / DSGVO
@@ -63,20 +64,31 @@ Jedes Event enthält:
 | `collect.php` | POST | Nein | Event-Ingestion (rate-limited, max 50/Batch) |
 | `analytics-config.php` | GET | Nein | Tracking-Config lesen |
 | `analytics-config.php` | POST | Ja | Tracking-Config schreiben |
-| `analytics-export.php?action=kpis` | GET | Ja | KPI-Aggregationen |
+| `analytics-export.php?action=kpis` | GET | Ja | KPI-Aggregationen (inkl. Bounce Rate, Kampagnen, Stunden-Verteilung) |
 | `analytics-export.php?action=export` | GET | Ja | Rohdaten-Export (CSV/JSON) |
 | `analytics-cleanup.php` | POST | Ja | Retention-Cleanup |
 | `analytics-status.php` | GET | Ja | System-Status |
+| `analytics-realtime.php` | GET | Ja | Letzte N Events für Live-Ticker |
 
 ## Admin-Dashboard
 
 Im Admin-Panel unter dem Tab "Analytics" verfügbar:
 
 ### Dashboard
-- KPIs: Events, Sessions, Seitenaufrufe, CTA-Klicks, Formulare
-- Events-pro-Tag Chart (recharts)
+- KPIs: Events, Sessions, Seitenaufrufe, CTA-Klicks, Formulare, Telefon, WhatsApp, Downloads
+- Engagement-Metriken: Bounce Rate, Ø Events/Session
+- Events-pro-Tag AreaChart (recharts)
+- Verteilung nach Uhrzeit (0-23h) BarChart
 - Top Seiten, Top UTM-Quellen
+- Top Referrer mit Balkenvisualisierung
+- Top Kampagnen (UTM Campaign) mit Balkenvisualisierung
 - Conversion Funnel: page_view → cta_click → form_submit
+
+### Live (Realtime)
+- Live Event-Ticker (letzte 30 Events)
+- Auto-Refresh alle 10 Sekunden (pausierbar)
+- Event-Icons und relative Zeitanzeige
+- UTM-Source-Anzeige pro Event
 
 ### Steuerung
 - Global Toggle: Tracking EIN/AUS
@@ -115,4 +127,5 @@ Im Admin-Panel unter dem Tab "Analytics" verfügbar:
 - `public/api/analytics-export.php` – KPIs & Export
 - `public/api/analytics-cleanup.php` – Retention-Cleanup
 - `public/api/analytics-status.php` – System-Status
+- `public/api/analytics-realtime.php` – Live Event-Feed
 - `public/api/db.php` – DB-Schema (analytics_events, analytics_config Tabellen)

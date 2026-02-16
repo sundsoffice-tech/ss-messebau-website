@@ -15,6 +15,7 @@ import type {
   AnalyticsKPIs,
   AnalyticsStatusInfo,
   ExportFormat,
+  RealtimeEvent,
 } from '@/types/analytics'
 
 /* ------------------------------------------------------------------ */
@@ -313,6 +314,15 @@ export async function exportAnalyticsData(
   })
   if (!resp.ok) throw new Error('Failed to export data')
   return resp.blob()
+}
+
+export async function fetchRealtimeEvents(limit = 20): Promise<RealtimeEvent[]> {
+  const params = new URLSearchParams({ limit: String(limit) })
+  const resp = await fetch(`${API_BASE}/analytics-realtime.php?${params}`, {
+    credentials: 'include',
+  })
+  if (!resp.ok) throw new Error('Failed to fetch realtime events')
+  return resp.json()
 }
 
 // Flush remaining events on page unload
