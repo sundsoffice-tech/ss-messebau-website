@@ -127,7 +127,7 @@ export function LeistungenEventbauPage({ onOpenInquiry }: { onOpenInquiry: () =>
       rating: 5,
     },
     {
-      text: 'Wir arbeiten seit zwei Jahren mit S&S Messebau für unsere Konferenzen und Galas zusammen. Die Zusammenarbeit ist unkompliziert, das Ergebnis immer erstklassig. Absolute Empfehlung für professionellen Eventbau!',
+      text: 'Wir vertrauen bei unseren Konferenzen und Galas auf S&S Messebau. Die Zusammenarbeit ist unkompliziert, das Ergebnis immer erstklassig. Absolute Empfehlung für professionellen Eventbau!',
       author: 'Julia Engel',
       company: 'EventPartner Deutschland',
       rating: 5,
@@ -292,7 +292,7 @@ export function LeistungenEventbauPage({ onOpenInquiry }: { onOpenInquiry: () =>
             Für jedes Event die passende Lösung
           </h2>
           <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Ob Firmenjubiläum, Produktlaunch oder Gala – wir haben die Erfahrung und
+            Ob Firmenjubiläum, Produktlaunch oder Gala – wir haben die Expertise und
             Kreativität für Ihre Veranstaltung.
           </p>
 
