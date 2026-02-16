@@ -31,8 +31,6 @@ pids
 .file-manifest
 .devcontainer/
 
-.spark-workbench-id
-
 # SQLite database (generated at runtime)
 public/api/data/*.sqlite
 public/api/data/*.sqlite3

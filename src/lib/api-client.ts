@@ -1,7 +1,7 @@
 /**
  * S&S Messebau - API Client
  * Centralized fetch wrapper for all PHP backend API endpoints.
- * Replaces spark.kv / localStorage calls for persistent data.
+ * Replaces localStorage calls for persistent data with server-side PHP APIs.
  */
 
 const API_BASE = '/api'

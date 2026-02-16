@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from '@/lib/i18n'
 import { useKV } from '@/hooks/use-kv'
+import { kvAdapter } from '@/lib/local-storage-adapter'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Check } from '@phosphor-icons/react'
@@ -206,7 +207,7 @@ export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps)
         status: 'neu',
       }
       
-      await window.spark.kv.set(configId, configToSave)
+      await kvAdapter.set(configId, configToSave)
 
       // Save order to backend API
       try {

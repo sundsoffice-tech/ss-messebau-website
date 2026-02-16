@@ -5,7 +5,7 @@
  * - Audit logging
  * - Safe error handling
  * 
- * The API key is managed server-side (via window.spark.llm or admin config).
+ * The API key is managed server-side (via admin config / PHP backend).
  * No API key is ever exposed to the client.
  */
 
