@@ -404,7 +404,7 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
             </div>
             <div className="aspect-square rounded-lg overflow-hidden">
               <img 
-                src="/images/referenzen/messebau-25qm/messestand-25qm-nachhaltig-natur-beige.jpg" 
+                src="/images/03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg" 
                 alt={t('nachhaltigkeit.business.imageAlt')}
                 width="800"
                 height="800"

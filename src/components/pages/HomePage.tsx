@@ -136,7 +136,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   t('home.services.messebau.b4')
                 ],
                 sectionId: 'messebau',
-                image: '/images/referenzen/messebau-25qm/messestand-25qm-lounge-multimedia-orange.jpg'
+                image: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg'
               },
               {
                 icon: CalendarDot,
@@ -149,7 +149,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   t('home.services.touren.b4')
                 ],
                 sectionId: 'touren',
-                image: '/images/referenzen/messebau-25qm/messestand-25qm-premium-design-dunkel.jpg'
+                image: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg'
               },
               {
                 icon: Storefront,
@@ -174,9 +174,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 >
                   <div className="relative aspect-[25/16] overflow-hidden bg-muted">
                     <img 
-                      src={`${service.image}&fm=webp&q=75`}
-                      srcSet={`${service.image}&fm=webp&q=75&w=400 400w, ${service.image}&fm=webp&q=75&w=500 500w, ${service.image}&fm=webp&q=75&w=640 640w`}
-                      sizes="(max-width: 1023px) 100vw, 33vw"
+                      src={service.image}
                       alt=""
                       role="presentation"
                       width="500"
@@ -285,9 +283,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               >
                 <div className="aspect-video relative overflow-hidden bg-muted">
                   <img 
-                    src={`${reference.imageUrl}&fm=webp&q=75`}
-                    srcSet={`${reference.imageUrl}&fm=webp&q=75&w=400 400w, ${reference.imageUrl}&fm=webp&q=75&w=640 640w, ${reference.imageUrl}&fm=webp&q=75&w=800 800w`}
-                    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
+                    src={reference.imageUrl}
                     alt={reference.title}
                     width="640"
                     height="360"
