@@ -142,7 +142,7 @@ export function LeistungenTourenPage({ onOpenInquiry }: { onOpenInquiry: () => v
         ]} />
       </div>
       {/* Hero Section */}
-      <section className="hero-gradient text-white py-12 sm:py-16">
+      <section id="hero" className="hero-gradient text-white py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1
@@ -213,7 +213,7 @@ export function LeistungenTourenPage({ onOpenInquiry }: { onOpenInquiry: () => v
       </section>
 
       {/* Leistungsübersicht Section */}
-      <section className="py-12 sm:py-16">
+      <section id="leistungen" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -273,7 +273,7 @@ export function LeistungenTourenPage({ onOpenInquiry }: { onOpenInquiry: () => v
       </section>
 
       {/* Vorteile Section */}
-      <section className="py-12 sm:py-16">
+      <section id="vorteile" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -303,7 +303,7 @@ export function LeistungenTourenPage({ onOpenInquiry }: { onOpenInquiry: () => v
       </section>
 
       {/* Ablauf/Prozess Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section id="prozess" className="py-12 sm:py-16 bg-secondary/30 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -338,7 +338,7 @@ export function LeistungenTourenPage({ onOpenInquiry }: { onOpenInquiry: () => v
       </section>
 
       {/* FAQ Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section id="faq" className="py-12 sm:py-16 bg-secondary/30 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -367,7 +367,7 @@ export function LeistungenTourenPage({ onOpenInquiry }: { onOpenInquiry: () => v
       </section>
 
       {/* Kundenstimmen Section */}
-      <section className="py-12 sm:py-16">
+      <section id="referenzen" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"

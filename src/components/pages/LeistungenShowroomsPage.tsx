@@ -125,7 +125,7 @@ export function LeistungenShowroomLadenbauPage({ onOpenInquiry }: { onOpenInquir
         ]} />
       </div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-amber-600 via-amber-500 to-orange-500 text-white py-12 sm:py-16">
+      <section id="hero" className="bg-gradient-to-br from-amber-600 via-amber-500 to-orange-500 text-white py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1
@@ -201,7 +201,7 @@ export function LeistungenShowroomLadenbauPage({ onOpenInquiry }: { onOpenInquir
       </section>
 
       {/* Leistungsübersicht Section */}
-      <section className="py-12 sm:py-16">
+      <section id="leistungen" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -266,7 +266,7 @@ export function LeistungenShowroomLadenbauPage({ onOpenInquiry }: { onOpenInquir
       </section>
 
       {/* Einsatzbereiche Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section id="einsatzbereiche" className="py-12 sm:py-16 bg-secondary/30 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -322,7 +322,7 @@ export function LeistungenShowroomLadenbauPage({ onOpenInquiry }: { onOpenInquir
       </section>
 
       {/* Ablauf/Prozess Section */}
-      <section className="py-12 sm:py-16">
+      <section id="prozess" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -357,7 +357,7 @@ export function LeistungenShowroomLadenbauPage({ onOpenInquiry }: { onOpenInquir
       </section>
 
       {/* FAQ Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section id="faq" className="py-12 sm:py-16 bg-secondary/30 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
@@ -385,7 +385,7 @@ export function LeistungenShowroomLadenbauPage({ onOpenInquiry }: { onOpenInquir
       </section>
 
       {/* Kundenstimmen Section */}
-      <section className="py-12 sm:py-16">
+      <section id="referenzen" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4"
