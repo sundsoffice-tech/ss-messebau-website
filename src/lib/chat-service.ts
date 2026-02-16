@@ -134,7 +134,7 @@ export async function sendChatMessage(request: ChatRequest): Promise<ChatRespons
       }),
     })
 
-    // Better error diagnostics: parse text first, then JSON
+    // Better error handling: parse text first for detailed error messages
     const responseText = await response.text()
     let data
     try {

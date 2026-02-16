@@ -58,7 +58,8 @@ try {
             $systemPrompt .= $trainingContext;
         }
     } catch (\Throwable $e) {
-        // Training data is optional, continue without it
+        // Training data is optional, continue without it if query fails
+        // Catches query execution errors (table missing, schema issues, etc.)
         error_log('Failed to load training data: ' . $e->getMessage());
     }
 
