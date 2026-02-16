@@ -25,27 +25,41 @@ $rateLimitFile = __DIR__ . '/data/rate_limit_' . md5($_SERVER['REMOTE_ADDR'] ?? 
 $now = time();
 
 $rateData = ['timestamps' => []];
-if (file_exists($rateLimitFile)) {
-    $raw = file_get_contents($rateLimitFile);
+$rateLimited = false;
+
+$fp = @fopen($rateLimitFile, 'c+');
+if ($fp && flock($fp, LOCK_EX)) {
+    $raw = stream_get_contents($fp);
     if ($raw) {
         $rateData = json_decode($raw, true) ?: ['timestamps' => []];
     }
+
+    // Remove timestamps older than 60 seconds
+    $rateData['timestamps'] = array_values(array_filter(
+        $rateData['timestamps'],
+        function($ts) use ($now) { return ($now - $ts) < 60; }
+    ));
+
+    if (count($rateData['timestamps']) >= 60) {
+        $rateLimited = true;
+    } else {
+        $rateData['timestamps'][] = $now;
+    }
+
+    ftruncate($fp, 0);
+    rewind($fp);
+    fwrite($fp, json_encode($rateData));
+    flock($fp, LOCK_UN);
+    fclose($fp);
+} else {
+    if ($fp) fclose($fp);
 }
 
-// Remove timestamps older than 60 seconds
-$rateData['timestamps'] = array_values(array_filter(
-    $rateData['timestamps'],
-    function($ts) use ($now) { return ($now - $ts) < 60; }
-));
-
-if (count($rateData['timestamps']) >= 60) {
+if ($rateLimited) {
     http_response_code(429);
     echo json_encode(['error' => 'Rate limit exceeded']);
     exit;
 }
-
-$rateData['timestamps'][] = $now;
-@file_put_contents($rateLimitFile, json_encode($rateData));
 
 // Parse input
 $input = json_decode(file_get_contents('php://input'), true);

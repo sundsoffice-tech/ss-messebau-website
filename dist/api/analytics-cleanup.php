@@ -32,7 +32,7 @@ $row = $stmt->fetch();
 $retentionDays = $row ? intval($row['config_value']) : 90;
 
 // Delete events older than retention period
-$cutoff = date('Y-m-d H:i:s', strtotime("-{$retentionDays} days"));
+$cutoff = date('Y-m-d H:i:s', time() - ($retentionDays * 86400));
 
 $stmt = $db->prepare("DELETE FROM analytics_events WHERE ts < :cutoff");
 $stmt->execute([':cutoff' => $cutoff]);

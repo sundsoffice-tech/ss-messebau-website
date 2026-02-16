@@ -29,6 +29,18 @@ $from = $_GET['from'] ?? date('Y-m-d', strtotime('-30 days'));
 $to = $_GET['to'] ?? date('Y-m-d');
 $eventType = $_GET['event_type'] ?? null;
 
+// Validate date format
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $from) || strtotime($from) === false) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid from date']);
+    exit;
+}
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $to) || strtotime($to) === false) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid to date']);
+    exit;
+}
+
 $db = getDB();
 
 if ($action === 'kpis') {
@@ -131,7 +143,8 @@ function handleExport(PDO $db, string $from, string $to, ?string $eventType, str
         $params[':event_type'] = $eventType;
     }
 
-    $sql .= " ORDER BY ts DESC LIMIT " . $limit;
+    // $limit is already validated via intval + min/max, safe for interpolation
+    $sql .= " ORDER BY ts DESC LIMIT " . intval($limit);
 
     $stmt = $db->prepare($sql);
     $stmt->execute($params);
@@ -145,7 +158,14 @@ function handleExport(PDO $db, string $from, string $to, ?string $eventType, str
         if (!empty($rows)) {
             fputcsv($output, array_keys($rows[0]));
             foreach ($rows as $row) {
-                fputcsv($output, $row);
+                // Sanitize CSV values to prevent formula injection
+                $sanitized = array_map(function($v) {
+                    if (is_string($v) && strlen($v) > 0 && in_array($v[0], ['=', '+', '-', '@'], true)) {
+                        return "'" . $v;
+                    }
+                    return $v;
+                }, $row);
+                fputcsv($output, $sanitized);
             }
         }
         fclose($output);
