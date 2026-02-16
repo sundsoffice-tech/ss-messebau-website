@@ -162,7 +162,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   t('home.services.showrooms.b4')
                 ],
                 sectionId: 'showroom-ladenbau',
-                image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=320&fit=crop'
+                image: '/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg'
               }
             ].map((service, index) => {
               const Icon = service.icon

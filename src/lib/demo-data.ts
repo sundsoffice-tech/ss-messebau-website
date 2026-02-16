@@ -22,7 +22,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'versicherungen',
     size: '80 qm',
     type: 'messebau',
-    imageUrl: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&h=600&fit=crop',
+    imageUrl: '/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg',
     description: 'Repräsentativer Messeauftritt mit Beratungszonen und interaktiven Elementen',
     challenge: 'Seriöser, vertrauensvoller Auftritt mit gleichzeitig moderner, zugänglicher Atmosphäre.',
     solution: 'Klare Raumzonierung: Offene Welcome-Area, abgeschirmte Beratungszonen, digitale Infoscreens.',
@@ -52,7 +52,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'food',
     size: '35 qm',
     type: 'messebau',
-    imageUrl: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=600&fit=crop',
+    imageUrl: '/images/03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg',
     description: 'Nachhaltiger Messestand für Bio-Feinkost mit Verkostungsbereich und B2B-Kontaktzone',
     challenge: 'Ein Bio-Food-Startup musste Premium-Produkte überzeugend präsentieren und gezielt B2B-Kontakte generieren.',
     solution: 'Warme Materialien, einladende Verkostungsstationen, LED-Produktpräsentation und gezielte Gesprächszonen für Einkäufer.',
@@ -67,7 +67,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'food',
     size: '28 qm',
     type: 'messebau',
-    imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&h=600&fit=crop',
+    imageUrl: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg',
     description: 'Temperaturkontrollierter Messestand für handgefertigte Confiserie-Produkte',
     challenge: 'Ein Chocolatier benötigte temperaturkontrollierte Produktpräsentation auf der ISM.',
     solution: 'Integrierte Kühlung, kunstvolle Displayvitrinen und beleuchtete Markenwand für maximale Produktinszenierung.',
@@ -82,7 +82,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'versicherungen',
     size: '60 qm',
     type: 'messebau',
-    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=600&fit=crop',
+    imageUrl: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
     description: 'Vertrauensbildender Messestand mit semi-privaten Beratungsräumen und digitalen Produktwänden',
     challenge: 'Vertrauensaufbau durch Standdesign für Versicherungskunden in offener Messeatmosphäre.',
     solution: 'Semi-private Beratungsräume, warme Beleuchtung und digitale Produktwände für interaktive Tarifberatung.',
@@ -97,7 +97,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'versicherungen',
     size: '40 qm',
     type: 'eventbau',
-    imageUrl: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&h=600&fit=crop',
+    imageUrl: '/images/980a1068-ecee-48de-86a3-8635874252e4.jpeg',
     description: 'Modulares Roadshow-Standsystem für konsistente Markenpräsenz auf regionalen Finanzmessen',
     challenge: 'Konsistente Markenpräsenz über mehrere regionale Veranstaltungen pro Jahr bei effizienter Budgetnutzung.',
     solution: 'Modulares, wiederverwendbares Standsystem mit schnellem Auf- und Abbau, transportoptimiert für den Roadshow-Einsatz.',
@@ -112,7 +112,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'industrie',
     size: '100 qm',
     type: 'messebau',
-    imageUrl: 'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=800&h=600&fit=crop',
+    imageUrl: '/images/49546524-e641-43fd-8c29-79a94e05bf99.jpeg',
     description: 'Schwerlast-Messestand mit Doppelstock-Meetingbereich für die Hannover Messe',
     challenge: 'Schwere Maschinen (2 Tonnen) erforderten verstärkte Bodeninfrastruktur und Starkstromversorgung.',
     solution: 'Verstärkter Schwerlastboden, integrierte Drehstromversorgung und Doppelstock-Meetingbereich für separate Kundengespräche.',
@@ -127,7 +127,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'industrie',
     size: '75 qm',
     type: 'messebau',
-    imageUrl: 'https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=800&h=600&fit=crop',
+    imageUrl: '/images/633e7f45-301e-4c5b-a5fc-b64c766f9956.jpeg',
     description: 'Robotik-Messestand mit Live-Demo-Fläche und Sicherheitszonen auf der Automatica',
     challenge: 'Ein Robotik-Unternehmen benötigte einen Live-Demo-Bereich mit Sicherheitszonen für Industrieroboter.',
     solution: 'Transparente Sicherheitsabsperrungen, erhöhte Demo-Plattform und interaktive Touch-Displays für technische Details.',
@@ -135,6 +135,27 @@ export const DEMO_REFERENCES: Reference[] = [
     keyfacts: ['Automatica München', '75 qm', 'Live-Demo-Fläche', 'Safety-Absperrungen'],
     messe: 'Automatica München',
     zielsetzung: 'Eindrucksvolle Live-Robotik-Demonstration mit höchsten Sicherheitsstandards'
+  },
+  {
+    id: '10',
+    title: 'Hockey EM Shop – THW Sport',
+    branche: 'sport',
+    size: '80 qm',
+    type: 'eventbau',
+    imageUrl: '/images/980a1068-ecee-48de-86a3-8635874252e4.jpeg',
+    description: 'Kompletter Shopaufbau für die EuroHockey Championships in Mönchengladbach',
+    challenge: 'THW Sport benötigte einen vollständigen Event-Shop für die Hockey EM mit professionellem Verkaufsraum, Umkleidekabinen und EuroHockey-Branding.',
+    solution: 'Wir entwickelten einen modularen Shop mit Verkaufsraum für Adidas Hockey- und Padel-Ausrüstung, separaten Umkleidekabinen mit Vorhängen und Spiegeln sowie einem einladenden Empfangsbereich mit EuroHockey Championships Branding.',
+    result: 'Erfolgreicher Event-Shop mit hoher Besucherfrequenz während der gesamten Turnierzeit',
+    keyfacts: ['EuroHockey Championships Mönchengladbach', '80 qm Event-Shop', 'Verkaufsraum + Umkleiden', 'Adidas Hockey Ausrüstung'],
+    messe: 'EuroHockey Championships Mönchengladbach',
+    zielsetzung: 'Professioneller Event-Shop für Hockey EM mit vollständiger Verkaufs- und Serviceinfrastruktur',
+    images: [
+      '/images/980a1068-ecee-48de-86a3-8635874252e4.jpeg',
+      '/images/49546524-e641-43fd-8c29-79a94e05bf99.jpeg',
+      '/images/633e7f45-301e-4c5b-a5fc-b64c766f9956.jpeg',
+      '/images/b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg'
+    ]
   }
 ]
 
@@ -699,7 +720,7 @@ Habt ihr noch Fragen zu eurem spezifischen Projekt? Wir von S&S Messebau helfen 
 
 Viel Erfolg beim Messeauftritt!`,
     category: 'Budget',
-    imageUrl: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop',
+    imageUrl: '/images/b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg',
     publishedAt: Date.now() - 14 * 24 * 60 * 60 * 1000
   },
   {
@@ -1591,7 +1612,7 @@ Ein Messestand von 20 bis 200 m² ist eine signifikante Investition. Aber mit re
 
 Wenn ihr konkrete Zahlen für euer Projekt braucht, kontaktiert uns. Wir von S&S Messebau kalkulieren transparent, beratend und realistisch – und zeigen euch nicht nur die Kosten, sondern auch, wo ihr intelligent sparen könnt, ohne Qualität zu verlieren.`,
     category: 'Kosten',
-    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=600&fit=crop',
+    imageUrl: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
     publishedAt: Date.now() - 3 * 24 * 60 * 60 * 1000
   },
   {
@@ -2164,7 +2185,7 @@ Wenn ihr ein Food-Unternehmen seid und auf Messen gehen wollt: **Macht es richti
 
 Wenn ihr konkrete Planung braucht, helfen wir von S&S Messebau gerne: Wir kennen die Anforderungen von Food-Ständen und wissen, wo die Fallstricke sind. Von der Genehmigung bis zur Montage.`,
     category: 'Branchen',
-    imageUrl: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=600&fit=crop',
+    imageUrl: '/images/03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg',
     publishedAt: new Date('2026-02-15').getTime()
   },
   {
@@ -2383,7 +2404,7 @@ Schnelle Angebotsstellung ist nicht Marketing-Gag, sondern **echtes Service-Vers
 
 Wenn euer Messebauer 2–3 Wochen auf ein Angebot braucht, fragt nach dem Grund. Ist es echte Komplexität – oder Prozessineffizienz? Das macht den Unterschied zwischen durchschnittlichem und exzellentem Service aus.`,
     category: 'Service',
-    imageUrl: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop',
+    imageUrl: '/images/980a1068-ecee-48de-86a3-8635874252e4.jpeg',
     publishedAt: Date.now() - 1 * 24 * 60 * 60 * 1000
   }
 ]

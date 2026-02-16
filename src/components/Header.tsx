@@ -74,7 +74,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-amber-50',
     featureKeys: ['header.mega.showroomLadenbau.f1', 'header.mega.showroomLadenbau.f2', 'header.mega.showroomLadenbau.f3'],
     gradient: 'from-amber-500/10 to-amber-600/5',
-    previewImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
+    previewImage: '/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg',
     sectionId: 'showroom-ladenbau',
     pagePath: '/leistungen/showroom-ladenbau'
   },
@@ -110,7 +110,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-rose-50',
     featureKeys: ['header.mega.bannerrahmen.f1', 'header.mega.bannerrahmen.f2', 'header.mega.bannerrahmen.f3'],
     gradient: 'from-rose-500/10 to-rose-600/5',
-    previewImage: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop',
+    previewImage: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg',
     sectionId: 'bannerrahmen',
     pagePath: '/bannerrahmen'
   }
