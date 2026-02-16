@@ -16,11 +16,56 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
     { id: 'cta', label: 'Kontakt', page: '/' }
   ],
   '/leistungen': [
-    { id: 'messebau', label: 'Messebau', page: '/leistungen' },
-    { id: 'touren', label: 'Touren & Messeauftritte', page: '/leistungen' },
-    { id: 'showroom-ladenbau', label: 'Showroom & Ladenbau | Brandspaces', page: '/leistungen' },
-    { id: 'eventbau', label: 'Eventbau & Bühnen', page: '/leistungen' },
-    { id: 'boeden-ausstattung', label: 'Böden & Ausstattung', page: '/leistungen' }
+    { id: 'services-grid', label: 'Leistungsübersicht', page: '/leistungen' },
+    { id: 'cta', label: 'Kontakt', page: '/leistungen' }
+  ],
+  '/leistungen/messebau': [
+    { id: 'hero', label: 'Messebau', page: '/leistungen/messebau' },
+    { id: 'leistungen', label: 'Leistungen im Detail', page: '/leistungen/messebau' },
+    { id: 'prozess', label: 'Ablauf', page: '/leistungen/messebau' },
+    { id: 'vorteile', label: 'Vorteile', page: '/leistungen/messebau' },
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/messebau' },
+    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/messebau' }
+  ],
+  '/leistungen/eventbau': [
+    { id: 'hero', label: 'Eventbau', page: '/leistungen/eventbau' },
+    { id: 'leistungen', label: 'Leistungen im Detail', page: '/leistungen/eventbau' },
+    { id: 'einsatzbereiche', label: 'Einsatzbereiche', page: '/leistungen/eventbau' },
+    { id: 'prozess', label: 'Ablauf', page: '/leistungen/eventbau' },
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/eventbau' },
+    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/eventbau' }
+  ],
+  '/leistungen/showroom-ladenbau': [
+    { id: 'hero', label: 'Showroom & Ladenbau', page: '/leistungen/showroom-ladenbau' },
+    { id: 'leistungen', label: 'Leistungen im Detail', page: '/leistungen/showroom-ladenbau' },
+    { id: 'einsatzbereiche', label: 'Einsatzbereiche', page: '/leistungen/showroom-ladenbau' },
+    { id: 'prozess', label: 'Ablauf', page: '/leistungen/showroom-ladenbau' },
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/showroom-ladenbau' },
+    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/showroom-ladenbau' }
+  ],
+  '/leistungen/touren': [
+    { id: 'hero', label: 'Touren & Roadshows', page: '/leistungen/touren' },
+    { id: 'leistungen', label: 'Leistungen im Detail', page: '/leistungen/touren' },
+    { id: 'vorteile', label: 'Vorteile', page: '/leistungen/touren' },
+    { id: 'prozess', label: 'Ablauf', page: '/leistungen/touren' },
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/touren' },
+    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/touren' }
+  ],
+  '/leistungen/boeden-ausstattung': [
+    { id: 'hero', label: 'Böden & Ausstattung', page: '/leistungen/boeden-ausstattung' },
+    { id: 'leistungen', label: 'Leistungen im Detail', page: '/leistungen/boeden-ausstattung' },
+    { id: 'materialien', label: 'Materialien', page: '/leistungen/boeden-ausstattung' },
+    { id: 'prozess', label: 'Ablauf', page: '/leistungen/boeden-ausstattung' },
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/boeden-ausstattung' },
+    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/boeden-ausstattung' }
+  ],
+  '/leistungen/digital-experience': [
+    { id: 'hero', label: 'Digital Experience', page: '/leistungen/digital-experience' },
+    { id: 'leistungen', label: 'Digitale Messelösungen', page: '/leistungen/digital-experience' },
+    { id: 'technologien', label: 'Technologie-Bereiche', page: '/leistungen/digital-experience' },
+    { id: 'prozess', label: 'Ablauf', page: '/leistungen/digital-experience' },
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/digital-experience' },
+    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/digital-experience' }
   ],
   '/branchen': [
     { id: 'food', label: 'Food & Feinkost', page: '/branchen' },
@@ -110,12 +155,12 @@ export function parseSectionHash(hash: string): { page: string; section?: string
 }
 
 export const THEMATIC_LINKS: Record<string, { page: string; section: string; label: string }> = {
-  'home-to-messebau': { page: '/leistungen', section: 'messebau', label: 'Messebau' },
-  'home-to-touren': { page: '/leistungen', section: 'touren', label: 'Touren & Messeauftritte' },
-  'home-to-trockenbau': { page: '/leistungen/showroom-ladenbau', section: 'showroom-ladenbau', label: 'Showroom & Ladenbau | Brandspaces' },
-  'home-to-eventbau': { page: '/leistungen', section: 'eventbau', label: 'Eventbau' },
-  'home-to-ladenbau': { page: '/leistungen/showroom-ladenbau', section: 'showroom-ladenbau', label: 'Showroom & Ladenbau' },
-  'home-to-boeden': { page: '/leistungen', section: 'boeden-ausstattung', label: 'Böden & Möbel' },
+  'home-to-messebau': { page: '/leistungen/messebau', section: 'hero', label: 'Messebau' },
+  'home-to-touren': { page: '/leistungen/touren', section: 'hero', label: 'Touren & Messeauftritte' },
+  'home-to-trockenbau': { page: '/leistungen/showroom-ladenbau', section: 'hero', label: 'Showroom & Ladenbau | Brandspaces' },
+  'home-to-eventbau': { page: '/leistungen/eventbau', section: 'hero', label: 'Eventbau' },
+  'home-to-ladenbau': { page: '/leistungen/showroom-ladenbau', section: 'hero', label: 'Showroom & Ladenbau' },
+  'home-to-boeden': { page: '/leistungen/boeden-ausstattung', section: 'hero', label: 'Böden & Möbel' },
   
   'nav-to-food': { page: '/branchen', section: 'food', label: 'Food & Feinkost' },
   'nav-to-versicherungen': { page: '/branchen', section: 'versicherungen', label: 'Versicherungen' },

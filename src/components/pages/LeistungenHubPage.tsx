@@ -16,11 +16,11 @@ interface LeistungenHubPageProps {
 }
 
 const services = [
-  { key: 'messebau', icon: Package, path: '/leistungen' },
-  { key: 'eventbau', icon: Microphone, path: '/leistungen' },
-  { key: 'touren', icon: CalendarDot, path: '/leistungen' },
+  { key: 'messebau', icon: Package, path: '/leistungen/messebau' },
+  { key: 'eventbau', icon: Microphone, path: '/leistungen/eventbau' },
+  { key: 'touren', icon: CalendarDot, path: '/leistungen/touren' },
   { key: 'showroomLadenbau', icon: Storefront, path: '/leistungen/showroom-ladenbau' },
-  { key: 'boeden', icon: Armchair, path: '/leistungen' },
+  { key: 'boeden', icon: Armchair, path: '/leistungen/boeden-ausstattung' },
   { key: 'bannerrahmen', icon: FrameCorners, path: '/bannerrahmen' },
 ] as const
 
@@ -52,7 +52,7 @@ export function LeistungenHubPage({ onOpenInquiry }: LeistungenHubPageProps) {
       </section>
 
       {/* Service Tiles Grid */}
-      <section className="py-12 sm:py-16">
+      <section id="services-grid" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {services.map((service) => {
@@ -115,7 +115,7 @@ export function LeistungenHubPage({ onOpenInquiry }: LeistungenHubPageProps) {
       </section>
 
       {/* Bottom CTA */}
-      <section className="bg-muted py-12 sm:py-16">
+      <section id="cta" className="bg-muted py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2
             className="font-bold leading-tight"
