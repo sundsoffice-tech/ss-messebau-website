@@ -9,6 +9,10 @@ import { EmailQueueManager } from '@/components/EmailQueueManager'
 import { SMTPConfigPanel } from '@/components/SMTPConfigPanel'
 import { NotificationConfigPanel } from '@/components/NotificationConfigPanel'
 import { AIAdminPanel } from '@/components/AIAdminPanel'
+import { AutomationPanel } from '@/components/AutomationPanel'
+import { TemplateEditorPanel } from '@/components/TemplateEditorPanel'
+import { ComposeEmailPanel } from '@/components/ComposeEmailPanel'
+import { EmailTrackingPanel } from '@/components/EmailTrackingPanel'
 import { BlogManager, MesseManager, ExternalApiKeysManager } from '@/components/AdminContentPanels'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -51,6 +55,10 @@ import {
   Trash,
   MagnifyingGlass,
   Eye,
+  Lightning,
+  PencilSimple,
+  PaperPlaneTilt,
+  ChartLine,
 } from '@phosphor-icons/react'
 import { authApi, ordersApi, inquiriesApi, type AuthUser, type OrderRecord, type InquiryRecord } from '@/lib/api-client'
 import { toast } from 'sonner'
@@ -245,6 +253,22 @@ export function AdminPage({ onOpenInquiry: _onOpenInquiry }: AdminPageProps) {
               <Bell className="w-4 h-4" />
               {t('admin.notifications')}
             </TabsTrigger>
+            <TabsTrigger value="automation" className="gap-2">
+              <Lightning className="w-4 h-4" />
+              {t('admin.automation')}
+            </TabsTrigger>
+            <TabsTrigger value="templates" className="gap-2">
+              <PencilSimple className="w-4 h-4" />
+              {t('admin.templates')}
+            </TabsTrigger>
+            <TabsTrigger value="compose" className="gap-2">
+              <PaperPlaneTilt className="w-4 h-4" />
+              {t('admin.compose')}
+            </TabsTrigger>
+            <TabsTrigger value="tracking" className="gap-2">
+              <ChartLine className="w-4 h-4" />
+              {t('admin.tracking')}
+            </TabsTrigger>
             <TabsTrigger value="ai" className="gap-2">
               <Brain className="w-4 h-4" />
               {t('admin.aiChatbot')}
@@ -281,6 +305,22 @@ export function AdminPage({ onOpenInquiry: _onOpenInquiry }: AdminPageProps) {
 
           <TabsContent value="notifications">
             <NotificationConfigPanel />
+          </TabsContent>
+
+          <TabsContent value="automation">
+            <AutomationPanel />
+          </TabsContent>
+
+          <TabsContent value="templates">
+            <TemplateEditorPanel />
+          </TabsContent>
+
+          <TabsContent value="compose">
+            <ComposeEmailPanel />
+          </TabsContent>
+
+          <TabsContent value="tracking">
+            <EmailTrackingPanel />
           </TabsContent>
 
           <TabsContent value="ai">
