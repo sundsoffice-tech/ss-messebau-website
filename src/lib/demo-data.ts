@@ -7,7 +7,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'food',
     size: '50 qm',
     type: 'messebau',
-    imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop',
+    imageUrl: '/images/referenzen/messebau-25qm/messestand-25qm-lounge-multimedia-orange.jpg',
     description: 'Moderner Messestand mit offener Verkostungsküche und Premium-Präsentation',
     challenge: 'Ein Feinkost-Unternehmen benötigte einen Stand, der hochwertige Produkte ansprechend präsentiert und gleichzeitig Verkostungen ermöglicht.',
     solution: 'Wir entwickelten ein offenes Konzept mit integrierter Showküche, LED-beleuchteten Produktvitrinen und einer einladenden Lounge-Area.',
@@ -37,7 +37,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'industrie',
     size: '120 qm',
     type: 'ladenbau',
-    imageUrl: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop',
+    imageUrl: '/images/referenzen/messebau-25qm/messestand-25qm-beratung-klassisch-rot.jpg',
     description: 'Permanenter Showroom für Kunststoff-Fertigungstechnik',
     challenge: 'Große Maschinen ansprechend präsentieren und technische Kompetenz vermitteln.',
     solution: 'Industrieller Look mit hochwertigen Details: Sichtbeton-Optik, LED-Spots, interaktive Produktkonfiguratoren.',
@@ -362,7 +362,7 @@ Falls ihr noch Fragen habt oder professionelle Unterstützung beim Standbau brau
 
 Viel Erfolg auf eurer nächsten Messe!`,
     category: 'Planung',
-    imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop',
+    imageUrl: '/images/referenzen/messebau-25qm/messestand-25qm-lounge-multimedia-orange.jpg',
     publishedAt: Date.now() - 7 * 24 * 60 * 60 * 1000
   },
   {
@@ -946,7 +946,7 @@ Wir von S&S Messebau helfen euch dabei. In den letzten zehn Jahren haben wir gel
 
 Viel Erfolg bei eurem nächsten nachhaltigen Messeauftritt!`,
     category: 'Nachhaltigkeit',
-    imageUrl: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&h=600&fit=crop',
+    imageUrl: '/images/referenzen/messebau-25qm/messestand-25qm-nachhaltig-natur-beige.jpg',
     publishedAt: new Date('2026-02-16').getTime()
   },
   {
