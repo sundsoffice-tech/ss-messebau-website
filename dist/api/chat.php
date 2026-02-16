@@ -38,6 +38,25 @@ $message = $input['message'];
 $systemPrompt = $input['systemPrompt'] ?? 'You are a helpful assistant.';
 $context = $input['context'] ?? '';
 
+// Load server-side training data as additional context
+try {
+    $trainingStmt = $db->query('SELECT title, content FROM ai_training_data WHERE active = 1 ORDER BY created_at DESC');
+    $trainingEntries = $trainingStmt->fetchAll();
+    if (!empty($trainingEntries)) {
+        $trainingContext = "\n\nZUSÄTZLICHES WISSEN (Admin-gepflegt):\n";
+        foreach ($trainingEntries as $te) {
+            // Sanitize training data to prevent prompt injection patterns
+            $title = substr(preg_replace('/[\x00-\x1f]/', '', $te['title']), 0, 200);
+            $content = substr(preg_replace('/[\x00-\x1f]/', '', $te['content']), 0, 5000);
+            $trainingContext .= "[{$title}]\n{$content}\n\n";
+        }
+        $systemPrompt .= $trainingContext;
+    }
+} catch (Exception $e) {
+    // Training data is optional, continue without it
+    error_log('Failed to load training data: ' . $e->getMessage());
+}
+
 // Get active OpenAI API key from database
 $db = getDB();
 $stmt = $db->prepare('SELECT api_key, id FROM ai_keys WHERE provider = :provider AND status = :status ORDER BY created_at DESC LIMIT 1');

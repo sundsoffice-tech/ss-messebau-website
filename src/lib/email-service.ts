@@ -1,26 +1,10 @@
 import type { BannerConfig } from '@/components/pages/BannerBestellenPage'
-import { sendEmail } from './smtp-service'
-import type { SerializedFile, FileAttachment } from '@/types/email'
-
-interface BannerEmailQueueItem {
-  id: string
-  to: string
-  subject: string
-  htmlBody: string
-  textBody: string
-  customerEmail: string
-  customerSubject: string
-  customerHtmlBody: string
-  customerTextBody: string
-  attachments: FileAttachment[]
-  configId: string
-  timestamp?: string
-}
+import type { SerializedFile } from '@/types/email'
+import { emailApi } from './api-client'
 
 interface EmailData {
   config: BannerConfig
   configId: string
-  sendImmediately?: boolean
 }
 
 function formatConfigForEmail(config: BannerConfig): string {
@@ -359,7 +343,7 @@ function formatFileSize(bytes: number): string {
 
 export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ success: boolean; queueId?: string; error?: string }> {
   try {
-    const { config, configId, sendImmediately = false } = data
+    const { config, configId } = data
     
     const emailSubject = `Neue Banner-Bestellung: ${config.step6.firmaKontakt} - ${config.step1.menge}x ${formatRahmenart(config.step1.rahmenart)}`
     const emailBody = formatConfigForEmail(config)
@@ -370,44 +354,22 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
       ? `\n\n📎 Anhänge: ${config.step4.serializedFiles.length} Datei(en) (${config.step4.serializedFiles.map(f => f.name).join(', ')})`
       : ''
 
-    const emailData = {
-      to: 'info@sundsmessebau.com',
-      subject: emailSubject,
-      htmlBody: emailBody,
-      textBody: convertHtmlToText(emailBody) + attachmentInfo,
-      customerEmail: config.step6.email,
-      customerSubject: `Auftragsbestätigung: Banner-Bestellung #${configId.slice(-8)}`,
-      customerHtmlBody: customerEmailBody,
-      customerTextBody: convertHtmlToText(customerEmailBody),
-      attachments: config.step4.serializedFiles || [],
-      configId,
-      timestamp: new Date().toISOString(),
-      sent: false,
-    }
-
     const queueId = `email_queue_${configId}`
 
     // Enqueue via backend API
-    try {
-      const { emailApi } = await import('./api-client')
-      await emailApi.enqueue({
-        queue_id: queueId,
-        to_email: emailData.to,
-        subject: emailData.subject,
-        html_body: emailData.htmlBody,
-        text_body: emailData.textBody,
-        customer_email: emailData.customerEmail,
-        customer_subject: emailData.customerSubject,
-        customer_html_body: emailData.customerHtmlBody,
-        customer_text_body: emailData.customerTextBody,
-        attachments: emailData.attachments,
-        order_id: configId,
-      })
-    } catch (apiError) {
-      // Fallback: store in localStorage if API unavailable
-      console.warn('Failed to enqueue via API, using localStorage fallback:', apiError)
-      await window.spark.kv.set(queueId, emailData)
-    }
+    await emailApi.enqueue({
+      queue_id: queueId,
+      to_email: 'info@sundsmessebau.com',
+      subject: emailSubject,
+      html_body: emailBody,
+      text_body: convertHtmlToText(emailBody) + attachmentInfo,
+      customer_email: config.step6.email,
+      customer_subject: `Auftragsbestätigung: Banner-Bestellung #${configId.slice(-8)}`,
+      customer_html_body: customerEmailBody,
+      customer_text_body: convertHtmlToText(customerEmailBody),
+      attachments: config.step4.serializedFiles || [],
+      order_id: configId,
+    })
 
     return { success: true, queueId }
   } catch (error) {
@@ -419,39 +381,13 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
 
 export async function sendQueuedEmail(queueId: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const emailData = await window.spark.kv.get<BannerEmailQueueItem>(queueId)
-    
-    if (!emailData) {
-      return { success: false, error: 'E-Mail nicht in Queue gefunden' }
+    // Send via backend API (server handles the actual email delivery)
+    const result = await emailApi.send(queueId)
+
+    if (!result.success) {
+      return { success: false, error: result.error || 'Versand fehlgeschlagen' }
     }
 
-    const companyResult = await sendEmail({
-      to: emailData.to,
-      subject: emailData.subject,
-      htmlBody: emailData.htmlBody,
-      textBody: emailData.textBody,
-      attachments: emailData.attachments,
-    })
-
-    if (!companyResult.success) {
-      return { success: false, error: `Firmen-E-Mail: ${companyResult.error}` }
-    }
-
-    const customerResult = await sendEmail({
-      to: emailData.customerEmail,
-      subject: emailData.customerSubject,
-      htmlBody: emailData.customerHtmlBody,
-      textBody: emailData.customerTextBody,
-    })
-
-    if (!customerResult.success) {
-      return { success: false, error: `Kunden-E-Mail: ${customerResult.error}` }
-    }
-
-    emailData.sent = true
-    emailData.sentAt = new Date().toISOString()
-    await window.spark.kv.set(queueId, emailData)
-    
     return { success: true }
   } catch (error) {
     console.error('❌ Fehler beim Versenden der E-Mail:', error)

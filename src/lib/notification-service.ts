@@ -1,4 +1,4 @@
-import { sendEmail } from './smtp-service'
+import { notificationsApi, emailApi } from './api-client'
 
 export type NotificationType = 'inquiry' | 'kontakt' | 'banner'
 
@@ -17,7 +17,7 @@ export interface NotificationConfig {
 
 export interface FormNotificationPayload {
   type: NotificationType
-  data: Record<string, any>
+  data: Record<string, unknown>
   inquiryId: string
   customerEmail?: string
 }
@@ -39,31 +39,31 @@ function escapeHtml(str: string): string {
 
 export async function getNotificationConfig(): Promise<NotificationConfig> {
   try {
-    const config = await window.spark.kv.get<NotificationConfig>('notification_config')
-    return config || DEFAULT_NOTIFICATION_CONFIG
+    const config = await notificationsApi.getConfig()
+    return config as NotificationConfig
   } catch {
     return DEFAULT_NOTIFICATION_CONFIG
   }
 }
 
 export async function saveNotificationConfig(config: NotificationConfig): Promise<void> {
-  await window.spark.kv.set('notification_config', config)
+  await notificationsApi.saveConfig(config)
 }
 
-function generateSubject(type: NotificationType, data: Record<string, any>): string {
+function generateSubject(type: NotificationType, data: Record<string, unknown>): string {
   switch (type) {
     case 'inquiry':
-      return `Neue Anfrage von ${escapeHtml(data.name || 'Unbekannt')} – ${escapeHtml(data.company || '')}`
+      return `Neue Anfrage von ${escapeHtml(String(data.name || 'Unbekannt'))} – ${escapeHtml(String(data.company || ''))}`
     case 'kontakt':
-      return `Neue Kontaktanfrage von ${escapeHtml(data.name || 'Unbekannt')}`
+      return `Neue Kontaktanfrage von ${escapeHtml(String(data.name || 'Unbekannt'))}`
     case 'banner':
-      return `Neue Banner-Bestellung: ${escapeHtml(data.firmaKontakt || data.company || 'Unbekannt')}`
+      return `Neue Banner-Bestellung: ${escapeHtml(String(data.firmaKontakt || data.company || 'Unbekannt'))}`
     default:
       return 'Neue Formularanfrage'
   }
 }
 
-function generateCompanyEmailHtml(type: NotificationType, data: Record<string, any>, inquiryId: string): string {
+function generateCompanyEmailHtml(type: NotificationType, data: Record<string, unknown>, inquiryId: string): string {
   const rows = Object.entries(data)
     .filter(([, v]) => v !== undefined && v !== '' && v !== false)
     .map(([k, v]) => `
@@ -102,8 +102,8 @@ function generateCompanyEmailHtml(type: NotificationType, data: Record<string, a
 </html>`.trim()
 }
 
-function generateCustomerConfirmationHtml(type: NotificationType, data: Record<string, any>, inquiryId: string): string {
-  const name = escapeHtml(data.ansprechpartner || data.name || 'Kunde')
+function generateCustomerConfirmationHtml(type: NotificationType, data: Record<string, unknown>, inquiryId: string): string {
+  const name = escapeHtml(String(data.ansprechpartner || data.name || 'Kunde'))
   const typeLabel = type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'
 
   return `
@@ -181,35 +181,6 @@ function formatLabel(key: string): string {
   return map[key] || key
 }
 
-async function sendWebhook(webhook: WebhookConfig, type: NotificationType, data: Record<string, any>, inquiryId: string): Promise<boolean> {
-  try {
-    // Validate webhook URL protocol
-    const parsed = new URL(webhook.url)
-    if (!['https:', 'http:'].includes(parsed.protocol)) {
-      console.error('Webhook-Fehler: Ungültiges Protokoll', parsed.protocol)
-      return false
-    }
-
-    const payload = {
-      text: `📨 Neue ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'} von ${escapeHtml(data.name || data.firmaKontakt || 'Unbekannt')} (#${inquiryId.slice(-8)})`,
-      type,
-      inquiryId,
-      data,
-    }
-
-    const response = await fetch(webhook.url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
-
-    return response.ok
-  } catch (error) {
-    console.error('Webhook-Fehler:', error)
-    return false
-  }
-}
-
 export async function sendFormNotification(payload: FormNotificationPayload): Promise<{ success: boolean; error?: string }> {
   try {
     const config = await getNotificationConfig()
@@ -219,33 +190,60 @@ export async function sendFormNotification(payload: FormNotificationPayload): Pr
     const htmlBody = generateCompanyEmailHtml(type, data, inquiryId)
     const textBody = convertHtmlToText(htmlBody)
 
-    // Send to all configured recipients
+    // Send to all configured recipients via backend email queue
     for (const recipient of config.recipients) {
-      await sendEmail({
-        to: recipient,
+      const queueId = `notif_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+
+      // Add customer confirmation email if enabled
+      const recipientEmail = customerEmail || String(data.email || '')
+      let customerEmailField: string | undefined
+      let customerSubjectField: string | undefined
+      let customerHtmlBodyField: string | undefined
+      let customerTextBodyField: string | undefined
+
+      if (config.sendCustomerConfirmation && recipientEmail) {
+        const customerHtml = generateCustomerConfirmationHtml(type, data, inquiryId)
+        customerEmailField = recipientEmail
+        customerSubjectField = `Eingangsbestätigung: Ihre ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Bestellung'} #${inquiryId.slice(-8)}`
+        customerHtmlBodyField = customerHtml
+        customerTextBodyField = convertHtmlToText(customerHtml)
+      }
+
+      await emailApi.enqueue({
+        queue_id: queueId,
+        to_email: recipient,
         subject,
-        htmlBody,
-        textBody,
-        replyTo: customerEmail || data.email,
+        html_body: htmlBody,
+        text_body: textBody,
+        customer_email: customerEmailField,
+        customer_subject: customerSubjectField,
+        customer_html_body: customerHtmlBodyField,
+        customer_text_body: customerTextBodyField,
       })
+
+      // Trigger immediate send
+      try {
+        await emailApi.send(queueId)
+      } catch {
+        // Email is queued, will be sent later
+        console.warn('Email queued but immediate send failed for:', queueId)
+      }
     }
 
-    // Send customer confirmation if enabled
-    const recipientEmail = customerEmail || data.email
-    if (config.sendCustomerConfirmation && recipientEmail) {
-      const customerHtml = generateCustomerConfirmationHtml(type, data, inquiryId)
-      await sendEmail({
-        to: recipientEmail,
-        subject: `Eingangsbestätigung: Ihre ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Bestellung'} #${inquiryId.slice(-8)}`,
-        htmlBody: customerHtml,
-        textBody: convertHtmlToText(customerHtml),
-      })
-    }
-
-    // Send webhooks
+    // Send webhooks via backend (server-side)
     for (const webhook of config.webhooks) {
       if (webhook.enabled && webhook.types.includes(type)) {
-        await sendWebhook(webhook, type, data, inquiryId)
+        try {
+          const webhookPayload = {
+            text: `📨 Neue ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'} von ${escapeHtml(String(data.name || data.firmaKontakt || 'Unbekannt'))} (#${inquiryId.slice(-8)})`,
+            type,
+            inquiryId,
+            data,
+          }
+          await notificationsApi.sendWebhook(webhook.url, webhookPayload)
+        } catch (error) {
+          console.error('Webhook-Fehler:', error)
+        }
       }
     }
 

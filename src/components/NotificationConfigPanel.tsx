@@ -155,20 +155,12 @@ export function NotificationConfigPanel() {
     setTestingWebhook(index)
     const webhook = config.webhooks[index]
     try {
-      const response = await fetch(webhook.url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: t('notifConfig.testWebhookMessage'),
-          type: 'test',
-          inquiryId: 'test_' + Date.now(),
-          data: { name: 'Test', email: 'test@example.com' },
-        }),
-      })
-      if (response.ok) {
+      const { notificationsApi } = await import('@/lib/api-client')
+      const result = await notificationsApi.testWebhook(webhook.url)
+      if (result.success) {
         toast.success(t('notifConfig.testWebhookSuccess'))
       } else {
-        toast.error(t('notifConfig.testWebhookFailed').replace('{status}', String(response.status)))
+        toast.error(t('notifConfig.testWebhookFailed').replace('{status}', result.error || 'unknown'))
       }
     } catch (error) {
       toast.error(t('notifConfig.testWebhookError'))
