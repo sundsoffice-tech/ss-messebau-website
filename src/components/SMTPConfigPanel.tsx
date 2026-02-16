@@ -48,10 +48,14 @@ export function SMTPConfigPanel() {
 
   const loadConfig = async () => {
     try {
-      const saved = await window.spark.kv.get<SMTPConfig>('smtp_config')
-      if (saved) {
-        setConfig(saved)
-      }
+      // Load config from backend API
+      const { emailApi } = await import('@/lib/api-client')
+      const serverConfig = await emailApi.getConfig()
+      setConfig({
+        provider: (serverConfig.provider as SMTPConfig['provider']) || 'test',
+        fromEmail: serverConfig.fromEmail || 'noreply@sunds-messebau.de',
+        fromName: serverConfig.fromName || 'S&S Messebau GbR',
+      })
     } catch (error) {
       console.error(t('smtp.loadConfigError'), error)
     }

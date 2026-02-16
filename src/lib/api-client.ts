@@ -232,4 +232,259 @@ export const emailApi = {
       ready: boolean
       testMode: boolean
     }>('email.php?action=status'),
+
+  getConfig: () =>
+    apiFetch<{
+      provider: string
+      fromEmail: string
+      fromName: string
+    }>('email.php?action=config'),
+
+  saveConfig: (config: Record<string, unknown>) =>
+    apiFetch<{ success: boolean; message?: string }>('email.php?action=config', {
+      method: 'POST',
+      body: JSON.stringify(config),
+    }),
+}
+
+// ─── Blog ────────────────────────────────────────────────────
+
+export interface BlogPostRecord {
+  id: string
+  slug: string
+  title: string
+  category: string
+  imageUrl: string
+  excerpt: string
+  content: string
+  publishedAt: number
+  createdAt: number
+  updatedAt: number
+}
+
+export const blogApi = {
+  list: (category?: string) => {
+    const qs = category ? `?category=${encodeURIComponent(category)}` : ''
+    return apiFetch<{ posts: BlogPostRecord[]; total: number }>(
+      `blog.php${qs}`
+    )
+  },
+
+  get: (idOrSlug: string) => {
+    const isNumeric = /^\d+$/.test(idOrSlug)
+    const param = isNumeric ? `id=${idOrSlug}` : `slug=${encodeURIComponent(idOrSlug)}`
+    return apiFetch<BlogPostRecord>(`blog.php?${param}`)
+  },
+
+  create: (data: {
+    title: string
+    slug?: string
+    category?: string
+    imageUrl?: string
+    excerpt?: string
+    content: string
+    publishedAt?: number
+  }) =>
+    apiFetch<{ success: boolean; post: BlogPostRecord }>('blog.php', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (id: string, data: Record<string, unknown>) =>
+    apiFetch<{ success: boolean }>('blog.php', {
+      method: 'PATCH',
+      body: JSON.stringify({ id, ...data }),
+    }),
+
+  delete: (id: string) =>
+    apiFetch<{ success: boolean }>(`blog.php?id=${id}`, {
+      method: 'DELETE',
+    }),
+}
+
+// ─── Messen ──────────────────────────────────────────────────
+
+export interface MesseEventRecord {
+  id: string
+  name: string
+  location: string
+  startDate: string
+  endDate: string
+  category: string
+  website: string
+  description: string
+  ssPresent: boolean
+  imageUrl: string
+  createdAt: number
+  updatedAt: number
+}
+
+export const messenApi = {
+  list: (category?: string) => {
+    const qs = category ? `?category=${encodeURIComponent(category)}` : ''
+    return apiFetch<{ events: MesseEventRecord[]; total: number }>(
+      `messen.php${qs}`
+    )
+  },
+
+  get: (id: string) =>
+    apiFetch<MesseEventRecord>(`messen.php?id=${id}`),
+
+  create: (data: {
+    name: string
+    location?: string
+    startDate?: string
+    endDate?: string
+    category?: string
+    website?: string
+    description?: string
+    ssPresent?: boolean
+    imageUrl?: string
+  }) =>
+    apiFetch<{ success: boolean; event: MesseEventRecord }>('messen.php', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (id: string, data: Record<string, unknown>) =>
+    apiFetch<{ success: boolean }>('messen.php', {
+      method: 'PATCH',
+      body: JSON.stringify({ id, ...data }),
+    }),
+
+  delete: (id: string) =>
+    apiFetch<{ success: boolean }>(`messen.php?id=${id}`, {
+      method: 'DELETE',
+    }),
+}
+
+// ─── External API Keys ──────────────────────────────────────
+
+export interface ExternalApiKeyRecord {
+  id: string
+  serviceName: string
+  maskedKey: string
+  description: string
+  createdAt: number
+  updatedAt: number
+}
+
+export const apiKeysApi = {
+  list: () =>
+    apiFetch<{ keys: ExternalApiKeyRecord[] }>('apikeys.php'),
+
+  create: (serviceName: string, key: string, description: string) =>
+    apiFetch<{ success: boolean; key: ExternalApiKeyRecord }>('apikeys.php', {
+      method: 'POST',
+      body: JSON.stringify({ serviceName, key, description }),
+    }),
+
+  update: (id: string, data: { serviceName?: string; key?: string; description?: string }) =>
+    apiFetch<{ success: boolean }>('apikeys.php', {
+      method: 'PATCH',
+      body: JSON.stringify({ id, ...data }),
+    }),
+
+  delete: (id: string) =>
+    apiFetch<{ success: boolean }>(`apikeys.php?id=${id}`, {
+      method: 'DELETE',
+    }),
+}
+
+// ─── Notifications ───────────────────────────────────────────
+
+export interface NotificationConfigRecord {
+  recipients: string[]
+  webhooks: Array<{
+    url: string
+    enabled: boolean
+    channel: string
+    types: string[]
+  }>
+  sendCustomerConfirmation: boolean
+}
+
+export const notificationsApi = {
+  getConfig: () =>
+    apiFetch<NotificationConfigRecord>('notifications.php?action=config'),
+
+  saveConfig: (config: NotificationConfigRecord) =>
+    apiFetch<{ success: boolean }>('notifications.php?action=config', {
+      method: 'POST',
+      body: JSON.stringify(config),
+    }),
+
+  testWebhook: (url: string) =>
+    apiFetch<{ success: boolean; message?: string; error?: string }>('notifications.php?action=webhook_test', {
+      method: 'POST',
+      body: JSON.stringify({ url }),
+    }),
+
+  sendWebhook: (url: string, payload: Record<string, unknown>) =>
+    apiFetch<{ success: boolean; error?: string }>('notifications.php?action=send_webhook', {
+      method: 'POST',
+      body: JSON.stringify({ url, payload }),
+    }),
+}
+
+// ─── AI Training & Audit ─────────────────────────────────────
+
+export interface TrainingDataRecord {
+  id: string
+  title: string
+  content: string
+  category: string
+  active: boolean
+  createdBy: string
+  createdAt: number
+  updatedAt: number
+}
+
+export interface AuditLogRecord {
+  id: string
+  timestamp: number
+  action: string
+  actor: string
+  details: string
+  category: string
+}
+
+export const aiApi = {
+  getTrainingData: () =>
+    apiFetch<{ data: TrainingDataRecord[]; total: number }>('ai.php?action=training'),
+
+  addTrainingData: (data: { title: string; content: string; category?: string; createdBy?: string }) =>
+    apiFetch<{ success: boolean; entry: TrainingDataRecord }>('ai.php?action=training', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  updateTrainingData: (id: string, data: { title?: string; content?: string; category?: string; active?: boolean }) =>
+    apiFetch<{ success: boolean }>('ai.php?action=training', {
+      method: 'PATCH',
+      body: JSON.stringify({ id, ...data }),
+    }),
+
+  deleteTrainingData: (id: string) =>
+    apiFetch<{ success: boolean }>(`ai.php?action=training&id=${id}`, {
+      method: 'DELETE',
+    }),
+
+  getAuditLog: (limit?: number) => {
+    const qs = limit ? `&limit=${limit}` : ''
+    return apiFetch<{ logs: AuditLogRecord[]; total: number }>(
+      `ai.php?action=audit${qs}`
+    )
+  },
+
+  addAuditEntry: (data: { action: string; details: string; category?: string; actor?: string }) =>
+    apiFetch<{ success: boolean }>('ai.php?action=audit', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  clearAuditLog: () =>
+    apiFetch<{ success: boolean }>('ai.php?action=audit', {
+      method: 'DELETE',
+    }),
 }

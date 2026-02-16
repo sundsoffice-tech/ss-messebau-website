@@ -62,20 +62,12 @@ export function getChatAuditLog(): ChatAuditEntry[] {
 
 /**
  * Get the custom system prompt from training data, if configured.
+ * Training data is now loaded server-side in chat.php,
+ * so we return empty here (backend appends it).
  */
 async function getTrainingContext(): Promise<string> {
-  try {
-    const raw = localStorage.getItem('spark_kv_ai_training_data')
-    if (!raw) return ''
-    const entries: Array<{ title: string; content: string; active: boolean }> = JSON.parse(raw)
-    const activeEntries = entries.filter(e => e.active)
-    if (activeEntries.length === 0) return ''
-
-    return '\n\nZUSÄTZLICHES WISSEN (Admin-gepflegt):\n' +
-      activeEntries.map(e => `[${e.title}]\n${e.content}`).join('\n\n')
-  } catch {
-    return ''
-  }
+  // Training context is loaded server-side by chat.php from the database
+  return ''
 }
 
 /**

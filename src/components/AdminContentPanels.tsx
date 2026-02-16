@@ -48,27 +48,44 @@ export function BlogManager() {
   const [editingId, setEditingId] = useState<string | null>(null)
 
   useEffect(() => {
-    setPosts(getBlogPosts())
+    const loadPosts = async () => {
+      const data = await getBlogPosts()
+      setPosts(data)
+    }
+    loadPosts()
   }, [])
 
-  const handleAdd = (data: Omit<AdminBlogPost, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newPost = addBlogPost(data)
-    setPosts(prev => [...prev, newPost])
-    setShowAddForm(false)
-    toast.success(t('adminContent.blog.addedSuccess'))
+  const handleAdd = async (data: Omit<AdminBlogPost, 'id' | 'createdAt' | 'updatedAt'>) => {
+    try {
+      const newPost = await addBlogPost(data)
+      setPosts(prev => [...prev, newPost])
+      setShowAddForm(false)
+      toast.success(t('adminContent.blog.addedSuccess'))
+    } catch {
+      toast.error('Fehler beim Erstellen des Blog-Posts')
+    }
   }
 
-  const handleUpdate = (id: string, data: Partial<Omit<AdminBlogPost, 'id' | 'createdAt' | 'updatedAt'>>) => {
-    updateBlogPost(id, data)
-    setPosts(getBlogPosts())
-    setEditingId(null)
-    toast.success(t('adminContent.blog.updatedSuccess'))
+  const handleUpdate = async (id: string, data: Partial<Omit<AdminBlogPost, 'id' | 'createdAt' | 'updatedAt'>>) => {
+    try {
+      await updateBlogPost(id, data)
+      const updatedPosts = await getBlogPosts()
+      setPosts(updatedPosts)
+      setEditingId(null)
+      toast.success(t('adminContent.blog.updatedSuccess'))
+    } catch {
+      toast.error('Fehler beim Aktualisieren')
+    }
   }
 
-  const handleDelete = (id: string) => {
-    deleteBlogPost(id)
-    setPosts(prev => prev.filter(p => p.id !== id))
-    toast.success(t('adminContent.blog.deletedSuccess'))
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteBlogPost(id)
+      setPosts(prev => prev.filter(p => p.id !== id))
+      toast.success(t('adminContent.blog.deletedSuccess'))
+    } catch {
+      toast.error('Fehler beim Löschen')
+    }
   }
 
   return (
@@ -259,27 +276,44 @@ export function MesseManager() {
   const [editingId, setEditingId] = useState<string | null>(null)
 
   useEffect(() => {
-    setEvents(getMesseEvents())
+    const loadEvents = async () => {
+      const data = await getMesseEvents()
+      setEvents(data)
+    }
+    loadEvents()
   }, [])
 
-  const handleAdd = (data: Omit<AdminMesseEvent, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newEvent = addMesseEvent(data)
-    setEvents(prev => [...prev, newEvent])
-    setShowAddForm(false)
-    toast.success(t('adminContent.messe.addedSuccess'))
+  const handleAdd = async (data: Omit<AdminMesseEvent, 'id' | 'createdAt' | 'updatedAt'>) => {
+    try {
+      const newEvent = await addMesseEvent(data)
+      setEvents(prev => [...prev, newEvent])
+      setShowAddForm(false)
+      toast.success(t('adminContent.messe.addedSuccess'))
+    } catch {
+      toast.error('Fehler beim Erstellen des Events')
+    }
   }
 
-  const handleUpdate = (id: string, data: Partial<Omit<AdminMesseEvent, 'id' | 'createdAt' | 'updatedAt'>>) => {
-    updateMesseEvent(id, data)
-    setEvents(getMesseEvents())
-    setEditingId(null)
-    toast.success(t('adminContent.messe.updatedSuccess'))
+  const handleUpdate = async (id: string, data: Partial<Omit<AdminMesseEvent, 'id' | 'createdAt' | 'updatedAt'>>) => {
+    try {
+      await updateMesseEvent(id, data)
+      const updatedEvents = await getMesseEvents()
+      setEvents(updatedEvents)
+      setEditingId(null)
+      toast.success(t('adminContent.messe.updatedSuccess'))
+    } catch {
+      toast.error('Fehler beim Aktualisieren')
+    }
   }
 
-  const handleDelete = (id: string) => {
-    deleteMesseEvent(id)
-    setEvents(prev => prev.filter(e => e.id !== id))
-    toast.success(t('adminContent.messe.deletedSuccess'))
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteMesseEvent(id)
+      setEvents(prev => prev.filter(e => e.id !== id))
+      toast.success(t('adminContent.messe.deletedSuccess'))
+    } catch {
+      toast.error('Fehler beim Löschen')
+    }
   }
 
   return (
@@ -503,27 +537,44 @@ export function ExternalApiKeysManager() {
   const [editingId, setEditingId] = useState<string | null>(null)
 
   useEffect(() => {
-    setKeys(getApiKeys())
+    const loadKeys = async () => {
+      const data = await getApiKeys()
+      setKeys(data)
+    }
+    loadKeys()
   }, [])
 
-  const handleAdd = (serviceName: string, key: string, description: string) => {
-    const newKey = addApiKey(serviceName, key, description)
-    setKeys(prev => [...prev, newKey])
-    setShowAddForm(false)
-    toast.success(t('adminContent.apiKeys.addedSuccess'))
+  const handleAdd = async (serviceName: string, key: string, description: string) => {
+    try {
+      const newKey = await addApiKey(serviceName, key, description)
+      setKeys(prev => [...prev, newKey])
+      setShowAddForm(false)
+      toast.success(t('adminContent.apiKeys.addedSuccess'))
+    } catch {
+      toast.error('Fehler beim Erstellen des API Keys')
+    }
   }
 
-  const handleUpdate = (id: string, updates: { serviceName?: string; key?: string; description?: string }) => {
-    updateApiKey(id, updates)
-    setKeys(getApiKeys())
-    setEditingId(null)
-    toast.success(t('adminContent.apiKeys.updatedSuccess'))
+  const handleUpdate = async (id: string, updates: { serviceName?: string; key?: string; description?: string }) => {
+    try {
+      await updateApiKey(id, updates)
+      const updatedKeys = await getApiKeys()
+      setKeys(updatedKeys)
+      setEditingId(null)
+      toast.success(t('adminContent.apiKeys.updatedSuccess'))
+    } catch {
+      toast.error('Fehler beim Aktualisieren')
+    }
   }
 
-  const handleDelete = (id: string) => {
-    deleteApiKey(id)
-    setKeys(prev => prev.filter(k => k.id !== id))
-    toast.success(t('adminContent.apiKeys.deletedSuccess'))
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteApiKey(id)
+      setKeys(prev => prev.filter(k => k.id !== id))
+      toast.success(t('adminContent.apiKeys.deletedSuccess'))
+    } catch {
+      toast.error('Fehler beim Löschen')
+    }
   }
 
   return (

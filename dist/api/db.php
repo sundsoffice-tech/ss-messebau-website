@@ -98,4 +98,81 @@ function initSchema(PDO $pdo): void {
             last_used_at TEXT
         )
     ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS blog_posts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            slug TEXT UNIQUE NOT NULL,
+            title TEXT NOT NULL,
+            category TEXT DEFAULT 'sonstiges',
+            image_url TEXT,
+            excerpt TEXT,
+            content TEXT NOT NULL,
+            published_at TEXT,
+            created_at TEXT DEFAULT (datetime('now')),
+            updated_at TEXT DEFAULT (datetime('now'))
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS messe_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            location TEXT,
+            start_date TEXT,
+            end_date TEXT,
+            category TEXT DEFAULT 'allgemein',
+            website TEXT,
+            description TEXT,
+            ss_present INTEGER DEFAULT 0,
+            image_url TEXT,
+            created_at TEXT DEFAULT (datetime('now')),
+            updated_at TEXT DEFAULT (datetime('now'))
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS external_api_keys (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            service_name TEXT NOT NULL,
+            encrypted_key TEXT NOT NULL,
+            masked_key TEXT NOT NULL,
+            description TEXT,
+            created_at TEXT DEFAULT (datetime('now')),
+            updated_at TEXT DEFAULT (datetime('now'))
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS notification_config (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            config_key TEXT UNIQUE NOT NULL,
+            config_value TEXT NOT NULL,
+            updated_at TEXT DEFAULT (datetime('now'))
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS ai_training_data (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            category TEXT DEFAULT 'faq',
+            active INTEGER DEFAULT 1,
+            created_by TEXT DEFAULT 'admin',
+            created_at TEXT DEFAULT (datetime('now')),
+            updated_at TEXT DEFAULT (datetime('now'))
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS ai_audit_log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            action TEXT NOT NULL,
+            actor TEXT DEFAULT 'admin',
+            details TEXT,
+            category TEXT DEFAULT 'config',
+            created_at TEXT DEFAULT (datetime('now'))
+        )
+    ");
 }

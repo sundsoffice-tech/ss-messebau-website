@@ -235,39 +235,61 @@ function TrainingDataManager() {
   const [newCategory, setNewCategory] = useState('faq')
 
   useEffect(() => {
-    setData(getTrainingData())
+    const loadData = async () => {
+      const entries = await getTrainingData()
+      setData(entries)
+    }
+    loadData()
   }, [])
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!newTitle.trim() || !newContent.trim()) {
       toast.error(t('aiAdmin.training.errorRequired'))
       return
     }
-    const entry = addTrainingData(newTitle.trim(), newContent.trim(), newCategory)
-    setData(prev => [...prev, entry])
-    setNewTitle('')
-    setNewContent('')
-    setNewCategory('faq')
-    setShowAddForm(false)
-    toast.success(t('aiAdmin.training.addedSuccess'))
+    try {
+      const entry = await addTrainingData(newTitle.trim(), newContent.trim(), newCategory)
+      setData(prev => [...prev, entry])
+      setNewTitle('')
+      setNewContent('')
+      setNewCategory('faq')
+      setShowAddForm(false)
+      toast.success(t('aiAdmin.training.addedSuccess'))
+    } catch {
+      toast.error('Fehler beim Hinzufügen')
+    }
   }
 
-  const handleToggleActive = (id: string, active: boolean) => {
-    updateTrainingData(id, { active: !active })
-    setData(getTrainingData())
+  const handleToggleActive = async (id: string, active: boolean) => {
+    try {
+      await updateTrainingData(id, { active: !active })
+      const updated = await getTrainingData()
+      setData(updated)
+    } catch {
+      toast.error('Fehler beim Aktualisieren')
+    }
   }
 
-  const handleDelete = (id: string) => {
-    deleteTrainingData(id)
-    setData(prev => prev.filter(d => d.id !== id))
-    toast.success(t('aiAdmin.training.deletedSuccess'))
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteTrainingData(id)
+      setData(prev => prev.filter(d => d.id !== id))
+      toast.success(t('aiAdmin.training.deletedSuccess'))
+    } catch {
+      toast.error('Fehler beim Löschen')
+    }
   }
 
-  const handleSaveEdit = (id: string, title: string, content: string, category: string) => {
-    updateTrainingData(id, { title, content, category })
-    setData(getTrainingData())
-    setEditingId(null)
-    toast.success(t('aiAdmin.training.updatedSuccess'))
+  const handleSaveEdit = async (id: string, title: string, content: string, category: string) => {
+    try {
+      await updateTrainingData(id, { title, content, category })
+      const updated = await getTrainingData()
+      setData(updated)
+      setEditingId(null)
+      toast.success(t('aiAdmin.training.updatedSuccess'))
+    } catch {
+      toast.error('Fehler beim Aktualisieren')
+    }
   }
 
   const categoryLabel = (value: string) =>
@@ -446,9 +468,13 @@ function AuditLogViewer() {
   const [securityLogs, setSecurityLogs] = useState<Array<{ timestamp: number; reason: string; inputPreview: string }>>([])
 
   useEffect(() => {
-    setAdminLogs(getAuditLog().reverse())
-    setChatLogs(getChatAuditLog().reverse())
-    setSecurityLogs(getSuspiciousActivityLog().reverse())
+    const loadLogs = async () => {
+      const logs = await getAuditLog()
+      setAdminLogs(logs)
+      setChatLogs(getChatAuditLog().reverse())
+      setSecurityLogs(getSuspiciousActivityLog().reverse())
+    }
+    loadLogs()
   }, [])
 
   const allLogs = [
