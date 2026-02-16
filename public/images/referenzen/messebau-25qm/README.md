@@ -53,6 +53,49 @@ Diese Bilder dienen als Referenzen für die Website und zeigen die Vielseitigkei
 - **Nachhaltige Ausrichtung** (Natur/Beige)
 - **Premium Design** (Dunkelbraun)
 
-## Integration
+## Integration in die Website
 
-Diese Bilder werden in einem separaten PR in die Website integriert. Dabei werden sie auf der Referenzen-Seite oder in einer Gallerie für 25 qm Messestände verwendet.
+Diese Bilder wurden in die Website integriert und ersetzen folgende Unsplash-Bilder:
+
+### 1. messestand-25qm-lounge-multimedia-orange.jpg
+**Ersetzt Unsplash-URL:** `photo-1540575467063-178a50c2df87`
+
+**Verwendung:**
+- `src/components/pages/HomePage.tsx` – Service-Card "Messebau" (Zeile 139)
+- `src/components/Header.tsx` – Mega-Menü previewImage für "Messebau" (Zeile 53)
+- `src/components/pages/BranchenPage.tsx` – Branche Food Bild (Zeile 95)
+- `src/lib/demo-data.ts` – Referenz "Premium Food-Stand" (Zeile 10)
+- `src/lib/demo-data.ts` – Blog-Post Bild (Zeile 365)
+
+### 2. messestand-25qm-beratung-klassisch-rot.jpg
+**Ersetzt Unsplash-URL:** `photo-1497366216548-37526070297c`
+
+**Verwendung:**
+- `src/components/pages/BranchenPage.tsx` – Branche Industrie Bild (Zeile 213)
+- `src/lib/demo-data.ts` – Referenz "Industrie-Showroom" (Zeile 40)
+
+### 3. messestand-25qm-nachhaltig-natur-beige.jpg
+**Ersetzt Unsplash-URL:** `photo-1532996122724-e3c354a0b15b`
+
+**Verwendung:**
+- `src/components/pages/OtherPages.tsx` – Nachhaltigkeit-Sektion Bild (Zeile 407)
+- `src/lib/demo-data.ts` – Blog-Post "Nachhaltiger Messebau" (Zeile 949)
+
+### 4. messestand-25qm-premium-design-dunkel.jpg
+**Ersetzt Unsplash-URL:** `photo-1492684223066-81342ee5ff30`
+
+**Verwendung:**
+- `src/components/pages/HomePage.tsx` – Service-Card "Touren/Events" (Zeile 152)
+- `src/components/Header.tsx` – Mega-Menü previewImage für "Touren" (Zeile 65)
+- `src/components/Header.tsx` – Mega-Menü previewImage für "Eventbau" (Zeile 89)
+
+---
+
+## Weitere geplante Bilder
+
+In zukünftigen Updates werden weitere Referenzbilder für größere Standgrößen ergänzt:
+- Messestände 50 qm
+- Messestände 80 qm
+- Messestände 100+ qm
+
+Diese werden dann weitere Unsplash-Bilder ersetzen und die Authentizität der Website weiter erhöhen.

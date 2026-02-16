@@ -50,7 +50,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-blue-50',
     featureKeys: ['header.mega.messebau.f1', 'header.mega.messebau.f2', 'header.mega.messebau.f3'],
     gradient: 'from-blue-500/10 to-blue-600/5',
-    previewImage: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop',
+    previewImage: '/images/referenzen/messebau-25qm/messestand-25qm-lounge-multimedia-orange.jpg',
     sectionId: 'messebau',
     pagePath: '/leistungen/messebau'
   },
@@ -62,7 +62,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-teal-50',
     featureKeys: ['header.mega.touren.f1', 'header.mega.touren.f2', 'header.mega.touren.f3'],
     gradient: 'from-teal-500/10 to-teal-600/5',
-    previewImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop',
+    previewImage: '/images/referenzen/messebau-25qm/messestand-25qm-premium-design-dunkel.jpg',
     sectionId: 'touren',
     pagePath: '/leistungen/touren'
   },
@@ -86,7 +86,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-purple-50',
     featureKeys: ['header.mega.eventbau.f1', 'header.mega.eventbau.f2', 'header.mega.eventbau.f3'],
     gradient: 'from-purple-500/10 to-purple-600/5',
-    previewImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop',
+    previewImage: '/images/referenzen/messebau-25qm/messestand-25qm-premium-design-dunkel.jpg',
     sectionId: 'eventbau',
     pagePath: '/leistungen/eventbau'
   },

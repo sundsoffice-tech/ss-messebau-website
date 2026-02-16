@@ -92,7 +92,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                 </div>
                 <div className="group aspect-square rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
-                    src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=800&fit=crop&fm=webp&q=75"
+                    src="/images/referenzen/messebau-25qm/messestand-25qm-lounge-multimedia-orange.jpg"
                     alt={t('branchen.food.alt')}
                     width="800"
                     height="800"
@@ -210,7 +210,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                 </div>
                 <div className="group aspect-square rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
-                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=800&fit=crop&fm=webp&q=75"
+                    src="/images/referenzen/messebau-25qm/messestand-25qm-beratung-klassisch-rot.jpg"
                     alt={t('branchen.industry.alt')}
                     width="800"
                     height="800"

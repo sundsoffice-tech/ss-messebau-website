@@ -136,7 +136,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   t('home.services.messebau.b4')
                 ],
                 sectionId: 'messebau',
-                image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&h=320&fit=crop'
+                image: '/images/referenzen/messebau-25qm/messestand-25qm-lounge-multimedia-orange.jpg'
               },
               {
                 icon: CalendarDot,
@@ -149,7 +149,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   t('home.services.touren.b4')
                 ],
                 sectionId: 'touren',
-                image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500&h=320&fit=crop'
+                image: '/images/referenzen/messebau-25qm/messestand-25qm-premium-design-dunkel.jpg'
               },
               {
                 icon: Storefront,
