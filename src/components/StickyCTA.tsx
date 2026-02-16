@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { PaperPlaneRight, WhatsappLogo } from '@phosphor-icons/react'
 import { trackWhatsAppClick, trackHeroCTAClick } from '@/lib/analytics'
 import { useTranslation } from '@/lib/i18n'
+import { useScrollDirection } from '@/hooks/use-scroll-direction'
 
 interface StickyCTAProps {
   onClick: () => void
@@ -11,6 +12,7 @@ const WHATSAPP_NUMBER = '4915140368754'
 
 export function StickyCTA({ onClick }: StickyCTAProps) {
   const { t } = useTranslation()
+  const isVisible = useScrollDirection()
 
   const openWhatsApp = (source: string) => {
     trackWhatsAppClick(source)
@@ -20,7 +22,14 @@ export function StickyCTA({ onClick }: StickyCTAProps) {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 lg:flex hidden flex-col gap-3" role="group" aria-label={t('sticky.contactOptions')}>
+    <div 
+      className={`fixed bottom-6 right-6 z-40 lg:flex hidden flex-col gap-3 transition-all duration-300 ${
+        isVisible ? 'translate-x-0 opacity-100' : 'translate-x-32 opacity-0 pointer-events-none'
+      }`} 
+      role="group" 
+      aria-label={t('sticky.contactOptions')}
+      aria-hidden={!isVisible}
+    >
       <Button
         size="lg"
         onClick={() => openWhatsApp('sticky_desktop')}
@@ -45,6 +54,7 @@ export function StickyCTA({ onClick }: StickyCTAProps) {
 
 export function MobileStickyCTA({ onClick }: StickyCTAProps) {
   const { t } = useTranslation()
+  const isVisible = useScrollDirection()
 
   const openWhatsApp = (source: string) => {
     trackWhatsAppClick(source)
@@ -55,9 +65,12 @@ export function MobileStickyCTA({ onClick }: StickyCTAProps) {
 
   return (
     <div 
-      className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-background/95 backdrop-blur-sm border-t shadow-lg pb-safe" 
+      className={`fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-background/95 backdrop-blur-sm border-t shadow-lg pb-safe transition-all duration-300 ${
+        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
+      }`} 
       role="group" 
       aria-label={t('sticky.contactOptions')}
+      aria-hidden={!isVisible}
       style={{ contain: 'layout style' }}
     >
       <div className="flex gap-3 p-3">
