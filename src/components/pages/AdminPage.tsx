@@ -897,12 +897,15 @@ function InquiriesManager() {
 
 // ─── Detail Row Helper ──────────────────────────────────────
 
-function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
+function DetailRow({ label, value }: { label: string; value: unknown }) {
   if (value === undefined || value === null || value === '') return null
+  const displayValue = typeof value === 'boolean'
+    ? (value ? '✅ Ja' : '❌ Nein')
+    : String(value)
   return (
     <div className="flex flex-col sm:flex-row sm:gap-4 py-1.5 border-b border-border/50 last:border-0">
       <dt className="text-sm font-medium text-muted-foreground min-w-[160px] shrink-0">{label}</dt>
-      <dd className="text-sm break-all">{typeof value === 'boolean' ? (value ? '✅ Ja' : '❌ Nein') : value}</dd>
+      <dd className="text-sm break-all">{displayValue}</dd>
     </div>
   )
 }
@@ -911,11 +914,11 @@ function DetailRow({ label, value }: { label: string; value: React.ReactNode }) 
 
 function OrderDetailDialog({ order, onClose }: { order: OrderRecord | null; onClose: () => void }) {
   if (!order) return null
-  const data = order.order_data as Record<string, any>
+  const data = order.order_data as Record<string, Record<string, unknown>> | null
   const step1 = data?.step1 || {}
   const step2 = data?.step2 || {}
   const step3 = data?.step3 || {}
-  const step4 = data?.step4 || {}
+  const step4 = data?.step4 || ({} as Record<string, unknown>)
   const step5 = data?.step5 || {}
   const step6 = data?.step6 || {}
 
@@ -965,7 +968,7 @@ function OrderDetailDialog({ order, onClose }: { order: OrderRecord | null; onCl
               <DetailRow label="RAL-Code" value={step2.ralCode} />
               <DetailRow label="Ecken" value={step2.ecken} />
               <DetailRow label="Seitigkeit" value={step2.seitigkeit} />
-              <DetailRow label="Zubehör" value={step2.zubehoer?.length ? step2.zubehoer.join(', ') : undefined} />
+              <DetailRow label="Zubehör" value={Array.isArray(step2.zubehoer) && step2.zubehoer.length > 0 ? step2.zubehoer.join(', ') : undefined} />
               <DetailRow label="LED/Backlit" value={step2.led} />
               <DetailRow label="LED Strom" value={step2.ledStrom} />
               <DetailRow label="LED Einsatz" value={step2.ledEinsatz} />
@@ -978,7 +981,7 @@ function OrderDetailDialog({ order, onClose }: { order: OrderRecord | null; onCl
             <dl className="space-y-0">
               <DetailRow label="Banner benötigt" value={step3.bannerBenoetigt} />
               <DetailRow label="Material" value={step3.material} />
-              <DetailRow label="Konfektion" value={step3.konfektion?.length ? step3.konfektion.join(', ') : undefined} />
+              <DetailRow label="Konfektion" value={Array.isArray(step3.konfektion) && step3.konfektion.length > 0 ? step3.konfektion.join(', ') : undefined} />
               <DetailRow label="Brandschutz" value={step3.brandschutz} />
               <DetailRow label="Druckqualität" value={step3.druckqualitaet} />
             </dl>
@@ -992,13 +995,13 @@ function OrderDetailDialog({ order, onClose }: { order: OrderRecord | null; onCl
               <DetailRow label="Grafikservice" value={step4.grafikservice} />
               <DetailRow label="Designwunsch" value={step4.designwunsch} />
               <DetailRow label="Kommentar" value={step4.kommentar} />
-              {step4.serializedFiles?.length > 0 && (
+              {Array.isArray(step4.serializedFiles) && step4.serializedFiles.length > 0 && (
                 <div className="py-1.5">
                   <p className="text-sm font-medium text-muted-foreground mb-1">Hochgeladene Dateien ({step4.serializedFiles.length})</p>
                   <div className="space-y-1">
-                    {step4.serializedFiles.map((f: any, i: number) => (
+                    {step4.serializedFiles.map((f: { name: string; size?: number; type?: string }, i: number) => (
                       <div key={i} className="text-sm bg-muted/50 px-3 py-1.5 rounded">
-                        📎 {f.name} – {f.size ? `${Math.round(f.size / 1024)} KB` : ''}
+                        📎 {f.name} – {f.size != null ? (f.size < 1024 ? `${f.size} B` : `${(f.size / 1024).toFixed(1)} KB`) : ''}
                         {f.type ? ` (${f.type})` : ''}
                       </div>
                     ))}
@@ -1016,7 +1019,7 @@ function OrderDetailDialog({ order, onClose }: { order: OrderRecord | null; onCl
               <DetailRow label="Straße" value={step5.strasse} />
               <DetailRow label="PLZ / Ort" value={step5.plz && step5.ort ? `${step5.plz} ${step5.ort}` : undefined} />
               <DetailRow label="Land" value={step5.land} />
-              <DetailRow label="Wunschlieferdatum" value={step5.wunschDatum ? new Date(step5.wunschDatum).toLocaleDateString('de-DE') : undefined} />
+              <DetailRow label="Wunschlieferdatum" value={step5.wunschDatum ? new Date(String(step5.wunschDatum)).toLocaleDateString('de-DE') : undefined} />
               <DetailRow label="Lieferart" value={step5.lieferart} />
               <DetailRow label="Express" value={step5.express} />
               <DetailRow label="Zeitfenster" value={step5.zeitfenster} />

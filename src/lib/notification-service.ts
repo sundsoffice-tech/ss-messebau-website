@@ -63,6 +63,15 @@ function generateSubject(type: NotificationType, data: Record<string, unknown>):
   }
 }
 
+function getTypeLabel(type: NotificationType): string {
+  const labels: Record<NotificationType, string> = {
+    inquiry: 'Anfrage',
+    kontakt: 'Kontaktanfrage',
+    banner: 'Banner-Bestellung',
+  }
+  return labels[type] || 'Formularanfrage'
+}
+
 function generateCompanyEmailHtml(type: NotificationType, data: Record<string, unknown>, inquiryId: string): string {
   const rows = Object.entries(data)
     .filter(([, v]) => v !== undefined && v !== '' && v !== false)
@@ -204,7 +213,7 @@ export async function sendFormNotification(payload: FormNotificationPayload): Pr
       if (config.sendCustomerConfirmation && recipientEmail) {
         const customerHtml = generateCustomerConfirmationHtml(type, data, inquiryId)
         customerEmailField = recipientEmail
-        customerSubjectField = `Eingangsbestätigung: Ihre ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Bestellung'} #${inquiryId.slice(-8)}`
+        customerSubjectField = `Eingangsbestätigung: Ihre ${getTypeLabel(type)} #${inquiryId.slice(-8)}`
         customerHtmlBodyField = customerHtml
         customerTextBodyField = convertHtmlToText(customerHtml)
       }
@@ -227,7 +236,7 @@ export async function sendFormNotification(payload: FormNotificationPayload): Pr
       if (webhook.enabled && webhook.types.includes(type)) {
         try {
           const webhookPayload = {
-            text: `📨 Neue ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'} von ${escapeHtml(String(data.name || data.firmaKontakt || 'Unbekannt'))} (#${inquiryId.slice(-8)})`,
+            text: `📨 Neue ${getTypeLabel(type)} von ${escapeHtml(String(data.name || data.firmaKontakt || 'Unbekannt'))} (#${inquiryId.slice(-8)})`,
             type,
             inquiryId,
             data,
@@ -261,7 +270,7 @@ export async function sendWebhooksOnly(payload: WebhookOnlyPayload): Promise<voi
       if (webhook.enabled && webhook.types.includes(type)) {
         try {
           const webhookPayload = {
-            text: `📨 Neue ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Banner-Bestellung'} von ${escapeHtml(String(data.name || data.firmaKontakt || 'Unbekannt'))} (#${inquiryId.slice(-8)})`,
+            text: `📨 Neue ${getTypeLabel(type)} von ${escapeHtml(String(data.name || data.firmaKontakt || 'Unbekannt'))} (#${inquiryId.slice(-8)})`,
             type,
             inquiryId,
             data,
