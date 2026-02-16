@@ -61,7 +61,7 @@ export function EmailSystemInfo() {
               {status?.testMode ? (
                 <>{t('emailsys.testDesc')}</>
               ) : (
-                <>{t('emailsys.liveDesc').replace('{email}', 'info@sunds-messebau.de')}</>
+                <>{t('emailsys.liveDesc').replace('{email}', 'info@sundsmessebau.com')}</>
               )}
             </p>
           </div>
@@ -75,7 +75,7 @@ export function EmailSystemInfo() {
           <div className="space-y-2 text-sm">
             <div className="flex items-start gap-2">
               <CaretRight className="w-4 h-4 text-primary mt-0.5 shrink-0" weight="bold" />
-              <span>{t('emailsys.toCompany').replace('{email}', 'info@sunds-messebau.de')}</span>
+              <span>{t('emailsys.toCompany').replace('{email}', 'info@sundsmessebau.com')}</span>
             </div>
             <div className="flex items-start gap-2">
               <CaretRight className="w-4 h-4 text-primary mt-0.5 shrink-0" weight="bold" />

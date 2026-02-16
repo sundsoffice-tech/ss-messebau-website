@@ -214,6 +214,16 @@ function formatConfigForEmail(config: BannerConfig): string {
           ${step5.land}
         </div>
       </div>
+      ${step5.ansprechpartnerLieferung ? `
+      <div class="row">
+        <div class="label">Ansprechpartner Lieferung:</div>
+        <div class="value">${step5.ansprechpartnerLieferung}</div>
+      </div>` : ''}
+      ${step5.emailLieferung ? `
+      <div class="row">
+        <div class="label">E-Mail Lieferung:</div>
+        <div class="value"><a href="mailto:${step5.emailLieferung}">${step5.emailLieferung}</a></div>
+      </div>` : ''}
       ${step5.wunschDatum ? `
       <div class="row">
         <div class="label">Wunschlieferdatum:</div>

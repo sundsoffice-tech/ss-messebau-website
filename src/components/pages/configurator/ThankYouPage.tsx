@@ -43,7 +43,7 @@ export function ThankYouPage({ config }: ThankYouPageProps) {
                     </div>
                     <div className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-primary" weight="bold" />
-                      <span>{t('thankyou.orderTo')} <strong>info@sunds-messebau.de</strong></span>
+                      <span>{t('thankyou.orderTo')} <strong>info@sundsmessebau.com</strong></span>
                     </div>
                     {fileCount > 0 && (
                       <div className="flex items-center gap-2">
