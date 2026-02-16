@@ -40,7 +40,7 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
                 size="lg"
                 variant="outline"
                 onClick={onOpenInquiry}
-                className="border-white text-white hover:bg-white/25"
+                className="bg-transparent border-white text-white hover:bg-white/25"
               >
                 {t('bannerrahmen.hero.consultationCta')}
               </Button>
@@ -323,7 +323,7 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
               size="lg"
               variant="outline"
               onClick={onOpenInquiry}
-              className="border-white text-white hover:bg-white/25"
+              className="bg-transparent border-white text-white hover:bg-white/25"
             >
               {t('bannerrahmen.cta.consultationCta')}
             </Button>
