@@ -1,0 +1,122 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    AI CHATBOT IMPLEMENTATION ARCHITECTURE                     ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              FRONTEND (Browser)                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                               │
+│  ┌───────────────┐         ┌────────────────┐        ┌─────────────────┐   │
+│  │ Kontakt Page  │         │ AI Admin Panel │        │  Chat Service   │   │
+│  │ (User Chat)   │────────▶│ (Key Mgmt UI)  │◀───────│   (Core Logic)  │   │
+│  └───────┬───────┘         └────────┬───────┘        └────────┬────────┘   │
+│          │                          │                         │             │
+│          │ sendChatMessage()        │ addAIKey()             │             │
+│          │                          │ getAIKeys()            │             │
+│          ▼                          ▼                         ▼             │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │              ai-admin-service.ts + chat-service.ts                   │   │
+│  │         • Rate limiting (10 msgs/5 min)                             │   │
+│  │         • Input sanitization (XSS prevention)                       │   │
+│  │         • Training data integration                                 │   │
+│  └──────────────────────────┬───────────────────────────────────────────┘   │
+└─────────────────────────────┼───────────────────────────────────────────────┘
+                              │
+                              │ HTTPS (credentials: 'include')
+                              │
+┌─────────────────────────────┼───────────────────────────────────────────────┐
+│                              │          BACKEND (PHP)                        │
+├─────────────────────────────┼───────────────────────────────────────────────┤
+│                              ▼                                               │
+│         ┌─────────────────────────────────────────────┐                     │
+│         │         Authentication Check                │                     │
+│         │      requireAuth() via auth.php             │                     │
+│         │   ✓ Valid PHP session? → Continue          │                     │
+│         │   ✗ No session? → 401 Unauthorized          │                     │
+│         └─────────┬────────────────────────┬──────────┘                     │
+│                   │                        │                                │
+│                   ▼                        ▼                                │
+│    ┌──────────────────────┐    ┌──────────────────────┐                    │
+│    │   ai-keys.php        │    │   chat.php           │                    │
+│    │   (Key Management)   │    │   (Chat Proxy)       │                    │
+│    ├──────────────────────┤    ├──────────────────────┤                    │
+│    │ GET   → List keys    │    │ POST → Send message  │                    │
+│    │ POST  → Add key      │    │                      │                    │
+│    │ PATCH → Revoke key   │    │ 1. Get OpenAI key    │                    │
+│    │ DELETE→ Delete key   │    │ 2. Build prompt      │                    │
+│    │                      │    │ 3. Call OpenAI       │                    │
+│    │ • Admin only         │    │ 4. Return response   │                    │
+│    │ • Keys masked        │    │                      │                    │
+│    └──────────┬───────────┘    └──────────┬───────────┘                    │
+│               │                           │                                 │
+│               │ SQL queries               │ SQL query + HTTP request        │
+│               ▼                           ▼                                 │
+│    ┌──────────────────────────────────────────────────┐                    │
+│    │              SQLite Database                      │                    │
+│    │              (database.sqlite)                    │                    │
+│    ├──────────────────────────────────────────────────┤                    │
+│    │  TABLE: ai_keys                                  │                    │
+│    │  ├─ id (primary key)                             │                    │
+│    │  ├─ key_id (unique identifier)                   │                    │
+│    │  ├─ provider (openai, anthropic, etc.)           │                    │
+│    │  ├─ api_key (actual key - NEVER sent to frontend)│                   │
+│    │  ├─ status (active, revoked)                     │                    │
+│    │  ├─ created_at                                   │                    │
+│    │  └─ last_used_at                                 │                    │
+│    └──────────────────────────────────────────────────┘                    │
+│                                                                              │
+└─────────────────────────────────┬────────────────────────────────────────────┘
+                                  │
+                                  │ cURL with API key
+                                  │ Model: gpt-4o
+                                  │ Timeout: 30s
+                                  ▼
+              ┌─────────────────────────────────────────┐
+              │         OpenAI API                      │
+              │  https://api.openai.com/v1/chat/...     │
+              ├─────────────────────────────────────────┤
+              │  • GPT-4o model                         │
+              │  • Max 1000 tokens per response         │
+              │  • Temperature: 0.7                     │
+              └─────────────────────────────────────────┘
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                              SECURITY LAYERS                                  ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+Layer 1: Frontend Rate Limiting
+  └─ 10 messages per 5 minutes per user
+
+Layer 2: Input Sanitization  
+  └─ XSS prevention, prompt injection detection
+
+Layer 3: Authentication
+  └─ PHP session validation (auth.php)
+
+Layer 4: Database Security
+  └─ Prepared statements (SQL injection prevention)
+
+Layer 5: Key Masking
+  └─ Only last 4 characters visible in UI
+
+Layer 6: Error Sanitization
+  └─ Generic error messages to client
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                DATA FLOW                                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+User Chat Flow:
+1. User types message in chat widget
+2. Frontend: Rate limit check → Input sanitization → Training data append
+3. Backend: Authentication → Fetch API key → Build OpenAI request
+4. OpenAI: Process message with GPT-4o
+5. Backend: Return response
+6. Frontend: Display response in chat
+
+Admin Key Management Flow:
+1. Admin navigates to Admin → KI-Verwaltung → API-Schlüssel
+2. Admin clicks "Neuer Schlüssel" and enters OpenAI key
+3. Frontend: POST /api/ai-keys.php with provider + key
+4. Backend: Validate auth → Store in database → Return masked key
+5. Frontend: Display masked key in list (e.g., "••••••••1234")
