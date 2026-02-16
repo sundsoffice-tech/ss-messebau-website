@@ -32,7 +32,7 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
               <Button
                 size="lg"
                 onClick={() => window.location.hash = '/banner-bestellen'}
-                className="bg-white text-primary hover:bg-white/90"
+                className="bg-white text-primary hover:bg-white/80"
               >
                 {t('bannerrahmen.hero.configureCta')}
               </Button>
@@ -40,7 +40,7 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
                 size="lg"
                 variant="outline"
                 onClick={onOpenInquiry}
-                className="border-white text-white hover:bg-white/10"
+                className="border-white text-white hover:bg-white/25"
               >
                 {t('bannerrahmen.hero.consultationCta')}
               </Button>
@@ -315,7 +315,7 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
             <Button
               size="lg"
               onClick={() => window.location.hash = '/banner-bestellen'}
-              className="bg-white text-primary hover:bg-white/90"
+              className="bg-white text-primary hover:bg-white/80"
             >
               {t('bannerrahmen.cta.configureCta')}
             </Button>
@@ -323,7 +323,7 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
               size="lg"
               variant="outline"
               onClick={onOpenInquiry}
-              className="border-white text-white hover:bg-white/10"
+              className="border-white text-white hover:bg-white/25"
             >
               {t('bannerrahmen.cta.consultationCta')}
             </Button>

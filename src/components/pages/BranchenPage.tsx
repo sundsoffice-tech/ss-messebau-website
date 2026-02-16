@@ -85,7 +85,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={() => { trackHeroCTAClick('branchen_food'); onOpenInquiry() }} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  <Button onClick={() => { trackHeroCTAClick('branchen_food'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                     {t('branchen.food.cta')}
                     <ArrowRight className="ml-2" />
                   </Button>
@@ -144,7 +144,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={() => { trackHeroCTAClick('branchen_versicherungen'); onOpenInquiry() }} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  <Button onClick={() => { trackHeroCTAClick('branchen_versicherungen'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                     {t('branchen.insurance.cta')}
                     <ArrowRight className="ml-2" />
                   </Button>
@@ -203,7 +203,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={() => { trackHeroCTAClick('branchen_industrie'); onOpenInquiry() }} className="bg-accent hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  <Button onClick={() => { trackHeroCTAClick('branchen_industrie'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                     {t('branchen.industry.cta')}
                     <ArrowRight className="ml-2" />
                   </Button>

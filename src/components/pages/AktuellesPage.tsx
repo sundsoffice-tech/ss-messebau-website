@@ -46,7 +46,7 @@ export function AktuellesPage({ onOpenInquiry }: AktuellesPageProps) {
           <Button
             size="lg"
             onClick={() => { trackHeroCTAClick('aktuelles_cta'); onOpenInquiry() }}
-            className="bg-accent hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg"
+            className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg"
           >
             {t('aktuelles.cta.button')}
             <ArrowRight className="ml-2" />

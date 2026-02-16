@@ -651,7 +651,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <Button
                 variant="default"
                 onClick={onOpenInquiry}
-                className="bg-accent hover:bg-accent/90 transition-colors"
+                className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
                 size={scrolled ? 'sm' : 'default'}
               >
                 {t('header.nav.inquiry')}
@@ -797,7 +797,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               <Button
                 variant="default"
                 onClick={onOpenInquiry}
-                className="bg-accent hover:bg-accent/90 transition-colors"
+                className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
                 size="sm"
               >
                 {t('header.nav.inquiry')}
@@ -830,7 +830,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               variant="default"
               size="sm"
               onClick={onOpenInquiry}
-              className="bg-accent hover:bg-accent/90 transition-colors text-sm px-3 py-2 min-h-[44px]"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors text-sm px-3 py-2 min-h-[44px]"
             >
               {t('header.nav.inquiry')}
             </Button>

@@ -141,7 +141,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
               <Button
                 type="submit"
                 disabled={form.loading}
-                className="bg-accent hover:bg-accent/90 min-h-[48px] w-full sm:flex-1 text-base font-medium"
+                className="bg-accent text-accent-foreground hover:bg-accent/90 min-h-[48px] w-full sm:flex-1 text-base font-medium"
                 aria-label={form.loading ? t('inquiry.submittingAria') : t('inquiry.submitAria')}
               >
                 {form.loading ? t('inquiry.submitting') : t('inquiry.submit')}

@@ -110,7 +110,7 @@ export function BlogPostDetail({ post, onNavigate, onOpenInquiry }: BlogPostDeta
             </Button>
             <Button
               onClick={onOpenInquiry}
-              className="bg-accent hover:bg-accent/90 min-h-[44px]"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 min-h-[44px]"
             >
               {t('blog.cta.button')}
               <ArrowRight className="ml-2 h-4 w-4" />

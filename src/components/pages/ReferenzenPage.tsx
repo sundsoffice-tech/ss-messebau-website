@@ -111,7 +111,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
               <p className="text-base sm:text-lg text-muted-foreground mb-6">
                 {t('referenzen.empty')}
               </p>
-              <Button onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 h-11 sm:h-10">
+              <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 h-11 sm:h-10">
                 {t('referenzen.emptyCta')}
               </Button>
             </div>
@@ -236,7 +236,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                   <Button onClick={() => {
                     setSelectedReference(null)
                     onOpenInquiry()
-                  }} className="w-full bg-accent hover:bg-accent/90 h-11 sm:h-10">
+                  }} className="w-full bg-accent text-accent-foreground hover:bg-accent/90 h-11 sm:h-10">
                     {t('referenzen.detail.cta')}
                   </Button>
                 </div>
@@ -252,7 +252,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
           <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
             {t('referenzen.cta.subtitle')}
           </p>
-          <Button size="lg" onClick={onOpenInquiry} className="bg-accent hover:bg-accent/90 h-12 sm:h-11">
+          <Button size="lg" onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 h-12 sm:h-11">
             {t('referenzen.cta.button')}
           </Button>
         </div>

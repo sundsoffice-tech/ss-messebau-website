@@ -370,7 +370,7 @@ ANTWORTRICHTLINIEN:
                   type="submit"
                   size="lg"
                   disabled={form.loading}
-                  className="w-full bg-accent hover:bg-accent/90 h-12 sm:h-11 text-base font-semibold"
+                  className="w-full bg-accent text-accent-foreground hover:bg-accent/90 h-12 sm:h-11 text-base font-semibold"
                 >
                   {form.loading ? t('kontakt.form.sending') : t('kontakt.form.send')}
                   <PaperPlaneRight className="ml-2" weight="fill" />

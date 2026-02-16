@@ -83,7 +83,7 @@ export function DynamicForm({
           <Button
             type="submit"
             disabled={form.loading}
-            className="bg-accent hover:bg-accent/90 min-h-[48px] w-full sm:flex-1 text-base font-medium"
+            className="bg-accent text-accent-foreground hover:bg-accent/90 min-h-[48px] w-full sm:flex-1 text-base font-medium"
           >
             {form.loading
               ? (submittingLabel || t(form.config.submittingKey))

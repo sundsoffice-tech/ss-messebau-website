@@ -91,7 +91,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               <Button 
                 size="lg" 
                 onClick={() => { trackHeroCTAClick('hero'); onOpenInquiry() }}
-                className="bg-accent hover:bg-accent/90 px-6 sm:px-8 py-6 text-base sm:text-lg font-medium min-h-[48px]"
+                className="bg-accent text-accent-foreground hover:bg-accent/90 px-6 sm:px-8 py-6 text-base sm:text-lg font-medium min-h-[48px]"
                 aria-label={t('home.hero.ctaAria')}
               >
                 {t('home.hero.cta')}
