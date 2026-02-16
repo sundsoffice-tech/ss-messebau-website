@@ -37,9 +37,21 @@ switch ($action) {
     case 'status':
         handleStatus();
         break;
+    case 'config':
+        if ($method === 'GET') {
+            if (!requireAuth()) return;
+            handleGetEmailConfig();
+        } elseif ($method === 'POST') {
+            if (!requireAuth()) return;
+            handleSaveEmailConfig();
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method not allowed']);
+        }
+        break;
     default:
         http_response_code(400);
-        echo json_encode(['error' => 'Unknown action. Use: enqueue, send, list, delete, status']);
+        echo json_encode(['error' => 'Unknown action. Use: enqueue, send, list, delete, status, config']);
 }
 
 function handleEnqueue(): void {
@@ -249,4 +261,23 @@ function sendViaSendGrid(string $to, string $subject, string $htmlBody, string $
     }
 
     return ['success' => false, 'error' => "SendGrid Error ($httpCode): $response"];
+}
+
+function handleGetEmailConfig(): void {
+    $apiKeySet = !empty(SENDGRID_API_KEY);
+    echo json_encode([
+        'provider' => $apiKeySet ? 'sendgrid' : 'test',
+        'fromEmail' => FROM_EMAIL,
+        'fromName' => FROM_NAME,
+    ]);
+}
+
+function handleSaveEmailConfig(): void {
+    // SMTP config is managed via environment variables / config.php on the server.
+    // This endpoint acknowledges the request but the actual key management
+    // is done server-side through config.php or environment variables.
+    echo json_encode([
+        'success' => true,
+        'message' => 'Email-Konfiguration wird serverseitig über Umgebungsvariablen verwaltet.',
+    ]);
 }
