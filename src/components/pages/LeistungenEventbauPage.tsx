@@ -127,7 +127,7 @@ export function LeistungenEventbauPage({ onOpenInquiry }: { onOpenInquiry: () =>
       rating: 5,
     },
     {
-      text: 'Wir arbeiten seit zwei Jahren mit S&S Messebau für unsere Konferenzen und Galas zusammen. Die Zusammenarbeit ist unkompliziert, das Ergebnis immer erstklassig. Absolute Empfehlung für professionellen Eventbau!',
+      text: 'Wir vertrauen bei unseren Konferenzen und Galas auf S&S Messebau. Die Zusammenarbeit ist unkompliziert, das Ergebnis immer erstklassig. Absolute Empfehlung für professionellen Eventbau!',
       author: 'Julia Engel',
       company: 'EventPartner Deutschland',
       rating: 5,

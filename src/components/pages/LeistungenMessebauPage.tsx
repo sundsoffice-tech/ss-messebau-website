@@ -117,7 +117,7 @@ export function LeistungenMessebauPage({ onOpenInquiry }: { onOpenInquiry: () =>
       rating: 5,
     },
     {
-      text: 'Seit drei Jahren arbeiten wir mit S&S Messebau zusammen. Die Stände werden jedes Mal besser, die Kommunikation ist erstklassig und das Preis-Leistungs-Verhältnis stimmt einfach.',
+      text: 'Wir arbeiten regelmäßig mit S&S Messebau zusammen. Die Stände werden jedes Mal besser, die Kommunikation ist erstklassig und das Preis-Leistungs-Verhältnis stimmt einfach.',
       author: 'Markus Becker',
       company: 'FoodBrand Deutschland',
       rating: 5,

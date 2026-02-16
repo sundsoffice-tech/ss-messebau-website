@@ -121,7 +121,7 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
       rating: 5,
     },
     {
-      text: 'Wir nutzen seit zwei Jahren die Mietmöbel von S&S Messebau. Immer top-gepflegt, pünktlich geliefert und flexibel konfigurierbar. Absolute Empfehlung für die Standausstattung.',
+      text: 'Wir setzen auf die Mietmöbel von S&S Messebau. Immer top-gepflegt, pünktlich geliefert und flexibel konfigurierbar. Absolute Empfehlung für die Standausstattung.',
       author: 'Sabine Hartmann',
       company: 'Eventwerk Köln',
       rating: 5,
