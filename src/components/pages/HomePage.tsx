@@ -166,6 +166,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               }
             ].map((service, index) => {
               const Icon = service.icon
+              const isUnsplashImage = service.image.includes('unsplash.com')
               return (
                 <Card 
                   key={index} 
@@ -174,9 +175,9 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 >
                   <div className="relative aspect-[25/16] overflow-hidden bg-muted">
                     <img 
-                      src={service.image.includes('unsplash.com') ? `${service.image}&fm=webp&q=75` : service.image}
-                      srcSet={service.image.includes('unsplash.com') ? `${service.image}&fm=webp&q=75&w=400 400w, ${service.image}&fm=webp&q=75&w=500 500w, ${service.image}&fm=webp&q=75&w=640 640w` : undefined}
-                      sizes={service.image.includes('unsplash.com') ? "(max-width: 1023px) 100vw, 33vw" : undefined}
+                      src={isUnsplashImage ? `${service.image}&fm=webp&q=75` : service.image}
+                      srcSet={isUnsplashImage ? `${service.image}&fm=webp&q=75&w=400 400w, ${service.image}&fm=webp&q=75&w=500 500w, ${service.image}&fm=webp&q=75&w=640 640w` : undefined}
+                      sizes={isUnsplashImage ? "(max-width: 1023px) 100vw, 33vw" : undefined}
                       alt=""
                       role="presentation"
                       width="500"
@@ -277,22 +278,24 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {DEMO_REFERENCES.slice(0, 3).map((reference) => (
-              <Card 
-                key={reference.id} 
-                className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
-                onClick={() => { trackReferenceDetailView(reference.id); handleNavigation('/referenzen') }}
-              >
-                <div className="aspect-video relative overflow-hidden bg-muted">
-                  <img 
-                    src={reference.imageUrl.includes('unsplash.com') ? `${reference.imageUrl}&fm=webp&q=75` : reference.imageUrl}
-                    srcSet={reference.imageUrl.includes('unsplash.com') ? `${reference.imageUrl}&fm=webp&q=75&w=400 400w, ${reference.imageUrl}&fm=webp&q=75&w=640 640w, ${reference.imageUrl}&fm=webp&q=75&w=800 800w` : undefined}
-                    sizes={reference.imageUrl.includes('unsplash.com') ? "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw" : undefined}
-                    alt={reference.title}
-                    width="640"
-                    height="360"
-                    loading="lazy"
-                    decoding="async"
+            {DEMO_REFERENCES.slice(0, 3).map((reference) => {
+              const isUnsplashImage = reference.imageUrl.includes('unsplash.com')
+              return (
+                <Card 
+                  key={reference.id} 
+                  className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
+                  onClick={() => { trackReferenceDetailView(reference.id); handleNavigation('/referenzen') }}
+                >
+                  <div className="aspect-video relative overflow-hidden bg-muted">
+                    <img 
+                      src={isUnsplashImage ? `${reference.imageUrl}&fm=webp&q=75` : reference.imageUrl}
+                      srcSet={isUnsplashImage ? `${reference.imageUrl}&fm=webp&q=75&w=400 400w, ${reference.imageUrl}&fm=webp&q=75&w=640 640w, ${reference.imageUrl}&fm=webp&q=75&w=800 800w` : undefined}
+                      sizes={isUnsplashImage ? "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw" : undefined}
+                      alt={reference.title}
+                      width="640"
+                      height="360"
+                      loading="lazy"
+                      decoding="async"
                     className="object-cover w-full h-full group-hover:scale-110 group-hover:rotate-1 transition-all duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -316,7 +319,8 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   <p className="text-sm text-muted-foreground line-clamp-2">{reference.description}</p>
                 </CardContent>
               </Card>
-            ))}
+            )
+            })}
           </div>
 
           <div className="text-center mt-8">
