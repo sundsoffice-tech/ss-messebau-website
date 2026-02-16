@@ -7,6 +7,12 @@ export function useScrollDirection() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
+      const scrollDelta = Math.abs(currentScrollY - lastScrollY)
+      
+      // Only update if scroll delta is significant (> 10px) to prevent jittery behavior
+      if (scrollDelta < 10) {
+        return
+      }
       
       // Show buttons when at the top of the page (within 100px)
       if (currentScrollY < 100) {
@@ -25,10 +31,11 @@ export function useScrollDirection() {
     }
 
     // Add scroll event listener with passive flag for better performance
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    const scrollOptions = { passive: true }
+    window.addEventListener('scroll', handleScroll, scrollOptions)
     
     return () => {
-      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('scroll', handleScroll, scrollOptions)
     }
   }, [lastScrollY])
 
