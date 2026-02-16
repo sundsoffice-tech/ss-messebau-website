@@ -86,4 +86,16 @@ function initSchema(PDO $pdo): void {
             created_at TEXT DEFAULT (datetime('now'))
         )
     ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS ai_keys (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            key_id TEXT UNIQUE NOT NULL,
+            provider TEXT NOT NULL,
+            api_key TEXT NOT NULL,
+            status TEXT DEFAULT 'active',
+            created_at TEXT DEFAULT (datetime('now')),
+            last_used_at TEXT
+        )
+    ");
 }
