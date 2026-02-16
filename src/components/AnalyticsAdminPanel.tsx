@@ -20,7 +20,7 @@ import {
   Lightning,
   TrendUp,
   Globe,
-  Megaphone,
+  ClipboardText,
   Phone,
   ChatCircleDots,
   FileArrowDown,
@@ -275,7 +275,7 @@ function KPIDashboardTab() {
         <KPICard label="Sessions" value={kpis.unique_sessions} icon={<Eye className="w-4 h-4" />} />
         <KPICard label="Seitenaufrufe" value={kpis.page_views} icon={<Globe className="w-4 h-4" />} />
         <KPICard label="CTA-Klicks" value={kpis.cta_clicks} icon={<TrendUp className="w-4 h-4" />} />
-        <KPICard label="Formulare" value={kpis.form_submits} icon={<Megaphone className="w-4 h-4" />} />
+        <KPICard label="Formulare" value={kpis.form_submits} icon={<ClipboardText className="w-4 h-4" />} />
         <KPICard label="Telefon" value={kpis.phone_clicks} icon={<Phone className="w-4 h-4" />} />
         <KPICard label="WhatsApp" value={kpis.whatsapp_clicks} icon={<ChatCircleDots className="w-4 h-4" />} />
         <KPICard label="Downloads" value={kpis.downloads} icon={<FileArrowDown className="w-4 h-4" />} />
@@ -741,6 +741,7 @@ function RealtimeTab() {
       const d = new Date(ts)
       const now = new Date()
       const diffMs = now.getTime() - d.getTime()
+      if (diffMs < 0) return d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
       const diffSec = Math.floor(diffMs / 1000)
       if (diffSec < 60) return `vor ${diffSec}s`
       const diffMin = Math.floor(diffSec / 60)
@@ -833,23 +834,23 @@ export function AnalyticsAdminPanel() {
       <CardContent>
         <Tabs defaultValue="dashboard" className="space-y-4">
           <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="dashboard" className="gap-2 text-xs sm:text-sm">
+            <TabsTrigger value="dashboard" className="gap-2 text-xs sm:text-sm" aria-label="Dashboard">
               <Eye className="w-4 h-4" />
               <span className="hidden sm:inline">Dashboard</span>
             </TabsTrigger>
-            <TabsTrigger value="realtime" className="gap-2 text-xs sm:text-sm">
+            <TabsTrigger value="realtime" className="gap-2 text-xs sm:text-sm" aria-label="Live Events">
               <Lightning className="w-4 h-4" />
               <span className="hidden sm:inline">Live</span>
             </TabsTrigger>
-            <TabsTrigger value="config" className="gap-2 text-xs sm:text-sm">
+            <TabsTrigger value="config" className="gap-2 text-xs sm:text-sm" aria-label="Steuerung">
               <Gear className="w-4 h-4" />
               <span className="hidden sm:inline">Steuerung</span>
             </TabsTrigger>
-            <TabsTrigger value="export" className="gap-2 text-xs sm:text-sm">
+            <TabsTrigger value="export" className="gap-2 text-xs sm:text-sm" aria-label="Export">
               <Export className="w-4 h-4" />
               <span className="hidden sm:inline">Export</span>
             </TabsTrigger>
-            <TabsTrigger value="status" className="gap-2 text-xs sm:text-sm">
+            <TabsTrigger value="status" className="gap-2 text-xs sm:text-sm" aria-label="System Status">
               <Heartbeat className="w-4 h-4" />
               <span className="hidden sm:inline">System</span>
             </TabsTrigger>
