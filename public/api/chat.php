@@ -45,7 +45,10 @@ try {
     if (!empty($trainingEntries)) {
         $trainingContext = "\n\nZUSÄTZLICHES WISSEN (Admin-gepflegt):\n";
         foreach ($trainingEntries as $te) {
-            $trainingContext .= "[{$te['title']}]\n{$te['content']}\n\n";
+            // Sanitize training data to prevent prompt injection patterns
+            $title = substr(preg_replace('/[\x00-\x1f]/', '', $te['title']), 0, 200);
+            $content = substr(preg_replace('/[\x00-\x1f]/', '', $te['content']), 0, 5000);
+            $trainingContext .= "[{$title}]\n{$content}\n\n";
         }
         $systemPrompt .= $trainingContext;
     }

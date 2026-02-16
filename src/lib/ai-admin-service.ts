@@ -157,7 +157,10 @@ export async function deleteTrainingData(id: string): Promise<void> {
 export async function getAuditLog(): Promise<AIAuditLogEntry[]> {
   try {
     const result = await aiApi.getAuditLog()
-    return result.logs as AIAuditLogEntry[]
+    return result.logs.map(log => ({
+      ...log,
+      category: log.category as AIAuditLogEntry['category'],
+    }))
   } catch (error) {
     console.error('Failed to fetch audit log:', error)
     return []

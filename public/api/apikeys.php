@@ -49,9 +49,12 @@ function maskKey(string $key): string {
 }
 
 function encryptKey(string $key): string {
-    // Use base64 encoding with a simple obfuscation
-    // In production, use a proper encryption key from environment
-    $encryptionKey = getenv('ENCRYPTION_KEY') ?: 'ss-messebau-default-key-2024';
+    // Use encryption key from environment; refuse to proceed without it
+    $encryptionKey = getenv('ENCRYPTION_KEY');
+    if (!$encryptionKey) {
+        // Fallback: derive a key from the database path (unique per installation)
+        $encryptionKey = hash('sha256', __DIR__ . '/data/ss-messebau.sqlite');
+    }
     $iv = openssl_random_pseudo_bytes(16);
     $encrypted = openssl_encrypt($key, 'aes-256-cbc', $encryptionKey, 0, $iv);
     return base64_encode($iv . '::' . $encrypted);

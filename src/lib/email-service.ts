@@ -1,5 +1,6 @@
 import type { BannerConfig } from '@/components/pages/BannerBestellenPage'
 import type { SerializedFile } from '@/types/email'
+import { emailApi } from './api-client'
 
 interface EmailData {
   config: BannerConfig
@@ -356,7 +357,6 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
     const queueId = `email_queue_${configId}`
 
     // Enqueue via backend API
-    const { emailApi } = await import('./api-client')
     await emailApi.enqueue({
       queue_id: queueId,
       to_email: 'info@sundsmessebau.com',
@@ -382,7 +382,6 @@ export async function sendOrderConfirmationEmail(data: EmailData): Promise<{ suc
 export async function sendQueuedEmail(queueId: string): Promise<{ success: boolean; error?: string }> {
   try {
     // Send via backend API (server handles the actual email delivery)
-    const { emailApi } = await import('./api-client')
     const result = await emailApi.send(queueId)
 
     if (!result.success) {

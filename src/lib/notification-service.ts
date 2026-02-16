@@ -194,25 +194,32 @@ export async function sendFormNotification(payload: FormNotificationPayload): Pr
     for (const recipient of config.recipients) {
       const queueId = `notif_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
 
-      const enqueueData: Record<string, unknown> = {
+      // Add customer confirmation email if enabled
+      const recipientEmail = customerEmail || String(data.email || '')
+      let customerEmailField: string | undefined
+      let customerSubjectField: string | undefined
+      let customerHtmlBodyField: string | undefined
+      let customerTextBodyField: string | undefined
+
+      if (config.sendCustomerConfirmation && recipientEmail) {
+        const customerHtml = generateCustomerConfirmationHtml(type, data, inquiryId)
+        customerEmailField = recipientEmail
+        customerSubjectField = `Eingangsbestätigung: Ihre ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Bestellung'} #${inquiryId.slice(-8)}`
+        customerHtmlBodyField = customerHtml
+        customerTextBodyField = convertHtmlToText(customerHtml)
+      }
+
+      await emailApi.enqueue({
         queue_id: queueId,
         to_email: recipient,
         subject,
         html_body: htmlBody,
         text_body: textBody,
-      }
-
-      // Add customer confirmation email if enabled
-      const recipientEmail = customerEmail || String(data.email || '')
-      if (config.sendCustomerConfirmation && recipientEmail) {
-        const customerHtml = generateCustomerConfirmationHtml(type, data, inquiryId)
-        enqueueData.customer_email = recipientEmail
-        enqueueData.customer_subject = `Eingangsbestätigung: Ihre ${type === 'inquiry' ? 'Anfrage' : type === 'kontakt' ? 'Kontaktanfrage' : 'Bestellung'} #${inquiryId.slice(-8)}`
-        enqueueData.customer_html_body = customerHtml
-        enqueueData.customer_text_body = convertHtmlToText(customerHtml)
-      }
-
-      await emailApi.enqueue(enqueueData as Parameters<typeof emailApi.enqueue>[0])
+        customer_email: customerEmailField,
+        customer_subject: customerSubjectField,
+        customer_html_body: customerHtmlBodyField,
+        customer_text_body: customerTextBodyField,
+      })
 
       // Trigger immediate send
       try {

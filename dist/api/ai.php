@@ -261,8 +261,8 @@ function handleAddAuditEntry(): void {
 
 function handleClearAuditLog(): void {
     $db = getDB();
+    $db->exec('DELETE FROM ai_audit_log');
     addAuditEntry('audit_cleared', 'admin', 'Audit-Log gelöscht', 'config');
-    $db->exec('DELETE FROM ai_audit_log WHERE action != \'audit_cleared\'');
     echo json_encode(['success' => true]);
 }
 
