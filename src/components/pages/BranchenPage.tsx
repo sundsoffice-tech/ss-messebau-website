@@ -19,16 +19,16 @@ interface BranchenPageProps {
 
 export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
   const { scrollToSection } = useDeepLinking('/branchen')
-  const [activeTab, setActiveTab] = useState<string>('food')
+  const [activeTab, setActiveTab] = useState<string>('messebau')
   const { t } = useTranslation()
   
-  useSectionObserver(['food', 'versicherungen', 'industrie'])
+  useSectionObserver(['messebau', 'eventbau', 'ladenbau', 'sport'])
   useScrollDepthTracking('branchen')
   useDwellTimeTracking('branchen')
 
   useEffect(() => {
     const deepLink = parseDeepLink(window.location.hash)
-    if (deepLink.section && ['food', 'versicherungen', 'industrie'].includes(deepLink.section)) {
+    if (deepLink.section && ['messebau', 'eventbau', 'ladenbau', 'sport'].includes(deepLink.section)) {
       setActiveTab(deepLink.section)
       setTimeout(() => {
         if (deepLink.section) {
@@ -52,32 +52,38 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
       <section id="branchen-content" className="py-12 md:py-16">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-8 md:mb-12 h-auto">
-              <TabsTrigger value="food" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">
-                <span className="hidden sm:inline">{t('branchen.tab.food')}</span>
-                <span className="sm:hidden">{t('branchen.tab.foodShort')}</span>
+            <TabsList className="grid w-full grid-cols-4 mb-8 md:mb-12 h-auto">
+              <TabsTrigger value="messebau" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">
+                <span className="hidden sm:inline">{t('branchen.tab.messebau')}</span>
+                <span className="sm:hidden">{t('branchen.tab.messebauShort')}</span>
               </TabsTrigger>
-              <TabsTrigger value="versicherungen" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">
-                <span className="hidden sm:inline">{t('branchen.tab.insurance')}</span>
-                <span className="sm:hidden">{t('branchen.tab.insuranceShort')}</span>
+              <TabsTrigger value="eventbau" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">
+                <span className="hidden sm:inline">{t('branchen.tab.eventbau')}</span>
+                <span className="sm:hidden">{t('branchen.tab.eventbauShort')}</span>
               </TabsTrigger>
-              <TabsTrigger value="industrie" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">{t('branchen.tab.industry')}</TabsTrigger>
+              <TabsTrigger value="ladenbau" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">
+                <span className="hidden sm:inline">{t('branchen.tab.ladenbau')}</span>
+                <span className="sm:hidden">{t('branchen.tab.ladenbauShort')}</span>
+              </TabsTrigger>
+              <TabsTrigger value="sport" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">
+                {t('branchen.tab.sport')}
+              </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="food" className="space-y-6 md:space-y-8" id="food">
+            <TabsContent value="messebau" className="space-y-6 md:space-y-8" id="messebau">
               <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.food.title')}</h2>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.messebau.title')}</h2>
                   <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                    {t('branchen.food.desc')}
+                    {t('branchen.messebau.desc')}
                   </p>
                   <div className="space-y-2.5 md:space-y-3 mb-6">
                     {[
-                      t('branchen.food.b1'),
-                      t('branchen.food.b2'),
-                      t('branchen.food.b3'),
-                      t('branchen.food.b4'),
-                      t('branchen.food.b5')
+                      t('branchen.messebau.b1'),
+                      t('branchen.messebau.b2'),
+                      t('branchen.messebau.b3'),
+                      t('branchen.messebau.b4'),
+                      t('branchen.messebau.b5')
                     ].map((item, index) => (
                       <div key={index} className="flex items-start gap-2.5 md:gap-3">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" weight="fill" />
@@ -85,15 +91,15 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={() => { trackHeroCTAClick('branchen_food'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                    {t('branchen.food.cta')}
+                  <Button onClick={() => { trackHeroCTAClick('branchen_messebau'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                    {t('branchen.messebau.cta')}
                     <ArrowRight className="ml-2" />
                   </Button>
                 </div>
                 <div className="group aspect-square rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
                     src="/images/deligreece-messestand-100qm-food.jpeg"
-                    alt={t('branchen.food.alt')}
+                    alt={t('branchen.messebau.alt')}
                     width="800"
                     height="800"
                     loading="lazy"
@@ -104,9 +110,9 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
               </div>
 
               <div className="mt-8 md:mt-10">
-                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{t('branchen.food.refTitle')}</h3>
+                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{t('branchen.messebau.refTitle')}</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
-                  {DEMO_REFERENCES.filter(r => r.branche === 'food').slice(0, 2).map((ref) => (
+                  {DEMO_REFERENCES.filter(r => r.branche === 'messebau').slice(0, 2).map((ref) => (
                     <CaseStudyCard
                       key={ref.id}
                       title={ref.title}
@@ -123,20 +129,20 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
               </div>
             </TabsContent>
 
-            <TabsContent value="versicherungen" className="space-y-6 md:space-y-8" id="versicherungen">
+            <TabsContent value="eventbau" className="space-y-6 md:space-y-8" id="eventbau">
               <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
                 <div className="lg:order-2">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.insurance.title')}</h2>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.eventbau.title')}</h2>
                   <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                    {t('branchen.insurance.desc')}
+                    {t('branchen.eventbau.desc')}
                   </p>
                   <div className="space-y-2.5 md:space-y-3 mb-6">
                     {[
-                      t('branchen.insurance.b1'),
-                      t('branchen.insurance.b2'),
-                      t('branchen.insurance.b3'),
-                      t('branchen.insurance.b4'),
-                      t('branchen.insurance.b5')
+                      t('branchen.eventbau.b1'),
+                      t('branchen.eventbau.b2'),
+                      t('branchen.eventbau.b3'),
+                      t('branchen.eventbau.b4'),
+                      t('branchen.eventbau.b5')
                     ].map((item, index) => (
                       <div key={index} className="flex items-start gap-2.5 md:gap-3">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" weight="fill" />
@@ -144,15 +150,15 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={() => { trackHeroCTAClick('branchen_versicherungen'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                    {t('branchen.insurance.cta')}
+                  <Button onClick={() => { trackHeroCTAClick('branchen_eventbau'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                    {t('branchen.eventbau.cta')}
                     <ArrowRight className="ml-2" />
                   </Button>
                 </div>
                 <div className="group aspect-square rounded-lg overflow-hidden lg:order-1 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
-                    src="/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg"
-                    alt="Messestand Stylee – Premium Design-Stand für Finanz- und Versicherungsbranche"
+                    src="/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg"
+                    alt={t('branchen.eventbau.alt')}
                     width="800"
                     height="800"
                     loading="lazy"
@@ -163,9 +169,9 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
               </div>
 
               <div className="mt-8 md:mt-10">
-                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{t('branchen.insurance.refTitle')}</h3>
+                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{t('branchen.eventbau.refTitle')}</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
-                  {DEMO_REFERENCES.filter(r => r.branche === 'versicherungen').slice(0, 2).map((ref) => (
+                  {DEMO_REFERENCES.filter(r => r.branche === 'eventbau').slice(0, 2).map((ref) => (
                     <CaseStudyCard
                       key={ref.id}
                       title={ref.title}
@@ -182,20 +188,20 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
               </div>
             </TabsContent>
 
-            <TabsContent value="industrie" className="space-y-6 md:space-y-8" id="industrie">
+            <TabsContent value="ladenbau" className="space-y-6 md:space-y-8" id="ladenbau">
               <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.industry.title')}</h2>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.ladenbau.title')}</h2>
                   <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
-                    {t('branchen.industry.desc')}
+                    {t('branchen.ladenbau.desc')}
                   </p>
                   <div className="space-y-2.5 md:space-y-3 mb-6">
                     {[
-                      t('branchen.industry.b1'),
-                      t('branchen.industry.b2'),
-                      t('branchen.industry.b3'),
-                      t('branchen.industry.b4'),
-                      t('branchen.industry.b5')
+                      t('branchen.ladenbau.b1'),
+                      t('branchen.ladenbau.b2'),
+                      t('branchen.ladenbau.b3'),
+                      t('branchen.ladenbau.b4'),
+                      t('branchen.ladenbau.b5')
                     ].map((item, index) => (
                       <div key={index} className="flex items-start gap-2.5 md:gap-3">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" weight="fill" />
@@ -203,15 +209,15 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={() => { trackHeroCTAClick('branchen_industrie'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
-                    {t('branchen.industry.cta')}
+                  <Button onClick={() => { trackHeroCTAClick('branchen_ladenbau'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                    {t('branchen.ladenbau.cta')}
                     <ArrowRight className="ml-2" />
                   </Button>
                 </div>
                 <div className="group aspect-square rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
-                    src="/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg"
-                    alt={t('branchen.industry.alt')}
+                    src="/images/ladenbau/ladenbau-display-regal-led-beleuchtung.jpg"
+                    alt={t('branchen.ladenbau.alt')}
                     width="800"
                     height="800"
                     loading="lazy"
@@ -222,9 +228,68 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
               </div>
 
               <div className="mt-8 md:mt-10">
-                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{t('branchen.industry.refTitle')}</h3>
+                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{t('branchen.ladenbau.refTitle')}</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
-                  {DEMO_REFERENCES.filter(r => r.branche === 'industrie').slice(0, 2).map((ref) => (
+                  {DEMO_REFERENCES.filter(r => r.branche === 'ladenbau').slice(0, 2).map((ref) => (
+                    <CaseStudyCard
+                      key={ref.id}
+                      title={ref.title}
+                      challenge={ref.challenge}
+                      solution={ref.solution}
+                      result={ref.result}
+                      imageUrl={ref.imageUrl}
+                      branche={ref.branche}
+                      size={ref.size}
+                      messe={ref.messe}
+                    />
+                  ))}
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="sport" className="space-y-6 md:space-y-8" id="sport">
+              <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div className="lg:order-2">
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.sport.title')}</h2>
+                  <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                    {t('branchen.sport.desc')}
+                  </p>
+                  <div className="space-y-2.5 md:space-y-3 mb-6">
+                    {[
+                      t('branchen.sport.b1'),
+                      t('branchen.sport.b2'),
+                      t('branchen.sport.b3'),
+                      t('branchen.sport.b4'),
+                      t('branchen.sport.b5')
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-start gap-2.5 md:gap-3">
+                        <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" weight="fill" />
+                        <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Button onClick={() => { trackHeroCTAClick('branchen_sport'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                    {t('branchen.sport.cta')}
+                    <ArrowRight className="ml-2" />
+                  </Button>
+                </div>
+                <div className="group aspect-square rounded-lg overflow-hidden lg:order-1 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
+                  <img 
+                    src="/images/980a1068-ecee-48de-86a3-8635874252e4.jpeg"
+                    alt={t('branchen.sport.alt')}
+                    width="800"
+                    height="800"
+                    loading="lazy"
+                    decoding="async"
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-8 md:mt-10">
+                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{t('branchen.sport.refTitle')}</h3>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {DEMO_REFERENCES.filter(r => r.branche === 'sport').slice(0, 2).map((ref) => (
                     <CaseStudyCard
                       key={ref.id}
                       title={ref.title}
