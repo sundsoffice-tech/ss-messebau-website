@@ -52,11 +52,20 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
 
   const getBrancheLabel = (branche: string) => {
     switch (branche) {
-      case 'messebau': return t('home.references.messebau')
-      case 'eventbau': return t('home.references.eventbau')
-      case 'ladenbau': return t('home.references.ladenbau')
-      case 'sport': return t('home.references.sport')
+      case 'messebau': return t('referenzen.filter.messebau')
+      case 'eventbau': return t('referenzen.filter.eventbau')
+      case 'ladenbau': return t('referenzen.filter.ladenbau')
+      case 'sport': return t('referenzen.filter.sport')
       default: return branche
+    }
+  }
+
+  const getTypeLabel = (type: string) => {
+    switch (type) {
+      case 'messebau': return t('referenzen.filter.messebau')
+      case 'eventbau': return t('referenzen.filter.eventbau')
+      case 'ladenbau': return t('referenzen.filter.ladenbau')
+      default: return type
     }
   }
 
@@ -293,7 +302,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
               return (
                 <Card 
                   key={reference.id} 
-                  className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
+                  className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary active:scale-[0.98]" 
                   onClick={() => { trackReferenceDetailView(reference.id); handleNavigation('/referenzen') }}
                 >
                   <div className="aspect-video relative overflow-hidden bg-muted">
@@ -309,16 +318,20 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                     className="object-cover w-full h-full group-hover:scale-110 group-hover:rotate-1 transition-all duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <Badge className="absolute top-4 left-4 bg-background/95 text-foreground shadow-lg">
+                  <Badge className="absolute top-4 left-4 bg-background/95 text-foreground shadow-lg backdrop-blur-sm">
                     {reference.size}
                   </Badge>
                   <div className="absolute bottom-4 left-4 right-4 transform translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    <p className="text-white text-sm font-medium drop-shadow-lg">{t('home.references.more')}</p>
+                    <p className="text-white text-sm font-medium drop-shadow-lg flex items-center gap-2">
+                      {t('referenzen.details')}
+                      <ArrowRight className="h-4 w-4" />
+                    </p>
                   </div>
                 </div>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2 mb-3">
                     <Badge variant="secondary">{getBrancheLabel(reference.branche)}</Badge>
+                    <Badge variant="outline">{getTypeLabel(reference.type)}</Badge>
                   </div>
                   <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">{reference.title}</h3>
                   <p className="text-sm text-muted-foreground line-clamp-2">{reference.description}</p>
