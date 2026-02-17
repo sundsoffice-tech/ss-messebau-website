@@ -69,6 +69,14 @@ Das Referenzsystem wurde von Branchen (food, versicherungen, industrie) auf **Le
 - `deligreece-messestand-100qm-food.jpeg` → Referenz #1 (Premium Food-Messestand, **messebau**), HomePage Service-Card Messebau, Header Mega-Menü Messebau, BranchenPage Messebau
 - `deligreece-messestand-100qm-food-2.jpeg` → Referenz #5 (Food-Messestand, **messebau**)
 
+## Batch 4 – Bannerrahmen
+
+| Datei | Beschreibung | Verwendung |
+|---|---|---|
+| 6da797c7-d75b-4d81-bdb4-81b33663b633.jpeg | Stehender Bannerrahmen / Aufsteller | Header Mega-Menü Bannerrahmen (previewImage), Bannerrahmen-Seite Showcase-Galerie |
+| 9412bc1d-704a-4bfb-bf51-d0f1b009e2da.jpeg | Stehender Bannerrahmen / Aufsteller | Bannerrahmen-Seite Showcase-Galerie |
+| b0f59ab1-307b-4e5c-8d15-63eb0d5ae122.jpeg | Stehender Bannerrahmen / Aufsteller | Bannerrahmen-Seite Showcase-Galerie |
+
 ### Ladenbau-Kontext → Kategorie: ladenbau
 - `ladenbau/ladenbau-display-regal-led-beleuchtung.jpg` → LeistungenShowroomsPage, Header Mega-Menü Showroom, HomePage Service-Card Showroom, LeistungenPage Möbel, BranchenPage Ladenbau
 - `ladenbau/showroom-bodenproben-ausstellung.jpg` → LeistungenShowroomsPage, LeistungenBoedenPage, Referenz #3 (Showroom, **ladenbau**), LeistungenPage Möbel

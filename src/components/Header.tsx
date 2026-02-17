@@ -110,7 +110,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-rose-50',
     featureKeys: ['header.mega.bannerrahmen.f1', 'header.mega.bannerrahmen.f2', 'header.mega.bannerrahmen.f3'],
     gradient: 'from-rose-500/10 to-rose-600/5',
-    previewImage: '/images/b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg',
+    previewImage: '/images/6da797c7-d75b-4d81-bdb4-81b33663b633.jpeg',
     sectionId: 'bannerrahmen',
     pagePath: '/bannerrahmen'
   }

@@ -81,6 +81,35 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
         </div>
       </section>
 
+      {/* Showcase Gallery */}
+      <section className="py-12 sm:py-16" aria-label="Bannerrahmen Produktgalerie">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div className="overflow-hidden rounded-lg">
+              <img 
+                src="/images/6da797c7-d75b-4d81-bdb4-81b33663b633.jpeg" 
+                alt="Stehender Bannerrahmen / Aufsteller - Beispiel 1"
+                className="w-full h-80 object-cover transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              />
+            </div>
+            <div className="overflow-hidden rounded-lg">
+              <img 
+                src="/images/9412bc1d-704a-4bfb-bf51-d0f1b009e2da.jpeg" 
+                alt="Stehender Bannerrahmen / Aufsteller - Beispiel 2"
+                className="w-full h-80 object-cover transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              />
+            </div>
+            <div className="overflow-hidden rounded-lg">
+              <img 
+                src="/images/b0f59ab1-307b-4e5c-8d15-63eb0d5ae122.jpeg" 
+                alt="Stehender Bannerrahmen / Aufsteller - Beispiel 3"
+                className="w-full h-80 object-cover transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="font-bold text-center mb-12" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('bannerrahmen.systems.title')}</h2>
