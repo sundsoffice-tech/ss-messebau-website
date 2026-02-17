@@ -92,7 +92,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                 </div>
                 <div className="group aspect-square rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
-                    src="/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg"
+                    src="/images/03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg"
                     alt={t('branchen.food.alt')}
                     width="800"
                     height="800"
@@ -151,8 +151,8 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                 </div>
                 <div className="group aspect-square rounded-lg overflow-hidden lg:order-1 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
-                    src="/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg"
-                    alt="Messestand Elektro Leven – Klassisch mit Beratung, 25qm"
+                    src="/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg"
+                    alt="Messestand Stylee – Premium Design-Stand für Finanz- und Versicherungsbranche"
                     width="800"
                     height="800"
                     loading="lazy"

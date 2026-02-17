@@ -86,7 +86,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-purple-50',
     featureKeys: ['header.mega.eventbau.f1', 'header.mega.eventbau.f2', 'header.mega.eventbau.f3'],
     gradient: 'from-purple-500/10 to-purple-600/5',
-    previewImage: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg',
+    previewImage: '/images/980a1068-ecee-48de-86a3-8635874252e4.jpeg',
     sectionId: 'eventbau',
     pagePath: '/leistungen/eventbau'
   },
@@ -110,7 +110,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-rose-50',
     featureKeys: ['header.mega.bannerrahmen.f1', 'header.mega.bannerrahmen.f2', 'header.mega.bannerrahmen.f3'],
     gradient: 'from-rose-500/10 to-rose-600/5',
-    previewImage: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg',
+    previewImage: '/images/b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg',
     sectionId: 'bannerrahmen',
     pagePath: '/bannerrahmen'
   }

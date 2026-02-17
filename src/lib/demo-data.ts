@@ -127,7 +127,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'industrie',
     size: '75 qm',
     type: 'messebau',
-    imageUrl: '/images/633e7f45-301e-4c5b-a5fc-b64c766f9956.jpeg',
+    imageUrl: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
     description: 'Robotik-Messestand mit Live-Demo-Fläche und Sicherheitszonen auf der Automatica',
     challenge: 'Ein Robotik-Unternehmen benötigte einen Live-Demo-Bereich mit Sicherheitszonen für Industrieroboter.',
     solution: 'Transparente Sicherheitsabsperrungen, erhöhte Demo-Plattform und interaktive Touch-Displays für technische Details.',
