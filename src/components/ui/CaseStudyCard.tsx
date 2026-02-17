@@ -30,7 +30,6 @@ export function CaseStudyCard({ title, challenge, solution, result, imageUrl, br
         />
         <div className="absolute top-3 left-3 flex gap-2">
           <Badge className="bg-background/95 text-foreground shadow text-xs">{size}</Badge>
-          {messe && <Badge className="bg-primary text-primary-foreground shadow text-xs">{messe}</Badge>}
         </div>
       </div>
       <CardContent className="p-5 md:p-6 space-y-4">

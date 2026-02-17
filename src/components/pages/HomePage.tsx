@@ -50,6 +50,16 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const getBrancheLabel = (branche: string) => {
+    switch (branche) {
+      case 'messebau': return t('home.references.messebau')
+      case 'eventbau': return t('home.references.eventbau')
+      case 'ladenbau': return t('home.references.ladenbau')
+      case 'sport': return t('home.references.sport')
+      default: return branche
+    }
+  }
+
   const handleServiceNavigation = (sectionId: string) => {
     window.location.hash = `/leistungen/${sectionId}`
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -149,7 +159,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   t('home.services.touren.b4')
                 ],
                 sectionId: 'touren',
-                image: '/images/980a1068-ecee-48de-86a3-8635874252e4.jpeg'
+                image: '/images/49546524-e641-43fd-8c29-79a94e05bf99.jpeg'
               },
               {
                 icon: Storefront,
@@ -302,18 +312,13 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   <Badge className="absolute top-4 left-4 bg-background/95 text-foreground shadow-lg">
                     {reference.size}
                   </Badge>
-                  {reference.messe && (
-                    <Badge className="absolute top-4 right-4 bg-primary/90 text-primary-foreground shadow-lg text-xs">
-                      {reference.messe}
-                    </Badge>
-                  )}
                   <div className="absolute bottom-4 left-4 right-4 transform translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
                     <p className="text-white text-sm font-medium drop-shadow-lg">{t('home.references.more')}</p>
                   </div>
                 </div>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="secondary">{reference.branche === 'food' ? t('home.references.food') : reference.branche === 'versicherungen' ? t('home.references.insurance') : t('home.references.industry')}</Badge>
+                    <Badge variant="secondary">{getBrancheLabel(reference.branche)}</Badge>
                   </div>
                   <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">{reference.title}</h3>
                   <p className="text-sm text-muted-foreground line-clamp-2">{reference.description}</p>
