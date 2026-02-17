@@ -13,7 +13,7 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Wir entwickelten ein offenes Konzept mit beleuchteten Garderobenbereichen, großformatigen Lifestyle-Bildern und einer einladenden VIP-Lounge für B2B-Gespräche.',
     result: 'Deutlich mehr Besucherkontakte, zahlreiche neue Handelspartner-Leads',
     keyfacts: ['80 qm Standfläche', '3 Tage Aufbau', 'Nachhaltige Systemelemente'],
-    messe: 'Gallery SHOES Düsseldorf',
+    messe: 'Gallery Shoes Düsseldorf',
     zielsetzung: 'Hochwertige Kollektionspräsentation und B2B-Kontaktgenerierung für die kommende Saison'
   },
   {
