@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, memo } from 'react'
 import { Button } from '@/components/ui/button'
+import { MediaFrame } from '@/components/ui/MediaFrame'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet'
 import { 
   List, 
@@ -148,15 +149,19 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
       className="group relative overflow-hidden rounded-lg border text-left transition-all hover:border-primary hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
       aria-label={`${t(item.titleKey)} - ${t(item.descriptionKey)}`}
     >
-      <div className="aspect-[2/1] relative overflow-hidden">
-        <img
+      <div className="relative overflow-hidden">
+        <MediaFrame
           src={item.previewImage}
           alt={`${t('header.mega.previewAlt')} ${t(item.titleKey)}`}
-          width="400"
-          height="200"
-          loading="lazy"
-          decoding="async"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          ratio="custom"
+          customRatio="2 / 1"
+          fit="cover"
+          position="center center"
+          width={400}
+          imgHeight={200}
+          radius="none"
+          showBackground={false}
+          imgClassName="transition-transform duration-500 group-hover:scale-110"
         />
         <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent`} />
         <div className={`absolute top-3 left-3 ${item.bgColor} ${item.color} p-2 rounded-lg`}>
