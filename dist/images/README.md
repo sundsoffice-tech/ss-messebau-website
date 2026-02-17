@@ -41,35 +41,30 @@
 | ladenbau-display-regal-led-beleuchtung.jpg | Display-Regal mit LED | Ladenbau Display-Regal mit LED-Beleuchtung |
 | showroom-bodenproben-ausstellung.jpg | Bodenproben-Ausstellung | Showroom mit Bodenproben-Ausstellung |
 
-### `moebel/` – Möbel & Ausstattung
-| Datei | Status | Hinweis |
-|---|---|---|
-| showroom-ausstellungsmoebel.svg | ⚠️ SVG-Platzhalter | TODO: Durch echtes Foto ersetzen |
-| individuelles-display-regal-led.svg | ⚠️ SVG-Platzhalter | TODO: Durch echtes Foto ersetzen |
-
 ### `referenzen/messebau-25qm/` – Referenz-Dokumentation
 Enthält README mit Bildbeschreibungen der Batch-1-Bilder (UUID-Dateien im Hauptordner).
 
 ## Verwendung im Code
 
 ### Messebau-Kontext (Batch 1)
-- `e859a873` → Referenz #8 (Schwerlast-Stand), HomePage Service-Card Messebau, Header Mega-Menü Messebau
-- `1a5f3965` → Referenz #2 (Versicherung), Referenz #3 (Industrie), Referenz #6 (Versicherung DKM), Referenz #9 (Robotik), BranchenPage Industrie
-- `03e69940` → Referenz #4 (Bio-Feinkost), OtherPages Nachhaltigkeit
-- `fda8df74` → Referenz #5 (Confiserie), Referenz #7 (Roadshow Finanz), Header Mega-Menü Touren
+- `e859a873` → Referenz #7 (Roadshow Finanz), Blog-Beiträge
+- `1a5f3965` → Referenz #6 (Versicherung DKM), BranchenPage Industrie
+- `03e69940` → Referenz #4 (Bio-Feinkost), OtherPages Nachhaltigkeit, Blog-Beiträge
+- `fda8df74` → Referenz #2 (Versicherung)
 
 ### Eventbau-Kontext (Batch 2)
-- `980a1068` → Referenz #10 (Hockey EM Shop), Header Mega-Menü Eventbau
-- `49546524` → Referenz #10, HomePage Service-Card Touren, OtherPages Über Uns
-- `633e7f45` → Referenz #10 (Galerie)
-- `b512edb4` → Referenz #10 (Galerie), Header Mega-Menü Bannerrahmen
+- `980a1068` → Referenz #10 (Hockey EM Shop), Header Mega-Menü Eventbau, HomePage Service-Card Touren
+- `49546524` → Referenz #10, Header Mega-Menü Touren, OtherPages Über Uns
+- `633e7f45` → Referenz #9 (Robotik), Referenz #10 (Galerie)
+- `b512edb4` → Referenz #8 (Schwerlast), Referenz #10 (Galerie), Header Mega-Menü Bannerrahmen
 
 ### Food/100qm-Kontext (Batch 3)
-- `deligreece-messestand-100qm-food.jpeg` → Referenz #1 (Premium Food), BranchenPage Food
+- `deligreece-messestand-100qm-food.jpeg` → Referenz #1 (Premium Food), HomePage Service-Card Messebau, Header Mega-Menü Messebau, BranchenPage Food
+- `deligreece-messestand-100qm-food-2.jpeg` → Referenz #5 (Confiserie)
 
 ### Ladenbau-Kontext
-- `ladenbau/ladenbau-display-regal-led-beleuchtung.jpg` → LeistungenShowroomsPage, Header Mega-Menü Showroom
-- `ladenbau/showroom-bodenproben-ausstellung.jpg` → LeistungenShowroomsPage, LeistungenBoedenPage
+- `ladenbau/ladenbau-display-regal-led-beleuchtung.jpg` → LeistungenShowroomsPage, Header Mega-Menü Showroom, HomePage Service-Card Showroom, LeistungenPage Möbel
+- `ladenbau/showroom-bodenproben-ausstellung.jpg` → LeistungenShowroomsPage, LeistungenBoedenPage, Referenz #3 (Industrie-Showroom), LeistungenPage Möbel
 
 ### Böden-Kontext
 - `boeden/` Bilder → LeistungenPage Böden-Sektion, Header Mega-Menü Böden
@@ -77,5 +72,5 @@ Enthält README mit Bildbeschreibungen der Batch-1-Bilder (UUID-Dateien im Haupt
 ## Hinweise
 
 - UUID-Dateinamen bleiben vorerst bestehen (spätere Umbenennung geplant)
-- SVG-Platzhalter in `moebel/` müssen durch echte Fotos ersetzt werden
+- SVG-Platzhalter in `moebel/` wurden entfernt und durch echte Ladenbau-Fotos ersetzt
 - Weitere Bilder (50qm, 80qm Messebau) folgen
