@@ -149,7 +149,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   t('home.services.touren.b4')
                 ],
                 sectionId: 'touren',
-                image: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg'
+                image: '/images/49546524-e641-43fd-8c29-79a94e05bf99.jpeg'
               },
               {
                 icon: Storefront,

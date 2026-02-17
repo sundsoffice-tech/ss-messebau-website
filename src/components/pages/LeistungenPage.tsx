@@ -627,6 +627,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-8 lg:mt-0">
+                  {/* TODO: Echte Möbel-Fotos hinzufügen und SVG-Platzhalter ersetzen */}
                   <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                     <img
                       src="/images/moebel/showroom-ausstellungsmoebel.svg"

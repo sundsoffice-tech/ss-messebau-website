@@ -162,6 +162,36 @@ export function LeistungenShowroomLadenbauPage({ onOpenInquiry }: { onOpenInquir
         </div>
       </section>
 
+      {/* Bildergalerie Showroom & Ladenbau */}
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <img
+                src="/images/ladenbau/ladenbau-display-regal-led-beleuchtung.jpg"
+                alt="Ladenbau Display-Regal mit LED-Beleuchtung – realisiert von S&S Messebau"
+                width="800"
+                height="450"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <img
+                src="/images/ladenbau/showroom-bodenproben-ausstellung.jpg"
+                alt="Showroom mit Bodenproben-Ausstellung – realisiert von S&S Messebau"
+                width="800"
+                height="450"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* USP Badge Section */}
       <section className="py-12 bg-secondary/30">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
