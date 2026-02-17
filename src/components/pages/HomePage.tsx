@@ -136,7 +136,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   t('home.services.messebau.b4')
                 ],
                 sectionId: 'messebau',
-                image: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg'
+                image: '/images/deligreece-messestand-100qm-food.jpeg'
               },
               {
                 icon: CalendarDot,
@@ -149,7 +149,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   t('home.services.touren.b4')
                 ],
                 sectionId: 'touren',
-                image: '/images/49546524-e641-43fd-8c29-79a94e05bf99.jpeg'
+                image: '/images/980a1068-ecee-48de-86a3-8635874252e4.jpeg'
               },
               {
                 icon: Storefront,
@@ -162,7 +162,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                   t('home.services.showrooms.b4')
                 ],
                 sectionId: 'showroom-ladenbau',
-                image: '/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg'
+                image: '/images/ladenbau/ladenbau-display-regal-led-beleuchtung.jpg'
               }
             ].map((service, index) => {
               const Icon = service.icon

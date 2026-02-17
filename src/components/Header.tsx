@@ -50,7 +50,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-blue-50',
     featureKeys: ['header.mega.messebau.f1', 'header.mega.messebau.f2', 'header.mega.messebau.f3'],
     gradient: 'from-blue-500/10 to-blue-600/5',
-    previewImage: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
+    previewImage: '/images/deligreece-messestand-100qm-food.jpeg',
     sectionId: 'messebau',
     pagePath: '/leistungen/messebau'
   },
@@ -62,7 +62,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-teal-50',
     featureKeys: ['header.mega.touren.f1', 'header.mega.touren.f2', 'header.mega.touren.f3'],
     gradient: 'from-teal-500/10 to-teal-600/5',
-    previewImage: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg',
+    previewImage: '/images/49546524-e641-43fd-8c29-79a94e05bf99.jpeg',
     sectionId: 'touren',
     pagePath: '/leistungen/touren'
   },
