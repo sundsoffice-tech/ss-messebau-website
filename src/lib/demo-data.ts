@@ -3,18 +3,18 @@ import { Reference, BlogPost } from './types'
 export const DEMO_REFERENCES: Reference[] = [
   {
     id: '1',
-    title: 'Premium Food-Messestand',
+    title: 'Premium Fashion-Messestand',
     branche: 'kleidung',
-    size: '100 qm',
+    size: '80 qm',
     type: 'messebau',
     imageUrl: '/images/deligreece-messestand-100qm-food.jpeg',
-    description: 'Moderner Messestand mit offener Verkostungsküche und Premium-Präsentation',
-    challenge: 'Ein Feinkost-Unternehmen benötigte einen Stand, der hochwertige Produkte ansprechend präsentiert und gleichzeitig Verkostungen ermöglicht.',
-    solution: 'Wir entwickelten ein offenes Konzept mit integrierter Showküche, LED-beleuchteten Produktvitrinen und einer einladenden Lounge-Area.',
-    result: 'Deutlich mehr Messebesucher, zahlreiche qualifizierte Neukunden-Leads',
-    keyfacts: ['100 qm Standfläche', '3 Tage Aufbau', 'Nachhaltige Systemelemente'],
-    messe: 'Anuga Köln',
-    zielsetzung: 'Hochwertige Produktpräsentation mit Live-Verkostungen zur Neukundengewinnung'
+    description: 'Eleganter Messestand mit stilvoller Kollektionspräsentation und VIP-Lounge für Einkäufer',
+    challenge: 'Ein Mode-Unternehmen benötigte einen Stand, der die aktuelle Kollektion hochwertig inszeniert und zugleich exklusive Beratungsgespräche mit Einkäufern ermöglicht.',
+    solution: 'Wir entwickelten ein offenes Konzept mit beleuchteten Garderobenbereichen, großformatigen Lifestyle-Bildern und einer einladenden VIP-Lounge für B2B-Gespräche.',
+    result: 'Deutlich mehr Besucherkontakte, zahlreiche neue Handelspartner-Leads',
+    keyfacts: ['80 qm Standfläche', '3 Tage Aufbau', 'Nachhaltige Systemelemente'],
+    messe: 'Gallery SHOES Düsseldorf',
+    zielsetzung: 'Hochwertige Kollektionspräsentation und B2B-Kontaktgenerierung für die kommende Saison'
   },
   {
     id: '2',
@@ -126,6 +126,36 @@ export const DEMO_REFERENCES: Reference[] = [
       '/images/633e7f45-301e-4c5b-a5fc-b64c766f9956.jpeg',
       '/images/b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg'
     ]
+  },
+  {
+    id: '8',
+    title: 'Messestand mit Display-Rahmen und Branding',
+    branche: 'messebau',
+    size: '30 qm',
+    type: 'messebau',
+    imageUrl: '/images/6da797c7-d75b-4d81-bdb4-81b33663b633.jpeg',
+    description: 'Kompakter Messestand mit professionellen Display-Rahmen und markengerechter Gestaltung',
+    challenge: 'Ein Unternehmen benötigte einen kompakten Messestand mit hoher Markenwirkung und flexiblen Displayflächen für wechselnde Kampagnen.',
+    solution: 'Einsatz hochwertiger Display-Rahmen mit Wechselgrafiken, beleuchtete Rückwand und flexible Standelemente für maximale Wirkung auf kleiner Fläche.',
+    result: 'Professioneller Markenauftritt mit flexiblen Wechselmöglichkeiten für Grafiken und Inhalte',
+    keyfacts: ['30 qm', 'Display-Rahmen-System', 'Wechselgrafiken'],
+    messe: 'EuroShop Düsseldorf',
+    zielsetzung: 'Maximale Markenwirkung auf kompakter Fläche mit flexiblen Displaylösungen'
+  },
+  {
+    id: '9',
+    title: 'Produktpräsentation mit Rahmen-Display-System',
+    branche: 'messebau',
+    size: '45 qm',
+    type: 'messebau',
+    imageUrl: '/images/9412bc1d-704a-4bfb-bf51-d0f1b009e2da.jpeg',
+    description: 'Messestand mit großformatigen Rahmen-Displays zur effektvollen Produktinszenierung',
+    challenge: 'Ein Unternehmen suchte eine eindrucksvolle Lösung zur Produktpräsentation mit großformatigen Grafikflächen und gutem Besucherfluss.',
+    solution: 'Wir konzipierten einen Stand mit freistehenden Rahmen-Display-Systemen, die beidseitig bedruckt und hinterleuchtet werden können – kombiniert mit einer offenen Besucherführung.',
+    result: 'Hohe Aufmerksamkeit und Besucherfrequenz dank großflächiger, leuchtender Markengrafiken',
+    keyfacts: ['45 qm', 'Hinterleuchtete Displays', 'Beidseitige Grafiken'],
+    messe: 'FIBO Köln',
+    zielsetzung: 'Eindrucksvolle, großflächige Produktinszenierung mit modernen Display-Rahmen-Systemen'
   }
 ]
 
@@ -353,7 +383,7 @@ Falls ihr noch Fragen habt oder professionelle Unterstützung beim Standbau brau
 
 Viel Erfolg auf eurer nächsten Messe!`,
     category: 'Planung',
-    imageUrl: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
+    imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=450&fit=crop',
     publishedAt: Date.now() - 7 * 24 * 60 * 60 * 1000
   },
   {
@@ -690,7 +720,7 @@ Habt ihr noch Fragen zu eurem spezifischen Projekt? Wir von S&S Messebau helfen 
 
 Viel Erfolg beim Messeauftritt!`,
     category: 'Budget',
-    imageUrl: '/images/b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg',
+    imageUrl: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=450&fit=crop',
     publishedAt: Date.now() - 14 * 24 * 60 * 60 * 1000
   },
   {
@@ -937,7 +967,7 @@ Wir von S&S Messebau helfen euch dabei. In den letzten zehn Jahren haben wir gel
 
 Viel Erfolg bei eurem nächsten nachhaltigen Messeauftritt!`,
     category: 'Nachhaltigkeit',
-    imageUrl: '/images/03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg',
+    imageUrl: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&h=450&fit=crop',
     publishedAt: new Date('2026-02-16').getTime()
   },
   {
@@ -1582,7 +1612,7 @@ Ein Messestand von 20 bis 200 m² ist eine signifikante Investition. Aber mit re
 
 Wenn ihr konkrete Zahlen für euer Projekt braucht, kontaktiert uns. Wir von S&S Messebau kalkulieren transparent, beratend und realistisch – und zeigen euch nicht nur die Kosten, sondern auch, wo ihr intelligent sparen könnt, ohne Qualität zu verlieren.`,
     category: 'Kosten',
-    imageUrl: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
+    imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=450&fit=crop',
     publishedAt: Date.now() - 3 * 24 * 60 * 60 * 1000
   },
   {
@@ -2155,7 +2185,7 @@ Wenn ihr ein Food-Unternehmen seid und auf Messen gehen wollt: **Macht es richti
 
 Wenn ihr konkrete Planung braucht, helfen wir von S&S Messebau gerne: Wir kennen die Anforderungen von Food-Ständen und wissen, wo die Fallstricke sind. Von der Genehmigung bis zur Montage.`,
     category: 'Branchen',
-    imageUrl: '/images/03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg',
+    imageUrl: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=450&fit=crop',
     publishedAt: new Date('2026-02-15').getTime()
   },
   {
@@ -2374,7 +2404,7 @@ Schnelle Angebotsstellung ist nicht Marketing-Gag, sondern **echtes Service-Vers
 
 Wenn euer Messebauer 2–3 Wochen auf ein Angebot braucht, fragt nach dem Grund. Ist es echte Komplexität – oder Prozessineffizienz? Das macht den Unterschied zwischen durchschnittlichem und exzellentem Service aus.`,
     category: 'Service',
-    imageUrl: '/images/980a1068-ecee-48de-86a3-8635874252e4.jpeg',
+    imageUrl: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=450&fit=crop',
     publishedAt: Date.now() - 1 * 24 * 60 * 60 * 1000
   }
 ]
