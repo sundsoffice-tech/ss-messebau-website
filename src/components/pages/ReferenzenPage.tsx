@@ -27,9 +27,10 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
 
   const getBrancheLabel = (branche: string) => {
     switch (branche) {
-      case 'food': return t('referenzen.filter.food')
-      case 'versicherungen': return t('referenzen.filter.insurance')
-      case 'industrie': return t('referenzen.filter.industry')
+      case 'messebau': return t('referenzen.filter.messebau')
+      case 'eventbau': return t('referenzen.filter.eventbau')
+      case 'ladenbau': return t('referenzen.filter.ladenbau')
+      case 'sport': return t('referenzen.filter.sport')
       default: return branche
     }
   }
@@ -62,9 +63,10 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
               <div className="flex flex-wrap gap-2">
                 {[
                   { value: 'alle', label: t('referenzen.filter.allBranchen') },
-                  { value: 'food', label: t('referenzen.filter.food') },
-                  { value: 'versicherungen', label: t('referenzen.filter.insurance') },
-                  { value: 'industrie', label: t('referenzen.filter.industry') }
+                  { value: 'messebau', label: t('referenzen.filter.messebau') },
+                  { value: 'eventbau', label: t('referenzen.filter.eventbau') },
+                  { value: 'ladenbau', label: t('referenzen.filter.ladenbau') },
+                  { value: 'sport', label: t('referenzen.filter.sport') }
                 ].map((option) => (
                   <Button
                     key={option.value}
