@@ -1,0 +1,85 @@
+:root {
+  /* === Bild-Container Aspect Ratios === */
+  --media-ratio-hero: 16 / 9;
+  --media-ratio-card: 4 / 3;
+  --media-ratio-gallery: 1 / 1;
+  --media-ratio-reference: 3 / 2;
+  --media-ratio-blog: 16 / 9;
+  --media-ratio-logo: 3 / 2;
+
+  /* === Card-Normen === */
+  --card-min-h-sm: 280px;
+  --card-min-h-md: 320px;
+  --card-min-h-lg: 360px;
+  --card-pad: var(--size-6);
+  --card-pad-sm: var(--size-4);
+  --card-radius: var(--radius);
+
+  /* === Grid-Normen === */
+  --grid-gap: var(--size-6);
+  --grid-gap-sm: var(--size-4);
+  --grid-min-col: 280px;
+
+  /* === Bild-Container Höhen (responsive) === */
+  --media-h-hero: clamp(300px, 50vw, 600px);
+  --media-h-card: clamp(180px, 25vw, 280px);
+  --media-h-gallery: clamp(200px, 30vw, 400px);
+  --media-h-reference: clamp(200px, 28vw, 320px);
+
+  /* === Kaschierung (Contain-Modus) === */
+  --media-bg-contain: var(--muted);
+}
+
+/* Standard-Card in einem Grid */
+.norm-card {
+  min-height: var(--card-min-h-sm);
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 768px) {
+  .norm-card { min-height: var(--card-min-h-md); }
+}
+@media (min-width: 1024px) {
+  .norm-card { min-height: var(--card-min-h-lg); }
+}
+
+/* Card-Grid (einheitliche Gaps, auto-fill) */
+.norm-grid {
+  display: grid;
+  gap: var(--grid-gap-sm);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .norm-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--grid-gap);
+  }
+}
+@media (min-width: 1024px) {
+  .norm-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Card mit Bild oben + Content unten (Flex) */
+.norm-media-card {
+  display: flex;
+  flex-direction: column;
+}
+.norm-media-card > .media-frame {
+  flex-shrink: 0;
+}
+.norm-media-card > .card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--card-pad-sm);
+}
+@media (min-width: 768px) {
+  .norm-media-card > .card-body {
+    padding: var(--card-pad);
+  }
+}
+.norm-media-card .card-actions {
+  margin-top: auto;
+}
