@@ -156,6 +156,36 @@ export const DEMO_REFERENCES: Reference[] = [
       '/images/633e7f45-301e-4c5b-a5fc-b64c766f9956.jpeg',
       '/images/b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg'
     ]
+  },
+  {
+    id: '11',
+    title: 'Feinkost-Messestand Deligreece',
+    branche: 'food',
+    size: '100 qm',
+    type: 'messebau',
+    imageUrl: '/images/WhatsApp%20Image%202026-02-16%20at%2021.12.21.jpeg',
+    description: 'Großzügiger Feinkost-Messestand mit Traversensystem für die Präsentation griechischer Delikatessen',
+    challenge: 'Deligreece benötigte einen einladenden 100qm-Stand, der die Vielfalt ihrer griechischen Feinkost-Produkte optimal präsentiert und gleichzeitig Verkostungsbereiche für Messebesucher bietet.',
+    solution: 'Offener Traversenstand mit Holz-Metall-Regalsystem, beleuchtete Produktpräsentation, zentrale Empfangstheke mit Markenbranding und Stehtische für Kundengespräche.',
+    result: 'Hohe Besucherfrequenz und erfolgreiche B2B-Kontakte mit Einzelhändlern und Gastronomen',
+    keyfacts: ['100 qm Messestand', 'Traversensystem', 'Produktregale Holz/Metall', 'Verkostungsbereich'],
+    messe: 'Feinkost-Fachmesse',
+    zielsetzung: 'Premium-Produktpräsentation griechischer Feinkost mit einladendem Verkostungskonzept'
+  },
+  {
+    id: '12',
+    title: 'Fashion-Messestand mit Innovation-Konzept',
+    branche: 'fashion',
+    size: '100 qm',
+    type: 'messebau',
+    imageUrl: '/images/WhatsApp%20Image%202026-02-16%20at%2021.12.21%20(1).jpeg',
+    description: 'Moderner Fashion-Messestand mit großflächigem Bilddruck und Kleiderpräsentation',
+    challenge: 'Ein Modunternehmen brauchte einen eindrucksvollen 100qm-Stand, der aktuelle Kollektionen professionell inszeniert und zum Verweilen einlädt.',
+    solution: 'Imposanter Bilddruck-Hintergrund mit Holzrahmen, Mannequins für Outfit-Präsentation, Kleiderstangen für Kollektion, moderne Stehtische mit Barhockern für Kundengespräche.',
+    result: 'Starke Markenwahrnehmung und zahlreiche Orderabschlüsse während der Messetage',
+    keyfacts: ['100 qm Messestand', 'Großformat-Bilddruck', 'Mannequin-Präsentation', 'Lounge-Bereich'],
+    messe: 'Mode-Fachmesse',
+    zielsetzung: 'Eindrucksvolle Kollektion-Präsentation mit modernem Markenauftritt'
   }
 ]
 

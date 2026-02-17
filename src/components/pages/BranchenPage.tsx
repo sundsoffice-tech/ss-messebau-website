@@ -92,8 +92,8 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                 </div>
                 <div className="group aspect-square rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
-                    src="/images/03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg"
-                    alt={t('branchen.food.alt')}
+                    src="/images/WhatsApp%20Image%202026-02-16%20at%2021.12.21.jpeg"
+                    alt="Feinkost-Messestand Deligreece ca. 100qm – Traversensystem mit Produktregalen"
                     width="800"
                     height="800"
                     loading="lazy"

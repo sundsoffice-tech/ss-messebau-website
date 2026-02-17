@@ -18,6 +18,13 @@
 | 633e7f45-301e-4c5b-a5fc-b64c766f9956.jpeg | Umkleidekabinen | THW Sport | Hockey EM Shop – Umkleidekabinen mit Vorhängen und Spiegeln |
 | b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg | Panorama Shop | THW Sport | Hockey EM Shop Panorama – Adidas Hockey & Padel Ausrüstung |
 
+## Messebau 100qm (Batch 3)
+
+| Datei | Motiv | Branche | Alt-Text |
+|---|---|---|---|
+| WhatsApp Image 2026-02-16 at 21.12.21.jpeg | Deligreece Feinkost-Stand | Food/Feinkost | Feinkost-Messestand Deligreece ca. 100qm – Traversensystem mit Produktregalen |
+| WhatsApp Image 2026-02-16 at 21.12.21 (1).jpeg | Fashion/Mode Innovation-Stand | Fashion/Mode | Fashion-Messestand ca. 100qm – Innovation-Bilddruck mit Mannequins |
+
 ## Verwendung im Code
 
 Alle Bilder sind in der Codebase referenziert mit dem Format `/images/[UUID].jpeg`.
