@@ -46,25 +46,32 @@ Enthält README mit Bildbeschreibungen der Batch-1-Bilder (UUID-Dateien im Haupt
 
 ## Verwendung im Code
 
-### Messebau-Kontext (Batch 1)
-- `e859a873` → Referenz #7 (Roadshow Finanz), Blog-Beiträge
-- `1a5f3965` → Referenz #6 (Versicherung DKM), BranchenPage Industrie
-- `03e69940` → Referenz #4 (Bio-Feinkost), OtherPages Nachhaltigkeit, Blog-Beiträge
-- `fda8df74` → Referenz #2 (Versicherung)
+### Leistungs-Typ Kategorisierung (Neu)
+Das Referenzsystem wurde von Branchen (food, versicherungen, industrie) auf **Leistungs-Typen** umgestellt:
+- **messebau** – Klassische Messestände (Individual-, System-, Modulbau)
+- **eventbau** – Events, Roadshows, temporäre Installationen
+- **ladenbau** – Permanente Showrooms, Shop-Systeme
+- **sport** – Sportevents, Championships, Event-Shops
 
-### Eventbau-Kontext (Batch 2)
-- `980a1068` → Referenz #10 (Hockey EM Shop), Header Mega-Menü Eventbau, HomePage Service-Card Touren
-- `49546524` → Referenz #10, Header Mega-Menü Touren, OtherPages Über Uns
-- `633e7f45` → Referenz #9 (Robotik), Referenz #10 (Galerie)
-- `b512edb4` → Referenz #8 (Schwerlast), Referenz #10 (Galerie), Header Mega-Menü Bannerrahmen
+### Messebau-Kontext (Batch 1) → Kategorie: messebau
+- `e859a873` → Referenz #7 (Roadshow System, **eventbau**), BranchenPage Eventbau, Blog-Beiträge
+- `1a5f3965` → Referenz #6 (Klassischer Messestand, **messebau**)
+- `03e69940` → Referenz #4 (Nachhaltiger Messestand, **messebau**), OtherPages Nachhaltigkeit, Blog-Beiträge
+- `fda8df74` → Referenz #2 (Design-Stand, **messebau**)
 
-### Food/100qm-Kontext (Batch 3)
-- `deligreece-messestand-100qm-food.jpeg` → Referenz #1 (Premium Food), HomePage Service-Card Messebau, Header Mega-Menü Messebau, BranchenPage Food
-- `deligreece-messestand-100qm-food-2.jpeg` → Referenz #5 (Confiserie)
+### Eventbau-Kontext (Batch 2) → Kategorie: sport / eventbau
+- `980a1068` → Referenz #10 (Hockey EM Shop, **sport**), Header Mega-Menü Eventbau, BranchenPage Sport
+- `49546524` → Referenz #10, Header Mega-Menü Touren, HomePage Service-Card Touren, OtherPages Über Uns
+- `633e7f45` → Referenz #9 (Technik-Messestand, **messebau**), Referenz #10 (Galerie)
+- `b512edb4` → Referenz #8 (Industrie-Messestand, **messebau**), Referenz #10 (Galerie), Header Mega-Menü Bannerrahmen
 
-### Ladenbau-Kontext
-- `ladenbau/ladenbau-display-regal-led-beleuchtung.jpg` → LeistungenShowroomsPage, Header Mega-Menü Showroom, HomePage Service-Card Showroom, LeistungenPage Möbel
-- `ladenbau/showroom-bodenproben-ausstellung.jpg` → LeistungenShowroomsPage, LeistungenBoedenPage, Referenz #3 (Industrie-Showroom), LeistungenPage Möbel
+### Food/100qm-Kontext (Batch 3) → Kategorie: messebau
+- `deligreece-messestand-100qm-food.jpeg` → Referenz #1 (Premium Food-Messestand, **messebau**), HomePage Service-Card Messebau, Header Mega-Menü Messebau, BranchenPage Messebau
+- `deligreece-messestand-100qm-food-2.jpeg` → Referenz #5 (Food-Messestand, **messebau**)
+
+### Ladenbau-Kontext → Kategorie: ladenbau
+- `ladenbau/ladenbau-display-regal-led-beleuchtung.jpg` → LeistungenShowroomsPage, Header Mega-Menü Showroom, HomePage Service-Card Showroom, LeistungenPage Möbel, BranchenPage Ladenbau
+- `ladenbau/showroom-bodenproben-ausstellung.jpg` → LeistungenShowroomsPage, LeistungenBoedenPage, Referenz #3 (Showroom, **ladenbau**), LeistungenPage Möbel
 
 ### Böden-Kontext
 - `boeden/` Bilder → LeistungenPage Böden-Sektion, Header Mega-Menü Böden
@@ -74,3 +81,5 @@ Enthält README mit Bildbeschreibungen der Batch-1-Bilder (UUID-Dateien im Haupt
 - UUID-Dateinamen bleiben vorerst bestehen (spätere Umbenennung geplant)
 - SVG-Platzhalter in `moebel/` wurden entfernt und durch echte Ladenbau-Fotos ersetzt
 - Weitere Bilder (50qm, 80qm Messebau) folgen
+- **Messe-Badges** werden nicht mehr auf Referenz-Karten angezeigt (nur noch in Detailansicht via `messe`-Feld)
+- **Branchen-System** wurde auf **Leistungs-Typen** umgestellt (messebau, eventbau, ladenbau, sport)
