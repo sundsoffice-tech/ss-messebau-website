@@ -18,22 +18,64 @@
 | 633e7f45-301e-4c5b-a5fc-b64c766f9956.jpeg | Umkleidekabinen | THW Sport | Hockey EM Shop – Umkleidekabinen mit Vorhängen und Spiegeln |
 | b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg | Panorama Shop | THW Sport | Hockey EM Shop Panorama – Adidas Hockey & Padel Ausrüstung |
 
+## 100qm Messebau – Deligreece (Batch 3)
+
+| Datei | Motiv | Branche | Alt-Text |
+|---|---|---|---|
+| deligreece-messestand-100qm-food.jpeg | Deligreece Food-Stand 100qm | Food/Gastronomie | Messestand Deligreece – Premium Food-Stand ca. 100qm |
+| deligreece-messestand-100qm-food-2.jpeg | Deligreece Food-Stand 100qm (Ansicht 2) | Food/Gastronomie | Messestand Deligreece – Premium Food-Stand ca. 100qm, zweite Ansicht |
+
+## Unterordner
+
+### `boeden/` – Böden & Ausstattung
+| Datei | Motiv | Alt-Text |
+|---|---|---|
+| besprechungsraum-vinylboden-moebel.jpg | Besprechungsraum mit Vinylboden | Besprechungsraum mit professionellem Vinylboden und Möblierung |
+| holzboden-laminat-verlegung-raum.jpg | Holzboden/Laminat-Verlegung | Professionell verlegter Holzboden in modernem Raum |
+| kueche-hochglanz-holz-arbeitsplatte.jpg | Küche Hochglanz mit Holz | Hochglanz-Küche mit Holz-Arbeitsplatte |
+| kueche-hochglanz-marmor-led-beleuchtung.jpg | Küche Hochglanz mit Marmor | Hochglanz-Küche mit Marmor und LED-Beleuchtung |
+
+### `ladenbau/` – Showroom & Ladenbau
+| Datei | Motiv | Alt-Text |
+|---|---|---|
+| ladenbau-display-regal-led-beleuchtung.jpg | Display-Regal mit LED | Ladenbau Display-Regal mit LED-Beleuchtung |
+| showroom-bodenproben-ausstellung.jpg | Bodenproben-Ausstellung | Showroom mit Bodenproben-Ausstellung |
+
+### `moebel/` – Möbel & Ausstattung
+| Datei | Status | Hinweis |
+|---|---|---|
+| showroom-ausstellungsmoebel.svg | ⚠️ SVG-Platzhalter | TODO: Durch echtes Foto ersetzen |
+| individuelles-display-regal-led.svg | ⚠️ SVG-Platzhalter | TODO: Durch echtes Foto ersetzen |
+
+### `referenzen/messebau-25qm/` – Referenz-Dokumentation
+Enthält README mit Bildbeschreibungen der Batch-1-Bilder (UUID-Dateien im Hauptordner).
+
 ## Verwendung im Code
 
-Alle Bilder sind in der Codebase referenziert mit dem Format `/images/[UUID].jpeg`.
-
 ### Messebau-Kontext (Batch 1)
-- Verwendet für Messestand-Referenzen, Branchen-Seiten
-- Service-Cards für Messebau, Showroom/Ladenbau
-- Blog-Posts zu Messebau-Themen
+- `e859a873` → Referenz #8 (Schwerlast-Stand), HomePage Service-Card Messebau, Header Mega-Menü Messebau
+- `1a5f3965` → Referenz #2 (Versicherung), Referenz #3 (Industrie), Referenz #6 (Versicherung DKM), Referenz #9 (Robotik), BranchenPage Industrie
+- `03e69940` → Referenz #4 (Bio-Feinkost), OtherPages Nachhaltigkeit
+- `fda8df74` → Referenz #5 (Confiserie), Referenz #7 (Roadshow Finanz), Header Mega-Menü Touren
 
 ### Eventbau-Kontext (Batch 2)
-- Verwendet für Hockey EM Shop Referenz (EuroHockey Championships Mönchengladbach)
-- Eventbau-bezogene Inhalte
-- About-Sektion und Service-Posts
+- `980a1068` → Referenz #10 (Hockey EM Shop), Header Mega-Menü Eventbau
+- `49546524` → Referenz #10, HomePage Service-Card Touren, OtherPages Über Uns
+- `633e7f45` → Referenz #10 (Galerie)
+- `b512edb4` → Referenz #10 (Galerie), Header Mega-Menü Bannerrahmen
+
+### Food/100qm-Kontext (Batch 3)
+- `deligreece-messestand-100qm-food.jpeg` → Referenz #1 (Premium Food), BranchenPage Food
+
+### Ladenbau-Kontext
+- `ladenbau/ladenbau-display-regal-led-beleuchtung.jpg` → LeistungenShowroomsPage, Header Mega-Menü Showroom
+- `ladenbau/showroom-bodenproben-ausstellung.jpg` → LeistungenShowroomsPage, LeistungenBoedenPage
+
+### Böden-Kontext
+- `boeden/` Bilder → LeistungenPage Böden-Sektion, Header Mega-Menü Böden
 
 ## Hinweise
 
-- Bilder haben noch UUID-Dateinamen (werden später umbenannt)
+- UUID-Dateinamen bleiben vorerst bestehen (spätere Umbenennung geplant)
+- SVG-Platzhalter in `moebel/` müssen durch echte Fotos ersetzt werden
 - Weitere Bilder (50qm, 80qm Messebau) folgen
-- Alle Unsplash-URLs wurden durch eigene Bilder ersetzt

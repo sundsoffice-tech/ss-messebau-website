@@ -68,28 +68,30 @@ Diese Bilder wurden in die Website integriert und ersetzen Unsplash-Bilder an fo
 
 **Verwendung:**
 - `src/components/pages/HomePage.tsx` – Service-Card "Messebau"
-- `src/components/pages/BranchenPage.tsx` – Branche Food Bild
-- `src/lib/demo-data.ts` – Referenz "Premium Food-Stand"
+- `src/lib/demo-data.ts` – Referenz "Schwerlast-Stand" (#8)
+- `src/components/Header.tsx` – Mega-Menü previewImage für "Messebau"
 
 ### 2. 1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg (Elektro Leven-Stand)
 **Aktueller Pfad:** `/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg`
 
 **Verwendung:**
 - `src/components/pages/BranchenPage.tsx` – Branche Industrie Bild
-- `src/lib/demo-data.ts` – Referenz "Industrie-Showroom"
+- `src/lib/demo-data.ts` – Referenz "Versicherung" (#2), "Industrie-Showroom" (#3), "Versicherung DKM" (#6), "Robotik" (#9)
 
 ### 3. 03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg (Vireo-Stand)
 **Aktueller Pfad:** `/images/03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg`
 
 **Verwendung:**
 - `src/components/pages/OtherPages.tsx` – Nachhaltigkeit-Sektion Bild
+- `src/lib/demo-data.ts` – Referenz "Bio-Feinkost" (#4)
 
 ### 4. fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg (Stylee-Stand)
 **Aktueller Pfad:** `/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg`
 
 **Verwendung:**
-- `src/components/pages/HomePage.tsx` – Service-Card "Touren/Events"
-- `src/components/Header.tsx` – Mega-Menü previewImage für "Eventbau"
+- `src/lib/demo-data.ts` – Referenz "Confiserie" (#5), "Roadshow Finanz" (#7)
+- `src/components/pages/BranchenPage.tsx` – Branche Versicherungen Bild
+- `src/components/Header.tsx` – Mega-Menü previewImage für "Touren"
 
 ---
 
@@ -98,10 +100,14 @@ Diese Bilder wurden in die Website integriert und ersetzen Unsplash-Bilder an fo
 Die folgenden Unsplash-URLs wurden NICHT ersetzt, da keine passenden eigenen Bilder vorhanden sind:
 
 - **Über Uns Seite** (`OtherPages.tsx`): Unsplash-Bild für Team/Büro
-- **Showroom/Ladenbau** (`HomePage.tsx`, `Header.tsx`): Unsplash-Bild für Showroom
-- **Versicherungen** (`BranchenPage.tsx`): Unsplash-Bild für Versicherungsbranche
 - **Bannerrahmen** (`Header.tsx`): Unsplash-Bild für Bannerrahmen
 - **Verschiedene Referenzen** (`demo-data.ts`): Unsplash-Bilder für Bio-Feinkost, Confiserie, etc.
+
+## Bilder mit eigenen Fotos ersetzt
+
+- **Showroom/Ladenbau** (`LeistungenShowroomsPage.tsx`, `Header.tsx`): Ladenbau-Bilder aus `ladenbau/`
+- **Food-Branche** (`BranchenPage.tsx`): Deligreece 100qm Food-Stand
+- **Food-Referenz** (`demo-data.ts`): Deligreece 100qm Food-Stand
 
 ---
 
