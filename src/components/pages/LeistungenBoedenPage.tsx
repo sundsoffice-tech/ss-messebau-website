@@ -182,6 +182,25 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
         </div>
       </section>
 
+      {/* Showroom Bodenproben Bild */}
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <img
+                src="/images/ladenbau/showroom-bodenproben-ausstellung.jpg"
+                alt="Showroom mit Bodenproben-Ausstellung – Materialauswahl bei S&S Messebau"
+                width="800"
+                height="450"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* USP Badge Section */}
       <section className="py-12 bg-secondary/30">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

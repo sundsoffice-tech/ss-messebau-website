@@ -50,7 +50,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-blue-50',
     featureKeys: ['header.mega.messebau.f1', 'header.mega.messebau.f2', 'header.mega.messebau.f3'],
     gradient: 'from-blue-500/10 to-blue-600/5',
-    previewImage: '/images/referenzen/messebau-25qm/messestand-25qm-lounge-multimedia-orange.jpg',
+    previewImage: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
     sectionId: 'messebau',
     pagePath: '/leistungen/messebau'
   },
@@ -62,7 +62,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-teal-50',
     featureKeys: ['header.mega.touren.f1', 'header.mega.touren.f2', 'header.mega.touren.f3'],
     gradient: 'from-teal-500/10 to-teal-600/5',
-    previewImage: '/images/referenzen/messebau-25qm/messestand-25qm-premium-design-dunkel.jpg',
+    previewImage: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg',
     sectionId: 'touren',
     pagePath: '/leistungen/touren'
   },
@@ -74,7 +74,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-amber-50',
     featureKeys: ['header.mega.showroomLadenbau.f1', 'header.mega.showroomLadenbau.f2', 'header.mega.showroomLadenbau.f3'],
     gradient: 'from-amber-500/10 to-amber-600/5',
-    previewImage: '/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg',
+    previewImage: '/images/ladenbau/ladenbau-display-regal-led-beleuchtung.jpg',
     sectionId: 'showroom-ladenbau',
     pagePath: '/leistungen/showroom-ladenbau'
   },

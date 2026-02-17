@@ -92,7 +92,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                 </div>
                 <div className="group aspect-square rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
-                    src="/images/03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg"
+                    src="/images/deligreece-messestand-100qm-food.jpeg"
                     alt={t('branchen.food.alt')}
                     width="800"
                     height="800"
