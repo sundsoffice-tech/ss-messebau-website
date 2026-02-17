@@ -87,7 +87,7 @@ export const DEMO_REFERENCES: Reference[] = [
     challenge: 'Ein Unternehmen benötigte einen Stand, der professionelle Beratungsgespräche in offener Messeatmosphäre ermöglicht.',
     solution: 'Semi-private Beratungsräume, warme Beleuchtung und digitale Produktwände für interaktive Präsentationen.',
     result: 'Über 250 qualifizierte Leads und sehr positive Bewertungen zur Standgestaltung',
-    keyfacts: ['35 qm', '8 Beratungsplätze', 'Digital Signage'],
+    keyfacts: ['35 qm', '4 Beratungsplätze', 'Digital Signage'],
     messe: 'DKM Dortmund',
     zielsetzung: 'Professionelle Standgestaltung mit maximaler Beratungskapazität'
   },
