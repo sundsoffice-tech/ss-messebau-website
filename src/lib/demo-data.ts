@@ -27,7 +27,7 @@ export const DEMO_REFERENCES: Reference[] = [
     challenge: 'Ein Fashion-/Design-Unternehmen benötigte einen Stand, der Produkte ästhetisch in Szene setzt und gleichzeitig Raum für Kundengespräche bietet.',
     solution: 'Klare Raumzonierung: Offene Welcome-Area, Produktpräsentationszonen und digitale Infoscreens für interaktive Markenerlebnisse.',
     result: 'Über 300 Besucherkontakte, sehr positive Feedbacks zur Standgestaltung und Produktpräsentation',
-    keyfacts: ['12 qm Standfläche', 'Modulares System', '6 Beratungsplätze'],
+    keyfacts: ['12 qm Standfläche', 'Modulares System', '2 Beratungsplätze'],
     messe: 'DKM Dortmund',
     zielsetzung: 'Ästhetische Markenpräsenz mit effizienten Kommunikationszonen für Kundengespräche'
   },
