@@ -50,6 +50,16 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const getBrancheLabel = (branche: string) => {
+    switch (branche) {
+      case 'messebau': return t('home.references.messebau')
+      case 'eventbau': return t('home.references.eventbau')
+      case 'ladenbau': return t('home.references.ladenbau')
+      case 'sport': return t('home.references.sport')
+      default: return branche
+    }
+  }
+
   const handleServiceNavigation = (sectionId: string) => {
     window.location.hash = `/leistungen/${sectionId}`
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -308,13 +318,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
                 </div>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="secondary">
-                      {reference.branche === 'messebau' ? t('home.references.messebau') : 
-                       reference.branche === 'eventbau' ? t('home.references.eventbau') : 
-                       reference.branche === 'ladenbau' ? t('home.references.ladenbau') : 
-                       reference.branche === 'sport' ? t('home.references.sport') : 
-                       reference.branche}
-                    </Badge>
+                    <Badge variant="secondary">{getBrancheLabel(reference.branche)}</Badge>
                   </div>
                   <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">{reference.title}</h3>
                   <p className="text-sm text-muted-foreground line-clamp-2">{reference.description}</p>
