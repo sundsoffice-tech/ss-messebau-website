@@ -22,7 +22,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'versicherungen',
     size: '80 qm',
     type: 'messebau',
-    imageUrl: '/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg',
+    imageUrl: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg',
     description: 'Repräsentativer Messeauftritt mit Beratungszonen und interaktiven Elementen',
     challenge: 'Seriöser, vertrauensvoller Auftritt mit gleichzeitig moderner, zugänglicher Atmosphäre.',
     solution: 'Klare Raumzonierung: Offene Welcome-Area, abgeschirmte Beratungszonen, digitale Infoscreens.',
@@ -37,7 +37,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'industrie',
     size: '120 qm',
     type: 'ladenbau',
-    imageUrl: '/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg',
+    imageUrl: '/images/ladenbau/showroom-bodenproben-ausstellung.jpg',
     description: 'Permanenter Showroom für Kunststoff-Fertigungstechnik',
     challenge: 'Große Maschinen ansprechend präsentieren und technische Kompetenz vermitteln.',
     solution: 'Industrieller Look mit hochwertigen Details: Sichtbeton-Optik, LED-Spots, interaktive Produktkonfiguratoren.',
@@ -67,7 +67,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'food',
     size: '28 qm',
     type: 'messebau',
-    imageUrl: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg',
+    imageUrl: '/images/deligreece-messestand-100qm-food-2.jpeg',
     description: 'Temperaturkontrollierter Messestand für handgefertigte Confiserie-Produkte',
     challenge: 'Ein Chocolatier benötigte temperaturkontrollierte Produktpräsentation auf der ISM.',
     solution: 'Integrierte Kühlung, kunstvolle Displayvitrinen und beleuchtete Markenwand für maximale Produktinszenierung.',
@@ -97,7 +97,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'versicherungen',
     size: '40 qm',
     type: 'eventbau',
-    imageUrl: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg',
+    imageUrl: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
     description: 'Modulares Roadshow-Standsystem für konsistente Markenpräsenz auf regionalen Finanzmessen',
     challenge: 'Konsistente Markenpräsenz über mehrere regionale Veranstaltungen pro Jahr bei effizienter Budgetnutzung.',
     solution: 'Modulares, wiederverwendbares Standsystem mit schnellem Auf- und Abbau, transportoptimiert für den Roadshow-Einsatz.',
@@ -112,7 +112,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'industrie',
     size: '100 qm',
     type: 'messebau',
-    imageUrl: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
+    imageUrl: '/images/b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg',
     description: 'Schwerlast-Messestand mit Doppelstock-Meetingbereich für die Hannover Messe',
     challenge: 'Schwere Maschinen (2 Tonnen) erforderten verstärkte Bodeninfrastruktur und Starkstromversorgung.',
     solution: 'Verstärkter Schwerlastboden, integrierte Drehstromversorgung und Doppelstock-Meetingbereich für separate Kundengespräche.',
@@ -127,7 +127,7 @@ export const DEMO_REFERENCES: Reference[] = [
     branche: 'industrie',
     size: '75 qm',
     type: 'messebau',
-    imageUrl: '/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg',
+    imageUrl: '/images/633e7f45-301e-4c5b-a5fc-b64c766f9956.jpeg',
     description: 'Robotik-Messestand mit Live-Demo-Fläche und Sicherheitszonen auf der Automatica',
     challenge: 'Ein Robotik-Unternehmen benötigte einen Live-Demo-Bereich mit Sicherheitszonen für Industrieroboter.',
     solution: 'Transparente Sicherheitsabsperrungen, erhöhte Demo-Plattform und interaktive Touch-Displays für technische Details.',
@@ -383,7 +383,7 @@ Falls ihr noch Fragen habt oder professionelle Unterstützung beim Standbau brau
 
 Viel Erfolg auf eurer nächsten Messe!`,
     category: 'Planung',
-    imageUrl: '/images/referenzen/messebau-25qm/messestand-25qm-lounge-multimedia-orange.jpg',
+    imageUrl: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
     publishedAt: Date.now() - 7 * 24 * 60 * 60 * 1000
   },
   {
@@ -967,7 +967,7 @@ Wir von S&S Messebau helfen euch dabei. In den letzten zehn Jahren haben wir gel
 
 Viel Erfolg bei eurem nächsten nachhaltigen Messeauftritt!`,
     category: 'Nachhaltigkeit',
-    imageUrl: '/images/referenzen/messebau-25qm/messestand-25qm-nachhaltig-natur-beige.jpg',
+    imageUrl: '/images/03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg',
     publishedAt: new Date('2026-02-16').getTime()
   },
   {
