@@ -31,6 +31,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
       case 'eventbau': return t('referenzen.filter.eventbau')
       case 'ladenbau': return t('referenzen.filter.ladenbau')
       case 'sport': return t('referenzen.filter.sport')
+      case 'kleidung': return t('referenzen.filter.kleidung')
       default: return branche
     }
   }
@@ -66,7 +67,8 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                   { value: 'messebau', label: t('referenzen.filter.messebau') },
                   { value: 'eventbau', label: t('referenzen.filter.eventbau') },
                   { value: 'ladenbau', label: t('referenzen.filter.ladenbau') },
-                  { value: 'sport', label: t('referenzen.filter.sport') }
+                  { value: 'sport', label: t('referenzen.filter.sport') },
+                  { value: 'kleidung', label: t('referenzen.filter.kleidung') }
                 ].map((option) => (
                   <Button
                     key={option.value}

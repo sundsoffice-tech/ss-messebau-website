@@ -29,7 +29,7 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
     {
       step: 1,
       title: 'Bedarfsanalyse & Beratung',
-      desc: 'Wir besprechen Ihre Anforderungen an Boden, Möblierung und Ausstattung. Standgröße, Nutzung und Corporate Design fließen in unsere Empfehlung ein.',
+      desc: 'Wir besprechen Ihre Anforderungen an Boden, Möblierung und Ausstattung. Raumgröße, Nutzung und Corporate Design fließen in unsere Empfehlung ein.',
     },
     {
       step: 2,
@@ -44,7 +44,7 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
     {
       step: 4,
       title: 'Anlieferung & Montage',
-      desc: 'Unser erfahrenes Team verlegt Böden, stellt Möbel auf und richtet Ihren Stand komplett ein – termingerecht und sauber.',
+      desc: 'Unser erfahrenes Team verlegt Böden, stellt Möbel auf und richtet Ihre Räumlichkeiten komplett ein – termingerecht und sauber.',
     },
     {
       step: 5,
@@ -152,11 +152,11 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
               className="font-bold mb-6"
               style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)', lineHeight: '1.2' }}
             >
-              Böden & Ausstattung – Premium-Ambiente für Ihren Messestand
+              Böden & Ausstattung – Premium-Ambiente für Ihre Räumlichkeiten
             </h1>
             <p className="text-xl mb-8 text-white/90">
               Hochwertige Bodenbeläge, stilvolle Möblierung und durchdachte Ausstattungslösungen
-              für einen professionellen Messeauftritt. Von Messeteppich bis Parkett, von
+              für Messestände, Showrooms, Büros und Gewerberäume. Von Messeteppich bis Parkett, von
               Loungemöbeln bis Beleuchtungskonzept – alles aus einer Hand.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -182,19 +182,63 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
         </div>
       </section>
 
-      {/* Showroom Bodenproben Bild */}
+      {/* Bildgalerie – Böden & Ausstattung */}
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
               <img
                 src="/images/ladenbau/showroom-bodenproben-ausstellung.jpg"
                 alt="Showroom mit Bodenproben-Ausstellung – Materialauswahl bei S&S Messebau"
+                width="640"
+                height="360"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <img
+                src="/images/boeden/besprechungsraum-vinylboden-moebel.jpg"
+                alt="Besprechungsraum mit hochwertigem Vinylboden und moderner Möblierung"
+                width="640"
+                height="360"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <img
+                src="/images/boeden/holzboden-laminat-verlegung-raum.jpg"
+                alt="Raum mit professionell verlegtem Holzboden in Laminat-Optik"
+                width="640"
+                height="360"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <img
+                src="/images/boeden/kueche-hochglanz-holz-arbeitsplatte.jpg"
+                alt="Moderne Küche mit Hochglanz-Oberflächen und hochwertiger Holz-Arbeitsplatte"
+                width="640"
+                height="360"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary sm:col-span-2">
+              <img
+                src="/images/boeden/kueche-hochglanz-marmor-led-beleuchtung.jpg"
+                alt="Hochglanz-Küche mit Marmor-Optik und stimmungsvoller LED-Beleuchtung"
                 width="800"
                 height="450"
                 loading="lazy"
                 decoding="async"
-                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"
               />
             </div>
           </div>
@@ -244,9 +288,9 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
             Böden & Ausstattung – Unsere Leistungen im Detail
           </h2>
           <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Von der Bodenverlegung bis zur kompletten Standausstattung bieten wir Ihnen
-            alle Services für ein perfektes Messe-Ambiente. Professionell, stilvoll und
-            passgenau auf Ihre Marke abgestimmt.
+            Von der Bodenverlegung bis zur kompletten Raumausstattung bieten wir Ihnen
+            alle Services für ein perfektes Ambiente – ob Messestand, Showroom oder
+            Gewerberaum. Professionell, stilvoll und passgenau auf Ihre Marke abgestimmt.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -304,7 +348,7 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
             Materialien & Bodenarten im Überblick
           </h2>
           <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Für jeden Messestand die richtige Bodenlösung – von kostengünstig bis premium,
+            Für jedes Projekt die richtige Bodenlösung – von kostengünstig bis premium,
             von klassisch bis modern.
           </p>
 
@@ -335,10 +379,10 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
             className="font-bold text-center mb-4"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
           >
-            Ihr Weg zur perfekten Standausstattung
+            Ihr Weg zur perfekten Raumausstattung
           </h2>
           <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            In fünf Schritten zum perfekt ausgestatteten Messestand –
+            In fünf Schritten zum perfekt ausgestatteten Raum –
             von der Beratung bis zur Montage vor Ort.
           </p>
 
@@ -471,12 +515,12 @@ export function LeistungenBoedenPage({ onOpenInquiry }: { onOpenInquiry: () => v
             className="font-bold mb-6"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
           >
-            Bereit für die perfekte Standausstattung?
+            Bereit für die perfekte Raumausstattung?
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
             Lassen Sie uns gemeinsam die ideale Boden- und Ausstattungslösung für Ihren
-            Messestand planen. Kontaktieren Sie uns für eine unverbindliche Beratung
-            und ein individuelles Angebot.
+            Messestand, Showroom oder Gewerberaum planen. Kontaktieren Sie uns für eine
+            unverbindliche Beratung und ein individuelles Angebot.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" onClick={onOpenInquiry}>
