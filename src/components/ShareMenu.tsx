@@ -20,8 +20,8 @@ interface ShareMenuProps {
   source?: string
 }
 
-const PRIMARY_PLATFORMS: SharePlatform[] = ['linkedin', 'whatsapp', 'email']
-const SECONDARY_PLATFORMS: SharePlatform[] = ['x', 'facebook']
+const PRIMARY_PLATFORMS: SharePlatform[] = ['linkedin', 'whatsapp', 'instagram']
+const SECONDARY_PLATFORMS: SharePlatform[] = ['facebook', 'x', 'email']
 
 export const ShareMenu = memo(function ShareMenu({
   url = '/',

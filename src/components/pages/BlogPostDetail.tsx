@@ -103,7 +103,7 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
           <div className="flex items-center gap-2 mt-4" role="group" aria-label={t('share.ariaLabel')}>
             <span className="text-sm text-primary-foreground/60">{t('share.label')}</span>
             <div className="flex items-center gap-1">
-              {(['linkedin', 'whatsapp', 'email', 'copy'] as const).map((platform) => (
+              {(['linkedin', 'whatsapp', 'instagram', 'facebook', 'email', 'copy'] as const).map((platform) => (
                 <ShareButton
                   key={platform}
                   platform={platform}

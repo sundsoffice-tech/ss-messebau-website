@@ -8,7 +8,7 @@ import { navigate } from '@/lib/deep-linking'
 import { ShareButton } from './ShareButton'
 import type { SharePlatform } from '@/lib/share'
 
-const FOOTER_SHARE_PLATFORMS: SharePlatform[] = ['linkedin', 'whatsapp', 'email', 'x', 'copy']
+const FOOTER_SHARE_PLATFORMS: SharePlatform[] = ['linkedin', 'whatsapp', 'instagram', 'facebook', 'email', 'x', 'copy']
 
 export const Footer = memo(function Footer() {
   const { t } = useTranslation()
