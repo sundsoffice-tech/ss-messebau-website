@@ -110,11 +110,11 @@ export function BannerrahmenPage() {
             </Card>
 
             <Card className="p-6">
-              <div className="h-48 rounded-lg mb-4 overflow-hidden">
+              <div className="h-48 bg-secondary rounded-lg mb-4 overflow-hidden">
                 <img
                   src="/images/b0f59ab1-307b-4e5c-8d15-63eb0d5ae122.jpeg"
                   alt="Standrahmen-System – freistehender Bannerrahmen"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <h3 className="text-xl font-bold mb-2">{t('bannerrahmen.systems.standing.title')}</h3>
