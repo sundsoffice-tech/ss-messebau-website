@@ -10,10 +10,7 @@ import {
   FrameCorners,
 } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
-
-interface LeistungenHubPageProps {
-  onOpenInquiry: () => void
-}
+import { useUIStore } from '@/store/ui-store'
 
 const services = [
   { key: 'messebau', icon: Package, path: '/leistungen/messebau' },
@@ -24,8 +21,9 @@ const services = [
   { key: 'bannerrahmen', icon: FrameCorners, path: '/bannerrahmen' },
 ] as const
 
-export function LeistungenHubPage({ onOpenInquiry }: LeistungenHubPageProps) {
+export function LeistungenHubPage() {
   const { t } = useTranslation()
+  const { openInquiry } = useUIStore()
 
   const handleTileClick = (path: string) => {
     window.location.hash = path
@@ -129,7 +127,7 @@ export function LeistungenHubPage({ onOpenInquiry }: LeistungenHubPageProps) {
           <Button
             size="lg"
             className="mt-6 bg-accent text-accent-foreground hover:bg-accent/90 min-h-[48px] text-base"
-            onClick={onOpenInquiry}
+            onClick={openInquiry}
           >
             {t('hub.cta.button')}
           </Button>

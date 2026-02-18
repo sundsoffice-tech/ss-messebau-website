@@ -4,10 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ArrowRight, ArrowLeft, CheckCircle, Calculator } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
-
-interface StandCalculatorProps {
-  onOpenInquiry: () => void
-}
+import { useUIStore } from '@/store/ui-store'
 
 type Industry = 'food' | 'insurance' | 'industrial' | 'other'
 type Size = 'small' | 'medium' | 'large' | 'xlarge'
@@ -35,7 +32,8 @@ function calculatePrice(size: Size, level: Level): { min: number; max: number } 
   }
 }
 
-export function StandCalculator({ onOpenInquiry }: StandCalculatorProps) {
+export function StandCalculator() {
+  const { openInquiry } = useUIStore()
   const { t, lang } = useTranslation()
   const [step, setStep] = useState(1)
   const [industry, setIndustry] = useState<Industry | null>(null)
@@ -191,7 +189,7 @@ export function StandCalculator({ onOpenInquiry }: StandCalculatorProps) {
                   {t('calculator.result.note')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <Button size="lg" onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 min-h-[52px] text-base">
+                  <Button size="lg" onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 min-h-[52px] text-base">
                     {t('calculator.result.cta')}
                     <ArrowRight className="ml-2" />
                   </Button>

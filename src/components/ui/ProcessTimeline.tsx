@@ -1,10 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
-
-interface ProcessTimelineProps {
-  onOpenInquiry: () => void
-}
+import { useUIStore } from '@/store/ui-store'
 
 const steps = [
   { titleKey: 'process.step1.title', descKey: 'process.step1.desc' },
@@ -15,7 +12,8 @@ const steps = [
   { titleKey: 'process.step6.title', descKey: 'process.step6.desc' },
 ]
 
-export function ProcessTimeline({ onOpenInquiry }: ProcessTimelineProps) {
+export function ProcessTimeline() {
+  const { openInquiry } = useUIStore()
   const { t } = useTranslation()
   return (
     <section id="process" className="py-12 sm:py-16">
@@ -45,7 +43,7 @@ export function ProcessTimeline({ onOpenInquiry }: ProcessTimelineProps) {
         </div>
 
         <div className="text-center mt-8 sm:mt-10">
-          <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90">
+          <Button onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90">
             {t('process.cta')}
             <ArrowRight className="ml-2" />
           </Button>

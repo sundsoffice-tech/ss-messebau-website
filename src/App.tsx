@@ -15,6 +15,8 @@ import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 import { usePageMeta } from './hooks/use-page-meta'
 import { usePageViewTracking } from './hooks/use-page-view-tracking'
 import { I18nContext, getTranslation, getStoredLanguage, storeLanguage, type Language } from './lib/i18n'
+import { useUIStore } from './store/ui-store'
+import { PageErrorBoundary } from './components/PageErrorBoundary'
 
 // Lazy load page components for code-splitting
 const HomePage = lazy(() => import('./components/pages/HomePage').then(m => ({ default: m.HomePage })))
@@ -41,7 +43,7 @@ const LeistungenDigitalPage = lazy(() => import('./components/pages/LeistungenDi
 const AdminPage = lazy(() => import('./components/pages/AdminPage').then(m => ({ default: m.AdminPage })))
 
 function App() {
-  const [inquiryDialogOpen, setInquiryDialogOpen] = useState(false)
+  const { inquiryDialogOpen, openInquiry, setInquiryOpen } = useUIStore()
   const [currentPage, setCurrentPage] = useState('/')
   const [lang, setLangState] = useState<Language>(getStoredLanguage)
 
@@ -67,9 +69,9 @@ function App() {
       const deepLink = parseDeepLink(window.location.hash)
       const page = normalizePagePath(deepLink.page)
       const section = deepLink.section
-      
+
       setCurrentPage(page)
-      
+
       if (section) {
         scrollToSectionWithRetry(section, {
           maxRetries: 20,
@@ -77,8 +79,8 @@ function App() {
         })
       } else {
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        window.scrollTo({ 
-          top: 0, 
+        window.scrollTo({
+          top: 0,
           behavior: prefersReducedMotion ? 'auto' : 'smooth'
         })
       }
@@ -86,9 +88,9 @@ function App() {
 
     handleHashChange()
     window.addEventListener('hashchange', handleHashChange)
-    
+
     window.addEventListener('popstate', handleHashChange)
-    
+
     return () => {
       window.removeEventListener('hashchange', handleHashChange)
       window.removeEventListener('popstate', handleHashChange)
@@ -96,19 +98,17 @@ function App() {
   }, [])
 
   const renderPage = () => {
-    const onOpenInquiry = () => setInquiryDialogOpen(true)
-
     switch (currentPage) {
       case '/':
-        return <HomePage onOpenInquiry={onOpenInquiry} />
+        return <HomePage />
       case '/leistungen':
-        return <LeistungenHubPage onOpenInquiry={onOpenInquiry} />
+        return <LeistungenHubPage />
       case '/leistungen/messebau':
-        return <LeistungenMessebauPage onOpenInquiry={onOpenInquiry} />
+        return <LeistungenMessebauPage />
       case '/leistungen/eventbau':
-        return <LeistungenEventbauPage onOpenInquiry={onOpenInquiry} />
+        return <LeistungenEventbauPage />
       case '/leistungen/showroom-ladenbau':
-        return <LeistungenShowroomsPage onOpenInquiry={onOpenInquiry} />
+        return <LeistungenShowroomsPage />
       case '/leistungen/showrooms':
       case '/leistungen/ladenbau':
       case '/leistungen/brandspaces':
@@ -116,44 +116,44 @@ function App() {
         window.location.hash = '/leistungen/showroom-ladenbau'
         return null
       case '/leistungen/touren':
-        return <LeistungenTourenPage onOpenInquiry={onOpenInquiry} />
+        return <LeistungenTourenPage />
       case '/leistungen/boeden-ausstattung':
-        return <LeistungenBoedenPage onOpenInquiry={onOpenInquiry} />
+        return <LeistungenBoedenPage />
       case '/leistungen/digital-experience':
-        return <LeistungenDigitalPage onOpenInquiry={onOpenInquiry} />
+        return <LeistungenDigitalPage />
       case '/branchen':
-        return <BranchenPage onOpenInquiry={onOpenInquiry} />
+        return <BranchenPage />
       case '/referenzen':
-        return <ReferenzenPage onOpenInquiry={onOpenInquiry} />
+        return <ReferenzenPage />
       case '/ueber-uns':
-        return <UeberUnsPage onOpenInquiry={onOpenInquiry} />
+        return <UeberUnsPage />
       case '/ablauf':
-        return <AblaufPage onOpenInquiry={onOpenInquiry} />
+        return <AblaufPage />
       case '/nachhaltigkeit':
-        return <NachhaltigkeitPage onOpenInquiry={onOpenInquiry} />
+        return <NachhaltigkeitPage />
       case '/blog':
-        return <BlogPage onOpenInquiry={onOpenInquiry} />
+        return <BlogPage />
       case '/aktuelles':
-        return <AktuellesPage onOpenInquiry={onOpenInquiry} />
+        return <AktuellesPage />
       case '/kontakt':
-        return <KontaktPage onOpenInquiry={onOpenInquiry} />
+        return <KontaktPage />
       case '/ki-berater':
-        return <KIBeraterPage onOpenInquiry={onOpenInquiry} />
+        return <KIBeraterPage />
       case '/bannerrahmen':
-        return <BannerrahmenPage onOpenInquiry={onOpenInquiry} />
+        return <BannerrahmenPage />
       case '/banner-bestellen':
-        return <BannerBestellenPage onOpenInquiry={onOpenInquiry} />
+        return <BannerBestellenPage />
       case '/admin':
-        return <AdminPage onOpenInquiry={onOpenInquiry} />
+        return <AdminPage />
       case '/impressum':
         return <ImpressumPage />
       case '/datenschutz':
         return <DatenschutzPage />
       default:
         if (currentPage.startsWith('/blog/')) {
-          return <BlogPage onOpenInquiry={onOpenInquiry} />
+          return <BlogPage />
         }
-        return <HomePage onOpenInquiry={onOpenInquiry} />
+        return <HomePage />
     }
   }
 
@@ -171,21 +171,23 @@ function App() {
         >
           Zum Hauptinhalt springen
         </a>
-        <Header onOpenInquiry={() => setInquiryDialogOpen(true)} />
+        <Header />
         <main id="main-content" tabIndex={-1} className="flex-1 mobile-safe-bottom focus:outline-none">
-          <Suspense fallback={
-            <div className="flex items-center justify-center min-h-[50vh]" role="status" aria-live="polite">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              <span className="sr-only">Seite wird geladen...</span>
-            </div>
-          }>
-            {renderPage()}
-          </Suspense>
+          <PageErrorBoundary>
+            <Suspense fallback={
+              <div className="flex items-center justify-center min-h-[50vh]" role="status" aria-live="polite">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                <span className="sr-only">Seite wird geladen...</span>
+              </div>
+            }>
+              {renderPage()}
+            </Suspense>
+          </PageErrorBoundary>
         </main>
         <Footer />
-        <StickyCTA onClick={() => setInquiryDialogOpen(true)} />
-        <MobileStickyCTA onClick={() => setInquiryDialogOpen(true)} />
-        <InquiryDialog open={inquiryDialogOpen} onOpenChange={setInquiryDialogOpen} />
+        <StickyCTA onClick={openInquiry} />
+        <MobileStickyCTA onClick={openInquiry} />
+        <InquiryDialog open={inquiryDialogOpen} onOpenChange={setInquiryOpen} />
         <CookieConsent />
         <Toaster position="top-center" richColors />
       </div>

@@ -125,11 +125,7 @@ const initialConfig: BannerConfig = {
   },
 }
 
-interface BannerBestellenPageProps {
-  onOpenInquiry: () => void
-}
-
-export function BannerBestellenPage({ onOpenInquiry }: BannerBestellenPageProps) {
+export function BannerBestellenPage() {
   const { t } = useTranslation()
   const [currentStep, setCurrentStep] = useState(1)
   const [config, setConfig] = useKV<BannerConfig>('banner_config_draft', initialConfig)

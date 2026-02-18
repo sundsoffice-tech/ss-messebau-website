@@ -5,13 +5,11 @@ import { useScrollDepthTracking, useDwellTimeTracking } from '@/hooks/use-analyt
 import { useTranslation } from '@/lib/i18n'
 import { MesseCalendar } from '@/components/MesseCalendar'
 import { NewsSection } from '@/components/NewsSection'
+import { useUIStore } from '@/store/ui-store'
 
-interface AktuellesPageProps {
-  onOpenInquiry: () => void
-}
-
-export function AktuellesPage({ onOpenInquiry }: AktuellesPageProps) {
+export function AktuellesPage() {
   const { t } = useTranslation()
+  const { openInquiry } = useUIStore()
 
   useScrollDepthTracking('aktuelles')
   useDwellTimeTracking('aktuelles')
@@ -45,7 +43,7 @@ export function AktuellesPage({ onOpenInquiry }: AktuellesPageProps) {
           </p>
           <Button
             size="lg"
-            onClick={() => { trackHeroCTAClick('aktuelles_cta'); onOpenInquiry() }}
+            onClick={() => { trackHeroCTAClick('aktuelles_cta'); openInquiry() }}
             className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg"
           >
             {t('aktuelles.cta.button')}

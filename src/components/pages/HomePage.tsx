@@ -12,7 +12,7 @@ import {
   Handshake,
   Target
 } from '@phosphor-icons/react'
-import { DEMO_REFERENCES } from '@/lib/demo-data'
+import { DEMO_REFERENCES } from '@/lib/demo-references'
 import { useTranslation } from '@/lib/i18n'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
@@ -23,13 +23,11 @@ import { LogoWall } from '@/components/ui/LogoWall'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
 import { trackHeroCTAClick, trackReferenceDetailView } from '@/lib/analytics'
 import { useScrollDepthTracking, useDwellTimeTracking } from '@/hooks/use-analytics'
+import { useUIStore } from '@/store/ui-store'
 
-interface HomePageProps {
-  onOpenInquiry: () => void
-}
-
-export function HomePage({ onOpenInquiry }: HomePageProps) {
+export function HomePage() {
   const { t } = useTranslation()
+  const { openInquiry } = useUIStore()
   useDeepLinking('/')
   
   useSectionObserver([
@@ -109,7 +107,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Button 
                 size="lg" 
-                onClick={() => { trackHeroCTAClick('hero'); onOpenInquiry() }}
+                onClick={() => { trackHeroCTAClick('hero'); openInquiry() }}
                 className="bg-accent text-accent-foreground hover:bg-accent/90 px-6 sm:px-8 py-6 text-base sm:text-lg font-medium min-h-[48px]"
                 aria-label={t('home.hero.ctaAria')}
               >
@@ -130,7 +128,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <GuaranteeBanner onOpenInquiry={onOpenInquiry} />
+      <GuaranteeBanner />
 
       <FactBar />
 
@@ -350,7 +348,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
         </div>
       </section>
 
-      <ProcessTimeline onOpenInquiry={onOpenInquiry} />
+      <ProcessTimeline />
 
       <LogoWall />
 
@@ -443,7 +441,7 @@ export function HomePage({ onOpenInquiry }: HomePageProps) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg"
-              onClick={() => { trackHeroCTAClick('cta_section'); onOpenInquiry() }}
+              onClick={() => { trackHeroCTAClick('cta_section'); openInquiry() }}
               className="bg-accent hover:bg-accent/90 text-accent-foreground"
             >
               {t('home.cta.button')}

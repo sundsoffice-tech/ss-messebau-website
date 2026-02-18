@@ -19,10 +19,6 @@ import { sendFormNotification } from '@/lib/notification-service'
 import { FIELD_TOKENS } from '@/lib/form-system/field-registry'
 import { sendChatMessage } from '@/lib/chat-service'
 
-interface KontaktPageProps {
-  onOpenInquiry: () => void
-}
-
 interface QuickAction {
   id: string
   icon: React.ReactNode
@@ -31,7 +27,7 @@ interface QuickAction {
   category: string
 }
 
-export function KontaktPage({ onOpenInquiry: _onOpenInquiry }: KontaktPageProps) {
+export function KontaktPage() {
   const { t } = useTranslation()
   useSectionObserver(['kontaktformular', 'anfahrt', 'ki-berater'])
   useScrollDepthTracking('kontakt')

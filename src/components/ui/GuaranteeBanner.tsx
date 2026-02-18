@@ -2,12 +2,10 @@ import { Button } from '@/components/ui/button'
 import { Lightning, ArrowRight } from '@phosphor-icons/react'
 import { track48hBannerClick } from '@/lib/analytics'
 import { useTranslation } from '@/lib/i18n'
+import { useUIStore } from '@/store/ui-store'
 
-interface GuaranteeBannerProps {
-  onOpenInquiry: () => void
-}
-
-export function GuaranteeBanner({ onOpenInquiry }: GuaranteeBannerProps) {
+export function GuaranteeBanner() {
+  const { openInquiry } = useUIStore()
   const { t } = useTranslation()
   return (
     <section className="bg-accent text-accent-foreground py-4 sm:py-5">
@@ -21,7 +19,7 @@ export function GuaranteeBanner({ onOpenInquiry }: GuaranteeBannerProps) {
             </div>
           </div>
           <Button
-            onClick={() => { track48hBannerClick(); onOpenInquiry() }}
+            onClick={() => { track48hBannerClick(); openInquiry() }}
             variant="outline"
             size="sm"
             className="border-accent-foreground/30 bg-accent-foreground/15 text-accent-foreground hover:bg-accent-foreground/25 whitespace-nowrap"

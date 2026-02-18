@@ -3,18 +3,19 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, ArrowRight, Clock } from '@phosphor-icons/react'
 import { marked } from 'marked'
-import { DEMO_BLOG_POSTS } from '@/lib/demo-data'
+import { DEMO_BLOG_POSTS } from '@/lib/demo-blog-posts'
 import { useTranslation } from '@/lib/i18n'
+import { useUIStore } from '@/store/ui-store'
 import { BlogPostCard } from './BlogPostCard'
 import type { BlogPost } from '@/lib/types'
 
 interface BlogPostDetailProps {
   post: BlogPost
   onNavigate: (path: string) => void
-  onOpenInquiry: () => void
 }
 
-export function BlogPostDetail({ post, onNavigate, onOpenInquiry }: BlogPostDetailProps) {
+export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
+  const { openInquiry } = useUIStore()
   const { t, lang } = useTranslation()
 
   const formatDate = (timestamp: number) => {
@@ -109,7 +110,7 @@ export function BlogPostDetail({ post, onNavigate, onOpenInquiry }: BlogPostDeta
               {t('blog.backToOverview')}
             </Button>
             <Button
-              onClick={onOpenInquiry}
+              onClick={openInquiry}
               className="bg-accent text-accent-foreground hover:bg-accent/90 min-h-[44px]"
             >
               {t('blog.cta.button')}
