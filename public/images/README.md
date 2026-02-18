@@ -4,7 +4,7 @@
 
 | Datei | Motiv | Branche | Alt-Text |
 |---|---|---|---|
-| e859a873-049d-4f2b-9156-0ac94939c636.jpeg | Große blaue Roadshow-Ausstellung mit Traversensystem, professioneller Beleuchtung, blauem Teppich und historischer Firmenchronik | Sport/Fitness | Messestand Flexersize – Lounge mit Multimedia, 25qm |
+| e859a873-049d-4f2b-9156-0ac94939c636.jpeg | Große blaue Roadshow-Ausstellung mit Traversensystem, professioneller Beleuchtung, blauem Teppich und historischer Firmenchronik | Eventbau | Große Roadshow-Ausstellung mit Traversen und professioneller Beleuchtung – realisiert von S&S Messebau |
 | 1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg | Elektro Leven Klassisch | Elektro/Handwerk | Messestand Elektro Leven – Klassisch mit Beratung, 25qm |
 | 03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg | Vireo Nachhaltig | Bio/Nachhaltigkeit | Messestand Vireo – Nachhaltig mit Naturmaterialien, 25qm |
 | fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg | Stylee Premium | Fashion/Design | Messestand Stylee – Premium Design, 25qm |
@@ -13,7 +13,7 @@
 
 | Datei | Motiv | Kunde | Alt-Text |
 |---|---|---|---|
-| 980a1068-ecee-48de-86a3-8635874252e4.jpeg | Elegante Galerie-Installation mit weißen Theken, Kunstpräsentation und moderner Beleuchtung | THW Sport | Hockey EM Shop Mönchengladbach – Verkaufsraum mit Adidas Hockey-Ausrüstung |
+| 980a1068-ecee-48de-86a3-8635874252e4.jpeg | Elegante Galerie-Installation mit weißen Theken, Kunstpräsentation und moderner Beleuchtung | Eventbau | Elegante Galerie-Installation mit modernem Ausstellungsdesign – realisiert von S&S Messebau |
 | 49546524-e641-43fd-8c29-79a94e05bf99.jpeg | Eingang/Empfang | THW Sport | Hockey EM Event-Shop – Eingangsbereich mit EuroHockey-Branding und Mannequins |
 | 633e7f45-301e-4c5b-a5fc-b64c766f9956.jpeg | Umkleidekabinen | THW Sport | Hockey EM Shop – Umkleidekabinen mit Vorhängen und Spiegeln |
 | b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg | Panorama Shop | THW Sport | Hockey EM Shop Panorama – Adidas Hockey & Padel Ausrüstung |
