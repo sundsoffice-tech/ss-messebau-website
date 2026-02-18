@@ -93,18 +93,18 @@ export const DEMO_REFERENCES: Reference[] = [
   },
   {
     id: '7',
-    title: 'Modulares Roadshow-System',
+    title: 'Galerie-Ausstellung & Marken-Showroom',
     branche: 'eventbau',
-    size: '40 qm',
+    size: '150 qm',
     type: 'eventbau',
-    imageUrl: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
-    description: 'Modulares Roadshow-Standsystem für konsistente Markenpräsenz auf regionalen Events und Messen',
-    challenge: 'Konsistente Markenpräsenz über mehrere regionale Veranstaltungen pro Jahr bei effizienter Budgetnutzung.',
-    solution: 'Modulares, wiederverwendbares Standsystem mit schnellem Auf- und Abbau, transportoptimiert für den Roadshow-Einsatz.',
-    result: 'Deutliche Kosteneinsparung gegenüber Einzelbauten, konsistente Markenpräsenz auf allen Events',
-    keyfacts: ['Mehrere Messen/Jahr', '40 qm Systemstand', '2h Aufbauzeit', 'Wiederverwendbar'],
-    messe: 'Mehrere Messen',
-    zielsetzung: 'Kosteneffiziente, konsistente Markenpräsenz über mehrere regionale Events und Messen'
+    imageUrl: '/images/WhatsApp%20Image%202026-02-15%20at%2018.25.23.jpeg',
+    description: 'Hochwertige Galerie-Ausstellung mit modularen Marken-Countern und eleganter Produktpräsentation in architektonischem Ambiente',
+    challenge: 'Mehrere Premium-Marken sollten in einer anspruchsvollen Galerieumgebung gleichwertig und hochwertig präsentiert werden – mit klarer Markenidentität pro Counter.',
+    solution: 'Modulare, weiße Ausstellungstheken mit integrierten Markenlogos, individuellen Stehleuchten und Produktdisplays. Offene Raumgestaltung mit Sichtbeton-Architektur und Oberlicht für natürliche Beleuchtung.',
+    result: 'Eindrucksvolle Markenpräsentation in Galeriequalität, hohe Besucherverweildauer und positive Resonanz aller teilnehmenden Marken',
+    keyfacts: ['150 qm Ausstellungsfläche', 'Multi-Marken-Konzept', 'Galerie-Ambiente', 'Integrierte Beleuchtung'],
+    messe: 'Kunst- & Design-Ausstellung',
+    zielsetzung: 'Premium-Markenpräsentation mehrerer Brands in hochwertigem Galerie-Setting mit architektonischem Anspruch'
   },
   {
     id: '10',

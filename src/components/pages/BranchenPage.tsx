@@ -155,8 +155,8 @@ export function BranchenPage() {
                 </div>
                 <div className="group aspect-square rounded-lg overflow-hidden lg:order-1 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img 
-                    src="/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg"
-                    alt={t('branchen.eventbau.alt')}
+                    src="/images/6f93c3a5-fc1c-4ea7-8803-a789be79302e.jpeg"
+                    alt="Professionelle Corporate-History-Ausstellung mit Truss-Konstruktionen und blauer Markenwelt"
                     width="800"
                     height="800"
                     loading="lazy"
