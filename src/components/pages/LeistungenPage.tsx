@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Warehouse, CalendarDot, Storefront, Armchair, ArrowRight, CheckCircle, Leaf, Recycle, TreeEvergreen, Truck, CubeTransparent, Lightning, Crosshair, Package, ChatCircleDots, TrendUp, DeviceMobile, ChartLine, Cube, Eye, Brain, Sparkle } from '@phosphor-icons/react'
+import { navigate } from '@/lib/deep-linking'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { StandCalculator } from '@/components/ui/StandCalculator'
@@ -852,8 +853,8 @@ export function LeistungenPage() {
               {t('leistungen.sustainability.outro')}
             </p>
             <a
-              href="#/nachhaltigkeit"
-              onClick={(e) => { e.preventDefault(); window.location.hash = '/nachhaltigkeit' }}
+              href="/nachhaltigkeit"
+              onClick={(e) => { e.preventDefault(); navigate('/nachhaltigkeit') }}
               className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-6 py-3 text-white font-semibold hover:bg-green-700 transition-colors min-h-[48px] text-base"
             >
               {t('leistungen.sustainability.cta')}

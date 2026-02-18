@@ -10,6 +10,7 @@ import {
   FrameCorners,
 } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
+import { navigate } from '@/lib/deep-linking'
 import { useUIStore } from '@/store/ui-store'
 
 const services = [
@@ -26,7 +27,7 @@ export function LeistungenHubPage() {
   const { openInquiry } = useUIStore()
 
   const handleTileClick = (path: string) => {
-    window.location.hash = path
+    navigate(path)
   }
 
   return (
@@ -52,27 +53,20 @@ export function LeistungenHubPage() {
       {/* Service Tiles Grid */}
       <section id="services-grid" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {services.map((service) => {
               const Icon = service.icon
-              const isBanner = service.key === 'bannerrahmen'
 
               return (
                 <Card
                   key={service.key}
-                  className={`group cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1 ${
-                    isBanner ? 'md:col-span-2 lg:col-span-3' : ''
-                  }`}
+                  className="group cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1"
                   data-track="hub-tile-click"
                   data-service={service.key}
                   onClick={() => handleTileClick(service.path)}
                 >
                   <CardContent className="flex flex-col gap-4 p-6 sm:p-8">
-                    <div
-                      className={`flex items-center gap-4 ${
-                        isBanner ? 'sm:flex-row' : 'flex-col sm:flex-row'
-                      }`}
-                    >
+                    <div className="flex items-center gap-4 flex-col sm:flex-row">
                       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                         <Icon size={28} weight="duotone" />
                       </div>

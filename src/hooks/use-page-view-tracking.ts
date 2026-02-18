@@ -15,7 +15,7 @@ export function usePageViewTracking(): void {
       trackPageView()
     }
 
-    window.addEventListener('hashchange', handler)
-    return () => window.removeEventListener('hashchange', handler)
+    window.addEventListener('popstate', handler)
+    return () => window.removeEventListener('popstate', handler)
   }, [])
 }

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, ArrowRight, Clock } from '@phosphor-icons/react'
@@ -29,6 +29,42 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
   const htmlContent = useMemo(() => {
     return marked.parse(post.content, { async: false }) as string
   }, [post.content])
+
+  // Inject BlogPosting JSON-LD structured data for SEO
+  useEffect(() => {
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: post.title,
+      description: post.excerpt,
+      image: post.imageUrl,
+      datePublished: new Date(post.publishedAt).toISOString(),
+      dateModified: new Date(post.publishedAt).toISOString(),
+      author: {
+        '@type': 'Organization',
+        name: 'S&S Messebau',
+        url: 'https://sunds-messebau.de'
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'S&S Messebau',
+        url: 'https://sunds-messebau.de'
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': `https://sunds-messebau.de/blog/${post.slug}`
+      }
+    }
+    const script = document.createElement('script')
+    script.type = 'application/ld+json'
+    script.dataset.blogSchema = 'true'
+    script.textContent = JSON.stringify(schema)
+    document.head.appendChild(script)
+
+    return () => {
+      document.head.querySelectorAll('script[data-blog-schema]').forEach(el => el.remove())
+    }
+  }, [post])
 
   const relatedPosts = useMemo(() => {
     const sameCategory = DEMO_BLOG_POSTS.filter(p => p.id !== post.id && p.category === post.category).slice(0, 3)

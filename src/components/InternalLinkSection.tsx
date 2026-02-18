@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { ArrowRight } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
+import { navigate } from '@/lib/deep-linking'
 
 interface InternalLink {
   label: string
@@ -22,7 +23,7 @@ export const InternalLinkSection = memo(function InternalLinkSection({
 
   const handleNavigation = (hash: string, event: React.MouseEvent) => {
     event.preventDefault()
-    window.location.hash = hash
+    navigate(hash)
   }
 
   return (

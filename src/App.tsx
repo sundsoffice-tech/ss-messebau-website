@@ -10,7 +10,7 @@ import CookieConsent from './components/CookieConsent'
 import { CustomCursor } from './components/CustomCursor'
 import { CursorGlow } from './components/CursorGlow'
 import { CursorRipple, useCursorScale } from './components/CursorEffects'
-import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath } from './lib/deep-linking'
+import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath, navigate } from './lib/deep-linking'
 import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 import { usePageMeta } from './hooks/use-page-meta'
 import { usePageViewTracking } from './hooks/use-page-view-tracking'
@@ -18,12 +18,14 @@ import { I18nContext, getTranslation, getStoredLanguage, storeLanguage, type Lan
 import { useUIStore } from './store/ui-store'
 import { PageErrorBoundary } from './components/PageErrorBoundary'
 
-// Lazy load page components for code-splitting
-const HomePage = lazy(() => import('./components/pages/HomePage').then(m => ({ default: m.HomePage })))
-const LeistungenHubPage = lazy(() => import('./components/pages/LeistungenHubPage').then(m => ({ default: m.LeistungenHubPage })))
+// Eager load critical SEO pages so crawlers get content immediately
+import { HomePage } from './components/pages/HomePage'
+import { LeistungenHubPage } from './components/pages/LeistungenHubPage'
+import { KontaktPage } from './components/pages/KontaktPage'
+
+// Lazy load remaining page components for code-splitting
 const BranchenPage = lazy(() => import('./components/pages/BranchenPage').then(m => ({ default: m.BranchenPage })))
 const ReferenzenPage = lazy(() => import('./components/pages/ReferenzenPage').then(m => ({ default: m.ReferenzenPage })))
-const KontaktPage = lazy(() => import('./components/pages/KontaktPage').then(m => ({ default: m.KontaktPage })))
 const BlogPage = lazy(() => import('./components/pages/BlogPage').then(m => ({ default: m.BlogPage })))
 const UeberUnsPage = lazy(() => import('./components/pages/OtherPages').then(m => ({ default: m.UeberUnsPage })))
 const AblaufPage = lazy(() => import('./components/pages/OtherPages').then(m => ({ default: m.AblaufPage })))
@@ -65,8 +67,8 @@ function App() {
   usePageViewTracking() // First-party analytics page view tracking
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const deepLink = parseDeepLink(window.location.hash)
+    const handleRouteChange = () => {
+      const deepLink = parseDeepLink()
       const page = normalizePagePath(deepLink.page)
       const section = deepLink.section
 
@@ -86,14 +88,23 @@ function App() {
       }
     }
 
-    handleHashChange()
-    window.addEventListener('hashchange', handleHashChange)
+    // Legacy hash-based URL support: redirect #/page to /page
+    const handleHashCompat = () => {
+      const hash = window.location.hash
+      if (hash && hash.startsWith('#/')) {
+        const cleanPath = hash.slice(1) // #/leistungen -> /leistungen
+        window.history.replaceState(null, '', cleanPath)
+      }
+      handleRouteChange()
+    }
 
-    window.addEventListener('popstate', handleHashChange)
+    handleHashCompat()
+    window.addEventListener('popstate', handleRouteChange)
+    window.addEventListener('hashchange', handleHashCompat)
 
     return () => {
-      window.removeEventListener('hashchange', handleHashChange)
-      window.removeEventListener('popstate', handleHashChange)
+      window.removeEventListener('popstate', handleRouteChange)
+      window.removeEventListener('hashchange', handleHashCompat)
     }
   }, [])
 
@@ -113,7 +124,7 @@ function App() {
       case '/leistungen/ladenbau':
       case '/leistungen/brandspaces':
         // Redirect old paths to new combined path
-        window.location.hash = '/leistungen/showroom-ladenbau'
+        navigate('/leistungen/showroom-ladenbau')
         return null
       case '/leistungen/touren':
         return <LeistungenTourenPage />

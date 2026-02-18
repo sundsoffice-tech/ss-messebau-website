@@ -6,6 +6,7 @@ import { Article, ArrowRight } from '@phosphor-icons/react'
 import { trackHeroCTAClick } from '@/lib/analytics'
 import { useScrollDepthTracking, useDwellTimeTracking, useArticleReadTracking } from '@/hooks/use-analytics'
 import { useTranslation } from '@/lib/i18n'
+import { navigate } from '@/lib/deep-linking'
 import { BlogPostCard } from './BlogPostCard'
 import { BlogPostDetail } from './BlogPostDetail'
 import type { BlogPost } from '@/lib/types'
@@ -14,8 +15,8 @@ import { useUIStore } from '@/store/ui-store'
 export function BlogPage() {
   const { t } = useTranslation()
   const { openInquiry } = useUIStore()
-  const currentSlug = window.location.hash.startsWith('#/blog/')
-    ? window.location.hash.replace('#/blog/', '')
+  const currentSlug = window.location.pathname.startsWith('/blog/')
+    ? window.location.pathname.replace('/blog/', '')
     : undefined
 
   useScrollDepthTracking('blog')
@@ -48,7 +49,7 @@ export function BlogPage() {
   }, [adminPosts])
 
   const handleNavigation = (path: string) => {
-    window.location.hash = path
+    navigate(path)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 

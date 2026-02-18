@@ -12,6 +12,7 @@ import {
   Warning
 } from '@phosphor-icons/react'
 import { getEmailStatus } from '@/lib/smtp-service'
+import { navigate } from '@/lib/deep-linking'
 import { useTranslation } from '@/lib/i18n'
 
 export function EmailSystemInfo() {
@@ -114,7 +115,7 @@ export function EmailSystemInfo() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => window.location.hash = '/admin'}
+            onClick={() => navigate('/admin')}
           >
             {t('emailsys.adminBtn')}
             <ArrowRight className="w-4 h-4 ml-2" />

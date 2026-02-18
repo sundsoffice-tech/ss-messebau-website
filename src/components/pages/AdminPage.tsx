@@ -63,6 +63,7 @@ import {
   ChartBar,
 } from '@phosphor-icons/react'
 import { authApi, ordersApi, inquiriesApi, type AuthUser, type OrderRecord, type InquiryRecord } from '@/lib/api-client'
+import { navigate } from '@/lib/deep-linking'
 import { toast } from 'sonner'
 
 export function AdminPage() {
@@ -402,7 +403,7 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
       <Button
         variant="ghost"
         className="mt-4 w-full"
-        onClick={() => window.location.hash = '/'}
+        onClick={() => navigate('/')}
       >
         {t('admin.backToHome')}
       </Button>

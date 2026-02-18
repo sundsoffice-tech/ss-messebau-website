@@ -14,6 +14,7 @@ import {
 } from '@phosphor-icons/react'
 import { DEMO_REFERENCES } from '@/lib/demo-references'
 import { useTranslation } from '@/lib/i18n'
+import { navigate } from '@/lib/deep-linking'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { USPBadges } from '@/components/ui/USPBadge'
@@ -44,7 +45,7 @@ export function HomePage() {
   useDwellTimeTracking('home')
 
   const handleNavigation = (path: string) => {
-    window.location.hash = path
+    navigate(path)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -68,7 +69,7 @@ export function HomePage() {
   }
 
   const handleServiceNavigation = (sectionId: string) => {
-    window.location.hash = `/leistungen/${sectionId}`
+    navigate(`/leistungen/${sectionId}`)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -140,7 +141,7 @@ export function HomePage() {
               {t('home.services.subtitle')}
             </p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 icon: Warehouse,
@@ -190,7 +191,7 @@ export function HomePage() {
                   className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
                   onClick={() => handleServiceNavigation(service.sectionId)}
                 >
-                  <div className="relative aspect-[25/16] overflow-hidden bg-muted">
+                  <div className="relative aspect-video overflow-hidden bg-muted">
                     <img 
                       src={isUnsplashImage ? `${service.image}&fm=webp&q=75` : service.image}
                       srcSet={isUnsplashImage ? `${service.image}&fm=webp&q=75&w=400 400w, ${service.image}&fm=webp&q=75&w=500 500w, ${service.image}&fm=webp&q=75&w=640 640w` : undefined}
@@ -250,7 +251,7 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 icon: CheckCircle,

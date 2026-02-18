@@ -136,22 +136,35 @@ export function validateSectionExists(page: string, sectionId: string): boolean 
 }
 
 export function createSectionHash(page: string, sectionId?: string): string {
-  if (!sectionId) return `#${page}`
-  return `#${page}#${sectionId}`
+  if (!sectionId) return page || '/'
+  return `${page || '/'}#${sectionId}`
 }
 
 export function parseSectionHash(hash: string): { page: string; section?: string } {
-  const cleanHash = hash.replace(/^#/, '')
-  const parts = cleanHash.split('#')
-  
-  if (parts.length === 1) {
-    return { page: parts[0] || '/' }
+  // Support legacy hash format: #/page#section
+  if (hash.startsWith('#')) {
+    const cleanHash = hash.replace(/^#/, '')
+    const parts = cleanHash.split('#')
+    return {
+      page: parts[0] || '/',
+      section: parts[1] || undefined
+    }
   }
-  
+  // Clean URL format: /page with optional #section from location.hash
+  const parts = hash.split('#')
   return {
     page: parts[0] || '/',
-    section: parts[1]
+    section: parts[1] || undefined
   }
+}
+
+/**
+ * Parse current location using clean URL format (pathname + hash anchor).
+ */
+export function parseCurrentLocation(): { page: string; section?: string } {
+  const page = window.location.pathname || '/'
+  const section = window.location.hash ? window.location.hash.slice(1) : undefined
+  return { page, section }
 }
 
 export const THEMATIC_LINKS: Record<string, { page: string; section: string; label: string }> = {

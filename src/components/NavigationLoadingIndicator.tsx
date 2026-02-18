@@ -18,7 +18,7 @@ export function NavigationLoadingIndicator() {
     let progressInterval: NodeJS.Timeout
     let resetTimeout: NodeJS.Timeout
 
-    const handleHashChange = () => {
+    const handleNavigation = () => {
       setIsLoading(true)
       setProgress(0)
 
@@ -43,10 +43,10 @@ export function NavigationLoadingIndicator() {
       }, NAVIGATION_COMPLETE_DELAY_MS)
     }
 
-    window.addEventListener('hashchange', handleHashChange)
+    window.addEventListener('popstate', handleNavigation)
 
     return () => {
-      window.removeEventListener('hashchange', handleHashChange)
+      window.removeEventListener('popstate', handleNavigation)
       clearInterval(progressInterval)
       clearTimeout(resetTimeout)
     }

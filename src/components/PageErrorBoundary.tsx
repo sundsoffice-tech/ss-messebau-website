@@ -2,6 +2,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { Alert, AlertTitle, AlertDescription } from './ui/alert'
 import { Button } from './ui/button'
 import { AlertTriangleIcon, HomeIcon, RefreshCwIcon } from 'lucide-react'
+import { navigate } from '@/lib/deep-linking'
 import type { ReactNode } from 'react'
 
 function PageErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
@@ -31,7 +32,7 @@ function PageErrorFallback({ error, resetErrorBoundary }: { error: Error; resetE
             Erneut versuchen
           </Button>
           <Button
-            onClick={() => { window.location.hash = '/'; window.location.reload() }}
+            onClick={() => { navigate('/'); window.location.reload() }}
             className="flex-1"
           >
             <HomeIcon className="h-4 w-4 mr-2" />

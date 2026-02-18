@@ -39,7 +39,7 @@ export default function CookieConsent() {
         <p className="text-sm text-gray-700 flex-1">
           {t('cookie.text')}{' '}
           <a
-            href="#/datenschutz"
+            href="/datenschutz"
             className="underline text-primary hover:text-primary/80"
           >
             {t('cookie.privacy')}

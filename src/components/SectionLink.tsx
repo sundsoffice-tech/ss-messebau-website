@@ -1,4 +1,4 @@
-import { navigateToPageAndSection } from '@/lib/deep-linking'
+import { navigateToPageAndSection, navigate } from '@/lib/deep-linking'
 import { createSectionHash } from '@/lib/section-map'
 
 interface SectionLinkProps {
@@ -28,7 +28,7 @@ export function SectionLink({
         headerOffset: 100
       })
     } else {
-      window.location.hash = page
+      navigate(page)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
     

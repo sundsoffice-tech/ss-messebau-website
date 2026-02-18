@@ -25,7 +25,7 @@ export function BranchenPage() {
   useDwellTimeTracking('branchen')
 
   useEffect(() => {
-    const deepLink = parseDeepLink(window.location.hash)
+    const deepLink = parseDeepLink()
     if (deepLink.section && ['messebau', 'eventbau', 'ladenbau', 'sport'].includes(deepLink.section)) {
       setActiveTab(deepLink.section)
       setTimeout(() => {
@@ -38,44 +38,44 @@ export function BranchenPage() {
 
   return (
     <div>
-      <section id="branchen-hero" className="py-12 md:py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.hero.title')}</h1>
-          <p className="text-base md:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
+      <section id="branchen-hero" className="py-12 sm:py-16 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">{t('branchen.hero.title')}</h1>
+          <p className="text-base sm:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
             {t('branchen.hero.subtitle')}
           </p>
         </div>
       </section>
 
-      <section id="branchen-content" className="py-12 md:py-16">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+      <section id="branchen-content" className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-8 md:mb-12 h-auto">
-              <TabsTrigger value="messebau" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">
+            <TabsList className="grid w-full grid-cols-4 mb-8 sm:mb-12 h-auto">
+              <TabsTrigger value="messebau" className="text-xs sm:text-sm sm:text-base py-2.5 md:py-3 px-2 md:px-4">
                 <span className="hidden sm:inline">{t('branchen.tab.messebau')}</span>
                 <span className="sm:hidden">{t('branchen.tab.messebauShort')}</span>
               </TabsTrigger>
-              <TabsTrigger value="eventbau" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">
+              <TabsTrigger value="eventbau" className="text-xs sm:text-sm sm:text-base py-2.5 md:py-3 px-2 md:px-4">
                 <span className="hidden sm:inline">{t('branchen.tab.eventbau')}</span>
                 <span className="sm:hidden">{t('branchen.tab.eventbauShort')}</span>
               </TabsTrigger>
-              <TabsTrigger value="ladenbau" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">
+              <TabsTrigger value="ladenbau" className="text-xs sm:text-sm sm:text-base py-2.5 md:py-3 px-2 md:px-4">
                 <span className="hidden sm:inline">{t('branchen.tab.ladenbau')}</span>
                 <span className="sm:hidden">{t('branchen.tab.ladenbauShort')}</span>
               </TabsTrigger>
-              <TabsTrigger value="sport" className="text-xs sm:text-sm md:text-base py-2.5 md:py-3 px-2 md:px-4">
+              <TabsTrigger value="sport" className="text-xs sm:text-sm sm:text-base py-2.5 md:py-3 px-2 md:px-4">
                 {t('branchen.tab.sport')}
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="messebau" className="space-y-6 md:space-y-8" id="messebau">
-              <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+            <TabsContent value="messebau" className="space-y-6 sm:space-y-8" id="messebau">
+              <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.messebau.title')}</h2>
-                  <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 leading-tight">{t('branchen.messebau.title')}</h2>
+                  <p className="text-base sm:text-lg text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
                     {t('branchen.messebau.desc')}
                   </p>
-                  <div className="space-y-2.5 md:space-y-3 mb-6">
+                  <div className="space-y-2.5 sm:space-y-3 mb-6">
                     {[
                       t('branchen.messebau.b1'),
                       t('branchen.messebau.b2'),
@@ -83,9 +83,9 @@ export function BranchenPage() {
                       t('branchen.messebau.b4'),
                       t('branchen.messebau.b5')
                     ].map((item, index) => (
-                      <div key={index} className="flex items-start gap-2.5 md:gap-3">
+                      <div key={index} className="flex items-start gap-2.5 sm:gap-3">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" weight="fill" />
-                        <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                        <span className="text-sm sm:text-base leading-relaxed">{item}</span>
                       </div>
                     ))}
                   </div>
@@ -107,8 +107,8 @@ export function BranchenPage() {
                 </div>
               </div>
 
-              <div className="mt-8 md:mt-10">
-                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{t('branchen.messebau.refTitle')}</h3>
+              <div className="mt-8 sm:mt-10">
+                <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{t('branchen.messebau.refTitle')}</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
                   {DEMO_REFERENCES.filter(r => r.branche === 'messebau').slice(0, 2).map((ref) => (
                     <CaseStudyCard
@@ -127,14 +127,14 @@ export function BranchenPage() {
               </div>
             </TabsContent>
 
-            <TabsContent value="eventbau" className="space-y-6 md:space-y-8" id="eventbau">
-              <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+            <TabsContent value="eventbau" className="space-y-6 sm:space-y-8" id="eventbau">
+              <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
                 <div className="lg:order-2">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.eventbau.title')}</h2>
-                  <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 leading-tight">{t('branchen.eventbau.title')}</h2>
+                  <p className="text-base sm:text-lg text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
                     {t('branchen.eventbau.desc')}
                   </p>
-                  <div className="space-y-2.5 md:space-y-3 mb-6">
+                  <div className="space-y-2.5 sm:space-y-3 mb-6">
                     {[
                       t('branchen.eventbau.b1'),
                       t('branchen.eventbau.b2'),
@@ -142,9 +142,9 @@ export function BranchenPage() {
                       t('branchen.eventbau.b4'),
                       t('branchen.eventbau.b5')
                     ].map((item, index) => (
-                      <div key={index} className="flex items-start gap-2.5 md:gap-3">
+                      <div key={index} className="flex items-start gap-2.5 sm:gap-3">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" weight="fill" />
-                        <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                        <span className="text-sm sm:text-base leading-relaxed">{item}</span>
                       </div>
                     ))}
                   </div>
@@ -166,8 +166,8 @@ export function BranchenPage() {
                 </div>
               </div>
 
-              <div className="mt-8 md:mt-10">
-                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{t('branchen.eventbau.refTitle')}</h3>
+              <div className="mt-8 sm:mt-10">
+                <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{t('branchen.eventbau.refTitle')}</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
                   {DEMO_REFERENCES.filter(r => r.branche === 'eventbau').slice(0, 2).map((ref) => (
                     <CaseStudyCard
@@ -186,14 +186,14 @@ export function BranchenPage() {
               </div>
             </TabsContent>
 
-            <TabsContent value="ladenbau" className="space-y-6 md:space-y-8" id="ladenbau">
-              <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+            <TabsContent value="ladenbau" className="space-y-6 sm:space-y-8" id="ladenbau">
+              <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.ladenbau.title')}</h2>
-                  <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 leading-tight">{t('branchen.ladenbau.title')}</h2>
+                  <p className="text-base sm:text-lg text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
                     {t('branchen.ladenbau.desc')}
                   </p>
-                  <div className="space-y-2.5 md:space-y-3 mb-6">
+                  <div className="space-y-2.5 sm:space-y-3 mb-6">
                     {[
                       t('branchen.ladenbau.b1'),
                       t('branchen.ladenbau.b2'),
@@ -201,9 +201,9 @@ export function BranchenPage() {
                       t('branchen.ladenbau.b4'),
                       t('branchen.ladenbau.b5')
                     ].map((item, index) => (
-                      <div key={index} className="flex items-start gap-2.5 md:gap-3">
+                      <div key={index} className="flex items-start gap-2.5 sm:gap-3">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" weight="fill" />
-                        <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                        <span className="text-sm sm:text-base leading-relaxed">{item}</span>
                       </div>
                     ))}
                   </div>
@@ -225,8 +225,8 @@ export function BranchenPage() {
                 </div>
               </div>
 
-              <div className="mt-8 md:mt-10">
-                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{t('branchen.ladenbau.refTitle')}</h3>
+              <div className="mt-8 sm:mt-10">
+                <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{t('branchen.ladenbau.refTitle')}</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
                   {DEMO_REFERENCES.filter(r => r.branche === 'ladenbau').slice(0, 2).map((ref) => (
                     <CaseStudyCard
@@ -245,14 +245,14 @@ export function BranchenPage() {
               </div>
             </TabsContent>
 
-            <TabsContent value="sport" className="space-y-6 md:space-y-8" id="sport">
-              <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+            <TabsContent value="sport" className="space-y-6 sm:space-y-8" id="sport">
+              <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
                 <div className="lg:order-2">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-tight">{t('branchen.sport.title')}</h2>
-                  <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                  <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 leading-tight">{t('branchen.sport.title')}</h2>
+                  <p className="text-base sm:text-lg text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
                     {t('branchen.sport.desc')}
                   </p>
-                  <div className="space-y-2.5 md:space-y-3 mb-6">
+                  <div className="space-y-2.5 sm:space-y-3 mb-6">
                     {[
                       t('branchen.sport.b1'),
                       t('branchen.sport.b2'),
@@ -260,9 +260,9 @@ export function BranchenPage() {
                       t('branchen.sport.b4'),
                       t('branchen.sport.b5')
                     ].map((item, index) => (
-                      <div key={index} className="flex items-start gap-2.5 md:gap-3">
+                      <div key={index} className="flex items-start gap-2.5 sm:gap-3">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" weight="fill" />
-                        <span className="text-sm md:text-base leading-relaxed">{item}</span>
+                        <span className="text-sm sm:text-base leading-relaxed">{item}</span>
                       </div>
                     ))}
                   </div>
@@ -284,8 +284,8 @@ export function BranchenPage() {
                 </div>
               </div>
 
-              <div className="mt-8 md:mt-10">
-                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{t('branchen.sport.refTitle')}</h3>
+              <div className="mt-8 sm:mt-10">
+                <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{t('branchen.sport.refTitle')}</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
                   {DEMO_REFERENCES.filter(r => r.branche === 'sport').slice(0, 2).map((ref) => (
                     <CaseStudyCard
@@ -307,16 +307,16 @@ export function BranchenPage() {
         </div>
       </section>
 
-      <section className="py-12 md:py-16 bg-muted">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <div className="text-center mb-10 md:mb-12">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 leading-tight">{t('branchen.expertise.title')}</h2>
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+      <section className="py-12 sm:py-16 bg-muted">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 leading-tight">{t('branchen.expertise.title')}</h2>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               {t('branchen.expertise.subtitle')}
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 title: t('branchen.expertise.concept.title'),
@@ -332,9 +332,9 @@ export function BranchenPage() {
               }
             ].map((item, index) => (
               <Card key={index}>
-                <CardContent className="p-5 md:p-6 text-center">
-                  <h3 className="font-semibold text-base md:text-lg mb-2 md:mb-3 leading-tight">{item.title}</h3>
-                  <p className="text-muted-foreground text-sm md:text-base leading-relaxed">{item.desc}</p>
+                <CardContent className="p-5 sm:p-6 text-center">
+                  <h3 className="font-semibold text-base sm:text-lg mb-2 sm:mb-3 leading-tight">{item.title}</h3>
+                  <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">{item.desc}</p>
                 </CardContent>
               </Card>
             ))}
@@ -342,14 +342,14 @@ export function BranchenPage() {
         </div>
       </section>
 
-      <section id="nachhaltigkeit-branchen" className="py-12 md:py-16">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-          <div className="text-center mb-10 md:mb-12">
+      <section id="nachhaltigkeit-branchen" className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10 sm:mb-12">
             <div className="flex items-center justify-center gap-2.5 mb-3">
               <Leaf className="h-8 w-8 text-green-600" weight="duotone" />
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">{t('sustainability.branchen.title')}</h2>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">{t('sustainability.branchen.title')}</h2>
             </div>
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               {t('sustainability.branchen.subtitle')}
             </p>
           </div>
@@ -363,11 +363,11 @@ export function BranchenPage() {
               const Icon = item.icon
               return (
                 <Card key={index}>
-                  <CardContent className="p-5 md:p-6 text-center">
+                  <CardContent className="p-5 sm:p-6 text-center">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-50 mx-auto mb-4">
                       <Icon className="h-6 w-6 text-green-600" weight="duotone" />
                     </div>
-                    <h3 className="font-semibold text-base md:text-lg mb-2 leading-tight">{item.title}</h3>
+                    <h3 className="font-semibold text-base sm:text-lg mb-2 leading-tight">{item.title}</h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
                   </CardContent>
                 </Card>

@@ -35,26 +35,15 @@ export function useSmoothScrollLinks() {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement
       const anchor = target.closest('a[href*="#"]') as HTMLAnchorElement
-      
+
       if (anchor && anchor.hash) {
-        const hash = anchor.hash.slice(1)
-        const parts = hash.split('#')
-        
-        if (parts.length >= 2) {
-          e.preventDefault()
-          const [page, section] = parts
-          const currentPage = window.location.hash.slice(1).split('#')[0] || '/'
-          
-          if (currentPage === page && section) {
-            scrollToSection(section)
-          } else if (section) {
-            window.location.hash = anchor.hash
-          }
-        } else if (parts.length === 1 && parts[0]) {
-          const element = document.getElementById(parts[0])
+        const sectionId = anchor.hash.slice(1) // remove # prefix
+
+        if (sectionId) {
+          const element = document.getElementById(sectionId)
           if (element) {
             e.preventDefault()
-            scrollToSection(parts[0])
+            scrollToSection(sectionId)
           }
         }
       }

@@ -3,14 +3,10 @@
 
 User-agent: *
 Allow: /
+Disallow: /api/
 
 # Sitemaps
 Sitemap: https://sunds-messebau.de/sitemap.xml
-
-# Disallow admin and internal pages
-Disallow: /#/admin
-Disallow: /admin
-Disallow: /api/
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1
