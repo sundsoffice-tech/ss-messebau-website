@@ -11,8 +11,8 @@ const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`
 
 const PAGE_META: Record<string, PageMeta> = {
   '/': {
-    title: 'S&S Messebau – Messestand 20–200 m² | Messebau NRW',
-    description: 'S&S Messebau: Messestände 20–200 m² für Food, Finance & Industrie. Unverbindliches 48h-Angebot mit persönlicher Beratung. Jetzt beraten lassen!'
+    title: 'S&S Messebau – Ihr Messebau-Partner | Messebau NRW',
+    description: 'S&S Messebau: Messestände für Food, Finance & Industrie. Unverbindliches 48h-Angebot mit persönlicher Beratung. Jetzt beraten lassen!'
   },
   '/leistungen': {
     title: 'Leistungen – Messebau, Eventbau, Showrooms & mehr | S&S Messebau',
@@ -36,8 +36,8 @@ const PAGE_META: Record<string, PageMeta> = {
     description: 'Hochwertige Messeboden-Systeme, Möbel und Beleuchtung – Komplettlösungen für Messe, Event und Showroom.'
   },
   '/leistungen/messebau': {
-    title: 'Messebau – Professionelle Messestände 20–200 m² | S&S Messebau NRW',
-    description: 'Messebau Full-Service: Individuelle Messestände von 20–200 m² für Food, Finance & Industrie. Konzeption, Bau & Betreuung aus einer Hand. Unverbindliches 48h-Angebot!'
+    title: 'Messebau – Professionelle Messestände | S&S Messebau NRW',
+    description: 'Messebau Full-Service: Individuelle Messestände für Food, Finance & Industrie. Konzeption, Bau & Betreuung aus einer Hand. Unverbindliches 48h-Angebot!'
   },
   '/leistungen/eventbau': {
     title: 'Eventbau & Bühnenbau – Unvergessliche Events | S&S Messebau',
@@ -60,12 +60,12 @@ const PAGE_META: Record<string, PageMeta> = {
     description: 'S&S Messebau: Branchenspezifische Messestände für Food, Versicherungen & Industrie. Erfahrung auf Anuga, DKM, Hannover Messe.'
   },
   '/referenzen': {
-    title: 'Referenzen – Messebau-Projekte 20–200 m² | S&S Messebau',
+    title: 'Referenzen – Messebau-Projekte | S&S Messebau',
     description: 'Überzeugen Sie sich von unseren Messebau-Projekten: Individuelle Stände für Food, Finance & Industrie. Referenzen ansehen!'
   },
   '/ueber-uns': {
     title: 'Über S&S Messebau – Ihr Messestand-Partner aus NRW',
-    description: 'S&S Messebau: Inhabergeführter Full-Service Messebau aus NRW. Persönliche Betreuung, bundesweite Umsetzung, 20–200 m².'
+    description: 'S&S Messebau: Inhabergeführter Full-Service Messebau aus NRW. Persönliche Betreuung, bundesweite Umsetzung.'
   },
   '/ablauf': {
     title: 'Ablauf – So entsteht Ihr Messestand | S&S Messebau',
