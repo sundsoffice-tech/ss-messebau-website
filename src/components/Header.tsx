@@ -37,10 +37,7 @@ import {
 import logo from '@/assets/logo/ss-messebau-logo.png'
 import { parseDeepLink } from '@/lib/deep-linking'
 import { useTranslation } from '@/lib/i18n'
-
-interface HeaderProps {
-  onOpenInquiry: () => void
-}
+import { useUIStore } from '@/store/ui-store'
 
 const LEISTUNGEN_MEGA_MENU = [
   {
@@ -192,7 +189,8 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
 
 MegaMenuItem.displayName = 'MegaMenuItem'
 
-export function Header({ onOpenInquiry }: HeaderProps) {
+export function Header() {
+  const { openInquiry } = useUIStore()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
@@ -655,7 +653,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
               </Button>
               <Button
                 variant="default"
-                onClick={onOpenInquiry}
+                onClick={openInquiry}
                 className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
                 size={scrolled ? 'sm' : 'default'}
               >
@@ -801,7 +799,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             <div className="ml-1 flex items-center gap-1">
               <Button
                 variant="default"
-                onClick={onOpenInquiry}
+                onClick={openInquiry}
                 className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
                 size="sm"
               >
@@ -834,7 +832,7 @@ export function Header({ onOpenInquiry }: HeaderProps) {
             <Button
               variant="default"
               size="sm"
-              onClick={onOpenInquiry}
+              onClick={openInquiry}
               className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors text-sm px-3 py-2 min-h-[44px]"
             >
               {t('header.nav.inquiry')}

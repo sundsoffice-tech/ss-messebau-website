@@ -3,11 +3,7 @@ import { Sparkle, Calculator, ClockClockwise, Lightbulb, CheckCircle, Microphone
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useTranslation } from '@/lib/i18n'
 
-interface KIBeraterPageProps {
-  onOpenInquiry: () => void
-}
-
-export function KIBeraterPage({ onOpenInquiry }: KIBeraterPageProps) {
+export function KIBeraterPage() {
   const isMobile = useIsMobile()
   const { t } = useTranslation()
   const isVoiceSupported = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window

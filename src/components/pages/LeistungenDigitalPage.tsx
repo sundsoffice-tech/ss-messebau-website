@@ -23,8 +23,10 @@ import {
   Sparkle,
   CubeTransparent,
 } from '@phosphor-icons/react'
+import { useUIStore } from '@/store/ui-store'
 
-export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
+export function LeistungenDigitalPage() {
+  const { openInquiry } = useUIStore()
   const processSteps = [
     {
       step: 1,
@@ -169,7 +171,7 @@ export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                onClick={onOpenInquiry}
+                onClick={openInquiry}
                 className="bg-white text-primary hover:bg-white/80"
               >
                 Digitale Messelösung anfragen
@@ -178,7 +180,7 @@ export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => 
               <Button
                 size="lg"
                 variant="outline"
-                onClick={onOpenInquiry}
+                onClick={openInquiry}
                 className="bg-transparent border-white text-white hover:bg-white/25"
               >
                 <Phone className="mr-2" />
@@ -462,11 +464,11 @@ export function LeistungenDigitalPage({ onOpenInquiry }: { onOpenInquiry: () => 
             für eine unverbindliche Beratung und erfahren Sie, wie Technologie Ihren Messeerfolg steigert.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" onClick={onOpenInquiry}>
+            <Button size="lg" onClick={openInquiry}>
               <Lightning className="mr-2" />
               Digital-Paket anfragen
             </Button>
-            <Button size="lg" variant="outline" onClick={onOpenInquiry}>
+            <Button size="lg" variant="outline" onClick={openInquiry}>
               <Phone className="mr-2" />
               Rückruf vereinbaren
             </Button>

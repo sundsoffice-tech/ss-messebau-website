@@ -5,13 +5,11 @@ import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { StandCalculator } from '@/components/ui/StandCalculator'
 import { useTranslation } from '@/lib/i18n'
+import { useUIStore } from '@/store/ui-store'
 
-interface LeistungenPageProps {
-  onOpenInquiry: () => void
-}
-
-export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
+export function LeistungenPage() {
   const { t } = useTranslation()
+  const { openInquiry } = useUIStore()
   useSectionObserver([
     'brand-activation',
     'digital-experience',
@@ -69,7 +67,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                     </div>
                   ))}
                 </div>
-                <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                <Button onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                   {t('leistungen.messebau.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
@@ -144,7 +142,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                     </div>
                   ))}
                 </div>
-                <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                <Button onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                   {t('leistungen.eventbau.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
@@ -173,7 +171,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                     </div>
                   ))}
                 </div>
-                <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                <Button onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                   {t('leistungen.touren.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
@@ -257,7 +255,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                     {t('leistungen.digital.arvr.useCaseText')}
                   </p>
                 </div>
-                <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                <Button onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                   {t('leistungen.digital.arvr.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
@@ -320,7 +318,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                     {t('leistungen.digital.tracking.useCaseText')}
                   </p>
                 </div>
-                <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                <Button onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                   {t('leistungen.digital.tracking.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
@@ -382,7 +380,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                     {t('leistungen.digital.interactive.useCaseText')}
                   </p>
                 </div>
-                <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                <Button onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                   {t('leistungen.digital.interactive.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
@@ -448,7 +446,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                     </div>
                   ))}
                 </div>
-                <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                <Button onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                   {t('leistungen.digital.showrooms.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
@@ -563,7 +561,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
                     ))}
                   </div>
                 </div>
-                <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                <Button onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                   {t('leistungen.ausstattung.boeden.cta')}
                   <ArrowRight className="ml-2" />
                 </Button>
@@ -596,7 +594,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               <div className="mt-8 text-center">
                 <p className="text-sm text-muted-foreground">
                   {t('leistungen.ausstattung.flooring.calcPrefix')}{' '}
-                  <button onClick={onOpenInquiry} className="text-primary font-semibold hover:underline">
+                  <button onClick={openInquiry} className="text-primary font-semibold hover:underline">
                     {t('leistungen.ausstattung.flooring.calcLink')}
                   </button>
                 </p>
@@ -680,7 +678,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               </p>
               <Button
                 size="lg"
-                onClick={onOpenInquiry}
+                onClick={openInquiry}
                 className="bg-white text-primary hover:bg-white/80 min-h-[52px] text-base md:text-lg"
               >
                 {t('leistungen.ausstattung.cta.button')}
@@ -786,7 +784,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
               {t('cta.free3d.desc')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" onClick={onOpenInquiry} className="bg-white text-primary hover:bg-white/80 w-full sm:w-auto min-h-[52px] text-base md:text-lg font-semibold">
+              <Button size="lg" onClick={openInquiry} className="bg-white text-primary hover:bg-white/80 w-full sm:w-auto min-h-[52px] text-base md:text-lg font-semibold">
                 {t('cta.free3d.button')}
                 <ArrowRight className="ml-2" />
               </Button>
@@ -866,7 +864,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
       </section>
 
       {/* Stand Calculator */}
-      <StandCalculator onOpenInquiry={onOpenInquiry} />
+      <StandCalculator />
 
       <InternalLinkSection
         title={t('leistungen.links.title')}
@@ -886,7 +884,7 @@ export function LeistungenPage({ onOpenInquiry }: LeistungenPageProps) {
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
             {t('leistungen.bottomCta.desc')}
           </p>
-          <Button size="lg" onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
+          <Button size="lg" onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
             {t('leistungen.bottomCta.button')}
             <ArrowRight className="ml-2" />
           </Button>

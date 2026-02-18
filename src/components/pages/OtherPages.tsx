@@ -4,12 +4,14 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { CheckCircle, Leaf, Recycle, TrendUp, ArrowRight } from '@phosphor-icons/react'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { useTranslation } from '@/lib/i18n'
+import { useUIStore } from '@/store/ui-store'
 
 export { KIBeraterPage } from './KIBeraterPage'
 
-export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
+export function UeberUnsPage() {
   useSectionObserver(['story', 'team', 'werte', 'arbeitsweise', 'vergleich'])
   const { t } = useTranslation()
+  const { openInquiry } = useUIStore()
 
   return (
     <div>
@@ -168,7 +170,7 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
           </p>
           <Button 
             size="lg"
-            onClick={onOpenInquiry}
+            onClick={openInquiry}
             className="bg-accent hover:bg-accent/90 text-accent-foreground"
           >
             {t('about.cta.button')}
@@ -180,8 +182,9 @@ export function UeberUnsPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
   )
 }
 
-export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
+export function AblaufPage() {
   const { t } = useTranslation()
+  const { openInquiry } = useUIStore()
   return (
     <div>
       <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
@@ -313,7 +316,7 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
           <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
             {t('ablauf.cta.text')}
           </p>
-          <Button size="lg" onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90">
+          <Button size="lg" onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90">
             {t('ablauf.cta.button')}
             <ArrowRight className="ml-2" />
           </Button>
@@ -323,8 +326,9 @@ export function AblaufPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
   )
 }
 
-export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
+export function NachhaltigkeitPage() {
   const { t } = useTranslation()
+  const { openInquiry } = useUIStore()
   return (
     <div>
       <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
@@ -446,7 +450,7 @@ export function NachhaltigkeitPage({ onOpenInquiry }: { onOpenInquiry: () => voi
           <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
             {t('nachhaltigkeit.cta.text')}
           </p>
-          <Button size="lg" onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90">
+          <Button size="lg" onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90">
             {t('nachhaltigkeit.cta.button')}
             <ArrowRight className="ml-2" />
           </Button>

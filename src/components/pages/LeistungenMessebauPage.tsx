@@ -23,8 +23,10 @@ import {
   ChatCircleDots,
   Wrench,
 } from '@phosphor-icons/react'
+import { useUIStore } from '@/store/ui-store'
 
-export function LeistungenMessebauPage({ onOpenInquiry }: { onOpenInquiry: () => void }) {
+export function LeistungenMessebauPage() {
+  const { openInquiry } = useUIStore()
   const processSteps = [
     {
       step: 1,
@@ -158,7 +160,7 @@ export function LeistungenMessebauPage({ onOpenInquiry }: { onOpenInquiry: () =>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                onClick={onOpenInquiry}
+                onClick={openInquiry}
                 className="bg-white text-primary hover:bg-white/80"
               >
                 Jetzt Messestand anfragen
@@ -167,7 +169,7 @@ export function LeistungenMessebauPage({ onOpenInquiry }: { onOpenInquiry: () =>
               <Button
                 size="lg"
                 variant="outline"
-                onClick={onOpenInquiry}
+                onClick={openInquiry}
                 className="bg-transparent border-white text-white hover:bg-white/25"
               >
                 <Phone className="mr-2" />
@@ -451,11 +453,11 @@ export function LeistungenMessebauPage({ onOpenInquiry }: { onOpenInquiry: () =>
             eine unverbindliche Beratung und ein individuelles Angebot – innerhalb von 48 Stunden.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" onClick={onOpenInquiry}>
+            <Button size="lg" onClick={openInquiry}>
               <Envelope className="mr-2" />
               Angebot anfordern
             </Button>
-            <Button size="lg" variant="outline" onClick={onOpenInquiry}>
+            <Button size="lg" variant="outline" onClick={openInquiry}>
               <Phone className="mr-2" />
               Rückruf vereinbaren
             </Button>

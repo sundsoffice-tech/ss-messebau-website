@@ -2,18 +2,16 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { DEMO_REFERENCES } from '@/lib/demo-data'
+import { DEMO_REFERENCES } from '@/lib/demo-references'
 import { Reference } from '@/lib/types'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { CheckCircle, ArrowRight } from '@phosphor-icons/react'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { useTranslation } from '@/lib/i18n'
+import { useUIStore } from '@/store/ui-store'
 
-interface ReferenzenPageProps {
-  onOpenInquiry: () => void
-}
-
-export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
+export function ReferenzenPage() {
+  const { openInquiry } = useUIStore()
   const { t } = useTranslation()
   const [selectedBranche, setSelectedBranche] = useState<string>('alle')
   const [selectedType, setSelectedType] = useState<string>('alle')
@@ -115,7 +113,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
               <p className="text-base sm:text-lg text-muted-foreground mb-6">
                 {t('referenzen.empty')}
               </p>
-              <Button onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 h-11 sm:h-10">
+              <Button onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 h-11 sm:h-10">
                 {t('referenzen.emptyCta')}
               </Button>
             </div>
@@ -239,7 +237,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
                 <div className="pt-2 sm:pt-4">
                   <Button onClick={() => {
                     setSelectedReference(null)
-                    onOpenInquiry()
+                    openInquiry()
                   }} className="w-full bg-accent text-accent-foreground hover:bg-accent/90 h-11 sm:h-10">
                     {t('referenzen.detail.cta')}
                   </Button>
@@ -256,7 +254,7 @@ export function ReferenzenPage({ onOpenInquiry }: ReferenzenPageProps) {
           <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
             {t('referenzen.cta.subtitle')}
           </p>
-          <Button size="lg" onClick={onOpenInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 h-12 sm:h-11">
+          <Button size="lg" onClick={openInquiry} className="bg-accent text-accent-foreground hover:bg-accent/90 h-12 sm:h-11">
             {t('referenzen.cta.button')}
           </Button>
         </div>

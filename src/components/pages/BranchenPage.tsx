@@ -9,15 +9,13 @@ import { trackHeroCTAClick } from '@/lib/analytics'
 import { useScrollDepthTracking, useDwellTimeTracking } from '@/hooks/use-analytics'
 import { parseDeepLink } from '@/lib/deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
-import { DEMO_REFERENCES } from '@/lib/demo-data'
+import { DEMO_REFERENCES } from '@/lib/demo-references'
 import { CaseStudyCard } from '@/components/ui/CaseStudyCard'
 import { useTranslation } from '@/lib/i18n'
+import { useUIStore } from '@/store/ui-store'
 
-interface BranchenPageProps {
-  onOpenInquiry: () => void
-}
-
-export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
+export function BranchenPage() {
+  const { openInquiry } = useUIStore()
   const { scrollToSection } = useDeepLinking('/branchen')
   const [activeTab, setActiveTab] = useState<string>('messebau')
   const { t } = useTranslation()
@@ -91,7 +89,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={() => { trackHeroCTAClick('branchen_messebau'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  <Button onClick={() => { trackHeroCTAClick('branchen_messebau'); openInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                     {t('branchen.messebau.cta')}
                     <ArrowRight className="ml-2" />
                   </Button>
@@ -150,7 +148,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={() => { trackHeroCTAClick('branchen_eventbau'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  <Button onClick={() => { trackHeroCTAClick('branchen_eventbau'); openInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                     {t('branchen.eventbau.cta')}
                     <ArrowRight className="ml-2" />
                   </Button>
@@ -209,7 +207,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={() => { trackHeroCTAClick('branchen_ladenbau'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  <Button onClick={() => { trackHeroCTAClick('branchen_ladenbau'); openInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                     {t('branchen.ladenbau.cta')}
                     <ArrowRight className="ml-2" />
                   </Button>
@@ -268,7 +266,7 @@ export function BranchenPage({ onOpenInquiry }: BranchenPageProps) {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={() => { trackHeroCTAClick('branchen_sport'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
+                  <Button onClick={() => { trackHeroCTAClick('branchen_sport'); openInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto min-h-[48px] text-base">
                     {t('branchen.sport.cta')}
                     <ArrowRight className="ml-2" />
                   </Button>

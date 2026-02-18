@@ -3,13 +3,11 @@ import { Card } from '@/components/ui/card'
 import { Check, Package, Truck, Shield, Wrench, Star, ArrowRight } from '@phosphor-icons/react'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { useTranslation } from '@/lib/i18n'
+import { useUIStore } from '@/store/ui-store'
 
-interface BannerrahmenPageProps {
-  onOpenInquiry: () => void
-}
-
-export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
+export function BannerrahmenPage() {
   const { t } = useTranslation()
+  const { openInquiry } = useUIStore()
 
   return (
     <div className="min-h-screen">
@@ -39,7 +37,7 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
               <Button
                 size="lg"
                 variant="outline"
-                onClick={onOpenInquiry}
+                onClick={openInquiry}
                 className="bg-transparent border-white text-white hover:bg-white/25"
               >
                 {t('bannerrahmen.hero.consultationCta')}
@@ -326,7 +324,7 @@ export function BannerrahmenPage({ onOpenInquiry }: BannerrahmenPageProps) {
             <Button
               size="lg"
               variant="outline"
-              onClick={onOpenInquiry}
+              onClick={openInquiry}
               className="bg-transparent border-white text-white hover:bg-white/25"
             >
               {t('bannerrahmen.cta.consultationCta')}

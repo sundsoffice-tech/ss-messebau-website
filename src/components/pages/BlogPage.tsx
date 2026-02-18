@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
-import { DEMO_BLOG_POSTS } from '@/lib/demo-data'
+import { DEMO_BLOG_POSTS } from '@/lib/demo-blog-posts'
 import { getBlogPosts } from '@/lib/admin-content-service'
 import { Article, ArrowRight } from '@phosphor-icons/react'
 import { trackHeroCTAClick } from '@/lib/analytics'
@@ -9,13 +9,11 @@ import { useTranslation } from '@/lib/i18n'
 import { BlogPostCard } from './BlogPostCard'
 import { BlogPostDetail } from './BlogPostDetail'
 import type { BlogPost } from '@/lib/types'
+import { useUIStore } from '@/store/ui-store'
 
-interface BlogPageProps {
-  onOpenInquiry: () => void
-}
-
-export function BlogPage({ onOpenInquiry }: BlogPageProps) {
+export function BlogPage() {
   const { t } = useTranslation()
+  const { openInquiry } = useUIStore()
   const currentSlug = window.location.hash.startsWith('#/blog/')
     ? window.location.hash.replace('#/blog/', '')
     : undefined
@@ -58,7 +56,7 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
   if (currentSlug) {
     const post = allPosts.find(p => p.slug === currentSlug)
     if (post) {
-      return <BlogPostDetail post={post} onNavigate={handleNavigation} onOpenInquiry={onOpenInquiry} />
+      return <BlogPostDetail post={post} onNavigate={handleNavigation} />
     }
     // Slug not found → fall through to overview
   }
@@ -94,7 +92,7 @@ export function BlogPage({ onOpenInquiry }: BlogPageProps) {
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
             {t('blog.cta.text')}
           </p>
-          <Button size="lg" onClick={() => { trackHeroCTAClick('blog_cta'); onOpenInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
+          <Button size="lg" onClick={() => { trackHeroCTAClick('blog_cta'); openInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
             {t('blog.cta.button')}
             <ArrowRight className="ml-2" />
           </Button>

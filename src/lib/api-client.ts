@@ -4,7 +4,7 @@
  * Replaces localStorage calls for persistent data with server-side PHP APIs.
  */
 
-const API_BASE = '/api'
+const API_BASE = import.meta.env.VITE_API_BASE || '/api'
 
 async function apiFetch<T>(
   endpoint: string,
