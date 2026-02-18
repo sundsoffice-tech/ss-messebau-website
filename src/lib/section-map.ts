@@ -9,7 +9,7 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
     { id: 'hero', label: 'Startseite', page: '/' },
     { id: 'services', label: 'Leistungsübersicht', page: '/' },
     { id: 'advantages', label: 'Unsere Vorteile', page: '/' },
-    { id: '48h-garantie', label: '48h-Angebotsgarantie', page: '/' },
+    { id: '48h-garantie', label: 'Unverbindliche 48h-Angebotsgarantie', page: '/' },
     { id: 'references', label: 'Referenzen', page: '/' },
     { id: 'process', label: 'Ablauf', page: '/' },
     { id: 'testimonials', label: 'Kundenstimmen', page: '/' },
@@ -86,7 +86,7 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
   '/ablauf': [
     { id: 'prozess', label: 'Unser Prozess', page: '/ablauf' },
     { id: 'timeline', label: 'Projekt-Ablauf', page: '/ablauf' },
-    { id: '48h-garantie', label: '48h-Angebotsgarantie', page: '/ablauf' },
+    { id: '48h-garantie', label: 'Unverbindliche 48h-Angebotsgarantie', page: '/ablauf' },
     { id: 'faq', label: 'Häufige Fragen', page: '/ablauf' }
   ],
   '/nachhaltigkeit': [

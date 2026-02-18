@@ -12,7 +12,7 @@ const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`
 const PAGE_META: Record<string, PageMeta> = {
   '/': {
     title: 'S&S Messebau – Messestand 20–200 m² | Messebau NRW',
-    description: 'S&S Messebau: Messestände 20–200 m² für Food, Finance & Industrie. 48h-Angebot mit persönlicher Beratung. Jetzt beraten lassen!'
+    description: 'S&S Messebau: Messestände 20–200 m² für Food, Finance & Industrie. Unverbindliches 48h-Angebot mit persönlicher Beratung. Jetzt beraten lassen!'
   },
   '/leistungen': {
     title: 'Leistungen – Messebau, Eventbau, Showrooms & mehr | S&S Messebau',
@@ -37,7 +37,7 @@ const PAGE_META: Record<string, PageMeta> = {
   },
   '/leistungen/messebau': {
     title: 'Messebau – Professionelle Messestände 20–200 m² | S&S Messebau NRW',
-    description: 'Messebau Full-Service: Individuelle Messestände von 20–200 m² für Food, Finance & Industrie. Konzeption, Bau & Betreuung aus einer Hand. 48h-Angebot!'
+    description: 'Messebau Full-Service: Individuelle Messestände von 20–200 m² für Food, Finance & Industrie. Konzeption, Bau & Betreuung aus einer Hand. Unverbindliches 48h-Angebot!'
   },
   '/leistungen/eventbau': {
     title: 'Eventbau & Bühnenbau – Unvergessliche Events | S&S Messebau',
@@ -69,7 +69,7 @@ const PAGE_META: Record<string, PageMeta> = {
   },
   '/ablauf': {
     title: 'Ablauf – So entsteht Ihr Messestand | S&S Messebau',
-    description: 'Von der Erstberatung bis zum Abbau: Der Projektablauf bei S&S Messebau. Transparente Prozesse, 48h-Angebote.'
+    description: 'Von der Erstberatung bis zum Abbau: Der Projektablauf bei S&S Messebau. Transparente Prozesse, unverbindliche 48h-Angebote.'
   },
   '/nachhaltigkeit': {
     title: 'Nachhaltiger Messebau – Systembau & Wiederverwendung | S&S Messebau',
@@ -85,7 +85,7 @@ const PAGE_META: Record<string, PageMeta> = {
   },
   '/kontakt': {
     title: 'Kontakt – Jetzt Messestand anfragen | S&S Messebau',
-    description: 'Kontaktieren Sie S&S Messebau für Ihr Messestand-Projekt. 48h-Angebot mit persönlicher Beratung. Jetzt unverbindlich anfragen!'
+    description: 'Kontaktieren Sie S&S Messebau für Ihr Messestand-Projekt. Unverbindliches 48h-Angebot mit persönlicher Beratung. Jetzt anfragen!'
   },
   '/bannerrahmen': {
     title: 'Bannerrahmen-Systeme für Messe & Event | S&S Messebau',

@@ -130,8 +130,8 @@ export const NEWS_ITEMS: NewsItem[] = [
   },
   {
     id: 'news-4',
-    title: '48h-Angebotsgarantie jetzt auch für Großprojekte',
-    excerpt: 'Unsere beliebte 48h-Angebotsgarantie gilt ab sofort auch für Standprojekte über 100 m². Schnelle Planung, transparente Kosten.',
+    title: 'Unverbindliche 48h-Angebotsgarantie jetzt auch für Großprojekte',
+    excerpt: 'Unsere beliebte unverbindliche 48h-Angebotsgarantie gilt ab sofort auch für Standprojekte über 100 m². Schnelle Planung, transparente Kosten.',
     date: '2026-01-20',
     category: 'Service',
   },
