@@ -6,6 +6,7 @@ import { marked } from 'marked'
 import { DEMO_BLOG_POSTS } from '@/lib/demo-blog-posts'
 import { useTranslation } from '@/lib/i18n'
 import { useUIStore } from '@/store/ui-store'
+import { ShareButton } from '@/components/ShareButton'
 import { BlogPostCard } from './BlogPostCard'
 import type { BlogPost } from '@/lib/types'
 
@@ -145,6 +146,7 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
               <ArrowLeft className="mr-2 h-4 w-4" />
               {t('blog.backToOverview')}
             </Button>
+            <ShareButton title={post.title} description={post.excerpt} variant="button" />
             <Button
               onClick={openInquiry}
               className="bg-accent text-accent-foreground hover:bg-accent/90 min-h-[44px]"

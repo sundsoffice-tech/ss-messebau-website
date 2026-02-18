@@ -1,8 +1,10 @@
 import { memo, useState, useEffect } from 'react'
 import { Separator } from '@/components/ui/separator'
-import { Phone, Envelope, MapPin } from '@phosphor-icons/react'
+import { Phone, Envelope, MapPin, InstagramLogo } from '@phosphor-icons/react'
 import logo from '@/assets/logo/ss-messebau-logo.png'
 import { useTranslation } from '@/lib/i18n'
+import { trackEvent } from '@/lib/analytics'
+import { ShareButton } from '@/components/ShareButton'
 import { authApi } from '@/lib/api-client'
 import { navigate } from '@/lib/deep-linking'
 
@@ -52,6 +54,19 @@ export const Footer = memo(function Footer() {
             <p className="text-sm text-muted-foreground leading-relaxed">
               {t('footer.company.desc')}
             </p>
+            <div className="flex items-center gap-3 mt-4" role="list" aria-label={t('footer.social.label')}>
+              <a
+                href="https://www.instagram.com/sundsmessebau/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary focus-visible:text-primary transition-colors p-1.5 -m-1.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                aria-label={t('footer.social.instagram')}
+                role="listitem"
+                onClick={() => trackEvent('social_link_click', { platform: 'instagram', source: 'footer' })}
+              >
+                <InstagramLogo className="h-5 w-5" aria-hidden="true" />
+              </a>
+            </div>
           </div>
 
           <div>
@@ -211,8 +226,9 @@ export const Footer = memo(function Footer() {
         <Separator className="my-6 sm:my-8" />
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <div className="text-center sm:text-left">
-            © {new Date().getFullYear()} S&S Messebau GbR. {t('footer.rights')}.
+          <div className="flex items-center gap-3 text-center sm:text-left">
+            <span>© {new Date().getFullYear()} S&S Messebau GbR. {t('footer.rights')}.</span>
+            <ShareButton variant="icon" />
           </div>
           <nav aria-label={t('footer.legal.nav')}>
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6">

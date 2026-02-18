@@ -27,7 +27,9 @@ export type AnalyticsEvent =
   | 'blog_article_read'
   | 'scroll_depth'
   | 'page_engagement'
-  | 'ab_test_impression';
+  | 'ab_test_impression'
+  | 'social_share'
+  | 'social_link_click';
 
 export interface EventParams {
   [key: string]: string | number | boolean | undefined;
