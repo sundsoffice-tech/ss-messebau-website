@@ -83,7 +83,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto p-4 sm:p-6">
+      <DialogContent className="sm:max-w-[600px] max-h-[100dvh] sm:max-h-[85vh] overflow-y-auto p-3 sm:p-4 md:p-6">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl">{t('inquiry.title')}</DialogTitle>
           <DialogDescription className="text-sm sm:text-base">

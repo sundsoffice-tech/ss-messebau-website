@@ -22,7 +22,7 @@ export function LeistungenPage() {
   return (
     <div>
       {/* Hero Section – Narrative Claim */}
-      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+      <section className="py-8 sm:py-12 lg:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4.5vw, 3.5rem)', lineHeight: '1.2' }}>{t('leistungen.hero.title')}</h1>
           <p className="text-base sm:text-lg lg:text-xl opacity-90 max-w-3xl leading-relaxed">
@@ -32,7 +32,7 @@ export function LeistungenPage() {
       </section>
 
       {/* Solution Module 1: Brand Activation */}
-      <section className="py-12 sm:py-16">
+      <section className="py-8 sm:py-12 lg:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="brand-activation" className="scroll-mt-20 space-y-8 sm:space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
@@ -74,7 +74,7 @@ export function LeistungenPage() {
                 </Button>
               </div>
               <Card className="mt-8 lg:mt-0">
-                <CardContent className="p-5 md:p-8">
+                <CardContent className="p-4 md:p-6 lg:p-8">
                   <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.messebau.processTitle')}</h4>
                   <div className="space-y-5 md:space-y-6">
                     {[
@@ -101,7 +101,7 @@ export function LeistungenPage() {
             {/* Eventbau */}
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
               <Card className="lg:order-2 mt-8 lg:mt-0">
-                <CardContent className="p-5 md:p-8">
+                <CardContent className="p-4 md:p-6 lg:p-8">
                   <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.eventbau.typesTitle')}</h4>
                   <div className="space-y-3 md:space-y-4">
                     {[
@@ -178,7 +178,7 @@ export function LeistungenPage() {
                 </Button>
               </div>
               <Card className="mt-8 lg:mt-0">
-                <CardContent className="p-5 md:p-8">
+                <CardContent className="p-4 md:p-6 lg:p-8">
                   <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.touren.processTitle')}</h4>
                   <div className="space-y-5 md:space-y-6">
                     {[
@@ -206,7 +206,7 @@ export function LeistungenPage() {
       </section>
 
       {/* Solution Module 2: Tech & Data Experience */}
-      <section className="py-12 sm:py-16 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5">
+      <section className="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="digital-experience" className="scroll-mt-20 space-y-8 sm:space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
@@ -262,7 +262,7 @@ export function LeistungenPage() {
                 </Button>
               </div>
               <Card className="mt-8 lg:mt-0">
-                <CardContent className="p-5 md:p-8">
+                <CardContent className="p-4 md:p-6 lg:p-8">
                   <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.digital.arvr.processTitle')}</h4>
                   <div className="space-y-5 md:space-y-6">
                     {[
@@ -325,7 +325,7 @@ export function LeistungenPage() {
                 </Button>
               </div>
               <Card className="lg:order-1 mt-8 lg:mt-0">
-                <CardContent className="p-5 md:p-8">
+                <CardContent className="p-4 md:p-6 lg:p-8">
                   <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.digital.tracking.metricsTitle')}</h4>
                   <div className="space-y-4">
                     {[
@@ -338,7 +338,7 @@ export function LeistungenPage() {
                       return (
                         <div key={index} className="flex gap-3 items-start border-l-4 border-primary/30 pl-4">
                           <Icon className="h-5 w-5 text-primary shrink-0 mt-0.5" weight="bold" />
-                          <div>
+                          <div className="min-w-0">
                             <p className="font-semibold text-sm md:text-base">{item.metric}</p>
                             <p className="text-xs md:text-sm text-muted-foreground">{item.desc}</p>
                           </div>
@@ -388,7 +388,7 @@ export function LeistungenPage() {
               </div>
               <div className="space-y-6 mt-8 lg:mt-0">
                 <Card>
-                  <CardContent className="p-5 md:p-8">
+                  <CardContent className="p-4 md:p-6 lg:p-8">
                     <div className="flex items-center gap-3 mb-4">
                       <Brain className="h-8 w-8 text-primary" weight="bold" />
                       <h4 className="text-lg md:text-xl font-semibold">{t('leistungen.digital.smart.title')}</h4>
@@ -453,7 +453,7 @@ export function LeistungenPage() {
                 </Button>
               </div>
               <Card>
-                <CardContent className="p-5 md:p-8">
+                <CardContent className="p-4 md:p-6 lg:p-8">
                   <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-5">{t('leistungen.digital.showrooms.servicesTitle')}</h4>
                   <div className="space-y-4">
                     {[
@@ -476,7 +476,7 @@ export function LeistungenPage() {
       </section>
 
       {/* Solution Module 3: Ausstattung & Ambiente */}
-      <section className="py-12 sm:py-16">
+      <section className="py-8 sm:py-12 lg:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="ausstattung-ambiente" className="scroll-mt-20 space-y-8 sm:space-y-12 md:space-y-16">
             <div className="text-center mb-8 md:mb-10">
@@ -488,8 +488,8 @@ export function LeistungenPage() {
 
             {/* Böden & Ausstattung Hero */}
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
-              <div className="lg:order-2 grid grid-cols-2 gap-4">
-                <div className="col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
+              <div className="lg:order-2 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div className="sm:col-span-2 group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary mt-6 lg:mt-0">
                   <img
                     src="/images/boeden/besprechungsraum-vinylboden-moebel.jpg"
                     alt={t('leistungen.ausstattung.boeden.alt1')}
@@ -625,7 +625,7 @@ export function LeistungenPage() {
                     ))}
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4 mt-8 lg:mt-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-8 lg:mt-0">
                   <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
                     <img
                       src="/images/ladenbau/ladenbau-display-regal-led-beleuchtung.jpg"
@@ -659,7 +659,7 @@ export function LeistungenPage() {
                 <p className="text-muted-foreground text-base md:text-lg mb-8 leading-relaxed">
                   {t('leistungen.ausstattung.kalkulation.desc')}
                 </p>
-                <div className="inline-flex items-center gap-4 bg-white rounded-xl p-6 shadow-lg">
+                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto bg-white rounded-xl p-6 shadow-lg">
                   <TrendUp className="h-10 w-10 text-primary shrink-0" weight="duotone" />
                   <div className="text-left">
                     <p className="font-bold text-xl md:text-2xl text-primary">{t('leistungen.ausstattung.kalkulation.saving')}</p>
@@ -691,7 +691,7 @@ export function LeistungenPage() {
       </section>
 
       {/* Methoden- & Qualitätsabschnitt */}
-      <section className="py-12 sm:py-16 bg-muted">
+      <section className="py-8 sm:py-12 lg:py-16 bg-muted">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="methodik" className="scroll-mt-20">
             <div className="text-center mb-10 md:mb-12">
@@ -726,7 +726,7 @@ export function LeistungenPage() {
       </section>
 
       {/* Erfolgsbilanz – inline integriert */}
-      <section className="py-12 sm:py-16">
+      <section className="py-8 sm:py-12 lg:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div id="erfolge" className="scroll-mt-20">
             <div className="max-w-3xl mx-auto text-center">
@@ -740,7 +740,7 @@ export function LeistungenPage() {
       </section>
 
       {/* Alles aus einer Hand */}
-      <section className="py-12 sm:py-16">
+      <section className="py-8 sm:py-12 lg:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-10 md:mb-12">
@@ -774,7 +774,7 @@ export function LeistungenPage() {
       </section>
 
       {/* Lead Magnet: 3D Visualization When Commissioned */}
-      <section id="lead-magnet" className="py-12 sm:py-16 bg-primary text-primary-foreground">
+      <section id="lead-magnet" className="py-8 sm:py-12 lg:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <div className="flex items-center justify-center gap-2.5 mb-4">
@@ -800,7 +800,7 @@ export function LeistungenPage() {
       </section>
 
       {/* Sustainability Section – Emotional, non-duplicating */}
-      <section id="nachhaltigkeit-leistungen" className="py-12 sm:py-16 bg-green-50/50">
+      <section id="nachhaltigkeit-leistungen" className="py-8 sm:py-12 lg:py-16 bg-green-50/50">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Emotional Intro */}
           <div className="text-center mb-10 md:mb-12">
@@ -879,7 +879,7 @@ export function LeistungenPage() {
         ]}
       />
 
-      <section className="py-12 sm:py-16">
+      <section className="py-8 sm:py-12 lg:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-bold mb-3 sm:mb-4 leading-tight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('leistungen.bottomCta.title')}</h2>
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">

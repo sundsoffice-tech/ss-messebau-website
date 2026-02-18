@@ -32,8 +32,8 @@ export function CaseStudyCard({ title, challenge, solution, result, imageUrl, br
           <Badge className="bg-background/95 text-foreground shadow text-xs">{size}</Badge>
         </div>
       </div>
-      <CardContent className="p-5 md:p-6 space-y-4">
-        <h4 className="text-lg md:text-xl font-semibold leading-tight">{title}</h4>
+      <CardContent className="p-3 sm:p-5 md:p-6 space-y-4">
+        <h4 className="text-base sm:text-lg md:text-xl font-semibold leading-tight">{title}</h4>
         <div className="space-y-3">
           <div>
             <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-1">{t('casestudy.problem')}</p>

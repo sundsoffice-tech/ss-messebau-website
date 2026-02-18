@@ -167,7 +167,7 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
       </div>
       
       <div className="p-3">
-        <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+        <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors line-clamp-1">
           {t(item.titleKey)}
         </h3>
         <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
@@ -178,7 +178,7 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
           {item.featureKeys.map((key) => (
             <li key={key} className="text-xs text-muted-foreground flex items-center gap-2">
               <div className="w-1 h-1 rounded-full bg-primary flex-shrink-0" aria-hidden="true" />
-              {t(key)}
+              <span className="truncate">{t(key)}</span>
             </li>
           ))}
         </ul>
@@ -462,7 +462,7 @@ export function Header() {
           <a
             href="/"
             onClick={(e) => handleNavigation('/', e)}
-            className="flex items-center gap-2 sm:gap-3 flex-shrink-0 min-h-[44px] min-w-[44px] -ml-2 pl-2 group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="flex items-center gap-0 sm:gap-3 flex-shrink-0 min-h-[44px] min-w-[44px] -ml-2 pl-2 group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label="S&S Messebau - Zur Startseite"
             aria-current={currentPath === '/' ? 'page' : undefined}
           >
@@ -546,10 +546,10 @@ export function Header() {
                   onBlur={handleMegaMenuBlur}
                   className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(900px,calc(100vw-2rem))] z-50 max-h-[calc(100vh-80px)]"
                 >
-                  <div className="bg-background border rounded-lg shadow-2xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto max-h-[calc(100vh-100px)]">
-                    <div className="grid grid-cols-3 gap-3 mb-4">
+                  <div className="bg-background border rounded-lg shadow-2xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-100px)]">
+                    <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 mb-4">
                       {LEISTUNGEN_MEGA_MENU.map((item) => (
-                        <MegaMenuItem 
+                        <MegaMenuItem
                           key={item.sectionId}
                           item={item}
                           onNavigate={handleSectionNavigation}
@@ -723,10 +723,10 @@ export function Header() {
                   onMouseLeave={() => setMegaMenuOpen(false)}
                   className="absolute right-0 top-full mt-2 w-[min(600px,calc(100vw-2rem))] z-50 max-h-[calc(100vh-80px)]"
                 >
-                  <div className="bg-background border rounded-lg shadow-2xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto max-h-[calc(100vh-100px)]">
-                    <div className="grid grid-cols-3 gap-3 mb-4">
+                  <div className="bg-background border rounded-lg shadow-2xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-100px)]">
+                    <div className="grid grid-cols-2 gap-2 mb-4">
                       {LEISTUNGEN_MEGA_MENU.map((item) => (
-                        <MegaMenuItem 
+                        <MegaMenuItem
                           key={item.sectionId}
                           item={item}
                           onNavigate={handleSectionNavigation}
@@ -852,7 +852,7 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               {/* Max width 320px ensures adequate tap area on larger phones while maintaining usability */}
-              <SheetContent side="left" className="w-[min(85vw,320px)] px-0" ref={sheetContentRef}>
+              <SheetContent side="left" className="w-[min(85vw,320px)] sm:w-[min(75vw,400px)] px-0" ref={sheetContentRef}>
                 <SheetTitle className="sr-only">{t('header.nav.mobileNav')}</SheetTitle>
                 <SheetDescription className="sr-only">
                   {t('header.nav.mobileNavDesc')}

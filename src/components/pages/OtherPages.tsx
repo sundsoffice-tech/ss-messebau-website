@@ -112,49 +112,49 @@ export function UeberUnsPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.compare.title')}</h2>
             <div className="overflow-x-auto">
-              <table className="w-full text-base">
+              <table className="w-full text-sm sm:text-base">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-4 font-semibold">{t('about.compare.aspect')}</th>
-                    <th className="text-left p-4 font-semibold bg-primary/5">{t('about.compare.ss')}</th>
-                    <th className="text-left p-4 font-semibold">{t('about.compare.competition')}</th>
+                    <th className="text-left p-2 sm:p-4 font-semibold">{t('about.compare.aspect')}</th>
+                    <th className="text-left p-2 sm:p-4 font-semibold bg-primary/5">{t('about.compare.ss')}</th>
+                    <th className="text-left p-2 sm:p-4 font-semibold">{t('about.compare.competition')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">{t('about.compare.r1.aspect')}</td>
-                    <td className="p-4 bg-primary/5">{t('about.compare.r1.ss')}</td>
-                    <td className="p-4">{t('about.compare.r1.competition')}</td>
+                    <td className="p-2 sm:p-4 font-medium">{t('about.compare.r1.aspect')}</td>
+                    <td className="p-2 sm:p-4 bg-primary/5">{t('about.compare.r1.ss')}</td>
+                    <td className="p-2 sm:p-4">{t('about.compare.r1.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">{t('about.compare.r2.aspect')}</td>
-                    <td className="p-4 bg-primary/5">{t('about.compare.r2.ss')}</td>
-                    <td className="p-4">{t('about.compare.r2.competition')}</td>
+                    <td className="p-2 sm:p-4 font-medium">{t('about.compare.r2.aspect')}</td>
+                    <td className="p-2 sm:p-4 bg-primary/5">{t('about.compare.r2.ss')}</td>
+                    <td className="p-2 sm:p-4">{t('about.compare.r2.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">{t('about.compare.r3.aspect')}</td>
-                    <td className="p-4 bg-primary/5">{t('about.compare.r3.ss')}</td>
-                    <td className="p-4">{t('about.compare.r3.competition')}</td>
+                    <td className="p-2 sm:p-4 font-medium">{t('about.compare.r3.aspect')}</td>
+                    <td className="p-2 sm:p-4 bg-primary/5">{t('about.compare.r3.ss')}</td>
+                    <td className="p-2 sm:p-4">{t('about.compare.r3.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">{t('about.compare.r4.aspect')}</td>
-                    <td className="p-4 bg-primary/5">{t('about.compare.r4.ss')}</td>
-                    <td className="p-4">{t('about.compare.r4.competition')}</td>
+                    <td className="p-2 sm:p-4 font-medium">{t('about.compare.r4.aspect')}</td>
+                    <td className="p-2 sm:p-4 bg-primary/5">{t('about.compare.r4.ss')}</td>
+                    <td className="p-2 sm:p-4">{t('about.compare.r4.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">{t('about.compare.r5.aspect')}</td>
-                    <td className="p-4 bg-primary/5">{t('about.compare.r5.ss')}</td>
-                    <td className="p-4">{t('about.compare.r5.competition')}</td>
+                    <td className="p-2 sm:p-4 font-medium">{t('about.compare.r5.aspect')}</td>
+                    <td className="p-2 sm:p-4 bg-primary/5">{t('about.compare.r5.ss')}</td>
+                    <td className="p-2 sm:p-4">{t('about.compare.r5.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">{t('about.compare.r6.aspect')}</td>
-                    <td className="p-4 bg-primary/5">{t('about.compare.r6.ss')}</td>
-                    <td className="p-4">{t('about.compare.r6.competition')}</td>
+                    <td className="p-2 sm:p-4 font-medium">{t('about.compare.r6.aspect')}</td>
+                    <td className="p-2 sm:p-4 bg-primary/5">{t('about.compare.r6.ss')}</td>
+                    <td className="p-2 sm:p-4">{t('about.compare.r6.competition')}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-medium">{t('about.compare.r7.aspect')}</td>
-                    <td className="p-4 bg-primary/5">{t('about.compare.r7.ss')}</td>
-                    <td className="p-4">{t('about.compare.r7.competition')}</td>
+                    <td className="p-2 sm:p-4 font-medium">{t('about.compare.r7.aspect')}</td>
+                    <td className="p-2 sm:p-4 bg-primary/5">{t('about.compare.r7.ss')}</td>
+                    <td className="p-2 sm:p-4">{t('about.compare.r7.competition')}</td>
                   </tr>
                 </tbody>
               </table>

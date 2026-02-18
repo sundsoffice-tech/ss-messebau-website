@@ -77,7 +77,7 @@ export function HomePage() {
     <div>
       <section 
         id="hero"
-        className="relative min-h-[500px] sm:min-h-[600px] flex items-center hero-gradient overflow-hidden"
+        className="relative min-h-[350px] sm:min-h-[500px] lg:min-h-[600px] flex items-center hero-gradient overflow-hidden"
         aria-labelledby="hero-heading"
       >
         <div className="absolute inset-0 hero-overlay" />
@@ -99,13 +99,13 @@ export function HomePage() {
             <h1 id="hero-heading" className="font-bold text-white mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>
               {t('home.hero.title')}
             </h1>
-            <p className="text-white/90 mb-5 sm:mb-6 leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', lineHeight: '1.5' }}>
+            <p className="text-white/90 mb-5 sm:mb-6 leading-relaxed max-w-sm sm:max-w-2xl" style={{ fontSize: 'clamp(0.95rem, 2.5vw, 1.5rem)', lineHeight: '1.6' }}>
               {t('home.hero.subtitle')}
             </p>
             <div className="mb-5 sm:mb-6">
               <USPBadges />
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
               <Button 
                 size="lg" 
                 onClick={() => { trackHeroCTAClick('hero'); openInquiry() }}
@@ -141,7 +141,7 @@ export function HomePage() {
               {t('home.services.subtitle')}
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {[
               {
                 icon: Warehouse,
@@ -188,7 +188,7 @@ export function HomePage() {
               return (
                 <Card 
                   key={index} 
-                  className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
+                  className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary flex flex-col h-full"
                   onClick={() => handleServiceNavigation(service.sectionId)}
                 >
                   <div className="relative aspect-video overflow-hidden bg-muted">
@@ -211,7 +211,7 @@ export function HomePage() {
                       </div>
                     </div>
                   </div>
-                  <CardContent className="p-5 sm:p-6 space-y-4">
+                  <CardContent className="p-4 sm:p-5 lg:p-6 space-y-4 flex flex-col flex-grow">
                     <h3 className="font-bold leading-tight" style={{ fontSize: 'clamp(1.125rem, 2vw, 1.25rem)' }}>
                       {service.title}
                     </h3>
@@ -251,7 +251,7 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {[
               {
                 icon: CheckCircle,
@@ -295,7 +295,7 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {DEMO_REFERENCES.slice(0, 3).map((reference) => {
               const isUnsplashImage = reference.imageUrl.includes('unsplash.com')
               return (
@@ -314,7 +314,7 @@ export function HomePage() {
                       height="360"
                       loading="lazy"
                       decoding="async"
-                    className="object-cover w-full h-full group-hover:scale-110 group-hover:rotate-1 transition-all duration-500"
+                    className="object-cover w-full h-full group-hover:scale-105 sm:group-hover:scale-110 group-hover:rotate-1 transition-all duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <Badge className="absolute top-4 left-4 bg-background/95 text-foreground shadow-lg backdrop-blur-sm">
@@ -376,7 +376,7 @@ export function HomePage() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {[
               {
                 text: t('home.testimonials.t1.text'),
@@ -397,14 +397,14 @@ export function HomePage() {
                 rating: 5
               }
             ].map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
+              <Card key={index} className="flex flex-col h-full">
+                <CardContent className="p-4 sm:p-6 flex flex-col flex-grow">
                   <div className="flex gap-1 mb-4">
                     {Array.from({ length: testimonial.rating }).map((_, i) => (
                       <Star key={i} className="h-5 w-5 text-yellow-500" weight="fill" />
                     ))}
                   </div>
-                  <p className="text-muted-foreground mb-4 italic">"{testimonial.text}"</p>
+                  <p className="text-muted-foreground mb-4 italic text-sm sm:text-base flex-grow">"{testimonial.text}"</p>
                   <Separator className="my-4" />
                   <div>
                     <p className="font-semibold">{testimonial.author}</p>
@@ -435,11 +435,11 @@ export function HomePage() {
       <section id="cta" className="py-12 sm:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('home.cta.title')}</h2>
-          <p className="text-xl font-semibold mb-4 opacity-95">{t('home.cta.subtitle')}</p>
-          <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl font-semibold mb-4 opacity-95">{t('home.cta.subtitle')}</p>
+          <p className="text-base sm:text-lg mb-8 opacity-90 max-w-2xl mx-auto">
             {t('home.cta.desc')}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full sm:w-auto mx-auto">
             <Button 
               size="lg"
               onClick={() => { trackHeroCTAClick('cta_section'); openInquiry() }}

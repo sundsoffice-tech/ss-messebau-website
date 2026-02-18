@@ -25,7 +25,7 @@ export const Footer = memo(function Footer() {
   return (
     <footer className="bg-muted border-t mt-16 sm:mt-24">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-primary/10 rounded-xl flex-shrink-0">
@@ -198,7 +198,7 @@ export const Footer = memo(function Footer() {
                 <Envelope className="h-5 w-5 shrink-0" aria-hidden="true" />
                 <a 
                   href="mailto:info@sundsmessebau.com" 
-                  className="hover:text-primary focus-visible:text-primary transition-colors py-2 break-all focus-visible:outline-none focus-visible:underline"
+                  className="hover:text-primary focus-visible:text-primary transition-colors py-2 break-words focus-visible:outline-none focus-visible:underline"
                   aria-label={t('footer.contact.email') + ' info@sundsmessebau.com'}
                 >
                   info@sundsmessebau.com

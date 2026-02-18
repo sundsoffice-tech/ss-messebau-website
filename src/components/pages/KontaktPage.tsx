@@ -345,7 +345,7 @@ ANTWORTRICHTLINIEN:
 
       <section id="kontaktformular" className="py-8 sm:py-12 lg:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-12">
             <div className="order-2 lg:order-1">
               <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">{t('kontakt.form.heading')}</h2>
               <form onSubmit={form.handleSubmit} className="space-y-4 sm:space-y-6">
@@ -534,7 +534,7 @@ ANTWORTRICHTLINIEN:
                           </div>
                         </div>
                       )}
-                      <ScrollArea className="h-[400px] sm:h-[500px]" ref={scrollRef}>
+                      <ScrollArea className="h-[280px] sm:h-[400px] md:h-[500px]" ref={scrollRef}>
                         <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
                           {(chatMessages || []).map((msg, index) => (
                             <div
@@ -586,7 +586,7 @@ ANTWORTRICHTLINIEN:
                             <Lightbulb className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                             {t('kontakt.ai.quickActions')}
                           </p>
-                          <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2">
                             {quickActions.map((action) => (
                               <Button
                                 key={action.id}
@@ -667,7 +667,7 @@ ANTWORTRICHTLINIEN:
 
       <section className="py-8 sm:py-12 bg-muted">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="aspect-video rounded-lg overflow-hidden shadow-lg">
+          <div className="aspect-square sm:aspect-video rounded-lg overflow-hidden shadow-lg">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2516.847!2d6.223!3d51.056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTHCsDAzJzIxLjYiTiA2wrAxMyczMy44IkU!5e0!3m2!1sde!2sde!4v1234567890"
               width="100%"

@@ -104,8 +104,8 @@
   
   /* Custom cursor styles - only on desktop with mouse (min-width: 1280px to exclude tablets) */
   @media (pointer: fine) and (hover: hover) and (min-width: 1280px) {
-    * {
-      cursor: none !important;
+    html, body {
+      cursor: none;
     }
     
     /* Keep cursor for inputs and text areas for better UX */
@@ -121,8 +121,8 @@
   
   /* Disable custom cursor for reduced motion preference */
   @media (prefers-reduced-motion: reduce) {
-    * {
-      cursor: auto !important;
+    html {
+      cursor: auto;
     }
   }
   
@@ -149,7 +149,13 @@
 }
 
 .mobile-safe-bottom {
-  padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 640px) {
+  .mobile-safe-bottom {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 @media (min-width: 1024px) {

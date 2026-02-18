@@ -33,9 +33,9 @@ export default function CookieConsent() {
     <div
       role="dialog"
       aria-label={t('cookie.ariaLabel')}
-      className="fixed bottom-0 inset-x-0 z-[9999] bg-white/95 backdrop-blur border-t border-gray-200 shadow-lg p-4 md:p-6"
+      className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200 shadow-lg p-4 md:p-6"
     >
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-start md:items-center gap-4">
+      <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
         <p className="text-sm text-gray-700 flex-1">
           {t('cookie.text')}{' '}
           <a

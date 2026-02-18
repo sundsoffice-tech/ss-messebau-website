@@ -137,7 +137,7 @@ export function LeistungenShowroomLadenbauPage() {
             >
               Showroom &amp; Ladenbau | Brandspaces
             </h1>
-            <p className="text-xl mb-8 text-white/90">
+            <p className="text-lg sm:text-xl mb-8 text-white/90">
               Individuelle Raumkonzepte, Shops &amp; Markenräume aus einer Hand: S&amp;S Messebau
               konzipiert und realisiert Showrooms, Ladenlokale, Brand Spaces und Ausstellungsräume
               – von der ersten Idee bis zur schlüsselfertigen Übergabe.
@@ -168,7 +168,7 @@ export function LeistungenShowroomLadenbauPage() {
       {/* Bildergalerie Showroom & Ladenbau */}
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6 max-w-5xl mx-auto">
             <div className="group aspect-video rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
               <img
                 src="/images/ladenbau/ladenbau-display-regal-led-beleuchtung.jpg"
@@ -198,7 +198,7 @@ export function LeistungenShowroomLadenbauPage() {
       {/* USP Badge Section */}
       <section className="py-12 bg-secondary/30">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4 md:gap-6 max-w-6xl mx-auto">
             <Card className="p-4 text-center">
               <PaintBrush className="w-8 h-8 mx-auto mb-2 text-primary" />
               <p className="font-semibold text-sm">Individuelle Gestaltung</p>
@@ -248,7 +248,7 @@ export function LeistungenShowroomLadenbauPage() {
             Übergabe.
           </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 max-w-6xl mx-auto">
             {[
               {
                 icon: Eye,
@@ -312,7 +312,7 @@ export function LeistungenShowroomLadenbauPage() {
             wo Ihre Marke erlebbar werden soll.
           </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 max-w-6xl mx-auto">
             {[
               {
                 icon: Storefront,
@@ -341,7 +341,7 @@ export function LeistungenShowroomLadenbauPage() {
               },
             ].map((item, index) => (
               <Card key={index}>
-                <CardContent className="p-6">
+                <CardContent className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-center justify-center h-14 w-14 rounded-lg bg-primary/10 mb-4">
                     <item.icon className="w-7 h-7 text-primary" />
                   </div>
@@ -379,7 +379,7 @@ export function LeistungenShowroomLadenbauPage() {
                     <div className="w-0.5 h-full bg-border mt-2" />
                   )}
                 </div>
-                <div className="pb-6 sm:pb-8">
+                <div className="pb-6 sm:pb-8 min-w-0">
                   <h3 className="text-xl sm:text-2xl font-semibold mb-2">{item.title}</h3>
                   <p className="text-base sm:text-lg text-muted-foreground">{item.desc}</p>
                 </div>
@@ -430,7 +430,7 @@ export function LeistungenShowroomLadenbauPage() {
             Vertrauen Sie auf die Erfahrung zufriedener Showroom-Kunden.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
             {testimonials.map((testimonial, index) => (
               <Card key={index}>
                 <CardContent className="p-6">

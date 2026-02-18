@@ -65,13 +65,13 @@ export function MobileStickyCTA({ onClick }: StickyCTAProps) {
 
   return (
     <div 
-      className={`fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-background/95 backdrop-blur-sm border-t shadow-lg pb-safe transition-all duration-300 ${
+      className={`fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-background/95 backdrop-blur-sm border-t shadow-lg transition-all duration-300 ${
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
-      }`} 
-      role="group" 
+      }`}
+      role="group"
       aria-label={t('sticky.contactOptions')}
       aria-hidden={!isVisible}
-      style={{ contain: 'layout style' }}
+      style={{ contain: 'layout style', paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}
     >
       <div className="flex gap-3 p-3">
         <Button

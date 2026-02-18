@@ -118,7 +118,7 @@ export function ReferenzenPage() {
               </Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {filteredReferences.map((reference) => (
                 <Card 
                   key={reference.id} 
@@ -162,11 +162,11 @@ export function ReferenzenPage() {
       </section>
 
       <Dialog open={!!selectedReference} onOpenChange={(open) => !open && setSelectedReference(null)}>
-        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+        <DialogContent className="w-[95vw] sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           {selectedReference && (
             <>
               <DialogHeader>
-                <DialogTitle className="text-xl sm:text-2xl pr-8">{selectedReference.title}</DialogTitle>
+                <DialogTitle className="text-base sm:text-xl md:text-2xl pr-7">{selectedReference.title}</DialogTitle>
               </DialogHeader>
 
               <div className="space-y-4 sm:space-y-6">
@@ -185,7 +185,7 @@ export function ReferenzenPage() {
                 </div>
 
                 {(selectedReference.kunde || selectedReference.messe || selectedReference.zielsetzung) && (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-muted rounded-lg">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 p-4 bg-muted rounded-lg">
                     {selectedReference.kunde && (
                       <div>
                         <p className="text-xs text-muted-foreground font-medium mb-0.5">{t('referenzen.detail.kunde')}</p>
