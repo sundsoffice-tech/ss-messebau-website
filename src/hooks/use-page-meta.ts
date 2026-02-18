@@ -6,7 +6,8 @@ interface PageMeta {
   ogType?: string
 }
 
-const DEFAULT_OG_IMAGE = 'https://sunds-messebau.de/og-image.jpg'
+const SITE_URL = 'https://sunds-messebau.de'
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`
 
 const PAGE_META: Record<string, PageMeta> = {
   '/': {
@@ -152,6 +153,21 @@ export function usePageMeta(page: string) {
     const twitterImage = document.querySelector('meta[name="twitter:image"]')
     if (twitterImage) {
       twitterImage.setAttribute('content', DEFAULT_OG_IMAGE)
+    }
+
+    // Dynamic canonical URL (clean path without hash)
+    const canonicalPath = page === '/' ? '' : page
+    const canonicalUrl = `${SITE_URL}${canonicalPath}`
+
+    let canonical = document.querySelector('link[rel="canonical"]')
+    if (canonical) {
+      canonical.setAttribute('href', canonicalUrl)
+    }
+
+    // Dynamic og:url
+    const ogUrl = document.querySelector('meta[property="og:url"]')
+    if (ogUrl) {
+      ogUrl.setAttribute('content', canonicalUrl)
     }
   }, [page])
 }
