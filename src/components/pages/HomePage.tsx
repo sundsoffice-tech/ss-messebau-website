@@ -140,7 +140,7 @@ export function HomePage() {
               {t('home.services.subtitle')}
             </p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 icon: Warehouse,
@@ -190,7 +190,7 @@ export function HomePage() {
                   className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
                   onClick={() => handleServiceNavigation(service.sectionId)}
                 >
-                  <div className="relative aspect-[25/16] overflow-hidden bg-muted">
+                  <div className="relative aspect-video overflow-hidden bg-muted">
                     <img 
                       src={isUnsplashImage ? `${service.image}&fm=webp&q=75` : service.image}
                       srcSet={isUnsplashImage ? `${service.image}&fm=webp&q=75&w=400 400w, ${service.image}&fm=webp&q=75&w=500 500w, ${service.image}&fm=webp&q=75&w=640 640w` : undefined}
@@ -250,7 +250,7 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 icon: CheckCircle,
