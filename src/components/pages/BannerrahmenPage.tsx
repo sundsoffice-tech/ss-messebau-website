@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card'
 import { Check, Package, Truck, Shield, Wrench, Star, ArrowRight } from '@phosphor-icons/react'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { useTranslation } from '@/lib/i18n'
+import { navigate } from '@/lib/deep-linking'
 import { useUIStore } from '@/store/ui-store'
 
 export function BannerrahmenPage() {
@@ -29,7 +30,7 @@ export function BannerrahmenPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                onClick={() => window.location.hash = '/banner-bestellen'}
+                onClick={() => navigate('/banner-bestellen')}
                 className="bg-white text-primary hover:bg-white/80"
               >
                 {t('bannerrahmen.hero.configureCta')}
@@ -274,28 +275,28 @@ export function BannerrahmenPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="font-bold text-center mb-8" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2rem)', lineHeight: '1.2' }}>Verwandte Leistungsbereiche</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-            <button onClick={() => window.location.hash = '/leistungen/messebau'} className="group text-left">
+            <button onClick={() => navigate('/leistungen/messebau')} className="group text-left">
               <Card className="p-5 h-full transition-all group-hover:border-primary group-hover:shadow-lg">
                 <Package className="w-8 h-8 text-primary mb-3" />
                 <h3 className="font-bold mb-1">Messebau</h3>
                 <p className="text-xs text-muted-foreground">Professionelle Messestände von 20–200 m²</p>
               </Card>
             </button>
-            <button onClick={() => window.location.hash = '/leistungen/boeden-ausstattung'} className="group text-left">
+            <button onClick={() => navigate('/leistungen/boeden-ausstattung')} className="group text-left">
               <Card className="p-5 h-full transition-all group-hover:border-primary group-hover:shadow-lg">
                 <Wrench className="w-8 h-8 text-primary mb-3" />
                 <h3 className="font-bold mb-1">Böden & Ausstattung</h3>
                 <p className="text-xs text-muted-foreground">Premium-Bodenbeläge und Möblierung</p>
               </Card>
             </button>
-            <button onClick={() => window.location.hash = '/banner-bestellen'} className="group text-left">
+            <button onClick={() => navigate('/banner-bestellen')} className="group text-left">
               <Card className="p-5 h-full transition-all group-hover:border-primary group-hover:shadow-lg border-primary/50">
                 <Shield className="w-8 h-8 text-primary mb-3" />
                 <h3 className="font-bold mb-1">Banner bestellen</h3>
                 <p className="text-xs text-muted-foreground">Jetzt Banner online konfigurieren</p>
               </Card>
             </button>
-            <button onClick={() => window.location.hash = '/leistungen'} className="group text-left">
+            <button onClick={() => navigate('/leistungen')} className="group text-left">
               <Card className="p-5 h-full transition-all group-hover:border-primary group-hover:shadow-lg">
                 <ArrowRight className="w-8 h-8 text-primary mb-3" />
                 <h3 className="font-bold mb-1">Alle Leistungen</h3>
@@ -316,7 +317,7 @@ export function BannerrahmenPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              onClick={() => window.location.hash = '/banner-bestellen'}
+              onClick={() => navigate('/banner-bestellen')}
               className="bg-white text-primary hover:bg-white/80"
             >
               {t('bannerrahmen.cta.configureCta')}

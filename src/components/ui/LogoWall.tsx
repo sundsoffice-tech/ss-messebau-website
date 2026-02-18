@@ -18,7 +18,7 @@ export function LogoWall() {
           {branchen.map((branche) => (
             <a
               key={branche.sectionId}
-              href={`#/branchen#${branche.sectionId}`}
+              href={`/branchen#${branche.sectionId}`}
               className="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition-opacity duration-300"
             >
               <span className="text-base sm:text-lg font-bold tracking-tight text-foreground">{t(branche.labelKey)}</span>

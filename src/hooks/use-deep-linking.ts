@@ -3,7 +3,7 @@ import { parseDeepLink, navigateToSection, navigateToPageAndSection, updateUrlWi
 
 export function useDeepLinking(currentPage: string) {
   useEffect(() => {
-    const deepLink = parseDeepLink(window.location.hash)
+    const deepLink = parseDeepLink()
     
     if (deepLink.page === currentPage && deepLink.section) {
       if (!isValidDeepLink(currentPage, deepLink.section)) {

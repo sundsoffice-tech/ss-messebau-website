@@ -14,6 +14,7 @@ import {
 } from '@phosphor-icons/react'
 import { DEMO_REFERENCES } from '@/lib/demo-references'
 import { useTranslation } from '@/lib/i18n'
+import { navigate } from '@/lib/deep-linking'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { USPBadges } from '@/components/ui/USPBadge'
@@ -44,7 +45,7 @@ export function HomePage() {
   useDwellTimeTracking('home')
 
   const handleNavigation = (path: string) => {
-    window.location.hash = path
+    navigate(path)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -68,7 +69,7 @@ export function HomePage() {
   }
 
   const handleServiceNavigation = (sectionId: string) => {
-    window.location.hash = `/leistungen/${sectionId}`
+    navigate(`/leistungen/${sectionId}`)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 

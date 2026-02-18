@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { CheckCircle, ArrowRight, Phone, Envelope, Check } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
+import { navigate } from '@/lib/deep-linking'
 import type { BannerConfig } from '../BannerBestellenPage'
 
 interface ThankYouPageProps {
@@ -96,13 +97,13 @@ export function ThankYouPage({ config }: ThankYouPageProps) {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Button size="lg" onClick={() => {
-                window.location.hash = '/banner-bestellen'
+                navigate('/banner-bestellen')
                 window.location.reload()
               }}>
                 {t('thankyou.newInquiry')}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
-              <Button size="lg" variant="outline" onClick={() => (window.location.hash = '/')}>
+              <Button size="lg" variant="outline" onClick={() => navigate('/')}>
                 {t('thankyou.backHome')}
               </Button>
             </div>

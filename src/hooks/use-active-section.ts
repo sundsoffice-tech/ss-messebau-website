@@ -13,24 +13,19 @@ export function useActiveSection() {
     if (typeof window === 'undefined') {
       return { page: '/' }
     }
-    return parseDeepLink(window.location.hash)
+    return parseDeepLink()
   })
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const deepLink = parseDeepLink(window.location.hash)
+    const handleRouteChange = () => {
+      const deepLink = parseDeepLink()
       setActiveSection(deepLink)
     }
 
-    // Listen for hash changes
-    window.addEventListener('hashchange', handleHashChange)
-    
-    // Also listen for history state changes
-    window.addEventListener('popstate', handleHashChange)
+    window.addEventListener('popstate', handleRouteChange)
 
     return () => {
-      window.removeEventListener('hashchange', handleHashChange)
-      window.removeEventListener('popstate', handleHashChange)
+      window.removeEventListener('popstate', handleRouteChange)
     }
   }, [])
 

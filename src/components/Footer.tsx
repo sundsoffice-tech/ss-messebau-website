@@ -4,6 +4,7 @@ import { Phone, Envelope, MapPin } from '@phosphor-icons/react'
 import logo from '@/assets/logo/ss-messebau-logo.png'
 import { useTranslation } from '@/lib/i18n'
 import { authApi } from '@/lib/api-client'
+import { navigate } from '@/lib/deep-linking'
 
 export const Footer = memo(function Footer() {
   const { t } = useTranslation()
@@ -18,7 +19,7 @@ export const Footer = memo(function Footer() {
     if (event) {
       event.preventDefault()
     }
-    window.location.hash = path
+    navigate(path)
   }
 
   return (

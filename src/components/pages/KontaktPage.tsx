@@ -9,6 +9,7 @@ import { useTranslation } from '@/lib/i18n'
 import { ContactInquiry, ChatMessage } from '@/lib/types'
 import { useKV } from '@/hooks/use-kv'
 import { useVoiceInput } from '@/hooks/use-voice-input'
+import { navigate } from '@/lib/deep-linking'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { trackFormSubmit } from '@/lib/analytics'
@@ -507,7 +508,7 @@ ANTWORTRICHTLINIEN:
                   </div>
 
                   <Button 
-                    onClick={() => window.location.hash = '/ki-berater'}
+                    onClick={() => navigate('/ki-berater')}
                     variant="outline"
                     className="w-full h-10 text-sm"
                   >

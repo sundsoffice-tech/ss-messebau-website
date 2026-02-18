@@ -9,6 +9,7 @@ import { useTranslation } from '@/lib/i18n'
 import { useFormSystem } from '@/hooks/use-form-system'
 import { FormField } from '@/components/form-system/FormField'
 import { sendFormNotification } from '@/lib/notification-service'
+import { navigate } from '@/lib/deep-linking'
 import { FIELD_TOKENS } from '@/lib/form-system/field-registry'
 
 interface InquiryDialogProps {
@@ -161,10 +162,10 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
               <p>
                 {t('inquiry.privacy')}{' '}
                 <a
-                  href="#/datenschutz"
+                  href="/datenschutz"
                   onClick={(e) => {
                     e.preventDefault()
-                    window.location.hash = '/datenschutz'
+                    navigate('/datenschutz')
                   }}
                   className="underline hover:text-primary transition-colors"
                 >

@@ -1,5 +1,6 @@
 import { CaretRight, House } from '@phosphor-icons/react'
 import { memo } from 'react'
+import { navigate } from '@/lib/deep-linking'
 
 interface BreadcrumbItem {
   label: string
@@ -15,7 +16,7 @@ export const Breadcrumbs = memo(function Breadcrumbs({ items }: BreadcrumbsProps
   if (items.length === 0) return null
 
   const handleNavigation = (path: string) => {
-    window.location.hash = path
+    navigate(path)
   }
 
   return (

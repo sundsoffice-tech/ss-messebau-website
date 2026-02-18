@@ -25,7 +25,7 @@ export function BranchenPage() {
   useDwellTimeTracking('branchen')
 
   useEffect(() => {
-    const deepLink = parseDeepLink(window.location.hash)
+    const deepLink = parseDeepLink()
     if (deepLink.section && ['messebau', 'eventbau', 'ladenbau', 'sport'].includes(deepLink.section)) {
       setActiveTab(deepLink.section)
       setTimeout(() => {

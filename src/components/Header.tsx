@@ -35,7 +35,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import logo from '@/assets/logo/ss-messebau-logo.png'
-import { parseDeepLink } from '@/lib/deep-linking'
+import { parseDeepLink, navigate, navigateToPageAndSection } from '@/lib/deep-linking'
 import { useTranslation } from '@/lib/i18n'
 import { useUIStore } from '@/store/ui-store'
 
@@ -194,7 +194,7 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
-  const [currentPath, setCurrentPath] = useState(() => parseDeepLink(window.location.hash).page)
+  const [currentPath, setCurrentPath] = useState(() => parseDeepLink().page)
   const megaMenuRef = useRef<HTMLDivElement>(null)
   const megaMenuTriggerRef = useRef<HTMLButtonElement>(null)
   const tabletMegaMenuRef = useRef<HTMLDivElement>(null)
@@ -205,9 +205,9 @@ export function Header() {
   const toggleLang = () => setLang(lang === 'de' ? 'en' : 'de')
 
   useEffect(() => {
-    const updatePath = () => setCurrentPath(parseDeepLink(window.location.hash).page)
-    window.addEventListener('hashchange', updatePath)
-    return () => window.removeEventListener('hashchange', updatePath)
+    const updatePath = () => setCurrentPath(parseDeepLink().page)
+    window.addEventListener('popstate', updatePath)
+    return () => window.removeEventListener('popstate', updatePath)
   }, [])
 
   useEffect(() => {
@@ -352,14 +352,14 @@ export function Header() {
     }
     setMobileMenuOpen(false)
     setMegaMenuOpen(false)
-    window.location.hash = path
+    navigate(path)
   }
 
   const handleSectionNavigation = (sectionId: string, pagePath?: string) => {
     setMobileMenuOpen(false)
     setMegaMenuOpen(false)
     if (pagePath) {
-      window.location.hash = pagePath
+      navigate(pagePath)
     } else {
       navigateToPageAndSection('/leistungen', sectionId)
     }
@@ -460,7 +460,7 @@ export function Header() {
           scrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'
         }`}>
           <a
-            href="#/"
+            href="/"
             onClick={(e) => handleNavigation('/', e)}
             className="flex items-center gap-2 sm:gap-3 flex-shrink-0 min-h-[44px] min-w-[44px] -ml-2 pl-2 group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label="S&S Messebau - Zur Startseite"
@@ -505,7 +505,7 @@ export function Header() {
               size={scrolled ? 'sm' : 'default'}
             >
               <a 
-                href="#/"
+                href="/"
                 onClick={(e) => handleNavigation('/', e)}
                 aria-current={currentPath === '/' ? 'page' : undefined}
               >
@@ -604,7 +604,7 @@ export function Header() {
                 size={scrolled ? 'sm' : 'default'}
               >
                 <a
-                  href={`#${item.path}`}
+                  href={item.path}
                   onClick={(e) => handleNavigation(item.path, e)}
                   aria-current={currentPath === item.path ? 'page' : undefined}
                 >
@@ -684,7 +684,7 @@ export function Header() {
               size="sm"
             >
               <a
-                href="#/"
+                href="/"
                 onClick={(e) => handleNavigation('/', e)}
                 aria-current={currentPath === '/' ? 'page' : undefined}
               >
@@ -763,7 +763,7 @@ export function Header() {
                 size="sm"
               >
                 <a
-                  href={`#${item.path}`}
+                  href={item.path}
                   onClick={(e) => handleNavigation(item.path, e)}
                   aria-current={currentPath === item.path ? 'page' : undefined}
                 >
@@ -925,7 +925,7 @@ export function Header() {
                           className="w-full mt-3 gap-2 text-primary min-h-[44px] text-base"
                         >
                           <a
-                            href="#/leistungen"
+                            href="/leistungen"
                             onClick={(e) => handleNavigation('/leistungen', e)}
                           >
                             {t('header.nav.allServices')}
@@ -954,7 +954,7 @@ export function Header() {
                         className="justify-start gap-3 min-h-[48px] w-full text-base"
                       >
                         <a
-                          href="#/"
+                          href="/"
                           onClick={(e) => handleNavigation('/', e)}
                           aria-current={currentPath === '/' ? 'page' : undefined}
                         >
@@ -973,7 +973,7 @@ export function Header() {
                             className="justify-start gap-3 min-h-[48px] w-full text-base"
                           >
                             <a
-                              href={`#${item.path}`}
+                              href={item.path}
                               onClick={(e) => handleNavigation(item.path, e)}
                               aria-current={currentPath === item.path ? 'page' : undefined}
                             >
@@ -1001,7 +1001,7 @@ export function Header() {
                             className="justify-start gap-3 min-h-[48px] w-full text-base"
                           >
                             <a
-                              href={`#${item.path}`}
+                              href={item.path}
                               onClick={(e) => handleNavigation(item.path, e)}
                               aria-current={currentPath === item.path ? 'page' : undefined}
                             >

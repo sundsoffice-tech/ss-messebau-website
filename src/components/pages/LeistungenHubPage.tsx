@@ -10,6 +10,7 @@ import {
   FrameCorners,
 } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
+import { navigate } from '@/lib/deep-linking'
 import { useUIStore } from '@/store/ui-store'
 
 const services = [
@@ -26,7 +27,7 @@ export function LeistungenHubPage() {
   const { openInquiry } = useUIStore()
 
   const handleTileClick = (path: string) => {
-    window.location.hash = path
+    navigate(path)
   }
 
   return (

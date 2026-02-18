@@ -25,6 +25,7 @@ import {
   Envelope,
   ShoppingBag,
 } from '@phosphor-icons/react'
+import { navigate } from '@/lib/deep-linking'
 import { useUIStore } from '@/store/ui-store'
 
 export function LeistungenShowroomLadenbauPage() {
@@ -472,7 +473,7 @@ export function LeistungenShowroomLadenbauPage() {
                 key={index}
                 variant="outline"
                 className="justify-between min-h-[48px]"
-                onClick={() => window.location.hash = page.hash}
+                onClick={() => navigate(page.hash)}
               >
                 {page.label}
                 <ArrowRight className="ml-2 shrink-0" />
@@ -481,7 +482,7 @@ export function LeistungenShowroomLadenbauPage() {
             <Button
               variant="ghost"
               className="justify-between min-h-[48px] text-muted-foreground"
-              onClick={() => window.location.hash = '/leistungen'}
+              onClick={() => navigate('/leistungen')}
             >
               ← Zurück zur Übersicht
             </Button>

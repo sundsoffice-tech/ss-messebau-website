@@ -1,7 +1,7 @@
 import React from 'react'
 import { scrollToSection } from '@/lib/scroll-utils'
 import { createSectionHash } from '@/lib/section-map'
-import { navigateToPageAndSection } from '@/lib/deep-linking'
+import { navigateToPageAndSection, navigate } from '@/lib/deep-linking'
 
 interface RouterLinkProps {
   to: string
@@ -26,7 +26,7 @@ export function RouterLink({
     e.preventDefault()
     
     if (section) {
-      const currentPage = window.location.hash.replace('#', '').split('#')[0] || '/'
+      const currentPage = window.location.pathname || '/'
       
       if (currentPage === to) {
         scrollToSection(section, 100)
@@ -38,14 +38,14 @@ export function RouterLink({
         })
       }
     } else {
-      window.location.hash = to
+      navigate(to)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
     
     onClick?.()
   }
 
-  const href = section ? createSectionHash(to, section) : `#${to}`
+  const href = section ? createSectionHash(to, section) : to
 
   return (
     <a 
