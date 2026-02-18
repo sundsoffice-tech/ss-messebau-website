@@ -143,10 +143,10 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
   return (
     <button
       onClick={() => onNavigate(item.sectionId, item.pagePath)}
-      className="group relative overflow-hidden rounded-lg border text-left transition-all hover:border-primary hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      className="group relative overflow-hidden rounded-lg border text-left transition-all hover:border-primary hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex flex-col h-full"
       aria-label={`${t(item.titleKey)} - ${t(item.descriptionKey)}`}
     >
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden flex-shrink-0">
         <MediaFrame
           src={item.previewImage}
           alt={`${t('header.mega.previewAlt')} ${t(item.titleKey)}`}
@@ -165,16 +165,16 @@ const MegaMenuItem = memo(({ item, onNavigate }: { item: typeof LEISTUNGEN_MEGA_
           <Icon className="h-5 w-5" weight="duotone" aria-hidden="true" />
         </div>
       </div>
-      
-      <div className="p-3">
+
+      <div className="p-3 flex-1 flex flex-col">
         <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors line-clamp-1">
           {t(item.titleKey)}
         </h3>
         <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
           {t(item.descriptionKey)}
         </p>
-        
-        <ul className="space-y-1" aria-label={`${t(item.titleKey)} Features`}>
+
+        <ul className="space-y-1 mt-auto" aria-label={`${t(item.titleKey)} Features`}>
           {item.featureKeys.map((key) => (
             <li key={key} className="text-xs text-muted-foreground flex items-center gap-2">
               <div className="w-1 h-1 rounded-full bg-primary flex-shrink-0" aria-hidden="true" />
