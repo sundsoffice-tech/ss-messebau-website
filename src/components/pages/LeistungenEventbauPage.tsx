@@ -192,6 +192,21 @@ export function LeistungenEventbauPage() {
         </div>
       </section>
 
+      {/* Showcase Image */}
+      <section className="py-8 sm:py-12">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="aspect-video rounded-lg overflow-hidden shadow-xl">
+            <img
+              src="/images/WhatsApp Image 2026-02-15 at 18.25.23.jpeg"
+              alt="Professioneller Eventbau – Ausstellungsfläche mit hochwertigen Displays und Beleuchtung"
+              className="w-full h-full object-cover"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* USP Badge Section */}
       <section className="py-12 bg-secondary/30">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

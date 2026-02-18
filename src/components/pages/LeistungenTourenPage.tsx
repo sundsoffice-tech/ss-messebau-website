@@ -182,6 +182,21 @@ export function LeistungenTourenPage() {
         </div>
       </section>
 
+      {/* Showcase Image */}
+      <section className="py-8 sm:py-12">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="aspect-video rounded-lg overflow-hidden shadow-xl">
+            <img
+              src="/images/6f93c3a5-fc1c-4ea7-8803-a789be79302e.jpeg"
+              alt="Roadshow-Ausstellung – professioneller Messebau mit Bühnentechnik und Displays"
+              className="w-full h-full object-cover"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* USP Badge Section */}
       <section className="py-12 bg-secondary/30">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
