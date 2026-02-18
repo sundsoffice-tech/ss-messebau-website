@@ -5,6 +5,10 @@ import logo from '@/assets/logo/ss-messebau-logo.png'
 import { useTranslation } from '@/lib/i18n'
 import { authApi } from '@/lib/api-client'
 import { navigate } from '@/lib/deep-linking'
+import { ShareButton } from './ShareButton'
+import type { SharePlatform } from '@/lib/share'
+
+const FOOTER_SHARE_PLATFORMS: SharePlatform[] = ['linkedin', 'whatsapp', 'email', 'x', 'copy']
 
 export const Footer = memo(function Footer() {
   const { t } = useTranslation()
@@ -214,23 +218,40 @@ export const Footer = memo(function Footer() {
           <div className="text-center sm:text-left">
             © {new Date().getFullYear()} S&S Messebau GbR. {t('footer.rights')}.
           </div>
+
+          <div className="flex items-center gap-3" role="group" aria-label={t('share.ariaLabel')}>
+            <span className="text-xs text-muted-foreground">{t('share.label')}</span>
+            <div className="flex items-center gap-1">
+              {FOOTER_SHARE_PLATFORMS.map((platform) => (
+                <ShareButton
+                  key={platform}
+                  platform={platform}
+                  url={window.location.pathname || '/'}
+                  title={document.title}
+                  size="sm"
+                  source="footer"
+                />
+              ))}
+            </div>
+          </div>
+
           <nav aria-label={t('footer.legal.nav')}>
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-              <button 
-                onClick={(e) => handleNavigation('/impressum', e)} 
+              <button
+                onClick={(e) => handleNavigation('/impressum', e)}
                 className="hover:text-primary focus-visible:text-primary transition-colors min-h-[44px] py-2 focus-visible:outline-none focus-visible:underline"
               >
                 {t('footer.legal.imprint')}
               </button>
-              <button 
-                onClick={(e) => handleNavigation('/datenschutz', e)} 
+              <button
+                onClick={(e) => handleNavigation('/datenschutz', e)}
                 className="hover:text-primary focus-visible:text-primary transition-colors min-h-[44px] py-2 focus-visible:outline-none focus-visible:underline"
               >
                 {t('footer.legal.privacy')}
               </button>
               {isAdmin && (
-              <button 
-                onClick={(e) => handleNavigation('/admin', e)} 
+              <button
+                onClick={(e) => handleNavigation('/admin', e)}
                 className="hover:text-primary focus-visible:text-primary transition-colors min-h-[44px] py-2 focus-visible:outline-none focus-visible:underline"
               >
                 {t('footer.legal.admin')}

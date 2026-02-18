@@ -1906,5 +1906,20 @@
   "admin.tracking.subject": "Betreff",
   "admin.tracking.status": "Status",
   "admin.tracking.eventTimeline": "Event-Verlauf",
-  "admin.tracking.noEvents": "Keine Events vorhanden"
+  "admin.tracking.noEvents": "Keine Events vorhanden",
+
+  "share.label": "Seite teilen",
+  "share.ariaLabel": "Seite in sozialen Netzwerken teilen",
+  "share.title": "Seite teilen",
+  "share.shareArticle": "Artikel teilen",
+  "share.linkedin": "Auf LinkedIn teilen",
+  "share.whatsapp": "Per WhatsApp teilen",
+  "share.email": "Per E-Mail teilen",
+  "share.x": "Auf X teilen",
+  "share.facebook": "Auf Facebook teilen",
+  "share.copy": "Link kopieren",
+  "share.copied": "Link kopiert!",
+  "share.native": "Teilen",
+  "share.copySuccess": "Link wurde in die Zwischenablage kopiert",
+  "share.copyError": "Link konnte nicht kopiert werden"
 }

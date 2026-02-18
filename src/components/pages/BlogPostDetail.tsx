@@ -7,6 +7,8 @@ import { DEMO_BLOG_POSTS } from '@/lib/demo-blog-posts'
 import { useTranslation } from '@/lib/i18n'
 import { useUIStore } from '@/store/ui-store'
 import { BlogPostCard } from './BlogPostCard'
+import { ShareButton } from '@/components/ShareButton'
+import { ShareMenu } from '@/components/ShareMenu'
 import type { BlogPost } from '@/lib/types'
 
 interface BlogPostDetailProps {
@@ -98,6 +100,24 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
             </div>
           </div>
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">{post.title}</h1>
+          <div className="flex items-center gap-2 mt-4" role="group" aria-label={t('share.ariaLabel')}>
+            <span className="text-sm text-primary-foreground/60">{t('share.label')}</span>
+            <div className="flex items-center gap-1">
+              {(['linkedin', 'whatsapp', 'email', 'copy'] as const).map((platform) => (
+                <ShareButton
+                  key={platform}
+                  platform={platform}
+                  url={`/blog/${post.slug}`}
+                  title={post.title}
+                  description={post.excerpt}
+                  size="sm"
+                  source="blog_header"
+                  campaign="blog_share"
+                  className="text-primary-foreground/60 hover:text-primary-foreground"
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -145,6 +165,16 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
               <ArrowLeft className="mr-2 h-4 w-4" />
               {t('blog.backToOverview')}
             </Button>
+            <ShareMenu
+              url={`/blog/${post.slug}`}
+              title={post.title}
+              description={post.excerpt}
+              campaign="blog_share"
+              triggerVariant="text"
+              triggerLabel={t('share.shareArticle')}
+              side="top"
+              source="blog_footer"
+            />
             <Button
               onClick={openInquiry}
               className="bg-accent text-accent-foreground hover:bg-accent/90 min-h-[44px]"
