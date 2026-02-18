@@ -13,7 +13,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Wir entwickelten ein offenes Konzept mit beleuchteten Garderobenbereichen, großformatigen Lifestyle-Bildern und einer einladenden VIP-Lounge für B2B-Gespräche.',
     result: 'Deutlich mehr Besucherkontakte, zahlreiche neue Handelspartner-Leads',
     keyfacts: ['80 qm Standfläche', '3 Tage Aufbau', 'Nachhaltige Systemelemente'],
-    messe: 'Gallery Shoes Düsseldorf',
     zielsetzung: 'Hochwertige Kollektionspräsentation und B2B-Kontaktgenerierung für die kommende Saison'
   },
   {
@@ -28,7 +27,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Klare Raumzonierung: Offene Welcome-Area, Produktpräsentationszonen und digitale Infoscreens für interaktive Markenerlebnisse.',
     result: 'Über 300 Besucherkontakte, sehr positive Feedbacks zur Standgestaltung und Produktpräsentation',
     keyfacts: ['12 qm Standfläche', 'Modulares System', '2 Beratungsplätze'],
-    messe: 'DKM Dortmund',
     zielsetzung: 'Ästhetische Markenpräsenz mit effizienten Kommunikationszonen für Kundengespräche'
   },
   {
@@ -43,7 +41,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Moderner Look mit hochwertigen Details: Sichtbeton-Optik, LED-Spots, interaktive Produktkonfiguratoren.',
     result: 'Dauerhafter Showroom mit regelmäßigen Kundenführungen und positivem Markenimage',
     keyfacts: ['120 qm Showroom', 'Permanent-Installation', 'Integrierte Medienwände', 'Barrierefreier Zugang'],
-    messe: 'Hannover Messe',
     zielsetzung: 'Permanenter Showroom zur Demonstration von Kompetenz und Produktvielfalt'
   },
   {
@@ -58,7 +55,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Warme Materialien, einladende Verkostungsstationen, LED-Produktpräsentation und gezielte Gesprächszonen für Einkäufer.',
     result: 'Zahlreiche B2B-Kontakte und Listungsvereinbarungen mit Feinkost-Händlern',
     keyfacts: ['25 qm', 'Verkostungstheken', 'Nachhaltige Materialien'],
-    messe: 'ISM Köln',
     zielsetzung: 'Premium-Produktpräsentation und B2B-Kontaktgenerierung für Markteintritt'
   },
   {
@@ -73,7 +69,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Integrierte Kühlung, kunstvolle Displayvitrinen und beleuchtete Markenwand für maximale Produktinszenierung.',
     result: 'Deutlich mehr Besucherkontakte im Vergleich zum Vorjahr',
     keyfacts: ['90 qm', 'Kühlvitrinen', 'Markeninszenierung'],
-    messe: 'ISM Köln',
     zielsetzung: 'Optimale Produktpräsentation unter Temperaturkontrolle für Premiumschokolade'
   },
   {
@@ -88,7 +83,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Semi-private Beratungsräume, warme Beleuchtung und digitale Produktwände für interaktive Präsentationen.',
     result: 'Über 250 qualifizierte Leads und sehr positive Bewertungen zur Standgestaltung',
     keyfacts: ['35 qm', '4 Beratungsplätze', 'Digital Signage'],
-    messe: 'DKM Dortmund',
     zielsetzung: 'Professionelle Standgestaltung mit maximaler Beratungskapazität'
   },
   {
@@ -103,7 +97,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Modulares, wiederverwendbares Standsystem mit schnellem Auf- und Abbau, transportoptimiert für den Roadshow-Einsatz.',
     result: 'Deutliche Kosteneinsparung gegenüber Einzelbauten, konsistente Markenpräsenz auf allen Events',
     keyfacts: ['Mehrere Messen/Jahr', '40 qm Systemstand', '2h Aufbauzeit', 'Wiederverwendbar'],
-    messe: 'Mehrere Messen',
     zielsetzung: 'Kosteneffiziente, konsistente Markenpräsenz über mehrere regionale Events und Messen'
   },
   {
@@ -118,37 +111,6 @@ export const DEMO_REFERENCES: Reference[] = [
     solution: 'Wir entwickelten einen modularen Shop mit Verkaufsraum für Adidas Hockey- und Padel-Ausrüstung, separaten Umkleidekabinen mit Vorhängen und Spiegeln sowie einem einladenden Empfangsbereich mit EuroHockey Championships Branding.',
     result: 'Erfolgreicher Event-Shop mit hoher Besucherfrequenz während der gesamten Turnierzeit',
     keyfacts: ['200 qm Event-Shop', 'Verkaufsraum + Umkleiden', 'Adidas Hockey Ausrüstung'],
-    messe: 'EuroHockey Championships Mönchengladbach',
     zielsetzung: 'Professioneller Event-Shop für Hockey EM mit vollständiger Verkaufs- und Serviceinfrastruktur',
-  },
-  {
-    id: '8',
-    title: 'Messestand mit Display-Rahmen und Branding',
-    branche: 'messebau',
-    size: '30 qm',
-    type: 'messebau',
-    imageUrl: '/images/6da797c7-d75b-4d81-bdb4-81b33663b633.jpeg',
-    description: 'Kompakter Messestand mit professionellen Display-Rahmen und markengerechter Gestaltung',
-    challenge: 'Ein Unternehmen benötigte einen kompakten Messestand mit hoher Markenwirkung und flexiblen Displayflächen für wechselnde Kampagnen.',
-    solution: 'Einsatz hochwertiger Display-Rahmen mit Wechselgrafiken, beleuchtete Rückwand und flexible Standelemente für maximale Wirkung auf kleiner Fläche.',
-    result: 'Professioneller Markenauftritt mit flexiblen Wechselmöglichkeiten für Grafiken und Inhalte',
-    keyfacts: ['30 qm', 'Display-Rahmen-System', 'Wechselgrafiken'],
-    messe: 'EuroShop Düsseldorf',
-    zielsetzung: 'Maximale Markenwirkung auf kompakter Fläche mit flexiblen Displaylösungen'
-  },
-  {
-    id: '9',
-    title: 'Produktpräsentation mit Rahmen-Display-System',
-    branche: 'messebau',
-    size: '45 qm',
-    type: 'messebau',
-    imageUrl: '/images/9412bc1d-704a-4bfb-bf51-d0f1b009e2da.jpeg',
-    description: 'Messestand mit großformatigen Rahmen-Displays zur effektvollen Produktinszenierung',
-    challenge: 'Ein Unternehmen suchte eine eindrucksvolle Lösung zur Produktpräsentation mit großformatigen Grafikflächen und gutem Besucherfluss.',
-    solution: 'Wir konzipierten einen Stand mit freistehenden Rahmen-Display-Systemen, die beidseitig bedruckt und hinterleuchtet werden können – kombiniert mit einer offenen Besucherführung.',
-    result: 'Hohe Aufmerksamkeit und Besucherfrequenz dank großflächiger, leuchtender Markengrafiken',
-    keyfacts: ['45 qm', 'Hinterleuchtete Displays', 'Beidseitige Grafiken'],
-    messe: 'FIBO Köln',
-    zielsetzung: 'Eindrucksvolle, großflächige Produktinszenierung mit modernen Display-Rahmen-Systemen'
   }
 ]

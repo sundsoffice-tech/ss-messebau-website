@@ -120,7 +120,6 @@ export function BranchenPage() {
                       imageUrl={ref.imageUrl}
                       branche={ref.branche}
                       size={ref.size}
-                      messe={ref.messe}
                     />
                   ))}
                 </div>
@@ -179,7 +178,6 @@ export function BranchenPage() {
                       imageUrl={ref.imageUrl}
                       branche={ref.branche}
                       size={ref.size}
-                      messe={ref.messe}
                     />
                   ))}
                 </div>
@@ -238,7 +236,6 @@ export function BranchenPage() {
                       imageUrl={ref.imageUrl}
                       branche={ref.branche}
                       size={ref.size}
-                      messe={ref.messe}
                     />
                   ))}
                 </div>
@@ -297,7 +294,6 @@ export function BranchenPage() {
                       imageUrl={ref.imageUrl}
                       branche={ref.branche}
                       size={ref.size}
-                      messe={ref.messe}
                     />
                   ))}
                 </div>
