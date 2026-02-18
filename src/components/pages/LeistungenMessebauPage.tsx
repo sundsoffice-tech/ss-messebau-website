@@ -75,7 +75,7 @@ export function LeistungenMessebauPage() {
     {
       icon: Clock,
       title: 'Schnell & zuverlässig',
-      desc: 'Erstangebot innerhalb von 48 Stunden. Auch bei kurzfristigen Anfragen finden wir eine Lösung – garantiert termingerecht.',
+      desc: 'Unverbindliches Erstangebot innerhalb von 48 Stunden. Auch bei kurzfristigen Anfragen finden wir eine Lösung – garantiert termingerecht.',
     },
   ]
 
@@ -187,7 +187,7 @@ export function LeistungenMessebauPage() {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-5xl mx-auto">
             <Card className="p-4 text-center">
               <Clock className="w-8 h-8 mx-auto mb-2 text-primary" />
-              <p className="font-semibold text-sm">48h-Angebot</p>
+              <p className="font-semibold text-sm">Unverb. 48h-Angebot</p>
               <p className="text-xs text-muted-foreground">Schnelle Angebotserstellung</p>
             </Card>
             <Card className="p-4 text-center">
