@@ -87,9 +87,9 @@ export const DEMO_REFERENCES: Reference[] = [
   },
   {
     id: '7',
-    title: 'Modulares Roadshow-System',
+    title: 'Galerie-Ausstellung & Marken-Showroom',
     branche: 'eventbau',
-    size: '40 qm',
+    size: '150 qm',
     type: 'eventbau',
     imageUrl: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
     description: 'Modulares Roadshow-Standsystem für konsistente Markenpräsenz auf regionalen Events und Messen',
