@@ -1855,5 +1855,20 @@
   "admin.tracking.subject": "Subject",
   "admin.tracking.status": "Status",
   "admin.tracking.eventTimeline": "Event Timeline",
-  "admin.tracking.noEvents": "No events available"
+  "admin.tracking.noEvents": "No events available",
+
+  "share.label": "Share page",
+  "share.ariaLabel": "Share this page on social networks",
+  "share.title": "Share this page",
+  "share.shareArticle": "Share article",
+  "share.linkedin": "Share on LinkedIn",
+  "share.whatsapp": "Share via WhatsApp",
+  "share.email": "Share via email",
+  "share.x": "Share on X",
+  "share.facebook": "Share on Facebook",
+  "share.copy": "Copy link",
+  "share.copied": "Link copied!",
+  "share.native": "Share",
+  "share.copySuccess": "Link has been copied to clipboard",
+  "share.copyError": "Could not copy link"
 }

@@ -27,6 +27,7 @@ export type AnalyticsEvent =
   | 'blog_article_read'
   | 'scroll_depth'
   | 'page_engagement'
+  | 'social_share'
   | 'ab_test_impression';
 
 export interface EventParams {
@@ -147,6 +148,14 @@ export function trackPageEngagement(
     page,
     dwell_time_seconds: dwellTimeSeconds,
   });
+}
+
+export function trackSocialShare(
+  platform: string,
+  page: string,
+  source: string,
+): void {
+  trackEvent('social_share', { platform, page, source });
 }
 
 /* ------------------------------------------------------------------ */
