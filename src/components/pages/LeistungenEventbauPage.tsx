@@ -192,6 +192,45 @@ export function LeistungenEventbauPage() {
         </div>
       </section>
 
+      {/* Bildgalerie – Eventbau in Aktion */}
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2
+            className="font-bold text-center mb-4"
+            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+          >
+            Eventbau in Aktion
+          </h2>
+          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
+            Unsere Event-Projekte – von großen Roadshow-Ausstellungen bis zu eleganten Galerie-Installationen
+          </p>
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <img
+                src="/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg"
+                alt="Große Roadshow-Ausstellung mit Traversen und professioneller Beleuchtung – realisiert von S&S Messebau"
+                width="800"
+                height="600"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full aspect-video group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <img
+                src="/images/980a1068-ecee-48de-86a3-8635874252e4.jpeg"
+                alt="Elegante Galerie-Installation mit modernem Ausstellungsdesign – realisiert von S&S Messebau"
+                width="800"
+                height="600"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full aspect-video group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* USP Badge Section */}
       <section className="py-12 bg-secondary/30">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

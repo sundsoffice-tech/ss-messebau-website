@@ -4,16 +4,16 @@
 
 | Datei | Motiv | Branche | Alt-Text |
 |---|---|---|---|
-| e859a873-049d-4f2b-9156-0ac94939c636.jpeg | Flexersize Lounge/Multimedia | Sport/Fitness | Messestand Flexersize – Lounge mit Multimedia, 25qm |
+| e859a873-049d-4f2b-9156-0ac94939c636.jpeg | Roadshow-Ausstellung mit Traversen | Eventbau | Große Roadshow-Ausstellung mit Traversen und professioneller Beleuchtung – realisiert von S&S Messebau |
 | 1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg | Elektro Leven Klassisch | Elektro/Handwerk | Messestand Elektro Leven – Klassisch mit Beratung, 25qm |
 | 03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg | Vireo Nachhaltig | Bio/Nachhaltigkeit | Messestand Vireo – Nachhaltig mit Naturmaterialien, 25qm |
 | fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg | Stylee Premium | Fashion/Design | Messestand Stylee – Premium Design, 25qm |
 
-## Eventbau – Hockey EM Shop (Batch 2)
+## Eventbau & Galerie-Installationen (Batch 2)
 
 | Datei | Motiv | Kunde | Alt-Text |
 |---|---|---|---|
-| 980a1068-ecee-48de-86a3-8635874252e4.jpeg | Shopinnenraum | THW Sport | Hockey EM Shop Mönchengladbach – Verkaufsraum mit Adidas Hockey-Ausrüstung |
+| 980a1068-ecee-48de-86a3-8635874252e4.jpeg | Galerie-Installation | Kunstmesse | Elegante Galerie-Installation mit modernem Ausstellungsdesign – realisiert von S&S Messebau |
 | 49546524-e641-43fd-8c29-79a94e05bf99.jpeg | Eingang/Empfang | THW Sport | Hockey EM Event-Shop – Eingangsbereich mit EuroHockey-Branding und Mannequins |
 | 633e7f45-301e-4c5b-a5fc-b64c766f9956.jpeg | Umkleidekabinen | THW Sport | Hockey EM Shop – Umkleidekabinen mit Vorhängen und Spiegeln |
 | b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg | Panorama Shop | THW Sport | Hockey EM Shop Panorama – Adidas Hockey & Padel Ausrüstung |
@@ -53,14 +53,14 @@ Das Referenzsystem wurde von Branchen (food, versicherungen, industrie) auf **Le
 - **ladenbau** – Permanente Showrooms, Shop-Systeme
 - **sport** – Sportevents, Championships, Event-Shops
 
-### Messebau-Kontext (Batch 1) → Kategorie: messebau
-- `e859a873` → Referenz #7 (Roadshow System, **eventbau**), BranchenPage Eventbau, Blog-Beiträge
+### Messebau-Kontext (Batch 1) → Kategorie: messebau / eventbau
+- `e859a873` → Referenz #7 (Roadshow-Ausstellung mit Firmenchronik, **eventbau**), BranchenPage Eventbau, LeistungenEventbauPage Galerie
 - `1a5f3965` → Referenz #6 (Klassischer Messestand, **messebau**)
 - `03e69940` → Referenz #4 (Nachhaltiger Messestand, **messebau**), OtherPages Nachhaltigkeit, Blog-Beiträge
 - `fda8df74` → Referenz #2 (Design-Stand, **messebau**)
 
-### Eventbau-Kontext (Batch 2) → Kategorie: sport / eventbau
-- `980a1068` → Referenz #10 (Hockey EM Shop, **sport**), Header Mega-Menü Eventbau, BranchenPage Sport
+### Eventbau & Galerie-Kontext (Batch 2) → Kategorie: eventbau
+- `980a1068` → Referenz #10 (Galerie-Ausstellung & Kunstmesse, **eventbau**), Header Mega-Menü Eventbau, BranchenPage Sport, LeistungenEventbauPage Galerie
 - `49546524` → Referenz #10, Header Mega-Menü Touren, HomePage Service-Card Touren, OtherPages Über Uns
 - `633e7f45` → Referenz #9 (Technik-Messestand, **messebau**), Referenz #10 (Galerie)
 - `b512edb4` → Referenz #8 (Industrie-Messestand, **messebau**), Referenz #10 (Galerie), Header Mega-Menü Bannerrahmen
