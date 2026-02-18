@@ -188,7 +188,7 @@ export function LeistungenTourenPage() {
           <div className="aspect-video rounded-lg overflow-hidden shadow-xl">
             <img
               src="/images/WhatsApp Image 2026-02-15 at 18.25.23.jpeg"
-              alt="Galerie-Ausstellung mit hochwertigen Marken-Countern und eleganter Produktpräsentation"
+              alt="Galerie-Ausstellung mit hochwertigen Marken-Displays und eleganter Beleuchtung"
               className="w-full h-full object-cover"
               loading="eager"
               decoding="async"
