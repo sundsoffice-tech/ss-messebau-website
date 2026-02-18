@@ -8,9 +8,9 @@ export const DEMO_REFERENCES: Reference[] = [
     size: '80 qm',
     type: 'messebau',
     imageUrl: '/images/deligreece-messestand-100qm-food.jpeg',
-    description: 'Eleganter Messestand mit stilvoller Kollektionspräsentation und VIP-Lounge für Einkäufer',
+    description: 'Eleganter Messestand mit stilvoller Kollektionspräsentation, offenen Sitzbereichen und Ausstellungsflächen für Kleidung',
     challenge: 'Ein Mode-Unternehmen benötigte einen Stand, der die aktuelle Kollektion hochwertig inszeniert und zugleich exklusive Beratungsgespräche mit Einkäufern ermöglicht.',
-    solution: 'Wir entwickelten ein offenes Konzept mit beleuchteten Garderobenbereichen, großformatigen Lifestyle-Bildern und einer einladenden VIP-Lounge für B2B-Gespräche.',
+    solution: 'Wir entwickelten ein offenes Konzept mit beleuchteten Garderobenbereichen, großformatigen Lifestyle-Bildern und einladenden Sitzbereichen für B2B-Gespräche.',
     result: 'Deutlich mehr Besucherkontakte, zahlreiche neue Handelspartner-Leads',
     keyfacts: ['80 qm Standfläche', '3 Tage Aufbau', 'Nachhaltige Systemelemente'],
     zielsetzung: 'Hochwertige Kollektionspräsentation und B2B-Kontaktgenerierung für die kommende Saison'

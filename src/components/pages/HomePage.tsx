@@ -154,7 +154,7 @@ export function HomePage() {
                   t('home.services.messebau.b4')
                 ],
                 sectionId: 'messebau',
-                image: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg'
+                image: '/images/WhatsApp Image 2026-02-16 at 21.12.21 (1).jpeg'
               },
               {
                 icon: CalendarDot,
