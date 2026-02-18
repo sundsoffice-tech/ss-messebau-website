@@ -187,8 +187,8 @@ export function LeistungenTourenPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="aspect-video rounded-lg overflow-hidden shadow-xl">
             <img
-              src="/images/6f93c3a5-fc1c-4ea7-8803-a789be79302e.jpeg"
-              alt="Roadshow-Ausstellung – professioneller Messebau mit Bühnentechnik und Displays"
+              src="/images/WhatsApp Image 2026-02-15 at 18.25.23.jpeg"
+              alt="Galerie-Ausstellung mit hochwertigen Marken-Countern und eleganter Produktpräsentation"
               className="w-full h-full object-cover"
               loading="eager"
               decoding="async"
