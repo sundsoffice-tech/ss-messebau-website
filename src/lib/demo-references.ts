@@ -99,7 +99,7 @@ export const DEMO_REFERENCES: Reference[] = [
     type: 'eventbau',
     imageUrl: '/images/WhatsApp%20Image%202026-02-15%20at%2018.25.23.jpeg',
     description: 'Hochwertige Galerie-Ausstellung mit modularen Marken-Countern und eleganter Produktpräsentation in architektonischem Ambiente',
-    challenge: 'Mehrere Premium-Marken sollten in einer anspruchsvollen Galerieumgebung gleichwertig und hochwertig präsentiert werden – mit klarer Markenidentität pro Counter.',
+    challenge: 'Mehrere Premium-Marken sollten in einer anspruchsvollen Galerieumgebung gleichwertig und hochwertig präsentiert werden, mit klarer Markenidentität pro Counter.',
     solution: 'Modulare, weiße Ausstellungstheken mit integrierten Markenlogos, individuellen Stehleuchten und Produktdisplays. Offene Raumgestaltung mit Sichtbeton-Architektur und Oberlicht für natürliche Beleuchtung.',
     result: 'Eindrucksvolle Markenpräsentation in Galeriequalität, hohe Besucherverweildauer und positive Resonanz aller teilnehmenden Marken',
     keyfacts: ['150 qm Ausstellungsfläche', 'Multi-Marken-Konzept', 'Galerie-Ambiente', 'Integrierte Beleuchtung'],
