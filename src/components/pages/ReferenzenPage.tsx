@@ -184,18 +184,12 @@ export function ReferenzenPage() {
                   <Badge variant="secondary" className="text-xs">{selectedReference.size}</Badge>
                 </div>
 
-                {(selectedReference.kunde || selectedReference.messe || selectedReference.zielsetzung) && (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-muted rounded-lg">
+                {(selectedReference.kunde || selectedReference.zielsetzung) && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-muted rounded-lg">
                     {selectedReference.kunde && (
                       <div>
                         <p className="text-xs text-muted-foreground font-medium mb-0.5">{t('referenzen.detail.kunde')}</p>
                         <p className="text-sm font-semibold">{selectedReference.kunde}</p>
-                      </div>
-                    )}
-                    {selectedReference.messe && (
-                      <div>
-                        <p className="text-xs text-muted-foreground font-medium mb-0.5">{t('referenzen.detail.messe')}</p>
-                        <p className="text-sm font-semibold">{selectedReference.messe}</p>
                       </div>
                     )}
                     {selectedReference.zielsetzung && (

@@ -10,10 +10,9 @@ interface CaseStudyCardProps {
   imageUrl: string
   branche: string
   size: string
-  messe?: string
 }
 
-export function CaseStudyCard({ title, challenge, solution, result, imageUrl, branche, size, messe }: CaseStudyCardProps) {
+export function CaseStudyCard({ title, challenge, solution, result, imageUrl, branche, size }: CaseStudyCardProps) {
   const { t } = useTranslation()
 
   return (
