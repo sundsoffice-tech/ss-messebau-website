@@ -39,4 +39,12 @@ if (!rootElement) {
       <App />
     </ErrorBoundary>
   )
+
+  // Remove native loading overlay now that React has mounted
+  const nativeLoader = document.getElementById('native-loader')
+  if (nativeLoader) {
+    nativeLoader.style.opacity = '0'
+    nativeLoader.style.transition = 'opacity 0.3s ease-out'
+    setTimeout(() => nativeLoader.remove(), 300)
+  }
 }
