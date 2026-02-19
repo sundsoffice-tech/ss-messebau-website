@@ -87,10 +87,17 @@ const EVENT_LABELS: Record<TrackingEventName, string> = {
   blog_article_read: 'Blog-Artikel gelesen',
   heartbeat: 'Herzschlag',
   session_start: 'Session-Start',
+  session_end: 'Session-Ende',
   form_interaction: 'Formular-Interaktion',
   form_abandon: 'Formular-Abbruch',
   exit_intent: 'Exit-Intent',
   configurator_step: 'Konfigurator-Schritt',
+  outbound_click: 'Externer Link',
+  video_play: 'Video-Wiedergabe',
+  error: 'Fehler',
+  performance: 'Performance',
+  search: 'Suche',
+  tab_visibility: 'Tab-Sichtbarkeit',
 }
 
 /* ================================================================== */

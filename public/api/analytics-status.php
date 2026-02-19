@@ -40,6 +40,23 @@ if (file_exists(DB_PATH)) {
     $dbSize = filesize(DB_PATH);
 }
 
+// Unique sessions total
+$uniqueSessionsTotal = (int)$db->query("SELECT COUNT(DISTINCT session_id) FROM analytics_events")->fetchColumn();
+
+// Unique visitors total
+$uniqueVisitorsTotal = (int)$db->query("SELECT COUNT(DISTINCT visitor_id) FROM analytics_events WHERE visitor_id != '' AND visitor_id IS NOT NULL")->fetchColumn();
+
+// Events today
+$today = date('Y-m-d');
+$todayStmt = $db->prepare("SELECT COUNT(*) FROM analytics_events WHERE ts >= :today");
+$todayStmt->execute([':today' => $today]);
+$eventsToday = (int)$todayStmt->fetchColumn();
+
+// Sessions today
+$sessionsTodayStmt = $db->prepare("SELECT COUNT(DISTINCT session_id) FROM analytics_events WHERE ts >= :today");
+$sessionsTodayStmt->execute([':today' => $today]);
+$sessionsToday = (int)$sessionsTodayStmt->fetchColumn();
+
 // Last cleanup info
 $configStmt = $db->prepare("SELECT config_key, config_value FROM analytics_config WHERE config_key IN ('last_cleanup', 'last_cleanup_count')");
 $configStmt->execute();
@@ -56,4 +73,8 @@ echo json_encode([
     'db_size_bytes' => $dbSize,
     'last_cleanup' => $configMap['last_cleanup'] ?? null,
     'last_cleanup_count' => isset($configMap['last_cleanup_count']) ? (int)$configMap['last_cleanup_count'] : null,
+    'unique_sessions_total' => $uniqueSessionsTotal,
+    'unique_visitors_total' => $uniqueVisitorsTotal,
+    'events_today' => $eventsToday,
+    'sessions_today' => $sessionsToday,
 ]);
