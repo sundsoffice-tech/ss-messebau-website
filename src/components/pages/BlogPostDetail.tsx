@@ -10,6 +10,7 @@ import { BlogPostCard } from './BlogPostCard'
 import { ShareButton } from '@/components/ShareButton'
 import { ShareMenu } from '@/components/ShareMenu'
 import type { BlogPost } from '@/lib/types'
+import { getBlogFallbackImage } from '@/lib/blog-image-defaults'
 
 interface BlogPostDetailProps {
   post: BlogPost
@@ -126,7 +127,7 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
         <div className="container mx-auto max-w-4xl px-4 md:px-6 lg:px-8">
           <div className="relative -mt-6 rounded-xl overflow-hidden shadow-2xl">
             <img
-              src={post.imageUrl}
+              src={post.imageUrl || getBlogFallbackImage(post.category)}
               alt={post.title}
               width="1200"
               height="675"

@@ -263,8 +263,27 @@
 
       /* Reserve space for sticky mobile CTA to prevent CLS */
       /* Actual padding is handled by .mobile-safe-bottom class in index.css */
+
+      /* FOUT-Schutz: Statischen Fallback verstecken wenn JS aktiv */
+      html.js-loading #root > * {
+        display: none !important;
+      }
+      html.js-loading #root::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #3730a3;
+        background: linear-gradient(to bottom right, oklch(0.45 0.15 250), oklch(0.45 0.15 250 / 0.95), oklch(0.45 0.15 250 / 0.9));
+      }
     </style>
-    
+    <script>
+      document.documentElement.classList.add('js-loading');
+      window.__jsLoadingTimeout = setTimeout(function() {
+        document.documentElement.classList.remove('js-loading');
+      }, 8000);
+    </script>
+
     <!-- Fonts mit optimiertem Loading (swap für schnelleres Rendering) -->
     <link 
       rel="preload" 

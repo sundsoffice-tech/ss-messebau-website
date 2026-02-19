@@ -232,6 +232,16 @@ function BlogPostForm({
           <div>
             <label className="text-sm font-medium mb-1 block">{t('adminContent.blog.imageLabel')}</label>
             <Input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://..." />
+            {imageUrl && (
+              <div className="mt-2 relative rounded-md overflow-hidden aspect-video max-w-[200px] bg-muted border">
+                <img
+                  src={imageUrl}
+                  alt="Vorschau"
+                  className="w-full h-full object-cover"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                />
+              </div>
+            )}
           </div>
           <div>
             <label className="text-sm font-medium mb-1 block">{t('adminContent.blog.dateLabel')}</label>

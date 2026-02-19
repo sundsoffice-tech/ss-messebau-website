@@ -31,6 +31,9 @@ import {
   FunnelSimple,
   Signpost,
   SignOut as SignOutIcon,
+  MapPin,
+  GlobeHemisphereWest,
+  Translate,
 } from '@phosphor-icons/react'
 import {
   fetchTrackingConfig,
@@ -207,6 +210,44 @@ function TrackingConfigTab() {
                 : <ToggleLeft className="w-6 h-6 text-green-600" weight="fill" />}
             </Button>
           </div>
+          {/* Geolocation Settings */}
+          <div className="border-t pt-4 mt-2 space-y-3">
+            <h4 className="text-sm font-semibold flex items-center gap-2">
+              <GlobeHemisphereWest className="w-4 h-4" />
+              Geolocation (Server-Side)
+            </h4>
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-sm font-medium">Server-Geolocation aktivieren</span>
+                <p className="text-xs text-muted-foreground">Stadt-genaue Standortdaten via ip-api.com</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setConfig({ ...config, geo_enabled: !config.geo_enabled })}
+              >
+                {config.geo_enabled
+                  ? <ToggleRight className="w-6 h-6 text-teal-500" weight="fill" />
+                  : <ToggleLeft className="w-6 h-6 text-muted-foreground" weight="fill" />}
+              </Button>
+            </div>
+            {config.geo_enabled && (
+              <div className="space-y-1">
+                <label className="text-xs font-medium">IP-API Key (optional)</label>
+                <Input
+                  type="password"
+                  placeholder="Leer = kostenloser Zugang (45 req/min)"
+                  value={config.geo_api_key || ''}
+                  onChange={e => setConfig({ ...config, geo_api_key: e.target.value })}
+                  className="h-8 text-xs"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Ohne Key: HTTP, 45 Anfragen/min. Mit Pro-Key: HTTPS, hoehere Limits.
+                </p>
+              </div>
+            )}
+          </div>
+
           <div className="flex items-center gap-3">
             <Button
               size="sm"
@@ -611,6 +652,137 @@ function KPIDashboardTab() {
           </Card>
         )}
       </div>
+
+      {/* Geographic Breakdown */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {kpis.country_breakdown && kpis.country_breakdown.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                Herkunft (Land)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {kpis.country_breakdown.map((c, i) => {
+                  const total = kpis.country_breakdown.reduce((s, x) => s + x.count, 0)
+                  const pct = total > 0 ? Math.round((c.count / total) * 100) : 0
+                  const FLAG_EMOJI: Record<string, string> = {
+                    DE: '\uD83C\uDDE9\uD83C\uDDEA', AT: '\uD83C\uDDE6\uD83C\uDDF9',
+                    CH: '\uD83C\uDDE8\uD83C\uDDED', NL: '\uD83C\uDDF3\uD83C\uDDF1',
+                    FR: '\uD83C\uDDEB\uD83C\uDDF7', GB: '\uD83C\uDDEC\uD83C\uDDE7',
+                    IT: '\uD83C\uDDEE\uD83C\uDDF9', ES: '\uD83C\uDDEA\uD83C\uDDF8',
+                    PL: '\uD83C\uDDF5\uD83C\uDDF1', SE: '\uD83C\uDDF8\uD83C\uDDEA',
+                    NO: '\uD83C\uDDF3\uD83C\uDDF4', DK: '\uD83C\uDDE9\uD83C\uDDF0',
+                    BE: '\uD83C\uDDE7\uD83C\uDDEA', LU: '\uD83C\uDDF1\uD83C\uDDFA',
+                    CZ: '\uD83C\uDDE8\uD83C\uDDFF', HU: '\uD83C\uDDED\uD83C\uDDFA',
+                    RO: '\uD83C\uDDF7\uD83C\uDDF4', PT: '\uD83C\uDDF5\uD83C\uDDF9',
+                    GR: '\uD83C\uDDEC\uD83C\uDDF7', FI: '\uD83C\uDDEB\uD83C\uDDEE',
+                    TR: '\uD83C\uDDF9\uD83C\uDDF7', RU: '\uD83C\uDDF7\uD83C\uDDFA',
+                  }
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center justify-between text-sm mb-0.5">
+                        <span className="flex items-center gap-1.5">
+                          {FLAG_EMOJI[c.country] ?? '\uD83C\uDF0D'} {c.region}
+                        </span>
+                        <span className="text-xs text-muted-foreground">{pct}% ({c.count})</span>
+                      </div>
+                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div className="h-full bg-teal-500/60 rounded-full" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {kpis.timezone_breakdown && kpis.timezone_breakdown.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <GlobeHemisphereWest className="w-4 h-4" />
+                Zeitzonen
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {kpis.timezone_breakdown.map((t, i) => {
+                  const total = kpis.timezone_breakdown.reduce((s, x) => s + x.count, 0)
+                  const pct = total > 0 ? Math.round((t.count / total) * 100) : 0
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center justify-between text-sm mb-0.5">
+                        <span className="text-xs">{t.timezone}</span>
+                        <span className="text-xs text-muted-foreground">{pct}% ({t.count})</span>
+                      </div>
+                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div className="h-full bg-cyan-500/60 rounded-full" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {kpis.language_breakdown && kpis.language_breakdown.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Translate className="w-4 h-4" />
+                Sprachen
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {kpis.language_breakdown.map((l, i) => {
+                  const total = kpis.language_breakdown.reduce((s, x) => s + x.count, 0)
+                  const pct = total > 0 ? Math.round((l.count / total) * 100) : 0
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center justify-between text-sm mb-0.5">
+                        <span>{l.language}</span>
+                        <span className="text-xs text-muted-foreground">{pct}% ({l.count})</span>
+                      </div>
+                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div className="h-full bg-indigo-500/60 rounded-full" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* City Breakdown (Server-Side Geo) */}
+      {kpis.city_breakdown && kpis.city_breakdown.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              Top Staedte
+            </CardTitle>
+            <CardDescription>Besucher nach Stadt (Server-Geolocation)</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1">
+              {kpis.city_breakdown.map((c, i) => (
+                <div key={i} className="flex items-center justify-between text-sm py-1 border-b border-border/50 last:border-0">
+                  <span>{c.city}, {c.country}</span>
+                  <Badge variant="secondary" className="ml-2">{c.count}</Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Form Conversion by Type */}
       {kpis.form_conversion_by_type && kpis.form_conversion_by_type.length > 0 && (
