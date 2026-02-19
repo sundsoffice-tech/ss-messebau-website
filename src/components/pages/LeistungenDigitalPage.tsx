@@ -15,7 +15,6 @@ import {
   CheckCircle,
   Star,
   Users,
-  Shield,
   Lightning,
   Eye,
   Brain,

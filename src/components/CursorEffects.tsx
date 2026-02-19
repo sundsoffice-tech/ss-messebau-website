@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { shouldDisableCursorEffects } from '../lib/cursor-utils'
 
 /**

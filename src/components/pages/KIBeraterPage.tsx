@@ -1,10 +1,8 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Sparkle, Calculator, ClockClockwise, Lightbulb, CheckCircle, Microphone } from '@phosphor-icons/react'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { useTranslation } from '@/lib/i18n'
 
 export function KIBeraterPage() {
-  const isMobile = useIsMobile()
   const { t } = useTranslation()
   const isVoiceSupported = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window
 

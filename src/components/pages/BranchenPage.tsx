@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Badge } from '@/components/ui/badge'
 import { ArrowRight, CheckCircle, Leaf, Recycle, TreeEvergreen, Truck } from '@phosphor-icons/react'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { useEffect, useState } from 'react'

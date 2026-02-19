@@ -37,7 +37,7 @@ export function KontaktPage() {
   useDwellTimeTracking('kontakt')
   useExitIntentTracking('kontakt')
 
-  const [inquiries, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
+  const [, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMessages, setChatMessages] = useKV<ChatMessage[]>('kontakt-chat-history', [
     { role: 'assistant', content: t('kontakt.chat.welcome') }
@@ -188,20 +188,19 @@ export function KontaktPage() {
   }, [chatMessages, isTyping])
 
   useEffect(() => {
-    if (isTyping && typingText) {
-      const timer = setTimeout(() => {
-        setChatMessages((prev) => {
-          const updated = [...(prev || [])]
-          if (updated[updated.length - 1]?.role === 'assistant') {
-            updated[updated.length - 1].content = typingText
-          }
-          return updated
-        })
-        setIsTyping(false)
-        setTypingText('')
-      }, 50)
-      return () => clearTimeout(timer)
-    }
+    if (!isTyping || !typingText) return
+    const timer = setTimeout(() => {
+      setChatMessages((prev) => {
+        const updated = [...(prev || [])]
+        if (updated[updated.length - 1]?.role === 'assistant') {
+          updated[updated.length - 1].content = typingText
+        }
+        return updated
+      })
+      setIsTyping(false)
+      setTypingText('')
+    }, 50)
+    return () => clearTimeout(timer)
   }, [isTyping, typingText])
 
   const handleChatSubmit = async (customPrompt?: string) => {

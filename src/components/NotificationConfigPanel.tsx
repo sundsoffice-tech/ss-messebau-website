@@ -7,13 +7,11 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
-  Bell,
   Plus,
   Trash,
   FloppyDisk,
   PaperPlaneTilt,
   CheckCircle,
-  Warning,
   WebhooksLogo,
   Envelope,
 } from '@phosphor-icons/react'
