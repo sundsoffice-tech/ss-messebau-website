@@ -2,32 +2,22 @@
 # S&S Messebau API - .htaccess
 # ============================================
 
-# Enable CORS for API requests
-<IfModule mod_headers.c>
-    # Allow credentials (cookies/sessions)
-    Header always set Access-Control-Allow-Credentials "true"
-
-    # Dynamically set Access-Control-Allow-Origin from request
-    SetEnvIf Origin "^https?://(localhost(:[0-9]+)?|sundsmessebau\.com|www\.sundsmessebau\.com)$" ORIGIN=$0
-    Header always set Access-Control-Allow-Origin "%{ORIGIN}e" env=ORIGIN
-
-    Header always set Access-Control-Allow-Methods "GET, POST, PATCH, DELETE, OPTIONS"
-    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
-    Header always set Access-Control-Max-Age "86400"
-</IfModule>
-
-# Handle preflight OPTIONS requests
-RewriteEngine On
-RewriteCond %{REQUEST_METHOD} OPTIONS
-RewriteRule ^(.*)$ $1 [R=200,L]
+# CORS is handled by PHP (setCorsHeaders() in config.php) to avoid
+# duplicate Access-Control-Allow-Origin headers which cause CORS failures.
+# Do NOT add Apache-level CORS headers here.
 
 # Ensure PHP files are executed (not served as static)
+# Cover both mod_php7 (PHP 7.x) and mod_php (PHP 8.x)
+<IfModule mod_php7.c>
+    php_flag engine on
+</IfModule>
 <IfModule mod_php.c>
     php_flag engine on
 </IfModule>
 
 # Deny access to data directory
 <IfModule mod_rewrite.c>
+    RewriteEngine On
     RewriteRule ^data/ - [F,L]
 </IfModule>
 

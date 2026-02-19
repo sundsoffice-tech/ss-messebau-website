@@ -545,23 +545,41 @@ export function ExternalApiKeysManager() {
   const [keys, setKeys] = useState<AdminApiKey[]>([])
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
 
-  useEffect(() => {
-    const loadKeys = async () => {
+  const loadKeys = async () => {
+    setLoading(true)
+    setError(null)
+    try {
       const data = await getApiKeys()
       setKeys(data)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unbekannter Fehler'
+      setError(msg)
+      console.error('API Keys laden fehlgeschlagen:', err)
+    } finally {
+      setLoading(false)
     }
+  }
+
+  useEffect(() => {
     loadKeys()
   }, [])
 
   const handleAdd = async (serviceName: string, key: string, description: string) => {
+    setSaving(true)
     try {
       const newKey = await addApiKey(serviceName, key, description)
       setKeys(prev => [...prev, newKey])
       setShowAddForm(false)
       toast.success(t('adminContent.apiKeys.addedSuccess'))
-    } catch {
-      toast.error('Fehler beim Erstellen des API Keys')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unbekannter Fehler'
+      toast.error(`Fehler beim Erstellen: ${msg}`)
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -572,8 +590,9 @@ export function ExternalApiKeysManager() {
       setKeys(updatedKeys)
       setEditingId(null)
       toast.success(t('adminContent.apiKeys.updatedSuccess'))
-    } catch {
-      toast.error('Fehler beim Aktualisieren')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unbekannter Fehler'
+      toast.error(`Fehler beim Aktualisieren: ${msg}`)
     }
   }
 
@@ -582,8 +601,9 @@ export function ExternalApiKeysManager() {
       await deleteApiKey(id)
       setKeys(prev => prev.filter(k => k.id !== id))
       toast.success(t('adminContent.apiKeys.deletedSuccess'))
-    } catch {
-      toast.error('Fehler beim Löschen')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unbekannter Fehler'
+      toast.error(`Fehler beim Löschen: ${msg}`)
     }
   }
 
@@ -608,10 +628,24 @@ export function ExternalApiKeysManager() {
           <ApiKeyForm
             onSave={handleAdd}
             onCancel={() => setShowAddForm(false)}
+            saving={saving}
           />
         )}
 
-        {keys.length === 0 ? (
+        {loading ? (
+          <Card className="p-8 text-center">
+            <p className="text-muted-foreground">Laden...</p>
+          </Card>
+        ) : error ? (
+          <Card className="p-8 text-center border-destructive/50">
+            <Key className="w-12 h-12 mx-auto mb-3 text-destructive opacity-50" />
+            <p className="text-destructive font-medium mb-1">Fehler beim Laden der API Keys</p>
+            <p className="text-xs text-muted-foreground mb-3">{error}</p>
+            <Button variant="outline" size="sm" onClick={loadKeys}>
+              Erneut versuchen
+            </Button>
+          </Card>
+        ) : keys.length === 0 ? (
           <Card className="p-8 text-center">
             <Key className="w-12 h-12 mx-auto mb-3 text-muted-foreground opacity-50" />
             <p className="text-muted-foreground">{t('adminContent.apiKeys.noKeys')}</p>
@@ -635,7 +669,7 @@ export function ExternalApiKeysManager() {
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">{entry.description}</p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        {t('adminContent.apiKeys.created')}: {new Date(entry.createdAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-DE')} · 
+                        {t('adminContent.apiKeys.created')}: {new Date(entry.createdAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-DE')} ·
                         {t('adminContent.apiKeys.updated')}: {new Date(entry.updatedAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-DE')}
                       </p>
                     </div>
@@ -661,21 +695,23 @@ export function ExternalApiKeysManager() {
 function ApiKeyForm({
   onSave,
   onCancel,
+  saving = false,
 }: {
-  onSave: (serviceName: string, key: string, description: string) => void
+  onSave: (serviceName: string, key: string, description: string) => Promise<void> | void
   onCancel: () => void
+  saving?: boolean
 }) {
   const { t } = useTranslation()
   const [serviceName, setServiceName] = useState('')
   const [key, setKey] = useState('')
   const [description, setDescription] = useState('')
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!serviceName.trim() || !key.trim()) {
       toast.error(t('adminContent.apiKeys.errorRequired'))
       return
     }
-    onSave(serviceName.trim(), key.trim(), description.trim())
+    await onSave(serviceName.trim(), key.trim(), description.trim())
   }
 
   return (
@@ -684,25 +720,25 @@ function ApiKeyForm({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="text-sm font-medium mb-1 block">{t('adminContent.apiKeys.serviceLabel')}</label>
-            <Input value={serviceName} onChange={(e) => setServiceName(e.target.value)} placeholder={t('adminContent.apiKeys.servicePlaceholder')} />
+            <Input value={serviceName} onChange={(e) => setServiceName(e.target.value)} placeholder={t('adminContent.apiKeys.servicePlaceholder')} disabled={saving} />
           </div>
           <div>
             <label className="text-sm font-medium mb-1 block">{t('adminContent.apiKeys.keyLabel')}</label>
-            <Input type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="API-Key / Token" />
+            <Input type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="API-Key / Token" disabled={saving} />
           </div>
         </div>
         <div>
           <label className="text-sm font-medium mb-1 block">{t('adminContent.apiKeys.descriptionLabel')}</label>
-          <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder={t('adminContent.apiKeys.descriptionPlaceholder')} />
+          <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder={t('adminContent.apiKeys.descriptionPlaceholder')} disabled={saving} />
         </div>
         <div className="flex gap-2 justify-end">
-          <Button variant="outline" size="sm" onClick={onCancel} className="gap-1">
+          <Button variant="outline" size="sm" onClick={onCancel} disabled={saving} className="gap-1">
             <X className="w-3.5 h-3.5" />
             {t('adminContent.apiKeys.cancel')}
           </Button>
-          <Button size="sm" onClick={handleSubmit} className="gap-1">
+          <Button size="sm" onClick={handleSubmit} disabled={saving} className="gap-1">
             <FloppyDisk className="w-3.5 h-3.5" />
-            {t('adminContent.apiKeys.save')}
+            {saving ? 'Speichern...' : t('adminContent.apiKeys.save')}
           </Button>
         </div>
       </CardContent>

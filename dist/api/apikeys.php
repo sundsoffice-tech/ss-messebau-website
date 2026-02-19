@@ -50,35 +50,42 @@ function maskKey(string $key): string {
 }
 
 function encryptKey(string $key): string {
-    // Use encryption key from environment; refuse to proceed without it
     $encryptionKey = getenv('ENCRYPTION_KEY');
     if (!$encryptionKey) {
         // Fallback: derive a key from the database path (unique per installation)
-        $encryptionKey = hash('sha256', __DIR__ . '/data/ss-messebau.sqlite');
+        $encryptionKey = hash('sha256', DB_PATH);
     }
     $iv = openssl_random_pseudo_bytes(16);
     $encrypted = openssl_encrypt($key, 'aes-256-cbc', $encryptionKey, 0, $iv);
+    if ($encrypted === false) {
+        throw new RuntimeException('Encryption failed - openssl_encrypt returned false');
+    }
     return base64_encode($iv . '::' . $encrypted);
 }
 
 function handleGetApiKeys(): void {
-    $db = getDB();
-    $stmt = $db->query('SELECT id, service_name, masked_key, description, created_at, updated_at FROM external_api_keys ORDER BY created_at DESC');
-    $keys = $stmt->fetchAll();
+    try {
+        $db = getDB();
+        $stmt = $db->query('SELECT id, service_name, masked_key, description, created_at, updated_at FROM external_api_keys ORDER BY created_at DESC');
+        $keys = $stmt->fetchAll();
 
-    $result = [];
-    foreach ($keys as $key) {
-        $result[] = [
-            'id' => (string)$key['id'],
-            'serviceName' => $key['service_name'],
-            'maskedKey' => $key['masked_key'],
-            'description' => $key['description'] ?? '',
-            'createdAt' => strtotime($key['created_at']) * 1000,
-            'updatedAt' => strtotime($key['updated_at']) * 1000,
-        ];
+        $result = [];
+        foreach ($keys as $key) {
+            $result[] = [
+                'id' => (string)$key['id'],
+                'serviceName' => $key['service_name'],
+                'maskedKey' => $key['masked_key'],
+                'description' => $key['description'] ?? '',
+                'createdAt' => strtotime($key['created_at']) * 1000,
+                'updatedAt' => strtotime($key['updated_at']) * 1000,
+            ];
+        }
+
+        echo json_encode(['keys' => $result]);
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to load API keys: ' . $e->getMessage()]);
     }
-
-    echo json_encode(['keys' => $result]);
 }
 
 function handleAddApiKey(): void {
@@ -94,9 +101,9 @@ function handleAddApiKey(): void {
     $apiKey = trim($input['key']);
     $description = trim($input['description'] ?? '');
 
-    $db = getDB();
-
     try {
+        $db = getDB();
+
         $stmt = $db->prepare('
             INSERT INTO external_api_keys (service_name, encrypted_key, masked_key, description)
             VALUES (:service_name, :encrypted_key, :masked_key, :description)
@@ -124,9 +131,9 @@ function handleAddApiKey(): void {
                 'updatedAt' => strtotime($record['updated_at']) * 1000,
             ],
         ]);
-    } catch (PDOException $e) {
+    } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Failed to save key']);
+        echo json_encode(['error' => 'Failed to save key: ' . $e->getMessage()]);
     }
 }
 
@@ -140,41 +147,46 @@ function handleUpdateApiKey(): void {
         return;
     }
 
-    $db = getDB();
-    $sets = [];
-    $params = [':id' => $id];
+    try {
+        $db = getDB();
+        $sets = [];
+        $params = [':id' => $id];
 
-    if (isset($input['serviceName'])) {
-        $sets[] = 'service_name = :service_name';
-        $params[':service_name'] = trim($input['serviceName']);
+        if (isset($input['serviceName'])) {
+            $sets[] = 'service_name = :service_name';
+            $params[':service_name'] = trim($input['serviceName']);
+        }
+
+        if (isset($input['key']) && !empty(trim($input['key']))) {
+            $apiKey = trim($input['key']);
+            $sets[] = 'encrypted_key = :encrypted_key';
+            $sets[] = 'masked_key = :masked_key';
+            $params[':encrypted_key'] = encryptKey($apiKey);
+            $params[':masked_key'] = maskKey($apiKey);
+        }
+
+        if (isset($input['description'])) {
+            $sets[] = 'description = :description';
+            $params[':description'] = trim($input['description']);
+        }
+
+        if (empty($sets)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'No fields to update']);
+            return;
+        }
+
+        $sets[] = "updated_at = datetime('now')";
+        $sql = 'UPDATE external_api_keys SET ' . implode(', ', $sets) . ' WHERE id = :id';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute($params);
+
+        echo json_encode(['success' => true, 'updated' => $stmt->rowCount()]);
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to update key: ' . $e->getMessage()]);
     }
-
-    if (isset($input['key']) && !empty(trim($input['key']))) {
-        $apiKey = trim($input['key']);
-        $sets[] = 'encrypted_key = :encrypted_key';
-        $sets[] = 'masked_key = :masked_key';
-        $params[':encrypted_key'] = encryptKey($apiKey);
-        $params[':masked_key'] = maskKey($apiKey);
-    }
-
-    if (isset($input['description'])) {
-        $sets[] = 'description = :description';
-        $params[':description'] = trim($input['description']);
-    }
-
-    if (empty($sets)) {
-        http_response_code(400);
-        echo json_encode(['error' => 'No fields to update']);
-        return;
-    }
-
-    $sets[] = "updated_at = datetime('now')";
-    $sql = 'UPDATE external_api_keys SET ' . implode(', ', $sets) . ' WHERE id = :id';
-
-    $stmt = $db->prepare($sql);
-    $stmt->execute($params);
-
-    echo json_encode(['success' => true, 'updated' => $stmt->rowCount()]);
 }
 
 function handleDeleteApiKey(): void {
@@ -185,9 +197,14 @@ function handleDeleteApiKey(): void {
         return;
     }
 
-    $db = getDB();
-    $stmt = $db->prepare('DELETE FROM external_api_keys WHERE id = :id');
-    $stmt->execute([':id' => $id]);
+    try {
+        $db = getDB();
+        $stmt = $db->prepare('DELETE FROM external_api_keys WHERE id = :id');
+        $stmt->execute([':id' => $id]);
 
-    echo json_encode(['success' => true, 'deleted' => $stmt->rowCount()]);
+        echo json_encode(['success' => true, 'deleted' => $stmt->rowCount()]);
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to delete key: ' . $e->getMessage()]);
+    }
 }

@@ -136,13 +136,8 @@ export async function deleteMesseEvent(id: string): Promise<void> {
 // ─── API Keys CRUD ───────────────────────────────────────────
 
 export async function getApiKeys(): Promise<AdminApiKey[]> {
-  try {
-    const result = await apiKeysApi.list()
-    return result.keys
-  } catch (error) {
-    console.error('Failed to fetch API keys:', error)
-    return []
-  }
+  const result = await apiKeysApi.list()
+  return result.keys
 }
 
 export async function addApiKey(serviceName: string, key: string, description: string): Promise<AdminApiKey> {
