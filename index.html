@@ -214,8 +214,8 @@
         line-gap-override: 0%;
         size-adjust: 107.06%;
       }
-      
-      body { 
+
+      body {
         font-family: 'Inter', 'Inter-fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         margin: 0;
         background: oklch(1 0 0);
@@ -228,7 +228,39 @@
       .hero-overlay {
         background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
       }
-      
+
+      /* Native loading screen – covers SEO fallback until React mounts */
+      #native-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, oklch(0.45 0.15 250), oklch(0.35 0.12 250));
+      }
+      #native-loader .loader-bar {
+        height: 4px;
+        width: 200px;
+        max-width: 80vw;
+        background: rgba(255,255,255,0.3);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 2rem;
+      }
+      #native-loader .loader-bar-inner {
+        height: 100%;
+        width: 33%;
+        background: #fff;
+        border-radius: 4px;
+        animation: native-loader-slide 1.2s ease-in-out infinite;
+      }
+      @keyframes native-loader-slide {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(400%); }
+      }
+
       /* Reserve space for sticky mobile CTA to prevent CLS */
       /* Actual padding is handled by .mobile-safe-bottom class in index.css */
 
@@ -277,7 +309,7 @@
       gtag('config', 'G-XXXXXXXXXX', { send_page_view: true });
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script type="module" crossorigin src="/assets/index-DvswB2Bz.js"></script>
+  <script type="module" crossorigin src="/assets/index-BV2ICMih.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor-react-DjPCVcPo.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-ui-qNHxpggR.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-motion-Dc4Hw-Bg.js">
@@ -285,6 +317,12 @@
 </head>
 
 <body>
+    <!-- Native loading overlay – instantly visible, removed by React on mount -->
+    <div id="native-loader" aria-hidden="true">
+      <img src="/icons/favicon-32x32.png" alt="" width="80" height="80" style="opacity:0.9;image-rendering:auto;" />
+      <div class="loader-bar"><div class="loader-bar-inner"></div></div>
+    </div>
+
     <div id="root">
       <!-- Static HTML fallback for SEO crawlers – replaced by React on mount -->
       <header style="background: #3730a3; color: #fff; padding: 1rem 2rem;">
