@@ -79,6 +79,8 @@ export function getTrackingConfig(): TrackingConfig {
     retention_days: 90,
     aggregation_months: 24,
     store_ip: false,
+    geo_enabled: false,
+    geo_api_key: '',
   }
 }
 
@@ -247,7 +249,65 @@ function detectOS(): string {
   return 'Other'
 }
 
+function detectTimezone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown'
+  } catch {
+    return 'unknown'
+  }
+}
+
+/**
+ * Infer approximate country/region from IANA timezone.
+ * Covers DACH + major European markets; falls back to continent.
+ */
+function inferGeoFromTimezone(tz: string): { country: string; region: string } {
+  const TIMEZONE_MAP: Record<string, { country: string; region: string }> = {
+    'Europe/Berlin': { country: 'DE', region: 'Deutschland' },
+    'Europe/Vienna': { country: 'AT', region: 'Oesterreich' },
+    'Europe/Zurich': { country: 'CH', region: 'Schweiz' },
+    'Europe/Amsterdam': { country: 'NL', region: 'Niederlande' },
+    'Europe/Brussels': { country: 'BE', region: 'Belgien' },
+    'Europe/Luxembourg': { country: 'LU', region: 'Luxemburg' },
+    'Europe/Paris': { country: 'FR', region: 'Frankreich' },
+    'Europe/London': { country: 'GB', region: 'Grossbritannien' },
+    'Europe/Madrid': { country: 'ES', region: 'Spanien' },
+    'Europe/Rome': { country: 'IT', region: 'Italien' },
+    'Europe/Warsaw': { country: 'PL', region: 'Polen' },
+    'Europe/Prague': { country: 'CZ', region: 'Tschechien' },
+    'Europe/Copenhagen': { country: 'DK', region: 'Daenemark' },
+    'Europe/Stockholm': { country: 'SE', region: 'Schweden' },
+    'Europe/Helsinki': { country: 'FI', region: 'Finnland' },
+    'Europe/Oslo': { country: 'NO', region: 'Norwegen' },
+    'Europe/Lisbon': { country: 'PT', region: 'Portugal' },
+    'Europe/Athens': { country: 'GR', region: 'Griechenland' },
+    'Europe/Budapest': { country: 'HU', region: 'Ungarn' },
+    'Europe/Bucharest': { country: 'RO', region: 'Rumaenien' },
+    'Europe/Moscow': { country: 'RU', region: 'Russland' },
+    'Europe/Istanbul': { country: 'TR', region: 'Tuerkei' },
+  }
+
+  if (TIMEZONE_MAP[tz]) return TIMEZONE_MAP[tz]
+
+  const continent = tz.split('/')[0]
+  const CONTINENT_MAP: Record<string, string> = {
+    'Europe': 'Europa (Sonstige)',
+    'America': 'Amerika',
+    'Asia': 'Asien',
+    'Africa': 'Afrika',
+    'Australia': 'Ozeanien',
+    'Pacific': 'Ozeanien',
+  }
+
+  return {
+    country: continent,
+    region: CONTINENT_MAP[continent] || 'Unbekannt',
+  }
+}
+
 function getDeviceProps(): Record<string, string | number> {
+  const tz = detectTimezone()
+  const geo = inferGeoFromTimezone(tz)
   return {
     device_type: detectDeviceType(),
     browser: detectBrowser(),
@@ -256,6 +316,9 @@ function getDeviceProps(): Record<string, string | number> {
     screen_height: window.screen.height,
     viewport_width: window.innerWidth,
     language: navigator.language || 'unknown',
+    timezone: tz,
+    geo_country: geo.country,
+    geo_region: geo.region,
   }
 }
 

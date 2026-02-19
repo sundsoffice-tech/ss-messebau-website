@@ -69,6 +69,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($input['store_ip'])) {
         $stmt->execute([':key' => 'store_ip', ':value' => $input['store_ip'] ? '1' : '0']);
     }
+    if (isset($input['geo_enabled'])) {
+        $stmt->execute([':key' => 'geo_enabled', ':value' => $input['geo_enabled'] ? '1' : '0']);
+    }
+    if (isset($input['geo_api_key'])) {
+        $stmt->execute([':key' => 'geo_api_key', ':value' => substr(trim($input['geo_api_key']), 0, 255)]);
+    }
 
     echo json_encode(loadTrackingConfig($db));
     exit;
@@ -108,6 +114,8 @@ function loadTrackingConfig(PDO $db): array {
         'retention_days' => intval($map['retention_days'] ?? '90'),
         'aggregation_months' => intval($map['aggregation_months'] ?? '24'),
         'store_ip' => ($map['store_ip'] ?? '0') === '1',
+        'geo_enabled' => ($map['geo_enabled'] ?? '0') === '1',
+        'geo_api_key' => $map['geo_api_key'] ?? '',
         'last_cleanup' => $map['last_cleanup'] ?? null,
         'last_cleanup_count' => isset($map['last_cleanup_count']) ? intval($map['last_cleanup_count']) : null,
     ];
