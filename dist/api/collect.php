@@ -62,6 +62,9 @@ if ($rateLimited) {
     exit;
 }
 
+// Enforce request body size limit
+enforceRequestBodyLimit();
+
 // Parse input
 $input = json_decode(file_get_contents('php://input'), true);
 if (!$input || !isset($input['events']) || !is_array($input['events'])) {

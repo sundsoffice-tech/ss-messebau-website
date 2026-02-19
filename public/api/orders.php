@@ -87,8 +87,36 @@ function handleGetOrders(): void {
     }
 }
 
+function checkOrderRateLimit(): bool {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $rateLimitFile = __DIR__ . '/data/order_limit_' . md5($ip) . '.json';
+    $now = time();
+    $maxRequests = 10;
+    $windowSeconds = 600; // 10 minutes
+
+    $timestamps = [];
+    if (file_exists($rateLimitFile)) {
+        $timestamps = json_decode(file_get_contents($rateLimitFile), true) ?: [];
+        $timestamps = array_values(array_filter($timestamps, function($ts) use ($now, $windowSeconds) {
+            return ($now - $ts) < $windowSeconds;
+        }));
+    }
+
+    if (count($timestamps) >= $maxRequests) {
+        http_response_code(429);
+        echo json_encode(['error' => 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.']);
+        return false;
+    }
+
+    $timestamps[] = $now;
+    @file_put_contents($rateLimitFile, json_encode($timestamps));
+    return true;
+}
+
 function handleCreateOrder(): void {
     // POST does NOT require auth – customers submit orders
+    if (!checkOrderRateLimit()) return;
+    enforceRequestBodyLimit();
     $input = json_decode(file_get_contents('php://input'), true);
 
     if (empty($input['config_id']) || empty($input['order_data'])) {
@@ -107,11 +135,11 @@ function handleCreateOrder(): void {
     $step6 = $orderData['step6'] ?? [];
 
     $stmt->execute([
-        ':config_id' => $input['config_id'],
-        ':customer_email' => $step6['email'] ?? $input['customer_email'] ?? '',
-        ':customer_name' => $step6['ansprechpartner'] ?? $input['customer_name'] ?? '',
-        ':company' => $step6['firmaKontakt'] ?? $input['company'] ?? '',
-        ':phone' => $step6['telefon'] ?? $input['phone'] ?? '',
+        ':config_id' => substr($input['config_id'], 0, 100),
+        ':customer_email' => substr($step6['email'] ?? $input['customer_email'] ?? '', 0, 255),
+        ':customer_name' => substr($step6['ansprechpartner'] ?? $input['customer_name'] ?? '', 0, 255),
+        ':company' => substr($step6['firmaKontakt'] ?? $input['company'] ?? '', 0, 255),
+        ':phone' => substr($step6['telefon'] ?? $input['phone'] ?? '', 0, 50),
         ':status' => 'neu',
         ':order_data' => json_encode($orderData),
     ]);

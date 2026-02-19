@@ -56,11 +56,27 @@ $updateStmt->execute([':key' => 'last_cleanup_count', ':value' => (string)$delet
 
 // Also clean up old rate limit files (older than 1 hour)
 $rateLimitDir = __DIR__ . '/data/';
-$files = glob($rateLimitDir . 'rate_limit_*.json');
-if ($files) {
-    foreach ($files as $file) {
-        if (filemtime($file) < time() - 3600) {
-            @unlink($file);
+$rateLimitPatterns = ['rate_limit_*.json', 'login_limit_*.json', 'email_limit_*.json', 'order_limit_*.json', 'inquiry_limit_*.json'];
+foreach ($rateLimitPatterns as $pattern) {
+    $files = glob($rateLimitDir . $pattern);
+    if ($files) {
+        foreach ($files as $file) {
+            if (filemtime($file) < time() - 3600) {
+                @unlink($file);
+            }
+        }
+    }
+}
+
+// Clean up old geocache files (older than 7 days)
+$geocacheDir = $rateLimitDir . 'geocache/';
+if (is_dir($geocacheDir)) {
+    $geoFiles = glob($geocacheDir . '*.json');
+    if ($geoFiles) {
+        foreach ($geoFiles as $file) {
+            if (filemtime($file) < time() - 604800) {
+                @unlink($file);
+            }
         }
     }
 }

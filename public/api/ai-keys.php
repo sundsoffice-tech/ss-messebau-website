@@ -108,8 +108,9 @@ function handleAddKey(): void {
             ],
         ]);
     } catch (PDOException $e) {
+        error_log('AI key save error: ' . $e->getMessage());
         http_response_code(500);
-        echo json_encode(['error' => 'Failed to save key: ' . $e->getMessage()]);
+        echo json_encode(['error' => 'Fehler beim Speichern des Schlüssels']);
     }
 }
 

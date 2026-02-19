@@ -30,3 +30,19 @@ define('ALLOWED_ORIGINS', [
     'https://sundsmessebau.com',
     'https://www.sundsmessebau.com',
 ]);
+
+// Maximum request body size (1MB) - reject oversized requests early
+define('MAX_REQUEST_BODY_SIZE', 1048576);
+
+/**
+ * Enforce request body size limit to prevent abuse.
+ * Call this at the start of any endpoint that reads php://input.
+ */
+function enforceRequestBodyLimit(): void {
+    $contentLength = $_SERVER['CONTENT_LENGTH'] ?? 0;
+    if ((int)$contentLength > MAX_REQUEST_BODY_SIZE) {
+        http_response_code(413);
+        echo json_encode(['error' => 'Request body too large']);
+        exit;
+    }
+}

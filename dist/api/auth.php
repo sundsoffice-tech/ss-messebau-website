@@ -73,6 +73,28 @@ function handleLogin(): void {
         return;
     }
 
+    // Brute-force protection: max 5 login attempts per 15 minutes per IP
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $rateLimitFile = __DIR__ . '/data/login_limit_' . md5($ip) . '.json';
+    $now = time();
+    $maxAttempts = 5;
+    $windowSeconds = 900; // 15 minutes
+
+    $attempts = [];
+    if (file_exists($rateLimitFile)) {
+        $attempts = json_decode(file_get_contents($rateLimitFile), true) ?: [];
+        $attempts = array_values(array_filter($attempts, function($ts) use ($now, $windowSeconds) {
+            return ($now - $ts) < $windowSeconds;
+        }));
+    }
+
+    if (count($attempts) >= $maxAttempts) {
+        $retryAfter = $windowSeconds - ($now - min($attempts));
+        http_response_code(429);
+        echo json_encode(['error' => 'Zu viele Anmeldeversuche. Bitte warten Sie ' . ceil($retryAfter / 60) . ' Minuten.']);
+        return;
+    }
+
     $input = json_decode(file_get_contents('php://input'), true);
     $username = trim($input['username'] ?? '');
     $password = $input['password'] ?? '';
@@ -83,16 +105,31 @@ function handleLogin(): void {
         return;
     }
 
+    // Limit input length to prevent abuse
+    if (strlen($username) > 100 || strlen($password) > 256) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Eingabe zu lang']);
+        return;
+    }
+
     $db = getDB();
     $stmt = $db->prepare('SELECT * FROM admin_users WHERE username = :username LIMIT 1');
     $stmt->execute([':username' => $username]);
     $user = $stmt->fetch();
 
     if (!$user || !password_verify($password, $user['password_hash'])) {
+        // Record failed attempt
+        $attempts[] = $now;
+        @file_put_contents($rateLimitFile, json_encode($attempts));
+        // Constant-time delay to prevent timing attacks
+        usleep(random_int(100000, 300000));
         http_response_code(401);
         echo json_encode(['error' => 'Ungültige Anmeldedaten']);
         return;
     }
+
+    // Successful login: clear rate limit
+    @unlink($rateLimitFile);
 
     // Regenerate session ID for security
     session_regenerate_id(true);
