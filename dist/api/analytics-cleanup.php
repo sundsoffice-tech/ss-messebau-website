@@ -38,6 +38,12 @@ $stmt = $db->prepare("DELETE FROM analytics_events WHERE ts < :cutoff");
 $stmt->execute([':cutoff' => $cutoff]);
 $deleted = $stmt->rowCount();
 
+// Clean up heartbeat events older than 24 hours (only useful for real-time, not historical analysis)
+$heartbeatCutoff = date('Y-m-d H:i:s', time() - 86400);
+$hbStmt = $db->prepare("DELETE FROM analytics_events WHERE event = 'heartbeat' AND ts < :hb_cutoff");
+$hbStmt->execute([':hb_cutoff' => $heartbeatCutoff]);
+$deleted += $hbStmt->rowCount();
+
 // Store cleanup metadata
 $updateStmt = $db->prepare("
     INSERT INTO analytics_config (config_key, config_value, updated_at)
