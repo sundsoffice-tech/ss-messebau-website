@@ -131,40 +131,44 @@
 </IfModule>
 
 # ============================================
-# SECURITY HEADERS
+# SECURITY HEADERS (HTML documents only)
 # ============================================
+# These headers are designed for browser-rendered documents (HTML pages).
+# API responses (JSON from /api/) unset these in api/.htaccess because
+# CSP, X-Frame-Options and COOP are meaningless on fetch() JSON responses
+# and can cause unexpected side-effects on some browsers/proxies.
 <IfModule mod_headers.c>
-  # Prevent clickjacking - DENY since site should not be framed
-  Header always set X-Frame-Options "DENY"
-
-  # Prevent MIME sniffing
+  # Prevent MIME sniffing (safe for all response types)
   Header always set X-Content-Type-Options "nosniff"
 
-  # Enable XSS protection
-  Header always set X-XSS-Protection "1; mode=block"
-
-  # Referrer Policy
+  # Referrer Policy (safe for all response types)
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
-  # Permissions Policy - restrict sensitive browser features
-  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
-
-  # HSTS - Force HTTPS for 1 year including subdomains
+  # HSTS - Force HTTPS (safe for all response types)
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 
-  # Content Security Policy - hardened
-  # script-src: 'unsafe-inline' kept because index.html has inline bootstrap scripts
-  # frame-src: 'none' - this site does not embed iframes
-  # object-src: 'none' - prevents Flash/plugin abuse
-  # connect-src: only required APIs (removed unused github, amazonaws wildcards)
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://media.istockphoto.com; connect-src 'self' https://api.sendgrid.com; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
-
-  # Cross-Origin headers for additional isolation
-  Header always set Cross-Origin-Opener-Policy "same-origin"
-
-  # Remove server signature
+  # Remove server signature (safe for all response types)
   Header unset Server
   Header unset X-Powered-By
+
+  # --- Document-only headers (unset in api/.htaccess) ---
+
+  # Prevent clickjacking
+  Header always set X-Frame-Options "DENY"
+
+  # XSS protection
+  Header always set X-XSS-Protection "1; mode=block"
+
+  # Permissions Policy
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+
+  # Content Security Policy
+  # script-src: 'unsafe-inline' kept because index.html has inline bootstrap scripts
+  # connect-src: 'self' covers /api/ calls (same-origin)
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://media.istockphoto.com; connect-src 'self' https://api.sendgrid.com; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+
+  # Cross-Origin isolation
+  Header always set Cross-Origin-Opener-Policy "same-origin"
 </IfModule>
 
 # ============================================

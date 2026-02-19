@@ -6,6 +6,37 @@
 # duplicate Access-Control-Allow-Origin headers which cause CORS failures.
 # Do NOT add Apache-level CORS headers here.
 
+# ─── Remove document-level security headers for API responses ───
+# These are inherited from the root .htaccess but only make sense for HTML
+# documents, NOT for JSON API responses. Leaving them on API responses can
+# cause unexpected browser behaviour (e.g. CSP connect-src enforcement on
+# responses that are not documents, COOP interfering with fetch()).
+<IfModule mod_headers.c>
+    Header unset Content-Security-Policy
+    Header always unset Content-Security-Policy
+    Header unset X-Frame-Options
+    Header always unset X-Frame-Options
+    Header unset Cross-Origin-Opener-Policy
+    Header always unset Cross-Origin-Opener-Policy
+    Header unset Permissions-Policy
+    Header always unset Permissions-Policy
+
+    # Ensure API responses are never cached by browsers
+    Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header always set Pragma "no-cache"
+</IfModule>
+
+# ─── Prevent Apache ErrorDocument from replacing PHP JSON responses ───
+# Without this, a PHP 500 response gets its body replaced with /index.html
+# content, which breaks the frontend's JSON parsing.
+ErrorDocument 400 default
+ErrorDocument 401 default
+ErrorDocument 403 default
+ErrorDocument 404 default
+ErrorDocument 405 default
+ErrorDocument 429 default
+ErrorDocument 500 default
+
 # Ensure PHP files are executed (not served as static)
 # Cover both mod_php7 (PHP 7.x) and mod_php (PHP 8.x)
 <IfModule mod_php7.c>
