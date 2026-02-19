@@ -1161,6 +1161,12 @@ function formatFormDataKey(key: string): string {
     firmaKontakt: 'Firma',
     ansprechpartner: 'Ansprechpartner',
     ustId: 'USt-ID',
+    branche: 'Branche',
+    wieGefunden: 'Gefunden über',
+    position: 'Position/Rolle',
+    utm_source: 'Quelle (UTM)',
+    utm_medium: 'Medium (UTM)',
+    utm_campaign: 'Kampagne (UTM)',
   }
   return map[key] || key
 }

@@ -25,6 +25,12 @@ import {
   ChatCircleDots,
   FileArrowDown,
   UsersThree,
+  DeviceMobile,
+  Desktop,
+  Browsers,
+  FunnelSimple,
+  Signpost,
+  SignOut as SignOutIcon,
 } from '@phosphor-icons/react'
 import {
   fetchTrackingConfig,
@@ -63,6 +69,11 @@ const EVENT_LABELS: Record<TrackingEventName, string> = {
   page_engagement: 'Verweildauer',
   blog_article_read: 'Blog-Artikel gelesen',
   heartbeat: 'Herzschlag',
+  session_start: 'Session-Start',
+  form_interaction: 'Formular-Interaktion',
+  form_abandon: 'Formular-Abbruch',
+  exit_intent: 'Exit-Intent',
+  configurator_step: 'Konfigurator-Schritt',
 }
 
 /* ================================================================== */
@@ -504,6 +515,196 @@ function KPIDashboardTab() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Device & Browser Breakdown */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {kpis.device_breakdown && kpis.device_breakdown.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <DeviceMobile className="w-4 h-4" />
+                Geräte
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {kpis.device_breakdown.map((d, i) => {
+                  const total = kpis.device_breakdown.reduce((s, x) => s + x.count, 0)
+                  const pct = total > 0 ? Math.round((d.count / total) * 100) : 0
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center justify-between text-sm mb-0.5">
+                        <span className="flex items-center gap-1.5">
+                          {d.device_type === 'desktop' ? <Desktop className="w-3.5 h-3.5" /> : <DeviceMobile className="w-3.5 h-3.5" />}
+                          {d.device_type}
+                        </span>
+                        <span className="text-xs text-muted-foreground">{pct}% ({d.count})</span>
+                      </div>
+                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500/60 rounded-full" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {kpis.browser_breakdown && kpis.browser_breakdown.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Browsers className="w-4 h-4" />
+                Browser
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {kpis.browser_breakdown.map((b, i) => {
+                  const total = kpis.browser_breakdown.reduce((s, x) => s + x.count, 0)
+                  const pct = total > 0 ? Math.round((b.count / total) * 100) : 0
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center justify-between text-sm mb-0.5">
+                        <span>{b.browser}</span>
+                        <span className="text-xs text-muted-foreground">{pct}% ({b.count})</span>
+                      </div>
+                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div className="h-full bg-purple-500/60 rounded-full" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {kpis.os_breakdown && kpis.os_breakdown.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Desktop className="w-4 h-4" />
+                Betriebssystem
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {kpis.os_breakdown.map((o, i) => {
+                  const total = kpis.os_breakdown.reduce((s, x) => s + x.count, 0)
+                  const pct = total > 0 ? Math.round((o.count / total) * 100) : 0
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center justify-between text-sm mb-0.5">
+                        <span>{o.os}</span>
+                        <span className="text-xs text-muted-foreground">{pct}% ({o.count})</span>
+                      </div>
+                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div className="h-full bg-amber-500/60 rounded-full" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Form Conversion by Type */}
+      {kpis.form_conversion_by_type && kpis.form_conversion_by_type.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <FunnelSimple className="w-4 h-4" />
+              Formular-Conversion nach Typ
+            </CardTitle>
+            <CardDescription>Abschluss vs. Abbruch pro Formulartyp</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {kpis.form_conversion_by_type.map((fc, i) => (
+                <div key={i} className="space-y-1">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="font-medium capitalize">{fc.form_type}</span>
+                    <div className="flex items-center gap-3">
+                      <Badge variant="default" className="text-xs">{fc.submits} Abschlüsse</Badge>
+                      <Badge variant="destructive" className="text-xs">{fc.abandons} Abbrüche</Badge>
+                      <Badge variant="outline" className="text-xs font-bold">{fc.rate}%</Badge>
+                    </div>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden flex">
+                    <div
+                      className="h-full bg-green-500 rounded-l-full"
+                      style={{ width: `${fc.rate}%` }}
+                    />
+                    <div
+                      className="h-full bg-red-400"
+                      style={{ width: `${100 - fc.rate}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Lead Source Attribution & Exit Intent */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {kpis.lead_sources && kpis.lead_sources.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Signpost className="w-4 h-4" />
+                Lead-Quellen
+              </CardTitle>
+              <CardDescription>Welche UTM-Quellen führen zu Conversions?</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {kpis.lead_sources.map((ls, i) => {
+                  const maxCount = kpis.lead_sources[0]?.conversions ?? 1
+                  const pct = Math.round((ls.conversions / maxCount) * 100)
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center justify-between text-sm mb-0.5">
+                        <span className="font-medium">{ls.source}</span>
+                        <Badge variant="secondary" className="text-xs">{ls.conversions} Conversions</Badge>
+                      </div>
+                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500/60 rounded-full" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <SignOutIcon className="w-4 h-4" />
+              Exit-Intents
+            </CardTitle>
+            <CardDescription>Wie oft versuchen Nutzer die Seite zu verlassen?</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center py-4">
+              <p className="text-3xl font-bold">{(kpis.exit_intents ?? 0).toLocaleString('de-DE')}</p>
+              <p className="text-sm text-muted-foreground mt-1">Exit-Versuche im Zeitraum</p>
+              {kpis.unique_sessions > 0 && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  {Math.round(((kpis.exit_intents ?? 0) / kpis.unique_sessions) * 100)}% der Sessions
+                </p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

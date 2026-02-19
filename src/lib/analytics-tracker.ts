@@ -212,10 +212,68 @@ export function trackFirstPartyEvent(
 }
 
 /* ------------------------------------------------------------------ */
+/*  Device Detection (non-PII)                                         */
+/* ------------------------------------------------------------------ */
+
+function detectDeviceType(): string {
+  const ua = navigator.userAgent
+  if (/Mobi|Android.*Mobile|iPhone|iPod/i.test(ua)) return 'mobile'
+  if (/iPad|Android(?!.*Mobile)|Tablet/i.test(ua)) return 'tablet'
+  return 'desktop'
+}
+
+function detectBrowser(): string {
+  const ua = navigator.userAgent
+  if (ua.includes('Firefox/')) return 'Firefox'
+  if (ua.includes('Edg/')) return 'Edge'
+  if (ua.includes('OPR/') || ua.includes('Opera/')) return 'Opera'
+  if (ua.includes('Chrome/') && !ua.includes('Edg/')) return 'Chrome'
+  if (ua.includes('Safari/') && !ua.includes('Chrome/')) return 'Safari'
+  return 'Other'
+}
+
+function detectOS(): string {
+  const ua = navigator.userAgent
+  if (ua.includes('Windows')) return 'Windows'
+  if (ua.includes('Mac OS X') || ua.includes('Macintosh')) return 'macOS'
+  if (ua.includes('iPhone') || ua.includes('iPad')) return 'iOS'
+  if (ua.includes('Android')) return 'Android'
+  if (ua.includes('Linux')) return 'Linux'
+  return 'Other'
+}
+
+function getDeviceProps(): Record<string, string | number> {
+  return {
+    device_type: detectDeviceType(),
+    browser: detectBrowser(),
+    os: detectOS(),
+    screen_width: window.screen.width,
+    screen_height: window.screen.height,
+    viewport_width: window.innerWidth,
+    language: navigator.language || 'unknown',
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Session Start (fired once per session with device info)            */
+/* ------------------------------------------------------------------ */
+
+const SESSION_START_KEY = 'ss_session_start_sent'
+
+function sendSessionStartIfNeeded(): void {
+  try {
+    if (sessionStorage.getItem(SESSION_START_KEY)) return
+    trackFirstPartyEvent('session_start', getDeviceProps())
+    sessionStorage.setItem(SESSION_START_KEY, '1')
+  } catch { /* ignore */ }
+}
+
+/* ------------------------------------------------------------------ */
 /*  Convenience Wrappers (first-party)                                 */
 /* ------------------------------------------------------------------ */
 
 export function trackPageView(): void {
+  sendSessionStartIfNeeded()
   trackFirstPartyEvent('page_view')
 }
 
@@ -223,8 +281,8 @@ export function trackCTAClick(ctaName: string): void {
   trackFirstPartyEvent('cta_click', { cta_name: ctaName })
 }
 
-export function trackFormSubmission(formType: string): void {
-  trackFirstPartyEvent('form_submit', { form_type: formType })
+export function trackFormSubmission(formType: string, extraProps?: Record<string, string>): void {
+  trackFirstPartyEvent('form_submit', { form_type: formType, ...extraProps })
 }
 
 export function trackPhoneClick(): void {
@@ -237,6 +295,28 @@ export function trackWhatsAppLinkClick(): void {
 
 export function trackDownloadClick(fileName: string): void {
   trackFirstPartyEvent('download', { file_name: fileName })
+}
+
+export function trackFormInteraction(formType: string, field: string, action: 'focus' | 'blur' | 'change'): void {
+  trackFirstPartyEvent('form_interaction', { form_type: formType, field, action })
+}
+
+export function trackFormAbandon(formType: string, lastField: string, filledFields: number, totalFields: number): void {
+  trackFirstPartyEvent('form_abandon', {
+    form_type: formType,
+    last_field: lastField,
+    filled_fields: filledFields,
+    total_fields: totalFields,
+    completion_pct: totalFields > 0 ? Math.round((filledFields / totalFields) * 100) : 0,
+  })
+}
+
+export function trackExitIntent(pageName: string): void {
+  trackFirstPartyEvent('exit_intent', { page: pageName })
+}
+
+export function trackConfiguratorStep(step: number, stepName: string): void {
+  trackFirstPartyEvent('configurator_step', { step, step_name: stepName })
 }
 
 /* ------------------------------------------------------------------ */
