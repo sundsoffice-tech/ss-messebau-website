@@ -1,4 +1,5 @@
 import type { BlogPost } from './types'
+import logo from '@/assets/logo/ss-messebau-logo.png'
 
 export const DEMO_BLOG_POSTS: BlogPost[] = [
   {
@@ -230,7 +231,7 @@ Falls ihr noch Fragen habt oder professionelle Unterstützung beim Standbau brau
 
 Viel Erfolg auf eurer nächsten Messe!`,
     category: 'Planung',
-    imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=450&fit=crop',
+    imageUrl: logo,
     publishedAt: Date.now() - 7 * 24 * 60 * 60 * 1000
   },
   {
@@ -573,7 +574,7 @@ Habt ihr noch Fragen zu eurem spezifischen Projekt? Wir von S&S Messebau helfen 
 
 Viel Erfolg beim Messeauftritt!`,
     category: 'Budget',
-    imageUrl: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=450&fit=crop',
+    imageUrl: logo,
     publishedAt: Date.now() - 14 * 24 * 60 * 60 * 1000
   },
   {
@@ -826,7 +827,7 @@ Wir von S&S Messebau helfen euch dabei. In den letzten zehn Jahren haben wir gel
 
 Viel Erfolg bei eurem nächsten nachhaltigen Messeauftritt!`,
     category: 'Nachhaltigkeit',
-    imageUrl: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&h=450&fit=crop',
+    imageUrl: logo,
     publishedAt: new Date('2026-02-16').getTime()
   },
   {
@@ -1477,7 +1478,7 @@ Ein Messestand von 20 bis 200 m² ist eine signifikante Investition. Aber mit re
 
 Wenn ihr konkrete Zahlen für euer Projekt braucht, kontaktiert uns. Wir von S&S Messebau kalkulieren transparent, beratend und realistisch – und zeigen euch nicht nur die Kosten, sondern auch, wo ihr intelligent sparen könnt, ohne Qualität zu verlieren.`,
     category: 'Kosten',
-    imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=450&fit=crop',
+    imageUrl: logo,
     publishedAt: Date.now() - 3 * 24 * 60 * 60 * 1000
   },
   {
@@ -2056,7 +2057,7 @@ Wenn ihr ein Food-Unternehmen seid und auf Messen gehen wollt: **Macht es richti
 
 Wenn ihr konkrete Planung braucht, helfen wir von S&S Messebau gerne: Wir kennen die Anforderungen von Food-Ständen und wissen, wo die Fallstricke sind. Von der Genehmigung bis zur Montage.`,
     category: 'Branchen',
-    imageUrl: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=450&fit=crop',
+    imageUrl: logo,
     publishedAt: new Date('2026-02-15').getTime()
   },
   {
@@ -2281,7 +2282,7 @@ Schnelle Angebotsstellung ist nicht Marketing-Gag, sondern **echtes Service-Vers
 
 Wenn euer Messebauer 2–3 Wochen auf ein Angebot braucht, fragt nach dem Grund. Ist es echte Komplexität – oder Prozessineffizienz? Das macht den Unterschied zwischen durchschnittlichem und exzellentem Service aus.`,
     category: 'Service',
-    imageUrl: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=450&fit=crop',
+    imageUrl: logo,
     publishedAt: Date.now() - 1 * 24 * 60 * 60 * 1000
   }
 ]

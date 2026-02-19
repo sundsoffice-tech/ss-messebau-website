@@ -23,7 +23,7 @@ export function BlogPostCard({ post, onNavigate }: BlogPostCardProps) {
 
   return (
     <Card className="group overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col border-2 hover:border-primary cursor-pointer">
-      <div className="aspect-video relative overflow-hidden bg-muted">
+      <div className="aspect-video relative overflow-hidden bg-black">
         <img
           src={post.imageUrl}
           alt={post.title}
@@ -31,7 +31,7 @@ export function BlogPostCard({ post, onNavigate }: BlogPostCardProps) {
           height="360"
           loading="lazy"
           decoding="async"
-          className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+          className="object-contain w-full h-full group-hover:scale-110 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <div className="absolute top-3 right-3 md:top-4 md:right-4">

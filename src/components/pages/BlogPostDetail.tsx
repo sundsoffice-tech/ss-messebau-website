@@ -124,13 +124,13 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
       {/* Article Image */}
       <section className="bg-background">
         <div className="container mx-auto max-w-4xl px-4 md:px-6 lg:px-8">
-          <div className="relative -mt-6 rounded-xl overflow-hidden shadow-2xl">
+          <div className="relative -mt-6 rounded-xl overflow-hidden shadow-2xl bg-black">
             <img
               src={post.imageUrl}
               alt={post.title}
               width="1200"
               height="675"
-              className="w-full aspect-video object-cover"
+              className="w-full aspect-video object-contain"
             />
           </div>
         </div>
