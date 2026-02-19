@@ -14,6 +14,7 @@ import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath, navigate } 
 import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 import { usePageMeta } from './hooks/use-page-meta'
 import { usePageViewTracking } from './hooks/use-page-view-tracking'
+import { useHeartbeat } from './hooks/use-heartbeat'
 import { I18nContext, getTranslation, getStoredLanguage, storeLanguage, type Language } from './lib/i18n'
 import { useUIStore } from './store/ui-store'
 import { PageErrorBoundary } from './components/PageErrorBoundary'
@@ -65,6 +66,7 @@ function App() {
   useCursorScale() // Add cursor scale effect
   usePageMeta(currentPage)
   usePageViewTracking() // First-party analytics page view tracking
+  useHeartbeat() // Real-time visitor presence heartbeat
 
   useEffect(() => {
     const handleRouteChange = () => {

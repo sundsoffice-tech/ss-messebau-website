@@ -18,6 +18,7 @@ export type TrackingEventName =
   | 'scroll_depth'
   | 'page_engagement'
   | 'blog_article_read'
+  | 'heartbeat'
 
 /** Standard event payload sent to collect endpoint */
 export interface TrackingEvent {
@@ -63,6 +64,7 @@ export const DEFAULT_TRACKING_CONFIG: TrackingConfig = {
     scroll_depth: true,
     page_engagement: true,
     blog_article_read: true,
+    heartbeat: true,
   },
   utm_whitelist: ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'],
   domain_whitelist: ['sunds-messebau.de', 'www.sunds-messebau.de', 'localhost'],
@@ -124,4 +126,36 @@ export interface ExportRequest {
   to?: string   // ISO date
   event_type?: TrackingEventName
   limit?: number
+}
+
+/* ------------------------------------------------------------------ */
+/*  Active Visitor Types (Real-time tracking)                          */
+/* ------------------------------------------------------------------ */
+
+/** Timeline entry for a visitor's recent activity */
+export interface VisitorTimelineEntry {
+  event: string
+  ts: string
+  url: string
+}
+
+/** A currently active visitor (session) */
+export interface ActiveVisitor {
+  session_id: string
+  session_id_hash: string
+  current_page: string
+  last_event: string
+  last_seen: string
+  first_seen_in_window: string
+  session_start: string
+  event_count: number
+  timeline: VisitorTimelineEntry[]
+}
+
+/** Response from analytics-visitors.php */
+export interface ActiveVisitorsResponse {
+  active_visitors: number
+  window_seconds: number
+  server_time: string
+  visitors: ActiveVisitor[]
 }
