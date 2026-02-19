@@ -1,3 +1,4 @@
+import type React from 'react'
 import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -25,6 +26,8 @@ import {
   ChatCircleDots,
   FileArrowDown,
   UsersThree,
+  UserCirclePlus,
+  UserCircle,
   DeviceMobile,
   Desktop,
   Browsers,
@@ -34,6 +37,19 @@ import {
   MapPin,
   GlobeHemisphereWest,
   Translate,
+  ArrowUp,
+  ArrowDown,
+  Timer,
+  Fire,
+  Warning,
+  Monitor,
+  WifiHigh,
+  CaretRight,
+  CalendarBlank,
+  Table,
+  Bug,
+  Gauge,
+  Path,
 } from '@phosphor-icons/react'
 import {
   fetchTrackingConfig,
@@ -54,8 +70,10 @@ import type {
   RealtimeEvent,
   ActiveVisitor,
   ActiveVisitorsResponse,
+  PeriodComparison,
+  HeatmapCell,
 } from '@/types/analytics'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area, Legend } from 'recharts'
 
 /* ------------------------------------------------------------------ */
 /*  Event labels                                                       */
@@ -87,11 +105,44 @@ const EVENT_LABELS: Record<TrackingEventName, string> = {
   blog_article_read: 'Blog-Artikel gelesen',
   heartbeat: 'Herzschlag',
   session_start: 'Session-Start',
+  session_end: 'Session-Ende',
   form_interaction: 'Formular-Interaktion',
   form_abandon: 'Formular-Abbruch',
   exit_intent: 'Exit-Intent',
   configurator_step: 'Konfigurator-Schritt',
+  outbound_click: 'Externer Link',
+  video_play: 'Video-Wiedergabe',
+  error: 'Fehler',
+  performance: 'Performance',
+  search: 'Suche',
+  tab_visibility: 'Tab-Sichtbarkeit',
 }
+
+const DAY_NAMES = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+
+const SESSION_QUALITY_COLORS: Record<string, string> = {
+  bounce: '#ef4444',
+  low: '#f97316',
+  medium: '#eab308',
+  high: '#22c55e',
+  power_user: '#6366f1',
+}
+
+const SESSION_QUALITY_LABELS: Record<string, string> = {
+  bounce: 'Bounce',
+  low: 'Niedrig',
+  medium: 'Mittel',
+  high: 'Hoch',
+  power_user: 'Power User',
+}
+
+const DATE_PRESETS = [
+  { label: 'Heute', days: 0 },
+  { label: '7 Tage', days: 7 },
+  { label: '30 Tage', days: 30 },
+  { label: '90 Tage', days: 90 },
+  { label: '1 Jahr', days: 365 },
+]
 
 /* ================================================================== */
 /*  1) Tracking Config Tab                                             */
@@ -320,19 +371,42 @@ function KPIDashboardTab() {
 
   return (
     <div className="space-y-4">
-      {/* Date filter */}
+      {/* Date filter with presets */}
       <Card>
-        <CardContent className="p-4">
+        <CardContent className="p-4 space-y-3">
+          <div className="flex flex-wrap gap-1.5">
+            {DATE_PRESETS.map(preset => {
+              const presetFrom = preset.days === 0
+                ? new Date().toISOString().split('T')[0]
+                : new Date(Date.now() - preset.days * 86400000).toISOString().split('T')[0]
+              const isActive = from === presetFrom
+              return (
+                <Button
+                  key={preset.label}
+                  variant={isActive ? 'default' : 'outline'}
+                  size="sm"
+                  className="text-xs h-7 gap-1"
+                  onClick={() => {
+                    setFrom(presetFrom)
+                    setTo(new Date().toISOString().split('T')[0])
+                  }}
+                >
+                  <CalendarBlank className="w-3 h-3" />
+                  {preset.label}
+                </Button>
+              )
+            })}
+          </div>
           <div className="flex flex-wrap items-end gap-3">
             <div>
               <label className="text-sm font-medium mb-1 block">Von</label>
-              <Input type="date" value={from} onChange={e => setFrom(e.target.value)} />
+              <Input type="date" value={from} onChange={e => setFrom(e.target.value)} className="h-8 text-sm" />
             </div>
             <div>
               <label className="text-sm font-medium mb-1 block">Bis</label>
-              <Input type="date" value={to} onChange={e => setTo(e.target.value)} />
+              <Input type="date" value={to} onChange={e => setTo(e.target.value)} className="h-8 text-sm" />
             </div>
-            <Button size="sm" onClick={load} className="gap-2">
+            <Button size="sm" onClick={load} className="gap-2 h-8">
               <ArrowClockwise className="w-4 h-4" />
               Aktualisieren
             </Button>
@@ -340,75 +414,201 @@ function KPIDashboardTab() {
         </CardContent>
       </Card>
 
-      {/* KPI Cards */}
+      {/* KPI Cards with Period Comparison */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        <KPICard label="Events gesamt" value={kpis.total_events} icon={<ChartLine className="w-4 h-4" />} />
-        <KPICard label="Sessions" value={kpis.unique_sessions} icon={<Eye className="w-4 h-4" />} />
-        <KPICard label="Seitenaufrufe" value={kpis.page_views} icon={<Globe className="w-4 h-4" />} />
-        <KPICard label="CTA-Klicks" value={kpis.cta_clicks} icon={<TrendUp className="w-4 h-4" />} />
-        <KPICard label="Formulare" value={kpis.form_submits} icon={<ClipboardText className="w-4 h-4" />} />
+        <KPICard label="Events gesamt" value={kpis.total_events} icon={<ChartLine className="w-4 h-4" />} comparison={kpis.comparison?.total_events} />
+        <KPICard label="Besucher" value={kpis.unique_visitors} icon={<UsersThree className="w-4 h-4" />} comparison={kpis.comparison?.unique_visitors} />
+        <KPICard label="Sessions" value={kpis.unique_sessions} icon={<Eye className="w-4 h-4" />} comparison={kpis.comparison?.unique_sessions} />
+        <KPICard label="Seitenaufrufe" value={kpis.page_views} icon={<Globe className="w-4 h-4" />} comparison={kpis.comparison?.page_views} />
+        <KPICard label="CTA-Klicks" value={kpis.cta_clicks} icon={<TrendUp className="w-4 h-4" />} comparison={kpis.comparison?.cta_clicks} />
+        <KPICard label="Formulare" value={kpis.form_submits} icon={<ClipboardText className="w-4 h-4" />} comparison={kpis.comparison?.form_submits} />
         <KPICard label="Telefon" value={kpis.phone_clicks} icon={<Phone className="w-4 h-4" />} />
         <KPICard label="WhatsApp" value={kpis.whatsapp_clicks} icon={<ChatCircleDots className="w-4 h-4" />} />
         <KPICard label="Downloads" value={kpis.downloads} icon={<FileArrowDown className="w-4 h-4" />} />
+        <KPICard label="Conversion Rate" value={Number(kpis.conversion_rate?.toFixed(1) ?? 0)} icon={<FunnelSimple className="w-4 h-4" />} />
       </div>
 
-      {/* Engagement Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">Bounce Rate</p>
-              <p className="text-2xl font-bold">{kpis.bounce_rate}%</p>
-            </div>
-            <div className={`p-2 rounded-lg ${kpis.bounce_rate > 70 ? 'bg-red-100' : kpis.bounce_rate > 40 ? 'bg-amber-100' : 'bg-green-100'}`}>
-              <TrendUp className={`w-5 h-5 ${kpis.bounce_rate > 70 ? 'text-red-600' : kpis.bounce_rate > 40 ? 'text-amber-600' : 'text-green-600'}`} />
-            </div>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">Sessions mit nur 1 Event</p>
+      {/* Engagement Score + Session Quality + Visitor Segments */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Engagement Score */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Fire className="w-4 h-4 text-orange-500" />
+              Engagement Score
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col items-center">
+            <EngagementScoreRing score={kpis.engagement?.engagement_score ?? 0} />
+            {kpis.engagement && (
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-3 text-xs w-full">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Ø Dauer</span>
+                  <span className="font-medium">{Math.round(kpis.engagement.avg_session_duration_seconds)}s</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Ø Seiten</span>
+                  <span className="font-medium">{kpis.engagement.avg_pages_per_session.toFixed(1)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Scroll-Tiefe</span>
+                  <span className="font-medium">{kpis.engagement.avg_scroll_depth}%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Interaktion</span>
+                  <span className="font-medium">{kpis.engagement.interaction_rate}%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Return Rate</span>
+                  <span className="font-medium">{kpis.engagement.return_rate}%</span>
+                </div>
+              </div>
+            )}
+          </CardContent>
         </Card>
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">Ø Events / Session</p>
-              <p className="text-2xl font-bold">{kpis.avg_session_events}</p>
+
+        {/* Session Quality Distribution */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Gauge className="w-4 h-4" />
+              Session-Qualitaet
+            </CardTitle>
+            <CardDescription>Verteilung der Session-Tiefe</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {kpis.session_quality && kpis.session_quality.length > 0 ? (
+              <>
+                {/* Stacked bar */}
+                <div className="h-6 rounded-full overflow-hidden flex">
+                  {kpis.session_quality.map(sq => (
+                    <div
+                      key={sq.quality}
+                      className="h-full transition-all"
+                      style={{
+                        width: `${sq.pct}%`,
+                        backgroundColor: SESSION_QUALITY_COLORS[sq.quality] ?? '#94a3b8',
+                        minWidth: sq.pct > 0 ? '4px' : '0',
+                      }}
+                      title={`${SESSION_QUALITY_LABELS[sq.quality]}: ${sq.pct}% (${sq.count})`}
+                    />
+                  ))}
+                </div>
+                {/* Legend */}
+                <div className="space-y-1.5 mt-3">
+                  {kpis.session_quality.map(sq => (
+                    <div key={sq.quality} className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SESSION_QUALITY_COLORS[sq.quality] }} />
+                        <span>{SESSION_QUALITY_LABELS[sq.quality]}</span>
+                      </div>
+                      <span className="text-muted-foreground">{sq.pct}% ({sq.count})</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground">Keine Daten</p>
+            )}
+            <div className="pt-2 border-t mt-3 grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span className="text-muted-foreground">Bounce Rate</span>
+                <p className={`font-bold text-lg ${kpis.bounce_rate > 70 ? 'text-red-500' : kpis.bounce_rate > 40 ? 'text-amber-500' : 'text-green-600'}`}>
+                  {kpis.bounce_rate}%
+                </p>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Ø Events/Session</span>
+                <p className="font-bold text-lg">{kpis.avg_session_events}</p>
+              </div>
             </div>
-            <div className="p-2 rounded-lg bg-blue-100">
-              <Lightning className="w-5 h-5 text-blue-600" />
-            </div>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">Durchschnittliche Interaktionen</p>
+          </CardContent>
+        </Card>
+
+        {/* Visitor Segments */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <UserCircle className="w-4 h-4" />
+              Besucher-Segmente
+            </CardTitle>
+            <CardDescription>Neu vs. Wiederkehrend</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {kpis.visitor_segments ? (
+              <div className="space-y-4">
+                <div className="h-4 rounded-full overflow-hidden flex">
+                  <div
+                    className="h-full bg-blue-500 transition-all"
+                    style={{ width: `${kpis.visitor_segments.new_pct}%` }}
+                  />
+                  <div
+                    className="h-full bg-violet-500 transition-all"
+                    style={{ width: `${kpis.visitor_segments.returning_pct}%` }}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="text-center p-3 rounded-lg bg-blue-50 dark:bg-blue-950/30">
+                    <UserCirclePlus className="w-5 h-5 mx-auto mb-1 text-blue-600" />
+                    <p className="text-xl font-bold">{kpis.visitor_segments.new_visitors}</p>
+                    <p className="text-xs text-muted-foreground">Neu ({kpis.visitor_segments.new_pct}%)</p>
+                  </div>
+                  <div className="text-center p-3 rounded-lg bg-violet-50 dark:bg-violet-950/30">
+                    <UserCircle className="w-5 h-5 mx-auto mb-1 text-violet-600" />
+                    <p className="text-xl font-bold">{kpis.visitor_segments.returning_visitors}</p>
+                    <p className="text-xs text-muted-foreground">Wiederkehrend ({kpis.visitor_segments.returning_pct}%)</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Keine Daten</p>
+            )}
+          </CardContent>
         </Card>
       </div>
 
-      {/* Events per Day Chart */}
+      {/* Events per Day Chart - Multi-Series */}
       {kpis.events_by_day.length > 0 && (
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">Events pro Tag</CardTitle>
+            <CardTitle className="text-base">Traffic-Verlauf</CardTitle>
+            <CardDescription>Events, Sessions, Seitenaufrufe & Conversions pro Tag</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
+            <ResponsiveContainer width="100%" height={280}>
               <AreaChart data={kpis.events_by_day}>
                 <defs>
                   <linearGradient id="colorEvents" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                   </linearGradient>
+                  <linearGradient id="colorSessions" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="colorPageViews" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
+                  </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   dataKey="date"
-                  tick={{ fontSize: 11 }}
+                  tick={{ fontSize: 10 }}
                   tickFormatter={(v: string) => {
                     const d = new Date(v)
                     return `${d.getDate()}.${d.getMonth() + 1}.`
                   }}
                 />
-                <YAxis tick={{ fontSize: 11 }} />
+                <YAxis tick={{ fontSize: 10 }} />
                 <Tooltip
-                  labelFormatter={(v: string) => new Date(v).toLocaleDateString('de-DE')}
+                  labelFormatter={(v: string) => new Date(v).toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}
                 />
+                <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
                 <Area type="monotone" dataKey="count" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorEvents)" name="Events" />
+                <Area type="monotone" dataKey="sessions" stroke="#8b5cf6" fillOpacity={1} fill="url(#colorSessions)" name="Sessions" />
+                <Area type="monotone" dataKey="page_views" stroke="#06b6d4" fillOpacity={1} fill="url(#colorPageViews)" name="Seitenaufrufe" />
+                <Area type="monotone" dataKey="conversions" stroke="#22c55e" fill="none" strokeWidth={2} strokeDasharray="5 5" name="Conversions" />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
@@ -546,30 +746,84 @@ function KPIDashboardTab() {
         </Card>
       </div>
 
-      {/* Funnel: page_view → cta_click → form_submit */}
+      {/* Enterprise Conversion Funnel */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">Conversion Funnel</CardTitle>
-          <CardDescription>page_view → cta_click → form_submit</CardDescription>
+          <CardTitle className="text-base flex items-center gap-2">
+            <FunnelSimple className="w-4 h-4" />
+            Conversion Funnel
+          </CardTitle>
+          <CardDescription>Vom Seitenaufruf zur Conversion</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-2">
-            <FunnelStep label="Seitenaufrufe" value={kpis.page_views} pct={100} />
-            <span className="text-muted-foreground">→</span>
-            <FunnelStep
-              label="CTA-Klicks"
-              value={kpis.cta_clicks}
-              pct={kpis.page_views > 0 ? Math.round((kpis.cta_clicks / kpis.page_views) * 100) : 0}
-            />
-            <span className="text-muted-foreground">→</span>
-            <FunnelStep
-              label="Formulare"
-              value={kpis.form_submits}
-              pct={kpis.cta_clicks > 0 ? Math.round((kpis.form_submits / kpis.cta_clicks) * 100) : 0}
-            />
-          </div>
+          {kpis.conversion_funnel && kpis.conversion_funnel.length > 0 ? (
+            <div className="space-y-3">
+              <div className="flex items-stretch gap-1">
+                {kpis.conversion_funnel.map((step, i) => {
+                  return (
+                    <div key={step.step} className="flex items-center flex-1 min-w-0">
+                      <div
+                        className="w-full rounded-lg p-3 text-center transition-all relative"
+                        style={{
+                          background: `linear-gradient(135deg, hsl(var(--primary) / ${0.15 + (1 - i / kpis.conversion_funnel.length) * 0.25}), hsl(var(--primary) / ${0.05 + (1 - i / kpis.conversion_funnel.length) * 0.15}))`,
+                          borderLeft: `3px solid hsl(var(--primary) / ${1 - i * 0.2})`,
+                        }}
+                      >
+                        <p className="text-lg font-bold">{step.count.toLocaleString('de-DE')}</p>
+                        <p className="text-xs font-medium truncate">{step.label}</p>
+                        <div className="flex items-center justify-center gap-1 mt-1">
+                          <Badge variant="outline" className="text-[10px] h-4">{step.pct_of_total}%</Badge>
+                          {i > 0 && step.drop_off > 0 && (
+                            <Badge variant="destructive" className="text-[10px] h-4">-{step.drop_off}%</Badge>
+                          )}
+                        </div>
+                      </div>
+                      {i < kpis.conversion_funnel.length - 1 && (
+                        <CaretRight className="w-4 h-4 text-muted-foreground shrink-0 mx-0.5" />
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="text-center text-sm">
+                <span className="text-muted-foreground">Gesamte Conversion Rate: </span>
+                <span className="font-bold text-green-600">{kpis.conversion_rate?.toFixed(2) ?? 0}%</span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <FunnelStepCard label="Seitenaufrufe" value={kpis.page_views} pct={100} />
+              <CaretRight className="w-4 h-4 text-muted-foreground" />
+              <FunnelStepCard label="CTA-Klicks" value={kpis.cta_clicks} pct={kpis.page_views > 0 ? Math.round((kpis.cta_clicks / kpis.page_views) * 100) : 0} />
+              <CaretRight className="w-4 h-4 text-muted-foreground" />
+              <FunnelStepCard label="Formulare" value={kpis.form_submits} pct={kpis.cta_clicks > 0 ? Math.round((kpis.form_submits / kpis.cta_clicks) * 100) : 0} />
+            </div>
+          )}
         </CardContent>
       </Card>
+
+      {/* Traffic Heatmap */}
+      {kpis.heatmap && kpis.heatmap.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Fire className="w-4 h-4" />
+              Traffic Heatmap
+            </CardTitle>
+            <CardDescription>Besucheraktivitaet nach Wochentag & Uhrzeit</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <HeatmapGrid cells={kpis.heatmap} />
+            <div className="flex items-center justify-end gap-1 mt-2">
+              <span className="text-[10px] text-muted-foreground">Wenig</span>
+              {[0.1, 0.3, 0.5, 0.7, 0.9].map(i => (
+                <div key={i} className="w-3 h-3 rounded-sm" style={{ backgroundColor: `rgba(99, 102, 241, ${0.1 + i * 0.85})` }} />
+              ))}
+              <span className="text-[10px] text-muted-foreground">Viel</span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Device & Browser Breakdown */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -824,6 +1078,204 @@ function KPIDashboardTab() {
         </Card>
       )}
 
+      {/* Page Performance Table */}
+      {kpis.page_performance && kpis.page_performance.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Table className="w-4 h-4" />
+              Seiten-Performance
+            </CardTitle>
+            <CardDescription>Detaillierte Metriken pro Seite</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b text-muted-foreground">
+                    <th className="text-left py-2 px-1 font-medium">Seite</th>
+                    <th className="text-right py-2 px-1 font-medium">Views</th>
+                    <th className="text-right py-2 px-1 font-medium">Sessions</th>
+                    <th className="text-right py-2 px-1 font-medium">Scroll %</th>
+                    <th className="text-right py-2 px-1 font-medium">Ø Engage.</th>
+                    <th className="text-right py-2 px-1 font-medium">Bounce</th>
+                    <th className="text-right py-2 px-1 font-medium">Conv.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {kpis.page_performance.slice(0, 15).map((p, i) => (
+                    <tr key={i} className="border-b border-border/50 hover:bg-muted/30">
+                      <td className="py-1.5 px-1 font-mono truncate max-w-[200px]" title={p.url}>{p.url}</td>
+                      <td className="text-right py-1.5 px-1">{p.views}</td>
+                      <td className="text-right py-1.5 px-1">{p.unique_sessions}</td>
+                      <td className="text-right py-1.5 px-1">{p.avg_scroll_depth}%</td>
+                      <td className="text-right py-1.5 px-1">{Math.round(p.avg_engagement_time)}s</td>
+                      <td className="text-right py-1.5 px-1">
+                        <span className={p.bounce_rate > 70 ? 'text-red-500' : p.bounce_rate > 40 ? 'text-amber-500' : 'text-green-600'}>
+                          {p.bounce_rate}%
+                        </span>
+                      </td>
+                      <td className="text-right py-1.5 px-1">
+                        <Badge variant="secondary" className="text-[10px] h-4">{p.conversions}</Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Navigation Paths */}
+      {kpis.navigation_paths && kpis.navigation_paths.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Path className="w-4 h-4" />
+              Navigation-Pfade
+            </CardTitle>
+            <CardDescription>Haeufigste Seitenuebergaenge</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {kpis.navigation_paths.slice(0, 10).map((path, i) => (
+                <div key={i} className="flex items-center gap-2 text-xs">
+                  <span className="font-mono truncate flex-1 text-right" title={path.from_page}>{path.from_page}</span>
+                  <CaretRight className="w-4 h-4 text-primary shrink-0" />
+                  <span className="font-mono truncate flex-1" title={path.to_page}>{path.to_page}</span>
+                  <Badge variant="secondary" className="shrink-0 text-[10px]">{path.count}</Badge>
+                  <span className="text-muted-foreground shrink-0 w-10 text-right">{path.pct}%</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Screen Resolution & Connection Type */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {kpis.screen_resolution_breakdown && kpis.screen_resolution_breakdown.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Monitor className="w-4 h-4" />
+                Bildschirmaufloesung
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {kpis.screen_resolution_breakdown.slice(0, 8).map((r, i) => {
+                  const total = kpis.screen_resolution_breakdown!.reduce((s, x) => s + x.count, 0)
+                  return <PercentageBar key={i} label={r.resolution} value={r.count} total={total} color="bg-cyan-500/60" />
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {kpis.connection_type_breakdown && kpis.connection_type_breakdown.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <WifiHigh className="w-4 h-4" />
+                Verbindungstyp
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {kpis.connection_type_breakdown.map((c, i) => {
+                  const total = kpis.connection_type_breakdown!.reduce((s, x) => s + x.count, 0)
+                  return <PercentageBar key={i} label={c.connection} value={c.count} total={total} color="bg-emerald-500/60" />
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Web Performance Metrics */}
+      {kpis.performance_metrics && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Timer className="w-4 h-4" />
+              Web Performance (Core Vitals)
+            </CardTitle>
+            <CardDescription>Durchschnittliche Ladezeiten</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="text-center p-3 rounded-lg bg-muted/50">
+                <p className={`text-xl font-bold ${
+                  kpis.performance_metrics.avg_ttfb_ms < 200 ? 'text-green-600' :
+                  kpis.performance_metrics.avg_ttfb_ms < 500 ? 'text-amber-500' : 'text-red-500'
+                }`}>
+                  {Math.round(kpis.performance_metrics.avg_ttfb_ms)}ms
+                </p>
+                <p className="text-xs text-muted-foreground">TTFB</p>
+              </div>
+              <div className="text-center p-3 rounded-lg bg-muted/50">
+                <p className={`text-xl font-bold ${
+                  kpis.performance_metrics.avg_fcp_ms < 1800 ? 'text-green-600' :
+                  kpis.performance_metrics.avg_fcp_ms < 3000 ? 'text-amber-500' : 'text-red-500'
+                }`}>
+                  {Math.round(kpis.performance_metrics.avg_fcp_ms)}ms
+                </p>
+                <p className="text-xs text-muted-foreground">FCP</p>
+              </div>
+              <div className="text-center p-3 rounded-lg bg-muted/50">
+                <p className={`text-xl font-bold ${
+                  kpis.performance_metrics.avg_dom_interactive_ms < 2500 ? 'text-green-600' :
+                  kpis.performance_metrics.avg_dom_interactive_ms < 4000 ? 'text-amber-500' : 'text-red-500'
+                }`}>
+                  {Math.round(kpis.performance_metrics.avg_dom_interactive_ms)}ms
+                </p>
+                <p className="text-xs text-muted-foreground">DOM Interactive</p>
+              </div>
+              <div className="text-center p-3 rounded-lg bg-muted/50">
+                <p className={`text-xl font-bold ${
+                  kpis.performance_metrics.avg_page_load_ms < 3000 ? 'text-green-600' :
+                  kpis.performance_metrics.avg_page_load_ms < 5000 ? 'text-amber-500' : 'text-red-500'
+                }`}>
+                  {Math.round(kpis.performance_metrics.avg_page_load_ms)}ms
+                </p>
+                <p className="text-xs text-muted-foreground">Page Load</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Error Monitoring */}
+      {kpis.top_errors && kpis.top_errors.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Warning className="w-4 h-4 text-red-500" />
+              Fehler-Monitoring
+            </CardTitle>
+            <CardDescription>Haeufigste JavaScript-Fehler</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {kpis.top_errors.map((err, i) => (
+                <div key={i} className="flex items-start gap-3 p-2 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-900/30">
+                  <Bug className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-mono truncate" title={err.error_message}>{err.error_message}</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                      Zuletzt: {new Date(err.last_seen).toLocaleString('de-DE')}
+                    </p>
+                  </div>
+                  <Badge variant="destructive" className="text-[10px] shrink-0">{err.count}x</Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Lead Source Attribution & Exit Intent */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {kpis.lead_sources && kpis.lead_sources.length > 0 && (
@@ -882,13 +1334,122 @@ function KPIDashboardTab() {
   )
 }
 
-function KPICard({ label, value, icon }: { label: string; value: number; icon?: React.ReactNode }) {
+function KPICard({ label, value, icon, comparison }: {
+  label: string
+  value: number
+  icon?: React.ReactNode
+  comparison?: PeriodComparison
+}) {
+  const changePct = comparison?.change_pct ?? null
+  const isPositive = changePct !== null && changePct > 0
+  const isNegative = changePct !== null && changePct < 0
+
   return (
-    <Card className="p-3 text-center">
+    <Card className="p-3 text-center relative overflow-hidden">
       {icon && <div className="flex justify-center mb-1 text-muted-foreground">{icon}</div>}
       <p className="text-2xl font-bold">{value.toLocaleString('de-DE')}</p>
       <p className="text-xs text-muted-foreground">{label}</p>
+      {changePct !== null && (
+        <div className={`flex items-center justify-center gap-0.5 mt-1 text-xs font-medium ${
+          isPositive ? 'text-green-600' : isNegative ? 'text-red-500' : 'text-muted-foreground'
+        }`}>
+          {isPositive ? <ArrowUp className="w-3 h-3" weight="bold" /> : isNegative ? <ArrowDown className="w-3 h-3" weight="bold" /> : null}
+          {Math.abs(changePct).toFixed(1)}%
+          <span className="text-[10px] text-muted-foreground ml-0.5">vs. Vorperiode</span>
+        </div>
+      )}
     </Card>
+  )
+}
+
+/** Engagement Score Ring */
+function EngagementScoreRing({ score, size = 120 }: { score: number; size?: number }) {
+  const radius = (size - 12) / 2
+  const circumference = 2 * Math.PI * radius
+  const offset = circumference - (score / 100) * circumference
+  const color = score >= 70 ? '#22c55e' : score >= 40 ? '#eab308' : '#ef4444'
+
+  return (
+    <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="hsl(var(--muted))" strokeWidth="8" />
+        <circle
+          cx={size / 2} cy={size / 2} r={radius} fill="none"
+          stroke={color} strokeWidth="8" strokeLinecap="round"
+          strokeDasharray={circumference} strokeDashoffset={offset}
+          className="transition-all duration-1000"
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-2xl font-bold">{score}</span>
+        <span className="text-[10px] text-muted-foreground">/ 100</span>
+      </div>
+    </div>
+  )
+}
+
+/** Heatmap Grid Component */
+function HeatmapGrid({ cells }: { cells: HeatmapCell[] }) {
+  const grid = Array.from({ length: 7 }, () => Array.from({ length: 24 }, () => 0))
+  const intensityGrid = Array.from({ length: 7 }, () => Array.from({ length: 24 }, () => 0))
+  cells.forEach(c => {
+    if (c.day >= 0 && c.day < 7 && c.hour >= 0 && c.hour < 24) {
+      grid[c.day][c.hour] = c.count
+      intensityGrid[c.day][c.hour] = c.intensity
+    }
+  })
+
+  return (
+    <div className="overflow-x-auto">
+      <div className="min-w-[600px]">
+        <div className="flex items-center gap-0.5 mb-1 ml-8">
+          {Array.from({ length: 24 }, (_, h) => (
+            <div key={h} className="flex-1 text-center text-[9px] text-muted-foreground">
+              {h % 3 === 0 ? `${h}` : ''}
+            </div>
+          ))}
+        </div>
+        {DAY_NAMES.map((day, di) => (
+          <div key={di} className="flex items-center gap-0.5 mb-0.5">
+            <span className="w-7 text-[10px] text-muted-foreground text-right pr-1">{day}</span>
+            {Array.from({ length: 24 }, (_, h) => {
+              const intensity = intensityGrid[di][h]
+              const count = grid[di][h]
+              return (
+                <div
+                  key={h}
+                  className="flex-1 aspect-square rounded-sm cursor-default transition-colors"
+                  style={{
+                    backgroundColor: intensity > 0
+                      ? `rgba(99, 102, 241, ${0.1 + intensity * 0.85})`
+                      : 'hsl(var(--muted))',
+                  }}
+                  title={`${DAY_NAMES[di]} ${h}:00 – ${count} Events`}
+                />
+              )
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/** Percentage bar with label */
+function PercentageBar({ label, value, total, color = 'bg-primary/60' }: {
+  label: string; value: number; total: number; color?: string
+}) {
+  const pct = total > 0 ? Math.round((value / total) * 100) : 0
+  return (
+    <div>
+      <div className="flex items-center justify-between text-sm mb-0.5">
+        <span className="truncate flex-1 mr-2">{label}</span>
+        <span className="text-xs text-muted-foreground">{pct}% ({value})</span>
+      </div>
+      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+        <div className={`h-full ${color} rounded-full`} style={{ width: `${pct}%` }} />
+      </div>
+    </div>
   )
 }
 
@@ -898,7 +1459,7 @@ function hourlyData(data: Array<{ hour: number; count: number }>): Array<{ hour:
   return Array.from({ length: 24 }, (_, i) => ({ hour: i, count: map.get(i) ?? 0 }))
 }
 
-function FunnelStep({ label, value, pct }: { label: string; value: number; pct: number }) {
+function FunnelStepCard({ label, value, pct }: { label: string; value: number; pct: number }) {
   return (
     <div className="flex-1 text-center p-3 rounded-lg bg-muted/50">
       <p className="text-lg font-bold">{value.toLocaleString('de-DE')}</p>
@@ -1034,12 +1595,30 @@ function SystemStatusTab() {
           <p className="text-xs text-muted-foreground">Events gesamt</p>
         </Card>
         <Card className="p-3 text-center">
+          <p className="text-2xl font-bold">{status?.unique_visitors_total?.toLocaleString('de-DE') ?? '0'}</p>
+          <p className="text-xs text-muted-foreground">Besucher gesamt</p>
+        </Card>
+        <Card className="p-3 text-center">
+          <p className="text-2xl font-bold">{status?.events_today?.toLocaleString('de-DE') ?? '0'}</p>
+          <p className="text-xs text-muted-foreground">Events heute</p>
+        </Card>
+        <Card className="p-3 text-center">
+          <p className="text-2xl font-bold">{status?.sessions_today?.toLocaleString('de-DE') ?? '0'}</p>
+          <p className="text-xs text-muted-foreground">Sessions heute</p>
+        </Card>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <Card className="p-3 text-center">
+          <p className="text-2xl font-bold">{status?.unique_sessions_total?.toLocaleString('de-DE') ?? '0'}</p>
+          <p className="text-xs text-muted-foreground">Sessions gesamt</p>
+        </Card>
+        <Card className="p-3 text-center">
           <p className="text-2xl font-bold">{status?.db_size_bytes ? formatBytes(status.db_size_bytes) : '–'}</p>
-          <p className="text-xs text-muted-foreground">DB-Größe</p>
+          <p className="text-xs text-muted-foreground">DB-Groesse</p>
         </Card>
         <Card className="p-3 text-center">
           <p className="text-sm font-medium">{status?.oldest_event ? new Date(status.oldest_event).toLocaleDateString('de-DE') : '–'}</p>
-          <p className="text-xs text-muted-foreground">Ältestes Event</p>
+          <p className="text-xs text-muted-foreground">Aeltestes Event</p>
         </Card>
         <Card className="p-3 text-center">
           <p className="text-sm font-medium">{status?.newest_event ? new Date(status.newest_event).toLocaleDateString('de-DE') : '–'}</p>
@@ -1158,10 +1737,24 @@ function VisitorCard({
               <Badge variant="outline" className="text-xs">
                 {EVENT_LABELS[visitor.last_event as TrackingEventName] ?? visitor.last_event}
               </Badge>
+              {visitor.is_returning && (
+                <Badge variant="secondary" className="text-[10px] h-4 bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300">
+                  Wiederkehrend
+                </Badge>
+              )}
             </div>
-            <div className="flex items-center gap-3 mt-0.5 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 mt-0.5 text-xs text-muted-foreground flex-wrap">
               <span>Session: {formatDuration(visitor.session_start)}</span>
               <span>{visitor.event_count} Events</span>
+              <span>{visitor.page_count} Seiten</span>
+              {visitor.device_type && <span className="flex items-center gap-0.5">{visitor.device_type === 'desktop' ? <Desktop className="w-3 h-3" /> : <DeviceMobile className="w-3 h-3" />}{visitor.device_type}</span>}
+              {visitor.browser && <span>{visitor.browser}</span>}
+              {visitor.city && visitor.country && (
+                <span className="flex items-center gap-0.5">
+                  <MapPin className="w-3 h-3" />
+                  {visitor.city}{visitor.country ? `, ${visitor.country}` : ''}
+                </span>
+              )}
             </div>
           </div>
 
@@ -1269,7 +1862,33 @@ function ActiveVisitorsTab() {
         </CardContent>
       </Card>
 
-      {(!data || data.visitors.length === 0) ? (
+        {/* Visitor Summary */}
+      {data && data.active_visitors > 0 && data.summary && (
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+          <Card className="p-2 text-center">
+            <p className="text-lg font-bold">{data.summary.desktop}</p>
+            <p className="text-[10px] text-muted-foreground flex items-center justify-center gap-1"><Desktop className="w-3 h-3" />Desktop</p>
+          </Card>
+          <Card className="p-2 text-center">
+            <p className="text-lg font-bold">{data.summary.mobile}</p>
+            <p className="text-[10px] text-muted-foreground flex items-center justify-center gap-1"><DeviceMobile className="w-3 h-3" />Mobile</p>
+          </Card>
+          <Card className="p-2 text-center">
+            <p className="text-lg font-bold">{data.summary.tablet}</p>
+            <p className="text-[10px] text-muted-foreground">Tablet</p>
+          </Card>
+          <Card className="p-2 text-center">
+            <p className="text-lg font-bold text-blue-600">{data.summary.new_visitors}</p>
+            <p className="text-[10px] text-muted-foreground">Neue</p>
+          </Card>
+          <Card className="p-2 text-center">
+            <p className="text-lg font-bold text-violet-600">{data.summary.returning_visitors}</p>
+            <p className="text-[10px] text-muted-foreground">Wiederkehrend</p>
+          </Card>
+        </div>
+      )}
+
+    {(!data || data.visitors.length === 0) ? (
         <Card className="p-8 text-center">
           <UsersThree className="w-12 h-12 mx-auto mb-3 text-muted-foreground opacity-50" />
           <p className="text-muted-foreground">Keine aktiven Besucher</p>
@@ -1300,21 +1919,28 @@ function ActiveVisitorsTab() {
 /* ================================================================== */
 
 const REALTIME_EVENT_ICONS: Record<string, string> = {
-  page_view: '📄',
-  cta_click: '🖱️',
-  form_submit: '📋',
-  phone_click: '📞',
-  whatsapp_click: '💬',
-  download: '⬇️',
-  scroll_depth: '📜',
-  page_engagement: '⏱️',
-  blog_article_read: '📰',
-  heartbeat: '💓',
-  session_start: '🚀',
-  form_interaction: '✏️',
-  form_abandon: '🚪',
-  exit_intent: '👋',
-  configurator_step: '⚙️',
+  page_view: '\uD83D\uDCC4',
+  cta_click: '\uD83D\uDDB1\uFE0F',
+  form_submit: '\uD83D\uDCCB',
+  phone_click: '\uD83D\uDCDE',
+  whatsapp_click: '\uD83D\uDCAC',
+  download: '\u2B07\uFE0F',
+  scroll_depth: '\uD83D\uDCDC',
+  page_engagement: '\u23F1\uFE0F',
+  blog_article_read: '\uD83D\uDCF0',
+  heartbeat: '\uD83D\uDC93',
+  session_start: '\uD83D\uDE80',
+  session_end: '\uD83C\uDFC1',
+  form_interaction: '\u270F\uFE0F',
+  form_abandon: '\uD83D\uDEAA',
+  exit_intent: '\uD83D\uDC4B',
+  configurator_step: '\u2699\uFE0F',
+  outbound_click: '\uD83D\uDD17',
+  video_play: '\u25B6\uFE0F',
+  error: '\u26A0\uFE0F',
+  performance: '\u23F1',
+  search: '\uD83D\uDD0D',
+  tab_visibility: '\uD83D\uDC41\uFE0F',
 }
 
 function RealtimeTab() {
