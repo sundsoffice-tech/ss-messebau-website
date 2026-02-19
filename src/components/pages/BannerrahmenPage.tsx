@@ -86,8 +86,12 @@ export function BannerrahmenPage() {
           
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <Card className="p-6">
-              <div className="h-48 bg-secondary rounded-lg mb-4 flex items-center justify-center">
-                <Package className="w-16 h-16 text-muted-foreground" />
+              <div className="h-48 bg-secondary rounded-lg mb-4 overflow-hidden">
+                <img
+                  src="/images/a18edfe1-6d1c-4f63-b82a-b26a07c6d025.jpeg"
+                  alt="Hängerahmen-System – Bannerrahmen zur Deckenmontage"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <h3 className="text-xl font-bold mb-2">{t('bannerrahmen.systems.hanging.title')}</h3>
               <p className="text-muted-foreground mb-4">
@@ -138,8 +142,12 @@ export function BannerrahmenPage() {
             </Card>
 
             <Card className="p-6">
-              <div className="h-48 bg-secondary rounded-lg mb-4 flex items-center justify-center">
-                <Package className="w-16 h-16 text-muted-foreground" />
+              <div className="h-48 bg-secondary rounded-lg mb-4 overflow-hidden">
+                <img
+                  src="/images/e1b0b5d0-5358-42d4-b015-4a9c22be8c88.jpeg"
+                  alt="Verkleidungsrahmen-System – Bannerrahmen für Wandverkleidung"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <h3 className="text-xl font-bold mb-2">{t('bannerrahmen.systems.cladding.title')}</h3>
               <p className="text-muted-foreground mb-4">
