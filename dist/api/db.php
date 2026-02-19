@@ -182,6 +182,7 @@ function initSchema(PDO $pdo): void {
             event TEXT NOT NULL,
             ts TEXT NOT NULL,
             session_id TEXT NOT NULL,
+            visitor_id TEXT DEFAULT '',
             url TEXT,
             referrer TEXT,
             utm_source TEXT,
@@ -197,6 +198,16 @@ function initSchema(PDO $pdo): void {
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_ts ON analytics_events(ts)");
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_event ON analytics_events(event)");
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_session ON analytics_events(session_id)");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_visitor ON analytics_events(visitor_id)");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_event_ts ON analytics_events(event, ts)");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_url ON analytics_events(url)");
+
+    // Add visitor_id column if missing (migration for existing databases)
+    try {
+        $pdo->exec("ALTER TABLE analytics_events ADD COLUMN visitor_id TEXT DEFAULT ''");
+    } catch (Exception $e) {
+        // Column already exists, ignore
+    }
 
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS analytics_config (
