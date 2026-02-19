@@ -154,7 +154,7 @@ export function HomePage() {
                   t('home.services.messebau.b4')
                 ],
                 sectionId: 'messebau',
-                image: '/images/deligreece-messestand-100qm-food.jpeg'
+                image: '/images/WhatsApp Image 2026-02-16 at 21.12.21 (1).jpeg'
               },
               {
                 icon: CalendarDot,
