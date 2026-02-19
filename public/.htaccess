@@ -229,12 +229,11 @@ ErrorDocument 500 /index.html
 </FilesMatch>
 
 # ============================================
-# PHP SETTINGS (if PHP is enabled)
+# PHP SETTINGS
 # ============================================
-<IfModule mod_php7.c>
-  # Disable PHP execution in uploads directory (if exists)
-  php_flag engine off
-</IfModule>
+# NOTE: php_flag engine off was removed - it was incorrectly placed in the
+# root .htaccess and disabled PHP execution for the entire site (including /api/).
+# If you need to disable PHP in a specific directory (e.g., uploads), add it there.
 
 # ============================================
 # UTF-8 ENCODING
