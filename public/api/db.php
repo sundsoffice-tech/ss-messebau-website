@@ -217,4 +217,65 @@ function initSchema(PDO $pdo): void {
             updated_at TEXT DEFAULT (datetime('now'))
         )
     ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS automation_rules (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            description TEXT DEFAULT '',
+            trigger_type TEXT NOT NULL DEFAULT 'order_created',
+            conditions TEXT DEFAULT '[]',
+            action TEXT NOT NULL DEFAULT 'send_email',
+            action_config TEXT DEFAULT '{}',
+            enabled INTEGER DEFAULT 1,
+            delay_minutes INTEGER DEFAULT 0,
+            created_at TEXT DEFAULT (datetime('now')),
+            updated_at TEXT DEFAULT (datetime('now'))
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS email_templates (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            subject TEXT NOT NULL,
+            html_content TEXT DEFAULT '',
+            text_content TEXT DEFAULT '',
+            variables TEXT DEFAULT '[]',
+            category TEXT DEFAULT 'custom',
+            version INTEGER DEFAULT 1,
+            created_at TEXT DEFAULT (datetime('now')),
+            updated_at TEXT DEFAULT (datetime('now'))
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS email_tracking (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tracking_id TEXT UNIQUE NOT NULL,
+            to_email TEXT NOT NULL,
+            subject TEXT DEFAULT '',
+            status TEXT DEFAULT 'queued',
+            order_id TEXT,
+            inquiry_id TEXT,
+            created_at TEXT DEFAULT (datetime('now')),
+            updated_at TEXT DEFAULT (datetime('now'))
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS email_tracking_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tracking_id TEXT NOT NULL,
+            event TEXT NOT NULL,
+            details TEXT,
+            created_at TEXT DEFAULT (datetime('now')),
+            FOREIGN KEY (tracking_id) REFERENCES email_tracking(tracking_id)
+        )
+    ");
+
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_tracking_status ON email_tracking(status)");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_tracking_order ON email_tracking(order_id)");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_tracking_inquiry ON email_tracking(inquiry_id)");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_tracking_events_tid ON email_tracking_events(tracking_id)");
 }
