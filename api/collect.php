@@ -96,7 +96,7 @@ $enabledEvents = $enabledEventsRow ? json_decode($enabledEventsRow['config_value
 $validEvents = [
     'page_view', 'cta_click', 'form_submit', 'phone_click',
     'whatsapp_click', 'download', 'scroll_depth', 'page_engagement',
-    'blog_article_read'
+    'blog_article_read', 'heartbeat'
 ];
 
 $stmt = $db->prepare("
