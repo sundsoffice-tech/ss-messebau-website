@@ -1,8 +1,9 @@
 <?php
 /**
- * S&S Messebau - Analytics Event Collection Endpoint
+ * S&S Messebau - Analytics Event Collection Endpoint (Enterprise)
  * POST: Receives batched tracking events from the frontend
  * Rate-limited, no auth required (public endpoint)
+ * Supports: visitor_id for cross-session tracking, new event types
  */
 
 require_once __DIR__ . '/db.php';
@@ -92,17 +93,19 @@ $enabledEventsStmt->execute();
 $enabledEventsRow = $enabledEventsStmt->fetch();
 $enabledEvents = $enabledEventsRow ? json_decode($enabledEventsRow['config_value'], true) : null;
 
-// Allowed event names
+// Allowed event names (extended)
 $validEvents = [
     'page_view', 'cta_click', 'form_submit', 'phone_click',
     'whatsapp_click', 'download', 'scroll_depth', 'page_engagement',
-    'blog_article_read', 'heartbeat', 'session_start', 'form_interaction',
-    'form_abandon', 'exit_intent', 'configurator_step'
+    'blog_article_read', 'heartbeat', 'session_start', 'session_end',
+    'form_interaction', 'form_abandon', 'exit_intent', 'configurator_step',
+    'outbound_click', 'video_play', 'error', 'performance',
+    'search', 'tab_visibility'
 ];
 
 $stmt = $db->prepare("
-    INSERT INTO analytics_events (event, ts, session_id, url, referrer, utm_source, utm_medium, utm_campaign, utm_content, utm_term, props)
-    VALUES (:event, :ts, :session_id, :url, :referrer, :utm_source, :utm_medium, :utm_campaign, :utm_content, :utm_term, :props)
+    INSERT INTO analytics_events (event, ts, session_id, visitor_id, url, referrer, utm_source, utm_medium, utm_campaign, utm_content, utm_term, props)
+    VALUES (:event, :ts, :session_id, :visitor_id, :url, :referrer, :utm_source, :utm_medium, :utm_campaign, :utm_content, :utm_term, :props)
 ");
 
 $stored = 0;
@@ -121,6 +124,7 @@ foreach ($events as $ev) {
     $url = substr($ev['url'] ?? '', 0, 2048);
     $referrer = substr($ev['referrer'] ?? '', 0, 2048);
     $sessionId = substr($ev['session_id'] ?? '', 0, 64);
+    $visitorId = substr($ev['visitor_id'] ?? '', 0, 64);
     $ts = $ev['ts'] ?? gmdate('c');
 
     // Validate timestamp format
@@ -160,6 +164,7 @@ foreach ($events as $ev) {
             ':event' => $eventName,
             ':ts' => $ts,
             ':session_id' => $sessionId,
+            ':visitor_id' => $visitorId,
             ':url' => $url,
             ':referrer' => $referrer,
             ':utm_source' => substr($ev['utm_source'] ?? '', 0, 255),
