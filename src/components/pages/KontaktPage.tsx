@@ -219,7 +219,7 @@ FIRMENINFO S&S MESSEBAU:
 ━━━━━━━━━━━━━━━━━━━━━━━
 • Standort: Hückelhoven, NRW (bundesweite Projekte)
 • Leistungen: Full-Service von Konzeption bis Abbau
-  - Messebau (20-200 qm): Systemstände & Individualstände
+  - Messebau: Systemstände & Individualstände
   - Eventbau & Bühnen
   - Ladenbau & Showrooms
   - Böden, Möbel, Ausstattung

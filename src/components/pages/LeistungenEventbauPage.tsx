@@ -197,8 +197,8 @@ export function LeistungenEventbauPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="aspect-video rounded-lg overflow-hidden shadow-xl">
             <img
-              src="/images/WhatsApp Image 2026-02-15 at 18.25.23.jpeg"
-              alt="Professioneller Eventbau – Ausstellungsfläche mit hochwertigen Displays und Beleuchtung"
+              src="/images/b512edb4-c43e-47ef-80d2-1b9f4b888e7c.jpeg"
+              alt="Hockey EM Shop Panorama – Adidas Hockey & Padel Ausrüstung"
               className="w-full h-full object-cover"
               loading="eager"
               decoding="async"

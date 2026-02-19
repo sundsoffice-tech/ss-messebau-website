@@ -197,8 +197,8 @@ export function LeistungenMessebauPage() {
             </Card>
             <Card className="p-4 text-center">
               <Warehouse className="w-8 h-8 mx-auto mb-2 text-primary" />
-              <p className="font-semibold text-sm">20–200 m²</p>
-              <p className="text-xs text-muted-foreground">Jede Standgröße</p>
+              <p className="font-semibold text-sm">Jede Größe</p>
+              <p className="text-xs text-muted-foreground">Flexibel skalierbar</p>
             </Card>
             <Card className="p-4 text-center">
               <Truck className="w-8 h-8 mx-auto mb-2 text-primary" />

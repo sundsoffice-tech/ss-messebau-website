@@ -11,7 +11,7 @@ const facts: Fact[] = [
   { value: 48, suffix: 'h', labelKey: 'facts.48h' },
   { value: 200, suffix: 'm²', labelKey: 'facts.200m' },
   { value: 3, suffix: '', labelKey: 'facts.3sectors' },
-  { value: 98, suffix: '%', labelKey: 'facts.98pct' },
+  { value: 100, suffix: '%', labelKey: 'facts.100pct' },
 ]
 
 function AnimatedNumber({ value, suffix, isVisible }: { value: number; suffix: string; isVisible: boolean }) {

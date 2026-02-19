@@ -279,7 +279,7 @@ export function BannerrahmenPage() {
               <Card className="p-5 h-full transition-all group-hover:border-primary group-hover:shadow-lg">
                 <Package className="w-8 h-8 text-primary mb-3" />
                 <h3 className="font-bold mb-1">Messebau</h3>
-                <p className="text-xs text-muted-foreground">Professionelle Messestände von 20–200 m²</p>
+                <p className="text-xs text-muted-foreground">Professionelle Messestände – individuell geplant</p>
               </Card>
             </button>
             <button onClick={() => navigate('/leistungen/boeden-ausstattung')} className="group text-left">
