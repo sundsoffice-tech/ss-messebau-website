@@ -8,6 +8,7 @@
 export type SharePlatform =
   | 'linkedin'
   | 'whatsapp'
+  | 'instagram'
   | 'email'
   | 'x'
   | 'facebook'
@@ -66,6 +67,11 @@ export function getXShareUrl(shareUrl: string, title: string): string {
 /** Facebook share dialog URL */
 export function getFacebookShareUrl(shareUrl: string): string {
   return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`
+}
+
+/** Instagram profile URL (Instagram has no web share intent, so we link to the profile) */
+export function getInstagramProfileUrl(): string {
+  return 'https://www.instagram.com/sundsmessebau/'
 }
 
 /** Check if the browser supports the Web Share API */

@@ -2,6 +2,7 @@ import { memo, useState, useCallback } from 'react'
 import {
   LinkedinLogo,
   WhatsappLogo,
+  InstagramLogo,
   Envelope,
   XLogo,
   FacebookLogo,
@@ -20,6 +21,7 @@ import {
   canUseNativeShare,
   getLinkedInShareUrl,
   getWhatsAppShareUrl,
+  getInstagramProfileUrl,
   getEmailShareUrl,
   getXShareUrl,
   getFacebookShareUrl,
@@ -41,6 +43,7 @@ interface ShareButtonProps {
 const ICON_MAP: Record<SharePlatform, typeof LinkedinLogo> = {
   linkedin: LinkedinLogo,
   whatsapp: WhatsappLogo,
+  instagram: InstagramLogo,
   email: Envelope,
   x: XLogo,
   facebook: FacebookLogo,
@@ -51,6 +54,7 @@ const ICON_MAP: Record<SharePlatform, typeof LinkedinLogo> = {
 const TRANSLATION_KEY: Record<SharePlatform, string> = {
   linkedin: 'share.linkedin',
   whatsapp: 'share.whatsapp',
+  instagram: 'share.instagram',
   email: 'share.email',
   x: 'share.x',
   facebook: 'share.facebook',
@@ -87,6 +91,11 @@ export const ShareButton = memo(function ShareButton({
 
     if (platform === 'native') {
       await triggerNativeShare({ url: shareUrl, title, description })
+      return
+    }
+
+    if (platform === 'instagram') {
+      openShareWindow(getInstagramProfileUrl(), platform)
       return
     }
 
