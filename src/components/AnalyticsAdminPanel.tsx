@@ -61,6 +61,20 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 /*  Event labels                                                       */
 /* ------------------------------------------------------------------ */
 
+const FLAG_EMOJI: Record<string, string> = {
+  DE: '\uD83C\uDDE9\uD83C\uDDEA', AT: '\uD83C\uDDE6\uD83C\uDDF9',
+  CH: '\uD83C\uDDE8\uD83C\uDDED', NL: '\uD83C\uDDF3\uD83C\uDDF1',
+  FR: '\uD83C\uDDEB\uD83C\uDDF7', GB: '\uD83C\uDDEC\uD83C\uDDE7',
+  IT: '\uD83C\uDDEE\uD83C\uDDF9', ES: '\uD83C\uDDEA\uD83C\uDDF8',
+  PL: '\uD83C\uDDF5\uD83C\uDDF1', SE: '\uD83C\uDDF8\uD83C\uDDEA',
+  NO: '\uD83C\uDDF3\uD83C\uDDF4', DK: '\uD83C\uDDE9\uD83C\uDDF0',
+  BE: '\uD83C\uDDE7\uD83C\uDDEA', LU: '\uD83C\uDDF1\uD83C\uDDFA',
+  CZ: '\uD83C\uDDE8\uD83C\uDDFF', HU: '\uD83C\uDDED\uD83C\uDDFA',
+  RO: '\uD83C\uDDF7\uD83C\uDDF4', PT: '\uD83C\uDDF5\uD83C\uDDF9',
+  GR: '\uD83C\uDDEC\uD83C\uDDF7', FI: '\uD83C\uDDEB\uD83C\uDDEE',
+  TR: '\uD83C\uDDF9\uD83C\uDDF7', RU: '\uD83C\uDDF7\uD83C\uDDFA',
+}
+
 const EVENT_LABELS: Record<TrackingEventName, string> = {
   page_view: 'Seitenaufrufe',
   cta_click: 'CTA-Klicks',
@@ -668,19 +682,6 @@ function KPIDashboardTab() {
                 {kpis.country_breakdown.map((c, i) => {
                   const total = kpis.country_breakdown.reduce((s, x) => s + x.count, 0)
                   const pct = total > 0 ? Math.round((c.count / total) * 100) : 0
-                  const FLAG_EMOJI: Record<string, string> = {
-                    DE: '\uD83C\uDDE9\uD83C\uDDEA', AT: '\uD83C\uDDE6\uD83C\uDDF9',
-                    CH: '\uD83C\uDDE8\uD83C\uDDED', NL: '\uD83C\uDDF3\uD83C\uDDF1',
-                    FR: '\uD83C\uDDEB\uD83C\uDDF7', GB: '\uD83C\uDDEC\uD83C\uDDE7',
-                    IT: '\uD83C\uDDEE\uD83C\uDDF9', ES: '\uD83C\uDDEA\uD83C\uDDF8',
-                    PL: '\uD83C\uDDF5\uD83C\uDDF1', SE: '\uD83C\uDDF8\uD83C\uDDEA',
-                    NO: '\uD83C\uDDF3\uD83C\uDDF4', DK: '\uD83C\uDDE9\uD83C\uDDF0',
-                    BE: '\uD83C\uDDE7\uD83C\uDDEA', LU: '\uD83C\uDDF1\uD83C\uDDFA',
-                    CZ: '\uD83C\uDDE8\uD83C\uDDFF', HU: '\uD83C\uDDED\uD83C\uDDFA',
-                    RO: '\uD83C\uDDF7\uD83C\uDDF4', PT: '\uD83C\uDDF5\uD83C\uDDF9',
-                    GR: '\uD83C\uDDEC\uD83C\uDDF7', FI: '\uD83C\uDDEB\uD83C\uDDEE',
-                    TR: '\uD83C\uDDF9\uD83C\uDDF7', RU: '\uD83C\uDDF7\uD83C\uDDFA',
-                  }
                   return (
                     <div key={i}>
                       <div className="flex items-center justify-between text-sm mb-0.5">
@@ -1309,6 +1310,11 @@ const REALTIME_EVENT_ICONS: Record<string, string> = {
   page_engagement: '⏱️',
   blog_article_read: '📰',
   heartbeat: '💓',
+  session_start: '🚀',
+  form_interaction: '✏️',
+  form_abandon: '🚪',
+  exit_intent: '👋',
+  configurator_step: '⚙️',
 }
 
 function RealtimeTab() {

@@ -104,7 +104,7 @@ function sanitizeUrl(url: string, utmWhitelist: string[]): string {
       if (v) params.set(key, v)
     }
     const qs = params.toString()
-    return u.pathname + u.hash + (qs ? '?' + qs : '')
+    return u.pathname + (qs ? '?' + qs : '') + u.hash
   } catch {
     return url.split('?')[0] || '/'
   }
