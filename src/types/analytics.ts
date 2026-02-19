@@ -53,6 +53,8 @@ export interface TrackingConfig {
   retention_days: number
   aggregation_months: number
   store_ip: boolean
+  geo_enabled: boolean
+  geo_api_key: string
   last_cleanup?: string
   last_cleanup_count?: number
 }
@@ -81,6 +83,8 @@ export const DEFAULT_TRACKING_CONFIG: TrackingConfig = {
   retention_days: 90,
   aggregation_months: 24,
   store_ip: false,
+  geo_enabled: false,
+  geo_api_key: '',
 }
 
 /* ------------------------------------------------------------------ */
@@ -107,6 +111,10 @@ export interface AnalyticsKPIs {
   device_breakdown: Array<{ device_type: string; count: number }>
   browser_breakdown: Array<{ browser: string; count: number }>
   os_breakdown: Array<{ os: string; count: number }>
+  country_breakdown: Array<{ country: string; region: string; count: number }>
+  timezone_breakdown: Array<{ timezone: string; count: number }>
+  language_breakdown: Array<{ language: string; count: number }>
+  city_breakdown?: Array<{ city: string; country: string; count: number }>
   form_conversion_by_type: Array<{ form_type: string; submits: number; abandons: number; rate: number }>
   lead_sources: Array<{ source: string; conversions: number }>
   exit_intents: number

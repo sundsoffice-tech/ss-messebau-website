@@ -128,7 +128,32 @@ foreach ($events as $ev) {
         $ts = gmdate('c');
     }
 
-    $props = isset($ev['props']) && is_array($ev['props']) ? json_encode($ev['props']) : null;
+    $propsArray = isset($ev['props']) && is_array($ev['props']) ? $ev['props'] : [];
+
+    // Server-side geolocation for session_start events
+    if ($eventName === 'session_start' && empty($propsArray['geo_city'])) {
+        $geoConfigStmt = $db->prepare("SELECT config_value FROM analytics_config WHERE config_key = 'geo_enabled'");
+        $geoConfigStmt->execute();
+        $geoEnabledRow = $geoConfigStmt->fetch();
+        $geoEnabled = $geoEnabledRow && $geoEnabledRow['config_value'] === '1';
+
+        if ($geoEnabled) {
+            $geoKeyStmt = $db->prepare("SELECT config_value FROM analytics_config WHERE config_key = 'geo_api_key'");
+            $geoKeyStmt->execute();
+            $geoKeyRow = $geoKeyStmt->fetch();
+            $geoApiKey = $geoKeyRow ? trim($geoKeyRow['config_value']) : '';
+
+            $geoData = resolveGeoFromIP($geoApiKey);
+            if ($geoData) {
+                $propsArray['geo_city'] = $geoData['city'];
+                $propsArray['geo_region_name'] = $geoData['regionName'];
+                $propsArray['geo_country_code'] = $geoData['countryCode'];
+                $propsArray['geo_country_name'] = $geoData['country'];
+            }
+        }
+    }
+
+    $props = !empty($propsArray) ? json_encode($propsArray) : null;
 
     try {
         $stmt->execute([
@@ -152,3 +177,53 @@ foreach ($events as $ev) {
 }
 
 echo json_encode(['ok' => true, 'stored' => $stored]);
+
+/**
+ * Resolve approximate location from client IP using ip-api.com.
+ * Without API key: http://ip-api.com (free, 45 req/min, HTTP only)
+ * With API key: https://pro.ip-api.com (HTTPS, higher limits)
+ * The IP is NOT stored — only the resolved geo data is returned.
+ */
+function resolveGeoFromIP(string $apiKey = ''): ?array {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+    if (empty($ip) || $ip === '127.0.0.1' || $ip === '::1') return null;
+
+    // File-based cache (24h TTL) using md5 hash of IP as filename
+    $cacheDir = __DIR__ . '/data/geocache/';
+    if (!is_dir($cacheDir)) @mkdir($cacheDir, 0755, true);
+
+    $cacheKey = md5($ip);
+    $cacheFile = $cacheDir . $cacheKey . '.json';
+
+    if (file_exists($cacheFile) && filemtime($cacheFile) > time() - 86400) {
+        $cached = json_decode(file_get_contents($cacheFile), true);
+        if ($cached) return $cached;
+    }
+
+    // Build API URL based on whether we have a key
+    if (!empty($apiKey)) {
+        $url = "https://pro.ip-api.com/json/{$ip}?key=" . urlencode($apiKey) . "&fields=status,country,countryCode,regionName,city";
+    } else {
+        $url = "http://ip-api.com/json/{$ip}?fields=status,country,countryCode,regionName,city";
+    }
+
+    $ctx = stream_context_create([
+        'http' => ['timeout' => 2, 'ignore_errors' => true]
+    ]);
+    $response = @file_get_contents($url, false, $ctx);
+
+    if (!$response) return null;
+
+    $data = json_decode($response, true);
+    if (!$data || ($data['status'] ?? '') !== 'success') return null;
+
+    $result = [
+        'country' => $data['country'] ?? '',
+        'countryCode' => $data['countryCode'] ?? '',
+        'regionName' => $data['regionName'] ?? '',
+        'city' => $data['city'] ?? '',
+    ];
+    @file_put_contents($cacheFile, json_encode($result));
+
+    return $result;
+}

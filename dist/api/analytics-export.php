@@ -183,6 +183,55 @@ function handleKPIs(PDO $db, string $from, string $to, ?string $eventType): void
     $stmt->execute($baseParams);
     $osBreakdown = $stmt->fetchAll();
 
+    // Country breakdown (from session_start events)
+    $stmt = $db->prepare("
+        SELECT json_extract(props, '$.geo_country') as country,
+               json_extract(props, '$.geo_region') as region,
+               COUNT(*) as cnt
+        FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND event = 'session_start'
+        AND json_extract(props, '$.geo_country') IS NOT NULL
+        GROUP BY country ORDER BY cnt DESC LIMIT 20
+    ");
+    $stmt->execute($baseParams);
+    $countryBreakdown = $stmt->fetchAll();
+
+    // Timezone breakdown (from session_start events)
+    $stmt = $db->prepare("
+        SELECT json_extract(props, '$.timezone') as timezone, COUNT(*) as cnt
+        FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND event = 'session_start'
+        AND json_extract(props, '$.timezone') IS NOT NULL
+        GROUP BY timezone ORDER BY cnt DESC LIMIT 20
+    ");
+    $stmt->execute($baseParams);
+    $timezoneBreakdown = $stmt->fetchAll();
+
+    // Language breakdown (from session_start events)
+    $stmt = $db->prepare("
+        SELECT json_extract(props, '$.language') as language, COUNT(*) as cnt
+        FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND event = 'session_start'
+        AND json_extract(props, '$.language') IS NOT NULL
+        GROUP BY language ORDER BY cnt DESC LIMIT 10
+    ");
+    $stmt->execute($baseParams);
+    $languageBreakdown = $stmt->fetchAll();
+
+    // City breakdown (from session_start events, server-side geo)
+    $stmt = $db->prepare("
+        SELECT json_extract(props, '$.geo_city') as city,
+               json_extract(props, '$.geo_country_name') as country,
+               COUNT(*) as cnt
+        FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND event = 'session_start'
+        AND json_extract(props, '$.geo_city') IS NOT NULL
+        AND json_extract(props, '$.geo_city') != ''
+        GROUP BY city, country ORDER BY cnt DESC LIMIT 20
+    ");
+    $stmt->execute($baseParams);
+    $cityBreakdown = $stmt->fetchAll();
+
     // Form conversion by type (submits vs abandons)
     $stmt = $db->prepare("
         SELECT json_extract(props, '$.form_type') as form_type, COUNT(*) as cnt
@@ -256,6 +305,24 @@ function handleKPIs(PDO $db, string $from, string $to, ?string $eventType): void
         'device_breakdown' => array_map(fn($r) => ['device_type' => $r['device_type'] ?? 'unknown', 'count' => (int)$r['cnt']], $deviceBreakdown),
         'browser_breakdown' => array_map(fn($r) => ['browser' => $r['browser'] ?? 'unknown', 'count' => (int)$r['cnt']], $browserBreakdown),
         'os_breakdown' => array_map(fn($r) => ['os' => $r['os'] ?? 'unknown', 'count' => (int)$r['cnt']], $osBreakdown),
+        'country_breakdown' => array_map(fn($r) => [
+            'country' => $r['country'] ?? 'unknown',
+            'region' => $r['region'] ?? 'unknown',
+            'count' => (int)$r['cnt'],
+        ], $countryBreakdown),
+        'timezone_breakdown' => array_map(fn($r) => [
+            'timezone' => $r['timezone'] ?? 'unknown',
+            'count' => (int)$r['cnt'],
+        ], $timezoneBreakdown),
+        'language_breakdown' => array_map(fn($r) => [
+            'language' => $r['language'] ?? 'unknown',
+            'count' => (int)$r['cnt'],
+        ], $languageBreakdown),
+        'city_breakdown' => array_map(fn($r) => [
+            'city' => $r['city'] ?? 'unknown',
+            'country' => $r['country'] ?? 'unknown',
+            'count' => (int)$r['cnt'],
+        ], $cityBreakdown),
         'form_conversion_by_type' => $formConversion,
         'lead_sources' => array_map(fn($r) => ['source' => $r['source'], 'conversions' => (int)$r['cnt']], $leadSources),
         'exit_intents' => $exitIntents,
