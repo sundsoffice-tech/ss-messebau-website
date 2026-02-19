@@ -1,24 +1,24 @@
 import { useEffect, useCallback } from 'react'
-import { parseDeepLink, navigateToSection, navigateToPageAndSection, updateUrlWithSection, isValidDeepLink, getHeaderHeight } from '@/lib/deep-linking'
+import { parseDeepLink, navigateToSection, navigateToPageAndSection, updateUrlWithSection, isValidDeepLink } from '@/lib/deep-linking'
 
 export function useDeepLinking(currentPage: string) {
   useEffect(() => {
     const deepLink = parseDeepLink()
-    
-    if (deepLink.page === currentPage && deepLink.section) {
-      if (!isValidDeepLink(currentPage, deepLink.section)) {
-        console.warn(`Invalid section "${deepLink.section}" for page "${currentPage}"`)
-      }
-      
-      const timeoutId = setTimeout(() => {
-        const success = navigateToSection(deepLink.section!)
-        if (!success) {
-          console.warn(`Failed to navigate to section "${deepLink.section}"`)
-        }
-      }, 400)
-      
-      return () => clearTimeout(timeoutId)
+
+    if (!(deepLink.page === currentPage && deepLink.section)) return
+
+    if (!isValidDeepLink(currentPage, deepLink.section)) {
+      console.warn(`Invalid section "${deepLink.section}" for page "${currentPage}"`)
     }
+
+    const timeoutId = setTimeout(() => {
+      const success = navigateToSection(deepLink.section!)
+      if (!success) {
+        console.warn(`Failed to navigate to section "${deepLink.section}"`)
+      }
+    }, 400)
+
+    return () => clearTimeout(timeoutId)
   }, [currentPage])
 
   const navigateToSectionOnPage = useCallback((page: string, section: string) => {

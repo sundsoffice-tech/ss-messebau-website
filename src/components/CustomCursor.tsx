@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { isMobileDevice, prefersReducedMotion } from '../lib/cursor-utils'
+import { isMobileDevice } from '../lib/cursor-utils'
 
 interface CursorProps {
   isVisible?: boolean

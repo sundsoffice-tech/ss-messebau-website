@@ -20,7 +20,7 @@ interface InquiryDialogProps {
 }
 
 export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
-  const [inquiries, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
+  const [, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
   const { t } = useTranslation()
 
   const form = useFormSystem({

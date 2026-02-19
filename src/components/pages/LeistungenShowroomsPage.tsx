@@ -14,7 +14,6 @@ import {
   Phone,
   CheckCircle,
   Star,
-  Users,
   Shield,
   Eye,
   PaintBrush,
