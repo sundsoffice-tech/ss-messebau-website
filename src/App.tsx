@@ -45,6 +45,7 @@ const LeistungenTourenPage = lazy(() => import('./components/pages/LeistungenTou
 const LeistungenBoedenPage = lazy(() => import('./components/pages/LeistungenBoedenPage').then(m => ({ default: m.LeistungenBoedenPage })))
 const LeistungenDigitalPage = lazy(() => import('./components/pages/LeistungenDigitalPage').then(m => ({ default: m.LeistungenDigitalPage })))
 const AdminPage = lazy(() => import('./components/pages/AdminPage').then(m => ({ default: m.AdminPage })))
+const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })))
 
 function App() {
   const { inquiryDialogOpen, openInquiry, setInquiryOpen } = useUIStore()
@@ -185,7 +186,7 @@ function App() {
         if (currentPage.startsWith('/blog/')) {
           return <BlogPage />
         }
-        return <HomePage />
+        return <NotFoundPage />
     }
   }
 

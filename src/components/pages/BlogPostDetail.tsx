@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, ArrowRight, Clock } from '@phosphor-icons/react'
 import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 import { DEMO_BLOG_POSTS } from '@/lib/demo-blog-posts'
 import { useTranslation } from '@/lib/i18n'
 import { useUIStore } from '@/store/ui-store'
@@ -30,7 +31,11 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
   }
 
   const htmlContent = useMemo(() => {
-    return marked.parse(post.content, { async: false }) as string
+    const rawHtml = marked.parse(post.content, { async: false }) as string
+    return DOMPurify.sanitize(rawHtml, {
+      ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'ul', 'ol', 'li', 'strong', 'em', 'br', 'hr', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'blockquote', 'code', 'pre', 'span', 'div', 'figure', 'figcaption'],
+      ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'target', 'rel', 'width', 'height', 'loading', 'decoding'],
+    })
   }, [post.content])
 
   // Inject BlogPosting JSON-LD structured data for SEO

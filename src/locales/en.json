@@ -1891,5 +1891,9 @@
   "share.copied": "Link copied!",
   "share.native": "Share",
   "share.copySuccess": "Link has been copied to clipboard",
-  "share.copyError": "Could not copy link"
+  "share.copyError": "Could not copy link",
+  "notFound.title": "Page not found",
+  "notFound.description": "The requested page does not exist or has been moved.",
+  "notFound.backHome": "Back to home",
+  "notFound.contact": "Contact us"
 }
