@@ -30,3 +30,17 @@ define('ALLOWED_ORIGINS', [
     'https://sundsmessebau.com',
     'https://www.sundsmessebau.com',
 ]);
+
+/**
+ * Set CORS headers based on the request origin.
+ * Call at the top of each API endpoint file.
+ */
+function setCorsHeaders(): void {
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    if (in_array($origin, ALLOWED_ORIGINS, true)) {
+        header("Access-Control-Allow-Origin: $origin");
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    }
+}
