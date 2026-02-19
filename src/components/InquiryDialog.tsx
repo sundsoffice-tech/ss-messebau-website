@@ -5,12 +5,14 @@ import { toast } from 'sonner'
 import { ContactInquiry } from '@/lib/types'
 import { useKV } from '@/hooks/use-kv'
 import { trackFormSubmit } from '@/lib/analytics'
+import { trackFormSubmission } from '@/lib/analytics-tracker'
 import { useTranslation } from '@/lib/i18n'
 import { useFormSystem } from '@/hooks/use-form-system'
 import { FormField } from '@/components/form-system/FormField'
 import { sendFormNotification } from '@/lib/notification-service'
 import { navigate } from '@/lib/deep-linking'
 import { FIELD_TOKENS } from '@/lib/form-system/field-registry'
+import { getUtmParams } from '@/lib/utm-utils'
 
 interface InquiryDialogProps {
   open: boolean
@@ -38,7 +40,9 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
 
       setInquiries((current) => [...(current || []), inquiry])
 
-      // Save inquiry to backend API
+      // Save inquiry to backend API with UTM attribution
+      const utm = getUtmParams()
+      const formDataWithUtm = { ...data, ...utm }
       try {
         const { inquiriesApi } = await import('@/lib/api-client')
         await inquiriesApi.create({
@@ -49,16 +53,16 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
           company: data.company,
           phone: data.phone,
           message: data.message,
-          form_data: data,
+          form_data: formDataWithUtm,
         })
       } catch {
         console.warn('API unavailable, inquiry saved locally only')
       }
 
-      // Send notification via centralized service
+      // Send notification via centralized service (include UTM for attribution)
       const notifResult = await sendFormNotification({
         type: 'inquiry',
-        data,
+        data: formDataWithUtm,
         inquiryId: inquiry.id,
         customerEmail: data.email,
       })
@@ -71,6 +75,11 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
         budget: data.budget || 'nicht_angegeben',
         messen_pro_jahr: data.messesProJahr || 'nicht_angegeben',
       })
+      trackFormSubmission('inquiry', {
+        branche: data.branche || '',
+        wie_gefunden: data.wieGefunden || '',
+        ...(utm.utm_source ? { utm_source: utm.utm_source } : {}),
+      })
 
       toast.success(t('inquiry.success'))
       form.reset()
@@ -80,6 +89,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
 
   const contactFields = form.config.fields.filter((f) => f.group === 'contact')
   const optionalFields = form.config.fields.filter((f) => f.group === 'optional')
+  const consentFields = form.config.fields.filter((f) => f.group === 'consent')
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -130,6 +140,25 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
               )
             })}
           </fieldset>
+
+          {consentFields.length > 0 && (
+            <fieldset className="space-y-3 pt-2">
+              {consentFields.map((fieldConfig) => {
+                const token = FIELD_TOKENS[fieldConfig.token]
+                if (!token) return null
+                return (
+                  <FormField
+                    key={token.key}
+                    tokenKey={fieldConfig.token}
+                    value={form.values[token.key]}
+                    error={form.errors[token.key]}
+                    required={fieldConfig.required}
+                    onChange={(val) => form.setValue(token.key, val)}
+                  />
+                )
+              })}
+            </fieldset>
+          )}
 
           <div className="space-y-4 pt-2">
             <div className="flex flex-col-reverse sm:flex-row gap-3">

@@ -13,12 +13,14 @@ import { navigate } from '@/lib/deep-linking'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { trackFormSubmit } from '@/lib/analytics'
-import { useScrollDepthTracking, useDwellTimeTracking } from '@/hooks/use-analytics'
+import { trackFormSubmission } from '@/lib/analytics-tracker'
+import { useScrollDepthTracking, useDwellTimeTracking, useExitIntentTracking } from '@/hooks/use-analytics'
 import { useFormSystem } from '@/hooks/use-form-system'
 import { FormField } from '@/components/form-system/FormField'
 import { sendFormNotification } from '@/lib/notification-service'
 import { FIELD_TOKENS } from '@/lib/form-system/field-registry'
 import { sendChatMessage } from '@/lib/chat-service'
+import { getUtmParams } from '@/lib/utm-utils'
 
 interface QuickAction {
   id: string
@@ -33,6 +35,7 @@ export function KontaktPage() {
   useSectionObserver(['kontaktformular', 'anfahrt', 'ki-berater'])
   useScrollDepthTracking('kontakt')
   useDwellTimeTracking('kontakt')
+  useExitIntentTracking('kontakt')
 
   const [inquiries, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
   const [chatOpen, setChatOpen] = useState(false)
@@ -65,7 +68,9 @@ export function KontaktPage() {
 
       setInquiries((current) => [...(current || []), inquiry])
 
-      // Save inquiry to backend API
+      // Save inquiry to backend API with UTM attribution
+      const utm = getUtmParams()
+      const formDataWithUtm = { ...data, ...utm }
       try {
         const { inquiriesApi } = await import('@/lib/api-client')
         await inquiriesApi.create({
@@ -76,16 +81,16 @@ export function KontaktPage() {
           company: data.company,
           phone: data.phone,
           message: data.message,
-          form_data: data,
+          form_data: formDataWithUtm,
         })
       } catch (error) {
         console.warn('API unavailable, inquiry saved locally only', error)
       }
 
-      // Send notification via centralized service
+      // Send notification via centralized service (include UTM for attribution)
       const notifResult = await sendFormNotification({
         type: 'kontakt',
-        data,
+        data: formDataWithUtm,
         inquiryId: inquiry.id,
         customerEmail: data.email,
       })
@@ -97,6 +102,12 @@ export function KontaktPage() {
       trackFormSubmit('kontakt', {
         budget: data.budget || 'nicht_angegeben',
         size: data.size || 'nicht_angegeben',
+      })
+      trackFormSubmission('kontakt', {
+        branche: data.branche || '',
+        wie_gefunden: data.wieGefunden || '',
+        position: data.position || '',
+        ...(utm.utm_source ? { utm_source: utm.utm_source } : {}),
       })
 
       toast.success(t(form.config.successKey))

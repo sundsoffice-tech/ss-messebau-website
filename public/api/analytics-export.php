@@ -150,6 +150,92 @@ function handleKPIs(PDO $db, string $from, string $to, ?string $eventType): void
     // Average events per session
     $avgSessionEvents = $uniqueSessions > 0 ? round($totalEvents / $uniqueSessions, 1) : 0;
 
+    // Device breakdown (from session_start events)
+    $stmt = $db->prepare("
+        SELECT json_extract(props, '$.device_type') as device_type, COUNT(*) as cnt
+        FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND event = 'session_start'
+        AND json_extract(props, '$.device_type') IS NOT NULL
+        GROUP BY device_type ORDER BY cnt DESC
+    ");
+    $stmt->execute($baseParams);
+    $deviceBreakdown = $stmt->fetchAll();
+
+    // Browser breakdown (from session_start events)
+    $stmt = $db->prepare("
+        SELECT json_extract(props, '$.browser') as browser, COUNT(*) as cnt
+        FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND event = 'session_start'
+        AND json_extract(props, '$.browser') IS NOT NULL
+        GROUP BY browser ORDER BY cnt DESC
+    ");
+    $stmt->execute($baseParams);
+    $browserBreakdown = $stmt->fetchAll();
+
+    // OS breakdown (from session_start events)
+    $stmt = $db->prepare("
+        SELECT json_extract(props, '$.os') as os, COUNT(*) as cnt
+        FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND event = 'session_start'
+        AND json_extract(props, '$.os') IS NOT NULL
+        GROUP BY os ORDER BY cnt DESC
+    ");
+    $stmt->execute($baseParams);
+    $osBreakdown = $stmt->fetchAll();
+
+    // Form conversion by type (submits vs abandons)
+    $stmt = $db->prepare("
+        SELECT json_extract(props, '$.form_type') as form_type, COUNT(*) as cnt
+        FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND event = 'form_submit'
+        AND json_extract(props, '$.form_type') IS NOT NULL
+        GROUP BY form_type ORDER BY cnt DESC
+    ");
+    $stmt->execute($baseParams);
+    $formSubmitsByType = $stmt->fetchAll();
+
+    $stmt = $db->prepare("
+        SELECT json_extract(props, '$.form_type') as form_type, COUNT(*) as cnt
+        FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND event = 'form_abandon'
+        AND json_extract(props, '$.form_type') IS NOT NULL
+        GROUP BY form_type ORDER BY cnt DESC
+    ");
+    $stmt->execute($baseParams);
+    $formAbandonsByType = $stmt->fetchAll();
+
+    $submitsMap = [];
+    foreach ($formSubmitsByType as $r) { $submitsMap[$r['form_type']] = (int)$r['cnt']; }
+    $abandonsMap = [];
+    foreach ($formAbandonsByType as $r) { $abandonsMap[$r['form_type']] = (int)$r['cnt']; }
+    $allFormTypes = array_unique(array_merge(array_keys($submitsMap), array_keys($abandonsMap)));
+    $formConversion = [];
+    foreach ($allFormTypes as $ft) {
+        $s = $submitsMap[$ft] ?? 0;
+        $a = $abandonsMap[$ft] ?? 0;
+        $total = $s + $a;
+        $formConversion[] = [
+            'form_type' => $ft,
+            'submits' => $s,
+            'abandons' => $a,
+            'rate' => $total > 0 ? round(($s / $total) * 100, 1) : 0,
+        ];
+    }
+
+    // Lead sources: which UTM sources led to form_submit
+    $stmt = $db->prepare("
+        SELECT utm_source as source, COUNT(*) as cnt
+        FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND event = 'form_submit'
+        AND utm_source IS NOT NULL AND utm_source != ''
+        GROUP BY utm_source ORDER BY cnt DESC LIMIT 10
+    ");
+    $stmt->execute($baseParams);
+    $leadSources = $stmt->fetchAll();
+
+    // Exit intent count
+    $exitIntents = $countByType('exit_intent');
+
     echo json_encode([
         'total_events' => $totalEvents,
         'unique_sessions' => $uniqueSessions,
@@ -167,6 +253,12 @@ function handleKPIs(PDO $db, string $from, string $to, ?string $eventType): void
         'events_by_hour' => array_map(fn($r) => ['hour' => (int)$r['hour'], 'count' => (int)$r['cnt']], $eventsByHour),
         'bounce_rate' => $bounceRate,
         'avg_session_events' => $avgSessionEvents,
+        'device_breakdown' => array_map(fn($r) => ['device_type' => $r['device_type'] ?? 'unknown', 'count' => (int)$r['cnt']], $deviceBreakdown),
+        'browser_breakdown' => array_map(fn($r) => ['browser' => $r['browser'] ?? 'unknown', 'count' => (int)$r['cnt']], $browserBreakdown),
+        'os_breakdown' => array_map(fn($r) => ['os' => $r['os'] ?? 'unknown', 'count' => (int)$r['cnt']], $osBreakdown),
+        'form_conversion_by_type' => $formConversion,
+        'lead_sources' => array_map(fn($r) => ['source' => $r['source'], 'conversions' => (int)$r['cnt']], $leadSources),
+        'exit_intents' => $exitIntents,
     ]);
 }
 
