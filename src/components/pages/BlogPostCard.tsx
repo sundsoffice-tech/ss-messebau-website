@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { ArrowRight, Clock } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
 import type { BlogPost } from '@/lib/types'
+import { getBlogFallbackImage } from '@/lib/blog-image-defaults'
 
 interface BlogPostCardProps {
   post: BlogPost
@@ -25,7 +26,7 @@ export function BlogPostCard({ post, onNavigate }: BlogPostCardProps) {
     <Card className="group overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col border-2 hover:border-primary cursor-pointer">
       <div className="aspect-video relative overflow-hidden bg-muted">
         <img
-          src={post.imageUrl}
+          src={post.imageUrl || getBlogFallbackImage(post.category)}
           alt={post.title}
           width="640"
           height="360"
