@@ -12,23 +12,49 @@ async function apiFetch<T>(
 ): Promise<T> {
   const url = `${API_BASE}/${endpoint}`
   const hasBody = options.body !== undefined
-  const res = await fetch(url, {
-    credentials: 'include', // send session cookies
-    ...options,
-    headers: {
-      // Only set Content-Type for requests with a body (POST, PATCH, PUT)
-      // GET/DELETE without body don't need it and it avoids unnecessary CORS preflight
-      ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
-      ...((options.headers as Record<string, string>) || {}),
-    },
-  })
 
-  // For DELETE that may return empty body
+  let res: Response
+  try {
+    res = await fetch(url, {
+      credentials: 'include', // send session cookies
+      ...options,
+      headers: {
+        // Only set Content-Type for requests with a body (POST, PATCH, PUT)
+        // GET/DELETE without body don't need it and it avoids unnecessary CORS preflight
+        ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
+        ...((options.headers as Record<string, string>) || {}),
+      },
+    })
+  } catch (networkErr) {
+    throw new Error('Netzwerkfehler – Server nicht erreichbar')
+  }
+
+  // Parse response body safely – the server might return HTML (ErrorDocument)
+  // or an empty body instead of JSON when something goes wrong.
   const text = await res.text()
-  const data = text ? JSON.parse(text) : {}
+  let data: Record<string, unknown> = {}
+
+  if (text) {
+    try {
+      data = JSON.parse(text)
+    } catch {
+      // Response is not JSON (e.g. Apache ErrorDocument HTML, PHP error page)
+      if (!res.ok) {
+        throw new Error(
+          res.status === 401 ? 'Sitzung abgelaufen – bitte neu anmelden'
+          : res.status === 403 ? 'Zugriff verweigert (403) – ggf. Server-Firewall'
+          : res.status === 500 ? 'Serverfehler (500) – bitte Logs prüfen'
+          : `Serverfehler (${res.status})`
+        )
+      }
+      // 2xx but non-JSON body → treat as empty success
+    }
+  }
 
   if (!res.ok) {
-    throw new Error(data.error || `API Error ${res.status}`)
+    const msg = (data.error as string)
+      || (res.status === 401 ? 'Sitzung abgelaufen – bitte neu anmelden' : `API Fehler ${res.status}`)
+    throw new Error(msg)
   }
 
   return data as T

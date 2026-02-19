@@ -29,6 +29,8 @@ define('ALLOWED_ORIGINS', [
     'http://localhost:4173',
     'https://sundsmessebau.com',
     'https://www.sundsmessebau.com',
+    'https://sunds-messebau.de',
+    'https://www.sunds-messebau.de',
 ]);
 
 /**
@@ -42,5 +44,18 @@ function setCorsHeaders(): void {
         header('Access-Control-Allow-Credentials: true');
         header('Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type, Authorization, Accept, X-Requested-With');
+    }
+}
+
+/**
+ * Reject oversized request bodies (1 MB limit for public endpoints).
+ * Prevents abuse via massive payloads. Call before reading php://input.
+ */
+function enforceRequestBodyLimit(int $maxBytes = 1048576): void {
+    $contentLength = (int)($_SERVER['CONTENT_LENGTH'] ?? 0);
+    if ($contentLength > $maxBytes) {
+        http_response_code(413);
+        echo json_encode(['error' => 'Request body too large']);
+        exit;
     }
 }
