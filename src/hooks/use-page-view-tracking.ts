@@ -15,7 +15,13 @@ export function usePageViewTracking(): void {
       trackPageView()
     }
 
+    // popstate fires on browser back/forward, hashchange fires on
+    // programmatic hash changes – both are needed for hash-based routing
     window.addEventListener('popstate', handler)
-    return () => window.removeEventListener('popstate', handler)
+    window.addEventListener('hashchange', handler)
+    return () => {
+      window.removeEventListener('popstate', handler)
+      window.removeEventListener('hashchange', handler)
+    }
   }, [])
 }
