@@ -186,6 +186,12 @@ function formatLabel(key: string): string {
     event: 'Messe/Event',
     size: 'Standgröße',
     wunschtermin: 'Wunschtermin',
+    branche: 'Branche',
+    wieGefunden: 'Gefunden über',
+    position: 'Position/Rolle',
+    utm_source: 'Quelle (UTM)',
+    utm_medium: 'Medium (UTM)',
+    utm_campaign: 'Kampagne (UTM)',
   }
   return map[key] || key
 }

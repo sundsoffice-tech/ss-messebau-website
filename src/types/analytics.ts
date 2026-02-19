@@ -19,6 +19,11 @@ export type TrackingEventName =
   | 'page_engagement'
   | 'blog_article_read'
   | 'heartbeat'
+  | 'session_start'
+  | 'form_interaction'
+  | 'form_abandon'
+  | 'exit_intent'
+  | 'configurator_step'
 
 /** Standard event payload sent to collect endpoint */
 export interface TrackingEvent {
@@ -65,6 +70,11 @@ export const DEFAULT_TRACKING_CONFIG: TrackingConfig = {
     page_engagement: true,
     blog_article_read: true,
     heartbeat: true,
+    session_start: true,
+    form_interaction: true,
+    form_abandon: true,
+    exit_intent: true,
+    configurator_step: true,
   },
   utm_whitelist: ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'],
   domain_whitelist: ['sunds-messebau.de', 'www.sunds-messebau.de', 'localhost'],
@@ -94,6 +104,12 @@ export interface AnalyticsKPIs {
   events_by_hour: Array<{ hour: number; count: number }>
   bounce_rate: number
   avg_session_events: number
+  device_breakdown: Array<{ device_type: string; count: number }>
+  browser_breakdown: Array<{ browser: string; count: number }>
+  os_breakdown: Array<{ os: string; count: number }>
+  form_conversion_by_type: Array<{ form_type: string; submits: number; abandons: number; rate: number }>
+  lead_sources: Array<{ source: string; conversions: number }>
+  exit_intents: number
 }
 
 /** Realtime event for live ticker */

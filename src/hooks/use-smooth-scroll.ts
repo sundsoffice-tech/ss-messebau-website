@@ -20,13 +20,11 @@ export function useSmoothScroll() {
 
 export function useSmoothScrollOnMount(sectionId?: string, offset?: number) {
   useEffect(() => {
-    if (sectionId) {
-      const timeoutId = setTimeout(() => {
-        scrollToSection(sectionId, offset)
-      }, 100)
-
-      return () => clearTimeout(timeoutId)
-    }
+    if (!sectionId) return
+    const timeoutId = setTimeout(() => {
+      scrollToSection(sectionId, offset)
+    }, 100)
+    return () => clearTimeout(timeoutId)
   }, [sectionId, offset])
 }
 

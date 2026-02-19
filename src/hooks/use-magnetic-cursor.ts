@@ -13,10 +13,10 @@ interface MagneticCursorOptions {
  */
 export function useMagneticCursor<T extends HTMLElement>(
   options: MagneticCursorOptions = {}
-): RefObject<T> {
+): RefObject<T | null> {
   const { strength = 0.3, radius = 100, disabled = false } = options
   const elementRef = useRef<T>(null)
-  const animationFrameRef = useRef<number>()
+  const animationFrameRef = useRef<number>(undefined)
 
   useEffect(() => {
     if (disabled) return
