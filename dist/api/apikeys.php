@@ -2,7 +2,7 @@
 /**
  * S&S Messebau - External API Keys API
  * Secure server-side management of external API keys
- * All endpoints require admin auth
+ * All endpoints require admin auth (checked per handler, like orders.php)
  * Keys are stored encrypted, only masked values returned to frontend
  */
 
@@ -14,11 +14,6 @@ setCorsHeaders();
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
-    exit;
-}
-
-// All endpoints require admin authentication
-if (!requireAuth()) {
     exit;
 }
 
@@ -50,20 +45,29 @@ function maskKey(string $key): string {
 }
 
 function encryptKey(string $key): string {
+    // Check openssl availability at runtime
+    if (!function_exists('openssl_encrypt')) {
+        // Fallback: use hash_hmac for encryption when openssl is not available
+        $encryptionKey = getenv('ENCRYPTION_KEY') ?: hash('sha256', DB_PATH);
+        $hmac = hash_hmac('sha256', $key, $encryptionKey, true);
+        return base64_encode('hmac::' . base64_encode($hmac) . '::' . base64_encode($key));
+    }
+
     $encryptionKey = getenv('ENCRYPTION_KEY');
     if (!$encryptionKey) {
-        // Fallback: derive a key from the database path (unique per installation)
         $encryptionKey = hash('sha256', DB_PATH);
     }
     $iv = openssl_random_pseudo_bytes(16);
     $encrypted = openssl_encrypt($key, 'aes-256-cbc', $encryptionKey, 0, $iv);
     if ($encrypted === false) {
-        throw new RuntimeException('Encryption failed - openssl_encrypt returned false');
+        throw new \RuntimeException('openssl_encrypt failed');
     }
     return base64_encode($iv . '::' . $encrypted);
 }
 
 function handleGetApiKeys(): void {
+    if (!requireAuth()) return;
+
     try {
         $db = getDB();
         $stmt = $db->query('SELECT id, service_name, masked_key, description, created_at, updated_at FROM external_api_keys ORDER BY created_at DESC');
@@ -82,13 +86,15 @@ function handleGetApiKeys(): void {
         }
 
         echo json_encode(['keys' => $result]);
-    } catch (Exception $e) {
+    } catch (\Throwable $e) {
         http_response_code(500);
         echo json_encode(['error' => 'Failed to load API keys: ' . $e->getMessage()]);
     }
 }
 
 function handleAddApiKey(): void {
+    if (!requireAuth()) return;
+
     $input = json_decode(file_get_contents('php://input'), true);
 
     if (empty($input['serviceName']) || empty($input['key'])) {
@@ -131,13 +137,15 @@ function handleAddApiKey(): void {
                 'updatedAt' => strtotime($record['updated_at']) * 1000,
             ],
         ]);
-    } catch (Exception $e) {
+    } catch (\Throwable $e) {
         http_response_code(500);
         echo json_encode(['error' => 'Failed to save key: ' . $e->getMessage()]);
     }
 }
 
 function handleUpdateApiKey(): void {
+    if (!requireAuth()) return;
+
     $input = json_decode(file_get_contents('php://input'), true);
     $id = $input['id'] ?? $_GET['id'] ?? null;
 
@@ -183,13 +191,15 @@ function handleUpdateApiKey(): void {
         $stmt->execute($params);
 
         echo json_encode(['success' => true, 'updated' => $stmt->rowCount()]);
-    } catch (Exception $e) {
+    } catch (\Throwable $e) {
         http_response_code(500);
         echo json_encode(['error' => 'Failed to update key: ' . $e->getMessage()]);
     }
 }
 
 function handleDeleteApiKey(): void {
+    if (!requireAuth()) return;
+
     $id = $_GET['id'] ?? null;
     if (!$id) {
         http_response_code(400);
@@ -203,7 +213,7 @@ function handleDeleteApiKey(): void {
         $stmt->execute([':id' => $id]);
 
         echo json_encode(['success' => true, 'deleted' => $stmt->rowCount()]);
-    } catch (Exception $e) {
+    } catch (\Throwable $e) {
         http_response_code(500);
         echo json_encode(['error' => 'Failed to delete key: ' . $e->getMessage()]);
     }

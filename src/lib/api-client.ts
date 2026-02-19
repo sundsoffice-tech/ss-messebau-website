@@ -11,13 +11,16 @@ async function apiFetch<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const url = `${API_BASE}/${endpoint}`
+  const hasBody = options.body !== undefined
   const res = await fetch(url, {
     credentials: 'include', // send session cookies
+    ...options,
     headers: {
-      'Content-Type': 'application/json',
+      // Only set Content-Type for requests with a body (POST, PATCH, PUT)
+      // GET/DELETE without body don't need it and it avoids unnecessary CORS preflight
+      ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
       ...((options.headers as Record<string, string>) || {}),
     },
-    ...options,
   })
 
   // For DELETE that may return empty body
