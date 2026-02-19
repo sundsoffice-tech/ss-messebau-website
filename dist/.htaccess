@@ -147,12 +147,8 @@
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   
   # Permissions Policy (formerly Feature Policy)
-  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), window-management=()"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
 
-  # Prevent embedding in iframes on other sites (anti-screenshot via embedding)
-  Header always set Cross-Origin-Opener-Policy "same-origin"
-  Header always set Cross-Origin-Resource-Policy "same-origin"
-  
   # HSTS - Force HTTPS for 1 year including subdomains
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
   
