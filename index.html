@@ -95,7 +95,106 @@
       "sameAs": []
     }
     </script>
-    
+
+    <!-- Schema.org WebSite with SearchAction -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "S&S Messebau",
+      "url": "https://sunds-messebau.de",
+      "description": "Professioneller Messebau, Eventbau und Showrooms aus NRW – Full-Service für Food, Finance und Industrie.",
+      "publisher": {
+        "@id": "https://sunds-messebau.de/#organization"
+      },
+      "inLanguage": "de-DE"
+    }
+    </script>
+
+    <!-- Schema.org FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Was kostet ein Messestand?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Die Kosten variieren je nach Größe und Ausstattung. Ein 50 qm Systemstand liegt bei ca. 25.000-35.000 €, individuelle Stände bei 600-1.200 €/qm. Kontaktieren Sie uns für ein individuelles Angebot."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie lange dauert die Planung und Produktion?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Von Briefing bis Fertigstellung rechnen Sie mit 8-12 Wochen. Bei Eilprojekten können wir auch schneller arbeiten."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Bauen Sie auch im Ausland auf?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja, wir realisieren Projekte bundesweit und in ganz Europa. Durch unser Partnernetzwerk sind auch internationale Projekte möglich."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Können wir den Stand mehrfach verwenden?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolut! Unsere Systeme sind für Mehrfachnutzung konzipiert. Wir lagern Ihre Elemente und passen sie für Folgemessen an."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Bieten Sie auch nur Teilleistungen an?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja, Sie können einzelne Leistungen buchen – z.B. nur Design, nur Aufbau, oder nur Möbel. Wir sind flexibel."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Schema.org BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Startseite",
+          "item": "https://sunds-messebau.de/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Leistungen",
+          "item": "https://sunds-messebau.de/leistungen"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Referenzen",
+          "item": "https://sunds-messebau.de/referenzen"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Kontakt",
+          "item": "https://sunds-messebau.de/kontakt"
+        }
+      ]
+    }
+    </script>
+
     <!-- Performance: Preconnect für externe Ressourcen -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -159,36 +258,117 @@
       gtag('config', 'G-XXXXXXXXXX', { send_page_view: true });
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script type="module" crossorigin src="/assets/index-Dtlleges.js"></script>
+  <script type="module" crossorigin src="/assets/index-DepTguUs.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor-react-DjPCVcPo.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-ui-qNHxpggR.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-motion-Dc4Hw-Bg.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-FpGl6VHn.css">
+  <link rel="stylesheet" crossorigin href="/assets/index-X1woJTbY.css">
 </head>
 
 <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Static HTML fallback for SEO crawlers – replaced by React on mount -->
+      <header style="background: #3730a3; color: #fff; padding: 1rem 2rem;">
+        <nav style="max-width: 72rem; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+          <strong style="font-size: 1.25rem; margin-right: auto;">S&amp;S Messebau</strong>
+          <a href="/leistungen" style="color: #fff; text-decoration: none;">Leistungen</a>
+          <a href="/leistungen/messebau" style="color: #fff; text-decoration: none;">Messebau</a>
+          <a href="/leistungen/eventbau" style="color: #fff; text-decoration: none;">Eventbau</a>
+          <a href="/leistungen/showroom-ladenbau" style="color: #fff; text-decoration: none;">Ladenbau</a>
+          <a href="/leistungen/touren" style="color: #fff; text-decoration: none;">Touren</a>
+          <a href="/branchen" style="color: #fff; text-decoration: none;">Branchen</a>
+          <a href="/referenzen" style="color: #fff; text-decoration: none;">Referenzen</a>
+          <a href="/ueber-uns" style="color: #fff; text-decoration: none;">Über uns</a>
+          <a href="/kontakt" style="color: #fff; text-decoration: none;">Kontakt</a>
+        </nav>
+      </header>
+      <main style="font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 72rem; margin: 0 auto; padding: 2rem;">
+        <h1>Messestände, die Ihre Marke verkaufen – S&amp;S Messebau aus NRW</h1>
+        <p>S&amp;S Messebau – unverbindliches 48h-Angebot mit persönlicher Beratung. Full-Service Messebau, Eventbau &amp; Showrooms für Food, Finance und Industrie – bundesweit aus NRW.</p>
+
+        <h2>Unsere Leistungen</h2>
+        <p>Drei Leistungsbereiche, ein Ansprechpartner: Full-Service Messebau als Kernleistung, skalierbare Tourenlösungen und professionelle Showrooms &amp; Brand Spaces – alles aus einer Hand.</p>
+        <ul>
+          <li><a href="/leistungen/messebau"><strong>Full-Service Messebau</strong></a> – Von der ersten Idee über Produktion und Logistik bis zur Lagerung für den nächsten Einsatz.</li>
+          <li><a href="/leistungen/touren"><strong>Messetouren &amp; Roadshows</strong></a> – Skalierbare Systemlösungen für viele kleine Messen und Roadshows – zentral koordiniert ab NRW.</li>
+          <li><a href="/leistungen/showroom-ladenbau"><strong>Ladenbau &amp; Brandspaces</strong></a> – Showrooms, Ladenbau und Brand Spaces – individuelle Raumkonzepte und Verkaufsräume.</li>
+          <li><a href="/leistungen/eventbau"><strong>Eventbau</strong></a> – Bühnen, Präsentationsflächen und Veranstaltungsaufbauten für Ihre Events.</li>
+          <li><a href="/leistungen/boeden-ausstattung"><strong>Böden &amp; Ausstattung</strong></a> – Hochwertige Messeböden und Ausstattungen für jeden Anlass.</li>
+          <li><a href="/leistungen/digital-experience"><strong>Digital Experience</strong></a> – Digitale Erlebnisse und interaktive Technologie für Ihren Messestand.</li>
+        </ul>
+
+        <h2>Warum S&amp;S Messebau?</h2>
+        <ul>
+          <li><strong>48h-Angebot</strong> – Schnelle, unverbindliche Angebote innerhalb von 48 Stunden.</li>
+          <li><strong>Branchenexperten</strong> – Spezialisiert auf Food, Finance und Industrie.</li>
+          <li><strong>Persönliche Beratung</strong> – Ein fester Ansprechpartner von Anfang bis Ende.</li>
+        </ul>
+
+        <h2>Branchen-Expertise</h2>
+        <p>Ob Food &amp; Feinkost, Versicherungen &amp; Finanzdienstleistungen oder Industrie &amp; Technik – wir kennen die Anforderungen Ihrer Branche.</p>
+        <ul>
+          <li>Food &amp; Feinkost (Anuga, ISM, ProSweets)</li>
+          <li>Versicherungen &amp; Finanzdienstleistungen (DKM)</li>
+          <li>Industrie &amp; Technik (Hannover Messe, K-Messe)</li>
+        </ul>
+
+        <h2>Referenzen</h2>
+        <p>Überzeugen Sie sich von unseren erfolgreich umgesetzten Projekten. <a href="/referenzen">Alle Referenzen ansehen</a></p>
+
+        <h2>Häufige Fragen zum Messebau</h2>
+        <h3>Was kostet ein Messestand?</h3>
+        <p>Die Kosten variieren je nach Größe und Ausstattung. Ein 50 qm Systemstand liegt bei ca. 25.000-35.000 €, individuelle Stände bei 600-1.200 €/qm. <a href="/kontakt">Kontaktieren Sie uns</a> für ein individuelles Angebot.</p>
+        <h3>Wie lange dauert die Planung und Produktion?</h3>
+        <p>Von Briefing bis Fertigstellung rechnen Sie mit 8-12 Wochen. Bei Eilprojekten können wir auch schneller arbeiten.</p>
+        <h3>Bauen Sie auch im Ausland auf?</h3>
+        <p>Ja, wir realisieren Projekte bundesweit und in ganz Europa. Durch unser Partnernetzwerk sind auch internationale Projekte möglich.</p>
+        <h3>Können wir den Stand mehrfach verwenden?</h3>
+        <p>Absolut! Unsere Systeme sind für Mehrfachnutzung konzipiert. Wir lagern Ihre Elemente und passen sie für Folgemessen an.</p>
+
+        <h2>Kontakt</h2>
+        <p>S&amp;S Messebau GbR<br>Marienstraße 37<br>41836 Hückelhoven</p>
+        <p>Mobil: <a href="tel:+4915140368754">+49 1514 0368754</a><br>E-Mail: <a href="mailto:info@sundsmessebau.com">info@sundsmessebau.com</a></p>
+
+        <h2>Weitere Seiten</h2>
+        <nav>
+          <ul>
+            <li><a href="/leistungen">Alle Leistungen im Überblick</a></li>
+            <li><a href="/branchen">Branchen-Expertise</a></li>
+            <li><a href="/referenzen">Unsere Referenzen</a></li>
+            <li><a href="/ablauf">So entsteht Ihr Messestand</a></li>
+            <li><a href="/nachhaltigkeit">Nachhaltigkeit bei S&amp;S Messebau</a></li>
+            <li><a href="/ueber-uns">Über uns</a></li>
+            <li><a href="/blog">Blog &amp; Ratgeber</a></li>
+            <li><a href="/bannerrahmen">Bannerrahmen-Systeme</a></li>
+            <li><a href="/kontakt">Kontakt &amp; Anfrage</a></li>
+            <li><a href="/impressum">Impressum</a></li>
+            <li><a href="/datenschutz">Datenschutz</a></li>
+          </ul>
+        </nav>
+      </main>
+    </div>
     <noscript>
       <div style="font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 48rem; margin: 0 auto; padding: 2rem;">
-        <h1>S&S Messebau – Professioneller Messebau aus NRW</h1>
-        <p>S&S Messebau ist Ihr Full-Service-Partner für Messestände jeder Größe. Wir planen, gestalten und realisieren Messestände, Eventbauten, Showrooms und Brand Spaces – bundesweit.</p>
+        <p><strong>Hinweis:</strong> Diese Webseite benötigt JavaScript für die volle Funktionalität. Bitte aktivieren Sie JavaScript in Ihrem Browser.</p>
+        <h1>S&amp;S Messebau – Professioneller Messebau aus NRW</h1>
+        <p>S&amp;S Messebau ist Ihr Full-Service-Partner für Messestände jeder Größe. Wir planen, gestalten und realisieren Messestände, Eventbauten, Showrooms und Brand Spaces – bundesweit.</p>
         <h2>Unsere Leistungen</h2>
         <ul>
-          <li><strong>Messebau</strong> – Individuelle Messestände für alle Branchen</li>
-          <li><strong>Eventbau</strong> – Bühnen, Präsentationsflächen und Veranstaltungsaufbauten</li>
-          <li><strong>Showrooms & Brand Spaces</strong> – Permanente Markenerlebnisräume</li>
-          <li><strong>Ladenbau</strong> – Ladenkonzepte und Shop-in-Shop-Lösungen</li>
+          <li><a href="/leistungen/messebau">Messebau</a> – Individuelle Messestände für alle Branchen</li>
+          <li><a href="/leistungen/eventbau">Eventbau</a> – Bühnen, Präsentationsflächen und Veranstaltungsaufbauten</li>
+          <li><a href="/leistungen/showroom-ladenbau">Showrooms &amp; Brand Spaces</a> – Permanente Markenerlebnisräume</li>
+          <li><a href="/leistungen/showroom-ladenbau">Ladenbau</a> – Ladenkonzepte und Shop-in-Shop-Lösungen</li>
         </ul>
         <h2>Branchen-Expertise</h2>
         <ul>
-          <li>Food & Feinkost (Anuga, ISM, ProSweets)</li>
-          <li>Versicherungen & Finanzdienstleistungen (DKM)</li>
-          <li>Industrie & Technik (Hannover Messe, K-Messe)</li>
+          <li>Food &amp; Feinkost (Anuga, ISM, ProSweets)</li>
+          <li>Versicherungen &amp; Finanzdienstleistungen (DKM)</li>
+          <li>Industrie &amp; Technik (Hannover Messe, K-Messe)</li>
         </ul>
         <h2>Kontakt</h2>
-        <p>S&S Messebau GbR<br>Marienstraße 37<br>41836 Hückelhoven</p>
+        <p>S&amp;S Messebau GbR<br>Marienstraße 37<br>41836 Hückelhoven</p>
         <p>Mobil: <a href="tel:+4915140368754">+49 1514 0368754</a><br>E-Mail: <a href="mailto:info@sundsmessebau.com">info@sundsmessebau.com</a></p>
-        <p><a href="https://sunds-messebau.de/#/leistungen">Leistungen</a> | <a href="https://sunds-messebau.de/#/branchen">Branchen</a> | <a href="https://sunds-messebau.de/#/referenzen">Referenzen</a> | <a href="https://sunds-messebau.de/#/kontakt">Kontakt</a> | <a href="https://sunds-messebau.de/#/impressum">Impressum</a> | <a href="https://sunds-messebau.de/#/datenschutz">Datenschutz</a></p>
+        <p><a href="/leistungen">Leistungen</a> | <a href="/branchen">Branchen</a> | <a href="/referenzen">Referenzen</a> | <a href="/kontakt">Kontakt</a> | <a href="/impressum">Impressum</a> | <a href="/datenschutz">Datenschutz</a></p>
       </div>
     </noscript>
 </body>
