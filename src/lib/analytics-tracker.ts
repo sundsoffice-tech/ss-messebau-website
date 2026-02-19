@@ -1,9 +1,20 @@
 /**
- * First-Party Analytics Tracker
+ * First-Party Analytics Tracker - Enterprise Edition
  *
  * Extends the existing GA4 analytics (src/lib/analytics.ts) with
- * first-party event collection that sends events to our own PHP backend.
+ * comprehensive first-party event collection that sends events to our own PHP backend.
  * Respects consent from CookieConsent / isTrackingAllowed().
+ *
+ * Features:
+ * - Persistent visitor ID (cross-session identification)
+ * - Enhanced device/network fingerprinting
+ * - Performance metrics collection (Web Vitals)
+ * - Scroll depth tracking with granularity
+ * - Page engagement timing
+ * - Session end detection
+ * - Outbound link tracking
+ * - Error tracking
+ * - Tab visibility tracking
  */
 
 import { v4 as uuidv4 } from 'uuid'
@@ -20,11 +31,14 @@ import type {
 } from '@/types/analytics'
 
 /* ------------------------------------------------------------------ */
-/*  Session Management                                                 */
+/*  Session & Visitor Management                                       */
 /* ------------------------------------------------------------------ */
 
 const SESSION_KEY = 'ss_analytics_session'
+const VISITOR_KEY = 'ss_analytics_visitor'
 const CONFIG_KEY = 'ss_tracking_config'
+const VISIT_COUNT_KEY = 'ss_visit_count'
+const LAST_VISIT_KEY = 'ss_last_visit'
 
 function getSessionId(): string {
   try {
@@ -36,6 +50,45 @@ function getSessionId(): string {
     return sid
   } catch {
     return uuidv4()
+  }
+}
+
+/** Persistent visitor ID stored in localStorage (survives sessions) */
+function getVisitorId(): string {
+  try {
+    let vid = localStorage.getItem(VISITOR_KEY)
+    if (!vid) {
+      vid = uuidv4()
+      localStorage.setItem(VISITOR_KEY, vid)
+    }
+    return vid
+  } catch {
+    return 'unknown'
+  }
+}
+
+/** Track visit count for returning visitor detection */
+function getVisitCount(): number {
+  try {
+    return parseInt(localStorage.getItem(VISIT_COUNT_KEY) || '0', 10)
+  } catch {
+    return 0
+  }
+}
+
+function incrementVisitCount(): void {
+  try {
+    const count = getVisitCount() + 1
+    localStorage.setItem(VISIT_COUNT_KEY, String(count))
+    localStorage.setItem(LAST_VISIT_KEY, new Date().toISOString())
+  } catch { /* ignore */ }
+}
+
+function getLastVisitDate(): string | null {
+  try {
+    return localStorage.getItem(LAST_VISIT_KEY)
+  } catch {
+    return null
   }
 }
 
@@ -54,7 +107,6 @@ export function getTrackingConfig(): TrackingConfig {
       return cachedConfig
     }
   } catch { /* ignore */ }
-  // Return default inline to avoid circular import
   return {
     enabled: true,
     events: {
@@ -69,10 +121,17 @@ export function getTrackingConfig(): TrackingConfig {
       blog_article_read: true,
       heartbeat: true,
       session_start: true,
+      session_end: true,
       form_interaction: true,
       form_abandon: true,
       exit_intent: true,
       configurator_step: true,
+      outbound_click: true,
+      video_play: true,
+      error: true,
+      performance: true,
+      search: true,
+      tab_visibility: true,
     },
     utm_whitelist: ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'],
     domain_whitelist: ['sunds-messebau.de', 'www.sunds-messebau.de', 'localhost'],
@@ -149,7 +208,7 @@ async function flushQueue(): Promise<void> {
   const queue = getQueue()
   if (queue.length === 0) return
 
-  const batch = queue.splice(0, 20) // send up to 20 events at a time
+  const batch = queue.splice(0, 20)
   saveQueue(queue)
 
   try {
@@ -160,11 +219,9 @@ async function flushQueue(): Promise<void> {
       keepalive: true,
     })
     if (!resp.ok) {
-      // Re-queue on failure
       saveQueue([...batch, ...getQueue()])
     }
   } catch {
-    // Re-queue on network error
     saveQueue([...batch, ...getQueue()])
   }
 }
@@ -174,29 +231,21 @@ function scheduleFlush(): void {
   flushTimer = setTimeout(() => {
     flushTimer = null
     flushQueue()
-  }, 2000) // batch events for 2s
+  }, 2000)
 }
 
 /* ------------------------------------------------------------------ */
 /*  Public Tracking API                                                */
 /* ------------------------------------------------------------------ */
 
-/**
- * Track a first-party analytics event.
- * Respects consent and admin config (event toggles).
- */
 export function trackFirstPartyEvent(
   eventName: TrackingEventName,
   props?: Record<string, string | number | boolean>,
 ): void {
-  // Gate: consent
   if (!isTrackingAllowed()) return
 
-  // Gate: global tracking toggle
   const config = getTrackingConfig()
   if (!config.enabled) return
-
-  // Gate: per-event toggle
   if (!config.events[eventName]) return
 
   const url = window.location.href
@@ -206,6 +255,7 @@ export function trackFirstPartyEvent(
     event: eventName,
     ts: new Date().toISOString(),
     session_id: getSessionId(),
+    visitor_id: getVisitorId(),
     url: sanitizeUrl(url, config.utm_whitelist),
     referrer: document.referrer ? sanitizeUrl(document.referrer, []) : undefined,
     ...utm,
@@ -219,7 +269,7 @@ export function trackFirstPartyEvent(
 }
 
 /* ------------------------------------------------------------------ */
-/*  Device Detection (non-PII)                                         */
+/*  Device Detection (non-PII) - Enhanced                              */
 /* ------------------------------------------------------------------ */
 
 function detectDeviceType(): string {
@@ -237,6 +287,22 @@ function detectBrowser(): string {
   if (ua.includes('Chrome/') && !ua.includes('Edg/')) return 'Chrome'
   if (ua.includes('Safari/') && !ua.includes('Chrome/')) return 'Safari'
   return 'Other'
+}
+
+function detectBrowserVersion(): string {
+  const ua = navigator.userAgent
+  const matchers: Array<[string, RegExp]> = [
+    ['Firefox', /Firefox\/(\d+)/],
+    ['Edge', /Edg\/(\d+)/],
+    ['Opera', /OPR\/(\d+)/],
+    ['Chrome', /Chrome\/(\d+)/],
+    ['Safari', /Version\/(\d+)/],
+  ]
+  for (const [, regex] of matchers) {
+    const match = ua.match(regex)
+    if (match) return match[1]
+  }
+  return 'unknown'
 }
 
 function detectOS(): string {
@@ -257,9 +323,54 @@ function detectTimezone(): string {
   }
 }
 
+function detectConnectionType(): string {
+  try {
+    const conn = (navigator as any).connection
+    if (conn) {
+      return conn.effectiveType || conn.type || 'unknown'
+    }
+  } catch { /* ignore */ }
+  return 'unknown'
+}
+
+function detectScreenResolution(): string {
+  return `${window.screen.width}x${window.screen.height}`
+}
+
+function detectColorDepth(): number {
+  return window.screen.colorDepth || 0
+}
+
+function detectTouchSupport(): boolean {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
+}
+
+function detectDoNotTrack(): boolean {
+  return navigator.doNotTrack === '1'
+}
+
+function detectCookiesEnabled(): boolean {
+  return navigator.cookieEnabled
+}
+
+function detectAdBlocker(): boolean {
+  try {
+    const testAd = document.createElement('div')
+    testAd.innerHTML = '&nbsp;'
+    testAd.className = 'adsbox ad-placement'
+    testAd.style.position = 'absolute'
+    testAd.style.left = '-9999px'
+    document.body.appendChild(testAd)
+    const blocked = testAd.offsetHeight === 0
+    document.body.removeChild(testAd)
+    return blocked
+  } catch {
+    return false
+  }
+}
+
 /**
  * Infer approximate country/region from IANA timezone.
- * Covers DACH + major European markets; falls back to continent.
  */
 function inferGeoFromTimezone(tz: string): { country: string; region: string } {
   const TIMEZONE_MAP: Record<string, { country: string; region: string }> = {
@@ -305,20 +416,35 @@ function inferGeoFromTimezone(tz: string): { country: string; region: string } {
   }
 }
 
-function getDeviceProps(): Record<string, string | number> {
+function getDeviceProps(): Record<string, string | number | boolean> {
   const tz = detectTimezone()
   const geo = inferGeoFromTimezone(tz)
   return {
     device_type: detectDeviceType(),
     browser: detectBrowser(),
+    browser_version: detectBrowserVersion(),
     os: detectOS(),
     screen_width: window.screen.width,
     screen_height: window.screen.height,
+    screen_resolution: detectScreenResolution(),
     viewport_width: window.innerWidth,
+    viewport_height: window.innerHeight,
+    color_depth: detectColorDepth(),
+    pixel_ratio: window.devicePixelRatio || 1,
     language: navigator.language || 'unknown',
+    languages: (navigator.languages || []).join(','),
     timezone: tz,
     geo_country: geo.country,
     geo_region: geo.region,
+    connection_type: detectConnectionType(),
+    touch_support: detectTouchSupport(),
+    cookies_enabled: detectCookiesEnabled(),
+    do_not_track: detectDoNotTrack(),
+    ad_blocker: detectAdBlocker(),
+    visit_count: getVisitCount(),
+    is_returning: getVisitCount() > 0,
+    last_visit: getLastVisitDate() || '',
+    page_count: 0,
   }
 }
 
@@ -331,9 +457,232 @@ const SESSION_START_KEY = 'ss_session_start_sent'
 function sendSessionStartIfNeeded(): void {
   try {
     if (sessionStorage.getItem(SESSION_START_KEY)) return
+    incrementVisitCount()
     trackFirstPartyEvent('session_start', getDeviceProps())
     sessionStorage.setItem(SESSION_START_KEY, '1')
+    setupSessionEndTracking()
+    setupOutboundClickTracking()
+    setupErrorTracking()
+    collectPerformanceMetrics()
   } catch { /* ignore */ }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Session End Detection                                              */
+/* ------------------------------------------------------------------ */
+
+const SESSION_PAGE_COUNT_KEY = 'ss_page_count'
+
+function getPageCount(): number {
+  try {
+    return parseInt(sessionStorage.getItem(SESSION_PAGE_COUNT_KEY) || '0', 10)
+  } catch { return 0 }
+}
+
+function incrementPageCount(): void {
+  try {
+    const count = getPageCount() + 1
+    sessionStorage.setItem(SESSION_PAGE_COUNT_KEY, String(count))
+  } catch { /* ignore */ }
+}
+
+function setupSessionEndTracking(): void {
+  const sessionStartTime = Date.now()
+
+  window.addEventListener('beforeunload', () => {
+    const duration = Math.round((Date.now() - sessionStartTime) / 1000)
+    trackFirstPartyEvent('session_end', {
+      session_duration_seconds: duration,
+      page_count: getPageCount(),
+      events_fired: getQueue().length,
+    })
+    flushQueue()
+  })
+}
+
+/* ------------------------------------------------------------------ */
+/*  Outbound Click Tracking                                            */
+/* ------------------------------------------------------------------ */
+
+function setupOutboundClickTracking(): void {
+  document.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement)?.closest('a')
+    if (!link) return
+
+    const href = link.getAttribute('href')
+    if (!href) return
+
+    try {
+      const url = new URL(href, window.location.origin)
+      if (url.hostname !== window.location.hostname) {
+        trackFirstPartyEvent('outbound_click', {
+          destination: url.hostname,
+          url: href.substring(0, 500),
+          text: (link.textContent || '').substring(0, 100).trim(),
+        })
+      }
+    } catch { /* ignore */ }
+  })
+}
+
+/* ------------------------------------------------------------------ */
+/*  Error Tracking                                                     */
+/* ------------------------------------------------------------------ */
+
+function setupErrorTracking(): void {
+  window.addEventListener('error', (e) => {
+    trackFirstPartyEvent('error', {
+      error_message: (e.message || 'Unknown error').substring(0, 500),
+      error_source: (e.filename || '').substring(0, 200),
+      error_line: e.lineno || 0,
+      error_col: e.colno || 0,
+    })
+  })
+
+  window.addEventListener('unhandledrejection', (e) => {
+    const message = e.reason?.message || e.reason?.toString() || 'Unhandled rejection'
+    trackFirstPartyEvent('error', {
+      error_message: message.substring(0, 500),
+      error_type: 'unhandled_rejection',
+    })
+  })
+}
+
+/* ------------------------------------------------------------------ */
+/*  Performance Metrics Collection                                     */
+/* ------------------------------------------------------------------ */
+
+function collectPerformanceMetrics(): void {
+  if (typeof window === 'undefined' || !window.performance) return
+
+  // Wait for page load to complete
+  const reportMetrics = () => {
+    try {
+      const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
+      if (!nav) return
+
+      trackFirstPartyEvent('performance', {
+        page_load_ms: Math.round(nav.loadEventEnd - nav.startTime),
+        ttfb_ms: Math.round(nav.responseStart - nav.requestStart),
+        dom_interactive_ms: Math.round(nav.domInteractive - nav.startTime),
+        dom_content_loaded_ms: Math.round(nav.domContentLoadedEventEnd - nav.startTime),
+        transfer_size: nav.transferSize || 0,
+        navigation_type: nav.type || 'navigate',
+      })
+
+      // FCP via PerformanceObserver
+      const paintEntries = performance.getEntriesByType('paint')
+      const fcp = paintEntries.find(e => e.name === 'first-contentful-paint')
+      if (fcp) {
+        trackFirstPartyEvent('performance', {
+          metric: 'fcp',
+          value_ms: Math.round(fcp.startTime),
+        })
+      }
+    } catch { /* ignore */ }
+  }
+
+  if (document.readyState === 'complete') {
+    setTimeout(reportMetrics, 100)
+  } else {
+    window.addEventListener('load', () => setTimeout(reportMetrics, 100))
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Scroll Depth Tracking - Enhanced                                   */
+/* ------------------------------------------------------------------ */
+
+let maxScrollDepth = 0
+let scrollDepthReported = new Set<number>()
+
+export function initScrollDepthTracking(): void {
+  if (typeof window === 'undefined') return
+
+  const thresholds = [25, 50, 75, 90, 100]
+  maxScrollDepth = 0
+  scrollDepthReported = new Set<number>()
+
+  const handleScroll = () => {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop
+    const docHeight = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.offsetHeight
+    )
+    const viewportHeight = window.innerHeight
+    const scrollableHeight = docHeight - viewportHeight
+
+    if (scrollableHeight <= 0) return
+
+    const depth = Math.min(100, Math.round((scrollTop / scrollableHeight) * 100))
+    maxScrollDepth = Math.max(maxScrollDepth, depth)
+
+    for (const threshold of thresholds) {
+      if (depth >= threshold && !scrollDepthReported.has(threshold)) {
+        scrollDepthReported.add(threshold)
+        trackFirstPartyEvent('scroll_depth', {
+          depth_pct: threshold,
+          page: window.location.pathname,
+        })
+      }
+    }
+  }
+
+  let scrollTimer: ReturnType<typeof setTimeout> | null = null
+  window.addEventListener('scroll', () => {
+    if (scrollTimer) return
+    scrollTimer = setTimeout(() => {
+      scrollTimer = null
+      handleScroll()
+    }, 200)
+  }, { passive: true })
+}
+
+/* ------------------------------------------------------------------ */
+/*  Page Engagement Tracking                                           */
+/* ------------------------------------------------------------------ */
+
+let engagementStartTime = 0
+let totalEngagementTime = 0
+let isEngaged = true
+
+export function initEngagementTracking(): void {
+  if (typeof window === 'undefined') return
+
+  engagementStartTime = Date.now()
+  totalEngagementTime = 0
+  isEngaged = true
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (isEngaged) {
+        totalEngagementTime += Date.now() - engagementStartTime
+        isEngaged = false
+      }
+      trackFirstPartyEvent('tab_visibility', { state: 'hidden' })
+    } else {
+      engagementStartTime = Date.now()
+      isEngaged = true
+      trackFirstPartyEvent('tab_visibility', { state: 'visible' })
+    }
+  })
+
+  // Report engagement on page unload
+  window.addEventListener('beforeunload', () => {
+    if (isEngaged) {
+      totalEngagementTime += Date.now() - engagementStartTime
+    }
+    const engagementSeconds = Math.round(totalEngagementTime / 1000)
+    if (engagementSeconds > 1) {
+      trackFirstPartyEvent('page_engagement', {
+        engagement_seconds: engagementSeconds,
+        page: window.location.pathname,
+        max_scroll_depth: maxScrollDepth,
+      })
+    }
+  })
 }
 
 /* ------------------------------------------------------------------ */
@@ -342,7 +691,13 @@ function sendSessionStartIfNeeded(): void {
 
 export function trackPageView(): void {
   sendSessionStartIfNeeded()
-  trackFirstPartyEvent('page_view')
+  incrementPageCount()
+  trackFirstPartyEvent('page_view', {
+    page_count: getPageCount(),
+    title: document.title.substring(0, 200),
+  })
+  initScrollDepthTracking()
+  initEngagementTracking()
 }
 
 export function trackCTAClick(ctaName: string): void {
@@ -385,6 +740,20 @@ export function trackExitIntent(pageName: string): void {
 
 export function trackConfiguratorStep(step: number, stepName: string): void {
   trackFirstPartyEvent('configurator_step', { step, step_name: stepName })
+}
+
+export function trackSearch(query: string, resultCount: number): void {
+  trackFirstPartyEvent('search', {
+    query: query.substring(0, 200),
+    result_count: resultCount,
+  })
+}
+
+export function trackVideoPlay(videoId: string, title?: string): void {
+  trackFirstPartyEvent('video_play', {
+    video_id: videoId,
+    title: (title || '').substring(0, 200),
+  })
 }
 
 /* ------------------------------------------------------------------ */
