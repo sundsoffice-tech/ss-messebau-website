@@ -24,6 +24,7 @@ import {
   Phone,
   ChatCircleDots,
   FileArrowDown,
+  UsersThree,
 } from '@phosphor-icons/react'
 import {
   fetchTrackingConfig,
@@ -33,6 +34,7 @@ import {
   runAnalyticsCleanup,
   exportAnalyticsData,
   fetchRealtimeEvents,
+  fetchActiveVisitors,
 } from '@/lib/analytics-tracker'
 import type {
   TrackingConfig,
@@ -41,6 +43,8 @@ import type {
   AnalyticsStatusInfo,
   ExportFormat,
   RealtimeEvent,
+  ActiveVisitor,
+  ActiveVisitorsResponse,
 } from '@/types/analytics'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area } from 'recharts'
 
@@ -58,6 +62,7 @@ const EVENT_LABELS: Record<TrackingEventName, string> = {
   scroll_depth: 'Scroll-Tiefe',
   page_engagement: 'Verweildauer',
   blog_article_read: 'Blog-Artikel gelesen',
+  heartbeat: 'Herzschlag',
 }
 
 /* ================================================================== */
@@ -700,7 +705,224 @@ function SystemStatusTab() {
 }
 
 /* ================================================================== */
-/*  5) Realtime Tab                                                    */
+/*  5) Active Visitors Tab                                             */
+/* ================================================================== */
+
+function formatTimeWithSeconds(ts: string): string {
+  try {
+    const d = new Date(ts)
+    return d.toLocaleTimeString('de-DE', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    })
+  } catch {
+    return ts
+  }
+}
+
+function formatRelativeSeconds(ts: string): string {
+  try {
+    const d = new Date(ts)
+    const now = new Date()
+    const diffSec = Math.floor((now.getTime() - d.getTime()) / 1000)
+    if (diffSec < 5) return 'gerade eben'
+    if (diffSec < 60) return `vor ${diffSec}s`
+    const diffMin = Math.floor(diffSec / 60)
+    if (diffMin < 60) return `vor ${diffMin}m ${diffSec % 60}s`
+    return formatTimeWithSeconds(ts)
+  } catch {
+    return ts
+  }
+}
+
+function formatDuration(startTs: string): string {
+  try {
+    const start = new Date(startTs)
+    const now = new Date()
+    const totalSec = Math.floor((now.getTime() - start.getTime()) / 1000)
+    const min = Math.floor(totalSec / 60)
+    const sec = totalSec % 60
+    if (min === 0) return `${sec}s`
+    return `${min}m ${sec}s`
+  } catch {
+    return '\u2013'
+  }
+}
+
+function VisitorCard({
+  visitor,
+  expanded,
+  onToggle,
+}: {
+  visitor: ActiveVisitor
+  expanded: boolean
+  onToggle: () => void
+}) {
+  const hue = parseInt(visitor.session_id_hash.slice(0, 4), 16) % 360
+  const avatarColor = `hsl(${hue}, 60%, 50%)`
+
+  return (
+    <Card
+      className="overflow-hidden transition-all cursor-pointer hover:border-primary/30"
+      onClick={onToggle}
+    >
+      <CardContent className="p-4">
+        <div className="flex items-center gap-3">
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-mono font-bold shrink-0"
+            style={{ backgroundColor: avatarColor }}
+          >
+            {visitor.session_id.slice(0, 4)}
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-mono text-sm font-medium truncate">
+                {visitor.current_page}
+              </span>
+              <Badge variant="outline" className="text-xs">
+                {EVENT_LABELS[visitor.last_event as TrackingEventName] ?? visitor.last_event}
+              </Badge>
+            </div>
+            <div className="flex items-center gap-3 mt-0.5 text-xs text-muted-foreground">
+              <span>Session: {formatDuration(visitor.session_start)}</span>
+              <span>{visitor.event_count} Events</span>
+            </div>
+          </div>
+
+          <div className="text-right shrink-0">
+            <p className="text-sm font-mono">{formatTimeWithSeconds(visitor.last_seen)}</p>
+            <p className="text-xs text-muted-foreground">{formatRelativeSeconds(visitor.last_seen)}</p>
+          </div>
+        </div>
+
+        {expanded && visitor.timeline.length > 0 && (
+          <div className="mt-4 pt-3 border-t space-y-2">
+            <h4 className="text-xs font-medium text-muted-foreground mb-2">Aktivit\u00e4ts-Verlauf</h4>
+            {visitor.timeline.map((entry, i) => (
+              <div key={`${entry.ts}-${i}`} className="flex items-center gap-3 text-sm">
+                <span className="font-mono text-xs text-muted-foreground w-20 shrink-0">
+                  {formatTimeWithSeconds(entry.ts)}
+                </span>
+                <div className={`w-2 h-2 rounded-full shrink-0 ${
+                  entry.event === 'heartbeat' ? 'bg-muted-foreground/40' : 'bg-primary'
+                }`} />
+                <Badge
+                  variant={entry.event === 'heartbeat' ? 'secondary' : 'outline'}
+                  className="text-xs"
+                >
+                  {EVENT_LABELS[entry.event as TrackingEventName] ?? entry.event}
+                </Badge>
+                <span className="font-mono text-xs truncate text-muted-foreground">
+                  {entry.url}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
+function ActiveVisitorsTab() {
+  const [data, setData] = useState<ActiveVisitorsResponse | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [autoRefresh, setAutoRefresh] = useState(true)
+  const [expandedSession, setExpandedSession] = useState<string | null>(null)
+
+  const load = useCallback(() => {
+    fetchActiveVisitors(90)
+      .then(setData)
+      .catch(() => toast.error('Besucher-Daten konnten nicht geladen werden'))
+      .finally(() => setLoading(false))
+  }, [])
+
+  useEffect(() => { load() }, [load])
+
+  useEffect(() => {
+    if (!autoRefresh) return
+    const interval = setInterval(load, 5000)
+    return () => clearInterval(interval)
+  }, [autoRefresh, load])
+
+  if (loading) {
+    return <Card className="p-8 text-center"><p className="text-muted-foreground">Lade Besucher-Daten\u2026</p></Card>
+  }
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <UsersThree className="w-6 h-6 text-primary" weight="fill" />
+                {data && data.active_visitors > 0 && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                )}
+              </div>
+              <div>
+                <span className="text-2xl font-bold">
+                  {data?.active_visitors ?? 0}
+                </span>
+                <span className="text-sm text-muted-foreground ml-2">
+                  Besucher online
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {data && (
+                <span className="text-xs text-muted-foreground hidden sm:inline">
+                  Server: {formatTimeWithSeconds(data.server_time)}
+                </span>
+              )}
+              <div className={`w-2 h-2 rounded-full ${autoRefresh ? 'bg-green-500 animate-pulse' : 'bg-muted-foreground'}`} />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setAutoRefresh(!autoRefresh)}
+                className="text-xs gap-1"
+              >
+                {autoRefresh ? 'Pausieren' : 'Fortsetzen'}
+              </Button>
+              <Button variant="outline" size="sm" onClick={load} className="text-xs gap-1">
+                <ArrowClockwise className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {(!data || data.visitors.length === 0) ? (
+        <Card className="p-8 text-center">
+          <UsersThree className="w-12 h-12 mx-auto mb-3 text-muted-foreground opacity-50" />
+          <p className="text-muted-foreground">Keine aktiven Besucher</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Besucher erscheinen hier, sobald sie die Website besuchen
+          </p>
+        </Card>
+      ) : (
+        <div className="space-y-2">
+          {data.visitors.map((visitor) => (
+            <VisitorCard
+              key={visitor.session_id_hash}
+              visitor={visitor}
+              expanded={expandedSession === visitor.session_id_hash}
+              onToggle={() => setExpandedSession(
+                expandedSession === visitor.session_id_hash ? null : visitor.session_id_hash
+              )}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ================================================================== */
+/*  6) Realtime Tab                                                    */
 /* ================================================================== */
 
 const REALTIME_EVENT_ICONS: Record<string, string> = {
@@ -713,6 +935,7 @@ const REALTIME_EVENT_ICONS: Record<string, string> = {
   scroll_depth: '📜',
   page_engagement: '⏱️',
   blog_article_read: '📰',
+  heartbeat: '💓',
 }
 
 function RealtimeTab() {
@@ -832,8 +1055,12 @@ export function AnalyticsAdminPanel() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="dashboard" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-5">
+        <Tabs defaultValue="visitors" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value="visitors" className="gap-2 text-xs sm:text-sm" aria-label="Besucher Live">
+              <UsersThree className="w-4 h-4" />
+              <span className="hidden sm:inline">Besucher</span>
+            </TabsTrigger>
             <TabsTrigger value="dashboard" className="gap-2 text-xs sm:text-sm" aria-label="Dashboard">
               <Eye className="w-4 h-4" />
               <span className="hidden sm:inline">Dashboard</span>
@@ -855,6 +1082,10 @@ export function AnalyticsAdminPanel() {
               <span className="hidden sm:inline">System</span>
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="visitors">
+            <ActiveVisitorsTab />
+          </TabsContent>
 
           <TabsContent value="dashboard">
             <KPIDashboardTab />

@@ -16,6 +16,7 @@ import type {
   AnalyticsStatusInfo,
   ExportFormat,
   RealtimeEvent,
+  ActiveVisitorsResponse,
 } from '@/types/analytics'
 
 /* ------------------------------------------------------------------ */
@@ -66,6 +67,7 @@ export function getTrackingConfig(): TrackingConfig {
       scroll_depth: true,
       page_engagement: true,
       blog_article_read: true,
+      heartbeat: true,
     },
     utm_whitelist: ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'],
     domain_whitelist: ['sunds-messebau.de', 'www.sunds-messebau.de', 'localhost'],
@@ -322,6 +324,15 @@ export async function fetchRealtimeEvents(limit = 20): Promise<RealtimeEvent[]> 
     credentials: 'include',
   })
   if (!resp.ok) throw new Error('Failed to fetch realtime events')
+  return resp.json()
+}
+
+export async function fetchActiveVisitors(windowSeconds = 90): Promise<ActiveVisitorsResponse> {
+  const params = new URLSearchParams({ window: String(windowSeconds) })
+  const resp = await fetch(`${API_BASE}/analytics-visitors.php?${params}`, {
+    credentials: 'include',
+  })
+  if (!resp.ok) throw new Error('Failed to fetch active visitors')
   return resp.json()
 }
 
