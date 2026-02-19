@@ -1,0 +1,11 @@
+# Deny all direct access to the data directory
+# This directory contains SQLite databases and rate limit files
+# They should only be accessed by PHP scripts, never served directly
+
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
