@@ -92,7 +92,10 @@
         "opens": "08:00",
         "closes": "18:00"
       },
-      "sameAs": []
+      "sameAs": [
+        "https://www.instagram.com/sundsmessebau/",
+        "https://www.facebook.com/sundsmessebau/"
+      ]
     }
     </script>
 
@@ -301,19 +304,32 @@
     </noscript>
     
     <!-- Google Analytics 4 – Consent Mode v2 (default: denied until user opts in) -->
+    <!-- TODO: Echte GA4 Measurement-ID eintragen (G-XXXXXXXXXX ersetzen) -->
+    <!-- Analytics ist DEAKTIVIERT bis eine echte ID konfiguriert wird -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('consent', 'default', { analytics_storage: 'denied' });
       gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX', { send_page_view: true });
+      // WICHTIG: G-XXXXXXXXXX durch echte GA4 Measurement-ID ersetzen!
+      if (!'G-XXXXXXXXXX'.startsWith('G-XXX')) {
+        gtag('config', 'G-XXXXXXXXXX', { send_page_view: true });
+      }
     </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script type="module" crossorigin src="/assets/index-CUa-blc0.js"></script>
+    <script>
+      // GA4 Script nur laden wenn echte ID konfiguriert
+      if (!'G-XXXXXXXXXX'.startsWith('G-XXX')) {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
+        document.head.appendChild(s);
+      }
+    </script>
+  <script type="module" crossorigin src="/assets/index-Cs0Nga4F.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor-react-DjPCVcPo.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-ui-qNHxpggR.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-motion-Ct0E2aNd.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-CoHKGtCS.css">
+  <link rel="stylesheet" crossorigin href="/assets/index-LTpwGXtS.css">
 </head>
 
 <body>
