@@ -101,6 +101,49 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Blog Posts -->
+  <url>
+    <loc>https://sunds-messebau.de/blog/messestand-checkliste</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://sunds-messebau.de/blog/messestand-budget-guide</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://sunds-messebau.de/blog/nachhaltiger-messebau</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://sunds-messebau.de/blog/messestand-kosten-mittelstand</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://sunds-messebau.de/blog/messestand-food-unternehmen-anuga</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://sunds-messebau.de/blog/schnelle-angebotsstellung-messebau-48h</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
   <url>
     <loc>https://sunds-messebau.de/aktuelles</loc>
     <lastmod>2026-02-18</lastmod>
