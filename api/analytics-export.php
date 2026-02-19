@@ -482,7 +482,7 @@ function calculateEngagement(PDO $db, array $params, int $sessions, int $visitor
     $stmt = $db->prepare("
         SELECT COUNT(*) FROM analytics_events
         WHERE ts >= :from AND ts <= :to AND event = 'session_start'
-        AND json_extract(props, '$.is_returning') = true
+        AND json_extract(props, '$.is_returning') = 1
     ");
     $stmt->execute($params);
     $returningCount = (int)$stmt->fetchColumn();
@@ -540,7 +540,7 @@ function calculateVisitorSegments(PDO $db, array $params, int $totalVisitors): a
     $stmt = $db->prepare("
         SELECT COUNT(*) FROM analytics_events
         WHERE ts >= :from AND ts <= :to AND event = 'session_start'
-        AND json_extract(props, '$.is_returning') = true
+        AND json_extract(props, '$.is_returning') = 1
     ");
     $stmt->execute($params);
     $returning = (int)$stmt->fetchColumn();
