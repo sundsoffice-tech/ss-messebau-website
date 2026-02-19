@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react'
+import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react'
 import { Toaster } from 'sonner'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
@@ -67,6 +67,14 @@ function App() {
   usePageMeta(currentPage)
   usePageViewTracking() // First-party analytics page view tracking
   useHeartbeat() // Real-time visitor presence heartbeat
+
+  // FOUT guard: remove js-loading class after React's first DOM commit
+  useLayoutEffect(() => {
+    document.documentElement.classList.remove('js-loading')
+    if ((window as any).__jsLoadingTimeout) {
+      clearTimeout((window as any).__jsLoadingTimeout)
+    }
+  }, [])
 
   useEffect(() => {
     const handleRouteChange = () => {
