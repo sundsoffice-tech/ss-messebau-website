@@ -151,8 +151,7 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
               [&_table]:w-full [&_table]:border-collapse [&_table]:mb-4
               [&_th]:text-left [&_th]:text-foreground [&_th]:font-semibold [&_th]:py-2 [&_th]:pr-4 [&_th]:border-b
               [&_td]:py-2 [&_td]:pr-4 [&_td]:border-b [&_td]:border-border
-              [&_a]:text-primary [&_a]:underline [&_a]:hover:text-primary/80
-              [&_img]:w-full [&_img]:rounded-xl [&_img]:my-8 [&_img]:shadow-lg [&_img]:aspect-video [&_img]:object-cover"
+              [&_a]:text-primary [&_a]:underline [&_a]:hover:text-primary/80"
             dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
 
