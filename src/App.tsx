@@ -9,7 +9,7 @@ import { NavigationLoadingIndicator } from './components/NavigationLoadingIndica
 import CookieConsent from './components/CookieConsent'
 import { CustomCursor } from './components/CustomCursor'
 import { CursorGlow } from './components/CursorGlow'
-import { CursorRipple, useCursorScale } from './components/CursorEffects'
+import { CursorRipple, useCursorScale, useCardTilt } from './components/CursorEffects'
 import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath, navigate } from './lib/deep-linking'
 import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 import { usePageMeta } from './hooks/use-page-meta'
@@ -73,7 +73,8 @@ function App() {
   }, [])
 
   useSmoothScrollLinks()
-  useCursorScale() // Add cursor scale effect
+  useCursorScale() // Premium hover scale + click compression
+  useCardTilt() // 3D perspective tilt on [data-tilt] cards
   usePageMeta(currentPage)
   usePageViewTracking() // First-party analytics page view tracking
   useHeartbeat() // Real-time visitor presence heartbeat

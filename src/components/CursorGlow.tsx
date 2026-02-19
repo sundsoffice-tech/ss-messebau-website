@@ -1,89 +1,79 @@
-import { useEffect, useState } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { isMobileDevice } from '../lib/cursor-utils'
+import { useEffect, useRef, useCallback } from 'react'
+import { shouldDisableCursorEffects } from '../lib/cursor-utils'
 
 /**
- * Interactive Cursor Glow Effect
- * Creates a subtle glow around interactive elements when hovered
+ * Premium Card Spotlight Effect
+ *
+ * Stripe/Linear-level spotlight that:
+ * - Tracks mouse position relative to each card
+ * - Creates radial gradient spotlight on card surface
+ * - Uses CSS custom properties for GPU-accelerated rendering
+ * - Only activates on [data-spotlight] elements or cards
+ * - Completely decoupled from React render cycle for performance
  */
 export function CursorGlow() {
-  const [isVisible, setIsVisible] = useState(false)
-  const [glowColor, setGlowColor] = useState('oklch(0.45 0.15 250)')
-  const [isMobile, setIsMobile] = useState(false)
-  
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  
-  const springConfig = { damping: 30, stiffness: 200 }
-  const xSpring = useSpring(x, springConfig)
-  const ySpring = useSpring(y, springConfig)
+  const frameRef = useRef<number>(0)
+  const mouseRef = useRef({ x: 0, y: 0 })
+  const activeElements = useRef<Set<HTMLElement>>(new Set())
+
+  const updateSpotlight = useCallback(() => {
+    const { x, y } = mouseRef.current
+
+    activeElements.current.forEach((el) => {
+      const rect = el.getBoundingClientRect()
+      const isInside =
+        x >= rect.left - 80 &&
+        x <= rect.right + 80 &&
+        y >= rect.top - 80 &&
+        y <= rect.bottom + 80
+
+      if (isInside) {
+        const relX = x - rect.left
+        const relY = y - rect.top
+        el.style.setProperty('--spotlight-x', `${relX}px`)
+        el.style.setProperty('--spotlight-y', `${relY}px`)
+        el.style.setProperty('--spotlight-opacity', '1')
+      } else {
+        el.style.setProperty('--spotlight-opacity', '0')
+      }
+    })
+  }, [])
 
   useEffect(() => {
-    // Check for mobile
-    const mobile = isMobileDevice()
-    setIsMobile(mobile)
-    
-    if (mobile) return
+    if (shouldDisableCursorEffects()) return
 
-    // Check for reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReducedMotion) return
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const target = e.target as HTMLElement
-      
-      // Check what type of element we're hovering
-      const isButton = target.closest('button:not([disabled])')
-      const isLink = target.closest('a')
-      const isInteractive = target.closest('[role="button"], [tabindex]:not([tabindex="-1"])')
-      
-      if (isButton || isLink || isInteractive) {
-        setIsVisible(true)
-        x.set(e.clientX)
-        y.set(e.clientY)
-        
-        // Different colors for different elements
-        if (isButton) {
-          setGlowColor('oklch(0.45 0.15 250)')
-        } else if (isLink) {
-          setGlowColor('oklch(0.40 0.15 270)')
-        } else {
-          setGlowColor('oklch(0.45 0.15 250)')
-        }
-      } else {
-        setIsVisible(false)
-      }
+    // Collect all spotlight-eligible elements
+    const collectElements = () => {
+      activeElements.current.clear()
+      const elements = document.querySelectorAll<HTMLElement>(
+        '[data-spotlight], [data-slot="card"], .spotlight-card'
+      )
+      elements.forEach((el) => activeElements.current.add(el))
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [x, y, isMobile])
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY }
+      cancelAnimationFrame(frameRef.current)
+      frameRef.current = requestAnimationFrame(updateSpotlight)
+    }
 
-  if (isMobile) return null
+    // Initial collection + MutationObserver for dynamic content
+    collectElements()
 
-  return (
-    <motion.div
-      className="fixed pointer-events-none z-[9997]"
-      style={{
-        left: xSpring,
-        top: ySpring,
-        translateX: '-50%',
-        translateY: '-50%',
-      }}
-      animate={{
-        opacity: isVisible ? 0.08 : 0,
-        scale: isVisible ? 1 : 0.5,
-      }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
-    >
-      <div
-        className="rounded-full blur-3xl"
-        style={{
-          width: '120px',
-          height: '120px',
-          background: glowColor,
-        }}
-      />
-    </motion.div>
-  )
+    const observer = new MutationObserver(() => {
+      collectElements()
+    })
+    observer.observe(document.body, { childList: true, subtree: true })
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true })
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      observer.disconnect()
+      cancelAnimationFrame(frameRef.current)
+    }
+  }, [updateSpotlight])
+
+  // This component renders nothing - it's a pure side-effect controller
+  return null
 }
