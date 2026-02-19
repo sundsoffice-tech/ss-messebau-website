@@ -154,7 +154,7 @@ export function HomePage() {
                   t('home.services.messebau.b4')
                 ],
                 sectionId: 'messebau',
-                image: '/images/WhatsApp Image 2026-02-16 at 21.12.21 (1).jpeg'
+                image: '/images/messebau-service-overview.jpeg'
               },
               {
                 icon: CalendarDot,
@@ -167,7 +167,7 @@ export function HomePage() {
                   t('home.services.touren.b4')
                 ],
                 sectionId: 'touren',
-                image: '/images/WhatsApp Image 2026-02-15 at 18.25.23.jpeg'
+                image: '/images/messetouren-roadshow-aufbau.jpeg'
               },
               {
                 icon: Storefront,

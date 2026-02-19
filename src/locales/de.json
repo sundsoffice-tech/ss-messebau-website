@@ -1942,5 +1942,9 @@
   "share.copied": "Link kopiert!",
   "share.native": "Teilen",
   "share.copySuccess": "Link wurde in die Zwischenablage kopiert",
-  "share.copyError": "Link konnte nicht kopiert werden"
+  "share.copyError": "Link konnte nicht kopiert werden",
+  "notFound.title": "Seite nicht gefunden",
+  "notFound.description": "Die angeforderte Seite existiert nicht oder wurde verschoben.",
+  "notFound.backHome": "Zur Startseite",
+  "notFound.contact": "Kontakt aufnehmen"
 }
