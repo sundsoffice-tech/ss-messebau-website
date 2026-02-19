@@ -35,6 +35,7 @@ function requireAuth(): bool {
 // Only run routing when this file is called directly (not included)
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'auth.php') {
     header('Content-Type: application/json; charset=utf-8');
+    setCorsHeaders();
     startSession();
 
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -193,5 +194,5 @@ function handleSetup(): void {
 function handleCheckSetup(): void {
     $db = getDB();
     $count = $db->query('SELECT COUNT(*) FROM admin_users')->fetchColumn();
-    echo json_encode(['needsSetup' => $count === 0]);
+    echo json_encode(['needsSetup' => (int)$count === 0]);
 }

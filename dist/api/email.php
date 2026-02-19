@@ -9,6 +9,7 @@ require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/auth.php';
 
 header('Content-Type: application/json; charset=utf-8');
+setCorsHeaders();
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -53,9 +54,19 @@ switch ($action) {
             echo json_encode(['error' => 'Method not allowed']);
         }
         break;
+    case 'compose_send':
+        if ($method !== 'POST') { http_response_code(405); echo json_encode(['error' => 'Method not allowed']); exit; }
+        handleComposeSend();
+        break;
+    case 'tracking':
+        handleTracking();
+        break;
+    case 'tracking_detail':
+        handleTrackingDetail();
+        break;
     default:
         http_response_code(400);
-        echo json_encode(['error' => 'Unknown action. Use: enqueue, auto_send, send, list, delete, status, config']);
+        echo json_encode(['error' => 'Unknown action. Use: enqueue, auto_send, send, list, delete, status, config, compose_send, tracking, tracking_detail']);
 }
 
 function handleEnqueue(): void {
@@ -410,4 +421,211 @@ function handleSaveEmailConfig(): void {
         'success' => true,
         'message' => 'Email-Konfiguration wird serverseitig über Umgebungsvariablen verwaltet.',
     ]);
+}
+
+// ─── Compose Send ────────────────────────────────────────────
+
+function handleComposeSend(): void {
+    if (!requireAuth()) return;
+
+    $input = json_decode(file_get_contents('php://input'), true);
+
+    $to = trim($input['to'] ?? '');
+    $subject = trim($input['subject'] ?? '');
+    $htmlBody = $input['html_body'] ?? '';
+
+    if (empty($to) || empty($subject)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'to and subject are required']);
+        return;
+    }
+
+    if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Invalid email address']);
+        return;
+    }
+
+    $textBody = $input['text_body'] ?? strip_tags($htmlBody);
+
+    // Enqueue the email
+    $queueId = 'compose-' . bin2hex(random_bytes(8));
+    $db = getDB();
+    $stmt = $db->prepare('
+        INSERT INTO email_queue (queue_id, to_email, subject, html_body, text_body, order_id, sent)
+        VALUES (:queue_id, :to_email, :subject, :html_body, :text_body, :order_id, 0)
+    ');
+
+    $stmt->execute([
+        ':queue_id' => $queueId,
+        ':to_email' => $to,
+        ':subject' => $subject,
+        ':html_body' => $htmlBody,
+        ':text_body' => $textBody,
+        ':order_id' => $input['related_order_id'] ?? '',
+    ]);
+
+    // Create tracking record
+    $trackingId = 'trk-' . bin2hex(random_bytes(8));
+    try {
+        $trackStmt = $db->prepare('
+            INSERT INTO email_tracking (tracking_id, to_email, subject, status, order_id, inquiry_id)
+            VALUES (:tracking_id, :to_email, :subject, :status, :order_id, :inquiry_id)
+        ');
+        $trackStmt->execute([
+            ':tracking_id' => $trackingId,
+            ':to_email' => $to,
+            ':subject' => $subject,
+            ':status' => 'queued',
+            ':order_id' => $input['related_order_id'] ?? '',
+            ':inquiry_id' => $input['related_inquiry_id'] ?? '',
+        ]);
+
+        $eventStmt = $db->prepare('
+            INSERT INTO email_tracking_events (tracking_id, event, details)
+            VALUES (:tracking_id, :event, :details)
+        ');
+        $eventStmt->execute([
+            ':tracking_id' => $trackingId,
+            ':event' => 'queued',
+            ':details' => 'Email composed and queued for sending',
+        ]);
+    } catch (\Throwable $e) {
+        error_log('Tracking insert failed: ' . $e->getMessage());
+    }
+
+    // Attempt immediate send
+    $result = sendViaSendGrid($to, $subject, $htmlBody, $textBody);
+
+    if ($result['success']) {
+        $updateStmt = $db->prepare("UPDATE email_queue SET sent = 1, sent_at = datetime('now'), error = NULL WHERE queue_id = :queue_id");
+        $updateStmt->execute([':queue_id' => $queueId]);
+
+        // Update tracking
+        try {
+            $db->prepare("UPDATE email_tracking SET status = 'sent', updated_at = datetime('now') WHERE tracking_id = :tid")
+               ->execute([':tid' => $trackingId]);
+            $db->prepare("INSERT INTO email_tracking_events (tracking_id, event, details) VALUES (:tid, 'sent', 'Email sent successfully')")
+               ->execute([':tid' => $trackingId]);
+        } catch (\Throwable $e) {
+            error_log('Tracking update failed: ' . $e->getMessage());
+        }
+
+        echo json_encode(['success' => true]);
+    } else {
+        $updateStmt = $db->prepare("UPDATE email_queue SET error = :error WHERE queue_id = :queue_id");
+        $updateStmt->execute([':error' => $result['error'], ':queue_id' => $queueId]);
+
+        // Update tracking
+        try {
+            $db->prepare("UPDATE email_tracking SET status = 'failed', updated_at = datetime('now') WHERE tracking_id = :tid")
+               ->execute([':tid' => $trackingId]);
+            $db->prepare("INSERT INTO email_tracking_events (tracking_id, event, details) VALUES (:tid, 'failed', :details)")
+               ->execute([':tid' => $trackingId, ':details' => $result['error']]);
+        } catch (\Throwable $e) {
+            error_log('Tracking update failed: ' . $e->getMessage());
+        }
+
+        echo json_encode(['success' => false, 'error' => $result['error']]);
+    }
+}
+
+// ─── Tracking ────────────────────────────────────────────────
+
+function handleTracking(): void {
+    if (!requireAuth()) return;
+
+    $db = getDB();
+    $status = $_GET['status'] ?? null;
+    $orderId = $_GET['order_id'] ?? null;
+    $inquiryId = $_GET['inquiry_id'] ?? null;
+
+    $sql = 'SELECT * FROM email_tracking';
+    $params = [];
+    $conditions = [];
+
+    if ($status) {
+        $conditions[] = 'status = :status';
+        $params[':status'] = $status;
+    }
+    if ($orderId) {
+        $conditions[] = 'order_id = :order_id';
+        $params[':order_id'] = $orderId;
+    }
+    if ($inquiryId) {
+        $conditions[] = 'inquiry_id = :inquiry_id';
+        $params[':inquiry_id'] = $inquiryId;
+    }
+
+    if (!empty($conditions)) {
+        $sql .= ' WHERE ' . implode(' AND ', $conditions);
+    }
+    $sql .= ' ORDER BY created_at DESC';
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
+    $records = $stmt->fetchAll();
+
+    $result = [];
+    foreach ($records as $record) {
+        $evtStmt = $db->prepare('SELECT * FROM email_tracking_events WHERE tracking_id = :tid ORDER BY created_at ASC');
+        $evtStmt->execute([':tid' => $record['tracking_id']]);
+        $events = $evtStmt->fetchAll();
+
+        $result[] = formatTrackingRecord($record, $events);
+    }
+
+    echo json_encode(['records' => $result, 'total' => count($result)]);
+}
+
+function handleTrackingDetail(): void {
+    if (!requireAuth()) return;
+
+    $id = $_GET['id'] ?? null;
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode(['error' => 'ID is required']);
+        return;
+    }
+
+    $db = getDB();
+    $stmt = $db->prepare('SELECT * FROM email_tracking WHERE id = :id OR tracking_id = :tid');
+    $stmt->execute([':id' => $id, ':tid' => $id]);
+    $record = $stmt->fetch();
+
+    if (!$record) {
+        http_response_code(404);
+        echo json_encode(['error' => 'Tracking record not found']);
+        return;
+    }
+
+    $evtStmt = $db->prepare('SELECT * FROM email_tracking_events WHERE tracking_id = :tid ORDER BY created_at ASC');
+    $evtStmt->execute([':tid' => $record['tracking_id']]);
+    $events = $evtStmt->fetchAll();
+
+    echo json_encode(formatTrackingRecord($record, $events));
+}
+
+function formatTrackingRecord(array $record, array $events): array {
+    $formattedEvents = [];
+    foreach ($events as $event) {
+        $formattedEvents[] = [
+            'id' => (string)$event['id'],
+            'emailId' => $event['tracking_id'],
+            'event' => $event['event'],
+            'timestamp' => strtotime($event['created_at']) * 1000,
+            'details' => $event['details'] ?? '',
+        ];
+    }
+
+    return [
+        'id' => (string)$record['id'],
+        'to' => $record['to_email'],
+        'subject' => $record['subject'] ?? '',
+        'status' => $record['status'] ?? 'queued',
+        'orderId' => $record['order_id'] ?: null,
+        'inquiryId' => $record['inquiry_id'] ?: null,
+        'events' => $formattedEvents,
+        'createdAt' => strtotime($record['created_at']) * 1000,
+    ];
 }
