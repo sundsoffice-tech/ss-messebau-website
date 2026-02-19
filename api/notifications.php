@@ -22,7 +22,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($action) {
     case 'config':
         if ($method === 'GET') {
-            // GET config is read-only, no auth needed (forms use this to get recipients/webhooks)
+            // Config contains admin emails and webhook URLs - require auth
+            if (!requireAuth()) return;
             handleGetConfig();
         } elseif ($method === 'POST') {
             if (!requireAuth()) return;
@@ -47,7 +48,8 @@ switch ($action) {
             echo json_encode(['error' => 'Method not allowed']);
             break;
         }
-        // send_webhook can be called from backend processes without auth
+        // send_webhook requires auth to prevent SSRF abuse
+        if (!requireAuth()) return;
         handleSendWebhook();
         break;
     default:

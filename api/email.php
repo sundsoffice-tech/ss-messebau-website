@@ -69,8 +69,64 @@ switch ($action) {
         echo json_encode(['error' => 'Unknown action. Use: enqueue, auto_send, send, list, delete, status, config, compose_send, tracking, tracking_detail']);
 }
 
+/**
+ * Rate limit public email endpoints to prevent abuse/email bombing.
+ * Max 5 emails per 10 minutes per IP.
+ */
+function checkEmailRateLimit(): bool {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $rateLimitFile = __DIR__ . '/data/email_limit_' . md5($ip) . '.json';
+    $now = time();
+    $maxRequests = 5;
+    $windowSeconds = 600; // 10 minutes
+
+    $timestamps = [];
+    if (file_exists($rateLimitFile)) {
+        $timestamps = json_decode(file_get_contents($rateLimitFile), true) ?: [];
+        $timestamps = array_values(array_filter($timestamps, function($ts) use ($now, $windowSeconds) {
+            return ($now - $ts) < $windowSeconds;
+        }));
+    }
+
+    if (count($timestamps) >= $maxRequests) {
+        http_response_code(429);
+        echo json_encode(['error' => 'Zu viele E-Mail-Anfragen. Bitte versuchen Sie es später erneut.']);
+        return false;
+    }
+
+    $timestamps[] = $now;
+    @file_put_contents($rateLimitFile, json_encode($timestamps));
+    return true;
+}
+
+/**
+ * Sanitize and validate email input data, enforcing size limits.
+ */
+function sanitizeEmailInput(array &$input): ?string {
+    // Validate customer_email if provided
+    $customerEmail = $input['customer_email'] ?? '';
+    if (!empty($customerEmail) && !filter_var($customerEmail, FILTER_VALIDATE_EMAIL)) {
+        return 'Invalid customer_email address';
+    }
+
+    // Enforce size limits on all text fields to prevent abuse
+    $input['queue_id'] = substr($input['queue_id'] ?? '', 0, 100);
+    $input['subject'] = substr($input['subject'] ?? '', 0, 500);
+    $input['html_body'] = substr($input['html_body'] ?? '', 0, 100000);
+    $input['text_body'] = substr($input['text_body'] ?? '', 0, 50000);
+    $input['customer_email'] = $customerEmail;
+    $input['customer_subject'] = substr($input['customer_subject'] ?? '', 0, 500);
+    $input['customer_html_body'] = substr($input['customer_html_body'] ?? '', 0, 100000);
+    $input['customer_text_body'] = substr($input['customer_text_body'] ?? '', 0, 50000);
+    $input['order_id'] = substr($input['order_id'] ?? '', 0, 100);
+
+    return null; // no error
+}
+
 function handleEnqueue(): void {
-    // Enqueue does NOT require auth – forms submit emails
+    // Rate limit to prevent email bombing
+    if (!checkEmailRateLimit()) return;
+
     $input = json_decode(file_get_contents('php://input'), true);
 
     if (empty($input['queue_id']) || empty($input['to_email']) || empty($input['subject'])) {
@@ -82,6 +138,13 @@ function handleEnqueue(): void {
     if (!filter_var($input['to_email'], FILTER_VALIDATE_EMAIL)) {
         http_response_code(400);
         echo json_encode(['error' => 'Invalid to_email address']);
+        return;
+    }
+
+    $sanitizeError = sanitizeEmailInput($input);
+    if ($sanitizeError) {
+        http_response_code(400);
+        echo json_encode(['error' => $sanitizeError]);
         return;
     }
 
@@ -99,14 +162,14 @@ function handleEnqueue(): void {
         ':queue_id' => $input['queue_id'],
         ':to_email' => $input['to_email'],
         ':subject' => $input['subject'],
-        ':html_body' => $input['html_body'] ?? '',
-        ':text_body' => $input['text_body'] ?? '',
-        ':customer_email' => $input['customer_email'] ?? '',
-        ':customer_subject' => $input['customer_subject'] ?? '',
-        ':customer_html_body' => $input['customer_html_body'] ?? '',
-        ':customer_text_body' => $input['customer_text_body'] ?? '',
+        ':html_body' => $input['html_body'],
+        ':text_body' => $input['text_body'],
+        ':customer_email' => $input['customer_email'],
+        ':customer_subject' => $input['customer_subject'],
+        ':customer_html_body' => $input['customer_html_body'],
+        ':customer_text_body' => $input['customer_text_body'],
         ':attachments' => json_encode($input['attachments'] ?? []),
-        ':order_id' => $input['order_id'] ?? '',
+        ':order_id' => $input['order_id'],
     ]);
 
     echo json_encode([
@@ -116,7 +179,9 @@ function handleEnqueue(): void {
 }
 
 function handleAutoSend(): void {
-    // auto_send does NOT require auth – combines enqueue + immediate send for form submissions
+    // Rate limit to prevent email bombing
+    if (!checkEmailRateLimit()) return;
+
     $input = json_decode(file_get_contents('php://input'), true);
 
     if (empty($input['queue_id']) || empty($input['to_email']) || empty($input['subject'])) {
@@ -128,6 +193,13 @@ function handleAutoSend(): void {
     if (!filter_var($input['to_email'], FILTER_VALIDATE_EMAIL)) {
         http_response_code(400);
         echo json_encode(['error' => 'Invalid to_email address']);
+        return;
+    }
+
+    $sanitizeError = sanitizeEmailInput($input);
+    if ($sanitizeError) {
+        http_response_code(400);
+        echo json_encode(['error' => $sanitizeError]);
         return;
     }
 
@@ -145,14 +217,14 @@ function handleAutoSend(): void {
         ':queue_id' => $input['queue_id'],
         ':to_email' => $input['to_email'],
         ':subject' => $input['subject'],
-        ':html_body' => $input['html_body'] ?? '',
-        ':text_body' => $input['text_body'] ?? '',
-        ':customer_email' => $input['customer_email'] ?? '',
-        ':customer_subject' => $input['customer_subject'] ?? '',
-        ':customer_html_body' => $input['customer_html_body'] ?? '',
-        ':customer_text_body' => $input['customer_text_body'] ?? '',
+        ':html_body' => $input['html_body'],
+        ':text_body' => $input['text_body'],
+        ':customer_email' => $input['customer_email'],
+        ':customer_subject' => $input['customer_subject'],
+        ':customer_html_body' => $input['customer_html_body'],
+        ':customer_text_body' => $input['customer_text_body'],
         ':attachments' => json_encode($input['attachments'] ?? []),
-        ':order_id' => $input['order_id'] ?? '',
+        ':order_id' => $input['order_id'],
     ]);
 
     $queueId = $input['queue_id'];

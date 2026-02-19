@@ -86,8 +86,36 @@ function handleGetInquiries(): void {
     }
 }
 
+function checkInquiryRateLimit(): bool {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $rateLimitFile = __DIR__ . '/data/inquiry_limit_' . md5($ip) . '.json';
+    $now = time();
+    $maxRequests = 10;
+    $windowSeconds = 600; // 10 minutes
+
+    $timestamps = [];
+    if (file_exists($rateLimitFile)) {
+        $timestamps = json_decode(file_get_contents($rateLimitFile), true) ?: [];
+        $timestamps = array_values(array_filter($timestamps, function($ts) use ($now, $windowSeconds) {
+            return ($now - $ts) < $windowSeconds;
+        }));
+    }
+
+    if (count($timestamps) >= $maxRequests) {
+        http_response_code(429);
+        echo json_encode(['error' => 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.']);
+        return false;
+    }
+
+    $timestamps[] = $now;
+    @file_put_contents($rateLimitFile, json_encode($timestamps));
+    return true;
+}
+
 function handleCreateInquiry(): void {
     // POST does NOT require auth – visitors submit inquiries
+    if (!checkInquiryRateLimit()) return;
+    enforceRequestBodyLimit();
     $input = json_decode(file_get_contents('php://input'), true);
 
     if (empty($input['inquiry_id'])) {
@@ -103,6 +131,13 @@ function handleCreateInquiry(): void {
         return;
     }
 
+    // Validate allowed inquiry types
+    $allowedTypes = ['inquiry', 'kontakt', 'banner'];
+    $type = $input['type'] ?? 'inquiry';
+    if (!in_array($type, $allowedTypes, true)) {
+        $type = 'inquiry';
+    }
+
     $db = getDB();
     $stmt = $db->prepare('
         INSERT INTO inquiries (inquiry_id, type, name, email, company, phone, message, form_data)
@@ -110,13 +145,13 @@ function handleCreateInquiry(): void {
     ');
 
     $stmt->execute([
-        ':inquiry_id' => $input['inquiry_id'],
-        ':type' => $input['type'] ?? 'inquiry',
-        ':name' => $input['name'] ?? '',
-        ':email' => $input['email'] ?? '',
-        ':company' => $input['company'] ?? '',
-        ':phone' => $input['phone'] ?? '',
-        ':message' => $input['message'] ?? '',
+        ':inquiry_id' => substr($input['inquiry_id'], 0, 100),
+        ':type' => $type,
+        ':name' => substr($input['name'] ?? '', 0, 255),
+        ':email' => substr($email, 0, 255),
+        ':company' => substr($input['company'] ?? '', 0, 255),
+        ':phone' => substr($input['phone'] ?? '', 0, 50),
+        ':message' => substr($input['message'] ?? '', 0, 10000),
         ':form_data' => json_encode($input['form_data'] ?? $input),
     ]);
 
