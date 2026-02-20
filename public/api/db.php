@@ -198,16 +198,20 @@ function initSchema(PDO $pdo): void {
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_ts ON analytics_events(ts)");
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_event ON analytics_events(event)");
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_session ON analytics_events(session_id)");
-    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_visitor ON analytics_events(visitor_id)");
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_event_ts ON analytics_events(event, ts)");
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_url ON analytics_events(url)");
 
     // Add visitor_id column if missing (migration for existing databases)
+    // MUST run BEFORE the visitor_id index is created, otherwise the index
+    // creation crashes with "no such column: visitor_id" on older databases.
     try {
         $pdo->exec("ALTER TABLE analytics_events ADD COLUMN visitor_id TEXT DEFAULT ''");
-    } catch (Exception $e) {
+    } catch (\Throwable $e) {
         // Column already exists, ignore
     }
+
+    // Now that visitor_id column is guaranteed to exist, create the index
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_analytics_visitor ON analytics_events(visitor_id)");
 
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS analytics_config (
