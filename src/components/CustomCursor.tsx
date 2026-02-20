@@ -276,7 +276,7 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
               <motion.div
                 className="rounded-full"
                 style={{
-                  opacity: ringOpacity,
+                  opacity: isLightBg ? 0.85 : ringOpacity,
                 }}
                 animate={{
                   width: ringSize,
