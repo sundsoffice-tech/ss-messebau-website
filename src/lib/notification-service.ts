@@ -205,24 +205,27 @@ export async function sendFormNotification(payload: FormNotificationPayload): Pr
     const htmlBody = generateCompanyEmailHtml(type, data, inquiryId)
     const textBody = convertHtmlToText(htmlBody)
 
+    // Prepare customer confirmation email once (not per recipient)
+    const recipientEmail = customerEmail || String(data.email || '')
+    let customerEmailField: string | undefined
+    let customerSubjectField: string | undefined
+    let customerHtmlBodyField: string | undefined
+    let customerTextBodyField: string | undefined
+
+    if (config.sendCustomerConfirmation && recipientEmail) {
+      const customerHtml = generateCustomerConfirmationHtml(type, data, inquiryId)
+      customerEmailField = recipientEmail
+      customerSubjectField = `Eingangsbestätigung: Ihre ${getTypeLabel(type)} #${inquiryId.slice(-8)}`
+      customerHtmlBodyField = customerHtml
+      customerTextBodyField = convertHtmlToText(customerHtml)
+    }
+
     // Send to all configured recipients via backend email queue
-    for (const recipient of config.recipients) {
+    // Customer confirmation is only included with the first recipient to avoid duplicates
+    for (let i = 0; i < config.recipients.length; i++) {
+      const recipient = config.recipients[i]
       const queueId = `notif_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
-
-      // Add customer confirmation email if enabled
-      const recipientEmail = customerEmail || String(data.email || '')
-      let customerEmailField: string | undefined
-      let customerSubjectField: string | undefined
-      let customerHtmlBodyField: string | undefined
-      let customerTextBodyField: string | undefined
-
-      if (config.sendCustomerConfirmation && recipientEmail) {
-        const customerHtml = generateCustomerConfirmationHtml(type, data, inquiryId)
-        customerEmailField = recipientEmail
-        customerSubjectField = `Eingangsbestätigung: Ihre ${getTypeLabel(type)} #${inquiryId.slice(-8)}`
-        customerHtmlBodyField = customerHtml
-        customerTextBodyField = convertHtmlToText(customerHtml)
-      }
+      const isFirstRecipient = i === 0
 
       await emailApi.autoSend({
         queue_id: queueId,
@@ -230,10 +233,10 @@ export async function sendFormNotification(payload: FormNotificationPayload): Pr
         subject,
         html_body: htmlBody,
         text_body: textBody,
-        customer_email: customerEmailField,
-        customer_subject: customerSubjectField,
-        customer_html_body: customerHtmlBodyField,
-        customer_text_body: customerTextBodyField,
+        customer_email: isFirstRecipient ? customerEmailField : undefined,
+        customer_subject: isFirstRecipient ? customerSubjectField : undefined,
+        customer_html_body: isFirstRecipient ? customerHtmlBodyField : undefined,
+        customer_text_body: isFirstRecipient ? customerTextBodyField : undefined,
       })
     }
 
