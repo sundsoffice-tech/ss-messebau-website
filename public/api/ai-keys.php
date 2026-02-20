@@ -69,13 +69,13 @@ function handleGetKeys(): void {
     } catch (\Throwable $e) {
         error_log('AI keys fetch error: ' . $e->getMessage());
         http_response_code(500);
-        echo json_encode(['error' => 'Schlüssel konnten nicht geladen werden']);
+        echo json_encode(['error' => 'Laden fehlgeschlagen: ' . $e->getMessage()]);
     }
 }
 
 function handleAddKey(): void {
     $input = json_decode(file_get_contents('php://input'), true);
-    
+
     if (empty($input['provider']) || empty($input['key'])) {
         http_response_code(400);
         echo json_encode(['error' => 'Provider and key are required']);
@@ -86,9 +86,8 @@ function handleAddKey(): void {
     $apiKey = trim($input['key']);
     $keyId = uniqid('key_', true);
 
-    $db = getDB();
-    
     try {
+        $db = getDB();
         $stmt = $db->prepare('INSERT INTO ai_keys (key_id, provider, api_key, status) VALUES (:key_id, :provider, :api_key, :status)');
         $stmt->execute([
             ':key_id' => $keyId,
@@ -122,7 +121,7 @@ function handleAddKey(): void {
     } catch (\Throwable $e) {
         error_log('AI key save error: ' . $e->getMessage());
         http_response_code(500);
-        echo json_encode(['error' => 'Fehler beim Speichern des Schlüssels']);
+        echo json_encode(['error' => 'Fehler beim Speichern: ' . $e->getMessage()]);
     }
 }
 
@@ -153,7 +152,7 @@ function handleRevokeKey(): void {
     } catch (\Throwable $e) {
         error_log('AI key revoke error: ' . $e->getMessage());
         http_response_code(500);
-        echo json_encode(['error' => 'Fehler beim Widerrufen des Schlüssels']);
+        echo json_encode(['error' => 'Fehler beim Widerrufen: ' . $e->getMessage()]);
     }
 }
 
@@ -181,6 +180,6 @@ function handleDeleteKey(): void {
     } catch (\Throwable $e) {
         error_log('AI key delete error: ' . $e->getMessage());
         http_response_code(500);
-        echo json_encode(['error' => 'Fehler beim Löschen des Schlüssels']);
+        echo json_encode(['error' => 'Fehler beim Löschen: ' . $e->getMessage()]);
     }
 }
