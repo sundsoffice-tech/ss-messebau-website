@@ -1,0 +1,59 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3730a3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e1b4b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#818cf8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle pattern overlay -->
+  <rect x="0" y="0" width="1200" height="630" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1">
+  </rect>
+
+  <!-- Decorative lines -->
+  <line x1="80" y1="500" x2="400" y2="500" stroke="url(#accent)" stroke-width="3" opacity="0.6"/>
+  <line x1="800" y1="130" x2="1120" y2="130" stroke="url(#accent)" stroke-width="3" opacity="0.6"/>
+
+  <!-- Geometric accent shape -->
+  <rect x="1050" y="50" width="100" height="100" rx="8" fill="none" stroke="#818cf8" stroke-width="2" opacity="0.3" transform="rotate(15, 1100, 100)"/>
+  <rect x="50" y="480" width="80" height="80" rx="8" fill="none" stroke="#818cf8" stroke-width="2" opacity="0.3" transform="rotate(-10, 90, 520)"/>
+
+  <!-- Company name -->
+  <text x="80" y="220" font-family="Inter, Arial, Helvetica, sans-serif" font-size="72" font-weight="700" fill="#ffffff" letter-spacing="-1">
+    S&amp;S Messebau
+  </text>
+
+  <!-- Tagline -->
+  <text x="80" y="290" font-family="Inter, Arial, Helvetica, sans-serif" font-size="32" font-weight="400" fill="#c7d2fe" letter-spacing="0.5">
+    Ihr Messebau-Partner aus NRW
+  </text>
+
+  <!-- Divider line -->
+  <rect x="80" y="320" width="120" height="4" rx="2" fill="#818cf8"/>
+
+  <!-- Services -->
+  <text x="80" y="380" font-family="Inter, Arial, Helvetica, sans-serif" font-size="22" font-weight="500" fill="#a5b4fc">
+    Full-Service Messebau  |  Eventbau  |  Showrooms  |  Ladenbau
+  </text>
+
+  <!-- CTA -->
+  <rect x="80" y="430" width="380" height="52" rx="8" fill="#818cf8" opacity="0.9"/>
+  <text x="270" y="463" font-family="Inter, Arial, Helvetica, sans-serif" font-size="20" font-weight="600" fill="#ffffff" text-anchor="middle">
+    Unverbindliches 48h-Angebot
+  </text>
+
+  <!-- Website URL -->
+  <text x="1120" y="590" font-family="Inter, Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#a5b4fc" text-anchor="end">
+    sunds-messebau.de
+  </text>
+
+  <!-- Bottom accent bar -->
+  <rect x="0" y="620" width="1200" height="10" fill="url(#accent)" opacity="0.8"/>
+</svg>

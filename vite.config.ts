@@ -1,5 +1,6 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import { defineConfig } from "vite";
 import { resolve } from 'path'
 
@@ -10,6 +11,19 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    ViteImageOptimizer({
+      jpg: { quality: 80 },
+      jpeg: { quality: 80 },
+      png: { quality: 80 },
+      webp: { quality: 80 },
+      avif: { quality: 65 },
+      svg: {
+        plugins: [
+          { name: 'removeViewBox', active: false },
+          { name: 'sortAttrs' },
+        ],
+      },
+    }),
   ],
   resolve: {
     alias: {
