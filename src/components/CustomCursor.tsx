@@ -2,35 +2,88 @@ import { useEffect, useRef, useCallback, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
 import { isMobileDevice, prefersReducedMotion } from '../lib/cursor-utils'
 
+// Parse rgb/rgba color string → [r, g, b, a] normalized 0–1, or null
+function parseColorRGBA(color: string): [number, number, number, number] | null {
+  const m = color.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*[,/]\s*([\d.]+%?))?\s*\)/)
+  if (!m) return null
+  const a = m[4] !== undefined
+    ? (m[4].endsWith('%') ? parseFloat(m[4]) / 100 : parseFloat(m[4]))
+    : 1
+  return [parseFloat(m[1]) / 255, parseFloat(m[2]) / 255, parseFloat(m[3]) / 255, Math.min(1, Math.max(0, a))]
+}
+
+// WCAG sRGB linearization for accurate perceptual luminance
+function toLinearRGB(c: number): number {
+  return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+}
+
 /**
  * Detect background luminance at a given screen position.
- * Walks up the DOM tree to find the first element with a non-transparent background.
+ * - Walks the DOM tree collecting background colors
+ * - Handles CSS gradient backgrounds (extracts dominant color stop)
+ * - Alpha-composites semi-transparent layers correctly
+ * - Applies WCAG gamma correction for perceptually accurate luminance
  */
 function getBackgroundLuminance(x: number, y: number): number {
   const el = document.elementFromPoint(x, y)
   if (!el) return 1
 
+  // Collect background color layers from topmost element to deepest ancestor
+  const layers: [number, number, number, number][] = []
   let current: Element | null = el
+
   while (current && current !== document.documentElement) {
-    const bg = getComputedStyle(current).backgroundColor
-    if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') {
-      const match = bg.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/)
-      if (match) {
-        const r = parseFloat(match[1]) / 255
-        const g = parseFloat(match[2]) / 255
-        const b = parseFloat(match[3]) / 255
-        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+    const style = getComputedStyle(current)
+    let color: [number, number, number, number] | null = null
+
+    // 1. Try solid background-color first
+    const bg = style.backgroundColor
+    if (bg) {
+      const rgba = parseColorRGBA(bg)
+      if (rgba && rgba[3] > 0.01) color = rgba
+    }
+
+    // 2. If transparent/none, try gradient or image background
+    if (!color) {
+      const bgImage = style.backgroundImage
+      if (bgImage && bgImage !== 'none') {
+        // Extract first color stop from gradient (browsers compute oklch → rgb)
+        const rgba = parseColorRGBA(bgImage)
+        if (rgba && rgba[3] > 0.01) color = rgba
       }
     }
+
+    if (color) {
+      layers.push(color)
+      if (color[3] >= 0.99) break // Fully opaque: no need to composite further
+    }
+
     current = current.parentElement
   }
 
-  return 1 // Default: white page background
+  if (layers.length === 0) return 1 // Default: white page background
+
+  // Alpha-composite from deepest layer (bottom) to topmost (top)
+  let r = 1, g = 1, b = 1 // Start with white browser background
+  for (let i = layers.length - 1; i >= 0; i--) {
+    const [lr, lg, lb, a] = layers[i]
+    r = lr * a + r * (1 - a)
+    g = lg * a + g * (1 - a)
+    b = lb * a + b * (1 - a)
+  }
+
+  // WCAG relative luminance with gamma correction
+  return 0.2126 * toLinearRGB(r) + 0.7152 * toLinearRGB(g) + 0.0722 * toLinearRGB(b)
 }
 
 // Cursor colors: brand blue on light surfaces, white on dark surfaces
 const CURSOR_COLOR_ON_LIGHT = '#0057B8'
 const CURSOR_COLOR_ON_DARK = '#ffffff'
+
+// Hysteresis thresholds – wide gap prevents flickering at section boundaries.
+// Website backgrounds: white/muted ≈ 0.87–1.0 luminance, primary blue ≈ 0.05–0.13
+const THRESHOLD_TO_LIGHT = 0.45 // Luminance above this → switch cursor to blue
+const THRESHOLD_TO_DARK  = 0.25 // Luminance below this → switch cursor to white
 
 type CursorState = 'default' | 'link' | 'button' | 'text' | 'media'
 
@@ -175,7 +228,9 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
       if (now - lastBgCheckTime.current > 100) {
         lastBgCheckTime.current = now
         const luminance = getBackgroundLuminance(e.clientX, e.clientY)
-        const isLight = luminance > 0.6
+        // Hysteresis: use different threshold depending on current state
+        const threshold = isLightBgRef.current ? THRESHOLD_TO_DARK : THRESHOLD_TO_LIGHT
+        const isLight = luminance > threshold
         if (isLight !== isLightBgRef.current) {
           isLightBgRef.current = isLight
           setIsLightBg(isLight)
