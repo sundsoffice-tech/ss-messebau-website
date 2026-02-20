@@ -2,6 +2,36 @@ import { useEffect, useRef, useCallback, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
 import { isMobileDevice, prefersReducedMotion } from '../lib/cursor-utils'
 
+/**
+ * Detect background luminance at a given screen position.
+ * Walks up the DOM tree to find the first element with a non-transparent background.
+ */
+function getBackgroundLuminance(x: number, y: number): number {
+  const el = document.elementFromPoint(x, y)
+  if (!el) return 1
+
+  let current: Element | null = el
+  while (current && current !== document.documentElement) {
+    const bg = getComputedStyle(current).backgroundColor
+    if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') {
+      const match = bg.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/)
+      if (match) {
+        const r = parseFloat(match[1]) / 255
+        const g = parseFloat(match[2]) / 255
+        const b = parseFloat(match[3]) / 255
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+      }
+    }
+    current = current.parentElement
+  }
+
+  return 1 // Default: white page background
+}
+
+// Cursor colors: brand blue on light surfaces, white on dark surfaces
+const CURSOR_COLOR_ON_LIGHT = '#0057B8'
+const CURSOR_COLOR_ON_DARK = '#ffffff'
+
 type CursorState = 'default' | 'link' | 'button' | 'text' | 'media'
 
 interface CursorProps {
@@ -23,6 +53,9 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
   const [isClicking, setIsClicking] = useState(false)
   const [isHidden, setIsHidden] = useState(false)
   const [enabled, setEnabled] = useState(false)
+  const [isLightBg, setIsLightBg] = useState(false)
+  const isLightBgRef = useRef(false)
+  const lastBgCheckTime = useRef(0)
 
   // Raw position (instant)
   const mouseX = useMotionValue(-100)
@@ -137,6 +170,17 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
       const target = e.target as HTMLElement
       setCursorState(detectState(target))
       setIsHidden(false)
+
+      // Throttled background luminance detection for cursor color adaptation
+      if (now - lastBgCheckTime.current > 100) {
+        lastBgCheckTime.current = now
+        const luminance = getBackgroundLuminance(e.clientX, e.clientY)
+        const isLight = luminance > 0.6
+        if (isLight !== isLightBgRef.current) {
+          isLightBgRef.current = isLight
+          setIsLightBg(isLight)
+        }
+      }
     }
 
     const handleMouseDown = () => setIsClicking(true)
@@ -199,20 +243,21 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
             }}
           >
             <motion.div
-              className="rounded-full bg-white"
+              className="rounded-full"
               style={{
                 scaleX: cursorState === 'default' ? stretch : 1,
                 rotate: cursorState === 'default' ? rotation : 0,
-                mixBlendMode: 'difference',
               }}
               animate={{
                 width: dotSize,
                 height: dotSize,
                 opacity: cursorState === 'text' ? 1 : 1,
+                backgroundColor: isLightBg ? CURSOR_COLOR_ON_LIGHT : CURSOR_COLOR_ON_DARK,
               }}
               transition={{
                 width: { type: 'spring', stiffness: 600, damping: 35 },
                 height: { type: 'spring', stiffness: 600, damping: 35 },
+                backgroundColor: { duration: 0.3, ease: [0.23, 1, 0.32, 1] },
               }}
             />
           </motion.div>
@@ -231,21 +276,24 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
               <motion.div
                 className="rounded-full"
                 style={{
-                  mixBlendMode: 'difference',
                   opacity: ringOpacity,
                 }}
                 animate={{
                   width: ringSize,
                   height: ringSize,
                   borderWidth: isInteractive ? 1.5 : 1,
-                  borderColor: 'rgba(255, 255, 255, 1)',
-                  backgroundColor: isInteractive ? 'rgba(255, 255, 255, 0.06)' : 'transparent',
+                  borderColor: isLightBg ? CURSOR_COLOR_ON_LIGHT : 'rgba(255, 255, 255, 1)',
+                  backgroundColor: isInteractive
+                    ? (isLightBg ? 'rgba(0, 87, 184, 0.08)' : 'rgba(255, 255, 255, 0.06)')
+                    : 'transparent',
                 }}
                 transition={{
                   type: 'spring',
                   stiffness: isClicking ? 500 : 220,
                   damping: isClicking ? 30 : 22,
                   mass: 0.6,
+                  borderColor: { duration: 0.3, ease: [0.23, 1, 0.32, 1] },
+                  backgroundColor: { duration: 0.3, ease: [0.23, 1, 0.32, 1] },
                 }}
               />
             </motion.div>
@@ -271,7 +319,9 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
                 style={{
                   width: 90,
                   height: 90,
-                  background: 'radial-gradient(circle, oklch(0.45 0.15 250 / 0.12) 0%, transparent 70%)',
+                  background: isLightBg
+                    ? 'radial-gradient(circle, rgba(0, 87, 184, 0.15) 0%, transparent 70%)'
+                    : 'radial-gradient(circle, oklch(0.45 0.15 250 / 0.12) 0%, transparent 70%)',
                   filter: 'blur(8px)',
                 }}
               />
