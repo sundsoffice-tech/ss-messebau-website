@@ -2,14 +2,54 @@ import { useEffect, useRef, useCallback, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
 import { isMobileDevice, prefersReducedMotion } from '../lib/cursor-utils'
 
-// Parse rgb/rgba color string → [r, g, b, a] normalized 0–1, or null
-function parseColorRGBA(color: string): [number, number, number, number] | null {
+// Lazy singleton 1×1 canvas for resolving any CSS color to RGBA
+let _colorCtx: CanvasRenderingContext2D | null = null
+function getColorCtx(): CanvasRenderingContext2D {
+  if (!_colorCtx) {
+    const c = document.createElement('canvas')
+    c.width = 1; c.height = 1
+    _colorCtx = c.getContext('2d', { willReadFrequently: true })!
+  }
+  return _colorCtx
+}
+
+// Parse ANY CSS color (rgb, rgba, oklch, lab, hsl, hex, named) → [r, g, b, a] normalized 0–1
+function parseCSSColor(color: string): [number, number, number, number] | null {
+  if (!color || color === 'transparent') return null
+
+  // Fast path: rgb/rgba regex (most common case, avoids canvas overhead)
   const m = color.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*[,/]\s*([\d.]+%?))?\s*\)/)
-  if (!m) return null
-  const a = m[4] !== undefined
-    ? (m[4].endsWith('%') ? parseFloat(m[4]) / 100 : parseFloat(m[4]))
-    : 1
-  return [parseFloat(m[1]) / 255, parseFloat(m[2]) / 255, parseFloat(m[3]) / 255, Math.min(1, Math.max(0, a))]
+  if (m) {
+    const a = m[4] !== undefined
+      ? (m[4].endsWith('%') ? parseFloat(m[4]) / 100 : parseFloat(m[4]))
+      : 1
+    if (a <= 0.01) return null
+    return [parseFloat(m[1]) / 255, parseFloat(m[2]) / 255, parseFloat(m[3]) / 255, Math.min(1, Math.max(0, a))]
+  }
+
+  // Fallback: canvas resolves oklch, lab, hsl, hex, named colors, etc.
+  try {
+    const ctx = getColorCtx()
+    ctx.clearRect(0, 0, 1, 1)
+    ctx.fillStyle = 'rgba(0,0,0,0)' // Reset to transparent
+    ctx.fillStyle = color // Set target; invalid values are silently ignored
+    ctx.fillRect(0, 0, 1, 1)
+    const d = ctx.getImageData(0, 0, 1, 1).data
+    if (d[3] <= 2) return null // Nearly transparent
+    return [d[0] / 255, d[1] / 255, d[2] / 255, d[3] / 255]
+  } catch {
+    return null
+  }
+}
+
+// Check if composited background color has a dominant blue hue
+function hasBlueHue(r: number, g: number, b: number): boolean {
+  const max = Math.max(r, g, b)
+  const min = Math.min(r, g, b)
+  if (max === 0) return false
+  const saturation = (max - min) / max
+  if (saturation < 0.15) return false // Too desaturated (gray/white)
+  return b > r * 1.2 && b > g * 1.1   // Blue channel dominates
 }
 
 // WCAG sRGB linearization for accurate perceptual luminance
@@ -18,15 +58,15 @@ function toLinearRGB(c: number): number {
 }
 
 /**
- * Detect background luminance at a given screen position.
- * - Walks the DOM tree collecting background colors
- * - Handles CSS gradient backgrounds (extracts dominant color stop)
+ * Analyze background at a given screen position.
+ * Returns luminance (WCAG) and whether the background has a blue hue.
+ * - Walks the DOM tree collecting background colors (solid + gradient)
  * - Alpha-composites semi-transparent layers correctly
- * - Applies WCAG gamma correction for perceptually accurate luminance
+ * - Uses canvas fallback for oklch/lab/hsl colors
  */
-function getBackgroundLuminance(x: number, y: number): number {
+function analyzeBackground(x: number, y: number): { luminance: number, isBlue: boolean } {
   const el = document.elementFromPoint(x, y)
-  if (!el) return 1
+  if (!el) return { luminance: 1, isBlue: false }
 
   // Collect background color layers from topmost element to deepest ancestor
   const layers: [number, number, number, number][] = []
@@ -39,17 +79,15 @@ function getBackgroundLuminance(x: number, y: number): number {
     // 1. Try solid background-color first
     const bg = style.backgroundColor
     if (bg) {
-      const rgba = parseColorRGBA(bg)
-      if (rgba && rgba[3] > 0.01) color = rgba
+      color = parseCSSColor(bg)
     }
 
     // 2. If transparent/none, try gradient or image background
     if (!color) {
       const bgImage = style.backgroundImage
       if (bgImage && bgImage !== 'none') {
-        // Extract first color stop from gradient (browsers compute oklch → rgb)
-        const rgba = parseColorRGBA(bgImage)
-        if (rgba && rgba[3] > 0.01) color = rgba
+        // Extract first color stop from gradient string
+        color = parseCSSColor(bgImage)
       }
     }
 
@@ -61,7 +99,7 @@ function getBackgroundLuminance(x: number, y: number): number {
     current = current.parentElement
   }
 
-  if (layers.length === 0) return 1 // Default: white page background
+  if (layers.length === 0) return { luminance: 1, isBlue: false }
 
   // Alpha-composite from deepest layer (bottom) to topmost (top)
   let r = 1, g = 1, b = 1 // Start with white browser background
@@ -72,8 +110,10 @@ function getBackgroundLuminance(x: number, y: number): number {
     b = lb * a + b * (1 - a)
   }
 
-  // WCAG relative luminance with gamma correction
-  return 0.2126 * toLinearRGB(r) + 0.7152 * toLinearRGB(g) + 0.0722 * toLinearRGB(b)
+  return {
+    luminance: 0.2126 * toLinearRGB(r) + 0.7152 * toLinearRGB(g) + 0.0722 * toLinearRGB(b),
+    isBlue: hasBlueHue(r, g, b),
+  }
 }
 
 // Cursor colors: brand blue on light surfaces, white on dark surfaces
@@ -224,13 +264,13 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
       setCursorState(detectState(target))
       setIsHidden(false)
 
-      // Throttled background luminance detection for cursor color adaptation
+      // Throttled background analysis for cursor color adaptation
       if (now - lastBgCheckTime.current > 100) {
         lastBgCheckTime.current = now
-        const luminance = getBackgroundLuminance(e.clientX, e.clientY)
-        // Hysteresis: use different threshold depending on current state
+        const { luminance, isBlue } = analyzeBackground(e.clientX, e.clientY)
+        // Hysteresis + blue-hue guard: never show blue cursor on blue background
         const threshold = isLightBgRef.current ? THRESHOLD_TO_DARK : THRESHOLD_TO_LIGHT
-        const isLight = luminance > threshold
+        const isLight = luminance > threshold && !isBlue
         if (isLight !== isLightBgRef.current) {
           isLightBgRef.current = isLight
           setIsLightBg(isLight)
