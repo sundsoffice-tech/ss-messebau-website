@@ -48,23 +48,29 @@ function maskKey(string $key): string {
 }
 
 function handleGetKeys(): void {
-    $db = getDB();
-    $stmt = $db->query('SELECT id, key_id, provider, api_key, status, created_at, last_used_at FROM ai_keys ORDER BY created_at DESC');
-    $keys = $stmt->fetchAll();
+    try {
+        $db = getDB();
+        $stmt = $db->query('SELECT id, key_id, provider, api_key, status, created_at, last_used_at FROM ai_keys ORDER BY created_at DESC');
+        $keys = $stmt->fetchAll();
 
-    $result = [];
-    foreach ($keys as $key) {
-        $result[] = [
-            'id' => $key['key_id'],
-            'provider' => $key['provider'],
-            'maskedKey' => maskKey($key['api_key']),
-            'status' => $key['status'],
-            'createdAt' => strtotime($key['created_at']) * 1000,
-            'lastUsedAt' => $key['last_used_at'] ? strtotime($key['last_used_at']) * 1000 : null,
-        ];
+        $result = [];
+        foreach ($keys as $key) {
+            $result[] = [
+                'id' => $key['key_id'],
+                'provider' => $key['provider'],
+                'maskedKey' => maskKey($key['api_key']),
+                'status' => $key['status'],
+                'createdAt' => strtotime($key['created_at']) * 1000,
+                'lastUsedAt' => $key['last_used_at'] ? strtotime($key['last_used_at']) * 1000 : null,
+            ];
+        }
+
+        echo json_encode(['keys' => $result]);
+    } catch (\Throwable $e) {
+        error_log('AI keys fetch error: ' . $e->getMessage());
+        http_response_code(500);
+        echo json_encode(['error' => 'Schlüssel konnten nicht geladen werden']);
     }
-
-    echo json_encode(['keys' => $result]);
 }
 
 function handleAddKey(): void {
@@ -97,6 +103,11 @@ function handleAddKey(): void {
         $fetchStmt->execute([':id' => $insertedId]);
         $record = $fetchStmt->fetch();
 
+        // $record can be false if lastInsertId() is unavailable – fall back to current time
+        $createdAt = ($record && !empty($record['created_at']))
+            ? strtotime($record['created_at']) * 1000
+            : time() * 1000;
+
         echo json_encode([
             'success' => true,
             'key' => [
@@ -104,11 +115,11 @@ function handleAddKey(): void {
                 'provider' => $provider,
                 'maskedKey' => maskKey($apiKey),
                 'status' => 'active',
-                'createdAt' => strtotime($record['created_at']) * 1000,
+                'createdAt' => $createdAt,
                 'lastUsedAt' => null,
             ],
         ]);
-    } catch (PDOException $e) {
+    } catch (\Throwable $e) {
         error_log('AI key save error: ' . $e->getMessage());
         http_response_code(500);
         echo json_encode(['error' => 'Fehler beim Speichern des Schlüssels']);
@@ -117,47 +128,59 @@ function handleAddKey(): void {
 
 function handleRevokeKey(): void {
     $input = json_decode(file_get_contents('php://input'), true);
-    
+
     if (empty($input['keyId'])) {
         http_response_code(400);
         echo json_encode(['error' => 'keyId is required']);
         return;
     }
 
-    $db = getDB();
-    $stmt = $db->prepare('UPDATE ai_keys SET status = :status WHERE key_id = :key_id');
-    $stmt->execute([
-        ':status' => 'revoked',
-        ':key_id' => $input['keyId'],
-    ]);
+    try {
+        $db = getDB();
+        $stmt = $db->prepare('UPDATE ai_keys SET status = :status WHERE key_id = :key_id');
+        $stmt->execute([
+            ':status' => 'revoked',
+            ':key_id' => $input['keyId'],
+        ]);
 
-    if ($stmt->rowCount() === 0) {
-        http_response_code(404);
-        echo json_encode(['error' => 'Key not found']);
-        return;
+        if ($stmt->rowCount() === 0) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Schlüssel nicht gefunden']);
+            return;
+        }
+
+        echo json_encode(['success' => true]);
+    } catch (\Throwable $e) {
+        error_log('AI key revoke error: ' . $e->getMessage());
+        http_response_code(500);
+        echo json_encode(['error' => 'Fehler beim Widerrufen des Schlüssels']);
     }
-
-    echo json_encode(['success' => true]);
 }
 
 function handleDeleteKey(): void {
     $keyId = $_GET['keyId'] ?? null;
-    
+
     if (empty($keyId)) {
         http_response_code(400);
         echo json_encode(['error' => 'keyId is required']);
         return;
     }
 
-    $db = getDB();
-    $stmt = $db->prepare('DELETE FROM ai_keys WHERE key_id = :key_id');
-    $stmt->execute([':key_id' => $keyId]);
+    try {
+        $db = getDB();
+        $stmt = $db->prepare('DELETE FROM ai_keys WHERE key_id = :key_id');
+        $stmt->execute([':key_id' => $keyId]);
 
-    if ($stmt->rowCount() === 0) {
-        http_response_code(404);
-        echo json_encode(['error' => 'Key not found']);
-        return;
+        if ($stmt->rowCount() === 0) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Schlüssel nicht gefunden']);
+            return;
+        }
+
+        echo json_encode(['success' => true]);
+    } catch (\Throwable $e) {
+        error_log('AI key delete error: ' . $e->getMessage());
+        http_response_code(500);
+        echo json_encode(['error' => 'Fehler beim Löschen des Schlüssels']);
     }
-
-    echo json_encode(['success' => true]);
 }
