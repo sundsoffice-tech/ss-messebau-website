@@ -38,18 +38,32 @@ export interface AIAuditLogEntry {
   category: 'key' | 'training' | 'config' | 'security'
 }
 
+// ─── Helpers ─────────────────────────────────────────────────
+
+/** Extract the actual error message from a non-ok API response body. */
+async function extractError(res: Response, fallback: string): Promise<string> {
+  try {
+    const data = await res.json() as { error?: string }
+    return data.error || fallback
+  } catch {
+    return res.status === 401 ? 'Sitzung abgelaufen – bitte neu anmelden'
+      : res.status === 403 ? 'Zugriff verweigert'
+      : `${fallback} (${res.status})`
+  }
+}
+
 // ─── API Key Management ──────────────────────────────────────
 
 export async function getAIKeys(): Promise<AIKeyInfo[]> {
   try {
+    // GET has no body – no Content-Type header needed
     const response = await fetch('/api/ai-keys.php', {
       method: 'GET',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
     })
 
     if (!response.ok) {
-      throw new Error('Failed to fetch keys')
+      throw new Error(await extractError(response, 'Schlüssel konnten nicht geladen werden'))
     }
 
     const data = await response.json()
@@ -69,12 +83,12 @@ export async function addAIKey(provider: string, key: string): Promise<AIKeyInfo
   })
 
   if (!response.ok) {
-    throw new Error('Failed to add key')
+    throw new Error(await extractError(response, 'Schlüssel konnte nicht gespeichert werden'))
   }
 
   const data = await response.json()
 
-  // Add audit log entry
+  // Add audit log entry (best-effort)
   try {
     await aiApi.addAuditEntry({
       action: 'key_added',
@@ -95,7 +109,7 @@ export async function revokeAIKey(keyId: string): Promise<void> {
   })
 
   if (!response.ok) {
-    throw new Error('Failed to revoke key')
+    throw new Error(await extractError(response, 'Schlüssel konnte nicht widerrufen werden'))
   }
 
   try {
@@ -108,14 +122,14 @@ export async function revokeAIKey(keyId: string): Promise<void> {
 }
 
 export async function deleteAIKey(keyId: string): Promise<void> {
+  // DELETE has no body – no Content-Type header needed
   const response = await fetch(`/api/ai-keys.php?keyId=${encodeURIComponent(keyId)}`, {
     method: 'DELETE',
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
   })
 
   if (!response.ok) {
-    throw new Error('Failed to delete key')
+    throw new Error(await extractError(response, 'Schlüssel konnte nicht gelöscht werden'))
   }
 
   try {
