@@ -304,8 +304,22 @@
     </noscript>
     
     <!-- Google Analytics 4 – Consent Mode v2 (default: denied until user opts in) -->
-    <!-- TODO: Echte GA4 Measurement-ID eintragen (G-XXXXXXXXXX ersetzen) -->
-    <!-- Analytics ist DEAKTIVIERT bis eine echte ID konfiguriert wird -->
+    <!--
+      SEO-HINWEIS: Google Analytics ist DEAKTIVIERT bis eine echte Measurement-ID konfiguriert wird.
+
+      So richtest du GA4 ein:
+      1. Gehe zu https://analytics.google.com
+      2. Erstelle eine neue GA4-Property für sunds-messebau.de
+      3. Erstelle einen Web-Datenstream (Web Stream)
+      4. Kopiere die Measurement-ID (Format: G-XXXXXXXXXX)
+      5. Ersetze ALLE Vorkommen von 'G-XXXXXXXXXX' unten durch deine echte ID
+
+      Ohne GA4 hast du KEINE Daten über:
+      - Besucherzahlen und Traffic-Quellen
+      - Nutzerverhalten auf der Website
+      - Conversion-Tracking (Kontaktformular-Anfragen)
+      - Core Web Vitals Monitoring
+    -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
