@@ -16,10 +16,10 @@ export function ProcessTimeline() {
   const { openInquiry } = useUIStore()
   const { t } = useTranslation()
   return (
-    <section id="process" className="py-12 sm:py-16">
+    <section id="process" className="section">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>
+          <h2 className="font-bold mb-3 sm:mb-4 heading-2">
             {t('process.title')}
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -30,11 +30,11 @@ export function ProcessTimeline() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
           {steps.map((step, i) => (
             <div key={step.titleKey} className="relative text-center group">
-              <div className="flex items-center justify-center mx-auto mb-3 h-12 w-12 rounded-full bg-primary text-primary-foreground font-bold text-lg shadow-md group-hover:scale-110 transition-transform duration-300">
+              <div className={`flex items-center justify-center mx-auto mb-3 h-12 w-12 rounded-full font-bold text-lg shadow-md group-hover:scale-110 transition-transform duration-300 ${i === 1 ? 'bg-accent text-accent-foreground ring-4 ring-accent/20' : 'bg-primary text-primary-foreground'}`}>
                 {i + 1}
               </div>
               {i < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-6 left-[calc(50%+28px)] w-[calc(100%-56px)] h-0.5 bg-primary/20" />
+                <div className="hidden lg:block absolute top-6 left-[calc(50%+28px)] w-[calc(100%-56px)] h-0.5 bg-gradient-to-r from-primary/30 to-primary/10" />
               )}
               <h3 className="font-semibold text-sm sm:text-base mb-1">{t(step.titleKey)}</h3>
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{t(step.descKey)}</p>

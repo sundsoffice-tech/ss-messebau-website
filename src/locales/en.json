@@ -310,6 +310,8 @@
   "thankyou.questions": "Questions? Call us:",
   "thankyou.emailCopy": "A copy of your configuration has been sent to your email address.",
   "thankyou.checkSpam": "Please also check your spam folder.",
+  "home.services.eyebrow": "Services",
+  "home.references.eyebrow": "Portfolio",
   "form.error.submitFailed": "Unfortunately your request could not be transmitted. Please contact us directly: phone +49 1514 0368754, email info@sundsmessebau.com or via WhatsApp. Your input remains in this form.",
   "form.name": "Name",
   "form.name.placeholder": "John Smith",

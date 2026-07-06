@@ -64,15 +64,19 @@ export function FactBar() {
   }, [])
 
   return (
-    <section ref={ref} className="bg-primary text-primary-foreground py-8 sm:py-10">
-      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center">
+    <section ref={ref} className="relative overflow-hidden bg-surface-deep text-primary-foreground py-10 sm:py-12">
+      <div
+        className="absolute -top-24 right-0 h-64 w-64 rounded-full bg-accent/15 blur-3xl"
+        aria-hidden="true"
+      />
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 text-center lg:divide-x lg:divide-white/10">
           {facts.map((fact) => (
-            <div key={fact.labelKey}>
-              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-1">
+            <div key={fact.labelKey} className="lg:px-4">
+              <p className="text-4xl sm:text-5xl font-bold tracking-tight mb-2">
                 <AnimatedNumber value={fact.value} suffix={fact.suffix} isVisible={isVisible} />
               </p>
-              <p className="text-xs sm:text-sm opacity-80">{t(fact.labelKey)}</p>
+              <p className="text-xs sm:text-sm font-medium uppercase tracking-wider text-on-deep-muted">{t(fact.labelKey)}</p>
             </div>
           ))}
         </div>

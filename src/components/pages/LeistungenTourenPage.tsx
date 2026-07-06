@@ -149,8 +149,7 @@ export function LeistungenTourenPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1
-              className="font-bold mb-6"
-              style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)', lineHeight: '1.2' }}
+              className="font-bold mb-6 heading-1"
             >
               Touren &amp; Roadshows – Bundesweite Messeauftritte aus einer Hand
             </h1>
@@ -234,8 +233,7 @@ export function LeistungenTourenPage() {
       <section id="leistungen" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Touren &amp; Roadshows – Unsere Leistungen im Detail
           </h2>
@@ -294,8 +292,7 @@ export function LeistungenTourenPage() {
       <section id="vorteile" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Warum Tourenpakete von S&amp;S Messebau?
           </h2>
@@ -324,8 +321,7 @@ export function LeistungenTourenPage() {
       <section id="prozess" className="py-12 sm:py-16 bg-secondary/30 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Ihr Weg zum Tourenpaket
           </h2>
@@ -359,8 +355,7 @@ export function LeistungenTourenPage() {
       <section id="faq" className="py-12 sm:py-16 bg-secondary/30 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Häufige Fragen zu Touren &amp; Roadshows
           </h2>
@@ -388,8 +383,7 @@ export function LeistungenTourenPage() {
       <section id="referenzen" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Das sagen unsere Tourenkunden
           </h2>
@@ -425,8 +419,7 @@ export function LeistungenTourenPage() {
       <section className="py-12 sm:py-16 bg-secondary/30">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Weitere Leistungen entdecken
           </h2>
@@ -461,8 +454,7 @@ export function LeistungenTourenPage() {
       <section className="py-12 sm:py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
           <h2
-            className="font-bold mb-6"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold mb-6 heading-2"
           >
             Bereit für Ihre nächste Messetour?
           </h2>

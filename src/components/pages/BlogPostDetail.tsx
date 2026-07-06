@@ -86,7 +86,7 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
   return (
     <div>
       {/* Hero / Header */}
-      <section className="py-12 md:py-16 bg-primary text-primary-foreground">
+      <section className="relative overflow-hidden hero-gradient text-white py-12 md:py-16">
         <div className="container mx-auto max-w-4xl px-4 md:px-6 lg:px-8">
           <Button
             variant="ghost"

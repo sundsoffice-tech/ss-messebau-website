@@ -15,9 +15,9 @@ export function UeberUnsPage() {
 
   return (
     <div>
-      <section id="ueber-uns-hero" className="py-12 sm:py-16 bg-primary text-primary-foreground">
+      <section id="ueber-uns-hero" className="relative overflow-hidden hero-gradient text-white py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>{t('about.hero.title')}</h1>
+          <h1 className="font-bold mb-4 sm:mb-6 leading-tight heading-display">{t('about.hero.title')}</h1>
           <p className="text-base sm:text-lg opacity-90 max-w-3xl leading-relaxed">
             {t('about.hero.subtitle')}
           </p>
@@ -28,7 +28,7 @@ export function UeberUnsPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
             <div>
-              <h2 className="font-bold mb-4 sm:mb-6" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.story.title')}</h2>
+              <h2 className="font-bold mb-4 sm:mb-6 heading-2">{t('about.story.title')}</h2>
               <div className="space-y-4 text-base sm:text-lg text-muted-foreground">
                 <p>
                   {t('about.story.p1')}
@@ -58,7 +58,7 @@ export function UeberUnsPage() {
 
       <section id="team" className="py-12 sm:py-16 bg-muted scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.team.title')}</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center heading-2">{t('about.team.title')}</h2>
           <p className="text-base sm:text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-8 sm:mb-12">
             {t('about.team.desc')}
           </p>
@@ -67,7 +67,7 @@ export function UeberUnsPage() {
 
       <section id="werte" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.werte.title')}</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center heading-2">{t('about.werte.title')}</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {[
                 { title: t('about.werte.v1.title'), desc: t('about.werte.v1.desc') },
@@ -87,7 +87,7 @@ export function UeberUnsPage() {
 
       <section id="arbeitsweise" className="py-12 sm:py-16 bg-muted scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.arbeitsweise.title')}</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center heading-2">{t('about.arbeitsweise.title')}</h2>
             <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
               {[
                 { title: t('about.arbeitsweise.w1.title'), desc: t('about.arbeitsweise.w1.desc') },
@@ -110,7 +110,7 @@ export function UeberUnsPage() {
 
       <section id="vergleich" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.compare.title')}</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center heading-2">{t('about.compare.title')}</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-base">
                 <thead>
@@ -162,9 +162,9 @@ export function UeberUnsPage() {
         </div>
       </section>
 
-      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+      <section className="relative overflow-hidden hero-gradient text-white py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('about.cta.title')}</h2>
+          <h2 className="font-bold mb-4 heading-2">{t('about.cta.title')}</h2>
           <p className="text-base sm:text-lg mb-6 sm:mb-8 opacity-90 max-w-2xl mx-auto">
             {t('about.cta.text')}
           </p>
@@ -187,9 +187,9 @@ export function AblaufPage() {
   const { openInquiry } = useUIStore()
   return (
     <div>
-      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+      <section className="relative overflow-hidden hero-gradient text-white py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-bold mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>{t('ablauf.hero.title')}</h1>
+          <h1 className="font-bold mb-4 sm:mb-6 leading-tight heading-display">{t('ablauf.hero.title')}</h1>
           <p className="text-base sm:text-lg opacity-90 max-w-3xl leading-relaxed">
             {t('ablauf.hero.subtitle')}
           </p>
@@ -255,7 +255,7 @@ export function AblaufPage() {
 
       <section id="faq" className="py-12 sm:py-16 bg-muted scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('ablauf.faq.title')}</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center heading-2">{t('ablauf.faq.title')}</h2>
           <div className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible className="w-full">
               {[
@@ -312,7 +312,7 @@ export function AblaufPage() {
 
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('ablauf.cta.title')}</h2>
+          <h2 className="font-bold mb-4 heading-2">{t('ablauf.cta.title')}</h2>
           <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
             {t('ablauf.cta.text')}
           </p>
@@ -331,11 +331,11 @@ export function NachhaltigkeitPage() {
   const { openInquiry } = useUIStore()
   return (
     <div>
-      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+      <section className="relative overflow-hidden hero-gradient text-white py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
             <Leaf className="h-10 w-10 sm:h-12 sm:w-12" />
-            <h1 className="font-bold leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>{t('nachhaltigkeit.hero.title')}</h1>
+            <h1 className="font-bold leading-tight heading-display">{t('nachhaltigkeit.hero.title')}</h1>
           </div>
           <p className="text-base sm:text-lg opacity-90 max-w-3xl leading-relaxed">
             {t('nachhaltigkeit.hero.subtitle')}
@@ -386,7 +386,7 @@ export function NachhaltigkeitPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
             <div>
-              <h2 className="font-bold mb-4 sm:mb-6" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('nachhaltigkeit.business.title')}</h2>
+              <h2 className="font-bold mb-4 sm:mb-6 heading-2">{t('nachhaltigkeit.business.title')}</h2>
               <p className="text-base sm:text-lg text-muted-foreground mb-4 sm:mb-6">
                 {t('nachhaltigkeit.business.subtitle')}
               </p>
@@ -423,7 +423,7 @@ export function NachhaltigkeitPage() {
 
       <section id="vorteile" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold mb-6 sm:mb-8 text-center" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('nachhaltigkeit.measures.title')}</h2>
+          <h2 className="font-bold mb-6 sm:mb-8 text-center heading-2">{t('nachhaltigkeit.measures.title')}</h2>
             <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
               {[
                 t('nachhaltigkeit.measures.m1'),
@@ -446,7 +446,7 @@ export function NachhaltigkeitPage() {
 
       <section className="py-12 sm:py-16 bg-muted">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', lineHeight: '1.2' }}>{t('nachhaltigkeit.cta.title')}</h2>
+          <h2 className="font-bold mb-4 heading-2">{t('nachhaltigkeit.cta.title')}</h2>
           <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
             {t('nachhaltigkeit.cta.text')}
           </p>
@@ -465,7 +465,7 @@ export function ImpressumPage() {
   return (
     <div className="py-12 sm:py-16">
       <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-bold mb-6 sm:mb-8" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', lineHeight: '1.2' }}>{t('imprint.title')}</h1>
+        <h1 className="font-bold mb-6 sm:mb-8 heading-1">{t('imprint.title')}</h1>
         
         <div className="space-y-6 text-muted-foreground">
           <div>
@@ -522,7 +522,7 @@ export function DatenschutzPage() {
   return (
     <div className="py-12 sm:py-16">
       <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-bold mb-6 sm:mb-8" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', lineHeight: '1.2' }}>{t('privacy.title')}</h1>
+        <h1 className="font-bold mb-6 sm:mb-8 heading-1">{t('privacy.title')}</h1>
         
         <div className="space-y-6 text-muted-foreground">
           <div>

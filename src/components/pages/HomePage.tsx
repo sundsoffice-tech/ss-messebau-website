@@ -1,3 +1,4 @@
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -25,6 +26,7 @@ import { LogoWall } from '@/components/ui/LogoWall'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
 import { trackHeroCTAClick, trackReferenceDetailView } from '@/lib/analytics'
 import { useScrollDepthTracking, useDwellTimeTracking } from '@/hooks/use-analytics'
+import { useReveal } from '@/hooks/use-reveal'
 import { useUIStore } from '@/store/ui-store'
 
 export function HomePage() {
@@ -45,6 +47,11 @@ export function HomePage() {
   useScrollDepthTracking('home')
   useDwellTimeTracking('home')
 
+  const revealRef = useReveal<HTMLDivElement>()
+  const prefersReducedMotion = useReducedMotion()
+  const { scrollY } = useScroll()
+  const heroParallax = useTransform(scrollY, [0, 600], [0, 80])
+
   const handleNavigation = (path: string) => {
     navigate(path)
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -56,32 +63,38 @@ export function HomePage() {
   }
 
   return (
-    <div>
-      <section 
+    <div ref={revealRef}>
+      <section
         id="hero"
-        className="relative min-h-[500px] sm:min-h-[600px] flex items-center hero-gradient overflow-hidden"
+        className="relative min-h-[560px] sm:min-h-[640px] flex items-center hero-gradient overflow-hidden"
         aria-labelledby="hero-heading"
       >
+        <motion.div
+          className="absolute -inset-y-12 inset-x-0"
+          style={{ y: prefersReducedMotion ? 0 : heroParallax }}
+          aria-hidden="true"
+        >
+          <img
+            src="/images/hero-messebau-startseite.jpg"
+            alt={t('home.hero.alt')}
+            width="1920"
+            height="1080"
+            className="w-full h-full object-cover"
+            style={{ objectPosition: 'center 25%' }}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </motion.div>
         <div className="absolute inset-0 hero-overlay" />
-        <img
-          src="/images/hero-messebau-startseite.jpg"
-          alt={t('home.hero.alt')}
-          width="1920"
-          height="1080"
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
-          style={{ objectPosition: 'center 25%' }}
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-        />
         
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 py-12 sm:py-16">
           <div className="max-w-3xl">
             <Badge className="mb-4 sm:mb-6 bg-accent text-accent-foreground text-sm">{t('home.hero.badge')}</Badge>
-            <h1 id="hero-heading" className="font-bold text-white mb-4 sm:mb-6 leading-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', lineHeight: '1.2' }}>
+            <h1 id="hero-heading" className="font-bold text-white mb-4 sm:mb-6 leading-tight heading-display">
               {t('home.hero.title')}
             </h1>
-            <p className="text-white/90 mb-5 sm:mb-6 leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', lineHeight: '1.5' }}>
+            <p className="text-white/90 mb-5 sm:mb-6 leading-relaxed max-w-2xl text-lead">
               {t('home.hero.subtitle')}
             </p>
             <div className="mb-5 sm:mb-6">
@@ -101,7 +114,7 @@ export function HomePage() {
                 size="lg" 
                 variant="outline"
                 onClick={() => handleNavigation('/leistungen')}
-                className="px-6 sm:px-8 py-6 text-base sm:text-lg font-medium bg-white/10 text-white border-white/30 hover:bg-white/20 min-h-[48px]"
+                className="px-6 sm:px-8 py-6 text-base sm:text-lg font-medium bg-transparent text-white border-white/40 hover:bg-white/10 hover:text-white min-h-[48px]"
                 aria-label={t('home.hero.secondaryAria')}
               >
                 {t('home.hero.secondary')}
@@ -115,11 +128,12 @@ export function HomePage() {
 
       <FactBar />
 
-      <section id="services" className="py-12 sm:py-16 bg-muted" aria-labelledby="services-heading">
+      <section id="services" className="section bg-muted" aria-labelledby="services-heading">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 id="services-heading" className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('home.services.title')}</h2>
-            <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <div className="mb-8 sm:mb-12 max-w-3xl">
+            <p className="eyebrow mb-2">{t('home.services.eyebrow')}</p>
+            <h2 id="services-heading" className="font-bold mb-3 sm:mb-4 heading-2">{t('home.services.title')}</h2>
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
               {t('home.services.subtitle')}
             </p>
           </div>
@@ -168,9 +182,10 @@ export function HomePage() {
               const Icon = service.icon
               const isUnsplashImage = service.image.includes('unsplash.com')
               return (
-                <Card 
-                  key={index} 
-                  className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary" 
+                <Card
+                  key={index}
+                  className="reveal group overflow-hidden hover:shadow-xl hover:ring-1 hover:ring-primary/20 transition-all duration-300 cursor-pointer border-2 hover:border-primary"
+                  style={{ '--reveal-delay': `${index * 0.1}s` } as React.CSSProperties}
                   onClick={() => handleServiceNavigation(service.sectionId)}
                 >
                   <div className="relative aspect-video overflow-hidden bg-muted">
@@ -194,7 +209,7 @@ export function HomePage() {
                     </div>
                   </div>
                   <CardContent className="p-5 sm:p-6 space-y-4">
-                    <h3 className="font-bold leading-tight" style={{ fontSize: 'clamp(1.125rem, 2vw, 1.25rem)' }}>
+                    <h3 className="font-bold leading-tight heading-3">
                       {service.title}
                     </h3>
                     <p className="text-sm leading-relaxed text-muted-foreground">
@@ -224,10 +239,10 @@ export function HomePage() {
         </div>
       </section>
 
-      <section id="advantages" className="py-12 sm:py-16">
+      <section id="advantages" className="section">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="font-bold mb-3 sm:mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('home.advantages.title')}</h2>
+            <h2 className="font-bold mb-3 sm:mb-4 heading-2">{t('home.advantages.title')}</h2>
             <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               {t('home.advantages.subtitle')}
             </p>
@@ -253,9 +268,13 @@ export function HomePage() {
             ].map((advantage, index) => {
               const Icon = advantage.icon
               return (
-                <div key={index} className="text-center">
+                <div
+                  key={index}
+                  className="reveal text-center"
+                  style={{ '--reveal-delay': `${index * 0.1}s` } as React.CSSProperties}
+                >
                   <div className="flex justify-center mb-4">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
                       <Icon className="h-8 w-8 text-primary" weight="fill" />
                     </div>
                   </div>
@@ -268,22 +287,24 @@ export function HomePage() {
         </div>
       </section>
 
-      <section id="references" className="py-12 sm:py-16 bg-muted">
+      <section id="references" className="section bg-muted">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('home.references.title')}</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <div className="mb-12 max-w-3xl">
+            <p className="eyebrow mb-2">{t('home.references.eyebrow')}</p>
+            <h2 className="font-bold mb-4 heading-2">{t('home.references.title')}</h2>
+            <p className="text-lg text-muted-foreground">
               {t('home.references.subtitle')}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {DEMO_REFERENCES.slice(0, 3).map((reference) => {
+            {DEMO_REFERENCES.slice(0, 3).map((reference, index) => {
               const isUnsplashImage = reference.imageUrl.includes('unsplash.com')
               return (
-                <Card 
-                  key={reference.id} 
-                  className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary active:scale-[0.98]" 
+                <Card
+                  key={reference.id}
+                  className="reveal group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary active:scale-[0.98]"
+                  style={{ '--reveal-delay': `${index * 0.1}s` } as React.CSSProperties}
                   onClick={() => { trackReferenceDetailView(reference.id); handleNavigation('/referenzen') }}
                 >
                   <div className="aspect-video relative overflow-hidden bg-muted">
@@ -335,10 +356,10 @@ export function HomePage() {
 
       <LogoWall />
 
-      <section id="testimonials" className="py-12 sm:py-16">
+      <section id="testimonials" className="section">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('home.testimonials.title')}</h2>
+            <h2 className="font-bold mb-4 heading-2">{t('home.testimonials.title')}</h2>
             <p className="text-lg text-muted-foreground mb-4">
               {t('home.testimonials.subtitle')}
             </p>
@@ -352,7 +373,7 @@ export function HomePage() {
                 target="_blank" 
                 rel="noopener noreferrer"
               >
-                <Star className="h-4 w-4 text-yellow-500" weight="fill" />
+                <Star className="h-4 w-4 text-[oklch(0.75_0.15_85)]" weight="fill" />
                 {t('home.testimonials.google')}
               </a>
             </Button>
@@ -379,16 +400,26 @@ export function HomePage() {
                 rating: 5
               }
             ].map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
+              <Card
+                key={index}
+                className="reveal relative h-full"
+                style={{ '--reveal-delay': `${index * 0.1}s` } as React.CSSProperties}
+              >
+                <span
+                  className="absolute top-3 left-4 text-7xl font-serif leading-none text-primary/10 select-none"
+                  aria-hidden="true"
+                >
+                  „
+                </span>
+                <CardContent className="p-6 flex flex-col h-full">
                   <div className="flex gap-1 mb-4">
                     {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-500" weight="fill" />
+                      <Star key={i} className="h-5 w-5 text-[oklch(0.75_0.15_85)]" weight="fill" />
                     ))}
                   </div>
                   <p className="text-muted-foreground mb-4 italic">"{testimonial.text}"</p>
-                  <Separator className="my-4" />
-                  <div>
+                  <div className="mt-auto">
+                    <Separator className="my-4" />
                     <p className="font-semibold">{testimonial.author}</p>
                     <p className="text-sm text-muted-foreground">{testimonial.company}</p>
                   </div>
@@ -414,9 +445,17 @@ export function HomePage() {
         ]}
       />
 
-      <section id="cta" className="py-12 sm:py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-bold mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('home.cta.title')}</h2>
+      <section id="cta" className="section relative overflow-hidden bg-surface-deep text-primary-foreground">
+        <div
+          className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-accent/20 blur-3xl"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute -bottom-40 -left-24 h-80 w-80 rounded-full bg-surface-deep-2 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center relative">
+          <h2 className="font-bold mb-4 heading-2">{t('home.cta.title')}</h2>
           <p className="text-xl font-semibold mb-4 opacity-95">{t('home.cta.subtitle')}</p>
           <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
             {t('home.cta.desc')}

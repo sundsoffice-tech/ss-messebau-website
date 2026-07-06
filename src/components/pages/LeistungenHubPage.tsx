@@ -33,17 +33,15 @@ export function LeistungenHubPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
-      <section className="bg-primary text-primary-foreground py-12 sm:py-16">
+      <section className="relative overflow-hidden hero-gradient text-white py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h1
-            className="font-bold leading-tight"
-            style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)' }}
+            className="font-bold leading-tight heading-display"
           >
             {t('hub.hero.title')}
           </h1>
           <p
-            className="mt-4 max-w-2xl mx-auto text-primary-foreground/80 leading-relaxed"
-            style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}
+            className="mt-4 max-w-2xl mx-auto text-primary-foreground/80 leading-relaxed text-lead"
           >
             {t('hub.hero.subtitle')}
           </p>
@@ -71,12 +69,7 @@ export function LeistungenHubPage() {
                         <Icon size={28} weight="duotone" />
                       </div>
                       <div className="flex-1">
-                        <h2
-                          className="font-semibold leading-tight"
-                          style={{
-                            fontSize: 'clamp(1.125rem, 2vw, 1.25rem)',
-                          }}
-                        >
+                        <h2 className="font-semibold leading-tight heading-3">
                           {t(`hub.${service.key}.title`)}
                         </h2>
                       </div>
@@ -110,8 +103,7 @@ export function LeistungenHubPage() {
       <section id="cta" className="bg-muted py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2
-            className="font-bold leading-tight"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)' }}
+            className="font-bold leading-tight heading-2"
           >
             {t('hub.cta.title')}
           </h2>

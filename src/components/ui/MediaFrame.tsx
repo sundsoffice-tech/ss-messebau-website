@@ -1,4 +1,4 @@
-import { type ImgHTMLAttributes } from 'react'
+import { useState, type ImgHTMLAttributes } from 'react'
 
 const RATIO_MAP: Record<string, string> = {
   hero: 'var(--media-ratio-hero)',
@@ -51,6 +51,8 @@ export function MediaFrame({
   showBackground = true,
   radius = 'md',
 }: MediaFrameProps) {
+  const [loaded, setLoaded] = useState(false)
+
   const aspectRatio = ratio === 'custom' && customRatio
     ? customRatio
     : RATIO_MAP[ratio] || RATIO_MAP.card
@@ -79,12 +81,13 @@ export function MediaFrame({
 
   return (
     <div
-      className={`media-frame overflow-hidden ${className}`}
+      className={`media-frame overflow-hidden ${loaded ? '' : 'animate-pulse bg-muted'} ${className}`}
       style={containerStyle}
     >
       <img
         {...imgProps}
-        className={`w-full h-full ${imgClassName}`}
+        onLoad={() => setLoaded(true)}
+        className={`w-full h-full transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'} ${imgClassName}`}
         style={{
           objectFit: fit,
           objectPosition: position,

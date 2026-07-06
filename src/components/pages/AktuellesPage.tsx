@@ -16,7 +16,7 @@ export function AktuellesPage() {
 
   return (
     <div>
-      <section className="py-12 md:py-16 bg-primary text-primary-foreground">
+      <section className="relative overflow-hidden hero-gradient text-white py-12 md:py-16">
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <div className="flex items-center gap-2.5 md:gap-3 mb-3 md:mb-4">
             <CalendarDot className="h-8 w-8 md:h-10 md:w-10 shrink-0" />

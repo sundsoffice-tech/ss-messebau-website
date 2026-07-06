@@ -8,8 +8,12 @@ export function GuaranteeBanner() {
   const { openInquiry } = useUIStore()
   const { t } = useTranslation()
   return (
-    <section className="bg-accent text-accent-foreground py-4 sm:py-5">
-      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden bg-accent text-accent-foreground py-4 sm:py-5">
+      <div
+        className="absolute inset-0 bg-[linear-gradient(110deg,transparent_30%,rgba(255,255,255,0.08)_50%,transparent_70%)]"
+        aria-hidden="true"
+      />
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
           <div className="flex items-center gap-3 text-center sm:text-left">
             <Lightning className="h-6 w-6 sm:h-7 sm:w-7 shrink-0" weight="fill" />

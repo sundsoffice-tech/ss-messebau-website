@@ -152,8 +152,7 @@ export function LeistungenBoedenPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1
-              className="font-bold mb-6"
-              style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)', lineHeight: '1.2' }}
+              className="font-bold mb-6 heading-1"
             >
               Böden & Ausstattung – Premium-Ambiente für Ihre Räumlichkeiten
             </h1>
@@ -285,8 +284,7 @@ export function LeistungenBoedenPage() {
       <section id="leistungen" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Böden & Ausstattung – Unsere Leistungen im Detail
           </h2>
@@ -345,8 +343,7 @@ export function LeistungenBoedenPage() {
       <section id="materialien" className="py-12 sm:py-16 bg-secondary/30 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Materialien & Bodenarten im Überblick
           </h2>
@@ -379,8 +376,7 @@ export function LeistungenBoedenPage() {
       <section id="prozess" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Ihr Weg zur perfekten Raumausstattung
           </h2>
@@ -414,8 +410,7 @@ export function LeistungenBoedenPage() {
       <section id="faq" className="py-12 sm:py-16 bg-secondary/30 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Häufige Fragen zu Böden & Ausstattung
           </h2>
@@ -442,8 +437,7 @@ export function LeistungenBoedenPage() {
       <section id="referenzen" className="py-12 sm:py-16 scroll-mt-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Das sagen unsere Kunden
           </h2>
@@ -479,8 +473,7 @@ export function LeistungenBoedenPage() {
       <section className="py-12 sm:py-16 bg-secondary/30">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="font-bold text-center mb-4"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold text-center mb-4 heading-2"
           >
             Weitere Leistungen entdecken
           </h2>
@@ -515,8 +508,7 @@ export function LeistungenBoedenPage() {
       <section className="py-12 sm:py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
           <h2
-            className="font-bold mb-6"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}
+            className="font-bold mb-6 heading-2"
           >
             Bereit für die perfekte Raumausstattung?
           </h2>

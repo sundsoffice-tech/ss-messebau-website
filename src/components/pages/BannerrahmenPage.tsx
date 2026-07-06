@@ -21,7 +21,7 @@ export function BannerrahmenPage() {
       <section className="hero-gradient text-white py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="font-bold mb-6" style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)', lineHeight: '1.2' }}>
+            <h1 className="font-bold mb-6 heading-1">
               {t('bannerrahmen.hero.title')}
             </h1>
             <p className="text-xl mb-8 text-white/90">
@@ -82,7 +82,7 @@ export function BannerrahmenPage() {
 
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-center mb-12" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('bannerrahmen.systems.title')}</h2>
+          <h2 className="font-bold text-center mb-12 heading-2">{t('bannerrahmen.systems.title')}</h2>
           
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <Card className="p-6">
@@ -174,7 +174,7 @@ export function BannerrahmenPage() {
 
       <section className="py-12 sm:py-16 bg-secondary/30">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-center mb-12" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('bannerrahmen.materials.title')}</h2>
+          <h2 className="font-bold text-center mb-12 heading-2">{t('bannerrahmen.materials.title')}</h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             <Card className="p-6">
@@ -233,7 +233,7 @@ export function BannerrahmenPage() {
       {/* FAQ Section */}
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-center mb-12" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Häufige Fragen zu Bannerrahmen</h2>
+          <h2 className="font-bold text-center mb-12 heading-2">Häufige Fragen zu Bannerrahmen</h2>
           <div className="max-w-3xl mx-auto space-y-6">
             {[
               { q: 'Welche Größen sind bei Bannerrahmen möglich?', a: 'Unsere Bannerrahmen sind in nahezu allen Größen erhältlich – von kompakten 0,5 × 1 m bis zu großflächigen Formaten wie 5 × 3 m. Sondermaße realisieren wir auf Anfrage.' },
@@ -254,7 +254,7 @@ export function BannerrahmenPage() {
       {/* Social Proof / Kundenstimmen */}
       <section className="py-12 sm:py-16 bg-secondary/30">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-center mb-12" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>Das sagen unsere Kunden</h2>
+          <h2 className="font-bold text-center mb-12 heading-2">Das sagen unsere Kunden</h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[
               { text: 'Die Bannerrahmen von S&S sind top verarbeitet und lassen sich supereinfach montieren. Wir nutzen sie auf allen unseren Messen.', author: 'Thomas K.', role: 'Marketing-Leiter, Food-Branche' },
@@ -281,7 +281,7 @@ export function BannerrahmenPage() {
       {/* Cross-Links / Verwandte Bereiche */}
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-center mb-8" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2rem)', lineHeight: '1.2' }}>Verwandte Leistungsbereiche</h2>
+          <h2 className="font-bold text-center mb-8 heading-2">Verwandte Leistungsbereiche</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
             <button onClick={() => navigate('/leistungen/messebau')} className="group text-left">
               <Card className="p-5 h-full transition-all group-hover:border-primary group-hover:shadow-lg">
@@ -316,9 +316,9 @@ export function BannerrahmenPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
+      <section className="relative overflow-hidden hero-gradient text-white py-12 sm:py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
-          <h2 className="font-bold mb-6" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: '1.2' }}>{t('bannerrahmen.cta.title')}</h2>
+          <h2 className="font-bold mb-6 heading-2">{t('bannerrahmen.cta.title')}</h2>
           <p className="text-lg mb-8 opacity-90">
             {t('bannerrahmen.cta.description')}
           </p>

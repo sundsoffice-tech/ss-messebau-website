@@ -349,9 +349,9 @@ ANTWORTRICHTLINIEN:
 
   return (
     <div>
-      <section id="kontakt-hero" className="py-12 sm:py-16 bg-primary text-primary-foreground">
+      <section id="kontakt-hero" className="relative overflow-hidden hero-gradient text-white py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">{t('kontakt.hero.title')}</h1>
+          <h1 className="heading-display font-bold mb-4 sm:mb-6">{t('kontakt.hero.title')}</h1>
           <p className="text-base sm:text-xl opacity-90 max-w-3xl">
             {t('kontakt.hero.subtitle')}
           </p>

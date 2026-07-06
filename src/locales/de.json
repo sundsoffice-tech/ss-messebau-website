@@ -310,6 +310,8 @@
   "thankyou.questions": "Fragen? Rufen Sie uns an:",
   "thankyou.emailCopy": "Eine Kopie Ihrer Konfiguration wurde an Ihre E-Mail-Adresse gesendet.",
   "thankyou.checkSpam": "Bitte überprüfen Sie ggf. auch Ihren Spam-Ordner.",
+  "home.services.eyebrow": "Leistungen",
+  "home.references.eyebrow": "Referenzen",
   "form.error.submitFailed": "Ihre Anfrage konnte leider nicht übertragen werden. Bitte kontaktieren Sie uns direkt: Telefon +49 1514 0368754, E-Mail info@sundsmessebau.com oder per WhatsApp. Ihre Eingaben bleiben in diesem Formular erhalten.",
   "form.name": "Name",
   "form.name.placeholder": "Max Mustermann",
