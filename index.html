@@ -14,7 +14,7 @@
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#3730a3" />
+    <meta name="theme-color" content="#1c2b4a" />
     
     <!-- Apple Touch Icons -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -45,7 +45,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
-    <link rel="mask-icon" href="/favicon.svg" color="#3730a3" />
+    <link rel="mask-icon" href="/favicon.svg" color="#1c2b4a" />
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://sunds-messebau.de/" />
@@ -202,10 +202,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Performance: Logo preloaden (LCP Optimierung) -->
-    <!-- Note: Image path is resolved during build by Vite -->
-    <!-- <link rel="preload" as="image" href="/src/assets/images/IMG-20230807-WA0009_(1).png"> -->
-    
     <!-- Performance: Kritisches CSS inline -->
     <style>
       /* Font fallback metrics to prevent CLS during font swap */
@@ -221,15 +217,16 @@
       body {
         font-family: 'Inter', 'Inter-fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         margin: 0;
-        background: oklch(1 0 0);
-        color: oklch(0.25 0.01 260);
+        background: oklch(0.988 0.003 85);
+        color: oklch(0.24 0.02 262);
         line-height: 1.6;
       }
+      /* Keep .hero-gradient/.hero-overlay in sync with src/index.css */
       .hero-gradient {
-        background: linear-gradient(135deg, oklch(0.45 0.15 250) 0%, oklch(0.35 0.12 250) 100%);
+        background: linear-gradient(135deg, oklch(0.26 0.055 262) 0%, oklch(0.34 0.09 258) 100%);
       }
       .hero-overlay {
-        background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+        background: linear-gradient(100deg, oklch(0.26 0.055 262 / 0.92) 0%, oklch(0.26 0.055 262 / 0.72) 45%, oklch(0.26 0.055 262 / 0.30) 100%);
       }
 
       /* Native loading screen – covers SEO fallback until React mounts */
@@ -241,7 +238,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, oklch(0.45 0.15 250), oklch(0.35 0.12 250));
+        background: linear-gradient(135deg, oklch(0.26 0.055 262), oklch(0.34 0.09 258));
       }
       #native-loader .loader-bar {
         height: 4px;
@@ -276,8 +273,8 @@
         position: fixed;
         inset: 0;
         z-index: 9999;
-        background: #3730a3;
-        background: linear-gradient(to bottom right, oklch(0.45 0.15 250), oklch(0.45 0.15 250 / 0.95), oklch(0.45 0.15 250 / 0.9));
+        background: #1c2b4a;
+        background: linear-gradient(to bottom right, oklch(0.26 0.055 262), oklch(0.26 0.055 262 / 0.95), oklch(0.26 0.055 262 / 0.9));
       }
     </style>
     <script>
@@ -303,47 +300,11 @@
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     </noscript>
     
-    <!-- Google Analytics 4 – Consent Mode v2 (default: denied until user opts in) -->
-    <!--
-      SEO-HINWEIS: Google Analytics ist DEAKTIVIERT bis eine echte Measurement-ID konfiguriert wird.
-
-      So richtest du GA4 ein:
-      1. Gehe zu https://analytics.google.com
-      2. Erstelle eine neue GA4-Property für sunds-messebau.de
-      3. Erstelle einen Web-Datenstream (Web Stream)
-      4. Kopiere die Measurement-ID (Format: G-XXXXXXXXXX)
-      5. Ersetze ALLE Vorkommen von 'G-XXXXXXXXXX' unten durch deine echte ID
-
-      Ohne GA4 hast du KEINE Daten über:
-      - Besucherzahlen und Traffic-Quellen
-      - Nutzerverhalten auf der Website
-      - Conversion-Tracking (Kontaktformular-Anfragen)
-      - Core Web Vitals Monitoring
-    -->
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('consent', 'default', { analytics_storage: 'denied' });
-      gtag('js', new Date());
-      // WICHTIG: G-XXXXXXXXXX durch echte GA4 Measurement-ID ersetzen!
-      if (!'G-XXXXXXXXXX'.startsWith('G-XXX')) {
-        gtag('config', 'G-XXXXXXXXXX', { send_page_view: true });
-      }
-    </script>
-    <script>
-      // GA4 Script nur laden wenn echte ID konfiguriert
-      if (!'G-XXXXXXXXXX'.startsWith('G-XXX')) {
-        var s = document.createElement('script');
-        s.async = true;
-        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
-        document.head.appendChild(s);
-      }
-    </script>
-  <script type="module" crossorigin src="/assets/index-CoXhhD0E.js"></script>
+  <script type="module" crossorigin src="/assets/index-BFGWyvS3.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor-react-DjPCVcPo.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-ui-qNHxpggR.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor-motion-Ct0E2aNd.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-MlRO4pcU.css">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-motion-CcmrN6dh.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-BD2nU6SE.css">
 </head>
 
 <body>
@@ -355,7 +316,7 @@
 
     <div id="root">
       <!-- Static HTML fallback for SEO crawlers – replaced by React on mount -->
-      <header style="background: #3730a3; color: #fff; padding: 1rem 2rem;">
+      <header style="background: #1c2b4a; color: #fff; padding: 1rem 2rem;">
         <nav style="max-width: 72rem; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
           <strong style="font-size: 1.25rem; margin-right: auto;">S&amp;S Messebau</strong>
           <a href="/leistungen" style="color: #fff; text-decoration: none;">Leistungen</a>
@@ -579,7 +540,7 @@
           </p>
         </nav>
       </div>
-    </noscript>
+    </noscript>
 </body>
 
 </html>
