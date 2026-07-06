@@ -416,7 +416,7 @@ export function CustomCursor({ isVisible = true }: CursorProps) {
                   height: 90,
                   background: isLightBg
                     ? 'radial-gradient(circle, rgba(0, 87, 184, 0.15) 0%, transparent 70%)'
-                    : 'radial-gradient(circle, oklch(0.45 0.15 250 / 0.12) 0%, transparent 70%)',
+                    : 'radial-gradient(circle, oklch(0.40 0.12 258 / 0.12) 0%, transparent 70%)',
                   filter: 'blur(8px)',
                 }}
               />

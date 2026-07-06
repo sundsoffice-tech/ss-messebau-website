@@ -28,7 +28,7 @@ export function useCardSpotlight<T extends HTMLElement>(
 ): RefObject<T | null> {
   const {
     radius = 200,
-    color = 'oklch(0.45 0.15 250)',
+    color = 'oklch(0.40 0.12 258)',
     opacity = 0.08,
     borderGlow = true,
     disabled = false,

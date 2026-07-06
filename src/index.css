@@ -65,25 +65,25 @@
   }
   
   *:focus-visible {
-    outline: 3px solid oklch(0.45 0.15 250);
+    outline: 3px solid var(--ring);
     outline-offset: 2px;
     border-radius: 0.25rem;
   }
-  
+
   button:focus-visible,
   a:focus-visible,
   [role="button"]:focus-visible {
-    outline: 3px solid oklch(0.45 0.15 250);
+    outline: 3px solid var(--ring);
     outline-offset: 2px;
-    box-shadow: 0 0 0 6px oklch(0.45 0.15 250 / 0.15);
+    box-shadow: 0 0 0 6px oklch(0.40 0.12 258 / 0.15);
   }
-  
+
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
-    outline: 3px solid oklch(0.45 0.15 250);
+    outline: 3px solid var(--ring);
     outline-offset: 0;
-    box-shadow: 0 0 0 4px oklch(0.45 0.15 250 / 0.1);
+    box-shadow: 0 0 0 4px oklch(0.40 0.12 258 / 0.1);
   }
   
   [tabindex="-1"]:focus {
@@ -180,7 +180,7 @@
   pointer-events: none;
   background: radial-gradient(
     var(--spotlight-radius, 200px) circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
-    var(--spotlight-color, oklch(0.45 0.15 250)) 0%,
+    var(--spotlight-color, oklch(0.40 0.12 258)) 0%,
     transparent 100%
   );
   opacity: calc(var(--spotlight-opacity, 0) * var(--spotlight-max-opacity, 0.08));
@@ -202,7 +202,7 @@
   border: 1px solid transparent;
   background: radial-gradient(
     var(--spotlight-radius, 200px) circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
-    oklch(0.45 0.15 250 / 0.25) 0%,
+    oklch(0.40 0.12 258 / 0.25) 0%,
     transparent 100%
   ) border-box;
   -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
@@ -220,12 +220,19 @@
   }
 }
 
+/* Keep .hero-gradient in sync with the inline critical CSS in index.html */
 .hero-gradient {
-  background: linear-gradient(135deg, oklch(0.45 0.15 250) 0%, oklch(0.35 0.12 250) 100%);
+  background: linear-gradient(135deg, oklch(0.26 0.055 262) 0%, oklch(0.34 0.09 258) 100%);
 }
 
+/* Directional scrim: dense over the text column, lets the photo breathe right */
 .hero-overlay {
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+  background: linear-gradient(
+    100deg,
+    oklch(0.26 0.055 262 / 0.92) 0%,
+    oklch(0.26 0.055 262 / 0.72) 45%,
+    oklch(0.26 0.055 262 / 0.30) 100%
+  );
 }
 
 .mobile-safe-bottom {

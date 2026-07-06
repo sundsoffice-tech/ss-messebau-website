@@ -11,13 +11,13 @@
   --card-min-h-sm: 280px;
   --card-min-h-md: 320px;
   --card-min-h-lg: 360px;
-  --card-pad: var(--size-6);
-  --card-pad-sm: var(--size-4);
+  --card-pad: 1.5rem;
+  --card-pad-sm: 1rem;
   --card-radius: var(--radius);
 
   /* === Grid-Normen === */
-  --grid-gap: var(--size-6);
-  --grid-gap-sm: var(--size-4);
+  --grid-gap: 1.5rem;
+  --grid-gap-sm: 1rem;
   --grid-min-col: 280px;
 
   /* === Bild-Container Höhen (responsive) === */
