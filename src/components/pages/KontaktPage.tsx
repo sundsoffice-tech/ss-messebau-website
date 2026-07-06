@@ -71,6 +71,7 @@ export function KontaktPage() {
       // Save inquiry to backend API with UTM attribution
       const utm = getUtmParams()
       const formDataWithUtm = { ...data, ...utm }
+      let apiSaved = false
       try {
         const { inquiriesApi } = await import('@/lib/api-client')
         await inquiriesApi.create({
@@ -83,6 +84,7 @@ export function KontaktPage() {
           message: data.message,
           form_data: formDataWithUtm,
         })
+        apiSaved = true
       } catch (error) {
         console.warn('API unavailable, inquiry saved locally only', error)
       }
@@ -95,8 +97,11 @@ export function KontaktPage() {
         customerEmail: data.email,
       })
 
-      if (!notifResult.success) {
-        toast.error('E-Mail konnte nicht gesendet werden: ' + (notifResult.error || 'Unbekannter Fehler'))
+      if (!apiSaved && !notifResult.success) {
+        // Neither the API nor the email reached us — the inquiry only exists in
+        // this browser's localStorage. Don't pretend it was submitted.
+        toast.error(t('form.error.submitFailed'), { duration: 12000 })
+        return
       }
 
       trackFormSubmit('kontakt', {

@@ -209,22 +209,22 @@ export function BannerBestellenPage() {
       await kvAdapter.set(configId, configToSave)
 
       // Save order to backend API
+      let apiSaved = false
       try {
         const { ordersApi } = await import('@/lib/api-client')
         await ordersApi.create(configId, configToSave)
+        apiSaved = true
       } catch (error) {
         // Fallback: order already saved to localStorage above
         console.warn('API unavailable, order saved locally only', error)
       }
 
+      let emailSent = false
       if (config) {
         // Send detailed email via email-service (company + customer confirmation)
         const { sendOrderConfirmationEmail } = await import('@/lib/email-service')
         const emailResult = await sendOrderConfirmationEmail({ config, configId })
-
-        if (!emailResult.success) {
-          toast.error('E-Mail konnte nicht gesendet werden: ' + (emailResult.error || 'Unbekannter Fehler'))
-        }
+        emailSent = emailResult.success
 
         // Send webhooks only via notification service (no duplicate email)
         try {
@@ -245,6 +245,13 @@ export function BannerBestellenPage() {
         } catch {
           // Webhooks are best-effort
         }
+      }
+
+      if (!apiSaved && !emailSent) {
+        // Order only exists in this browser's localStorage — be honest instead
+        // of showing the thank-you page.
+        toast.error(t('form.error.submitFailed'), { duration: 12000 })
+        return
       }
 
       setSubmitted(true)

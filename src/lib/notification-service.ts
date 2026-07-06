@@ -220,10 +220,15 @@ export async function sendFormNotification(payload: FormNotificationPayload): Pr
       customerTextBodyField = convertHtmlToText(customerHtml)
     }
 
-    // Send to all configured recipients via backend email queue
+    // Send to all configured recipients via backend email queue.
+    // An empty recipients list would silently drop the company mail AND the
+    // customer confirmation, so fall back to the default recipient.
+    const recipients = config.recipients?.length
+      ? config.recipients
+      : DEFAULT_NOTIFICATION_CONFIG.recipients
     // Customer confirmation is only included with the first recipient to avoid duplicates
-    for (let i = 0; i < config.recipients.length; i++) {
-      const recipient = config.recipients[i]
+    for (let i = 0; i < recipients.length; i++) {
+      const recipient = recipients[i]
       const queueId = `notif_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
       const isFirstRecipient = i === 0
 

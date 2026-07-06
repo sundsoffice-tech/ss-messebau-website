@@ -18,7 +18,7 @@ export const DEMO_REFERENCES: Reference[] = [
   {
     id: '2',
     title: 'Design-Stand mit Markenpräsentation',
-    branche: 'sport',
+    branche: 'kleidung',
     size: '12 qm',
     type: 'messebau',
     imageUrl: '/images/fda8df74-ab46-44c7-a6ca-ebfc6c9b4850.jpeg',
@@ -32,7 +32,7 @@ export const DEMO_REFERENCES: Reference[] = [
   {
     id: '3',
     title: 'Showroom für Produktpräsentation',
-    branche: 'ladenbau',
+    branche: 'industrie',
     size: '120 qm',
     type: 'ladenbau',
     imageUrl: '/images/ladenbau/showroom-bodenproben-ausstellung.jpg',
@@ -46,7 +46,7 @@ export const DEMO_REFERENCES: Reference[] = [
   {
     id: '4',
     title: 'Nachhaltiger Messestand mit Bio-Konzept',
-    branche: 'messebau',
+    branche: 'food',
     size: '25 qm',
     type: 'messebau',
     imageUrl: '/images/03e69940-1b4a-4555-9c29-e3bb8c2564b3.jpeg',
@@ -60,7 +60,7 @@ export const DEMO_REFERENCES: Reference[] = [
   {
     id: '5',
     title: 'Food-Messestand mit Verkostungsbereich',
-    branche: 'messebau',
+    branche: 'food',
     size: '90 qm',
     type: 'messebau',
     imageUrl: '/images/deligreece-messestand-100qm-food-2.jpeg',
@@ -74,7 +74,7 @@ export const DEMO_REFERENCES: Reference[] = [
   {
     id: '6',
     title: 'Klassischer Messestand mit Beratungszonen',
-    branche: 'messebau',
+    branche: 'industrie',
     size: '35 qm',
     type: 'messebau',
     imageUrl: '/images/1a5f3965-6bc4-478c-95e1-a97df5fec326.jpeg',
@@ -87,18 +87,17 @@ export const DEMO_REFERENCES: Reference[] = [
   },
   {
     id: '7',
-    title: 'Galerie-Ausstellung & Marken-Showroom',
-    branche: 'eventbau',
-    size: '150 qm',
-    type: 'eventbau',
-    imageUrl: '/images/WhatsApp%20Image%202026-02-15%20at%2018.25.23.jpeg',
-    description: 'Hochwertige Galerie-Ausstellung mit modularen Marken-Countern und eleganter Produktpräsentation in architektonischem Ambiente',
-    challenge: 'Mehrere Premium-Marken sollten in einer anspruchsvollen Galerieumgebung gleichwertig und hochwertig präsentiert werden – mit klarer Markenidentität pro Counter.',
-    solution: 'Modulare, weiße Ausstellungstheken mit integrierten Markenlogos, individuellen Stehleuchten und Produktdisplays. Offene Raumgestaltung mit Sichtbeton-Architektur und Oberlicht für natürliche Beleuchtung.',
-    result: 'Eindrucksvolle Markenpräsentation in Galeriequalität, hohe Besucherverweildauer und positive Resonanz aller teilnehmenden Marken',
-    keyfacts: ['150 qm Ausstellungsfläche', 'Multi-Marken-Konzept', 'Galerie-Ambiente', 'Integrierte Beleuchtung'],
-    messe: 'Kunst- & Design-Ausstellung',
-    zielsetzung: 'Premium-Markenpräsentation mehrerer Brands in hochwertigem Galerie-Setting mit architektonischem Anspruch'
+    title: 'Markenstand mit Digital Signage',
+    branche: 'sport',
+    size: '50 qm',
+    type: 'messebau',
+    imageUrl: '/images/e859a873-049d-4f2b-9156-0ac94939c636.jpeg',
+    description: 'Kontrastreicher Markenstand mit großformatigen Screens, Lounge-Bereich und geschwungenem Empfangscounter',
+    challenge: 'Eine Fitness-Marke wollte ihre digitale Produktwelt live erlebbar machen und zugleich eine einladende Gesprächszone für Interessenten schaffen.',
+    solution: 'Markenwände in kräftigen CI-Farben, zwei großformatige Displays für Produkt-Demos, Lounge-Sitzgruppe auf Holzboden und ein geschwungener Empfangscounter mit Prospekthalter.',
+    result: 'Hohe Aufmerksamkeit im Messegang, viele spontane Produkt-Demos und qualifizierte Leads',
+    keyfacts: ['50 qm Standfläche', 'Digital Signage', 'Lounge & Empfangscounter'],
+    zielsetzung: 'Digitale Produktwelt erlebbar machen und Besucher aktiv in Gespräche ziehen'
   },
   {
     id: '10',

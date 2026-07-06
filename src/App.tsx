@@ -205,7 +205,7 @@ function App() {
           Zum Hauptinhalt springen
         </a>
         <Header />
-        <main id="main-content" tabIndex={-1} className="flex-1 mobile-safe-bottom focus:outline-none">
+        <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
           <PageErrorBoundary>
             <Suspense fallback={
               <div className="flex items-center justify-center min-h-[50vh]" role="status" aria-live="polite">

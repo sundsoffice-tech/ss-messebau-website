@@ -202,10 +202,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Performance: Logo preloaden (LCP Optimierung) -->
-    <!-- Note: Image path is resolved during build by Vite -->
-    <!-- <link rel="preload" as="image" href="/src/assets/images/IMG-20230807-WA0009_(1).png"> -->
-    
     <!-- Performance: Kritisches CSS inline -->
     <style>
       /* Font fallback metrics to prevent CLS during font swap */
@@ -303,42 +299,6 @@
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     </noscript>
     
-    <!-- Google Analytics 4 – Consent Mode v2 (default: denied until user opts in) -->
-    <!--
-      SEO-HINWEIS: Google Analytics ist DEAKTIVIERT bis eine echte Measurement-ID konfiguriert wird.
-
-      So richtest du GA4 ein:
-      1. Gehe zu https://analytics.google.com
-      2. Erstelle eine neue GA4-Property für sunds-messebau.de
-      3. Erstelle einen Web-Datenstream (Web Stream)
-      4. Kopiere die Measurement-ID (Format: G-XXXXXXXXXX)
-      5. Ersetze ALLE Vorkommen von 'G-XXXXXXXXXX' unten durch deine echte ID
-
-      Ohne GA4 hast du KEINE Daten über:
-      - Besucherzahlen und Traffic-Quellen
-      - Nutzerverhalten auf der Website
-      - Conversion-Tracking (Kontaktformular-Anfragen)
-      - Core Web Vitals Monitoring
-    -->
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('consent', 'default', { analytics_storage: 'denied' });
-      gtag('js', new Date());
-      // WICHTIG: G-XXXXXXXXXX durch echte GA4 Measurement-ID ersetzen!
-      if (!'G-XXXXXXXXXX'.startsWith('G-XXX')) {
-        gtag('config', 'G-XXXXXXXXXX', { send_page_view: true });
-      }
-    </script>
-    <script>
-      // GA4 Script nur laden wenn echte ID konfiguriert
-      if (!'G-XXXXXXXXXX'.startsWith('G-XXX')) {
-        var s = document.createElement('script');
-        s.async = true;
-        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
-        document.head.appendChild(s);
-      }
-    </script>
 </head>
 
 <body>

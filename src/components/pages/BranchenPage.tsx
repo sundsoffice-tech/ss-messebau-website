@@ -109,7 +109,7 @@ export function BranchenPage() {
               <div className="mt-8 sm:mt-10">
                 <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{t('branchen.messebau.refTitle')}</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
-                  {DEMO_REFERENCES.filter(r => r.branche === 'messebau').slice(0, 2).map((ref) => (
+                  {DEMO_REFERENCES.filter(r => r.type === 'messebau').slice(0, 2).map((ref) => (
                     <CaseStudyCard
                       key={ref.id}
                       title={ref.title}
@@ -167,7 +167,7 @@ export function BranchenPage() {
               <div className="mt-8 sm:mt-10">
                 <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{t('branchen.eventbau.refTitle')}</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
-                  {DEMO_REFERENCES.filter(r => r.branche === 'eventbau').slice(0, 2).map((ref) => (
+                  {DEMO_REFERENCES.filter(r => r.type === 'eventbau').slice(0, 2).map((ref) => (
                     <CaseStudyCard
                       key={ref.id}
                       title={ref.title}
@@ -225,7 +225,7 @@ export function BranchenPage() {
               <div className="mt-8 sm:mt-10">
                 <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{t('branchen.ladenbau.refTitle')}</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
-                  {DEMO_REFERENCES.filter(r => r.branche === 'ladenbau').slice(0, 2).map((ref) => (
+                  {DEMO_REFERENCES.filter(r => r.type === 'ladenbau').slice(0, 2).map((ref) => (
                     <CaseStudyCard
                       key={ref.id}
                       title={ref.title}

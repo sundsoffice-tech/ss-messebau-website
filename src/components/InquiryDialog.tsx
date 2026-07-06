@@ -43,6 +43,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
       // Save inquiry to backend API with UTM attribution
       const utm = getUtmParams()
       const formDataWithUtm = { ...data, ...utm }
+      let apiSaved = false
       try {
         const { inquiriesApi } = await import('@/lib/api-client')
         await inquiriesApi.create({
@@ -55,6 +56,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
           message: data.message,
           form_data: formDataWithUtm,
         })
+        apiSaved = true
       } catch {
         console.warn('API unavailable, inquiry saved locally only')
       }
@@ -67,8 +69,11 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
         customerEmail: data.email,
       })
 
-      if (!notifResult.success) {
-        toast.error('E-Mail konnte nicht gesendet werden: ' + (notifResult.error || 'Unbekannter Fehler'))
+      if (!apiSaved && !notifResult.success) {
+        // Neither the API nor the email reached us — keep the dialog open with
+        // the user's input and tell them how to reach us directly.
+        toast.error(t('form.error.submitFailed'), { duration: 12000 })
+        return
       }
 
       trackFormSubmit('inquiry', {

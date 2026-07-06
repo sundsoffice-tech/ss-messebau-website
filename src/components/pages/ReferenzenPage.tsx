@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { DEMO_REFERENCES } from '@/lib/demo-references'
+import { getBrancheLabel, getTypeLabel } from '@/lib/reference-labels'
 import { Reference } from '@/lib/types'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { CheckCircle, ArrowRight } from '@phosphor-icons/react'
@@ -13,35 +14,13 @@ import { useUIStore } from '@/store/ui-store'
 export function ReferenzenPage() {
   const { openInquiry } = useUIStore()
   const { t } = useTranslation()
-  const [selectedBranche, setSelectedBranche] = useState<string>('alle')
   const [selectedType, setSelectedType] = useState<string>('alle')
   const [selectedReference, setSelectedReference] = useState<Reference | null>(null)
 
   const filteredReferences = DEMO_REFERENCES.filter((ref) => {
-    if (selectedBranche !== 'alle' && ref.branche !== selectedBranche) return false
     if (selectedType !== 'alle' && ref.type !== selectedType) return false
     return true
   })
-
-  const getBrancheLabel = (branche: string) => {
-    switch (branche) {
-      case 'messebau': return t('referenzen.filter.messebau')
-      case 'eventbau': return t('referenzen.filter.eventbau')
-      case 'ladenbau': return t('referenzen.filter.ladenbau')
-      case 'sport': return t('referenzen.filter.sport')
-      case 'kleidung': return t('referenzen.filter.kleidung')
-      default: return branche
-    }
-  }
-
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case 'messebau': return t('referenzen.filter.messebau')
-      case 'eventbau': return t('referenzen.filter.eventbau')
-      case 'ladenbau': return t('referenzen.filter.ladenbau')
-      default: return type
-    }
-  }
 
   return (
     <div>
@@ -56,51 +35,25 @@ export function ReferenzenPage() {
 
       <section className="py-6 sm:py-8 lg:py-12 border-b bg-muted">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="space-y-4 sm:space-y-6">
-            <div>
-              <p className="text-xs sm:text-sm text-muted-foreground mb-2 font-medium">{t('referenzen.filter.branche')}</p>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  { value: 'alle', label: t('referenzen.filter.allBranchen') },
-                  { value: 'messebau', label: t('referenzen.filter.messebau') },
-                  { value: 'eventbau', label: t('referenzen.filter.eventbau') },
-                  { value: 'ladenbau', label: t('referenzen.filter.ladenbau') },
-                  { value: 'sport', label: t('referenzen.filter.sport') },
-                  { value: 'kleidung', label: t('referenzen.filter.kleidung') }
-                ].map((option) => (
-                  <Button
-                    key={option.value}
-                    variant={selectedBranche === option.value ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedBranche(option.value)}
-                    className="h-9 text-xs sm:text-sm"
-                  >
-                    {option.label}
-                  </Button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="text-xs sm:text-sm text-muted-foreground mb-2 font-medium">{t('referenzen.filter.type')}</p>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  { value: 'alle', label: t('referenzen.filter.allTypes') },
-                  { value: 'messebau', label: t('referenzen.filter.messebau') },
-                  { value: 'eventbau', label: t('referenzen.filter.eventbau') },
-                  { value: 'ladenbau', label: t('referenzen.filter.ladenbau') }
-                ].map((option) => (
-                  <Button
-                    key={option.value}
-                    variant={selectedType === option.value ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedType(option.value)}
-                    className="h-9 text-xs sm:text-sm"
-                  >
-                    {option.label}
-                  </Button>
-                ))}
-              </div>
+          <div>
+            <p className="text-xs sm:text-sm text-muted-foreground mb-2 font-medium">{t('referenzen.filter.leistung')}</p>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { value: 'alle', label: t('referenzen.filter.alleLeistungen') },
+                { value: 'messebau', label: t('referenzen.filter.messebau') },
+                { value: 'eventbau', label: t('referenzen.filter.eventbau') },
+                { value: 'ladenbau', label: t('referenzen.filter.ladenbau') }
+              ].map((option) => (
+                <Button
+                  key={option.value}
+                  variant={selectedType === option.value ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedType(option.value)}
+                  className="h-9 text-xs sm:text-sm"
+                >
+                  {option.label}
+                </Button>
+              ))}
             </div>
           </div>
         </div>
@@ -148,8 +101,8 @@ export function ReferenzenPage() {
                   </div>
                   <CardContent className="p-4 sm:p-6">
                     <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
-                      <Badge variant="secondary" className="text-[10px] sm:text-xs">{getBrancheLabel(reference.branche)}</Badge>
-                      <Badge variant="outline" className="text-[10px] sm:text-xs">{getTypeLabel(reference.type)}</Badge>
+                      <Badge variant="secondary" className="text-[10px] sm:text-xs">{getBrancheLabel(t, reference.branche)}</Badge>
+                      <Badge variant="outline" className="text-[10px] sm:text-xs">{getTypeLabel(t, reference.type)}</Badge>
                     </div>
                     <h3 className="font-semibold text-sm sm:text-base mb-1 sm:mb-2 group-hover:text-primary transition-colors line-clamp-1">{reference.title}</h3>
                     <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{reference.description}</p>
@@ -179,8 +132,8 @@ export function ReferenzenPage() {
                 </div>
 
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                  <Badge className="text-xs">{getBrancheLabel(selectedReference.branche)}</Badge>
-                  <Badge variant="outline" className="text-xs">{getTypeLabel(selectedReference.type)}</Badge>
+                  <Badge className="text-xs">{getBrancheLabel(t, selectedReference.branche)}</Badge>
+                  <Badge variant="outline" className="text-xs">{getTypeLabel(t, selectedReference.type)}</Badge>
                   <Badge variant="secondary" className="text-xs">{selectedReference.size}</Badge>
                 </div>
 

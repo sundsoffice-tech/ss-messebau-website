@@ -15,7 +15,7 @@ export interface ContactInquiry {
 export interface Reference {
   id: string
   title: string
-  branche: 'messebau' | 'eventbau' | 'ladenbau' | 'sport' | 'kleidung'
+  branche: 'food' | 'sport' | 'kleidung' | 'industrie'
   size: string
   type: 'messebau' | 'eventbau' | 'ladenbau'
   imageUrl: string

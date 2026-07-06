@@ -19,6 +19,10 @@ function AnimatedNumber({ value, suffix, isVisible }: { value: number; suffix: s
 
   useEffect(() => {
     if (!isVisible) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setDisplayValue(value)
+      return
+    }
     const duration = 2000
     let startTime: number | null = null
     let rafId = 0
@@ -53,7 +57,7 @@ export function FactBar() {
           observer.disconnect()
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
     )
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()

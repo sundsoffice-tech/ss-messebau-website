@@ -13,6 +13,7 @@ import {
   Target
 } from '@phosphor-icons/react'
 import { DEMO_REFERENCES } from '@/lib/demo-references'
+import { getBrancheLabel, getTypeLabel } from '@/lib/reference-labels'
 import { useTranslation } from '@/lib/i18n'
 import { navigate } from '@/lib/deep-linking'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
@@ -47,25 +48,6 @@ export function HomePage() {
   const handleNavigation = (path: string) => {
     navigate(path)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const getBrancheLabel = (branche: string) => {
-    switch (branche) {
-      case 'messebau': return t('referenzen.filter.messebau')
-      case 'eventbau': return t('referenzen.filter.eventbau')
-      case 'ladenbau': return t('referenzen.filter.ladenbau')
-      case 'sport': return t('referenzen.filter.sport')
-      default: return branche
-    }
-  }
-
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case 'messebau': return t('referenzen.filter.messebau')
-      case 'eventbau': return t('referenzen.filter.eventbau')
-      case 'ladenbau': return t('referenzen.filter.ladenbau')
-      default: return type
-    }
   }
 
   const handleServiceNavigation = (sectionId: string) => {
@@ -329,8 +311,8 @@ export function HomePage() {
                 </div>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="secondary">{getBrancheLabel(reference.branche)}</Badge>
-                    <Badge variant="outline">{getTypeLabel(reference.type)}</Badge>
+                    <Badge variant="secondary">{getBrancheLabel(t, reference.branche)}</Badge>
+                    <Badge variant="outline">{getTypeLabel(t, reference.type)}</Badge>
                   </div>
                   <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">{reference.title}</h3>
                   <p className="text-sm text-muted-foreground line-clamp-2">{reference.description}</p>
