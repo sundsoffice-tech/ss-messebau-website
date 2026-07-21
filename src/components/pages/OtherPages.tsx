@@ -511,6 +511,13 @@ export function ImpressumPage() {
               {t('imprint.liability.text')}
             </p>
           </div>
+
+          <div>
+            <h2 className="text-xl font-semibold text-foreground mb-2">{t('imprint.credits.title')}</h2>
+            <p className="mb-4">
+              {t('imprint.credits.text')}
+            </p>
+          </div>
         </div>
       </div>
     </div>

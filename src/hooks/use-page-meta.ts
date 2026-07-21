@@ -51,6 +51,10 @@ const PAGE_META: Record<string, PageMeta> = {
     title: 'Böden & Ausstattung – Premium-Messeböden & Möblierung | S&S Messebau',
     description: 'Messeböden & Standausstattung: Teppich, Vinyl, Parkett, Möblierung & Beleuchtung. Nachhaltige Premium-Qualität für Ihren Messestand.'
   },
+  '/leistungen/regalsysteme': {
+    title: 'Regalsysteme & Sonderbau – Maßgefertigte Regale | S&S Messebau',
+    description: 'Edle, lackierte Regalsysteme mit Holzböden: Verkaufsregale, Präsentationsregale & individuelle Lagersysteme. Maßanfertigung inkl. Lieferung & Montage.'
+  },
   '/leistungen/digital-experience': {
     title: 'Digital Experience – AR/VR & Interaktive Messelösungen | S&S Messebau',
     description: 'Digitale Messelösungen: AR/VR-Erlebnisse, interaktive Displays, Lead-Tracking & Datenanalyse. Technologie trifft Markenerlebnis – jetzt beraten lassen!'

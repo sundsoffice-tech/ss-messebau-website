@@ -44,6 +44,7 @@ const LeistungenShowroomsPage = lazy(() => import('./components/pages/Leistungen
 const LeistungenTourenPage = lazy(() => import('./components/pages/LeistungenTourenPage').then(m => ({ default: m.LeistungenTourenPage })))
 const LeistungenBoedenPage = lazy(() => import('./components/pages/LeistungenBoedenPage').then(m => ({ default: m.LeistungenBoedenPage })))
 const LeistungenDigitalPage = lazy(() => import('./components/pages/LeistungenDigitalPage').then(m => ({ default: m.LeistungenDigitalPage })))
+const LeistungenRegalsystemePage = lazy(() => import('./components/pages/LeistungenRegalsystemePage').then(m => ({ default: m.LeistungenRegalsystemePage })))
 const AdminPage = lazy(() => import('./components/pages/AdminPage').then(m => ({ default: m.AdminPage })))
 const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })))
 
@@ -154,6 +155,8 @@ function App() {
         return <LeistungenBoedenPage />
       case '/leistungen/digital-experience':
         return <LeistungenDigitalPage />
+      case '/leistungen/regalsysteme':
+        return <LeistungenRegalsystemePage />
       case '/branchen':
         return <BranchenPage />
       case '/referenzen':

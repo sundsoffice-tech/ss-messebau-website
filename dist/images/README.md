@@ -41,6 +41,15 @@
 | ladenbau-display-regal-led-beleuchtung.jpg | Display-Regal mit LED | Ladenbau Display-Regal mit LED-Beleuchtung |
 | showroom-bodenproben-ausstellung.jpg | Bodenproben-Ausstellung | Showroom mit Bodenproben-Ausstellung |
 
+### `regalsysteme/` – Regalsysteme & Sonderbau (Stock-Bilder, Pexels)
+**Hinweis:** Stock-Bilder von Pexels (Pexels-Lizenz, kommerziell frei). Metadaten wurden mit eigenen SEO-Feldern neu geschrieben; Fotografen-Credit ist in EXIF/IPTC hinterlegt und im Impressum (Bildnachweis) genannt.
+
+| Datei | Motiv | Fotograf (Pexels) | Alt-Text |
+|---|---|---|---|
+| regalsysteme-stahlrahmen-vierkant-holz.jpg | Massiver Vierkantrohr-Stahlrahmen mit Holzböden (Mega-Menü-Preview + Hauptbild) | Dale Mohagan | Regalsystem mit massivem, lackiertem Vierkantrohr-Stahlrahmen und hochwertigen Holzböden |
+| regalsysteme-verkaufsregal-schwarz-holz.jpg | Schwarzes Verkaufsregal mit Holzböden | Tembela Bohle | Schwarzes Verkaufsregal mit Holzböden – elegante Warenpräsentation im Einzelhandel |
+| regalsysteme-stahl-holz-detail.jpg | Detail: kräftige Stahlprofile + massive Holzböden | Mathias Reding | Detailansicht: robuste lackierte Stahlprofile kombiniert mit massiven Holzböden |
+
 ### `referenzen/messebau-25qm/` – Referenz-Dokumentation
 Enthält README mit Bildbeschreibungen der Batch-1-Bilder (UUID-Dateien im Hauptordner).
 

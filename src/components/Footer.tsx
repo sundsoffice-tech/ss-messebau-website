@@ -118,6 +118,14 @@ export const Footer = memo(function Footer() {
                   </button>
                 </li>
                 <li>
+                  <button
+                    onClick={(e) => handleNavigation('/leistungen/regalsysteme', e)}
+                    className="hover:text-white focus-visible:text-white transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"
+                  >
+                    {t('footer.services.regalsysteme')}
+                  </button>
+                </li>
+                <li>
                   <button 
                     onClick={(e) => handleNavigation('/leistungen/digital-experience', e)} 
                     className="hover:text-white focus-visible:text-white transition-colors text-left min-h-[44px] py-2 -my-2 focus-visible:outline-none focus-visible:underline"

@@ -8,6 +8,7 @@ import {
   Storefront,
   Armchair,
   FrameCorners,
+  Stack,
 } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
 import { navigate } from '@/lib/deep-linking'
@@ -19,6 +20,7 @@ const services = [
   { key: 'touren', icon: CalendarDot, path: '/leistungen/touren' },
   { key: 'showroomLadenbau', icon: Storefront, path: '/leistungen/showroom-ladenbau' },
   { key: 'boeden', icon: Armchair, path: '/leistungen/boeden-ausstattung' },
+  { key: 'regalsysteme', icon: Stack, path: '/leistungen/regalsysteme' },
   { key: 'bannerrahmen', icon: FrameCorners, path: '/bannerrahmen' },
 ] as const
 

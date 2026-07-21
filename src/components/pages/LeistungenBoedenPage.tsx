@@ -134,6 +134,7 @@ export function LeistungenBoedenPage() {
   const relatedPages = [
     { label: 'Messebau & Standgestaltung', hash: '/leistungen/messebau' },
     { label: 'Showroom & Ladenbau', hash: '/leistungen/showroom-ladenbau' },
+    { label: 'Regalsysteme & Sonderbau', hash: '/leistungen/regalsysteme' },
     { label: 'Bannerrahmen-Systeme', hash: '/bannerrahmen' },
     { label: 'Alle Leistungen im Überblick', hash: '/leistungen' },
     { label: 'Kontakt & Beratung', hash: '/kontakt' },

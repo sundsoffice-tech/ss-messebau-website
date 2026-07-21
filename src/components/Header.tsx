@@ -26,7 +26,8 @@ import {
   Wrench,
   ArrowRight,
   CalendarDot,
-  GlobeSimple
+  GlobeSimple,
+  Stack
 } from '@phosphor-icons/react'
 import {
   DropdownMenu,
@@ -99,6 +100,18 @@ const LEISTUNGEN_MEGA_MENU = [
     previewImage: '/images/boeden/besprechungsraum-vinylboden-moebel.jpg',
     sectionId: 'boeden-ausstattung',
     pagePath: '/leistungen/boeden-ausstattung'
+  },
+  {
+    titleKey: 'header.mega.regalsysteme',
+    descriptionKey: 'header.mega.regalsysteme.desc',
+    icon: Stack,
+    color: 'text-primary',
+    bgColor: 'bg-primary/10',
+    featureKeys: ['header.mega.regalsysteme.f1', 'header.mega.regalsysteme.f2', 'header.mega.regalsysteme.f3'],
+    gradient: 'from-primary/10 to-primary/5',
+    previewImage: '/images/regalsysteme/regalsysteme-stahlrahmen-vierkant-holz.jpg',
+    sectionId: 'regalsysteme',
+    pagePath: '/leistungen/regalsysteme'
   },
   {
     titleKey: 'header.mega.bannerrahmen',

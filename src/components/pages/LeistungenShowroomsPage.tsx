@@ -113,6 +113,7 @@ export function LeistungenShowroomLadenbauPage() {
     { label: 'Messebau & Messestände', hash: '/leistungen/messebau' },
     { label: 'Eventbau & Veranstaltungen', hash: '/leistungen/eventbau' },
     { label: 'Böden & Ausstattung', hash: '/leistungen/boeden-ausstattung' },
+    { label: 'Regalsysteme & Sonderbau', hash: '/leistungen/regalsysteme' },
     { label: 'Bannerrahmen-Systeme', hash: '/bannerrahmen' },
     { label: 'Alle Leistungen im Überblick', hash: '/leistungen' },
     { label: 'Kontakt & Beratung', hash: '/kontakt' },
