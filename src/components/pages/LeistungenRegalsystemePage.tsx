@@ -169,21 +169,10 @@ export function LeistungenRegalsystemePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
             <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary sm:col-span-2">
               <img
-                src="/images/regalsysteme/regalsysteme-stahlrahmen-vierkant-holz.jpg"
-                alt="Regalsystem mit massivem, lackiertem Vierkantrohr-Stahlrahmen und hochwertigen Holzböden"
+                src="/images/regalsysteme/regalsysteme-vierkantrohr-stahl-holz.jpg"
+                alt="Maßgefertigtes Regalsystem: geschweißter Vierkantrohr-Stahlrahmen in Schwarz mit massiver Holzbohle"
                 width="800"
                 height="450"
-                loading="lazy"
-                decoding="async"
-                className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"
-              />
-            </div>
-            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-              <img
-                src="/images/regalsysteme/regalsysteme-verkaufsregal-schwarz-holz.jpg"
-                alt="Schwarzes Verkaufsregal mit Holzböden – elegante Warenpräsentation im Einzelhandel"
-                width="640"
-                height="360"
                 loading="lazy"
                 decoding="async"
                 className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"
@@ -200,12 +189,12 @@ export function LeistungenRegalsystemePage() {
                 className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"
               />
             </div>
-            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary sm:col-span-2">
+            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
               <img
                 src="/images/regalsysteme/regalsysteme-stahl-holz-detail.jpg"
                 alt="Detailansicht: robuste lackierte Stahlprofile kombiniert mit massiven Holzböden"
-                width="800"
-                height="450"
+                width="640"
+                height="360"
                 loading="lazy"
                 decoding="async"
                 className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"

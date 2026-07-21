@@ -109,7 +109,7 @@ const LEISTUNGEN_MEGA_MENU = [
     bgColor: 'bg-primary/10',
     featureKeys: ['header.mega.regalsysteme.f1', 'header.mega.regalsysteme.f2', 'header.mega.regalsysteme.f3'],
     gradient: 'from-primary/10 to-primary/5',
-    previewImage: '/images/regalsysteme/regalsysteme-stahlrahmen-vierkant-holz.jpg',
+    previewImage: '/images/regalsysteme/regalsysteme-vierkantrohr-stahl-holz.jpg',
     sectionId: 'regalsysteme',
     pagePath: '/leistungen/regalsysteme'
   },

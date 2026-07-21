@@ -46,8 +46,7 @@
 
 | Datei | Motiv | Fotograf (Pexels) | Alt-Text |
 |---|---|---|---|
-| regalsysteme-stahlrahmen-vierkant-holz.jpg | Massiver Vierkantrohr-Stahlrahmen mit Holzböden (Mega-Menü-Preview + Hauptbild) | Dale Mohagan | Regalsystem mit massivem, lackiertem Vierkantrohr-Stahlrahmen und hochwertigen Holzböden |
-| regalsysteme-verkaufsregal-schwarz-holz.jpg | Schwarzes Verkaufsregal mit Holzböden | Tembela Bohle | Schwarzes Verkaufsregal mit Holzböden – elegante Warenpräsentation im Einzelhandel |
+| regalsysteme-vierkantrohr-stahl-holz.jpg | Vierkantrohr-Stahlrahmen (schwarz) mit massiver Holzbohle, eigener 16:9-Ausschnitt (Mega-Menü-Preview + Hauptbild) | Milada Vigerova | Maßgefertigtes Regalsystem: geschweißter Vierkantrohr-Stahlrahmen in Schwarz mit massiver Holzbohle |
 | regalsysteme-stahl-holz-detail.jpg | Detail: kräftige Stahlprofile + massive Holzböden | Mathias Reding | Detailansicht: robuste lackierte Stahlprofile kombiniert mit massiven Holzböden |
 
 ### `referenzen/messebau-25qm/` – Referenz-Dokumentation
