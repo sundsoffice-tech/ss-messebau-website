@@ -8,7 +8,7 @@ interface StickyCTAProps {
   onClick: () => void
 }
 
-const WHATSAPP_NUMBER = '4915140368754'
+const WHATSAPP_NUMBER = '4915140322125'
 
 export function StickyCTA({ onClick }: StickyCTAProps) {
   const { t } = useTranslation()

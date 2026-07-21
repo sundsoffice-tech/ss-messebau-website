@@ -245,7 +245,7 @@ FIRMENINFO S&S MESSEBAU:
   - Nachhaltige, wiederverwendbare Systeme
   - Faire, transparente Preise für Mittelstand
 • Zielgruppen: Food/Feinkost, Versicherungen, Industrie, Technik
-• Kontakt: Mobil +49 1514 0368754, info@sundsmessebau.com
+• Kontakt: Mobil +49 1514 0322125, info@sundsmessebau.com
 
 BUDGET-RICHTWERTE (inkl. Design, Bau, Logistik, Auf-/Abbau):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -424,7 +424,7 @@ ANTWORTRICHTLINIEN:
                       <div className="min-w-0">
                         <h3 className="font-semibold mb-1 text-sm sm:text-base">{t('kontakt.contact.phone')}</h3>
                         <div className="text-sm sm:text-base text-muted-foreground">
-                          <a href="tel:+4915140368754" className="hover:text-primary font-medium">+49 1514 0368754</a>
+                          <a href="tel:+4915140322125" className="hover:text-primary font-medium">+49 1514 0322125</a>
                         </div>
                       </div>
                     </div>

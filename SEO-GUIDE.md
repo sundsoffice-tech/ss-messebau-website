@@ -96,7 +96,7 @@ Letzte Aktualisierung: 20.02.2026
 6. **Adresse:** Marienstrasse 37, 41836 Hueckelhoven
    - **WICHTIG:** Diese Adresse muss mit der Website und ALLEN Brancheneintraegen uebereinstimmen!
 7. **Einzugsgebiet:** NRW / Deutschland / Europa
-8. **Telefon:** +49 1514 0368754
+8. **Telefon:** +49 1514 0322125
 9. **Website:** `https://sunds-messebau.de`
 10. **Verifizierung** per Postkarte oder Telefon
 
@@ -186,7 +186,7 @@ Die folgenden Daten muessen UEBERALL identisch sein:
 
 - **Name:** S&S Messebau GbR
 - **Adresse:** Marienstrasse 37, 41836 Hueckelhoven (oder die korrekte aktuelle Adresse)
-- **Phone:** +49 1514 0368754
+- **Phone:** +49 1514 0322125
 - **Email:** info@sundsmessebau.com
 - **Website:** https://sunds-messebau.de
 
