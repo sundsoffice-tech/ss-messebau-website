@@ -31,7 +31,7 @@ export function LeistungenRegalsystemePage() {
     {
       step: 1,
       title: 'Anfrage & Beratung',
-      desc: 'Sie schildern uns Ihre Anforderungen – Verkaufsraum, Ausstellung oder Lager. Wir beraten Sie zu Maßen, Materialien, Oberflächen und Traglasten.',
+      desc: 'Sie schildern uns Ihre Anforderungen – Verkaufsraum, Ausstellung oder Lager. Eine Skizze oder ein Foto genügt für den Start. Wir beraten Sie zu Maßen, Materialien, Oberflächen und Traglasten.',
     },
     {
       step: 2,
@@ -51,7 +51,7 @@ export function LeistungenRegalsystemePage() {
     {
       step: 5,
       title: 'Lieferung & Montage',
-      desc: 'Wir liefern und montieren Ihr Regalsystem termingerecht vor Ort – sauber, sicher und einbaufertig, auf Wunsch inklusive Warenpräsentation.',
+      desc: 'Wir liefern und montieren Ihr Regalsystem termingerecht vor Ort – sauber, sicher und einbaufertig. Auf Wunsch richten wir auch die Warenpräsentation gleich mit ein.',
     },
   ]
 
@@ -136,9 +136,10 @@ export function LeistungenRegalsystemePage() {
             </h1>
             <p className="text-xl mb-8 text-white/90">
               Edle, lackierte Regalsysteme mit hochwertigen Holzböden und -verkleidungen –
-              individuell geplant und gefertigt für Verkaufsräume, Showrooms und Ausstellungen.
-              Auf Wunsch auch maßgeschneiderte Lager- und Warensysteme. Vom Einzelstück bis
-              zur kompletten Ladeneinrichtung.
+              bei uns geplant, gefertigt und montiert. Für Verkaufsräume, Showrooms und
+              Ausstellungen, auf Wunsch auch als maßgeschneidertes Lager- und Warensystem.
+              Vom Einzelstück bis zur kompletten Ladeneinrichtung: Sie nennen uns Maß,
+              Material und Wunschfarbe – wir bauen Ihr Regal.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -248,7 +249,8 @@ export function LeistungenRegalsystemePage() {
           <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
             Vom edlen Präsentationsregal für Ihren Verkaufsraum bis zum maßgeschneiderten
             Lagersystem – wir planen, fertigen und montieren Regalsysteme, die exakt zu
-            Ihrem Raum, Ihrer Ware und Ihrer Marke passen.
+            Ihrem Raum, Ihrer Ware und Ihrer Marke passen. Kein Katalogmaß, keine
+            Kompromisse: Jedes System entsteht nach Ihren Anforderungen.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -325,6 +327,24 @@ export function LeistungenRegalsystemePage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+
+          {/* Mid-Page CTA */}
+          <div className="mt-12 text-center">
+            <p className="text-lg font-semibold mb-1">
+              Ihr Wunschregal ist nicht dabei?
+            </p>
+            <p className="text-muted-foreground mb-5">
+              Kein Problem – wir fertigen nach Ihren Maßen, Ihrem Material und Ihrer Wunschfarbe.
+            </p>
+            <Button
+              size="lg"
+              onClick={openInquiry}
+              className="bg-accent text-accent-foreground hover:bg-accent/90 min-h-[48px]"
+            >
+              Jetzt unverbindlich anfragen
+              <ArrowRight className="ml-2" />
+            </Button>
           </div>
         </div>
       </section>
@@ -435,8 +455,9 @@ export function LeistungenRegalsystemePage() {
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
             Lassen Sie uns gemeinsam das perfekte Regal- oder Warensystem für Ihren
-            Verkaufsraum, Ihre Ausstellung oder Ihr Lager entwickeln. Kontaktieren Sie
-            uns für eine unverbindliche Beratung und ein individuelles Angebot.
+            Verkaufsraum, Ihre Ausstellung oder Ihr Lager entwickeln. Schicken Sie uns
+            Ihre Maße oder eine Skizze – Sie erhalten eine unverbindliche Beratung und
+            Ihr individuelles Angebot innerhalb von 48 Stunden.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" onClick={openInquiry}>
