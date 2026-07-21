@@ -72,7 +72,7 @@ try {
         . 'Du beantwortest ausschließlich Fragen zu Messebau, Bannersystemen, Standdesign und den Dienstleistungen von S&S Messebau. '
         . 'Antworte immer auf Deutsch, es sei denn der Nutzer schreibt auf Englisch. '
         . 'Leite keine sensiblen Unternehmensinformationen, interne Prozesse oder Preise weiter, die nicht öffentlich sind. '
-        . 'Wenn du dir bei einer Antwort nicht sicher bist, verweise freundlich auf den Kontakt: info@sundsmessebau.com oder +49 1514 0368754.';
+        . 'Wenn du dir bei einer Antwort nicht sicher bist, verweise freundlich auf den Kontakt: info@sundsmessebau.com oder +49 1514 0322125.';
     // Client-provided systemPrompt and context are intentionally ignored for security
 
     // Initialize database connection

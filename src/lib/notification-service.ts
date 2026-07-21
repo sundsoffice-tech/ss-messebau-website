@@ -103,7 +103,7 @@ function generateCompanyEmailHtml(type: NotificationType, data: Record<string, u
       <p style="margin:0 0 10px;"><strong>S&amp;S Messebau GbR</strong></p>
       <p style="margin:0;font-size:14px;opacity:0.9;">
         Marienstraße 37 | 41836 Hückelhoven<br>
-        Mobil: +49 1514 0368754 | info@sundsmessebau.com
+        Mobil: +49 1514 0322125 | info@sundsmessebau.com
       </p>
     </div>
   </div>
@@ -141,7 +141,7 @@ function generateCustomerConfirmationHtml(type: NotificationType, data: Record<s
       <p style="margin:0 0 10px;"><strong>S&amp;S Messebau GbR</strong></p>
       <p style="margin:0;font-size:14px;opacity:0.9;">
         Marienstraße 37 | 41836 Hückelhoven<br>
-        Mobil: +49 1514 0368754 | info@sundsmessebau.com
+        Mobil: +49 1514 0322125 | info@sundsmessebau.com
       </p>
     </div>
   </div>

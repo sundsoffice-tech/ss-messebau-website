@@ -1017,12 +1017,12 @@ export function Header() {
                   <div className="flex-shrink-0 px-6 py-4 border-t bg-background">
                     <div className="space-y-2.5 text-sm">
                       <a 
-                        href="tel:+4915140368754" 
+                        href="tel:+4915140322125" 
                         className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label={t('header.nav.call') + ': +49 1514 0368754'}
+                        aria-label={t('header.nav.call') + ': +49 1514 0322125'}
                       >
                         <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
-                        <span>+49 1514 0368754</span>
+                        <span>+49 1514 0322125</span>
                       </a>
                       <a 
                         href="mailto:info@sundsmessebau.com" 

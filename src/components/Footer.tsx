@@ -206,11 +206,11 @@ export const Footer = memo(function Footer() {
               <li className="flex items-center gap-2 text-on-deep-muted min-h-[44px]">
                 <Phone className="h-5 w-5 shrink-0" aria-hidden="true" />
                 <a 
-                  href="tel:+4915140368754" 
+                  href="tel:+4915140322125" 
                   className="hover:text-white focus-visible:text-white transition-colors py-2 focus-visible:outline-none focus-visible:underline"
-                  aria-label={t('footer.contact.call') + ': +49 1514 0368754'}
+                  aria-label={t('footer.contact.call') + ': +49 1514 0322125'}
                 >
-                  +49 1514 0368754
+                  +49 1514 0322125
                 </a>
               </li>
               <li className="flex items-center gap-2 text-on-deep-muted min-h-[44px]">

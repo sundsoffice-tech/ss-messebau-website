@@ -110,9 +110,9 @@ export function ThankYouPage({ config }: ThankYouPageProps) {
 
             <div className="border-t pt-6">
               <p className="text-sm text-muted-foreground mb-2">{t('thankyou.questions')}</p>
-              <a href="tel:+4915140368754" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+              <a href="tel:+4915140322125" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
                 <Phone className="w-5 h-5" />
-                +49 1514 0368754
+                +49 1514 0322125
               </a>
             </div>
           </Card>
