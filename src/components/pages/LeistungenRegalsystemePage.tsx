@@ -167,15 +167,26 @@ export function LeistungenRegalsystemePage() {
       <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary sm:col-span-2">
+            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary sm:row-span-2">
               <img
-                src="/images/regalsysteme/regalsysteme-vierkantrohr-stahl-holz.jpg"
-                alt="Maßgefertigtes Regalsystem: geschweißter Vierkantrohr-Stahlrahmen in Schwarz mit massiver Holzbohle"
-                width="800"
-                height="450"
+                src="/images/regalsysteme/regalsysteme-vierkant-regal-komplett.jpg"
+                alt="Freistehendes maßgefertigtes Regalsystem mit Vierkantrohr-Stahlrahmen in Schwarz und massiven Holzböden – Komplettansicht"
+                width="640"
+                height="960"
                 loading="lazy"
                 decoding="async"
-                className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"
+                className="object-cover w-full h-full aspect-[2/3] sm:aspect-auto group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
+              <img
+                src="/images/regalsysteme/regalsysteme-vierkantrohr-stahl-holz.jpg"
+                alt="Detail: geschweißter Vierkantrohr-Stahlrahmen in Schwarz mit massiver Holzbohle"
+                width="640"
+                height="360"
+                loading="lazy"
+                decoding="async"
+                className="object-cover w-full h-full aspect-video group-hover:scale-110 transition-transform duration-500"
               />
             </div>
             <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
@@ -186,18 +197,7 @@ export function LeistungenRegalsystemePage() {
                 height="360"
                 loading="lazy"
                 decoding="async"
-                className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"
-              />
-            </div>
-            <div className="group rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 hover:border-primary">
-              <img
-                src="/images/regalsysteme/regalsysteme-stahl-holz-detail.jpg"
-                alt="Detailansicht: robuste lackierte Stahlprofile kombiniert mit massiven Holzböden"
-                width="640"
-                height="360"
-                loading="lazy"
-                decoding="async"
-                className="object-cover w-full aspect-video group-hover:scale-110 transition-transform duration-500"
+                className="object-cover w-full h-full aspect-video group-hover:scale-110 transition-transform duration-500"
               />
             </div>
           </div>

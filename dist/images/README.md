@@ -46,7 +46,8 @@
 
 | Datei | Motiv | Fotograf (Pexels) | Alt-Text |
 |---|---|---|---|
-| regalsysteme-vierkantrohr-stahl-holz.jpg | Vierkantrohr-Stahlrahmen (schwarz) mit massiver Holzbohle, eigener 16:9-Ausschnitt (Mega-Menü-Preview + Hauptbild) | Milada Vigerova | Maßgefertigtes Regalsystem: geschweißter Vierkantrohr-Stahlrahmen in Schwarz mit massiver Holzbohle |
+| regalsysteme-vierkant-regal-komplett.jpg | Freistehendes Vierkantrohr-Regal mit Massivholzböden, Komplettansicht (Mega-Menü-Preview + Galerie-Hauptbild) | Wolf Art | Freistehendes maßgefertigtes Regalsystem mit Vierkantrohr-Stahlrahmen in Schwarz und massiven Holzböden – Komplettansicht |
+| regalsysteme-vierkantrohr-stahl-holz.jpg | Vierkantrohr-Rahmenecke mit massiver Holzbohle, eigener 16:9-Ausschnitt | Milada Vigerova | Detail: geschweißter Vierkantrohr-Stahlrahmen in Schwarz mit massiver Holzbohle |
 | regalsysteme-stahl-holz-detail.jpg | Detail: kräftige Stahlprofile + massive Holzböden | Mathias Reding | Detailansicht: robuste lackierte Stahlprofile kombiniert mit massiven Holzböden |
 
 ### `referenzen/messebau-25qm/` – Referenz-Dokumentation
