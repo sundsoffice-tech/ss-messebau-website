@@ -3,6 +3,7 @@ import { Separator } from '@/components/ui/separator'
 import { Phone, Envelope, MapPin } from '@phosphor-icons/react'
 import logo from '@/assets/logo/ss-messebau-logo.png'
 import { useTranslation } from '@/lib/i18n'
+import { CONTACT, PHONE_HREF, EMAIL_HREF } from '@/lib/contact'
 import { authApi } from '@/lib/api-client'
 import { navigate } from '@/lib/deep-linking'
 import { ShareButton } from './ShareButton'
@@ -205,22 +206,22 @@ export const Footer = memo(function Footer() {
               </li>
               <li className="flex items-center gap-2 text-on-deep-muted min-h-[44px]">
                 <Phone className="h-5 w-5 shrink-0" aria-hidden="true" />
-                <a 
-                  href="tel:+4915140368754" 
+                <a
+                  href={PHONE_HREF}
                   className="hover:text-white focus-visible:text-white transition-colors py-2 focus-visible:outline-none focus-visible:underline"
-                  aria-label={t('footer.contact.call') + ': +49 1514 0368754'}
+                  aria-label={t('footer.contact.call') + ': ' + CONTACT.phoneDisplay}
                 >
-                  +49 1514 0368754
+                  {CONTACT.phoneDisplay}
                 </a>
               </li>
               <li className="flex items-center gap-2 text-on-deep-muted min-h-[44px]">
                 <Envelope className="h-5 w-5 shrink-0" aria-hidden="true" />
-                <a 
-                  href="mailto:info@sundsmessebau.com" 
+                <a
+                  href={EMAIL_HREF}
                   className="hover:text-white focus-visible:text-white transition-colors py-2 break-all focus-visible:outline-none focus-visible:underline"
-                  aria-label={t('footer.contact.email') + ' info@sundsmessebau.com'}
+                  aria-label={t('footer.contact.email') + ' ' + CONTACT.email}
                 >
-                  info@sundsmessebau.com
+                  {CONTACT.email}
                 </a>
               </li>
             </ul>

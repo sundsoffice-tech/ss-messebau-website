@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, memo } from 'react'
 import { Button } from '@/components/ui/button'
 import { MediaFrame } from '@/components/ui/MediaFrame'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet'
+import { CONTACT, PHONE_HREF, EMAIL_HREF } from '@/lib/contact'
 import { 
   List, 
   X,
@@ -1016,21 +1017,21 @@ export function Header() {
 
                   <div className="flex-shrink-0 px-6 py-4 border-t bg-background">
                     <div className="space-y-2.5 text-sm">
-                      <a 
-                        href="tel:+4915140368754" 
+                      <a
+                        href={PHONE_HREF}
                         className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label={t('header.nav.call') + ': +49 1514 0368754'}
+                        aria-label={t('header.nav.call') + ': ' + CONTACT.phoneDisplay}
                       >
                         <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
-                        <span>+49 1514 0368754</span>
+                        <span>{CONTACT.phoneDisplay}</span>
                       </a>
-                      <a 
-                        href="mailto:info@sundsmessebau.com" 
+                      <a
+                        href={EMAIL_HREF}
                         className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label={t('header.nav.email') + ' info@sundsmessebau.com'}
+                        aria-label={t('header.nav.email') + ' ' + CONTACT.email}
                       >
                         <Envelope className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
-                        <span className="truncate">info@sundsmessebau.com</span>
+                        <span className="truncate">{CONTACT.email}</span>
                       </a>
                     </div>
                   </div>

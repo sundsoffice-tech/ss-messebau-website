@@ -49,6 +49,14 @@
   --input: oklch(0.905 0.008 85);
   --ring: oklch(0.40 0.12 258);
 
+  /* WhatsApp-Schnellkontakt: offizielles WhatsApp-Dunkelgruen. Das Hellgruen #25D366
+     erreicht auf Weiss nur 1,98:1 und faellt bei WCAG 1.4.3/1.4.11 durch;
+     #075E54 liegt bei 7,7:1 (gemessen 2026-08-21). */
+  --whatsapp: #075E54;
+  /* Hover/Fokus-Flaeche: DECKEND (kein Alpha), damit die Schaltflaeche ueber roten oder
+     dunklen Baendern nicht durchscheint. #075E54 auf #E5FAED = 7,0:1. */
+  --whatsapp-soft: #E5FAED;
+
   --surface-deep: oklch(0.26 0.055 262);
   --surface-deep-2: oklch(0.31 0.075 260);
   --on-deep-muted: oklch(0.82 0.02 260);
@@ -91,6 +99,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-soft: var(--whatsapp-soft);
   --color-surface-deep: var(--surface-deep);
   --color-surface-deep-2: var(--surface-deep-2);
   --color-on-deep-muted: var(--on-deep-muted);
