@@ -128,6 +128,7 @@ jobs:
         # genau diesen Befehl beschraenkt (command="..."), kann also nur deployen.
         env:
           HOSTINGER_SSH_KEY: ${{ secrets.HOSTINGER_SSH_KEY }}
+          HOSTINGER_KNOWN_HOSTS: ${{ vars.HOSTINGER_KNOWN_HOSTS }}
           HOSTINGER_HOST: sunds-messebau.de
           HOSTINGER_PORT: "65002"
           HOSTINGER_USER: u605792113
@@ -138,14 +139,33 @@ jobs:
             echo "::warning::Secret HOSTINGER_SSH_KEY fehlt - Pull uebersprungen. Manuell: hPanel -> GIT -> Bereitstellen"
             exit 0
           fi
+          echo "[1/4] Schluessel ablegen"
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$HOSTINGER_SSH_KEY" > ~/.ssh/hostinger_ci && chmod 600 ~/.ssh/hostinger_ci
-          ssh-keyscan -p "$HOSTINGER_PORT" "$HOSTINGER_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          echo "-> git pull auf $HOSTINGER_HOST:$HOSTINGER_PATH"
-          ssh -i ~/.ssh/hostinger_ci -o IdentitiesOnly=yes -o BatchMode=yes -o ConnectTimeout=20 \
+          echo "[2/4] Hostkey: gepinnt aus Repo-Variable (vars.HOSTINGER_KNOWN_HOSTS), Keyscan nur als Rueckfall"
+          if [ -n "$HOSTINGER_KNOWN_HOSTS" ]; then
+            printf '%s\n' "$HOSTINGER_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+          else
+            echo "::warning::vars.HOSTINGER_KNOWN_HOSTS fehlt - TOFU per ssh-keyscan"
+            ssh-keyscan -T 20 -t ed25519 -p "$HOSTINGER_PORT" "$HOSTINGER_HOST" >> ~/.ssh/known_hosts || echo "keyscan ohne Ergebnis"
+          fi
+          echo "[3/4] Erreichbarkeit $HOSTINGER_HOST:$HOSTINGER_PORT"
+          if ! timeout 15 bash -c "</dev/tcp/$HOSTINGER_HOST/$HOSTINGER_PORT"; then
+            echo "::error::Port $HOSTINGER_PORT auf $HOSTINGER_HOST ist vom GitHub-Runner aus nicht erreichbar (Hostinger blockt ggf. Cloud-IPs). Manuell: hPanel -> GIT -> Bereitstellen"
+            rm -f ~/.ssh/hostinger_ci; exit 1
+          fi
+          echo "[4/4] git pull auf $HOSTINGER_HOST:$HOSTINGER_PATH (Key ist dort auf diesen Befehl beschraenkt)"
+          set +e
+          ssh -i ~/.ssh/hostinger_ci -o IdentitiesOnly=yes -o BatchMode=yes -o ConnectTimeout=20 -o StrictHostKeyChecking=yes \
               -p "$HOSTINGER_PORT" "$HOSTINGER_USER@$HOSTINGER_HOST" \
               "cd $HOSTINGER_PATH && git pull --ff-only origin hostinger && git log --oneline -1"
+          RC=$?
+          set -e
           rm -f ~/.ssh/hostinger_ci
+          if [ "$RC" != "0" ]; then
+            echo "::error::SSH/git pull fehlgeschlagen (Exit $RC). Manuell: hPanel -> GIT -> Bereitstellen"
+            exit 1
+          fi
 
           # Messen statt vermuten: Live muss das Bundle aus dem hostinger-Branch liefern.
           ERWARTET=$(grep -o 'assets/index-[^"]*\.js' index.html | head -1)
