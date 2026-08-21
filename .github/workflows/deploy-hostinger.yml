@@ -121,6 +121,48 @@ jobs:
             echo "✅ Deployment to hostinger branch completed!"
           fi
 
+      - name: Hostinger ziehen lassen (SSH git pull) und Live messen
+        # Hostinger zieht den Branch nicht von selbst (Webhook antwortet 200, tut
+        # nichts - gemessen 21.08.2026). Deshalb loest dieser Schritt den Pull auf
+        # dem Hosting-Konto selbst aus. Der Key ist dort per authorized_keys auf
+        # genau diesen Befehl beschraenkt (command="..."), kann also nur deployen.
+        env:
+          HOSTINGER_SSH_KEY: ${{ secrets.HOSTINGER_SSH_KEY }}
+          HOSTINGER_HOST: sunds-messebau.de
+          HOSTINGER_PORT: "65002"
+          HOSTINGER_USER: u605792113
+          HOSTINGER_PATH: domains/sunds-messebau.de/public_html
+          LIVE_URL: https://sunds-messebau.de/
+        run: |
+          if [ -z "$HOSTINGER_SSH_KEY" ]; then
+            echo "::warning::Secret HOSTINGER_SSH_KEY fehlt - Pull uebersprungen. Manuell: hPanel -> GIT -> Bereitstellen"
+            exit 0
+          fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$HOSTINGER_SSH_KEY" > ~/.ssh/hostinger_ci && chmod 600 ~/.ssh/hostinger_ci
+          ssh-keyscan -p "$HOSTINGER_PORT" "$HOSTINGER_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          echo "-> git pull auf $HOSTINGER_HOST:$HOSTINGER_PATH"
+          ssh -i ~/.ssh/hostinger_ci -o IdentitiesOnly=yes -o BatchMode=yes -o ConnectTimeout=20 \
+              -p "$HOSTINGER_PORT" "$HOSTINGER_USER@$HOSTINGER_HOST" \
+              "cd $HOSTINGER_PATH && git pull --ff-only origin hostinger && git log --oneline -1"
+          rm -f ~/.ssh/hostinger_ci
+
+          # Messen statt vermuten: Live muss das Bundle aus dem hostinger-Branch liefern.
+          ERWARTET=$(grep -o 'assets/index-[^"]*\.js' index.html | head -1)
+          LIVE=""
+          for i in $(seq 1 12); do
+            LIVE=$(curl -s --max-time 20 -H 'Cache-Control: no-cache' "$LIVE_URL" | grep -o 'assets/index-[^"]*\.js' | head -1 || true)
+            [ "$LIVE" = "$ERWARTET" ] && break
+            sleep 5
+          done
+          echo "erwartet: $ERWARTET"
+          echo "live:     $LIVE"
+          if [ "$LIVE" != "$ERWARTET" ]; then
+            echo "::error::Live liefert nicht das deployte Bundle. Manuell pruefen: hPanel -> GIT -> Letzte Build-Ausgabe / Bereitstellen"
+            exit 1
+          fi
+          echo "Live = Branch. Deploy angekommen."
+
       - name: Deployment Summary
         if: success()
         run: |
@@ -133,5 +175,5 @@ jobs:
           echo "   • Target Branch: hostinger"
           echo "   • Build Output: dist/ → hostinger branch root"
           echo ""
-          echo "🌐 The website will be deployed by Hostinger automatically!"
+          echo "🌐 Hostinger hat per SSH gezogen; Live wurde gegen das Bundle gemessen."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
