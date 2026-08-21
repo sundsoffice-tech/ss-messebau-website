@@ -18,6 +18,7 @@ import { useScrollDepthTracking, useDwellTimeTracking, useExitIntentTracking } f
 import { useFormSystem } from '@/hooks/use-form-system'
 import { FormField } from '@/components/form-system/FormField'
 import { sendFormNotification } from '@/lib/notification-service'
+import { relayInquiryLead } from '@/lib/lead-relay'
 import { FIELD_TOKENS } from '@/lib/form-system/field-registry'
 import { sendChatMessage } from '@/lib/chat-service'
 import { getUtmParams } from '@/lib/utm-utils'
@@ -89,15 +90,23 @@ export function KontaktPage() {
         console.warn('API unavailable, inquiry saved locally only', error)
       }
 
-      // Send notification via centralized service (include UTM for attribution)
-      const notifResult = await sendFormNotification({
-        type: 'kontakt',
-        data: formDataWithUtm,
-        inquiryId: inquiry.id,
-        customerEmail: data.email,
-      })
+      // Zwei Zustellwege parallel: (1) Benachrichtigung per SendGrid aus dem eigenen
+      // Backend, (2) Lead-Endpunkt des S&S-Oekosystems (speichert zuerst, sendet dann;
+      // SCHNITTSTELLE-LEADS.md). Beide laufen nebeneinander, keiner blockiert den anderen.
+      const [notifResult, relayResult] = await Promise.all([
+        sendFormNotification({
+          type: 'kontakt',
+          data: formDataWithUtm,
+          inquiryId: inquiry.id,
+          customerEmail: data.email,
+        }),
+        relayInquiryLead({ type: 'kontakt', data: formDataWithUtm, inquiryId: inquiry.id }),
+      ])
+      if (!relayResult.ok) {
+        console.warn('Lead-Endpunkt nicht erreicht (Anfrage liegt trotzdem im Backend/Mail):', relayResult.error)
+      }
 
-      if (!apiSaved && !notifResult.success) {
+      if (!apiSaved && !notifResult.success && !relayResult.ok) {
         // Neither the API nor the email reached us — the inquiry only exists in
         // this browser's localStorage. Don't pretend it was submitted.
         toast.error(t('form.error.submitFailed'), { duration: 12000 })

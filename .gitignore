@@ -36,3 +36,6 @@ public/api/data/*.sqlite
 public/api/data/*.sqlite3
 dist/api/data/*.sqlite
 dist/api/data/*.sqlite3
+
+# Python-Bytecode (ops-Skripte)
+__pycache__/
