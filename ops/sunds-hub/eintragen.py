@@ -40,11 +40,14 @@ EINTRAG = {
               "Branch hostinger = gebautes Live-Artefakt",
     "seit": "2026-08-21",
     "hinweis": (
-        "Laeuft NICHT auf sunds-hub. Deploy: Push auf main -> GitHub Action baut und pusht "
-        "Branch hostinger -> Hostinger zieht NICHT automatisch (Webhook antwortet 200, tut "
-        "nichts; gemessen 21.08.2026) -> hPanel -> Websites -> sunds-messebau.de -> Erweitert "
-        "-> GIT -> Zeilenmenue -> Bereitstellen. Der Aussenwaechter vergleicht Live gegen den "
-        "Branch (Ziel 'Messebau-Website Deploy-Abgleich'). Anfragen gehen parallel an den "
+        "Laeuft NICHT auf sunds-hub. Deploy seit 21.08.2026 13:20 vollautomatisch: Push auf main "
+        "-> GitHub Action baut und pusht Branch hostinger -> dieselbe Action zieht per SSH auf dem "
+        "Hostinger-Konto (Key github-actions-deploy@ss-messebau, in authorized_keys per command= "
+        "auf 'git pull --ff-only origin hostinger' beschraenkt; Hostkey gepinnt in "
+        "vars.HOSTINGER_KNOWN_HOSTS) und misst danach Live gegen das Bundle. Der Hostinger-Webhook "
+        "selbst zieht nicht (antwortet 200, tut nichts). Rueckfall von Hand: hPanel -> Websites -> "
+        "sunds-messebau.de -> Erweitert -> GIT -> Zeilenmenue -> Bereitstellen. Der Aussenwaechter "
+        "vergleicht Live gegen den Branch (Ziel 'Messebau-Website Deploy-Abgleich'). Anfragen gehen parallel an den "
         "Lead-Endpunkt (kunde=messebau) UND per SendGrid aus dem eigenen Backend; beides "
         "bleibt, bis der Lead-Weg 4 Wochen sauber laeuft (Entscheidung Fabrice, 21.08.2026)."),
     "schnittstellen": {
