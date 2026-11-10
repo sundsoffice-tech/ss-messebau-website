@@ -838,7 +838,11 @@ if (typeof window !== 'undefined') {
   window.addEventListener('storage', (ereignis) => {
     const name = ereignis.key
     if (name !== null && name !== CONSENT_STORAGE_KEY) return
-    if (!isTrackingAllowed()) stopStatistics()
+    // Maßgeblich ist der gemeldete Wert, nicht nur der Zustand beim Verarbeiten: Ein Tab im
+    // Hintergrund kann den Widerruf erst bekommen, nachdem dort wieder zugestimmt wurde. Auch
+    // dann endet die laufende Zählung; die nächste beginnt mit neuer Kennung.
+    const widerrufGemeldet = name !== null && ereignis.newValue !== 'granted'
+    if (widerrufGemeldet || !isTrackingAllowed()) stopStatistics()
   })
 }
 

@@ -329,6 +329,65 @@ describe('Zustimmung erst auf der zweiten Seite', () => {
   })
 })
 
+describe('Widerruf in einem anderen Tab, in diesem Tab erst später verarbeitet', () => {
+  it('die laufende Zählung endet, auch wenn inzwischen wieder zugestimmt ist; die nächste hat eine neue Kennung', async () => {
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    const { tracker } = await seiteLaden('/')
+    const vorher = warteschlange()
+    expect(vorher.map((e) => e.event)).toEqual(['session_start', 'page_view'])
+
+    // Der andere Tab hat abgelehnt und wieder zugestimmt; hier kommt erst jetzt die Ablehnung an.
+    window.dispatchEvent(new StorageEvent('storage', { key: CONSENT_KEY, newValue: 'denied' }))
+    expect(warteschlange()).toEqual([])
+
+    window.history.pushState(null, '', '/kontakt')
+    tracker.trackPageView()
+
+    const danach = warteschlange()
+    expect(danach.map((e) => e.event)).toEqual(['session_start', 'page_view'])
+    expect(danach[0].session_id).not.toBe(vorher[0].session_id)
+  })
+
+  it('ein geleerter Speicher bei bestehender Zustimmung lässt Quelle und Zählung stehen', async () => {
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    const { utm, deepLinking } = await seiteLaden(KAMPAGNE)
+    deepLinking.updateUrlWithSection('hero')
+    const kennung = warteschlange()[0].session_id
+
+    window.dispatchEvent(new StorageEvent('storage', { key: null }))
+
+    expect(utm.getUtmParams()).toEqual(QUELLE)
+    expect(warteschlange().map((e) => e.session_id)).toEqual([kennung, kennung])
+  })
+
+  it('liegt der Eintrag aus einer Zustimmung und ein anderer Tab lehnt ab, ist er weg', async () => {
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    await seiteLaden(KAMPAGNE)
+    expect(sessionStorage.getItem(UTM_KEY)).not.toBeNull()
+
+    localStorage.setItem(CONSENT_KEY, 'denied')
+    window.dispatchEvent(new StorageEvent('storage', { key: CONSENT_KEY, newValue: 'denied' }))
+
+    expect(sessionStorage.getItem(UTM_KEY)).toBeNull()
+  })
+})
+
+describe('Veränderter Eintrag im Speicher des Besuchers', () => {
+  it.each([
+    ['Zeichenkette', '"text"', {}],
+    ['Zahl', '5', {}],
+    ['Feld', '["a","b"]', {}],
+    ['fremde Felder', '{"message":"x","utm_source":"google","utm_medium":5,"utm_term":""}', { utm_source: 'google' }],
+  ])('%s: die Anfrage bekommt nur die fünf Kampagnen-Felder als Zeichenketten', async (_name, inhalt, erwartet) => {
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    sessionStorage.setItem(UTM_KEY, inhalt)
+
+    const { utm } = await seiteLaden('/')
+
+    expect(utm.getUtmParams()).toEqual(erwartet)
+  })
+})
+
 describe('Beschädigter Eintrag im Speicher', () => {
   it('ein Eintrag mit dem Inhalt null wirft nicht und liefert keine Quelle', async () => {
     localStorage.setItem(CONSENT_KEY, 'granted')

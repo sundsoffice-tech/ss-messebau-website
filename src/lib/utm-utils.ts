@@ -43,6 +43,21 @@ function readFromUrl(): UtmParams {
   return utm
 }
 
+/**
+ * Aus einem gespeicherten Eintrag nur die fünf Kampagnen-Felder als nicht leere
+ * Zeichenketten. Der Eintrag liegt im Browser des Besuchers und kann dort verändert
+ * sein; ohne den Filter landeten fremde Felder ungeprüft in einer Anfrage.
+ */
+function nurKampagnenfelder(wert: unknown): UtmParams {
+  const utm: UtmParams = {}
+  if (!wert || typeof wert !== 'object' || Array.isArray(wert)) return utm
+  for (const key of UTM_KEYS) {
+    const feld = (wert as Record<string, unknown>)[key]
+    if (typeof feld === 'string' && feld !== '') utm[key] = feld
+  }
+  return utm
+}
+
 function persist(utm: UtmParams): void {
   try {
     sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(utm))
@@ -89,8 +104,8 @@ export function getUtmParams(): UtmParams {
   if (consent === 'granted') {
     try {
       const raw = sessionStorage.getItem(UTM_STORAGE_KEY)
-      const gespeichert: unknown = raw ? JSON.parse(raw) : null
-      if (gespeichert && typeof gespeichert === 'object') return gespeichert as UtmParams
+      const gespeichert = nurKampagnenfelder(raw ? JSON.parse(raw) : null)
+      if (hasAny(gespeichert)) return gespeichert
     } catch { /* ignore */ }
   }
   return {}
