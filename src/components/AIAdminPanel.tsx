@@ -36,8 +36,6 @@ import {
   type TrainingDataEntry,
   type AIAuditLogEntry,
 } from '@/lib/ai-admin-service'
-import { getChatAuditLog } from '@/lib/chat-service'
-import { getSuspiciousActivityLog } from '@/lib/chat-sanitizer'
 
 // ─── API Key Management Tab ──────────────────────────────────
 
@@ -464,33 +462,22 @@ function TrainingDataEditForm({
 function AuditLogViewer() {
   const { t } = useTranslation()
   const [adminLogs, setAdminLogs] = useState<AIAuditLogEntry[]>([])
-  const [chatLogs, setChatLogs] = useState<Array<{ timestamp: number; action: string; details: string }>>([])
-  const [securityLogs, setSecurityLogs] = useState<Array<{ timestamp: number; reason: string; inputPreview: string }>>([])
 
+  // Nur das Protokoll vom Server. Die zwei Chat-Protokolle aus dem Browserspeicher
+  // (`chat_audit_log`, `chat_security_log`) gibt es seit 10.11.2026 nicht mehr: Sie
+  // zeigten ohnehin nur, was im Browser des Admins selbst getippt wurde.
   useEffect(() => {
     const loadLogs = async () => {
       const logs = await getAuditLog()
       setAdminLogs(logs)
-      setChatLogs(getChatAuditLog().reverse())
-      setSecurityLogs(getSuspiciousActivityLog().reverse())
     }
     loadLogs()
   }, [])
 
-  const allLogs = [
-    ...adminLogs.map(l => ({ ...l, source: 'admin' as const })),
-    ...chatLogs.map(l => ({ id: `chat-${l.timestamp}`, ...l, source: 'chat' as const, actor: 'user', category: 'security' as const })),
-    ...securityLogs.map(l => ({ id: `sec-${l.timestamp}`, timestamp: l.timestamp, action: 'suspicious_input', details: `${l.reason}: ${l.inputPreview}`, source: 'security' as const, actor: 'user', category: 'security' as const })),
-  ].sort((a, b) => b.timestamp - a.timestamp).slice(0, 100)
-
-  const getCategoryColor = (source: string) => {
-    switch (source) {
-      case 'admin': return 'bg-blue-100 text-blue-700'
-      case 'chat': return 'bg-green-100 text-green-700'
-      case 'security': return 'bg-red-100 text-red-700'
-      default: return 'bg-gray-100 text-gray-700'
-    }
-  }
+  const allLogs = adminLogs
+    .map(l => ({ ...l, source: 'admin' as const }))
+    .sort((a, b) => b.timestamp - a.timestamp)
+    .slice(0, 100)
 
   return (
     <div className="space-y-4">
@@ -506,14 +493,6 @@ function AuditLogViewer() {
           <p className="text-2xl font-bold">{adminLogs.length}</p>
           <p className="text-xs text-muted-foreground">{t('aiAdmin.audit.adminActions')}</p>
         </Card>
-        <Card className="p-4 text-center">
-          <p className="text-2xl font-bold">{chatLogs.length}</p>
-          <p className="text-xs text-muted-foreground">{t('aiAdmin.audit.chatRequests')}</p>
-        </Card>
-        <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-destructive">{securityLogs.length}</p>
-          <p className="text-xs text-muted-foreground">{t('aiAdmin.audit.securityEvents')}</p>
-        </Card>
       </div>
 
       {allLogs.length === 0 ? (
@@ -525,8 +504,8 @@ function AuditLogViewer() {
         <div className="space-y-1">
           {allLogs.map((log, idx) => (
             <div key={log.id || idx} className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 border border-transparent hover:border-border transition-colors">
-              <Badge variant="outline" className={`text-xs shrink-0 ${getCategoryColor(log.source)}`}>
-                {log.source === 'admin' ? t('aiAdmin.audit.sourceAdmin') : log.source === 'chat' ? t('aiAdmin.audit.sourceChat') : t('aiAdmin.audit.sourceSecurity')}
+              <Badge variant="outline" className="text-xs shrink-0 bg-blue-100 text-blue-700">
+                {t('aiAdmin.audit.sourceAdmin')}
               </Badge>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium">{log.action}</p>

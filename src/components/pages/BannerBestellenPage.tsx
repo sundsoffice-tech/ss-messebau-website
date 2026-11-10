@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from '@/lib/i18n'
 import { useKV } from '@/hooks/use-kv'
-import { kvAdapter } from '@/lib/local-storage-adapter'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Check } from '@phosphor-icons/react'
@@ -206,8 +205,8 @@ export function BannerBestellenPage() {
         status: 'neu',
       }
       
-      await kvAdapter.set(configId, configToSave)
-
+      // Keine Kopie der Bestellung im Browser: Sie geht nur an Backend und Mail.
+      // Der Entwurf (`banner_config_draft`) bleibt, ihn liest der Konfigurator.
       // Save order to backend API
       let apiSaved = false
       try {
@@ -215,8 +214,7 @@ export function BannerBestellenPage() {
         await ordersApi.create(configId, configToSave)
         apiSaved = true
       } catch (error) {
-        // Fallback: order already saved to localStorage above
-        console.warn('API unavailable, order saved locally only', error)
+        console.warn('API unavailable, order not stored in backend', error)
       }
 
       let emailSent = false
@@ -248,8 +246,8 @@ export function BannerBestellenPage() {
       }
 
       if (!apiSaved && !emailSent) {
-        // Order only exists in this browser's localStorage — be honest instead
-        // of showing the thank-you page.
+        // Weder Backend noch Mail haben die Bestellung erhalten: ehrliche Fehlermeldung
+        // statt Dankeseite. Der Entwurf im Konfigurator bleibt erhalten.
         toast.error(t('form.error.submitFailed'), { duration: 12000 })
         return
       }

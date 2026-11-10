@@ -3,8 +3,14 @@ import { ErrorBoundary } from "react-error-boundary";
 
 import App from './App.tsx'
 import { ErrorFallback } from './ErrorFallback.tsx'
+import { entferneSpeicherAltbestand } from './lib/speicher-altbestand'
 
 import "./main.css"
+
+// Einmal je Seitenaufruf, vor dem ersten Rendern: Einträge früherer Fassungen
+// ohne Leser aus dem Browserspeicher nehmen (Kopie der Anfragen, Bestellkopie,
+// zwei Chat-Protokolle).
+entferneSpeicherAltbestand()
 
 if (import.meta.env.DEV) {
   import('./lib/validate-sections')

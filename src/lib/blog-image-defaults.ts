@@ -1,18 +1,44 @@
 /**
- * Default fallback images per blog category.
- * Used when a blog post has no imageUrl set.
+ * Bilder der Blogartikel. Alle liegen auf dem eigenen Server unter `public/images/`:
+ * Die Datenschutzerklärung sagt zu, dass der Browser Bilder nicht von einem fremden
+ * Dienst lädt (`privacy.medien.text1`), und die CSP erlaubt nur `img-src 'self' data:`.
+ * Verwendet werden nur eigene Projektfotos, keine Stockbilder.
  */
 
 const BLOG_CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
-  messebau: 'https://media.istockphoto.com/id/1350544847/de/foto/messestand-f%C3%BCr-mockup-und-corporate-identity-display-design-leerstand-design-retail.webp?a=1&b=1&s=612x612&w=0&k=20&c=xgg_tJcwyuWFvckoZsLN6cq-96DksORO9hx8-6dKBz8=',
-  messen: 'https://images.unsplash.com/photo-1527345931282-806d3b11967f?w=800&h=450&fit=crop',
-  nachhaltigkeit: 'https://media.istockphoto.com/id/1340881556/de/foto/eine-ikone-eines-erf%C3%BCllten-ziels-in-form-eines-klaren-teiches-inmitten-eines-%C3%BCppigen-waldes-3d.webp?a=1&b=1&s=612x612&w=0&k=20&c=j04yU1pWJWyja6tCMNW1ATl_zixPCCtlFahWRxj4kXQ=',
-  service: 'https://images.unsplash.com/photo-1553034545-32d4cd2168f1?w=800&h=450&fit=crop',
-  branchen: 'https://images.unsplash.com/photo-1503147658877-b6636154a299?w=800&h=450&fit=crop',
-  sonstiges: 'https://media.istockphoto.com/id/2242753700/de/foto/budget-projektdaten-im-gesch%C3%A4ftsordner-mit-grafik.webp?a=1&b=1&s=612x612&w=0&k=20&c=C_OpRqf8xQE7JzY-LLcrPG2WezUJ61xcKNTzovZI96Y=',
+  messebau: '/images/deligreece-messestand-100qm-food-2.jpeg',
+  messen: '/images/messetouren-roadshow-aufbau.jpeg',
+  nachhaltigkeit: '/images/ladenbau/showroom-bodenproben-ausstellung.jpg',
+  service: '/images/boeden/besprechungsraum-vinylboden-moebel.jpg',
+  branchen: '/images/deligreece-messestand-100qm-food-2.jpeg',
+  sonstiges: '/images/messetouren-roadshow-aufbau.jpeg',
 }
 
 export function getBlogFallbackImage(category: string): string {
   return BLOG_CATEGORY_FALLBACK_IMAGES[category]
     || BLOG_CATEGORY_FALLBACK_IMAGES['messebau']
+}
+
+/**
+ * Wahr, wenn die Adresse auf den eigenen Server zeigt: ein Pfad ab der Wurzel oder
+ * eine volle Adresse mit dem Ursprung der Seite. `//host/…`, fremde Hosts und
+ * `data:` zählen nicht.
+ */
+export function istEigenesBild(url: string | null | undefined): url is string {
+  if (!url) return false
+  if (url.startsWith('/')) return !url.startsWith('//')
+  try {
+    return new URL(url).origin === window.location.origin
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Bildadresse eines Artikels. Trägt ein Artikel aus der Verwaltung eine fremde
+ * Adresse, zeigt die Seite das eigene Kategoriebild, statt den Browser des Besuchers
+ * zu einem fremden Server zu schicken.
+ */
+export function blogBild(imageUrl: string | null | undefined, category: string): string {
+  return istEigenesBild(imageUrl) ? imageUrl : getBlogFallbackImage(category)
 }

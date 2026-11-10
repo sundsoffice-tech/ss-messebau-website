@@ -52,7 +52,6 @@
           ["h3", "privacy.anfragen.weg.title"],
           ["p", "privacy.anfragen.weg.text1"],
           ["p", "privacy.anfragen.weg.text2"],
-          ["p", "privacy.anfragen.weg.text3"],
           ["h3", "privacy.anfragen.zweck.title"],
           ["p", "privacy.anfragen.zweck.text1"],
           ["p", "privacy.anfragen.zweck.text2"]
@@ -112,10 +111,7 @@
       },
       {
         "titel": "privacy.medien.title",
-        "inhalt": [
-          ["p", "privacy.medien.text1"],
-          ["p", "privacy.medien.text2"]
-        ]
+        "inhalt": [["p", "privacy.medien.text1"]]
       },
       {
         "titel": "privacy.empfaenger.title",
@@ -130,6 +126,7 @@
         "inhalt": [
           ["p", "privacy.rechte.text1"],
           ["ul", "privacy.rechte.liste"],
+          ["p", "privacy.rechte.widerspruch"],
           ["p", "privacy.rechte.text2"],
           ["p", "privacy.rechte.text3"],
           ["p", "privacy.rechte.text4"]

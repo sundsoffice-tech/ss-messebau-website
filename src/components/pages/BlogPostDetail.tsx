@@ -10,7 +10,7 @@ import { BlogPostCard } from './BlogPostCard'
 import { ShareButton } from '@/components/ShareButton'
 import { ShareMenu } from '@/components/ShareMenu'
 import type { BlogPost } from '@/lib/types'
-import { getBlogFallbackImage } from '@/lib/blog-image-defaults'
+import { blogBild } from '@/lib/blog-image-defaults'
 
 interface BlogPostDetailProps {
   post: BlogPost
@@ -42,7 +42,7 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
       '@type': 'BlogPosting',
       headline: post.title,
       description: post.excerpt,
-      image: post.imageUrl,
+      image: new URL(blogBild(post.imageUrl, post.category), 'https://sunds-messebau.de').href,
       datePublished: new Date(post.publishedAt).toISOString(),
       dateModified: new Date(post.publishedAt).toISOString(),
       author: {
@@ -129,7 +129,7 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
         <div className="container mx-auto max-w-4xl px-4 md:px-6 lg:px-8">
           <div className="relative -mt-6 rounded-xl overflow-hidden shadow-2xl">
             <img
-              src={post.imageUrl || getBlogFallbackImage(post.category)}
+              src={blogBild(post.imageUrl, post.category)}
               alt={post.title}
               width="1200"
               height="675"
