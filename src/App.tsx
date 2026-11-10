@@ -15,7 +15,7 @@ import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 import { usePageMeta } from './hooks/use-page-meta'
 import { usePageViewTracking } from './hooks/use-page-view-tracking'
 import { useHeartbeat } from './hooks/use-heartbeat'
-import { I18nContext, getTranslation, getStoredLanguage, storeLanguage, type Language } from './lib/i18n'
+import { I18nContext, getTranslation, getInitialLanguage, storeLanguage, type Language } from './lib/i18n'
 import { useUIStore } from './store/ui-store'
 import { PageErrorBoundary } from './components/PageErrorBoundary'
 
@@ -49,7 +49,7 @@ const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage').then(m
 function App() {
   const { inquiryDialogOpen, openInquiry, setInquiryOpen } = useUIStore()
   const [currentPage, setCurrentPage] = useState('/')
-  const [lang, setLangState] = useState<Language>(getStoredLanguage)
+  const [lang, setLangState] = useState<Language>(() => getInitialLanguage())
 
   const setLang = (newLang: Language) => {
     setLangState(newLang)

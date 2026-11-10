@@ -37,6 +37,22 @@ export function getStoredLanguage(): Language {
   return 'de'
 }
 
+/**
+ * Sprache beim Start: Die Adresse geht vor (`?lang=en` oder `?lang=de`), sonst die
+ * gespeicherte Wahl. Jede Seite nennt im Kopf `hreflang="en"` mit `?lang=en`; ohne
+ * diese Auswertung zeigte genau diese Adresse die deutsche Fassung. Gespeichert wird
+ * dabei nichts: `ss-lang` entsteht erst, wenn der Besucher die Sprache selbst umstellt.
+ */
+export function getInitialLanguage(suche?: string): Language {
+  try {
+    const wert = new URLSearchParams(suche ?? window.location.search).get('lang')
+    if (wert === 'en' || wert === 'de') return wert
+  } catch {
+    // keine Adresse lesbar: dann gilt die gespeicherte Wahl
+  }
+  return getStoredLanguage()
+}
+
 export function storeLanguage(lang: Language) {
   try {
     localStorage.setItem('ss-lang', lang)
