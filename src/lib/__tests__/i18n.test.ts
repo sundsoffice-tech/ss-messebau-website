@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { getTranslation, getStoredLanguage, getInitialLanguage, storeLanguage } from '../i18n'
+import { getTranslation, getStoredLanguage, getInitialLanguage, storeLanguage, ohneSprachangabe } from '../i18n'
 
 describe('getTranslation', () => {
   it('returns a function', () => {
@@ -75,5 +75,32 @@ describe('Sprache beim Start', () => {
     window.history.replaceState(null, '', '/branchen?lang=en')
     expect(getInitialLanguage()).toBe('en')
     window.history.replaceState(null, '', '/')
+  })
+})
+
+describe('Adresse ohne Sprachangabe', () => {
+  it('nimmt nur `lang` heraus', () => {
+    expect(ohneSprachangabe('/branchen', '?lang=en', '')).toBe('/branchen')
+    expect(ohneSprachangabe('/', '?lang=de', '')).toBe('/')
+  })
+
+  it('lässt UTM-Angaben und Anker stehen', () => {
+    expect(ohneSprachangabe('/branchen', '?utm_source=x&lang=en&utm_medium=cpc', '#eventbau')).toBe(
+      '/branchen?utm_source=x&utm_medium=cpc#eventbau',
+    )
+    expect(ohneSprachangabe('/', '?lang=en', '#kontakt')).toBe('/#kontakt')
+  })
+
+  it('ändert eine Adresse ohne `lang` nicht, auch nicht in der Schreibweise', () => {
+    expect(ohneSprachangabe('/kontakt', '?utm_term=messe%20bau&x', '#a')).toBe('/kontakt?utm_term=messe%20bau&x#a')
+    expect(ohneSprachangabe('/kontakt', '', '')).toBe('/kontakt')
+  })
+
+  it('nach dem Herausnehmen gilt beim Neuladen die gespeicherte Wahl', () => {
+    localStorage.clear()
+    storeLanguage('de')
+    const ziel = ohneSprachangabe('/branchen', '?lang=en', '')
+    const suche = ziel.includes('?') ? ziel.slice(ziel.indexOf('?')) : ''
+    expect(getInitialLanguage(suche)).toBe('de')
   })
 })

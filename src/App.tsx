@@ -15,7 +15,7 @@ import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 import { usePageMeta } from './hooks/use-page-meta'
 import { usePageViewTracking } from './hooks/use-page-view-tracking'
 import { useHeartbeat } from './hooks/use-heartbeat'
-import { I18nContext, getTranslation, getInitialLanguage, storeLanguage, type Language } from './lib/i18n'
+import { I18nContext, getTranslation, getInitialLanguage, storeLanguage, ohneSprachangabe, type Language } from './lib/i18n'
 import { useUIStore } from './store/ui-store'
 import { PageErrorBoundary } from './components/PageErrorBoundary'
 
@@ -55,6 +55,10 @@ function App() {
     setLangState(newLang)
     storeLanguage(newLang)
     document.documentElement.lang = newLang
+    // Die eigene Wahl geht vor einer Angabe `?lang=…` in der Adresse, auch nach dem Neuladen.
+    const { pathname, search, hash } = window.location
+    const ziel = ohneSprachangabe(pathname, search, hash)
+    if (ziel !== `${pathname}${search}${hash}`) window.history.replaceState(window.history.state, '', ziel)
   }
 
   const t = getTranslation(lang)
