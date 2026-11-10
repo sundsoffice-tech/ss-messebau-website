@@ -127,7 +127,7 @@ const initialConfig: BannerConfig = {
 export function BannerBestellenPage() {
   const { t } = useTranslation()
   const [currentStep, setCurrentStep] = useState(1)
-  const [config, setConfig] = useKV<BannerConfig>('banner_config_draft', initialConfig)
+  const [config, setConfig, entwurfEntfernen] = useKV<BannerConfig>('banner_config_draft', initialConfig)
   const [submitted, setSubmitted] = useState(false)
 
   const totalSteps = 6
@@ -206,7 +206,8 @@ export function BannerBestellenPage() {
       }
       
       // Keine Kopie der Bestellung im Browser: Sie geht nur an Backend und Mail.
-      // Der Entwurf (`banner_config_draft`) bleibt, ihn liest der Konfigurator.
+      // Der Entwurf (`banner_config_draft`) bleibt bis zur angenommenen Bestellung,
+      // ihn liest der Konfigurator.
       // Save order to backend API
       let apiSaved = false
       try {
@@ -252,6 +253,10 @@ export function BannerBestellenPage() {
         return
       }
 
+      // Die Bestellung ist angekommen: Der Entwurf mit Kontaktdaten und Druckdateien
+      // hat im Browser keine Aufgabe mehr. Die Dankeseite zeigt den Stand aus dem
+      // Arbeitsspeicher; ein neuer Aufruf des Konfigurators beginnt leer.
+      entwurfEntfernen()
       setSubmitted(true)
     } catch (error) {
       console.error('Error saving configuration:', error)
