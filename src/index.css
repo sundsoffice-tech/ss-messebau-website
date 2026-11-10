@@ -100,6 +100,10 @@
     font-family: 'Inter', 'Inter-fallback', sans-serif;
     line-height: 1.6;
     overscroll-behavior-y: contain;
+    /* Solange der Cookie-Hinweis am unteren Rand steht, bleibt unter der Seite
+       so viel Platz frei, wie er hoch ist: Am Seitenende liegen Impressum und
+       Datenschutz dann über ihm. Den Wert setzt useHinweisPlatz, sonst 0px. */
+    padding-bottom: var(--cookie-hinweis-hoehe, 0px);
   }
   
   /* Custom cursor styles - only on desktop with mouse (min-width: 1280px to exclude tablets) */

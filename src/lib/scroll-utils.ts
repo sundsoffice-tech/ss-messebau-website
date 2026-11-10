@@ -1,4 +1,4 @@
-import { parseSectionHash, createSectionHash } from './section-map'
+import { parseSectionHash, createSectionHash, resolveSectionId } from './section-map'
 
 export function getHeaderHeight(): number {
   const header = document.querySelector('header')
@@ -16,7 +16,7 @@ export function getHeaderHeight(): number {
 }
 
 export function scrollToSection(sectionId: string, offset?: number): boolean {
-  const element = document.getElementById(sectionId)
+  const element = document.getElementById(resolveSectionId(sectionId))
   
   if (!element) {
     return false

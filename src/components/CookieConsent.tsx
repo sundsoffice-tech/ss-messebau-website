@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { getConsent, setConsent } from '@/lib/analytics';
 import { useTranslation } from '@/lib/i18n';
 import { useUIStore } from '@/store/ui-store';
+import { RouterLink } from '@/components/RouterLink';
+import { useHinweisPlatz } from '@/hooks/use-hinweis-platz';
 
 /**
  * GDPR-compliant cookie consent banner.
@@ -10,6 +12,11 @@ import { useUIStore } from '@/store/ui-store';
  * Besucher ihn über „Cookie-Einstellungen" im Footer verlangt (Widerrufsweg,
  * Art. 7 Abs. 3 DSGVO). „Ablehnen" nach früherem „Akzeptieren" stoppt die
  * Statistik sofort; das erledigen die Lauscher an `setConsent`.
+ *
+ * Der Hinweis liegt fest am unteren Rand. Damit er nichts verdeckt, meldet er
+ * seine Höhe (`useHinweisPlatz`): Die Seite hält unten so viel Platz frei, und
+ * die Kontaktleiste rückt über ihn. Impressum und Datenschutzerklärung sind
+ * zusätzlich aus dem Hinweis selbst erreichbar.
  */
 export default function CookieConsent() {
   const { t } = useTranslation();
@@ -18,6 +25,8 @@ export default function CookieConsent() {
   const closeCookieSettings = useUIStore((state) => state.closeCookieSettings);
   const declineRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const visible = undecided || requested;
 
   useEffect(() => {
     // Show the banner when no decision has been stored yet
@@ -33,7 +42,9 @@ export default function CookieConsent() {
     declineRef.current?.focus();
   }, [requested]);
 
-  if (!undecided && !requested) return null;
+  useHinweisPlatz(bannerRef, visible);
+
+  if (!visible) return null;
 
   const close = () => {
     setUndecided(getConsent() === null);
@@ -49,6 +60,7 @@ export default function CookieConsent() {
 
   return (
     <div
+      ref={bannerRef}
       role="dialog"
       aria-modal="true"
       aria-label={t('cookie.ariaLabel')}
@@ -61,12 +73,18 @@ export default function CookieConsent() {
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-start md:items-center gap-4">
         <p className="text-sm text-gray-700 flex-1">
           {t('cookie.text')}{' '}
-          <a
-            href="/datenschutz"
-            className="underline text-primary hover:text-primary/80"
+          <RouterLink
+            to="/datenschutz"
+            className="mr-2 underline text-primary hover:text-primary/80"
           >
             {t('cookie.privacy')}
-          </a>
+          </RouterLink>{' '}
+          <RouterLink
+            to="/impressum"
+            className="underline text-primary hover:text-primary/80"
+          >
+            {t('cookie.imprint')}
+          </RouterLink>
         </p>
         <div className="flex gap-3 shrink-0">
           <button

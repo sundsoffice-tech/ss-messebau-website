@@ -9,7 +9,7 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
     { id: 'hero', label: 'Startseite', page: '/' },
     { id: 'services', label: 'Leistungsübersicht', page: '/' },
     { id: 'advantages', label: 'Unsere Vorteile', page: '/' },
-    { id: '48h-garantie', label: 'Unverbindliches 48h-Angebot', page: '/' },
+    { id: '48h-angebot', label: 'Unverbindliches 48h-Angebot', page: '/' },
     { id: 'references', label: 'Referenzen', page: '/' },
     { id: 'process', label: 'Ablauf', page: '/' },
     { id: 'cta', label: 'Kontakt', page: '/' }
@@ -80,7 +80,7 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
   '/ablauf': [
     { id: 'prozess', label: 'Unser Prozess', page: '/ablauf' },
     { id: 'timeline', label: 'Projekt-Ablauf', page: '/ablauf' },
-    { id: '48h-garantie', label: 'Unverbindliches 48h-Angebot', page: '/ablauf' },
+    { id: '48h-angebot', label: 'Unverbindliches 48h-Angebot', page: '/ablauf' },
     { id: 'faq', label: 'Häufige Fragen', page: '/ablauf' }
   ],
   '/nachhaltigkeit': [
@@ -112,13 +112,28 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
   ]
 }
 
+/**
+ * Frühere Ankernamen. Ein alter Verweis (`/#48h-garantie` aus Lesezeichen, Mails
+ * oder fremden Seiten) landet beim heutigen Abschnitt, statt ins Leere zu gehen.
+ * Schlüssel: alter Name, Wert: heutiger Name aus SECTION_MAP.
+ */
+export const SECTION_ALIASES: Record<string, string> = {
+  '48h-garantie': '48h-angebot'
+}
+
+/** Heutiger Name eines Ankers; unbekannte Namen kommen unverändert zurück. */
+export function resolveSectionId(sectionId: string): string {
+  return Object.prototype.hasOwnProperty.call(SECTION_ALIASES, sectionId) ? SECTION_ALIASES[sectionId] : sectionId
+}
+
 export function getSectionsByPage(page: string): SectionConfig[] {
   return SECTION_MAP[page] || []
 }
 
 export function findSection(sectionId: string): SectionConfig | undefined {
+  const id = resolveSectionId(sectionId)
   for (const sections of Object.values(SECTION_MAP)) {
-    const found = sections.find(s => s.id === sectionId)
+    const found = sections.find(s => s.id === id)
     if (found) return found
   }
   return undefined
@@ -126,7 +141,8 @@ export function findSection(sectionId: string): SectionConfig | undefined {
 
 export function validateSectionExists(page: string, sectionId: string): boolean {
   const sections = SECTION_MAP[page]
-  return sections ? sections.some(s => s.id === sectionId) : false
+  const id = resolveSectionId(sectionId)
+  return sections ? sections.some(s => s.id === id) : false
 }
 
 export function createSectionHash(page: string, sectionId?: string): string {
@@ -141,14 +157,14 @@ export function parseSectionHash(hash: string): { page: string; section?: string
     const parts = cleanHash.split('#')
     return {
       page: parts[0] || '/',
-      section: parts[1] || undefined
+      section: parts[1] ? resolveSectionId(parts[1]) : undefined
     }
   }
   // Clean URL format: /page with optional #section from location.hash
   const parts = hash.split('#')
   return {
     page: parts[0] || '/',
-    section: parts[1] || undefined
+    section: parts[1] ? resolveSectionId(parts[1]) : undefined
   }
 }
 
@@ -157,7 +173,7 @@ export function parseSectionHash(hash: string): { page: string; section?: string
  */
 export function parseCurrentLocation(): { page: string; section?: string } {
   const page = window.location.pathname || '/'
-  const section = window.location.hash ? window.location.hash.slice(1) : undefined
+  const section = window.location.hash ? resolveSectionId(window.location.hash.slice(1)) : undefined
   return { page, section }
 }
 

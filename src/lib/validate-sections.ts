@@ -1,4 +1,4 @@
-import { SECTION_MAP } from './section-map'
+import { SECTION_MAP, resolveSectionId } from './section-map'
 
 export interface ValidationResult {
   isValid: boolean
@@ -58,7 +58,8 @@ export function validateSectionMap(): ValidationResult {
 export function validateSectionExists(page: string, sectionId: string): boolean {
   const sections = SECTION_MAP[page]
   if (!sections) return false
-  return sections.some(s => s.id === sectionId)
+  const id = resolveSectionId(sectionId)
+  return sections.some(s => s.id === id)
 }
 
 export function validateAllSectionsInDOM(): ValidationResult {
