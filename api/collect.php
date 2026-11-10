@@ -187,6 +187,18 @@ foreach ($events as $ev) {
 
 echo json_encode(['ok' => true, 'stored' => $stored]);
 
+// Anstoß der Bereinigung, zweiter Weg neben health.php: höchstens einmal je
+// Tag und erst nach dem Ende dieses Skripts. Die Antwort oben steht schon;
+// ein Fehler hier steht nur im Fehlerprotokoll.
+try {
+    if ((@include_once __DIR__ . '/bereinigung-anstoss.php') !== false
+        && function_exists('bereinigungVormerken')) {
+        bereinigungVormerken();
+    }
+} catch (\Throwable $e) {
+    error_log('Bereinigung: Anstoß aus collect.php gescheitert: ' . $e->getMessage());
+}
+
 /**
  * Resolve approximate location from client IP using ip-api.com.
  * Without API key: http://ip-api.com (free, 45 req/min, HTTP only)
