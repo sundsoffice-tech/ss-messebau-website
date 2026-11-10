@@ -959,7 +959,7 @@
   "privacy.statistik.widerruf.title": "Legal basis, withdrawal and duration",
   "privacy.statistik.widerruf.text1": "The legal basis is your consent (Art. 6(1)(a) GDPR and Section 25(1) TDDDG).",
   "privacy.statistik.widerruf.text2": "You can withdraw your consent at any time: click “Cookie settings” at the foot of any page and then “Decline”. The statistics then delete their entries from your browser and send nothing further. Measurement data already transmitted remains stored until it is deleted.",
-  "privacy.statistik.widerruf.text3": "A retention period of no more than 365 days is set for the measurement data. Older entries are removed by a clean-up that we trigger in the website's administration.",
+  "privacy.statistik.widerruf.text3": "A retention period of 365 days is set for the measurement data. Older entries are removed by the website's clean-up routine, which runs automatically, as a rule within two days.",
   "privacy.karte.title": "7. Google Maps on the Contact Page",
   "privacy.karte.text1": "On the contact page you can display a map from Google Maps. The map is only loaded when you click “Load map (Google Maps)”. Before that, your browser requests nothing from Google.",
   "privacy.karte.text2": "With the click, your browser loads the map directly from Google's servers. Google receives your IP address in the process and may set its own cookies. Your decision applies only to the current page view; we do not store it. The link “Open in Google Maps” leads to Google's website. A request to Google only takes place when you follow it.",
