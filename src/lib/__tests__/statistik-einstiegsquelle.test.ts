@@ -74,15 +74,30 @@ async function seiteLaden(ziel: string) {
   return { analytics, utm, tracker, deepLinking }
 }
 
+/**
+ * Jedes `seiteLaden` lädt die Module neu, und jedes Modul hängt seine `storage`-Lauscher
+ * ans Fenster. Im Browser gibt es je Seite genau einen Satz; hier blieben die Lauscher
+ * früherer Fälle sonst hängen und antworteten mit. Deshalb werden sie je Fall wieder entfernt.
+ */
+let storageLauscher: EventListenerOrEventListenerObject[] = []
+
 beforeEach(() => {
   localStorage.clear()
   sessionStorage.clear()
   vi.useFakeTimers()
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }))
   window.history.pushState({}, '', '/')
+  storageLauscher = []
+  const anhaengen = window.addEventListener.bind(window)
+  vi.spyOn(window, 'addEventListener').mockImplementation(((typ: string, lauscher: EventListenerOrEventListenerObject, optionen?: boolean | AddEventListenerOptions) => {
+    if (typ === 'storage') storageLauscher.push(lauscher)
+    anhaengen(typ, lauscher, optionen)
+  }) as typeof window.addEventListener)
 })
 
 afterEach(() => {
+  for (const lauscher of storageLauscher) window.removeEventListener('storage', lauscher)
+  vi.restoreAllMocks()
   vi.useRealTimers()
   vi.unstubAllGlobals()
 })
@@ -336,16 +351,46 @@ describe('Widerruf in einem anderen Tab, in diesem Tab erst später verarbeitet'
     const vorher = warteschlange()
     expect(vorher.map((e) => e.event)).toEqual(['session_start', 'page_view'])
 
-    // Der andere Tab hat abgelehnt und wieder zugestimmt; hier kommt erst jetzt die Ablehnung an.
-    window.dispatchEvent(new StorageEvent('storage', { key: CONSENT_KEY, newValue: 'denied' }))
-    expect(warteschlange()).toEqual([])
+    // Der andere Tab hat abgelehnt (Kennung, Zähler und Warteschlange im gemeinsamen Speicher
+    // sind damit weg) und wieder zugestimmt; seine neue Zählung liegt schon im Speicher.
+    for (const name of ['ss_analytics_visitor', 'ss_visit_count', 'ss_last_visit', QUEUE_KEY]) localStorage.removeItem(name)
+    localStorage.setItem('ss_analytics_visitor', 'besucher-neu')
+    const ausAnderemTab = { event: 'page_view', url: '/anderer-tab', session_id: 'sitzung-anderer-tab' }
+    localStorage.setItem(QUEUE_KEY, JSON.stringify([ausAnderemTab]))
 
-    window.history.pushState(null, '', '/kontakt')
-    tracker.trackPageView()
+    // Hier kommt erst jetzt die Ablehnung an.
+    window.dispatchEvent(new StorageEvent('storage', { key: CONSENT_KEY, newValue: 'denied' }))
 
     const danach = warteschlange()
-    expect(danach.map((e) => e.event)).toEqual(['session_start', 'page_view'])
-    expect(danach[0].session_id).not.toBe(vorher[0].session_id)
+    // Die Zählung des anderen Tabs bleibt unberührt, seine Besucherkennung auch
+    expect(danach[0]).toEqual(ausAnderemTab)
+    expect(localStorage.getItem('ss_analytics_visitor')).toBe('besucher-neu')
+    // Dieser Tab beginnt sofort neu: Sitzungsstart und Seitenaufruf, neue Sitzungskennung
+    const eigene = danach.slice(1)
+    expect(eigene.map((e) => e.event)).toEqual(['session_start', 'page_view'])
+    expect(eigene[0].session_id).not.toBe(vorher[0].session_id)
+    expect(eigene[1].session_id).toBe(eigene[0].session_id)
+    expect(eigene.map((e) => e.visitor_id)).toEqual(['besucher-neu', 'besucher-neu'])
+
+    // Der nächste Seitenwechsel gehört zur selben neuen Sitzung, ohne zweiten Sitzungsstart
+    window.history.pushState(null, '', '/kontakt')
+    tracker.trackPageView()
+    const spaeter = warteschlange().slice(1)
+    expect(spaeter.map((e) => e.event)).toEqual(['session_start', 'page_view', 'page_view'])
+    expect(spaeter[2].session_id).toBe(eigene[0].session_id)
+  })
+
+  it('Widerruf ohne erneute Zustimmung: Zählung und Warteschlange sind weg, nichts beginnt neu', async () => {
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    await seiteLaden('/')
+    expect(warteschlange().length).toBe(2)
+
+    localStorage.setItem(CONSENT_KEY, 'denied')
+    window.dispatchEvent(new StorageEvent('storage', { key: CONSENT_KEY, newValue: 'denied' }))
+
+    expect(warteschlange()).toEqual([])
+    expect(schluessel(sessionStorage)).toEqual([])
+    expect(schluessel(localStorage)).toEqual([CONSENT_KEY])
   })
 
   it('ein geleerter Speicher bei bestehender Zustimmung lässt Quelle und Zählung stehen', async () => {
