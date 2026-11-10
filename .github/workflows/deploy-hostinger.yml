@@ -213,6 +213,15 @@ jobs:
           STATUS=$(curl -s --max-time 20 -o /dev/null -w '%{http_code}' "${LIVE_URL}api/health.php" || true)
           echo "/api/health.php: Status ${STATUS}"
           [ "$STATUS" = "200" ] || FEHLER=1
+          # Stufe 2: Unbekanntes antwortet mit 404 und der Hausseite (Anwendung startet darin).
+          STATUS=$(curl -s --max-time 20 -o /tmp/seite.html -w '%{http_code}' "${LIVE_URL}gibt-es-nicht-deploy-probe" || true)
+          WURZEL=$(grep -c '<div id="root">' /tmp/seite.html || true)
+          OHNEINDEX=$(grep -c 'name="robots" content="noindex"' /tmp/seite.html || true)
+          echo "/gibt-es-nicht-deploy-probe: Status ${STATUS}, root ${WURZEL}, noindex ${OHNEINDEX}"
+          if [ "$STATUS" != "404" ] || [ "$WURZEL" != "1" ] || [ "$OHNEINDEX" != "1" ]; then FEHLER=1; fi
+          STATUS=$(curl -s --max-time 20 -o /dev/null -w '%{http_code}' "${LIVE_URL}blog/gibt-es-nicht-deploy-probe" || true)
+          echo "/blog/gibt-es-nicht-deploy-probe: Status ${STATUS}"
+          [ "$STATUS" = "200" ] || FEHLER=1
           # Dateien duerfen nicht als HTML zurueckkommen (Fall: die Dateipruefung der neuen Regel
           # traefe auf dem Server immer zu, dann waere die Seite weiss und die Adressen oben trotzdem 200).
           TYP=$(curl -s --max-time 20 -o /dev/null -w '%{http_code} %{content_type}' "${LIVE_URL}${ERWARTET}" || true)

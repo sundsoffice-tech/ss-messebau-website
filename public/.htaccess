@@ -38,16 +38,18 @@
   RewriteCond %{DOCUMENT_ROOT}/_s%{REQUEST_URI}.html -f
   RewriteRule ^ /_s%{REQUEST_URI}.html [L]
 
-  # Handle SPA routing - Send all requests to index.html
-  # except for files that actually exist and API routes
-  # Stufe 2 (eigener PR, erst nachdem die Regel oben live gemessen ist): diese Auffangregel
-  # auf /admin und /blog/ begrenzen und ErrorDocument 404 auf /_s/nicht-gefunden.html
-  # stellen, damit unbekannte Adressen mit Status 404 antworten.
+  # Bereiche, deren Unterseiten erst zur Laufzeit entstehen (Verwaltung, Blogartikel aus der
+  # Verwaltung) oder die die Anwendung weiterleitet (drei alte Leistungs-Adressen): weiter die
+  # Anwendung mit Status 200.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-l
-  RewriteCond %{REQUEST_URI} !^/api/ [NC]
+  RewriteCond %{REQUEST_URI} ^/(admin(/|$)|blog/|leistungen/(showrooms|ladenbau|brandspaces)$) [NC]
   RewriteRule . /index.html [L]
+
+  # Stufe 2 (seit 11/2026): Alles andere, das es nicht gibt, beantwortet der Server mit
+  # Status 404 (ErrorDocument unten). Die Anwendung startet in dieser Antwort und zeigt ihre
+  # 404-Ansicht. Vorher antwortete jede unbekannte Adresse mit 200 und der Startseite.
 </IfModule>
 
 # ============================================
@@ -219,7 +221,7 @@
 # ERROR PAGES
 # ============================================
 # Custom error pages (optional)
-ErrorDocument 404 /index.html
+ErrorDocument 404 /_s/nicht-gefunden.html
 ErrorDocument 500 /index.html
 
 # ============================================
