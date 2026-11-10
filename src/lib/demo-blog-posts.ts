@@ -2441,5 +2441,136 @@ Alle Dokumente abgerufen am 10. November 2026.
     category: 'Planung',
     imageUrl: '',
     publishedAt: new Date('2026-11-10').getTime()
+  },
+  {
+    id: '8',
+    title: 'Messeförderung 2027: Was es für Aussteller gibt',
+    slug: 'messefoerderung-aussteller',
+    excerpt: 'Förderung für Messeauftritte 2027: Zuschuss für junge innovative Unternehmen, Gemeinschaftsstände im Ausland, Landesförderung NRW. Mit Fristen.',
+    content: `Ein Messeauftritt kostet Geld, und einen Teil davon können manche Aussteller über öffentliche Programme zurückholen. Für 2027 liegen die Bedingungen vor: Das Bundesministerium für Wirtschaft und Energie hat die Liste der Messen veröffentlicht, auf denen junge innovative Unternehmen gefördert werden können, mit Stand 04.11.2026. Nordrhein-Westfalen fördert Auslandsmessen nach einer Richtlinie, die bis Ende 2027 gilt.
+
+Dieser Beitrag stellt drei Wege vor: das Bundesprogramm für junge innovative Unternehmen auf Leitmessen in Deutschland, die Gemeinschaftsstände des Bundes auf Auslandsmessen und das Landesprogramm in Nordrhein-Westfalen.
+
+Die Angaben stammen von den Seiten der bewilligenden Stellen, aus den Förderrichtlinien und aus der Förderdatenbank des Bundes, abgerufen am 10. November 2026; zwei Messetermine zum Vergleich stammen von den Veranstaltern. Die Quellen stehen am Ende. Sätze, Höchstbeträge, Fristen und die Messeliste können sich ändern; maßgeblich ist, was am Tag Ihres Antrags gilt. Auf die Zuschüsse des Bundesprogramms und des Landes Nordrhein-Westfalen besteht kein Rechtsanspruch. Ob Ihr Unternehmen und Ihre Messe förderfähig sind, entscheidet die Bewilligungsstelle.
+
+## Das Wichtigste in Kürze
+
+- **Bund, Messen in Deutschland:** Junge innovative Unternehmen können für einen Platz auf dem Gemeinschaftsstand des Bundes einen Zuschuss erhalten: 60 Prozent der Kosten für Standmiete und Standbau bei den ersten zwei Teilnahmen, danach 50 Prozent, höchstens 7.500 Euro pro Aussteller und Messe, gerechnet ohne Umsatzsteuer.
+- **Bund, Auslandsmessen:** Hier gibt es keinen Zuschuss auf das Konto, sondern einen Platz auf einem deutschen Gemeinschaftsstand gegen einen Beteiligungspreis.
+- **Nordrhein-Westfalen:** Kleine und mittlere Unternehmen erhalten für Auslandsmessen bis zu 50 Prozent der förderfähigen Kosten, höchstens 7.500 Euro pro Unternehmen und Jahr. Messen in Deutschland fördert das Land nach der geltenden Richtlinie nicht mehr.
+- **Fristen:** Beim Bundesprogramm melden Sie sich spätestens acht Wochen vor Messebeginn beim Veranstalter an. In Nordrhein-Westfalen muss der Antrag spätestens zwei Monate vor Beginn des Vorhabens gestellt sein.
+
+## Bundesprogramm für junge innovative Unternehmen
+
+Das Programm heißt bei der Bewilligungsstelle, dem Bundesamt für Wirtschaft und Ausfuhrkontrolle (BAFA), „Young Innovators“. Gefördert wird die Teilnahme an einem Gemeinschaftsstand, den der Messeveranstalter auf einer internationalen Leitmesse in Deutschland organisiert.
+
+**Wer gefördert wird:** rechtlich selbstständige Unternehmen mit Sitz und Geschäftsbetrieb in Deutschland, die weniger als 50 Mitarbeiter haben, deren Jahresbilanzsumme oder Jahresumsatz höchstens zehn Millionen Euro beträgt und die jünger als zehn Jahre sind. Sie müssen Produkte, Verfahren oder Dienstleistungen neu entwickelt oder wesentlich verbessert haben. Ausgenommen sind nach der Förderrichtlinie unter anderem Consulting-Unternehmen, Marketing-Unternehmen und Research-Anbieter.
+
+**Was gefördert wird:** die vom Messeveranstalter in Rechnung gestellten Kosten für Standmiete und Standbau auf dem Gemeinschaftsstand. Weitere Leistungen, die Sie beim Veranstalter zusätzlich bestellen, sind nicht förderfähig. Wer außerhalb des Gemeinschaftsstands ausstellt, wird nicht gefördert.
+
+**Wie viel:** 60 Prozent der förderfähigen Ausgaben bei den ersten zwei Teilnahmen und 50 Prozent ab der dritten, bis zu 7.500 Euro pro Aussteller und Messe. Förderfähig sind höchstens drei Teilnahmen an derselben Messe. Ergibt die Berechnung weniger als 500 Euro, gibt es keine Förderung.
+
+**Der Ablauf laut BAFA:**
+
+1. Fragen Sie beim Messeveranstalter nach, ob auf dem Gemeinschaftsstand noch Platz ist.
+2. Melden Sie sich spätestens acht Wochen vor Messebeginn beim Veranstalter für den Gemeinschaftsstand an und stellen Sie direkt danach den Antrag beim BAFA.
+3. Das BAFA prüft die Förderfähigkeit und teilt ein positives Ergebnis Ihnen und dem Veranstalter per E-Mail mit. Erst dann lässt der Veranstalter Sie offiziell zu.
+4. Sie leiten die Standrechnung des Veranstalters an das BAFA weiter und erhalten den Zuwendungsbescheid.
+5. Nach Bezahlung der Standrechnung reichen Sie den Verwendungsnachweis online ein, mit einem Kontoauszug als Zahlungsbeleg. Das Geld kommt laut BAFA etwa zehn Tage nach Eingang des Nachweises.
+
+Die Förderrichtlinie ist bis zum 31. Dezember 2028 befristet. Über Anträge wird in der Reihenfolge ihres Eingangs entschieden, und die Förderung steht unter dem Vorbehalt verfügbarer Haushaltsmittel.
+
+## Die Liste der Messen 2027
+
+Welche Messen dazugehören, legt das Ministerium jedes Jahr fest. Die Liste für 2027 trägt den Stand 04.11.2026; auf der Programmseite des BAFA war am Recherchetag noch der Stand 21.10.2026 angegeben. Wir haben in der Liste 45 Einträge gezählt, davon 30 im ersten Halbjahr.
+
+Aus Nordrhein-Westfalen stehen unter anderem auf der Liste:
+
+- IPM Essen, 26. bis 29. Januar 2027
+- E-world energy & water in Essen, 16. bis 18. Februar 2027
+- Anuga FoodTec in Köln, 23. bis 26. Februar 2027
+- FIBO in Köln, 8. bis 11. April 2027
+- interzum in Köln, 11. bis 14. Mai 2027
+- GIFA, METEC, THERMPROCESS und NEWCAST in Düsseldorf, 21. bis 25. Juni 2027
+- A+A in Düsseldorf, 19. bis 22. Oktober 2027
+- MEDICA und COMPAMED in Düsseldorf, 15. bis 18. November 2027
+
+Außerhalb des Landes gehören zum Beispiel die BAU in München (11. bis 15. Januar 2027), die LogiMAT in Stuttgart (16. bis 18. März 2027) und die HANNOVER MESSE (5. bis 8. April 2027) dazu.
+
+Prüfen Sie den Termin Ihrer Messe beim Veranstalter. Die Liste weicht an mindestens zwei Stellen von dessen Angaben ab: Für die DMEXCO nennt sie den 12. bis 22. September 2027, der Veranstalter den 22. und 23. September 2027. Die spoga+gafa steht in der Liste im September, der Veranstalter nennt den 15. bis 17. Juni 2027.
+
+## Auslandsmessen: Gemeinschaftsstände des Bundes
+
+Für Messen im Ausland arbeitet der Bund anders. Das Ministerium beteiligt sich an internationalen Messen und bietet deutschen Unternehmen Plätze auf Gemeinschaftsständen unter dem Dach „made in Germany“ an. Die teilnehmenden Unternehmen zahlen einen Beteiligungspreis für Standfläche, Standbau und Betreuung. Das BAFA schreibt dazu ausdrücklich: Das Programm kommt den Firmen indirekt zugute, direkte Zahlungen an Aussteller werden nicht geleistet.
+
+Ein Antragsverfahren gibt es nach dem Flyer des Ministeriums nicht, Unternehmen melden sich an. Teilnahmeberechtigt sind Unternehmen, die Produkte oder Dienstleistungen mit Bezug zu „made in Germany“ zeigen. Der Flyer mit Stand Februar 2026 spricht von rund 250 Gemeinschaftsbeteiligungen jährlich in etwa 50 Ländern. Das aktuelle Programm mit Terminen, Ländern und Ansprechpartnern steht auf dem Portal german-pavilion.com.
+
+Für den eigenen Standbau heißt das: Auf einem Gemeinschaftsstand des Bundes ist der Standbau einheitlich und Teil des Pakets.
+
+## Nordrhein-Westfalen: Messe meets Mittelstand
+
+Das Landesprogramm richtet sich an kleine und mittlere Unternehmen mit Haupt- oder Zweigniederlassung oder selbstständiger Betriebsstätte in Nordrhein-Westfalen. Es gilt in der Fassung des Runderlasses vom 22. Oktober 2025.
+
+**Nur noch Auslandsmessen:** Die frühere Fassung, gültig bis 23.10.2025, förderte auch internationale Messen im Inland. Die geltende Richtlinie nennt nur noch Auslandsmessen. Gefördert werden grundsätzlich Messen, die beim Ausstellungs- und Messe-Ausschuss der Deutschen Wirtschaft (AUMA) gelistet sind. Für Messen, auf denen Land oder Bund schon mit einem Firmengemeinschaftsstand vertreten sind, gibt es keine Förderung.
+
+**Wer gefördert wird:** Unternehmen mit weniger als 250 Mitarbeitern. Bei Messen in der Europäischen Union und der Europäischen Freihandelszone gilt: Jahresumsatz des Vorjahres höchstens zehn Millionen Euro oder Bilanzsumme nicht mehr als zehn Millionen Euro. Bei Messen in allen übrigen Ländern liegt die Grenze bei höchstens 50 Millionen Euro Jahresumsatz oder 43 Millionen Euro Bilanzsumme. In beiden Fällen verlangt die Richtlinie außerdem, dass das Unternehmen unabhängig ist. Unternehmensberatungen, Messevertreter, Kammern, Verbände und Cluster sind von der Förderung ausgeschlossen.
+
+**Was gefördert wird**, jeweils mit den Nettobeträgen der Rechnungen:
+
+- Maßnahmen zur Vorbereitung wie Mailings, Anzeigen oder der Eintrag in den Veranstaltungskatalog
+- Standmiete
+- Standauf- und -abbau durch Dritte
+- externe Dolmetscher während der Messelaufzeit
+- Transportkosten für Exponate einschließlich Transportversicherung
+
+**Wie viel:** bis zu 50 Prozent der förderfähigen Kosten, höchstens 7.500 Euro pro Unternehmen und Jahr. Bleibt die Förderung für eine Messe darunter, kann im selben Jahr eine weitere Messe gefördert werden. Für Messen in einem bestimmten Zielland gibt es grundsätzlich höchstens für drei Messejahre Geld; Förderungen für dasselbe Zielland aus den letzten zehn Jahren werden angerechnet.
+
+**Antrag:** spätestens zwei Monate vor Beginn des Vorhabens bei der NRW.Global Business GmbH, zusammen mit der De-minimis-Erklärung und einem Kostenplan. Nach Abschluss der Maßnahme legen Sie innerhalb von drei Monaten die Nachweise vor; als Zahlungsbelege werden nur Kontoauszüge anerkannt. Die Richtlinie tritt am 31. Dezember 2027 außer Kraft.
+
+**Auflage für den Stand:** Das Erscheinungsbild auf der Messe soll deutlich machen, dass es sich um eine Beteiligung nordrhein-westfälischer Unternehmen handelt. Die Richtlinie verlangt dafür das Landeslogo Nordrhein-Westfalens.
+
+## Andere Länder: eigene Programme
+
+Jedes Land regelt seine Messeförderung selbst. Die Förderdatenbank des Bundes führt Programme mehrerer Länder, unter anderem für Hessen, Niedersachsen und Bayern. Ob die dort abgelegten Fassungen 2027 gelten, konnten wir am Recherchetag für keines davon belegen; wir nennen deshalb keine Sätze und Beträge. Fragen Sie bei der Förderbank oder der Wirtschaftsförderung Ihres Landes nach, bevor Sie sich zur Messe anmelden.
+
+## Was bei den Zuschüssen gilt
+
+- **Die Fristen laufen vor der Messe ab.** Beim Bundesprogramm melden Sie sich erst beim Veranstalter an und stellen direkt danach den Antrag. In Nordrhein-Westfalen muss der Antrag spätestens zwei Monate vor Beginn des Vorhabens gestellt sein; klären Sie mit NRW.Global Business, ab wann Sie Verträge schließen dürfen.
+- **Kein Rechtsanspruch.** Beim Bundesprogramm für junge Unternehmen und in Nordrhein-Westfalen entscheidet die Bewilligungsstelle nach Ermessen und im Rahmen der verfügbaren Haushaltsmittel.
+- **Keine doppelte Förderung.** Wer für dieselbe Messeteilnahme schon andere öffentliche Mittel erhält, ist beim Bundesprogramm und in Nordrhein-Westfalen ausgeschlossen.
+- **De-minimis.** Die Zuschüsse des Bundesprogramms und des Landes Nordrhein-Westfalen sind De-minimis-Beihilfen. Das Bundesprogramm schließt Unternehmen aus, die in drei Jahren bereits 300.000 Euro solcher Beihilfen erhalten haben.
+- **Belege.** Beide Programme zahlen gegen Rechnung und Kontoauszug. In Nordrhein-Westfalen gehören außerdem ein Fragebogen und eine Fotodokumentation zu den Nachweisen, auf der die Logo-Aufkleber von NRW.Global Business zu erkennen sind.
+
+## Was das für Ihren Messestand heißt
+
+Die folgenden Punkte sind unsere Einordnung für die Standplanung. Ob und in welcher Höhe ein Posten gefördert wird, entscheidet die Bewilligungsstelle.
+
+1. Beim Bundesprogramm für junge Unternehmen stellt der Messeveranstalter Standmiete und Standbau in Rechnung; ein Stand außerhalb des Gemeinschaftsstands wird nicht gefördert. Auf den Gemeinschaftsständen im Ausland gehört der einheitliche Standbau zum Beteiligungspreis.
+2. Beim Landesprogramm in Nordrhein-Westfalen ist der Standauf- und -abbau durch Dritte ausdrücklich förderfähig. Der Auf- und Abbau Ihres Standes durch einen Messebauer kann also in den Kostenplan. Ob die Kosten des Standbaus selbst dazugehören, also Fertigung und Gestaltung oder ein gemieteter Stand, sagt die Richtlinie nicht; fragen Sie NRW.Global Business. Transport fördert sie für Exponate.
+3. Planen Sie die Förderung vor dem Standkonzept ein. Wer zwei Monate vor Beginn des Vorhabens den Antrag stellen muss, braucht bis dahin belastbare Zahlen für Standmiete, Auf- und Abbau und den Transport der Exponate.
+4. Achten Sie darauf, dass Angebot und Rechnung die förderfähigen Leistungen getrennt ausweisen. Die Förderung bezieht sich in Nordrhein-Westfalen auf Nettobeträge.
+
+Sie planen eine Auslandsmesse und brauchen Zahlen für den Kostenplan? [Schreiben Sie uns](/kontakt), wir nennen Ihnen die Kosten für Ihren Stand. Ob und welche Posten davon gefördert werden, entscheidet die Bewilligungsstelle; Auskunft zur Förderung erhalten Sie dort.
+
+## Quellen
+
+Alle Dokumente abgerufen am 10. November 2026.
+
+- [BAFA: Messeprogramm Young Innovators](https://www.bafa.de/DE/Wirtschaft/Auslandsmarkterschliessung/Messeprogramm_junge_innovative_Unternehmen/messeprogramm_junge_innovative_unternehmen_node.html)
+- [Bundesministerium für Wirtschaft und Energie: Liste der förderfähigen Messen 2027, Stand 04.11.2026](https://www.bafa.de/SharedDocs/Downloads/DE/Wirtschaft/miu_veranstaltungen_2027.pdf?__blob=publicationFile)
+- [Förderdatenbank des Bundes: Young Innovators mit Wortlaut der Förderrichtlinie vom 6. März 2024](https://www.foerderdatenbank.de/FDB/Content/DE/Foerderprogramm/Bund/BMWi/teilnahme-junger-unternehmen-leitmessen.html)
+- [BAFA: Auslandsmesseprogramm](https://www.bafa.de/DE/Wirtschaft/Auslandsmarkterschliessung/Auslandsmesseprogramm/auslandsmesseprogramm_node.html)
+- [Bundesministerium für Wirtschaft und Energie: Flyer zum Auslandsmesseprogramm, Stand Februar 2026](https://www.bafa.de/SharedDocs/Downloads/DE/Wirtschaft/amp_flyer_2026.pdf?__blob=publicationFile&v=3)
+- [Land Nordrhein-Westfalen: Förderrichtlinie Messe meets Mittelstand NRW vom 22. Oktober 2025](https://nrwglobalbusiness.com/fileadmin/Trade_Events/Messe_meets_Mittelstand/Formulare/Foerderrichtlinie_MMM.pdf)
+- [Land Nordrhein-Westfalen: frühere Fassung der Förderrichtlinie, gültig bis 23.10.2025](https://recht.nrw.de/lrmb/verwaltungsvorschrift/foerderrichtlinie-messe-meets-mittelstand-nrw-runderlass-des/)
+- [NRW.BANK: Messe meets Mittelstand NRW](https://www.nrwbank.de/de/foerderung/foerderprodukte/15385/messe-meets-mittelstand-nrw.html)
+- [Förderdatenbank des Bundes: Messeförderung Hessen](https://www.foerderdatenbank.de/FDB/Content/DE/Foerderprogramm/Land/Hessen/messefoerderung.html)
+- [Förderdatenbank des Bundes: Messepräsentationen Niedersachsen](https://www.foerderdatenbank.de/FDB/Content/DE/Foerderprogramm/Land/Niedersachsen/messepraesentationen.html)
+- [Förderdatenbank des Bundes: Mittelständisches Messeprogramm Bayern](https://www.foerderdatenbank.de/FDB/Content/DE/Foerderprogramm/Land/Bayern/mittelstaendisches-messeprogramm.html)
+- [DMEXCO: Termin 2027](https://dmexco.com/de/)
+- [spoga+gafa: Termin 2027](https://www.spogagafa.de/)`,
+    category: 'Förderung',
+    imageUrl: '',
+    publishedAt: new Date('2026-11-10').getTime()
   }
 ]
