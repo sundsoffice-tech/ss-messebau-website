@@ -593,10 +593,13 @@ function ersetzeAlle(array $u, array $stellen): bool {
 /** Altlast: $anzahl Herzschlag-Zeilen, drei Tage alt, im Format des Browsers. */
 function altlast(array $u, int $anzahl): void {
     $p = db($u);
-    $s = $p->prepare("WITH RECURSIVE n(i) AS (SELECT 1 UNION ALL SELECT i + 1 FROM n WHERE i < :anzahl)
+    // Die Zahl steht als Zahl im Befehl und nicht als Platzhalter: PDO bindet
+    // Platzhalter als Text, und "i < '30000'" ist in SQLite für jede Zahl wahr.
+    // Die Rekursion endete dann nie (gemessen 10.11.2026: 16 GB in sechs Minuten).
+    $s = $p->prepare('WITH RECURSIVE n(i) AS (SELECT 1 UNION ALL SELECT i + 1 FROM n WHERE i < ' . $anzahl . ")
         INSERT INTO analytics_events (event, ts, session_id, visitor_id, url)
         SELECT 'heartbeat', :ts, 'altlast-' || i, 'altlast', '/probe' FROM n");
-    $s->execute([':anzahl' => $anzahl, ':ts' => gmdate('Y-m-d\TH:i:s', time() - 3 * TAG) . '.000Z']);
+    $s->execute([':ts' => gmdate('Y-m-d\TH:i:s', time() - 3 * TAG) . '.000Z']);
 }
 
 function altlastRest(array $u): int {
