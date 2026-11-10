@@ -566,7 +566,7 @@ Viel Erfolg beim Messeauftritt!`,
   },
   {
     id: '3',
-    title: 'Nachhaltiger Messebau: Gut für Umwelt und Budget',
+    title: 'Nachhaltiger Messebau: Systemstände mehrfach nutzen',
     slug: 'nachhaltiger-messebau',
     excerpt: 'Wiederverwendbare Systeme, lokale Partner, effiziente Logistik: So geht moderner, nachhaltiger Messebau.',
     content: `**Autor:** S&S Messebau GbR
@@ -577,7 +577,7 @@ Viel Erfolg beim Messeauftritt!`,
 
 Nachhaltigkeit im Messebau – für viele Aussteller klingt das nach idealistischen Träumereien. Die Realität sieht anders aus: Nachhaltige Messestände sind nicht nur ökologisch sinnvoll, sondern auch wirtschaftlich attraktiver als viele denken.
 
-Wir bei S&S Messebau setzen auf Stände, die Umwelt und Budget schonen – und das ohne Qualitätsverluste. In diesem Artikel zeigen wir euch, was nachhaltiger Messebau wirklich bedeutet, wo die größten Potenziale liegen und wie ihr damit euer Markenimage stärkt.
+Wir bei S&S Messebau setzen auf Stände, die sich mehrfach einsetzen lassen – und das ohne Qualitätsverluste. In diesem Artikel zeigen wir euch, was nachhaltiger Messebau wirklich bedeutet, wo die größten Potenziale liegen und wie ihr damit euer Markenimage stärkt.
 
 ---
 

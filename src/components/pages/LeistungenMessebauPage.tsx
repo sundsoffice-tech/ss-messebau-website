@@ -100,7 +100,7 @@ export function LeistungenMessebauPage() {
     },
     {
       q: 'Kann ich meinen bestehenden Messestand umbauen oder erweitern lassen?',
-      a: 'Selbstverständlich. Wir modernisieren bestehende Messestände, passen sie an neue Standflächen an oder erweitern sie um zusätzliche Elemente. Das spart Kosten und ist nachhaltig.',
+      a: 'Selbstverständlich. Wir modernisieren bestehende Messestände, passen sie an neue Standflächen an oder erweitern sie um zusätzliche Elemente. Das spart Material und Kosten.',
     },
   ]
 

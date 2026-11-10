@@ -38,7 +38,7 @@
   },
   "/leistungen/boeden-ausstattung": {
     "title": "Böden & Ausstattung – Premium-Messeböden & Möblierung | S&S Messebau",
-    "description": "Messeböden & Standausstattung: Teppich, Vinyl, Parkett, Möblierung & Beleuchtung. Nachhaltige Premium-Qualität für Ihren Messestand."
+    "description": "Messeböden & Standausstattung: Teppich, Vinyl, Parkett, Möblierung & Beleuchtung. Premium-Qualität für Ihren Messestand."
   },
   "/leistungen/digital-experience": {
     "title": "Digital Experience – AR/VR & Interaktive Messelösungen | S&S Messebau",
@@ -62,7 +62,7 @@
   },
   "/nachhaltigkeit": {
     "title": "Nachhaltiger Messebau – Systembau & Wiederverwendung | S&S Messebau",
-    "description": "Nachhaltige Messestände mit Systembauweise und Wiederverwendung. S&S Messebau für umweltbewusste Messeauftritte."
+    "description": "Messestände in Systembauweise: Bauteile werden eingelagert und wieder eingesetzt. So arbeitet S&S Messebau."
   },
   "/blog": {
     "title": "Blog & Ratgeber – Messebau-Tipps | S&S Messebau",
@@ -117,7 +117,7 @@
     "ogType": "article"
   },
   "/blog/nachhaltiger-messebau": {
-    "title": "Nachhaltiger Messebau: Gut für Umwelt und Budget | S&S Messebau",
+    "title": "Nachhaltiger Messebau: Systemstände mehrfach nutzen | S&S Messebau",
     "description": "Wiederverwendbare Systeme, lokale Partner, effiziente Logistik: So geht moderner, nachhaltiger Messebau.",
     "ogType": "article"
   },
