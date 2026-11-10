@@ -77,14 +77,22 @@ define('BEREINIGUNG_VERSUCHE', 3);
 // vollständigen Lauf vergangen ist.
 define('BEREINIGUNG_UEBERFAELLIG', 172800);
 
-/** Inhalt der Marke, je Aufruf höchstens einmal gelesen. false = Datei fehlt. */
-function bereinigungMarkeLesen() {
+/**
+ * Inhalt der Marke, je Aufruf höchstens einmal gelesen.
+ * Rückgabe: ['da' => gab es die Datei, 'stand' => ihr Inhalt oder null].
+ * Ob es die Datei gibt, wird VOR dem Lesen festgestellt und nicht danach:
+ * Legt ein gleichzeitiger Aufruf sie in diesem Augenblick an, gilt sie hier
+ * noch als fehlend, statt als vorhanden und unlesbar (gemessen 10.11.2026:
+ * einer von acht gleichzeitigen Abrufen zeigte sonst "ueberfaellig").
+ */
+function bereinigungMarkeLesen(): array {
     static $gelesen = null;
     if ($gelesen === null) {
-        $roh = @file_get_contents(BEREINIGUNG_MARKE);
-        $gelesen = ['stand' => $roh === false ? false : json_decode($roh, true)];
+        $da = is_file(BEREINIGUNG_MARKE);
+        $roh = $da ? @file_get_contents(BEREINIGUNG_MARKE) : false;
+        $gelesen = ['da' => $da, 'lesbar' => $roh !== false, 'stand' => $roh === false ? null : json_decode($roh, true)];
     }
-    return $gelesen['stand'];
+    return $gelesen;
 }
 
 /**
@@ -127,12 +135,14 @@ function bereinigungFaellig($stand, int $jetzt): bool {
  */
 function bereinigungZustand(?int $jetzt = null): string {
     $jetzt = $jetzt ?? time();
-    $stand = bereinigungMarkeLesen();
-    if ($stand === false) {
-        // Fehlt die Datei, ist nie ein Lauf angelaufen. Ist sie da und nur
-        // nicht lesbar, ist der Zustand unbekannt und gilt als überfällig.
-        return file_exists(BEREINIGUNG_MARKE) ? 'ueberfaellig' : 'ok';
+    $marke = bereinigungMarkeLesen();
+    if (!$marke['da']) {
+        return 'ok'; // nie ein Lauf angelaufen
     }
+    if (!$marke['lesbar']) {
+        return 'ueberfaellig'; // Datei da, aber nicht lesbar: Zustand unbekannt
+    }
+    $stand = $marke['stand'];
     $bezug = null;
     if (is_array($stand) && is_int($stand['erfolg_zeit'] ?? null)) {
         $bezug = $stand['erfolg_zeit'];
@@ -163,7 +173,7 @@ function bereinigungVormerken(): void {
     try {
         // Ohne Sperre gelesen: Ein halb geschriebener Stand gilt als "fällig",
         // die Entscheidung fällt dann unter der Sperre in bereinigungLaufen().
-        if (bereinigungFaellig(bereinigungMarkeLesen(), time())) {
+        if (bereinigungFaellig(bereinigungMarkeLesen()['stand'], time())) {
             register_shutdown_function('bereinigungNachAntwort');
         }
     } catch (\Throwable $e) {
@@ -353,8 +363,8 @@ function bereinigungLaufen(): void {
  */
 function bereinigungAusfuehren(int $bereinigungFristNs): array {
     require_once __DIR__ . '/db.php';
-    // PDO wartet sonst bis zu 60 Sekunden auf eine gesperrte Datenbank.
-    getDB()->setAttribute(PDO::ATTR_TIMEOUT, BEREINIGUNG_DB_WARTEN);
+    // Die Wartezeit je Datenbankbefehl (BEREINIGUNG_DB_WARTEN) setzt
+    // analytics-cleanup.php auf seiner eigenen Verbindung.
     $bereinigungIntern = true;
     $ergebnis = require __DIR__ . '/analytics-cleanup.php';
     if (!is_array($ergebnis)) {

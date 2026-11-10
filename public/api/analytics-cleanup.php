@@ -46,7 +46,25 @@ if (!$bereinigungIntern) {
     if (!requireAuth()) exit;
 }
 
-$db = getDB();
+// Eigene Verbindung für die Bereinigung, nicht die gemeinsame aus getDB():
+// Auf der gemeinsamen kann ein Lesebefehl des aufrufenden Skripts noch offen
+// sein (collect.php, auth.php holen je eine Zeile und schließen den Befehl
+// nicht). Solange er offen ist, hält die Verbindung ihren Lesestand fest, und
+// jeder Schreibbefehl darauf scheitert sofort mit "database is locked", sobald
+// ein anderer Aufruf inzwischen geschrieben hat; die Wartezeit greift dann
+// nicht (gemessen 10.11.2026: Abbruch nach der zweiten Portion, als ein zweiter
+// Schreiber dazukam). Aus demselben Grund schließt diese Datei jeden eigenen
+// Lesebefehl gleich nach dem Lesen (closeCursor).
+getDB(); // legt Datenbank und Schema an, falls sie fehlen
+$db = new PDO('sqlite:' . DB_PATH, null, null, [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+]);
+if ($bereinigungIntern && defined('BEREINIGUNG_DB_WARTEN')) {
+    // Der Lauf ohne Handgriff wartet je Befehl nur kurz auf die Schreibsperre
+    // (PDO wartet sonst bis zu 60 Sekunden).
+    $db->setAttribute(PDO::ATTR_TIMEOUT, BEREINIGUNG_DB_WARTEN);
+}
 
 // ─── Grenzen des Laufs ──────────────────────────────────────────────────────
 // Portion: Die Messzeilen werden nicht mehr mit einem einzigen DELETE je Regel
@@ -77,6 +95,7 @@ $fristNs = ($bereinigungIntern && isset($bereinigungFristNs) && is_int($bereinig
 $stmt = $db->prepare("SELECT config_value FROM analytics_config WHERE config_key = 'retention_days'");
 $stmt->execute();
 $row = $stmt->fetch();
+$stmt->closeCursor();
 $retentionDays = $row ? intval($row['config_value']) : 90;
 
 // Die Grenzen werden in UTC gebildet (gmdate), weil der Zeitstempel "ts" der
@@ -130,7 +149,9 @@ $datenbankTeil = function () use ($db, $zeilenRegeln, $portionZeilen, $portionPa
             // (ein Blick in den Index, keine Schreibsperre).
             $offen = $db->prepare("SELECT 1 FROM analytics_events WHERE $bedingung LIMIT 1");
             $offen->execute([':grenze' => $grenze]);
-            if ($offen->fetchColumn() !== false) {
+            $nochFaellig = $offen->fetchColumn() !== false;
+            $offen->closeCursor();
+            if ($nochFaellig) {
                 $dbStand['rest'] = true;
                 return;
             }
@@ -211,6 +232,7 @@ try {
     $teilStmt = $db->prepare("SELECT config_value FROM analytics_config WHERE config_key = 'cleanup_teil_count'");
     $teilStmt->execute();
     $teilZuvor = (int)$teilStmt->fetchColumn();
+    $teilStmt->closeCursor();
 
     // Store cleanup metadata
     $updateStmt = $db->prepare("

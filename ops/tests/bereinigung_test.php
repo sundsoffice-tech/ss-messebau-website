@@ -1036,8 +1036,8 @@ if (ersetzeAlle($u, [['bereinigung-anstoss.php', "define('BEREINIGUNG_BUDGET_MS'
     pruefe('die Dateien sind schon nach dem ersten Anlauf gelöscht, obwohl die Datenbank nicht fertig ist',
         ($nachErstem['dateien'] ?? ['?']) === [], 'noch da: ' . implode(', ', $nachErstem['dateien'] ?? []));
     pruefe('last_cleanup ist nach dem ersten Anlauf nicht geschrieben, kein Erfolg in der Marke',
-        ($nachErstem['last_cleanup'] ?? 'x') === null && !array_key_exists('erfolg_zeit', $nachErstem['marke'] ?? []),
-        json_encode($nachErstem['last_cleanup'] ?? null));
+        is_array($nachErstem) && $nachErstem['last_cleanup'] === null && !array_key_exists('erfolg_zeit', $nachErstem['marke']),
+        json_encode($nachErstem));
     pruefe('health.php antwortete dabei Wort für Wort wie sonst ("status": "ok", "bereinigung": "ok")',
         $ersteAntwort !== null && wieSonst($ersteAntwort, $basis), $ersteAntwort !== null ? kurz($ersteAntwort) : '');
     $faellt = count($reste) >= 2;
@@ -1266,7 +1266,10 @@ if ($u === null) {
 } else {
     schema($u);
     $soll = fuelle($u);
-    $grosseAltlast = 600000;
+    // So viele Zeilen, dass der eine DELETE länger rechnet als Zeitgrenze (1 s)
+    // plus Nachfrist von PHP (hard_timeout, 2 s): gemessen auf hel1 rund
+    // 4 µs je Zeile, 600.000 Zeilen waren in 2,8 s durch.
+    $grosseAltlast = 2500000;
     altlast($u, $grosseAltlast);
     $original = [];
     foreach (['analytics-cleanup.php', 'bereinigung-anstoss.php'] as $datei) {
