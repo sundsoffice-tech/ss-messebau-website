@@ -838,7 +838,23 @@ if (typeof window !== 'undefined') {
   window.addEventListener('storage', (ereignis) => {
     const name = ereignis.key
     if (name !== null && name !== CONSENT_STORAGE_KEY) return
-    if (!isTrackingAllowed()) stopStatistics()
+    // Maßgeblich ist der gemeldete Wert, nicht nur der Zustand beim Verarbeiten: Ein Tab im
+    // Hintergrund kann den Widerruf erst bekommen, nachdem dort wieder zugestimmt wurde. Auch
+    // dann endet die laufende Zählung; die nächste beginnt mit neuer Kennung.
+    const widerrufGemeldet = name !== null && ereignis.newValue !== 'granted'
+    if (!isTrackingAllowed()) {
+      stopStatistics()
+      return
+    }
+    if (!widerrufGemeldet) return
+    // Die Zustimmung besteht schon wieder: Der andere Tab hat beim Widerruf Kennung und
+    // Warteschlange entfernt und zählt seitdem neu. Was jetzt im gemeinsamen Speicher liegt,
+    // gehört zu dieser neuen Zählung und bleibt. Hier endet nur die alte Sitzung dieses Tabs;
+    // die neue beginnt sofort mit Sitzungsstart und Seitenaufruf der laufenden Seite.
+    try {
+      for (const key of STATISTICS_SESSION_KEYS) sessionStorage.removeItem(key)
+    } catch { /* ignore */ }
+    trackPageView()
   })
 }
 

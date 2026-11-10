@@ -74,15 +74,30 @@ async function seiteLaden(ziel: string) {
   return { analytics, utm, tracker, deepLinking }
 }
 
+/**
+ * Jedes `seiteLaden` lädt die Module neu, und jedes Modul hängt seine `storage`-Lauscher
+ * ans Fenster. Im Browser gibt es je Seite genau einen Satz; hier blieben die Lauscher
+ * früherer Fälle sonst hängen und antworteten mit. Deshalb werden sie je Fall wieder entfernt.
+ */
+let storageLauscher: EventListenerOrEventListenerObject[] = []
+
 beforeEach(() => {
   localStorage.clear()
   sessionStorage.clear()
   vi.useFakeTimers()
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }))
   window.history.pushState({}, '', '/')
+  storageLauscher = []
+  const anhaengen = window.addEventListener.bind(window)
+  vi.spyOn(window, 'addEventListener').mockImplementation(((typ: string, lauscher: EventListenerOrEventListenerObject, optionen?: boolean | AddEventListenerOptions) => {
+    if (typ === 'storage') storageLauscher.push(lauscher)
+    anhaengen(typ, lauscher, optionen)
+  }) as typeof window.addEventListener)
 })
 
 afterEach(() => {
+  for (const lauscher of storageLauscher) window.removeEventListener('storage', lauscher)
+  vi.restoreAllMocks()
   vi.useRealTimers()
   vi.unstubAllGlobals()
 })
@@ -326,6 +341,95 @@ describe('Zustimmung erst auf der zweiten Seite', () => {
     expect(ereignisse.map((e) => e.event)).toEqual(['session_start', 'page_view'])
     expect(ereignisse.map(quelle)).toEqual([QUELLE, QUELLE])
     expect(ereignisse.map((e) => e.url)).toEqual(['/kontakt', '/kontakt'])
+  })
+})
+
+describe('Widerruf in einem anderen Tab, in diesem Tab erst später verarbeitet', () => {
+  it('die laufende Zählung endet, auch wenn inzwischen wieder zugestimmt ist; die nächste hat eine neue Kennung', async () => {
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    const { tracker } = await seiteLaden('/')
+    const vorher = warteschlange()
+    expect(vorher.map((e) => e.event)).toEqual(['session_start', 'page_view'])
+
+    // Der andere Tab hat abgelehnt (Kennung, Zähler und Warteschlange im gemeinsamen Speicher
+    // sind damit weg) und wieder zugestimmt; seine neue Zählung liegt schon im Speicher.
+    for (const name of ['ss_analytics_visitor', 'ss_visit_count', 'ss_last_visit', QUEUE_KEY]) localStorage.removeItem(name)
+    localStorage.setItem('ss_analytics_visitor', 'besucher-neu')
+    const ausAnderemTab = { event: 'page_view', url: '/anderer-tab', session_id: 'sitzung-anderer-tab' }
+    localStorage.setItem(QUEUE_KEY, JSON.stringify([ausAnderemTab]))
+
+    // Hier kommt erst jetzt die Ablehnung an.
+    window.dispatchEvent(new StorageEvent('storage', { key: CONSENT_KEY, newValue: 'denied' }))
+
+    const danach = warteschlange()
+    // Die Zählung des anderen Tabs bleibt unberührt, seine Besucherkennung auch
+    expect(danach[0]).toEqual(ausAnderemTab)
+    expect(localStorage.getItem('ss_analytics_visitor')).toBe('besucher-neu')
+    // Dieser Tab beginnt sofort neu: Sitzungsstart und Seitenaufruf, neue Sitzungskennung
+    const eigene = danach.slice(1)
+    expect(eigene.map((e) => e.event)).toEqual(['session_start', 'page_view'])
+    expect(eigene[0].session_id).not.toBe(vorher[0].session_id)
+    expect(eigene[1].session_id).toBe(eigene[0].session_id)
+    expect(eigene.map((e) => e.visitor_id)).toEqual(['besucher-neu', 'besucher-neu'])
+
+    // Der nächste Seitenwechsel gehört zur selben neuen Sitzung, ohne zweiten Sitzungsstart
+    window.history.pushState(null, '', '/kontakt')
+    tracker.trackPageView()
+    const spaeter = warteschlange().slice(1)
+    expect(spaeter.map((e) => e.event)).toEqual(['session_start', 'page_view', 'page_view'])
+    expect(spaeter[2].session_id).toBe(eigene[0].session_id)
+  })
+
+  it('Widerruf ohne erneute Zustimmung: Zählung und Warteschlange sind weg, nichts beginnt neu', async () => {
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    await seiteLaden('/')
+    expect(warteschlange().length).toBe(2)
+
+    localStorage.setItem(CONSENT_KEY, 'denied')
+    window.dispatchEvent(new StorageEvent('storage', { key: CONSENT_KEY, newValue: 'denied' }))
+
+    expect(warteschlange()).toEqual([])
+    expect(schluessel(sessionStorage)).toEqual([])
+    expect(schluessel(localStorage)).toEqual([CONSENT_KEY])
+  })
+
+  it('ein geleerter Speicher bei bestehender Zustimmung lässt Quelle und Zählung stehen', async () => {
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    const { utm, deepLinking } = await seiteLaden(KAMPAGNE)
+    deepLinking.updateUrlWithSection('hero')
+    const kennung = warteschlange()[0].session_id
+
+    window.dispatchEvent(new StorageEvent('storage', { key: null }))
+
+    expect(utm.getUtmParams()).toEqual(QUELLE)
+    expect(warteschlange().map((e) => e.session_id)).toEqual([kennung, kennung])
+  })
+
+  it('liegt der Eintrag aus einer Zustimmung und ein anderer Tab lehnt ab, ist er weg', async () => {
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    await seiteLaden(KAMPAGNE)
+    expect(sessionStorage.getItem(UTM_KEY)).not.toBeNull()
+
+    localStorage.setItem(CONSENT_KEY, 'denied')
+    window.dispatchEvent(new StorageEvent('storage', { key: CONSENT_KEY, newValue: 'denied' }))
+
+    expect(sessionStorage.getItem(UTM_KEY)).toBeNull()
+  })
+})
+
+describe('Veränderter Eintrag im Speicher des Besuchers', () => {
+  it.each([
+    ['Zeichenkette', '"text"', {}],
+    ['Zahl', '5', {}],
+    ['Feld', '["a","b"]', {}],
+    ['fremde Felder', '{"message":"x","utm_source":"google","utm_medium":5,"utm_term":""}', { utm_source: 'google' }],
+  ])('%s: die Anfrage bekommt nur die fünf Kampagnen-Felder als Zeichenketten', async (_name, inhalt, erwartet) => {
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    sessionStorage.setItem(UTM_KEY, inhalt)
+
+    const { utm } = await seiteLaden('/')
+
+    expect(utm.getUtmParams()).toEqual(erwartet)
   })
 })
 
