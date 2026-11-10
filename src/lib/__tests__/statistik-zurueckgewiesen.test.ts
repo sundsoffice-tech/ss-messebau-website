@@ -6,7 +6,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
  * Status aus:
  * 1. Der Stapel bleibt in der Warteschlange, in seiner Reihenfolge.
  * 2. Der Tracker wiederholt nicht von selbst: ohne neues Ereignis kein weiterer Abruf.
- * 3. Mit dem nächsten Ereignis geht derselbe Stapel wieder mit, die älteren zuerst.
+ * 3. Mit dem nächsten Ereignis geht derselbe Stapel wieder mit, die älteren zuerst,
+ *    auch wenn das Ereignis während des abgelehnten Abrufs dazukam.
  * 4. Nimmt der Server ihn dann an (200), ist die Warteschlange leer.
  */
 
@@ -74,6 +75,26 @@ describe.each([429, 503])('Antwort %i von collect.php', (status) => {
     await vi.advanceTimersByTimeAsync(2_100)
     expect(fetchMock).toHaveBeenCalledTimes(2)
     expect(gesendet(1)).toEqual(['session_start', 'page_view', 'phone_click', 'phone_click'])
+    expect(warteschlange()).toEqual([])
+  })
+
+  it('ein Ereignis, das während des Abrufs dazukommt, steht nach der Ablehnung hinter dem zurückgelegten Stapel', async () => {
+    let antworten: (antwort: { ok: boolean; status: number }) => void = () => {}
+    fetchMock.mockImplementationOnce(() => new Promise((ok) => { antworten = ok }))
+    const tracker = await besucherMitZustimmung()
+
+    await vi.advanceTimersByTimeAsync(2_100)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    tracker.trackCTAClick('angebot')
+    antworten({ ok: false, status })
+    await vi.advanceTimersByTimeAsync(100)
+
+    expect(warteschlange().map((e) => e.event)).toEqual(['session_start', 'page_view', 'phone_click', 'cta_click'])
+
+    // Der nächste Abruf sendet in dieser Reihenfolge: der Sitzungsstart zuerst
+    await vi.advanceTimersByTimeAsync(2_100)
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(gesendet(1)).toEqual(['session_start', 'page_view', 'phone_click', 'cta_click'])
     expect(warteschlange()).toEqual([])
   })
 
