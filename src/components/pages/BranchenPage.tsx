@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ArrowRight, CheckCircle, Leaf, Recycle, TreeEvergreen, Truck } from '@phosphor-icons/react'
+import { ArrowRight, CheckCircle, Leaf, Lightbulb, Recycle, Truck } from '@phosphor-icons/react'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { useEffect, useState } from 'react'
 import { parseDeepLink } from '@/lib/deep-linking'
@@ -347,7 +347,7 @@ export function BranchenPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { icon: Recycle, title: t('sustainability.reuse'), desc: t('sustainability.branchen.reuse.desc') },
-              { icon: TreeEvergreen, title: t('sustainability.materials'), desc: t('sustainability.branchen.materials.desc') },
+              { icon: Lightbulb, title: t('sustainability.materials'), desc: t('sustainability.branchen.materials.desc') },
               { icon: Truck, title: t('sustainability.logistics'), desc: t('sustainability.branchen.logistics.desc') },
               { icon: Leaf, title: t('sustainability.savings'), desc: t('sustainability.branchen.savings.desc') },
             ].map((item, index) => {

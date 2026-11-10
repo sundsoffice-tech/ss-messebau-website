@@ -23,10 +23,16 @@ const seiten = import.meta.glob(['../../components/pages/**/*.tsx', '!**/__tests
 }) as Record<string, string>
 
 /** Geprüft wird der Text, den Besucher und Suchmaschinen bekommen; Schlüsselnamen zählen nicht. */
+// Die vorab gebauten Blogtexte laufen als eigene Quelle, damit eine Ausnahme nur sie trifft.
+const inhalt = seitenInhalt as Record<string, unknown>
+const inhaltOhneBlog = Object.fromEntries(Object.entries(inhalt).filter(([pfad]) => !pfad.startsWith('/blog/')))
+const inhaltBlog = Object.fromEntries(Object.entries(inhalt).filter(([pfad]) => pfad.startsWith('/blog/')))
+
 const quellen: Array<[string, string]> = [
   ['src/locales/de.json', Object.values(deutsch).join('\n')],
   ['src/locales/en.json', Object.values(englisch).join('\n')],
-  ['scripts/seiten-inhalt.json', JSON.stringify(seitenInhalt, null, 1)],
+  ['scripts/seiten-inhalt.json', JSON.stringify(inhaltOhneBlog, null, 1)],
+  ['scripts/seiten-inhalt.json (Blog)', JSON.stringify(inhaltBlog, null, 1)],
   ['index.html', startseite],
   ...Object.entries(seiten).map(([pfad, text]): [string, string] => [pfad.replace(/^(\.\.\/)+/, 'src/'), text]),
 ]
@@ -49,6 +55,11 @@ const verboten: Array<[string, RegExp]> = [
     /schon(en|t) (wir |gleichzeitig )?(die )?Umwelt|Umwelt und Budget|gut für (die )?Umwelt|für die Umwelt|protect(ing)? the environment|(good )?for the environment/gi,
   ],
   ['umweltbewusst', /umweltbewusst|environmentally conscious|eco-conscious/gi],
+  // Nachzug nach der Prüfung von PR #252: Zusagen und Merkmale, für die kein Beleg vorliegt
+  ['Herkunftsnachweis', /Herkunftsnachweis|proof of origin/gi],
+  ['recycelbar', /recycelbar|recyclable/gi],
+  ['papierlos', /papierlos|paperless/gi],
+  ['ökologisch', /ökologisch|ecological/gi],
   // A15: Einsparzahlen ohne Projektbeleg
   ['bis zu 60 % Material', /bis zu 60 ?%|up to 60 ?%/gi],
   ['73 % als Tatsache', /73 ?% (Ersparnis|savings)/gi],
@@ -68,6 +79,14 @@ const verboten: Array<[string, RegExp]> = [
   ],
 ]
 
+/**
+ * Bekannte Reste als Paar aus Quelle und Wendung. Der Blogbeitrag „nachhaltiger-messebau“ trägt im vorab
+ * gebauten Absatz noch „ökologisch sinnvoll“; er wird in einem eigenen PR überarbeitet (Prüfung 3.5).
+ * Trifft eine Ausnahme nichts mehr, wird der Test rot: dann die Zeile hier entfernen.
+ */
+const ausnahmen: Array<[string, string]> = [['scripts/seiten-inhalt.json (Blog)', 'ökologisch']]
+const istAusnahme = (datei: string, name: string) => ausnahmen.some(([d, n]) => d === datei && n === name)
+
 describe('Umwelt- und Zahlenaussagen ohne Beleg (A12 bis A16)', () => {
   it('prüft die Sprachdateien, die vorab gebauten Texte und alle Seiten', () => {
     const namen = quellen.map(([datei]) => datei)
@@ -80,9 +99,20 @@ describe('Umwelt- und Zahlenaussagen ohne Beleg (A12 bis A16)', () => {
 
   it('keine der gestrichenen Wendungen steht wieder da', () => {
     const funde = quellen.flatMap(([datei, text]) =>
-      verboten.flatMap(([name, muster]) => (text.match(muster) || []).map((treffer) => `${datei}: ${name}: „${treffer}“`))
+      verboten
+        .filter(([name]) => !istAusnahme(datei, name))
+        .flatMap(([name, muster]) => (text.match(muster) || []).map((treffer) => `${datei}: ${name}: „${treffer}“`))
     )
     expect(funde).toEqual([])
+  })
+
+  it('jede Ausnahme wird noch gebraucht', () => {
+    const ohneTreffer = ausnahmen.filter(([datei, name]) => {
+      const text = quellen.find(([d]) => d === datei)?.[1] ?? ''
+      const muster = verboten.find(([n]) => n === name)?.[1]
+      return !muster || !new RegExp(muster.source, muster.flags).test(text)
+    })
+    expect(ohneTreffer).toEqual([])
   })
 
   it('die Liste erkennt jede Wendung am alten Wortlaut', () => {
@@ -106,6 +136,13 @@ describe('Umwelt- und Zahlenaussagen ohne Beleg (A12 bis A16)', () => {
       'Bis zu 30% Kostenersparnis',
       'durchschnittlich 30–50 % der Gesamtkosten',
       'Bis 50 % sparen',
+      'Holzwerkstoffe mit Herkunftsnachweis auf Wunsch',
+      'Wood-based materials with proof of origin on request',
+      'Recycelbare Materialien wo immer möglich',
+      'Recyclable materials wherever possible',
+      'Digitale Planungsprozesse (papierlos)',
+      'Digital planning processes (paperless)',
+      'Nachhaltige Messestände sind nicht nur ökologisch sinnvoll',
       'Nachhaltige Systeme amortisieren sich ab der 2. Messe deutlich.',
       '💡 Use Case: VR-Showroom für internationales Publikum',
       'Ergebnis: 40% mehr qualifizierte Leads',
