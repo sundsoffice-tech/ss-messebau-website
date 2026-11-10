@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import { ShieldCheck } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { ContactInquiry } from '@/lib/types'
-import { useKV } from '@/hooks/use-kv'
 import { trackFormSubmission } from '@/lib/analytics-tracker'
 import { useTranslation } from '@/lib/i18n'
 import { useFormSystem } from '@/hooks/use-form-system'
@@ -20,7 +19,6 @@ interface InquiryDialogProps {
 }
 
 export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
-  const [, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
   const { t } = useTranslation()
 
   const form = useFormSystem({
@@ -38,8 +36,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
         timestamp: Date.now(),
       }
 
-      setInquiries((current) => [...(current || []), inquiry])
-
+      // Keine Kopie im Browser: Die Anfrage geht nur an Backend, Mail und Lead-Eingang.
       // Save inquiry to backend API with UTM attribution
       const utm = getUtmParams()
       const formDataWithUtm = { ...data, ...utm }
@@ -58,7 +55,7 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
         })
         apiSaved = true
       } catch {
-        console.warn('API unavailable, inquiry saved locally only')
+        console.warn('API unavailable, inquiry not stored in backend')
       }
 
       // Zwei Zustellwege parallel: (1) Benachrichtigung per SendGrid aus dem eigenen

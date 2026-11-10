@@ -10,13 +10,12 @@ import type { BlogPost } from '@/lib/types'
 /**
  * Die Blogbilder waren zum Teil eingebundene Vorschaubilder eines Bildanbieters ohne
  * belegte Lizenz (Prüfung Wettbewerbsrecht 10.11.2026). Bilder kommen nur noch aus dem
- * eigenen Ordner oder von der einen Quelle, deren Lizenz die freie Nutzung erlaubt;
- * ein Beitrag ohne Bild zeigt ein neutrales Feld statt eines fremden Fotos.
+ * eigenen Ordner; ein Beitrag ohne Bild zeigt ein neutrales Feld statt eines fremden Fotos.
  */
 
 // Der Name des Anbieters steht hier geteilt, damit die Suche diese Datei nicht selbst trifft.
 const ANBIETER = new RegExp(['istock', 'photo'].join(''), 'i')
-const ERLAUBT = /^(\/images\/|https:\/\/images\.unsplash\.com\/)/
+const ERLAUBT = /^\/images\//
 
 const quelltexte = import.meta.glob(['../../../**/*.{ts,tsx,json}', '!**/__tests__/**'], {
   query: '?raw',
@@ -46,8 +45,8 @@ describe('Blogbilder nur aus eigener oder frei nutzbarer Quelle', () => {
       const bild = blogBild(post)
       if (bild !== undefined) expect(bild, post.slug).toMatch(ERLAUBT)
     }
-    // Beiträge ohne eigenes Bild gibt es, sonst prüfte der Fall darunter nichts Echtes
-    expect(DEMO_BLOG_POSTS.some((post) => blogBild(post) === undefined)).toBe(true)
+    // Ohne eigenes Bild und ohne Bild der Kategorie gibt es keines
+    expect(blogBild({ imageUrl: '', category: 'Planung' })).toBeUndefined()
   })
 
   it('eine Kategorie ohne Eintrag bekommt kein fremdes Rückfallbild', () => {

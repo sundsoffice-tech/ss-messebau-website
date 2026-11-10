@@ -5,6 +5,7 @@ import { CheckCircle, Leaf, Recycle, TrendUp, ArrowRight } from '@phosphor-icons
 import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { useTranslation } from '@/lib/i18n'
 import { useUIStore } from '@/store/ui-store'
+import rechtsseiten from '@/lib/rechtsseiten.json'
 
 export { KIBeraterPage } from './KIBeraterPage'
 
@@ -452,110 +453,81 @@ export function NachhaltigkeitPage() {
   )
 }
 
-export function ImpressumPage() {
+type RechtsBlock = ['p' | 'h3' | 'zeilen' | 'ul', string]
+
+interface RechtsseiteStruktur {
+  titel: string
+  abschnitte: Array<{ titel: string; inhalt: RechtsBlock[] }>
+}
+
+/**
+ * Aufbau von Impressum und Datenschutzerklärung. Dieselbe Datei liest
+ * scripts/seiten-vorab.mjs für den Rückfalltext ohne JavaScript: Ein Abschnitt,
+ * der dort fehlt, fehlt auf der Seite und im Rückfalltext zugleich, und der
+ * Test rechtsseiten-rueckfall.test.tsx wird rot, wenn die Seite etwas zeigt,
+ * das im Rückfalltext nicht steht.
+ */
+const RECHTSSEITEN = rechtsseiten as unknown as Record<string, RechtsseiteStruktur>
+
+function Rechtsseite({ pfad }: { pfad: '/impressum' | '/datenschutz' }) {
   const { t } = useTranslation()
+  const seite = RECHTSSEITEN[pfad]
   return (
     <div className="py-12 sm:py-16">
       <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-bold mb-6 sm:mb-8 heading-1">{t('imprint.title')}</h1>
-        
-        <div className="space-y-6 text-muted-foreground">
-          <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">{t('imprint.tmg')}</h2>
-            <p>
-              {t('imprint.address').split('\n').map((line, i, arr) => (
-                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-              ))}
-            </p>
-          </div>
+        <h1 className="font-bold mb-6 sm:mb-8 heading-1">{t(seite.titel)}</h1>
 
-          <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">{t('imprint.partners.title')}</h2>
-            <p>
-              {t('imprint.partners.names').split('\n').map((line, i, arr) => (
-                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-              ))}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">{t('imprint.contact.title')}</h2>
-            <p>
-              {t('imprint.contact.details').split('\n').map((line, i, arr) => (
-                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-              ))}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">{t('imprint.vat.title')}</h2>
-            <p>
-              {t('imprint.vat.text').split('\n').map((line, i, arr) => (
-                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-              ))}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">{t('imprint.liability.title')}</h2>
-            <h3 className="font-semibold text-foreground mt-4 mb-2">{t('imprint.liability.subtitle')}</h3>
-            <p className="mb-4">
-              {t('imprint.liability.text')}
-            </p>
-          </div>
+        <div className="space-y-6 text-muted-foreground break-words">
+          {seite.abschnitte.map((abschnitt) => (
+            <div key={abschnitt.titel}>
+              <h2 className="text-xl font-semibold text-foreground mb-2">{t(abschnitt.titel)}</h2>
+              {abschnitt.inhalt.map(([art, schluessel], i) => {
+                // Abstand nach unten nur zwischen Blöcken, nicht am Ende des Abschnitts
+                const abstand = i < abschnitt.inhalt.length - 1 ? 'mb-4' : undefined
+                const key = `${schluessel}-${i}`
+                if (art === 'h3') {
+                  return (
+                    <h3 key={key} className="font-semibold text-foreground mt-4 mb-2">
+                      {t(schluessel)}
+                    </h3>
+                  )
+                }
+                if (art === 'ul') {
+                  return (
+                    <ul key={key} className={['list-disc pl-6 space-y-1', abstand].filter(Boolean).join(' ')}>
+                      {t(schluessel).split('\n').map((punkt, j) => (
+                        <li key={j}>{punkt}</li>
+                      ))}
+                    </ul>
+                  )
+                }
+                if (art === 'zeilen') {
+                  return (
+                    <p key={key} className={abstand}>
+                      {t(schluessel).split('\n').map((line, j, arr) => (
+                        <span key={j}>{line}{j < arr.length - 1 && <br />}</span>
+                      ))}
+                    </p>
+                  )
+                }
+                return (
+                  <p key={key} className={abstand}>
+                    {t(schluessel)}
+                  </p>
+                )
+              })}
+            </div>
+          ))}
         </div>
       </div>
     </div>
   )
 }
 
+export function ImpressumPage() {
+  return <Rechtsseite pfad="/impressum" />
+}
+
 export function DatenschutzPage() {
-  const { t } = useTranslation()
-  return (
-    <div className="py-12 sm:py-16">
-      <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-bold mb-6 sm:mb-8 heading-1">{t('privacy.title')}</h1>
-        
-        <div className="space-y-6 text-muted-foreground">
-          <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">{t('privacy.s1.title')}</h2>
-            <h3 className="font-semibold text-foreground mt-4 mb-2">{t('privacy.s1.subtitle')}</h3>
-            <p>
-              {t('privacy.s1.text')}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">{t('privacy.s2.title')}</h2>
-            <h3 className="font-semibold text-foreground mt-4 mb-2">{t('privacy.s2.subtitle')}</h3>
-            <p className="mb-4">
-              {t('privacy.s2.text1')}
-            </p>
-            <p>
-              {t('privacy.s2.text2')}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">{t('privacy.s3.title')}</h2>
-            <p className="mb-4">
-              {t('privacy.s3.text1')}
-            </p>
-            <p>
-              {t('privacy.s3.text2')}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">{t('privacy.s4.title')}</h2>
-            <p>
-              {t('privacy.s4.text').split('\n').map((line, i, arr) => (
-                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-              ))}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+  return <Rechtsseite pfad="/datenschutz" />
 }

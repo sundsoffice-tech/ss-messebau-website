@@ -43,7 +43,7 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
       '@type': 'BlogPosting',
       headline: post.title,
       description: post.excerpt,
-      image: post.imageUrl || undefined,
+      image: bild ? new URL(bild, 'https://sunds-messebau.de').href : undefined,
       datePublished: new Date(post.publishedAt).toISOString(),
       dateModified: new Date(post.publishedAt).toISOString(),
       author: {

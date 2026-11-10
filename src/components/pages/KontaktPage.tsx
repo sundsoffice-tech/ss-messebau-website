@@ -36,7 +36,6 @@ export function KontaktPage() {
   useSectionObserver(['kontaktformular', 'anfahrt', 'ki-berater'])
   useExitIntentTracking('kontakt')
 
-  const [, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMessages, setChatMessages] = useKV<ChatMessage[]>('kontakt-chat-history', [
     { role: 'assistant', content: t('kontakt.chat.welcome') }
@@ -65,8 +64,7 @@ export function KontaktPage() {
         timestamp: Date.now(),
       }
 
-      setInquiries((current) => [...(current || []), inquiry])
-
+      // Keine Kopie im Browser: Die Anfrage geht nur an Backend, Mail und Lead-Eingang.
       // Save inquiry to backend API with UTM attribution
       const utm = getUtmParams()
       const formDataWithUtm = { ...data, ...utm }
@@ -85,7 +83,7 @@ export function KontaktPage() {
         })
         apiSaved = true
       } catch (error) {
-        console.warn('API unavailable, inquiry saved locally only', error)
+        console.warn('API unavailable, inquiry not stored in backend', error)
       }
 
       // Zwei Zustellwege parallel: (1) Benachrichtigung per SendGrid aus dem eigenen
@@ -105,8 +103,8 @@ export function KontaktPage() {
       }
 
       if (!apiSaved && !notifResult.success && !relayResult.ok) {
-        // Neither the API nor the email reached us — the inquiry only exists in
-        // this browser's localStorage. Don't pretend it was submitted.
+        // Weder API noch Mail noch Lead-Eingang haben die Anfrage erhalten. Das Formular
+        // behält die Eingaben, der Besucher bekommt eine ehrliche Fehlermeldung.
         toast.error(t('form.error.submitFailed'), { duration: 12000 })
         return
       }

@@ -27,9 +27,6 @@ const INJECTION_PATTERNS: RegExp[] = [
 /** Maximum allowed message length */
 const MAX_MESSAGE_LENGTH = 2000
 
-/** localStorage key for security logs */
-const SECURITY_LOG_STORAGE_KEY = 'chat_security_log'
-
 export interface SanitizeResult {
   sanitized: string
   blocked: boolean
@@ -74,38 +71,4 @@ export function sanitizeChatInput(input: string): SanitizeResult {
   cleaned = cleaned.replace(/\s{3,}/g, '  ')
 
   return { sanitized: cleaned, blocked: false }
-}
-
-/**
- * Log suspicious chat activity for monitoring.
- */
-export function logSuspiciousActivity(input: string, reason: string): void {
-  try {
-    const raw = localStorage.getItem(SECURITY_LOG_STORAGE_KEY)
-    const logs: Array<{ timestamp: number; reason: string; inputPreview: string }> = raw ? JSON.parse(raw) : []
-
-    logs.push({
-      timestamp: Date.now(),
-      reason,
-      inputPreview: input.slice(0, 100),
-    })
-
-    // Keep only last 100 entries
-    const trimmed = logs.slice(-100)
-    localStorage.setItem(SECURITY_LOG_STORAGE_KEY, JSON.stringify(trimmed))
-  } catch {
-    // ignore storage errors
-  }
-}
-
-/**
- * Get logged suspicious activities (for admin panel).
- */
-export function getSuspiciousActivityLog(): Array<{ timestamp: number; reason: string; inputPreview: string }> {
-  try {
-    const raw = localStorage.getItem(SECURITY_LOG_STORAGE_KEY)
-    return raw ? JSON.parse(raw) : []
-  } catch {
-    return []
-  }
 }

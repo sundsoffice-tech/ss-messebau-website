@@ -219,35 +219,6 @@
       "Weiterführende Informationen"
     ]
   },
-  "/datenschutz": {
-    "h1": "Datenschutzerklärung",
-    "absaetze": [
-      "Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.",
-      "Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert.",
-      "Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung oder Löschung dieser Daten."
-    ],
-    "abschnitte": [
-      "1. Datenschutz auf einen Blick",
-      "2. Datenerfassung auf dieser Website",
-      "3. Ihre Rechte",
-      "4. Kontakt"
-    ]
-  },
-  "/impressum": {
-    "h1": "Impressum",
-    "absaetze": [
-      "S&S Messebau GbR Fabrice Noel Schippers & Pam Singh Marienstraße 37 41836 Hückelhoven Deutschland",
-      "Mobil: +49 1514 0368754 E-Mail: info@sundsmessebau.com Internet: sunds-messebau.de",
-      "Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz: Wird auf Anfrage mitgeteilt"
-    ],
-    "abschnitte": [
-      "Angaben gemäß § 5 DDG",
-      "Vertretungsberechtigte Gesellschafter",
-      "Kontakt",
-      "Umsatzsteuer-ID",
-      "Haftungsausschluss"
-    ]
-  },
   "/ki-berater": {
     "h1": "KI-Messebau-Berater",
     "absaetze": [
