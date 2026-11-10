@@ -160,10 +160,11 @@ function starte(string $apiQuelle, array $admins = ['chef'], int $arbeiter = 1, 
         exit(2);
     }
     $umgebungen[] = $u;
-    // Schema anlegen lassen, dann die Admins direkt eintragen (unabhängig von der Aktion setup).
+    // Schema mit dem Code des Prüflings anlegen, dann die Admins direkt eintragen (unabhängig von der Aktion setup).
+    exec(escapeshellarg(PHP_BINARY) . ' -r ' . escapeshellarg('require $argv[1]; getDB();') . ' ' . escapeshellarg($wurzel . '/api/db.php') . ' 2>&1', $zeilen, $rc);
     $erst = anfrage($u, 'GET', '/auth.php?action=check_setup');
-    if ($erst['status'] !== 200) {
-        fwrite(STDERR, "check_setup antwortet nicht mit 200: " . kurz($erst) . "\n");
+    if ($rc !== 0 || $erst['status'] !== 200) {
+        fwrite(STDERR, "Datenbank nicht anzulegen oder check_setup ohne 200: " . implode(' ', $zeilen) . ' ' . kurz($erst) . "\n");
         exit(2);
     }
     $db = db($u);

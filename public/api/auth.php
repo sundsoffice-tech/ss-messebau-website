@@ -7,6 +7,12 @@
 
 require_once __DIR__ . '/db.php';
 
+// Ersteinrichtung (Aktion setup): legt den ersten Admin an, wenn die Tabelle leer ist.
+// Im ausgelieferten Stand gesperrt: Geht die Datenbankdatei verloren, legt db.php eine leere an,
+// und ohne diese Sperre würde der erste Aufrufer aus dem Netz Admin. Für eine neue Installation
+// wird der Schalter mit einem eigenen Commit geöffnet und nach der Einrichtung wieder geschlossen.
+const SETUP_ERLAUBT = false;
+
 function startSession(): void {
     if (session_status() === PHP_SESSION_NONE) {
         $isSecure = isset($_SERVER['HTTPS']) || 
@@ -261,6 +267,11 @@ function handleSetup(): void {
         echo json_encode(['error' => 'Method not allowed']);
         return;
     }
+    if (!SETUP_ERLAUBT) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Die Ersteinrichtung ist gesperrt.']);
+        return;
+    }
 
     $db = getDB();
 
@@ -315,6 +326,12 @@ function handleSetup(): void {
 }
 
 function handleCheckSetup(): void {
+    if (!SETUP_ERLAUBT) {
+        // Gesperrt: Die Anmeldeseite zeigt dann nie das Formular der Ersteinrichtung,
+        // und die Antwort verrät nicht, ob die Tabelle leer ist.
+        echo json_encode(['needsSetup' => false]);
+        return;
+    }
     $db = getDB();
     $count = $db->query('SELECT COUNT(*) FROM admin_users')->fetchColumn();
     echo json_encode(['needsSetup' => (int)$count === 0]);
