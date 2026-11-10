@@ -17,8 +17,14 @@
 #   fertig    Zeitstempel, zuletzt
 # Alle Container laufen ohne Netz, lesen <D> nur und werden nach 900 s beendet
 # (die Fälle mit großer Altlast füllen bis zu 600.000 Zeilen ein).
+#
+# Zweites Argument "klein": Fall M (Abbruch im langen Datenbankbefehl) entfällt.
+# Seine Datenbank wird rund 600 MB groß; bei knapper Platte auf dem Server läuft
+# der Beleg ohne ihn (die übrigen Fälle bleiben unter 100 MB und räumen hinter sich auf).
 set -u
 D=${1:?Verzeichnis mit neu/ und alt/ oder main/ fehlt}
+OHNE_GROSS=0
+[ "${2:-}" = klein ] && OHNE_GROSS=1
 cd "$D" || exit 2
 KENNUNG="ber-$(basename "$D")-$$"
 ZUS=""
@@ -29,7 +35,7 @@ ALT=/app/main
 probe() { # <abbild> <name> <befehl...>
     local abbild=$1 name=$2
     shift 2
-    timeout 900 docker run --rm --name "$name" --network none -m 512m -v "$D":/app:ro -w /app "$abbild" "$@"
+    timeout 900 docker run --rm --name "$name" --network none -m 512m -e BEREINIGUNG_OHNE_GROSS="$OHNE_GROSS" -v "$D":/app:ro -w /app "$abbild" "$@"
     local rc=$?
     [ "$rc" = 124 ] && docker stop -t 2 "$name" >/dev/null 2>&1
     return "$rc"

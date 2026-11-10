@@ -118,6 +118,7 @@ function handleAddTrainingData(): void {
     $fetchStmt = $db->prepare('SELECT * FROM ai_training_data WHERE id = :id');
     $fetchStmt->execute([':id' => $id]);
     $entry = $fetchStmt->fetch();
+    $fetchStmt->closeCursor(); // vor dem nächsten Schreibbefehl (offener Lesestand, siehe chat.php)
 
     // Add audit log
     addAuditEntry('training_added', 'admin', "Wissensdatei \"{$input['title']}\" hinzugefügt", 'training');
@@ -187,6 +188,7 @@ function handleDeleteTrainingData(): void {
     $fetchStmt = $db->prepare('SELECT title FROM ai_training_data WHERE id = :id');
     $fetchStmt->execute([':id' => $id]);
     $entry = $fetchStmt->fetch();
+    $fetchStmt->closeCursor(); // vor dem DELETE (offener Lesestand, siehe chat.php)
 
     $stmt = $db->prepare('DELETE FROM ai_training_data WHERE id = :id');
     $stmt->execute([':id' => $id]);

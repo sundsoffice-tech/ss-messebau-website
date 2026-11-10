@@ -141,6 +141,12 @@ $datenbankTeil = function () use ($db, $zeilenRegeln, $portionZeilen, $portionPa
                 if ($anzahl < $portionZeilen) {
                     break; // diese Regel ist fertig
                 }
+                // Budget gleich nach der Portion prüfen und nicht erst nach der
+                // Pause: Der Lauf überzieht so höchstens um die eine Portion.
+                if (hrtime(true) >= $fristNs) {
+                    $budgetAus = true;
+                    break;
+                }
                 usleep((int)min(1000000, max($portionPauseMs * 1000, intdiv($dauerNs, 1000))));
             }
         }
@@ -223,11 +229,29 @@ foreach ($dateienVorher as $datei) {
 // die sich nicht löschen ließ. Bleibt etwas liegen, merkt sich
 // cleanup_teil_count die schon gelöschten Zeilen; last_cleanup_count nennt
 // beim Abschluss die Summe seit dem letzten vollständigen Lauf.
+// Scheitert der Datenbankteil mittendrin, bleiben die schon gelöschten Portionen
+// gelöscht. Ihre Zahl wird deshalb auch im Fehlerfall vermerkt, sonst fehlte
+// sie in der Summe, die last_cleanup_count beim Abschluss nennt.
 $dbFehler = null;
+$dbSperre = false;
 $vollstaendig = false;
+$dbAusnahme = null;
 try {
     $datenbankTeil();
-    $vollstaendig = !$dbStand['rest'] && $dateienFehler === 0;
+} catch (\Throwable $e) {
+    $dbAusnahme = $e;
+    if ($bereinigungIntern) {
+        // Für den Vermerk unten nur noch kurz auf die Schreibsperre warten:
+        // Der Lauf hat sein Warten schon hinter sich.
+        try {
+            $db->setAttribute(PDO::ATTR_TIMEOUT, 1);
+        } catch (\Throwable $e2) {
+            // dann bleibt es bei der bisherigen Wartezeit
+        }
+    }
+}
+try {
+    $vollstaendig = $dbAusnahme === null && !$dbStand['rest'] && $dateienFehler === 0;
 
     $teilStmt = $db->prepare("SELECT config_value FROM analytics_config WHERE config_key = 'cleanup_teil_count'");
     $teilStmt->execute();
@@ -250,13 +274,48 @@ try {
         $updateStmt->execute([':key' => 'cleanup_teil_count', ':value' => (string)($teilZuvor + $dbStand['deleted'])]);
     }
 } catch (\Throwable $e) {
+    $vollstaendig = false;
+    if ($dbAusnahme === null) {
+        $dbAusnahme = $e;
+    }
+    // Sonst gilt der erste Fehler; dass auch der Vermerk scheiterte, ändert
+    // am Ergebnis nichts (die Zahl dieses Anlaufs fehlt dann in der Summe).
+}
+if ($dbAusnahme !== null) {
     if (!$bereinigungIntern) {
-        throw $e; // Admin-Knopf: wie bisher ein Serverfehler ohne Text nach außen
+        throw $dbAusnahme; // Admin-Knopf: wie bisher ein Serverfehler ohne Text nach außen
     }
     $vollstaendig = false;
-    $dbFehler = get_class($e) . ': ' . $e->getMessage();
+    $dbFehler = get_class($dbAusnahme) . ': ' . $dbAusnahme->getMessage();
+    // Sperrfehler (SQLITE_BUSY 5, SQLITE_LOCKED 6): Die Datenbank war belegt,
+    // kaputt ist nichts. bereinigung-anstoss.php wertet ihn nach Fortschritt
+    // als Teillauf und nicht als Fehlschlag.
+    $dbSperre = $dbAusnahme instanceof \PDOException
+        && (in_array(((int)($dbAusnahme->errorInfo[1] ?? 0)) & 0xFF, [5, 6], true)
+            || stripos($dbAusnahme->getMessage(), 'database is locked') !== false);
 }
 $deleted = $dbStand['deleted'];
+
+// Admin-Knopf: Ein vollständiger Lauf von Hand wird auch in der Marke des
+// Anstoßes als Erfolg vermerkt (unter ihrer Dateisperre), damit
+// "checks.bereinigung" in health.php danach "ok" zeigt und der Mensch am Knopf
+// die Wirkung seines Handgriffs sieht. Ein Fehler dabei ändert die Antwort nicht.
+if (!$bereinigungIntern && $vollstaendig) {
+    try {
+        if ((@include_once __DIR__ . '/bereinigung-anstoss.php') !== false
+            && function_exists('bereinigungErfolgVermerken')) {
+            bereinigungErfolgVermerken([
+                'deleted' => $deleted,
+                'dateien' => $dateienGeloescht,
+                'dateien_fehler' => $dateienFehler,
+                'portionen' => $dbStand['portionen'],
+                'laengste_portion_ms' => $dbStand['laengste_portion_ms'],
+            ]);
+        }
+    } catch (\Throwable $e) {
+        error_log('Bereinigung: Erfolg des Laufs von Hand nicht in der Marke vermerkt: ' . get_class($e) . ': ' . $e->getMessage());
+    }
+}
 
 // Anstoß ohne Handgriff: Ergebnis an bereinigungAusfuehren() zurück, keine Ausgabe.
 if ($bereinigungIntern) {
@@ -270,6 +329,7 @@ if ($bereinigungIntern) {
         'portionen' => $dbStand['portionen'],
         'laengste_portion_ms' => $dbStand['laengste_portion_ms'],
         'db_fehler' => $dbFehler,
+        'db_sperre' => $dbSperre,
         'vollstaendig' => $vollstaendig,
     ];
 }

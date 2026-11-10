@@ -281,6 +281,10 @@ function handleSend(): void {
     $stmt = $db->prepare('SELECT * FROM email_queue WHERE queue_id = :queue_id');
     $stmt->execute([':queue_id' => $queueId]);
     $email = $stmt->fetch();
+    // Lesebefehl schließen, bevor versendet wird: Sonst scheitert das UPDATE
+    // nach dem Versand mit "database is locked", sobald währenddessen ein
+    // anderer Aufruf geschrieben hat (offener Lesestand, wie in chat.php).
+    $stmt->closeCursor();
 
     if (!$email) {
         http_response_code(404);
