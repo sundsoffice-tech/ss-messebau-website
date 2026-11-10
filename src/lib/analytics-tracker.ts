@@ -241,8 +241,10 @@ function getQueue(): TrackingEvent[] {
 /**
  * Obergrenzen der Warteschlange. Nimmt der Server länger nichts an (Störung, Bremse,
  * kein Netz), wuchs sie sonst mit jedem Ereignis weiter und blieb im Browser liegen.
- * - Alter: Der Server verwirft Ereignisse, deren Zeitstempel älter als 24 Stunden ist;
- *   sie weiter aufzuheben hat keinen Zweck.
+ * - Alter: Was länger als 24 Stunden liegt, wird nicht mehr gesendet. Der Server nähme es
+ *   zwar an, zählte es aber mit der Ankunftszeit (collect.php, COLLECT_TS_ZURUECK): Es
+ *   stünde am falschen Tag und läge länger, als sein wahres Alter erlaubt. Die Grenze
+ *   gilt beim Speichern und beim Senden.
  * - Zahl: Bei mehr als 200 fallen zuerst die nachrangigen Ereignisse weg (dieselbe Liste
  *   wie am Server: Herzschlag, Scrolltiefe, Leistung, Sichtbarkeit), die ältesten zuerst.
  *   Reicht das nicht, fallen die jüngsten übrigen weg: Sitzungsstart und Einstiegsseite
@@ -297,8 +299,12 @@ async function flushQueue(): Promise<void> {
     clearStatisticsStorage()
     return
   }
-  const queue = getQueue()
-  if (queue.length === 0) return
+  const queue = begrenzeQueue(getQueue())
+  if (queue.length === 0) {
+    // Auch die Reste im Speicher räumen, wenn alles Wartende zu alt war.
+    saveQueue(queue)
+    return
+  }
 
   const batch = queue.splice(0, 20)
   saveQueue(queue)

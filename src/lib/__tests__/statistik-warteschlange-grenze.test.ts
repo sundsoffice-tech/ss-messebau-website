@@ -5,7 +5,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
  * nichts an (503, 429, kein Netz), wuchs sie sonst mit jedem Ereignis und blieb liegen.
  * - höchstens 200 Ereignisse; zuerst fallen nachrangige weg (Herzschlag, Scrolltiefe,
  *   Leistung, Sichtbarkeit), dann die jüngsten übrigen; Sitzungsstart und Einstieg bleiben
- * - nichts, was älter als 24 Stunden ist (der Server verwürfe es ohnehin)
+ * - nichts, was älter als 24 Stunden ist: Der Server nähme es an, zählte es aber mit der
+ *   Ankunftszeit, also am falschen Tag. Das gilt beim Speichern und beim Senden.
  */
 
 const CONSENT_KEY = 'ss_cookie_consent'
@@ -120,5 +121,31 @@ describe('Obergrenzen der Statistik-Warteschlange', () => {
     expect(schlange.length).toBe(2)
     expect(schlange.every((e) => e.event === 'phone_click')).toBe(true)
     expect(schlange.map((e) => e.ts.slice(0, 13))).toEqual(['2026-11-11T09', '2026-11-11T10'])
+  })
+
+  it('beim Senden geht nichts hinaus, was älter als 24 Stunden ist', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200 })
+    vi.stubGlobal('fetch', fetchMock)
+    // Ein Besuch, dessen Ereignisse nie zugestellt wurden: Sie liegen im Speicher, kein Zeitgeber läuft mehr.
+    const alt = { event: 'cta_click', ts: '2026-11-09T09:00:00.000Z', session_id: 'alt', visitor_id: 'v', url: 'https://sunds-messebau.de/' }
+    const frisch = { ...alt, ts: '2026-11-10T09:30:00.000Z', session_id: 'frisch' }
+    localStorage.setItem(QUEUE_KEY, JSON.stringify([alt, frisch]))
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    vi.resetModules()
+    await import('@/lib/analytics-tracker')
+
+    // Der Tab wird verborgen: Der Tracker sendet, ohne dass vorher etwas neu gespeichert wurde.
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => true })
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' })
+    // Im Browser steigt das Ereignis vom Dokument zum Fenster auf; dort hängt der Lauscher.
+    window.dispatchEvent(new Event('visibilitychange'))
+    await vi.advanceTimersByTimeAsync(100)
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => false })
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' })
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    const gesendet = JSON.parse((fetchMock.mock.calls[0][1] as { body: string }).body).events as Array<{ session_id: string }>
+    expect(gesendet.map((e) => e.session_id)).toEqual(['frisch'])
+    expect(warteschlange()).toEqual([])
   })
 })
