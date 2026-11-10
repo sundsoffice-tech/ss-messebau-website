@@ -42,10 +42,21 @@
  *   S  der Admin-Knopf vermerkt einen vollständigen Lauf in der Marke
  *   T  gescheiterte Dateisperre: kein Lauf, Fehlschlag gezählt, Pause und Obergrenze
  *   U  Zeitstempel im Format des Browsers ("T" und "Z") an den Fristen
+ *   V  Anteil je Adresse am Gesamtdeckel: eine Adresse füllt ihn nicht mehr allein,
+ *      ein zweiter Besucher wird weiter gezählt; die Zähldatei je Adresse trägt
+ *      keine Adresse und fällt unter die Bereinigung
+ *   W  Größe je Ereignis: zu großes "props" wird leer gespeichert und gezählt
+ *   X  Zählerausfall: 503, health.php "statistik": "zaehler", Heilung; "deckel"
+ *      erst nach fünf Minuten am Stück; Zahlen des Tages in analytics-status.php
+ *   Y  Auswertung: der letzte Tag des Zeitraums zählt mit, Absprung ist eine
+ *      Sitzung mit genau einem Seitenaufruf
+ *   Z  Sitzungen und Anfragen je Quelle über den Sitzungsstart
  *
  * Gegen den Stand von main vom 10.11.2026 (375ba93) ist der Test an den Fällen
  * O, P, Q, R und S rot. T und U sind dort grün: Sie belegen Verhalten, das es
- * schon gab und das bisher keinen Zeugen hatte.
+ * schon gab und das bisher keinen Zeugen hatte. Gegen main f04e50c (mit PR #251)
+ * sind A bis U grün bis auf die Stellen in Q, die den Anteil je Adresse und die
+ * Antwort 503 verlangen, und V bis Z sind rot.
  *
  * Umgebung: BEREINIGUNG_OHNE_GROSS=1 lässt Fall M aus (seine Datenbank wird
  * rund 600 MB groß). Jeder Fall räumt sein Verzeichnis unter dem
@@ -362,6 +373,19 @@ function lies(CurlHandle $ch, $roh, string $url): array {
 function anfrage(array $u, string $methode, string $pfad, ?string $koerper = null, array $kopf = [], int $zeitgrenze = 20): array {
     $url = $u['basis'] . $pfad;
     $ch = curlGriff($url, $methode, $koerper, $kopf, $zeitgrenze);
+    return lies($ch, curl_exec($ch), $url);
+}
+
+/**
+ * Wie anfrage(), aber von einer anderen Absenderadresse aus dem Netz 127.0.0.0/8
+ * (unter Linux gehört das ganze Netz zur Schleife): Der Prüfling sieht sie als
+ * REMOTE_ADDR. Nie mit session_start benutzen: Die Ortung in collect.php lässt
+ * nur 127.0.0.1 aus und ginge für jede andere Adresse nach außen.
+ */
+function anfrageVon(array $u, string $adresse, string $methode, string $pfad, ?string $koerper = null): array {
+    $url = $u['basis'] . $pfad;
+    $ch = curlGriff($url, $methode, $koerper, []);
+    curl_setopt($ch, CURLOPT_INTERFACE, $adresse);
     return lies($ch, curl_exec($ch), $url);
 }
 
@@ -1341,7 +1365,9 @@ if (PHP_OS_FAMILY === 'Windows') {
         if (((marke($u) ?? [])['ergebnis'] ?? null) !== 'laeuft') {
             break;
         }
-        $antwortenO[] = anfrage($u, 'POST', '/collect.php', stapel('ueber-collect', 'ueber-collect-' . $i, 50));
+        // Je POST eine andere Absenderadresse: Von einer Adresse speichert
+        // collect.php je Minute nur ihren Anteil am Gesamtdeckel (Fall V).
+        $antwortenO[] = anfrageVon($u, '127.0.0.' . (41 + $i % 200), 'POST', '/collect.php', stapel('ueber-collect', 'ueber-collect-' . $i, 50));
         $gesendet += 50;
         usleep(150000);
     }
@@ -1506,25 +1532,39 @@ pruefe('Gesamtdeckel steht als COLLECT_GESAMT_JE_MINUTE in collect.php und liegt
     $deckel >= 100 && $deckel <= 2000);
 $rechneMit = $deckel > 0 ? $deckel : 400;
 $zaehlDatei = $u['daten'] . '/collect_gesamt.json';
-$stapelZahl = intdiv($rechneMit, 50) + 4; // 200 Ereignisse über dem Deckel, unter 60 Anfragen je Minute
+// Seit dem Anteil je Adresse (COLLECT_ADRESSE_JE_MINUTE) füllt eine Adresse den
+// Deckel nicht mehr allein (Fall V): Hier senden deshalb so viele Adressen, dass
+// ihre Anteile zusammen über dem Deckel liegen, jede etwas mehr als ihren Anteil.
+$anteilJeAdresse = preg_match("/define\\('COLLECT_ADRESSE_JE_MINUTE',\\s*(\\d+)\\)/", (string)file_get_contents($apiQuelle . '/collect.php'), $treffer)
+    ? (int)$treffer[1] : 120;
+$adressZahl = intdiv($rechneMit + $anteilJeAdresse - 1, $anteilJeAdresse) + 1; // eine mehr, als den Deckel füllen
+$stapelJeAdresse = intdiv($anteilJeAdresse, 50) + 1;                            // 30 Ereignisse über dem Anteil
+$stapelZahl = $adressZahl * $stapelJeAdresse;
 $wieImmer = true;
-for ($i = 0; $i < $stapelZahl; $i++) {
-    $k = anfrage($u, 'POST', '/collect.php', stapel('deckel', 'deckel-' . $i, 50));
-    $wieImmer = $wieImmer && $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":50}';
+for ($nr = 0; $nr < $adressZahl; $nr++) {
+    for ($i = 0; $i < $stapelJeAdresse; $i++) {
+        $k = anfrageVon($u, '127.0.0.' . (11 + $nr), 'POST', '/collect.php', stapel('deckel', 'deckel-' . $nr . '-' . $i, 50));
+        $wieImmer = $wieImmer && $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":50}';
+    }
 }
 $gesendet = $stapelZahl * 50;
+$ueberAnteil = $adressZahl * ($stapelJeAdresse * 50 - $anteilJeAdresse);
+$ueberDeckel = $gesendet - $ueberAnteil - $rechneMit;
 $gespeichert = count(zeilenVon($u, 'deckel'));
-pruefe("$gesendet Ereignisse in $stapelZahl POST binnen Sekunden: gespeichert sind genau $rechneMit (Deckel), nicht mehr: $gespeichert",
+pruefe("$gesendet Ereignisse in $stapelZahl POST von $adressZahl Adressen binnen Sekunden: gespeichert sind genau $rechneMit (Deckel), nicht mehr: $gespeichert",
     $gespeichert === $rechneMit);
 pruefe('jeder POST antwortete unverändert 200 mit {"ok":true,"stored":50}: was über dem Deckel liegt, wird still nicht gespeichert', $wieImmer, kurz($k));
 $zaehler = is_file($zaehlDatei) ? json_decode((string)file_get_contents($zaehlDatei), true) : null;
-pruefe('die Zähldatei nennt die Zahlen des Tages: angenommen ' . $rechneMit . ', verworfen ' . ($gesendet - $rechneMit) . ', dichteste Minute ' . $rechneMit,
+pruefe('die Zähldatei nennt die Zahlen des Tages: angenommen ' . $rechneMit . ', über dem Deckel verworfen ' . $ueberDeckel
+    . ', über dem Anteil der Adressen ' . $ueberAnteil . ', dichteste Minute ' . $rechneMit,
     is_array($zaehler) && ($zaehler['tag'] ?? null) === heute() && ($zaehler['angenommen_tag'] ?? null) === $rechneMit
-        && ($zaehler['verworfen_tag'] ?? null) === $gesendet - $rechneMit && ($zaehler['spitze_tag'] ?? null) === $rechneMit,
-    is_file($zaehlDatei) ? substr((string)file_get_contents($zaehlDatei), 0, 200) : 'Datei fehlt');
+        && ($zaehler['verworfen_tag'] ?? null) === $ueberDeckel && ($zaehler['verworfen_adresse_tag'] ?? null) === $ueberAnteil
+        && ($zaehler['spitze_tag'] ?? null) === $rechneMit,
+    is_file($zaehlDatei) ? substr((string)file_get_contents($zaehlDatei), 0, 260) : 'Datei fehlt');
 pruefe('die Zähldatei trägt nur Zahlen, keine Adresse und keine Kennung',
-    is_array($zaehler) && array_diff(array_keys($zaehler), ['tag', 'angenommen_tag', 'verworfen_tag', 'spitze_tag', 'verworfen_gesamt', 'deckel', 'vortag', 'sekunden']) === []
-        && strpos((string)file_get_contents($zaehlDatei), 'deckel-') === false && strpos((string)file_get_contents($zaehlDatei), '127.0.0.1') === false);
+    is_array($zaehler) && array_diff(array_keys($zaehler), ['tag', 'angenommen_tag', 'verworfen_tag', 'spitze_tag', 'verworfen_gesamt', 'deckel',
+            'verworfen_adresse_tag', 'props_gross_tag', 'je_adresse', 'deckel_lauf', 'vortag', 'sekunden']) === []
+        && strpos((string)file_get_contents($zaehlDatei), 'deckel-') === false && strpos((string)file_get_contents($zaehlDatei), '127.0.0.') === false);
 pruefe('der Deckel steht genau einmal im Protokoll, nicht je verworfenem Ereignis', protokollZahl($u, 'Gesamtdeckel von') === 1,
     protokollZahl($u, 'Gesamtdeckel von') . ' Zeilen');
 // Eine Minute später ist wieder Platz: die Fächer des Zählers um 61 s zurückstellen.
@@ -1536,7 +1576,7 @@ if (is_array($zaehler) && is_array($zaehler['sekunden'] ?? null)) {
     $zaehler['sekunden'] = $verschoben;
     file_put_contents($zaehlDatei, json_encode($zaehler));
 }
-$k = anfrage($u, 'POST', '/collect.php', stapel('deckel', 'deckel-spaeter', 50));
+$k = anfrageVon($u, '127.0.0.30', 'POST', '/collect.php', stapel('deckel', 'deckel-spaeter', 50)); // Adresse mit freiem Anteil
 $gespeichertSpaeter = count(zeilenVon($u, 'deckel'));
 pruefe('61 Sekunden später (Zähler zurückgestellt) werden wieder 50 gespeichert: ' . $gespeichertSpaeter,
     $gespeichertSpaeter === $rechneMit + 50 && $k['text'] === '{"ok":true,"stored":50}', kurz($k));
@@ -1546,18 +1586,25 @@ $k = anfrage($u, 'POST', '/collect.php', stapel('deckel', 'deckel-neuer-tag', 1)
 $zaehler = json_decode((string)@file_get_contents($zaehlDatei), true);
 pruefe('Tageswechsel: neuer Tag beginnt bei 1 angenommen und 0 verworfen, der letzte Tag steht als vortag (7 angenommen, 3 verworfen, Spitze 5)',
     is_array($zaehler) && ($zaehler['tag'] ?? null) === heute() && ($zaehler['angenommen_tag'] ?? null) === 1 && ($zaehler['verworfen_tag'] ?? null) === 0
-        && ($zaehler['vortag'] ?? null) === ['tag' => '2000-01-01', 'angenommen' => 7, 'verworfen' => 3, 'spitze' => 5]
+        && array_intersect_key(is_array($zaehler['vortag'] ?? null) ? $zaehler['vortag'] : [], ['tag' => 1, 'angenommen' => 1, 'verworfen' => 1, 'spitze' => 1])
+            === ['tag' => '2000-01-01', 'angenommen' => 7, 'verworfen' => 3, 'spitze' => 5]
         && ($zaehler['verworfen_gesamt'] ?? null) === 3,
     substr((string)@file_get_contents($zaehlDatei), 0, 240));
-// Zähler nicht nutzbar (ein Verzeichnis an seiner Stelle): dann wird nichts gespeichert.
+// Zähler nicht nutzbar (ein Verzeichnis an seiner Stelle): dann wird nichts
+// gespeichert, und der Browser erfährt es (503), damit er den Stapel behält.
 $vorher = count(zeilenVon($u, 'deckel'));
 @unlink($zaehlDatei);
 mkdir($zaehlDatei);
 $k = anfrage($u, 'POST', '/collect.php', stapel('deckel', 'deckel-ohne-zaehler', 5));
-pruefe('Zähldatei nicht nutzbar: 200 mit {"ok":true,"stored":0}, nichts gespeichert, eine Zeile im Protokoll',
-    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":0}' && count(zeilenVon($u, 'deckel')) === $vorher
-        && protokollZahl($u, 'Gesamtdeckels nicht nutzbar') === 1, kurz($k) . ' ' . (count(zeilenVon($u, 'deckel')) - $vorher) . ' gespeichert');
+pruefe('Zähldatei nicht nutzbar: 503 mit Fehlertext statt 200 mit "stored" 0, nichts gespeichert, eine Zeile im Protokoll',
+    $k['status'] === 503 && is_string($k['fehler']) && $k['fehler'] !== '' && !isset($k['json']['stored'])
+        && count(zeilenVon($u, 'deckel')) === $vorher && protokollZahl($u, 'Gesamtdeckels nicht nutzbar') === 1,
+    kurz($k) . ' ' . (count(zeilenVon($u, 'deckel')) - $vorher) . ' gespeichert');
 rmdir($zaehlDatei);
+$k = anfrage($u, 'POST', '/collect.php', stapel('deckel', 'deckel-ohne-zaehler', 5));
+pruefe('Zähldatei wieder nutzbar: derselbe Stapel noch einmal gesendet (so tut es der Browser) wird gespeichert, 200 mit {"ok":true,"stored":5}',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":5}' && count(zeilenVon($u, 'deckel')) === $vorher + 5,
+    kurz($k) . ' ' . (count(zeilenVon($u, 'deckel')) - $vorher) . ' gespeichert');
 stoppe($u);
 
 // ─── R: Sperrfehler nach Fortschritt ────────────────────────────────────────
@@ -1879,6 +1926,393 @@ if ($u === null) {
     }
     stoppe($u);
 }
+
+// ─── V: Anteil je Adresse am Gesamtdeckel ───────────────────────────────────
+echo "\nV  Anteil je Adresse am Gesamtdeckel: eine Adresse füllt ihn nicht mehr allein\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$collectText = (string)file_get_contents($apiQuelle . '/collect.php');
+$deckel = preg_match("/define\\('COLLECT_GESAMT_JE_MINUTE',\\s*(\\d+)\\)/", $collectText, $treffer) ? (int)$treffer[1] : 400;
+$anteil = preg_match("/define\\('COLLECT_ADRESSE_JE_MINUTE',\\s*(\\d+)\\)/", $collectText, $treffer) ? (int)$treffer[1] : 0;
+pruefe('Anteil je Adresse steht als COLLECT_ADRESSE_JE_MINUTE in collect.php: mindestens 37 (drei Seiten in einer Minute), und drei Adressen füllen den Gesamtdeckel nicht: ' . $anteil,
+    $anteil >= 37 && $anteil * 3 < $deckel);
+$rechneAnteil = $anteil > 0 ? $anteil : 120;
+$stapelZahl = intdiv($deckel, 50) + 4; // mehr als der ganze Gesamtdeckel, unter 60 Anfragen je Minute
+$wieImmer = true;
+for ($i = 0; $i < $stapelZahl; $i++) {
+    $k = anfrageVon($u, '127.0.0.61', 'POST', '/collect.php', stapel('viel', 'viel-' . $i, 50));
+    $wieImmer = $wieImmer && $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":50}';
+}
+warte($u, ['ok', 'fehler', 'teilweise']); // der erste POST hat den ersten Lauf der Bereinigung angestoßen
+$vonEiner = count(zeilenVon($u, 'viel'));
+pruefe('eine Adresse sendet ' . ($stapelZahl * 50) . " Ereignisse in $stapelZahl POST: gespeichert ist genau ihr Anteil von $rechneAnteil, nicht der ganze Deckel von $deckel: $vonEiner",
+    $vonEiner === $rechneAnteil);
+pruefe('jeder ihrer POST antwortete unverändert 200 mit {"ok":true,"stored":50}', $wieImmer, kurz($k));
+// Zweiter Besucher in derselben Minute: seine dichteste Minute bei einer Seite, 17 Ereignisse in 3 POST.
+$zweiterOk = true;
+foreach ([7, 5, 5] as $nr => $n) {
+    $k = anfrageVon($u, '127.0.0.62', 'POST', '/collect.php', stapel('besucher', 'besucher-' . $nr, $n));
+    $zweiterOk = $zweiterOk && $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":' . $n . '}';
+}
+$vomZweiten = count(zeilenVon($u, 'besucher'));
+pruefe("ein zweiter Besucher von anderer Adresse in derselben Minute (17 Ereignisse) wird vollständig gezählt: $vomZweiten von 17",
+    $vomZweiten === 17 && $zweiterOk, kurz($k));
+$zaehler = json_decode((string)@file_get_contents($u['daten'] . '/collect_gesamt.json'), true);
+$ueberAnteil = $stapelZahl * 50 - $rechneAnteil;
+pruefe('Zähldatei: angenommen ' . ($rechneAnteil + 17) . ", über dem Anteil einer Adresse $ueberAnteil, über dem Gesamtdeckel 0, kein Lauf \"Deckel erreicht\"",
+    is_array($zaehler) && ($zaehler['angenommen_tag'] ?? null) === $rechneAnteil + 17 && ($zaehler['verworfen_adresse_tag'] ?? null) === $ueberAnteil
+        && ($zaehler['verworfen_tag'] ?? null) === 0 && !isset($zaehler['deckel_lauf']) && ($zaehler['je_adresse'] ?? null) === $rechneAnteil,
+    substr((string)@file_get_contents($u['daten'] . '/collect_gesamt.json'), 0, 260));
+$anteilDateien = glob($u['daten'] . '/rate_limit_anteil_*.json') ?: [];
+$sauber = count($anteilDateien) === 2;
+foreach ($anteilDateien as $d) {
+    $inhalt = json_decode((string)file_get_contents($d), true);
+    $sauber = $sauber && preg_match('/^rate_limit_anteil_[0-9a-f]{32}\.json$/', basename($d)) === 1
+        && is_array($inhalt) && array_keys($inhalt) === ['sekunden'] && is_array($inhalt['sekunden'])
+        && array_filter($inhalt['sekunden'], 'is_int') === $inhalt['sekunden'];
+}
+pruefe('je Adresse eine Zähldatei rate_limit_anteil_<Hash>.json, Inhalt nur Sekunden und Zahlen', $sauber,
+    implode(', ', array_map('basename', $anteilDateien)));
+$klartext = [];
+foreach (glob($u['daten'] . '/*.json') ?: [] as $d) {
+    if (strpos(basename($d), '127.0.0.') !== false || strpos((string)file_get_contents($d), '127.0.0.') !== false) {
+        $klartext[] = basename($d);
+    }
+}
+pruefe('keine Datei im Datenordner trägt eine Adresse im Klartext, weder im Namen noch im Inhalt', $klartext === [], implode(', ', $klartext));
+foreach ($anteilDateien as $d) {
+    touch($d, time() - 7200);
+}
+clearstatcache();
+$m = marke($u) ?? [];
+$m['tag'] = gmdate('Y-m-d', time() - TAG); // Marke von gestern: der nächste Abruf räumt noch einmal
+setzeMarke($u, $m);
+anfrage($u, 'GET', '/health.php');
+warte($u, ['ok', 'fehler', 'teilweise']);
+clearstatcache();
+$nochDa = glob($u['daten'] . '/rate_limit_anteil_*.json') ?: [];
+pruefe('die Bereinigung löscht sie wie die übrigen rate_limit_-Dateien eine Stunde nach der letzten Änderung (hier zwei Stunden alt)',
+    $anteilDateien !== [] && $nochDa === [] && markeIst($u, 'ok', 1), count($nochDa) . ' noch da, ' . markeText($u));
+$aus = [];
+$rc = 1;
+exec(escapeshellarg(PHP_BINARY) . ' -r ' . escapeshellarg('require $argv[1]; $s = "statistikAdressSchluessel"; echo json_encode(['
+    . '$s("2001:db8:1:2::1") === $s("2001:db8:1:2:ffff::9"), $s("2001:db8:1:2::1") !== $s("2001:db8:1:3::1"), '
+    . '$s("::ffff:192.0.2.7") === $s("192.0.2.7"), $s("192.0.2.7") !== $s("192.0.2.8"), '
+    . 'preg_match("/^[0-9a-f]{32}$/", $s("192.0.2.7")) === 1]);')
+    . ' ' . escapeshellarg($u['api'] . '/statistik-zaehler.php') . ' 2>&1', $aus, $rc);
+pruefe('Schlüssel der Adresse: IPv6 zählt je /64-Präfix, als IPv6 geschriebenes IPv4 wie IPv4, verschiedene Adressen verschieden, nur Hash',
+    $rc === 0 && implode('', $aus) === '[true,true,true,true,true]', substr(implode(' ', $aus), 0, 80));
+stoppe($u);
+
+// ─── W: Größe je Ereignis ───────────────────────────────────────────────────
+echo "\nW  Größe je Ereignis: zu großes props wird leer gespeichert und gezählt\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$grenze = preg_match("/define\\('COLLECT_PROPS_BYTES',\\s*(\\d+)\\)/", $collectText, $treffer) ? (int)$treffer[1] : 0;
+pruefe('Grenze steht als COLLECT_PROPS_BYTES in collect.php, zwischen 4.277 (größter Fall, den der Browser erzeugen kann) und 16.384: ' . $grenze,
+    $grenze >= 4277 && $grenze <= 16384);
+$rechneGrenze = $grenze > 0 ? $grenze : 8192;
+// Was der Browser wirklich schickt (src/lib/analytics-tracker.ts): Geräteangaben
+// beim Sitzungsstart und der längste Fehlertext, den er zulässt, nur aus Umlauten.
+$geraet = ['device_type' => 'desktop', 'browser' => 'Chrome', 'browser_version' => '131.0.6778.86', 'os' => 'Windows',
+    'screen_width' => 1920, 'screen_height' => 1080, 'screen_resolution' => '1920x1080', 'viewport_width' => 1920,
+    'viewport_height' => 969, 'color_depth' => 24, 'pixel_ratio' => 1.25, 'language' => 'de-DE',
+    'languages' => 'de-DE,de,en-US,en', 'timezone' => 'Europe/Berlin', 'geo_country' => 'Europe', 'geo_region' => 'Europa',
+    'connection_type' => '4g', 'touch_support' => false, 'cookies_enabled' => true, 'do_not_track' => false,
+    'ad_blocker' => false, 'visit_count' => 3, 'is_returning' => true, 'last_visit' => '2026-11-09T14:03:27.512Z', 'page_count' => 0];
+$fehlerVoll = ['error_message' => str_repeat('ä', 500), 'error_source' => str_repeat('ä', 200), 'error_line' => 123456, 'error_col' => 123456];
+$fuell = function (int $bytes): array { // props, dessen JSON genau $bytes lang ist
+    return ['fuell' => str_repeat('x', $bytes - 12)];
+};
+$lang = str_repeat('u', 5000);
+$mitProps = function (string $ereignisName, string $sitzung, array $props, array $dazu = []): array {
+    return ['event' => $ereignisName, 'session_id' => $sitzung, 'visitor_id' => 'gr', 'url' => '/probe',
+        'ts' => browserZeit(time()), 'props' => $props] + $dazu;
+};
+$ereignisse = [
+    $mitProps('session_start', 'gr-start', $geraet), // von 127.0.0.1: die Ortung lässt diese Adresse aus
+    $mitProps('error', 'gr-fehler', $fehlerVoll),
+    $mitProps('page_view', 'gr-genau', $fuell($rechneGrenze)),
+    $mitProps('page_view', 'gr-eins-drueber', $fuell($rechneGrenze + 1)),
+    $mitProps('page_view', 'gr-riesig', $fuell(300000)),
+    ['url' => $lang, 'referrer' => $lang, 'utm_source' => $lang, 'utm_medium' => $lang, 'utm_campaign' => $lang,
+        'utm_content' => $lang, 'utm_term' => $lang] + $mitProps('page_view', 'gr-felder', $fuell($rechneGrenze)),
+];
+$k = anfrage($u, 'POST', '/collect.php', json_encode(['events' => $ereignisse]));
+warte($u, ['ok', 'fehler', 'teilweise']);
+pruefe('POST mit 6 Ereignissen, zwei davon mit zu großem props (eines 300 KB): Antwort unverändert 200 {"ok":true,"stored":6}',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":6}', kurz($k));
+$s = db($u)->prepare("SELECT session_id, props, length(event) + length(ts) + length(session_id) + length(visitor_id) + length(url)
+    + length(referrer) + length(utm_source) + length(utm_medium) + length(utm_campaign) + length(utm_content) + length(utm_term)
+    + coalesce(length(props), 0) AS bytes FROM analytics_events WHERE visitor_id = 'gr'");
+$s->execute();
+$da = [];
+foreach ($s->fetchAll(PDO::FETCH_ASSOC) as $r) {
+    $da[$r['session_id']] = $r;
+}
+pruefe('alle 6 sind gespeichert', count($da) === 6, implode(', ', array_keys($da)));
+pruefe('props bis zur Grenze steht unverändert da: Geräteangaben des Sitzungsstarts (' . strlen(json_encode($geraet)) . ' Bytes), längster Fehlertext aus Umlauten ('
+    . strlen(json_encode($fehlerVoll)) . " Bytes), genau $rechneGrenze Bytes",
+    json_decode((string)($da['gr-start']['props'] ?? ''), true) == $geraet
+        && json_decode((string)($da['gr-fehler']['props'] ?? ''), true) === $fehlerVoll
+        && strlen((string)($da['gr-genau']['props'] ?? '')) === $rechneGrenze,
+    'Längen: ' . strlen((string)($da['gr-start']['props'] ?? '')) . ', ' . strlen((string)($da['gr-fehler']['props'] ?? '')) . ', ' . strlen((string)($da['gr-genau']['props'] ?? '')));
+pruefe('props ein Byte über der Grenze und props mit 300 KB: das Ereignis ist gespeichert, props ist leer',
+    array_key_exists('gr-eins-drueber', $da) && $da['gr-eins-drueber']['props'] === null
+        && array_key_exists('gr-riesig', $da) && $da['gr-riesig']['props'] === null,
+    'Längen: ' . strlen((string)($da['gr-eins-drueber']['props'] ?? '')) . ', ' . strlen((string)($da['gr-riesig']['props'] ?? '')));
+$groesste = $da === [] ? 0 : max(array_map(fn($r) => (int)$r['bytes'], $da));
+$obergrenze = 64 + 64 + 2048 + 2048 + 5 * 255 + 64 + $rechneGrenze;
+pruefe("die größte gespeicherte Zeile (alle Textfelder mit 5.000 Zeichen gesendet, props an der Grenze) hat $groesste Bytes, höchstens $obergrenze",
+    $groesste > 0 && $groesste <= $obergrenze);
+$zaehler = json_decode((string)@file_get_contents($u['daten'] . '/collect_gesamt.json'), true);
+pruefe('Zähldatei: 6 angenommen, 2 mit zu großem props gezählt, eine Zeile im Protokoll',
+    is_array($zaehler) && ($zaehler['angenommen_tag'] ?? null) === 6 && ($zaehler['props_gross_tag'] ?? null) === 2
+        && protokollZahl($u, 'props über der Größengrenze') === 1,
+    substr((string)@file_get_contents($u['daten'] . '/collect_gesamt.json'), 0, 260));
+stoppe($u);
+
+// ─── X: Sichtbarkeit von Zählerausfall und Deckel ───────────────────────────
+echo "\nX  Zählerausfall und Deckel werden sichtbar: 503, checks.statistik, analytics-status.php\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$zaehlDatei = $u['daten'] . '/collect_gesamt.json';
+$statistik = function (array $a): ?string {
+    $wert = is_array($a['json']) ? ($a['json']['checks']['statistik'] ?? null) : null;
+    return is_string($wert) ? $wert : null;
+};
+$sonstOk = function (array $a): bool {
+    return $a['status'] === 200 && is_array($a['json']) && array_keys($a['json']) === ['status', 'checks']
+        && $a['json']['status'] === 'ok' && ($a['json']['checks']['database'] ?? null) === 'ok'
+        && ($a['json']['checks']['data_writable'] ?? null) === 'ok';
+};
+$a = anfrage($u, 'GET', '/health.php');
+warte($u, ['ok', 'fehler', 'teilweise']);
+pruefe('frisch nach dem Deploy (noch keine Zähldatei): "statistik": "ok", "status": "ok", HTTP 200', $statistik($a) === 'ok' && $sonstOk($a), kurz($a));
+$felder = is_array($a['json']) && is_array($a['json']['checks'] ?? null) ? array_keys($a['json']['checks']) : [];
+pruefe('checks trägt alle bisherigen Felder (database, data_writable, timestamp, bereinigung), statistik steht dahinter',
+    array_diff(['database', 'data_writable', 'timestamp', 'bereinigung'], $felder) === [] && end($felder) === 'statistik', implode(', ', $felder));
+$k = anfrage($u, 'POST', '/collect.php', stapel('sicht', 'sicht-a', 3));
+$a = anfrage($u, 'GET', '/health.php');
+pruefe('gewöhnlicher POST: 200 mit {"ok":true,"stored":3}, health.php "statistik": "ok"',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":3}' && $statistik($a) === 'ok' && $sonstOk($a), kurz($k) . ' | ' . kurz($a));
+// Ausfall: ein Verzeichnis an der Stelle der Zähldatei.
+@unlink($zaehlDatei);
+mkdir($zaehlDatei);
+$k = anfrage($u, 'POST', '/collect.php', stapel('sicht', 'sicht-b', 4));
+$a = anfrage($u, 'GET', '/health.php');
+pruefe('Zähldatei nicht nutzbar: collect.php antwortet 503 mit Fehlertext und ohne "stored", nichts gespeichert',
+    $k['status'] === 503 && is_string($k['fehler']) && $k['fehler'] !== '' && !isset($k['json']['stored']) && count(zeilenVon($u, 'sicht')) === 3,
+    kurz($k) . ' ' . count(zeilenVon($u, 'sicht')) . ' Zeilen');
+pruefe('health.php zeigt dabei "statistik": "zaehler"; "status" bleibt "ok", HTTP 200', $statistik($a) === 'zaehler' && $sonstOk($a), kurz($a));
+rmdir($zaehlDatei);
+$k = anfrage($u, 'POST', '/collect.php', stapel('sicht', 'sicht-b', 4));
+$a = anfrage($u, 'GET', '/health.php');
+pruefe('geheilt: derselbe Stapel noch einmal gesendet wird gespeichert (200, "stored" 4, 7 Zeilen), health.php wieder "ok"',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":4}' && count(zeilenVon($u, 'sicht')) === 7 && $statistik($a) === 'ok' && $sonstOk($a),
+    kurz($k) . ' ' . count(zeilenVon($u, 'sicht')) . ' Zeilen | ' . kurz($a));
+// Deckel: erst nach fünf Minuten am Stück, und nur eine halbe Stunde lang.
+$mitLauf = function (int $beginn, int $zuletzt) use ($zaehlDatei, $u): array {
+    $stand = json_decode((string)file_get_contents($zaehlDatei), true) ?: [];
+    $stand['deckel_lauf'] = ['beginn' => $beginn, 'zuletzt' => $zuletzt];
+    file_put_contents($zaehlDatei, json_encode($stand));
+    return anfrage($u, 'GET', '/health.php');
+};
+$minute = intdiv(time(), 60);
+$a = $mitLauf($minute - 5, $minute - 1);
+pruefe('Deckel fünf Minuten am Stück erreicht, zuletzt vor einer Minute: "statistik": "deckel"; "status" bleibt "ok", HTTP 200',
+    $statistik($a) === 'deckel' && $sonstOk($a), kurz($a));
+pruefe('die Antwort nennt dabei keine Zahl und kein Feld aus der Zähldatei',
+    preg_match('/angenommen|verworfen|spitze|beginn|zuletzt|sekunden/', $a['text']) === 0, kurz($a));
+$a = $mitLauf($minute - 32, $minute - 28);
+pruefe('derselbe Lauf, zuletzt vor 28 Minuten: noch "deckel" (der Wächter ruft alle 15 Minuten ab)', $statistik($a) === 'deckel' && $sonstOk($a), kurz($a));
+$a = $mitLauf($minute - 2, $minute - 1);
+pruefe('Deckel nur zwei Minuten am Stück erreicht: "ok", kein Alarm', $statistik($a) === 'ok' && $sonstOk($a), kurz($a));
+$a = $mitLauf($minute - 45, $minute - 41);
+pruefe('fünf Minuten am Stück, aber zuletzt vor 41 Minuten: wieder "ok"', $statistik($a) === 'ok' && $sonstOk($a), kurz($a));
+// Der Lauf entsteht in collect.php selbst. Nicht über eine Minutengrenze hinweg messen.
+if ((int)gmdate('s') >= 55) {
+    sleep(6);
+}
+$jetzt = time();
+$minute = intdiv($jetzt, 60);
+$voll = ['tag' => heute(), 'angenommen_tag' => $deckel, 'verworfen_tag' => 0, 'spitze_tag' => $deckel, 'verworfen_gesamt' => 0,
+    'deckel' => $deckel, 'sekunden' => [$jetzt - 2 => $deckel]];
+file_put_contents($zaehlDatei, json_encode($voll));
+$k = anfrageVon($u, '127.0.0.71', 'POST', '/collect.php', stapel('sicht', 'sicht-stoss', 5));
+$stand = json_decode((string)file_get_contents($zaehlDatei), true);
+$a = anfrage($u, 'GET', '/health.php');
+pruefe('ein einzelner Stoß (Deckel voll, ein POST darüber): Antwort unverändert, nichts gespeichert, der Lauf beginnt in dieser Minute, health.php bleibt "ok"',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":5}' && count(zeilenVon($u, 'sicht')) === 7
+        && is_array($stand) && ($stand['deckel_lauf'] ?? null) === ['beginn' => $minute, 'zuletzt' => $minute] && ($stand['verworfen_tag'] ?? null) === 5
+        && $statistik($a) === 'ok' && $sonstOk($a),
+    kurz($k) . ' ' . json_encode($stand['deckel_lauf'] ?? null) . ' | ' . kurz($a));
+file_put_contents($zaehlDatei, json_encode($voll + ['deckel_lauf' => ['beginn' => $minute - 4, 'zuletzt' => $minute - 1]]));
+$davor = anfrage($u, 'GET', '/health.php');
+$k = anfrageVon($u, '127.0.0.72', 'POST', '/collect.php', stapel('sicht', 'sicht-dauer', 5));
+$stand = json_decode((string)file_get_contents($zaehlDatei), true);
+$a = anfrage($u, 'GET', '/health.php');
+pruefe('Deckel seit vier Minuten erreicht (health.php noch "ok"), ein POST in der fünften: der Lauf reicht bis zu dieser Minute, health.php zeigt "deckel"',
+    $statistik($davor) === 'ok' && $k['text'] === '{"ok":true,"stored":5}' && count(zeilenVon($u, 'sicht')) === 7
+        && is_array($stand) && ($stand['deckel_lauf'] ?? null) === ['beginn' => $minute - 4, 'zuletzt' => $minute]
+        && $statistik($a) === 'deckel' && $sonstOk($a),
+    kurz($davor) . ' | ' . json_encode($stand['deckel_lauf'] ?? null) . ' | ' . kurz($a));
+// Die Zahlen sieht nur der angemeldete Admin.
+$p = db($u);
+$p->prepare('INSERT INTO admin_users (username, password_hash, display_name) VALUES (?, ?, ?)')
+    ->execute(['probe-admin', password_hash('Nur-fuer-diesen-Test-1', PASSWORD_DEFAULT), 'Probe']);
+$p = null;
+$l = anfrage($u, 'POST', '/auth.php?action=login', '{"username":"probe-admin","password":"Nur-fuer-diesen-Test-1"}');
+$s = anfrage($u, 'GET', '/analytics-status.php', null, ['Cookie: ' . (string)$l['cookie']]);
+$stand = json_decode((string)file_get_contents($zaehlDatei), true);
+$bisher = ['total_events', 'oldest_event', 'newest_event', 'db_size_bytes', 'last_cleanup', 'last_cleanup_count',
+    'unique_sessions_total', 'unique_visitors_total', 'events_today', 'sessions_today'];
+pruefe('angemeldet: analytics-status.php zeigt angenommen_tag, verworfen_tag und spitze_tag aus der Zähldatei ('
+    . ($stand['angenommen_tag'] ?? '?') . ', ' . ($stand['verworfen_tag'] ?? '?') . ', ' . ($stand['spitze_tag'] ?? '?') . ') hinter den bisherigen zehn Feldern',
+    $l['status'] === 200 && $s['status'] === 200 && is_array($s['json']) && is_array($stand)
+        && array_slice(array_keys($s['json']), 0, 10) === $bisher
+        && ($s['json']['angenommen_tag'] ?? null) === $stand['angenommen_tag'] && $stand['angenommen_tag'] >= $deckel
+        && ($s['json']['verworfen_tag'] ?? null) === $stand['verworfen_tag'] && $stand['verworfen_tag'] === 5
+        && ($s['json']['spitze_tag'] ?? null) === $stand['spitze_tag']
+        && ($s['json']['statistik_zaehler']['zustand'] ?? null) === 'deckel',
+    kurz($l) . ' | ' . substr($s['text'], 0, 400));
+$ohne = anfrage($u, 'GET', '/analytics-status.php');
+pruefe('ohne Anmeldung: 401, keine Zahl', $ohne['status'] === 401 && strpos($ohne['text'], 'angenommen') === false, kurz($ohne));
+stoppe($u);
+
+// ─── Y und Z: Auswertung ────────────────────────────────────────────────────
+// Die Zeilen stehen fest (kein Zufall, kein Abruf von health.php oder
+// collect.php, also auch kein Lauf der Bereinigung): Y misst den Zeitraum
+// vor 3 bis vor 1 Tag, Z den Zeitraum vor 12 bis vor 10 Tagen.
+echo "\nY  Auswertung: der letzte Tag des Zeitraums zählt mit, Absprung ist eine Sitzung mit genau einem Seitenaufruf\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$p = db($u);
+$p->prepare('INSERT INTO admin_users (username, password_hash, display_name) VALUES (?, ?, ?)')
+    ->execute(['probe-admin', password_hash('Nur-fuer-diesen-Test-1', PASSWORD_DEFAULT), 'Probe']);
+$ein = $p->prepare('INSERT INTO analytics_events (event, ts, session_id, visitor_id, url, utm_source, utm_campaign) VALUES (?, ?, ?, ?, ?, ?, ?)');
+$lege = function (string $ereignisName, string $ts, string $sitzung, string $url = '/probe', string $quelle = '', string $kampagne = '') use ($ein): void {
+    $ein->execute([$ereignisName, $ts, $sitzung, 'ausw', $url, $quelle, $kampagne]);
+};
+$tagVor = function (int $n): string {
+    return gmdate('Y-m-d', time() - $n * TAG);
+};
+$letzter = $tagVor(1);
+$mitte = $tagVor(2);
+$erster = $tagVor(3);
+// A: ein Besuch mit einer Seite am letzten Tag, vier Ereignisse (Absprung).
+$lege('session_start', $letzter . 'T10:00:00.000Z', 'ausw-a', '/');
+$lege('page_view', $letzter . 'T10:00:00.100Z', 'ausw-a', '/');
+$lege('scroll_depth', $letzter . 'T10:00:05.000Z', 'ausw-a', '/');
+$lege('page_engagement', $letzter . 'T10:00:30.000Z', 'ausw-a', '/');
+// B: zwei Seiten am letzten Tag, die zweite Zeile im alten Format mit Leerzeichen.
+$lege('session_start', $letzter . 'T11:00:00.000Z', 'ausw-b', '/');
+$lege('page_view', $letzter . 'T11:00:00.000Z', 'ausw-b', '/');
+$lege('page_view', $letzter . ' 11:05:00', 'ausw-b', '/leistungen');
+// C: zwei Seiten in derselben Sekunde am mittleren Tag.
+$lege('session_start', $mitte . 'T09:00:00.000Z', 'ausw-c', '/eins');
+$lege('page_view', $mitte . 'T09:00:01.000Z', 'ausw-c', '/eins');
+$lege('page_view', $mitte . 'T09:00:01.000Z', 'ausw-c', '/zwei');
+// D: Bruchstück, ein einzelner Klick ohne Seitenaufruf (die alte Zählung nannte das Absprung).
+$lege('cta_click', $mitte . 'T12:00:00.000Z', 'ausw-d');
+// E und F: je eine Seite in der letzten Sekunde des letzten Tages, im Format des Servers und ohne Millisekunden.
+$lege('session_start', $letzter . 'T23:59:59+00:00', 'ausw-e', '/');
+$lege('page_view', $letzter . 'T23:59:59+00:00', 'ausw-e', '/');
+$lege('session_start', $letzter . 'T23:59:59Z', 'ausw-f', '/');
+$lege('page_view', $letzter . 'T23:59:59Z', 'ausw-f', '/');
+// Gegenprobe: die erste Sekunde des Folgetags gehört nicht dazu.
+$lege('page_view', $tagVor(0) . 'T00:00:00.000Z', 'ausw-folgetag', '/');
+// Vergleichszeitraum (vor 5 bis vor 4 Tagen): eine Seite an seinem letzten Tag.
+$lege('session_start', $tagVor(4) . 'T15:00:00.000Z', 'ausw-vorher', '/');
+$lege('page_view', $tagVor(4) . 'T15:00:00.000Z', 'ausw-vorher', '/');
+// Z: Kampagnen, vor 13 bis vor 10 Tagen.
+$z1 = $tagVor(11);
+$z2 = $tagVor(10);
+// S1: Einstieg über google, zweiter Kampagnenklick im selben Tab über den Newsletter, Anfrage am letzten Tag.
+$lege('session_start', $z1 . 'T08:00:00.000Z', 'quelle-1', '/', 'google', 'herbst');
+$lege('page_view', $z1 . 'T08:00:00.100Z', 'quelle-1', '/', 'google', 'herbst');
+$lege('page_view', $z1 . 'T08:10:00.000Z', 'quelle-1', '/angebot', 'newsletter', 'nl-11');
+$lege('form_submit', $z2 . 'T08:12:00.000Z', 'quelle-1', '/angebot', 'newsletter', 'nl-11');
+// S2: Einstieg über den Newsletter, keine Anfrage.
+$lege('session_start', $z1 . 'T09:00:00.000Z', 'quelle-2', '/', 'newsletter', 'nl-11');
+$lege('page_view', $z1 . 'T09:00:00.100Z', 'quelle-2', '/', 'newsletter', 'nl-11');
+$lege('heartbeat', $z1 . 'T09:00:30.000Z', 'quelle-2', '/', 'newsletter', 'nl-11');
+// S3: Einstieg ohne Kampagne, später eine Seite und eine Anfrage mit google in der Adresse.
+$lege('session_start', $z1 . 'T10:00:00.000Z', 'quelle-3', '/');
+$lege('page_view', $z1 . 'T10:05:00.000Z', 'quelle-3', '/', 'google', 'herbst');
+$lege('form_submit', $z1 . 'T10:06:00.000Z', 'quelle-3', '/kontakt', 'google', 'herbst');
+// S4: Einstieg über google vor dem Zeitraum, Anfrage im Zeitraum ohne Angabe in der Adresse.
+$lege('session_start', $tagVor(13) . 'T10:00:00.000Z', 'quelle-4', '/', 'google', 'herbst');
+$lege('form_submit', $z2 . 'T10:00:00.000Z', 'quelle-4', '/kontakt');
+$ein = null;
+$p = null;
+$l = anfrage($u, 'POST', '/auth.php?action=login', '{"username":"probe-admin","password":"Nur-fuer-diesen-Test-1"}');
+$angemeldet = ['Cookie: ' . (string)$l['cookie']];
+$y = anfrage($u, 'GET', '/analytics-export.php?action=kpis&from=' . $erster . '&to=' . $letzter, null, $angemeldet);
+$j = is_array($y['json']) ? $y['json'] : [];
+$bisherKpi = ['total_events', 'unique_sessions', 'page_views', 'unique_visitors', 'cta_clicks', 'form_submits', 'phone_clicks',
+    'whatsapp_clicks', 'downloads', 'comparison', 'bounce_rate', 'avg_session_events', 'engagement', 'session_quality',
+    'visitor_segments', 'conversion_funnel', 'conversion_rate', 'events_by_day', 'events_by_hour', 'heatmap', 'top_pages',
+    'page_performance', 'navigation_paths', 'top_referrers', 'top_sources', 'top_campaigns', 'device_breakdown',
+    'browser_breakdown', 'os_breakdown', 'screen_resolution_breakdown', 'connection_type_breakdown', 'country_breakdown',
+    'timezone_breakdown', 'language_breakdown', 'city_breakdown', 'form_conversion_by_type', 'lead_sources', 'exit_intents',
+    'performance_metrics', 'top_errors'];
+pruefe('angemeldet antwortet analytics-export.php?action=kpis mit 200 und den bisherigen 40 Feldern in der bisherigen Reihenfolge',
+    $l['status'] === 200 && $y['status'] === 200 && array_slice(array_keys($j), 0, 40) === $bisherKpi, kurz($l) . ' | ' . kurz($y));
+pruefe('der letzte Tag des Zeitraums zählt mit: 15 Ereignisse, 6 Sitzungen, 7 Seitenaufrufe (am Stand davor fehlten alle Zeilen mit "T" des letzten Tages)',
+    ($j['total_events'] ?? null) === 15 && ($j['unique_sessions'] ?? null) === 6 && ($j['page_views'] ?? null) === 7,
+    'total_events ' . json_encode($j['total_events'] ?? null) . ', unique_sessions ' . json_encode($j['unique_sessions'] ?? null) . ', page_views ' . json_encode($j['page_views'] ?? null));
+$tage = [];
+foreach (is_array($j['events_by_day'] ?? null) ? $j['events_by_day'] : [] as $t) {
+    $tage[(string)($t['date'] ?? '')] = (int)($t['page_views'] ?? -1);
+}
+pruefe("events_by_day nennt den letzten Tag $letzter mit 5 Seitenaufrufen (Formate des Browsers, des Servers, ohne Millisekunden, mit Leerzeichen) und $mitte mit 2",
+    $tage === [$mitte => 2, $letzter => 5], json_encode($tage));
+pruefe('die erste Sekunde des Folgetags zählt nicht mit (Gegenprobe: die Grenze ist nicht zu weit)',
+    ($j['total_events'] ?? null) === 15 && !isset($tage[$tagVor(0)]), json_encode($tage));
+pruefe('der Vergleichszeitraum zählt seinen letzten Tag ebenfalls mit: 1 Seitenaufruf davor',
+    ($j['comparison']['page_views']['previous'] ?? null) === 1 && ($j['comparison']['page_views']['current'] ?? null) === 7,
+    json_encode($j['comparison']['page_views'] ?? null));
+pruefe('Absprung: 3 von 5 Sitzungen mit Seitenaufruf haben genau einen (A, E, F), bounce_rate 60; das Bruchstück D ohne Seitenaufruf zählt nicht',
+    is_numeric($j['bounce_rate'] ?? null) && abs((float)$j['bounce_rate'] - 60.0) < 0.05
+        && ($j['bounce_sessions'] ?? null) === 3 && ($j['page_view_sessions'] ?? null) === 5,
+    'bounce_rate ' . json_encode($j['bounce_rate'] ?? null) . ', bounce_sessions ' . json_encode($j['bounce_sessions'] ?? null)
+        . ', page_view_sessions ' . json_encode($j['page_view_sessions'] ?? null));
+$pfade = [];
+foreach (is_array($j['navigation_paths'] ?? null) ? $j['navigation_paths'] : [] as $pfad) {
+    $pfade[] = ($pfad['from_page'] ?? '') . ' -> ' . ($pfad['to_page'] ?? '');
+}
+pruefe('Seitenfolge: zwei Seitenaufrufe derselben Sekunde stehen in der Reihenfolge ihres Eingangs (/eins -> /zwei)',
+    in_array('/eins -> /zwei', $pfade, true) && !in_array('/zwei -> /eins', $pfade, true), implode(', ', $pfade));
+$x = anfrage($u, 'GET', '/analytics-export.php?action=export&format=json&limit=1000&from=' . $erster . '&to=' . $letzter, null, $angemeldet);
+$sitzungen = is_array($x['json']) ? array_count_values(array_column($x['json'], 'session_id')) : [];
+pruefe('der Rohdaten-Export desselben Zeitraums trägt dieselben 15 Zeilen, ohne die des Folgetags',
+    $x['status'] === 200 && array_sum($sitzungen) === 15 && ($sitzungen['ausw-a'] ?? 0) === 4 && !isset($sitzungen['ausw-folgetag']),
+    $x['status'] . ' ' . json_encode($sitzungen));
+
+echo "\nZ  Sitzungen und Anfragen je Quelle über den Sitzungsstart\n";
+$y = anfrage($u, 'GET', '/analytics-export.php?action=kpis&from=' . $tagVor(12) . '&to=' . $z2, null, $angemeldet);
+$j = is_array($y['json']) ? $y['json'] : [];
+pruefe('neue Felder stehen hinter den bisherigen 40: bounce_sessions, page_view_sessions, sessions_by_source, leads_by_source, sessions_by_campaign, leads_by_campaign',
+    $y['status'] === 200 && array_slice(array_keys($j), 0, 40) === $bisherKpi
+        && array_slice(array_keys($j), 40) === ['bounce_sessions', 'page_view_sessions', 'sessions_by_source', 'leads_by_source', 'sessions_by_campaign', 'leads_by_campaign'],
+    implode(', ', array_slice(array_keys($j), 40)));
+pruefe('Sitzungen je Quelle: google 1, newsletter 1. Die Sitzung mit zwei Kampagnenklicks zählt einmal, bei der Quelle ihres Starts; die Sitzung ohne Quelle am Start zählt nicht',
+    ($j['sessions_by_source'] ?? null) === [['source' => 'google', 'sessions' => 1], ['source' => 'newsletter', 'sessions' => 1]],
+    json_encode($j['sessions_by_source'] ?? null));
+pruefe('Anfragen je Quelle: google 2 (die Anfrage nach dem zweiten Klick und die der Sitzung, die vor dem Zeitraum über google begann), newsletter keine',
+    ($j['leads_by_source'] ?? null) === [['source' => 'google', 'conversions' => 2]], json_encode($j['leads_by_source'] ?? null));
+pruefe('je Kampagne dasselbe: Sitzungen herbst 1 und nl-11 1, Anfragen herbst 2',
+    ($j['sessions_by_campaign'] ?? null) === [['campaign' => 'herbst', 'sessions' => 1], ['campaign' => 'nl-11', 'sessions' => 1]]
+        && ($j['leads_by_campaign'] ?? null) === [['campaign' => 'herbst', 'conversions' => 2]],
+    json_encode($j['sessions_by_campaign'] ?? null) . ' ' . json_encode($j['leads_by_campaign'] ?? null));
+$leadAlt = is_array($j['lead_sources'] ?? null) ? $j['lead_sources'] : [];
+usort($leadAlt, fn($l1, $l2) => strcmp((string)($l1['source'] ?? ''), (string)($l2['source'] ?? '')));
+pruefe('die bisherigen Felder zählen weiter je Ereignis: top_sources newsletter 5 und google 4, lead_sources google 1 und newsletter 1',
+    ($j['top_sources'] ?? null) === [['source' => 'newsletter', 'count' => 5], ['source' => 'google', 'count' => 4]]
+        && $leadAlt === [['source' => 'google', 'conversions' => 1], ['source' => 'newsletter', 'conversions' => 1]],
+    json_encode($j['top_sources'] ?? null) . ' ' . json_encode($j['lead_sources'] ?? null));
+stoppe($u);
 
 // ─── Schluss: keine Antwort verrät Fehlertext oder Pfade ────────────────────
 echo "\nSchluss\n";

@@ -7,12 +7,18 @@
  */
 
 require_once __DIR__ . '/db.php';
+// Ort der Zähldatei und der Lauf "Deckel erreicht", den health.php liest.
+require_once __DIR__ . '/statistik-zaehler.php';
 
 // ─── Grenzen des Zuflusses ──────────────────────────────────────────────────
-// Der Endpunkt ist öffentlich. Die Bremse je Adresse weiter unten (60 Anfragen
-// je Minute, also bis zu 3.000 Ereignisse) hält einen einzelnen Absender auf,
-// aber nicht viele Adressen zugleich. Die Grenzen hier gelten für alle zusammen.
-// Antwort und Statuscode für den Browser ändern sich dadurch nicht.
+// Der Endpunkt ist öffentlich. Vier Grenzen, in dieser Reihenfolge:
+//   1. Anfragen je Adresse (60 je Minute, weiter unten),
+//   2. Größe je Ereignis (Textfelder gekürzt, "props" höchstens COLLECT_PROPS_BYTES),
+//   3. gespeicherte Ereignisse je Adresse und Minute (COLLECT_ADRESSE_JE_MINUTE),
+//   4. gespeicherte Ereignisse je Minute über alle Adressen (COLLECT_GESAMT_JE_MINUTE).
+// Antwort und Statuscode für den Browser ändern sich dadurch nicht. Einzige
+// Ausnahme: Sind die Zähler für 3 oder 4 nicht nutzbar, antwortet der Endpunkt
+// mit 503 statt still nichts zu speichern (siehe dort).
 
 // Zeitstempel: Das Feld "ts" kommt vom Besucher. Gespeichert wird es nur, wenn
 // es das Format des Browsers hat (toISOString, etwa 2026-11-10T14:03:27.512Z)
@@ -50,11 +56,50 @@ define('COLLECT_TS_VORAUS', 300);
 // Der echte Bedarf ist nicht gemessen; die Zähldatei führt dafür die Zahlen
 // des Tages (angenommen, verworfen, dichteste Minute).
 define('COLLECT_GESAMT_JE_MINUTE', 400);
-// Der Name passt absichtlich in kein Muster von analytics-cleanup.php: Die
-// Zahlen des Tages sollen nicht nach einer Stunde Ruhe verschwinden. Die Datei
-// trägt keine Adresse und keine Kennung, nur Zahlen, und liegt im gesperrten
-// Datenordner (nicht öffentlich).
-define('COLLECT_GESAMT_DATEI', __DIR__ . '/data/collect_gesamt.json');
+// Ort und Begründung des Namens: statistik-zaehler.php.
+define('COLLECT_GESAMT_DATEI', STATISTIK_ZAEHLDATEI);
+
+// Anteil je Adresse am Gesamtdeckel: höchstens so viele gespeicherte Ereignisse
+// in 60 Sekunden von einer Adresse (IPv6: von einem /64-Präfix). Die Bremse
+// weiter unten zählt Anfragen, nicht Ereignisse: Mit 8 Anfragen zu 50
+// Ereignissen füllte eine Adresse den Gesamtdeckel allein, und jeder echte
+// Besuch der Minute ging still verloren.
+// Rechnung für 120:
+//   Dichteste Minute eines Besuchers (aus src/lib/analytics-tracker.ts gezählt):
+//   17 Ereignisse bei einer Seite, 37 bei drei Seiten in derselben Minute.
+//   120 sind das 7-fache und das 3,2-fache davon. Hinter einer gemeinsamen
+//   Adresse (Firmennetz, Mobilfunk) tragen 120 je Minute 3 Besucher, die alle
+//   gleichzeitig drei Seiten in einer Minute aufrufen, 7 gleichzeitig in ihrer
+//   dichtesten Minute mit einer Seite, 30 lesende Besucher (4 je Minute) oder
+//   60 offene Tabs (2 Herzschläge je Minute).
+//   Gegen den Gesamtdeckel: 3 Adressen kommen auf 360 von 400, erst die vierte
+//   füllt ihn. Neben einer Adresse am Anschlag bleiben 280 je Minute frei.
+// Was über dem Anteil liegt, wird wie über dem Gesamtdeckel still nicht
+// gespeichert und in der Zähldatei gezählt (verworfen_adresse_tag). Liegt die
+// Zahl an einem gewöhnlichen Tag über null, ist der Anteil zu klein oder
+// REMOTE_ADDR ist nicht die Adresse des Besuchers (Vorschaltserver).
+define('COLLECT_ADRESSE_JE_MINUTE', 120);
+
+// Größe je Ereignis: "props" darf als JSON, so wie es gespeichert wird,
+// höchstens so viele Bytes haben. Ohne diese Grenze galt nur 1 MB je Anfrage,
+// und eine Adresse konnte mit wenigen dicken Ereignissen die Datenbank füllen,
+// in der auch die Anfragen der Kunden liegen.
+// Rechnung für 8192 (nachgerechnet aus dem, was der Browser schickt):
+//   session_start (Geräteangaben, das größte gewöhnliche Ereignis): 569 Bytes,
+//   mit der Ortung des Servers 712, mit 40 Sprachen im Browser 934.
+//   error mit voller Länge (500 + 200 Zeichen): 781 Bytes, wenn der Text nur
+//   aus Umlauten bestünde (json_encode schreibt je Zeichen 6 Bytes) 4.277.
+//   outbound_click mit voller Länge: 892, nur Umlaute 3.890.
+//   8192 ist das 1,9-fache des größten Falls, den der Browser überhaupt
+//   erzeugen kann, und das 11-fache des größten gewöhnlichen.
+// Was darüber liegt, wird mit leerem "props" gespeichert und gezählt
+// (props_gross_tag), nicht verworfen: Seitenaufruf, Sitzung und Zeit bleiben
+// so gezählt, falls doch ein echter Browser die Grenze reißt; einem Fremden
+// bringt es nichts, denn dieselbe Zeile ohne "props" durfte er ohnehin senden.
+// Die übrigen Felder sind einzeln gekürzt (collectText unten): Kennungen je 64,
+// Adresse und Herkunft je 2048, fünf Kampagnenfelder je 255 Bytes. Eine Zeile
+// hat damit höchstens rund 13,7 KB (rund 5.550 Bytes Felder, 8.192 Bytes props).
+define('COLLECT_PROPS_BYTES', 8192);
 
 header('Content-Type: application/json; charset=utf-8');
 setCorsHeaders();
@@ -156,6 +201,7 @@ $validEvents = [
 
 // 1. Prüfen: was von diesem POST überhaupt gespeichert werden dürfte.
 $zeilen = [];
+$propsZuGross = 0; // Ereignisse, deren "props" über COLLECT_PROPS_BYTES lag
 foreach ($events as $ev) {
     if (!is_array($ev)) continue;
 
@@ -165,6 +211,16 @@ foreach ($events as $ev) {
     // Check per-event toggle
     if ($enabledEvents !== null && isset($enabledEvents[$eventName]) && !$enabledEvents[$eventName]) {
         continue;
+    }
+
+    // Größe je Ereignis: gemessen wird der Text, der gespeichert würde.
+    $props = isset($ev['props']) && is_array($ev['props']) ? $ev['props'] : [];
+    if ($props !== []) {
+        $propsText = json_encode($props);
+        if ($propsText === false || strlen($propsText) > COLLECT_PROPS_BYTES) {
+            $props = [];
+            $propsZuGross++;
+        }
     }
 
     // Sanitize: no PII allowed in url/referrer
@@ -180,19 +236,31 @@ foreach ($events as $ev) {
         'utm_campaign' => collectText($ev['utm_campaign'] ?? '', 255),
         'utm_content' => collectText($ev['utm_content'] ?? '', 255),
         'utm_term' => collectText($ev['utm_term'] ?? '', 255),
-        'props' => isset($ev['props']) && is_array($ev['props']) ? $ev['props'] : [],
+        'props' => $props,
     ];
 }
 
-// 2. Gesamtdeckel: wie viele davon in dieser Minute noch Platz haben.
+// 2. Anteil der Adresse, dann Gesamtdeckel: wie viele davon in dieser Minute
+// noch Platz haben. Erst der Anteil, damit eine Adresse dem Gesamtdeckel je
+// Minute nie mehr als ihren Anteil abverlangt. Gezählt wird beim Anteil, was
+// die Adresse beansprucht hat, auch wenn der Gesamtdeckel es danach verwirft.
 $geprueft = count($zeilen);
-$still = 0; // über dem Deckel: nicht gespeichert, dem Browser nicht gemeldet
+$still = 0; // über Anteil oder Deckel: nicht gespeichert, dem Browser nicht gemeldet
+$zaehlerAus = false;
 if ($geprueft > 0) {
-    $erlaubt = collectGesamtdeckel(COLLECT_GESAMT_DATEI, $geprueft, COLLECT_GESAMT_JE_MINUTE, $now);
+    $anteilDatei = __DIR__ . '/data/rate_limit_anteil_'
+        . statistikAdressSchluessel((string)($_SERVER['REMOTE_ADDR'] ?? 'unknown')) . '.json';
+    $anteil = collectAdressAnteil($anteilDatei, $geprueft, COLLECT_ADRESSE_JE_MINUTE, $now);
+    $erlaubt = $anteil === null ? null : collectGesamtdeckel(
+        COLLECT_GESAMT_DATEI, $anteil, COLLECT_GESAMT_JE_MINUTE, $now,
+        ['adresse' => $geprueft - $anteil, 'props' => $propsZuGross, 'je_adresse' => COLLECT_ADRESSE_JE_MINUTE]
+    );
     if ($erlaubt === null) {
-        // Ohne Zähler kein Deckel, ohne Deckel keine Speicherung.
+        // Ohne Zähler kein Deckel, ohne Deckel keine Speicherung. Der Browser
+        // bekommt 503 (unten) und behält den Stapel für den nächsten Versuch.
         error_log('Analytics collect: Zähler des Gesamtdeckels nicht nutzbar, ' . $geprueft . ' Ereignisse nicht gespeichert');
         $zeilen = [];
+        $zaehlerAus = true;
     } else {
         $still = $geprueft - $erlaubt;
         $zeilen = array_slice($zeilen, 0, $erlaubt);
@@ -273,9 +341,21 @@ if ($zeilen !== []) {
     }
 }
 
-// Antwort wie bisher. Was über dem Gesamtdeckel lag, zählt hier mit: Die Zahl
-// der verworfenen Ereignisse steht nur in der Zähldatei, nicht in der Antwort.
-echo json_encode(['ok' => true, 'stored' => $stored + $still]);
+if ($zaehlerAus) {
+    // Zähler nicht nutzbar: 503 statt 200 mit "stored" 0. Der Browser wertet nur
+    // den Status aus (flushQueue in src/lib/analytics-tracker.ts): Bei 200
+    // verwirft er den Stapel, bei 503 legt er ihn zurück und sendet ihn mit dem
+    // nächsten Ereignis wieder, höchstens 20 je Anfrage und ohne eigene
+    // Wiederholung. health.php zeigt denselben Zustand als "statistik": "zaehler".
+    http_response_code(503);
+    header('Retry-After: 60');
+    echo json_encode(['error' => 'Statistics temporarily unavailable']);
+} else {
+    // Antwort wie bisher. Was über dem Anteil der Adresse oder dem Gesamtdeckel
+    // lag, zählt hier mit: Die Zahl der verworfenen Ereignisse steht nur in der
+    // Zähldatei, nicht in der Antwort.
+    echo json_encode(['ok' => true, 'stored' => $stored + $still]);
+}
 
 // Anstoß der Bereinigung, zweiter Weg neben health.php: nur, wenn heute noch
 // nicht vollständig geräumt ist (bei großer Altlast in Teilläufen im Abstand
@@ -335,11 +415,15 @@ function collectZeitstempel($roh, int $jetzt): string {
  * (Muster wie die Zähler in chat.php). Führt nebenbei die Zahlen des Tages
  * (UTC), aus denen das Haus den Bedarf und den Missbrauch liest.
  *
+ * $neben zählt mit, was vor dem Deckel schon aussortiert wurde: 'adresse'
+ * (Ereignisse über dem Anteil der Adresse), 'props' (Ereignisse mit zu großem
+ * "props", leer gespeichert), 'je_adresse' (der geltende Anteil, zur Anzeige).
+ *
  * Rückgabe: wie viele der $anzahl Ereignisse gespeichert werden dürfen
  * (0 bis $anzahl), oder null, wenn der Zähler nicht nutzbar ist (Datei nicht
  * zu öffnen, zu sperren oder zu schreiben). Der Aufrufer speichert bei null nichts.
  */
-function collectGesamtdeckel(string $datei, int $anzahl, int $max, int $jetzt): ?int {
+function collectGesamtdeckel(string $datei, int $anzahl, int $max, int $jetzt, array $neben = []): ?int {
     $fp = @fopen($datei, 'c+');
     if (!$fp) {
         return null;
@@ -373,6 +457,10 @@ function collectGesamtdeckel(string $datei, int $anzahl, int $max, int $jetzt): 
     $tag = gmdate('Y-m-d', $jetzt);
     $heute = ($stand['tag'] ?? null) === $tag;
     $verworfenBisher = $heute ? $zahl($stand['verworfen_tag'] ?? null) : 0;
+    $ueberAnteil = $zahl($neben['adresse'] ?? null);
+    $ueberAnteilBisher = $heute ? $zahl($stand['verworfen_adresse_tag'] ?? null) : 0;
+    $propsGross = $zahl($neben['props'] ?? null);
+    $propsGrossBisher = $heute ? $zahl($stand['props_gross_tag'] ?? null) : 0;
     $neu = [
         'tag' => $tag,
         'angenommen_tag' => ($heute ? $zahl($stand['angenommen_tag'] ?? null) : 0) + $erlaubt,
@@ -381,7 +469,18 @@ function collectGesamtdeckel(string $datei, int $anzahl, int $max, int $jetzt): 
         'spitze_tag' => max($heute ? $zahl($stand['spitze_tag'] ?? null) : 0, $belegt + $erlaubt),
         'verworfen_gesamt' => $zahl($stand['verworfen_gesamt'] ?? null) + $verworfen,
         'deckel' => $max,
+        // über dem Anteil einer Adresse (nicht gespeichert) und mit zu großem
+        // "props" (leer gespeichert), je Tag
+        'verworfen_adresse_tag' => $ueberAnteilBisher + $ueberAnteil,
+        'props_gross_tag' => $propsGrossBisher + $propsGross,
+        'je_adresse' => $zahl($neben['je_adresse'] ?? ($stand['je_adresse'] ?? null)),
     ];
+    // Lauf "Deckel erreicht" in Kalenderminuten: daraus liest health.php, ob
+    // der Deckel mehrere Minuten am Stück erreicht war (statistik-zaehler.php).
+    $lauf = statistikDeckelLauf($stand['deckel_lauf'] ?? null, intdiv($jetzt, 60), $belegt + $erlaubt >= $max);
+    if ($lauf !== null) {
+        $neu['deckel_lauf'] = $lauf;
+    }
     if (!$heute && is_string($stand['tag'] ?? null)) {
         // Tageswechsel: die Zahlen des letzten Tages mit Verkehr bleiben stehen.
         $neu['vortag'] = [
@@ -389,6 +488,8 @@ function collectGesamtdeckel(string $datei, int $anzahl, int $max, int $jetzt): 
             'angenommen' => $zahl($stand['angenommen_tag'] ?? null),
             'verworfen' => $zahl($stand['verworfen_tag'] ?? null),
             'spitze' => $zahl($stand['spitze_tag'] ?? null),
+            'verworfen_adresse' => $zahl($stand['verworfen_adresse_tag'] ?? null),
+            'props_gross' => $zahl($stand['props_gross_tag'] ?? null),
         ];
     } elseif (is_array($stand['vortag'] ?? null)) {
         $neu['vortag'] = [
@@ -396,6 +497,8 @@ function collectGesamtdeckel(string $datei, int $anzahl, int $max, int $jetzt): 
             'angenommen' => $zahl($stand['vortag']['angenommen'] ?? null),
             'verworfen' => $zahl($stand['vortag']['verworfen'] ?? null),
             'spitze' => $zahl($stand['vortag']['spitze'] ?? null),
+            'verworfen_adresse' => $zahl($stand['vortag']['verworfen_adresse'] ?? null),
+            'props_gross' => $zahl($stand['vortag']['props_gross'] ?? null),
         ];
     }
     $neu['sekunden'] = $sekunden;
@@ -404,10 +507,60 @@ function collectGesamtdeckel(string $datei, int $anzahl, int $max, int $jetzt): 
         error_log('Analytics collect: Gesamtdeckel von ' . $max . ' Ereignissen je Minute am ' . $tag
             . ' erreicht, weitere Ereignisse werden nicht gespeichert');
     }
+    if ($ueberAnteil > 0 && $ueberAnteilBisher === 0) {
+        error_log('Analytics collect: Anteil je Adresse am ' . $tag
+            . ' erreicht, weitere Ereignisse dieser Adresse werden in der Minute nicht gespeichert');
+    }
+    if ($propsGross > 0 && $propsGrossBisher === 0) {
+        error_log('Analytics collect: props über der Größengrenze am ' . $tag . ', Ereignis ohne props gespeichert');
+    }
 
     $text = json_encode($neu);
     // Erst überschreiben, dann auf die neue Länge kürzen: So steht zu keinem
     // Zeitpunkt eine leere Datei da, die als Zählerstand null gelesen würde.
+    $geschrieben = rewind($fp)
+        && fwrite($fp, $text) === strlen($text)
+        && ftruncate($fp, strlen($text))
+        && fflush($fp);
+    flock($fp, LOCK_UN);
+    fclose($fp);
+    return $geschrieben ? $erlaubt : null;
+}
+
+/**
+ * Anteil einer Adresse am Gesamtdeckel: höchstens $max Ereignisse in 60
+ * Sekunden, gezählt in Sekundenfächern in einer eigenen Zähldatei je Adresse
+ * unter Dateisperre. Der Dateiname trägt nur einen Hash der Adresse
+ * (statistikAdressSchluessel), der Inhalt nur Sekunden und Zahlen. Der Name
+ * beginnt mit rate_limit_ und fällt damit unter dieselbe Regel der Bereinigung
+ * wie die übrigen Zähldateien mit IP-Bezug (eine Stunde nach der letzten Änderung).
+ *
+ * Rückgabe: wie viele der $anzahl Ereignisse die Adresse noch beanspruchen
+ * darf (0 bis $anzahl), oder null, wenn der Zähler nicht nutzbar ist.
+ */
+function collectAdressAnteil(string $datei, int $anzahl, int $max, int $jetzt): ?int {
+    $fp = @fopen($datei, 'c+');
+    if (!$fp) {
+        return null;
+    }
+    if (!flock($fp, LOCK_EX)) {
+        fclose($fp);
+        return null;
+    }
+    $stand = json_decode((string)stream_get_contents($fp), true);
+    $sekunden = [];
+    $belegt = 0;
+    foreach (is_array($stand) && is_array($stand['sekunden'] ?? null) ? $stand['sekunden'] : [] as $sekunde => $n) {
+        if (is_int($sekunde) && is_int($n) && $n > 0 && abs($jetzt - $sekunde) < 60) {
+            $sekunden[$sekunde] = $n;
+            $belegt += $n;
+        }
+    }
+    $erlaubt = max(0, min($anzahl, $max - $belegt));
+    if ($erlaubt > 0) {
+        $sekunden[$jetzt] = ($sekunden[$jetzt] ?? 0) + $erlaubt;
+    }
+    $text = json_encode(['sekunden' => $sekunden]);
     $geschrieben = rewind($fp)
         && fwrite($fp, $text) === strlen($text)
         && ftruncate($fp, strlen($text))
