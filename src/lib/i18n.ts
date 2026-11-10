@@ -53,6 +53,20 @@ export function getInitialLanguage(suche?: string): Language {
   return getStoredLanguage()
 }
 
+/**
+ * Adresse ohne die Angabe `lang`, alles andere bleibt (UTM-Angaben, Anker).
+ * Stellt der Besucher die Sprache selbst um, gilt seine Wahl; stünde `?lang=en`
+ * weiter in der Adresse, zeigte ein Neuladen wieder Englisch, weil die Adresse
+ * beim Start vorgeht.
+ */
+export function ohneSprachangabe(pfad: string, suche: string, anker: string): string {
+  const angaben = new URLSearchParams(suche)
+  if (!angaben.has('lang')) return `${pfad}${suche}${anker}`
+  angaben.delete('lang')
+  const rest = angaben.toString()
+  return `${pfad}${rest ? `?${rest}` : ''}${anker}`
+}
+
 export function storeLanguage(lang: Language) {
   try {
     localStorage.setItem('ss-lang', lang)
