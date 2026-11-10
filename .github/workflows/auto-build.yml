@@ -46,6 +46,11 @@ jobs:
             exit 1
           fi
 
+          if [ ! -f "dist/_s/kontakt.html" ] || [ ! -f "dist/_s/nicht-gefunden.html" ]; then
+            echo "❌ ERROR: dist/_s/ fehlt (scripts/seiten-vorab.mjs); ohne diese Dateien antworten alle Unterseiten mit 404"
+            exit 1
+          fi
+          
           if [ ! -f "dist/.htaccess" ]; then
             echo "❌ ERROR: .htaccess not found in dist/ (Hostinger SPA routing would break)"
             exit 1

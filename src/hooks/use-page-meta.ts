@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import seitenMeta from '@/lib/seiten-meta.json'
 
 interface PageMeta {
   title: string
@@ -9,105 +10,9 @@ interface PageMeta {
 const SITE_URL = 'https://sunds-messebau.de'
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`
 
-const PAGE_META: Record<string, PageMeta> = {
-  '/': {
-    title: 'S&S Messebau – Ihr Messebau-Partner | Messebau NRW',
-    description: 'S&S Messebau: Messestände für Food, Finance & Industrie. Unverbindliches 48h-Angebot mit persönlicher Beratung. Jetzt beraten lassen!'
-  },
-  '/leistungen': {
-    title: 'Leistungen – Messebau, Eventbau, Showrooms & mehr | S&S Messebau',
-    description: 'Full-Service Messebau: Messestände, Eventbau, Showrooms, Ladenbau, Bannerrahmen & Ausstattung – alles aus einer Hand. Übersicht aller Leistungen.',
-    ogType: 'website'
-  },
-  '/leistungen/showroom-ladenbau': {
-    title: 'Showroom & Ladenbau | Brandspaces – Individuelle Raumkonzepte | S&S Messebau',
-    description: 'Showrooms, Ladenbau und Brand Spaces aus einer Hand: Individuelle Raumkonzepte, Verkaufsräume und Markenerlebnisräume. Full-Service von Konzeption bis Montage.'
-  },
-  '/leistungen/showrooms': {
-    title: 'Showroom & Ladenbau | Brandspaces – Individuelle Raumkonzepte | S&S Messebau',
-    description: 'Showrooms, Ladenbau und Brand Spaces aus einer Hand: Individuelle Raumkonzepte, Verkaufsräume und Markenerlebnisräume. Full-Service von Konzeption bis Montage.'
-  },
-  '/leistungen/ladenbau': {
-    title: 'Showroom & Ladenbau | Brandspaces – Individuelle Raumkonzepte | S&S Messebau',
-    description: 'Showrooms, Ladenbau und Brand Spaces aus einer Hand: Individuelle Raumkonzepte, Verkaufsräume und Markenerlebnisräume. Full-Service von Konzeption bis Montage.'
-  },
-  '/leistungen/boeden': {
-    title: 'Böden & Ausstattung – Komplettlösungen | S&S Messebau',
-    description: 'Hochwertige Messeboden-Systeme, Möbel und Beleuchtung – Komplettlösungen für Messe, Event und Showroom.'
-  },
-  '/leistungen/messebau': {
-    title: 'Messebau – Professionelle Messestände | S&S Messebau NRW',
-    description: 'Messebau Full-Service: Individuelle Messestände für Food, Finance & Industrie. Konzeption, Bau & Betreuung aus einer Hand. Unverbindliches 48h-Angebot!'
-  },
-  '/leistungen/eventbau': {
-    title: 'Eventbau & Bühnenbau – Unvergessliche Events | S&S Messebau',
-    description: 'Eventbau & Bühnenbau vom Profi: Bühnen, Podeste, Event-Architektur & komplette Veranstaltungsausstattung. Full-Service aus NRW – jetzt planen!'
-  },
-  '/leistungen/touren': {
-    title: 'Touren & Roadshows – Bundesweite Messeauftritte | S&S Messebau',
-    description: 'Touren-Pakete für wiederkehrende Messeauftritte: Modulare Systeme, zentrale Logistik ab NRW, kostenoptimiert. Jetzt Touren-Paket anfragen!'
-  },
-  '/leistungen/boeden-ausstattung': {
-    title: 'Böden & Ausstattung – Premium-Messeböden & Möblierung | S&S Messebau',
-    description: 'Messeböden & Standausstattung: Teppich, Vinyl, Parkett, Möblierung & Beleuchtung. Nachhaltige Premium-Qualität für Ihren Messestand.'
-  },
-  '/leistungen/digital-experience': {
-    title: 'Digital Experience – AR/VR & Interaktive Messelösungen | S&S Messebau',
-    description: 'Digitale Messelösungen: AR/VR-Erlebnisse, interaktive Displays, Lead-Tracking & Datenanalyse. Technologie trifft Markenerlebnis – jetzt beraten lassen!'
-  },
-  '/branchen': {
-    title: 'Branchen-Expertise – Food, Finance & Industrie | S&S Messebau',
-    description: 'S&S Messebau: Branchenspezifische Messestände für Food, Versicherungen & Industrie. Erfahrung auf Anuga, DKM, Hannover Messe.'
-  },
-  '/referenzen': {
-    title: 'Referenzen – Messebau-Projekte | S&S Messebau',
-    description: 'Überzeugen Sie sich von unseren Messebau-Projekten: Individuelle Stände für Food, Finance & Industrie. Referenzen ansehen!'
-  },
-  '/ueber-uns': {
-    title: 'Über S&S Messebau – Ihr Messestand-Partner aus NRW',
-    description: 'S&S Messebau: Inhabergeführter Full-Service Messebau aus NRW. Persönliche Betreuung, bundesweite Umsetzung.'
-  },
-  '/ablauf': {
-    title: 'Ablauf – So entsteht Ihr Messestand | S&S Messebau',
-    description: 'Von der Erstberatung bis zum Abbau: Der Projektablauf bei S&S Messebau. Transparente Prozesse, unverbindliche 48h-Angebote.'
-  },
-  '/nachhaltigkeit': {
-    title: 'Nachhaltiger Messebau – Systembau & Wiederverwendung | S&S Messebau',
-    description: 'Nachhaltige Messestände mit Systembauweise und Wiederverwendung. S&S Messebau für umweltbewusste Messeauftritte.'
-  },
-  '/blog': {
-    title: 'Blog & Ratgeber – Messebau-Tipps | S&S Messebau',
-    description: 'Praxis-Tipps rund um Messebau, Standgestaltung und erfolgreiche Messeauftritte. Blog von S&S Messebau.'
-  },
-  '/aktuelles': {
-    title: 'Aktuelles – Messekalender & News | S&S Messebau',
-    description: 'Aktuelle Messen, Events und News rund um S&S Messebau. Messekalender mit Countdown und Branchen-Übersicht.'
-  },
-  '/kontakt': {
-    title: 'Kontakt – Jetzt Messestand anfragen | S&S Messebau',
-    description: 'Kontaktieren Sie S&S Messebau für Ihr Messestand-Projekt. Unverbindliches 48h-Angebot mit persönlicher Beratung. Jetzt anfragen!'
-  },
-  '/bannerrahmen': {
-    title: 'Bannerrahmen-Systeme für Messe & Event | S&S Messebau',
-    description: 'Professionelle Bannerrahmen-Systeme für Messe, Event und POS. Flexible Lösungen von S&S Messebau.'
-  },
-  '/banner-bestellen': {
-    title: 'Banner bestellen – Konfigurator | S&S Messebau',
-    description: 'Banner online konfigurieren und bestellen. Individuelle Formate für Messe und Event bei S&S Messebau.'
-  },
-  '/impressum': {
-    title: 'Impressum | S&S Messebau GbR',
-    description: 'Impressum der S&S Messebau GbR, Hückelhoven. Angaben gemäß § 5 TMG.'
-  },
-  '/datenschutz': {
-    title: 'Datenschutzerklärung | S&S Messebau GbR',
-    description: 'Datenschutzerklärung der S&S Messebau GbR. Informationen zum Umgang mit Ihren Daten.'
-  },
-  '/ki-berater': {
-    title: 'KI-Messeberater – Intelligente Beratung | S&S Messebau',
-    description: 'Lassen Sie sich von unserem KI-Messeberater zu Ihrem Messestand beraten. Sofortige Antworten auf Ihre Fragen.'
-  }
-}
+// Titel und Beschreibung je Pfad liegen in src/lib/seiten-meta.json, weil scripts/seiten-vorab.mjs
+// dieselben Werte beim Build in die HTML-Datei jeder Seite schreibt (eine Quelle, zwei Nutzer).
+const PAGE_META: Record<string, PageMeta> = seitenMeta
 
 export function usePageMeta(page: string) {
   useEffect(() => {
