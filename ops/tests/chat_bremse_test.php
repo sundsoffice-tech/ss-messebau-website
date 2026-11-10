@@ -799,8 +799,8 @@ pruefe('Deckel erreicht: health.php meldet "chat": "deckel_erreicht"',
 pruefe('"status": "ok" und "database": "ok" bleiben dabei stehen (der Wächter für API und Datenbank wird wegen des Chats nicht rot)',
     strpos($a['text'], '"status": "ok"') !== false && strpos($a['text'], '"database": "ok"') !== false, kurz($a));
 $ohneZeit = preg_replace('/"timestamp":\s*"[^"]*"/', '', $a['text']);
-pruefe('der Zustand steht ohne Zahl da: außer dem Zeitstempel keine Ziffer in der Antwort, Felder nur database, data_writable, chat, timestamp',
-    !preg_match('/\d/', (string)$ohneZeit) && array_keys($a['json']['checks'] ?? []) === ['database', 'data_writable', 'chat', 'timestamp'],
+pruefe('der Zustand steht ohne Zahl da: außer dem Zeitstempel keine Ziffer in der Antwort, Felder nur database, data_writable, chat, timestamp, bereinigung',
+    !preg_match('/\d/', (string)$ohneZeit) && array_keys($a['json']['checks'] ?? []) === ['database', 'data_writable', 'chat', 'timestamp', 'bereinigung'],
     str_replace(["\r", "\n"], ' ', (string)$ohneZeit));
 $a = anfrage($u, 'POST', '/chat.php', GUELTIG);
 $b = anfrage($u, 'GET', '/health.php');
