@@ -150,11 +150,11 @@ pruef('unbekannter Name: abgewiesen, nichts geändert', $code !== 0 && password_
 
 echo "Fall 5: kein Admin, keine Datenbank\n";
 $z = instanz([]);
-[$code] = lauf($z, []);
-pruef('kein Admin: abgewiesen, keiner angelegt', $code !== 0 && count(hashes($z)) === 0, "Code $code");
+[$code, $aus] = lauf($z, []);
+pruef('kein Admin: Ende 1 mit Meldung, keiner angelegt', $code === 1 && str_contains($aus, 'keinen Admin-Benutzer') && count(hashes($z)) === 0, "Code $code");
 $z = instanz([], false);
-[$code] = lauf($z, []);
-pruef('keine Datenbank: abgewiesen, keine angelegt', $code !== 0 && !file_exists($z . '/data/database.sqlite'), "Code $code");
+[$code, $aus] = lauf($z, []);
+pruef('keine Datenbank: Ende 1 mit Meldung, keine angelegt', $code === 1 && str_contains($aus, 'nicht gefunden') && !file_exists($z . '/data/database.sqlite'), "Code $code");
 
 echo "Fall 6: ohne Terminal\n";
 $z = instanz(['chef']);
