@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Check, Package, Truck, Shield, Wrench, Star, ArrowRight } from '@phosphor-icons/react'
+import { Check, Package, Truck, Shield, Wrench, ArrowRight } from '@phosphor-icons/react'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { useTranslation } from '@/lib/i18n'
 import { navigate } from '@/lib/deep-linking'
@@ -245,33 +245,6 @@ export function BannerrahmenPage() {
               <Card key={i} className="p-6">
                 <h3 className="font-bold mb-2">{faq.q}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof / Kundenstimmen */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-center mb-12 heading-2">Das sagen unsere Kunden</h2>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {[
-              { text: 'Die Bannerrahmen von S&S sind top verarbeitet und lassen sich supereinfach montieren. Wir nutzen sie auf allen unseren Messen.', author: 'Thomas K.', role: 'Marketing-Leiter, Food-Branche' },
-              { text: 'Schnelle Lieferung, perfekte Qualität und ein Grafikservice, der mitdenkt. Unser Go-to-Partner für alle Bannerprojekte.', author: 'Sandra M.', role: 'Eventmanagerin, Versicherungsbranche' },
-              { text: 'Wir haben die Bannerrahmen mit LED-Hinterleuchtung bestellt – der Wow-Effekt auf der Messe war enorm. Klare Empfehlung!', author: 'Michael R.', role: 'Geschäftsführer, Industrieunternehmen' }
-            ].map((testimonial, i) => (
-              <Card key={i} className="p-6">
-                <div className="flex mb-3">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} className="w-4 h-4 text-yellow-500" weight="fill" />
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground mb-4 italic leading-relaxed">„{testimonial.text}"</p>
-                <div>
-                  <p className="font-semibold text-sm">{testimonial.author}</p>
-                  <p className="text-xs text-muted-foreground">{testimonial.role}</p>
-                </div>
               </Card>
             ))}
           </div>
