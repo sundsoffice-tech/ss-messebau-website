@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ArrowRight, CheckCircle, Leaf, Recycle, TreeEvergreen, Truck } from '@phosphor-icons/react'
+import { ArrowRight, CheckCircle, Coins, Lightbulb, Repeat, Stack, Truck } from '@phosphor-icons/react'
 import { useDeepLinking, useSectionObserver } from '@/hooks/use-deep-linking'
 import { useEffect, useState } from 'react'
 import { parseDeepLink } from '@/lib/deep-linking'
@@ -337,7 +337,7 @@ export function BranchenPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
             <div className="flex items-center justify-center gap-2.5 mb-3">
-              <Leaf className="h-8 w-8 text-green-600" weight="duotone" />
+              <Stack className="h-8 w-8 text-primary" weight="duotone" />
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">{t('sustainability.branchen.title')}</h2>
             </div>
             <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -346,17 +346,17 @@ export function BranchenPage() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Recycle, title: t('sustainability.reuse'), desc: t('sustainability.branchen.reuse.desc') },
-              { icon: TreeEvergreen, title: t('sustainability.materials'), desc: t('sustainability.branchen.materials.desc') },
+              { icon: Repeat, title: t('sustainability.reuse'), desc: t('sustainability.branchen.reuse.desc') },
+              { icon: Lightbulb, title: t('sustainability.materials'), desc: t('sustainability.branchen.materials.desc') },
               { icon: Truck, title: t('sustainability.logistics'), desc: t('sustainability.branchen.logistics.desc') },
-              { icon: Leaf, title: t('sustainability.savings'), desc: t('sustainability.branchen.savings.desc') },
+              { icon: Coins, title: t('sustainability.savings'), desc: t('sustainability.branchen.savings.desc') },
             ].map((item, index) => {
               const Icon = item.icon
               return (
                 <Card key={index}>
                   <CardContent className="p-5 sm:p-6 text-center">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-50 mx-auto mb-4">
-                      <Icon className="h-6 w-6 text-green-600" weight="duotone" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 mx-auto mb-4">
+                      <Icon className="h-6 w-6 text-primary" weight="duotone" />
                     </div>
                     <h3 className="font-semibold text-base sm:text-lg mb-2 leading-tight">{item.title}</h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>

@@ -244,7 +244,7 @@ FIRMENINFO S&S MESSEBAU:
 • USPs:
   - Persönliche Betreuung durch erfahrenes Team
   - Starkes Partnernetzwerk (Logistik, Material, Druck)
-  - Nachhaltige, wiederverwendbare Systeme
+  - Wiederverwendbare Systeme
   - Faire, transparente Preise für Mittelstand
 • Zielgruppen: Food/Feinkost, Versicherungen, Industrie, Technik
 • Kontakt: Mobil +49 1514 0368754, info@sundsmessebau.com

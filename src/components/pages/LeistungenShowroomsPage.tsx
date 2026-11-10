@@ -66,7 +66,7 @@ export function LeistungenShowroomLadenbauPage() {
     },
     {
       q: 'Können bestehende Räume umgestaltet werden?',
-      a: 'Ja, wir modernisieren und erweitern bestehende Showrooms, Verkaufsräume, Ausstellungsräume und Empfangsbereiche. Das spart Kosten und schont Ressourcen.',
+      a: 'Ja, wir modernisieren und erweitern bestehende Showrooms, Verkaufsräume, Ausstellungsräume und Empfangsbereiche. Das spart Material und Kosten.',
     },
     {
       q: 'Bieten Sie auch interaktive Elemente an?',
@@ -242,7 +242,7 @@ export function LeistungenShowroomLadenbauPage() {
               {
                 icon: Cube,
                 title: 'Materialkonzepte',
-                desc: 'Hochwertige Materialauswahl passend zu Ihrer Markenidentität. Edle Oberflächen, nachhaltige Werkstoffe und individuelle Sonderanfertigungen.',
+                desc: 'Hochwertige Materialauswahl passend zu Ihrer Markenidentität. Edle Oberflächen und individuelle Sonderanfertigungen.',
               },
               {
                 icon: ShoppingBag,

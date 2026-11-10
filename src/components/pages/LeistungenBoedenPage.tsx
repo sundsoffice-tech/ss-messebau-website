@@ -66,7 +66,7 @@ export function LeistungenBoedenPage() {
     },
     {
       title: 'Parkett',
-      features: ['Edle Optik', 'Hochwertige Ausstrahlung', 'Nachhaltig', 'Langlebig'],
+      features: ['Edle Optik', 'Hochwertige Ausstrahlung', 'Mehrfach einsetzbar', 'Langlebig'],
     },
     {
       title: 'Laminat',
@@ -101,7 +101,7 @@ export function LeistungenBoedenPage() {
     },
     {
       q: 'Werden die Böden nach der Messe entsorgt oder wiederverwendet?',
-      a: 'Messeteppich wird in der Regel nach einmaliger Nutzung recycelt. Hochwertigere Böden wie Vinyl, Parkett und Podestflächen können mehrfach eingesetzt und bei uns eingelagert werden. Wir beraten Sie gerne zum nachhaltigen Einsatz.',
+      a: 'Messeteppich wird in der Regel nur einmal eingesetzt. Hochwertigere Böden wie Vinyl, Parkett und Podestflächen können mehrfach eingesetzt und bei uns eingelagert werden. Wir beraten Sie gerne zur Wiederverwendung.',
     },
     {
       q: 'Können Sie auch Beleuchtung und Dekoration übernehmen?',
@@ -246,8 +246,8 @@ export function LeistungenBoedenPage() {
             </Card>
             <Card className="p-4 text-center">
               <Leaf className="w-8 h-8 mx-auto mb-2 text-primary" />
-              <p className="font-semibold text-sm">Nachhaltiger Ansatz</p>
-              <p className="text-xs text-muted-foreground">Recycling & Wiederverwertung</p>
+              <p className="font-semibold text-sm">Mehrfach einsetzbar</p>
+              <p className="text-xs text-muted-foreground">Einlagerung & Wiederverwendung</p>
             </Card>
             <Card className="p-4 text-center">
               <Shield className="w-8 h-8 mx-auto mb-2 text-primary" />
