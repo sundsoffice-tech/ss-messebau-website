@@ -561,7 +561,7 @@ Habt ihr noch Fragen zu eurem spezifischen Projekt? Wir von S&S Messebau helfen 
 
 Viel Erfolg beim Messeauftritt!`,
     category: 'Budget',
-    imageUrl: 'https://media.istockphoto.com/id/2242753700/de/foto/budget-projektdaten-im-gesch%C3%A4ftsordner-mit-grafik.webp?a=1&b=1&s=612x612&w=0&k=20&c=C_OpRqf8xQE7JzY-LLcrPG2WezUJ61xcKNTzovZI96Y=',
+    imageUrl: '',
     publishedAt: Date.now() - 14 * 24 * 60 * 60 * 1000
   },
   {
@@ -800,7 +800,7 @@ Wir von S&S Messebau helfen euch dabei. Aus unseren Messeprojekten wissen wir, w
 
 Viel Erfolg bei eurem nächsten nachhaltigen Messeauftritt!`,
     category: 'Nachhaltigkeit',
-    imageUrl: 'https://media.istockphoto.com/id/1340881556/de/foto/eine-ikone-eines-erf%C3%BCllten-ziels-in-form-eines-klaren-teiches-inmitten-eines-%C3%BCppigen-waldes-3d.webp?a=1&b=1&s=612x612&w=0&k=20&c=j04yU1pWJWyja6tCMNW1ATl_zixPCCtlFahWRxj4kXQ=',
+    imageUrl: '',
     publishedAt: new Date('2026-02-16').getTime()
   },
   {
@@ -1441,7 +1441,7 @@ Ein Messestand von 20 bis 200 m² ist eine signifikante Investition. Aber mit re
 
 Wenn ihr konkrete Zahlen für euer Projekt braucht, kontaktiert uns. Wir von S&S Messebau kalkulieren transparent, beratend und realistisch – und zeigen euch nicht nur die Kosten, sondern auch, wo ihr intelligent sparen könnt, ohne Qualität zu verlieren.`,
     category: 'Kosten',
-    imageUrl: 'https://media.istockphoto.com/id/1350544847/de/foto/messestand-f%C3%BCr-mockup-und-corporate-identity-display-design-leerstand-design-retail.webp?a=1&b=1&s=612x612&w=0&k=20&c=xgg_tJcwyuWFvckoZsLN6cq-96DksORO9hx8-6dKBz8=',
+    imageUrl: '',
     publishedAt: Date.now() - 3 * 24 * 60 * 60 * 1000
   },
   {

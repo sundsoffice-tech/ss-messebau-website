@@ -10,7 +10,7 @@ import { BlogPostCard } from './BlogPostCard'
 import { ShareButton } from '@/components/ShareButton'
 import { ShareMenu } from '@/components/ShareMenu'
 import type { BlogPost } from '@/lib/types'
-import { getBlogFallbackImage } from '@/lib/blog-image-defaults'
+import { blogBild } from '@/lib/blog-image-defaults'
 
 interface BlogPostDetailProps {
   post: BlogPost
@@ -20,6 +20,7 @@ interface BlogPostDetailProps {
 export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
   const { openInquiry } = useUIStore()
   const { t, lang } = useTranslation()
+  const bild = blogBild(post)
 
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-US', {
@@ -42,7 +43,7 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
       '@type': 'BlogPosting',
       headline: post.title,
       description: post.excerpt,
-      image: post.imageUrl,
+      image: post.imageUrl || undefined,
       datePublished: new Date(post.publishedAt).toISOString(),
       dateModified: new Date(post.publishedAt).toISOString(),
       author: {
@@ -124,20 +125,22 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
         </div>
       </section>
 
-      {/* Article Image */}
-      <section className="bg-background">
-        <div className="container mx-auto max-w-4xl px-4 md:px-6 lg:px-8">
-          <div className="relative -mt-6 rounded-xl overflow-hidden shadow-2xl">
-            <img
-              src={post.imageUrl || getBlogFallbackImage(post.category)}
-              alt={post.title}
-              width="1200"
-              height="675"
-              className="w-full aspect-video object-cover"
-            />
+      {/* Beitragsbild; ohne Bild folgt der Text direkt auf den Kopf */}
+      {bild && (
+        <section className="bg-background">
+          <div className="container mx-auto max-w-4xl px-4 md:px-6 lg:px-8">
+            <div className="relative -mt-6 rounded-xl overflow-hidden shadow-2xl">
+              <img
+                src={bild}
+                alt={post.title}
+                width="1200"
+                height="675"
+                className="w-full aspect-video object-cover"
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Article Content */}
       <section className="py-10 md:py-14">

@@ -1,18 +1,25 @@
 /**
- * Default fallback images per blog category.
- * Used when a blog post has no imageUrl set.
+ * Rückfallbilder je Blog-Kategorie für Beiträge ohne eigenes Bild.
+ *
+ * Für eine Kategorie ohne Eintrag gibt es kein Bild: Die Karte zeigt dann ein neutrales
+ * Feld mit Symbol (`BlogBildErsatz`) statt eines fremden Fotos, im Beitrag entfällt der Bildblock.
+ * Die früheren Einträge für „messebau“, „nachhaltigkeit“ und „sonstiges“ waren
+ * eingebundene Vorschaubilder eines Bildanbieters ohne belegte Lizenz und sind
+ * entfernt (Prüfung Wettbewerbsrecht 10.11.2026). Ein neues Bild kommt nur mit
+ * Lizenz oder als eigenes Foto unter `public/images/` hierher.
  */
 
 const BLOG_CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
-  messebau: 'https://media.istockphoto.com/id/1350544847/de/foto/messestand-f%C3%BCr-mockup-und-corporate-identity-display-design-leerstand-design-retail.webp?a=1&b=1&s=612x612&w=0&k=20&c=xgg_tJcwyuWFvckoZsLN6cq-96DksORO9hx8-6dKBz8=',
   messen: 'https://images.unsplash.com/photo-1527345931282-806d3b11967f?w=800&h=450&fit=crop',
-  nachhaltigkeit: 'https://media.istockphoto.com/id/1340881556/de/foto/eine-ikone-eines-erf%C3%BCllten-ziels-in-form-eines-klaren-teiches-inmitten-eines-%C3%BCppigen-waldes-3d.webp?a=1&b=1&s=612x612&w=0&k=20&c=j04yU1pWJWyja6tCMNW1ATl_zixPCCtlFahWRxj4kXQ=',
   service: 'https://images.unsplash.com/photo-1553034545-32d4cd2168f1?w=800&h=450&fit=crop',
   branchen: 'https://images.unsplash.com/photo-1503147658877-b6636154a299?w=800&h=450&fit=crop',
-  sonstiges: 'https://media.istockphoto.com/id/2242753700/de/foto/budget-projektdaten-im-gesch%C3%A4ftsordner-mit-grafik.webp?a=1&b=1&s=612x612&w=0&k=20&c=C_OpRqf8xQE7JzY-LLcrPG2WezUJ61xcKNTzovZI96Y=',
 }
 
-export function getBlogFallbackImage(category: string): string {
+export function getBlogFallbackImage(category: string): string | undefined {
   return BLOG_CATEGORY_FALLBACK_IMAGES[category]
-    || BLOG_CATEGORY_FALLBACK_IMAGES['messebau']
+}
+
+/** Das Bild eines Beitrags: sein eigenes, sonst das der Kategorie, sonst keines. */
+export function blogBild(post: { imageUrl?: string; category: string }): string | undefined {
+  return (post.imageUrl || '').trim() || getBlogFallbackImage(post.category)
 }
