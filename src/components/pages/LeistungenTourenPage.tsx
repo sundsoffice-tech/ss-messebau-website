@@ -190,7 +190,7 @@ export function LeistungenTourenPage() {
             <Card className="p-4 text-center">
               <TrendUp className="w-8 h-8 mx-auto mb-2 text-primary" />
               <p className="font-semibold text-sm">Kostenoptimiert</p>
-              <p className="text-xs text-muted-foreground">Bis 50 % sparen</p>
+              <p className="text-xs text-muted-foreground">Material und Kosten sparen</p>
             </Card>
             <Card className="p-4 text-center">
               <MapPin className="w-8 h-8 mx-auto mb-2 text-primary" />

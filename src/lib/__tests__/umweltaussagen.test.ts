@@ -55,6 +55,7 @@ const verboten: Array<[string, RegExp]> = [
   ['LED 90 % weniger Strom', /90 ?% (weniger Stromverbrauch|less power)/gi],
   ['bis zu 30 % Kostenersparnis', /bis zu 30 ?% Kostenersparnis|up to 30 ?% cost savings/gi],
   ['30 bis 50 % der Gesamtkosten', /30\s?[–-]\s?50 ?% der Gesamtkosten/gi],
+  ['bis 50 % sparen', /bis (zu )?50 ?% sparen/gi],
   ['Amortisation ab der 2. Messe', /nachhaltige Systeme amortisieren|sustainable systems pay for themselves/gi],
   // A16: Ergebniszahlen und eigene Produkte in den Beispielkästen
   ['Use Case', /Use Case/gi],
@@ -104,6 +105,7 @@ describe('Umwelt- und Zahlenaussagen ohne Beleg (A12 bis A16)', () => {
       'LED-Beleuchtung (90% weniger Stromverbrauch)',
       'Bis zu 30% Kostenersparnis',
       'durchschnittlich 30–50 % der Gesamtkosten',
+      'Bis 50 % sparen',
       'Nachhaltige Systeme amortisieren sich ab der 2. Messe deutlich.',
       '💡 Use Case: VR-Showroom für internationales Publikum',
       'Ergebnis: 40% mehr qualifizierte Leads',
