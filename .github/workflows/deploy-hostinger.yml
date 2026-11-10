@@ -213,6 +213,15 @@ jobs:
           STATUS=$(curl -s --max-time 20 -o /dev/null -w '%{http_code}' "${LIVE_URL}api/health.php" || true)
           echo "/api/health.php: Status ${STATUS}"
           [ "$STATUS" = "200" ] || FEHLER=1
+          # Das Werkzeug fuer die Kommandozeile des Servers darf ueber das Netz nicht erreichbar sein.
+          for DATEI in admin-passwort-setzen.php admin-passwort-setzen.sh; do
+            STATUS=$(curl -s --max-time 20 -o /dev/null -w '%{http_code}' "${LIVE_URL}api/${DATEI}" || true)
+            echo "/api/${DATEI}: Status ${STATUS}"
+            if [ "$STATUS" != "403" ]; then
+              echo "::error::/api/${DATEI} antwortet ueber das Netz mit ${STATUS} statt 403 (Sperre in api/.htaccess pruefen)."
+              FEHLER=1
+            fi
+          done
           # Stufe 2: Unbekanntes antwortet mit 404 und der Hausseite (Anwendung startet darin).
           STATUS=$(curl -s --max-time 20 -o /tmp/seite.html -w '%{http_code}' "${LIVE_URL}gibt-es-nicht-deploy-probe" || true)
           WURZEL=$(grep -c '<div id="root">' /tmp/seite.html || true)

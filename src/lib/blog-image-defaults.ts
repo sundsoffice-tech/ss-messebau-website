@@ -26,12 +26,12 @@ export function getBlogFallbackImage(category: string): string | undefined {
 
 /**
  * Wahr, wenn die Adresse auf den eigenen Server zeigt: ein Pfad ab der Wurzel oder
- * eine volle Adresse mit dem Ursprung der Seite. `//host/…`, fremde Hosts und
- * `data:` zählen nicht.
+ * eine volle Adresse mit dem Ursprung der Seite. `//host/…`, `/\host/…` (Browser lesen
+ * beides als fremden Host), fremde Hosts und `data:` zählen nicht.
  */
 export function istEigenesBild(url: string | null | undefined): url is string {
   if (!url) return false
-  if (url.startsWith('/')) return !url.startsWith('//')
+  if (url.startsWith('/')) return !url.startsWith('//') && !url.startsWith('/\\')
   try {
     return new URL(url).origin === window.location.origin
   } catch {
