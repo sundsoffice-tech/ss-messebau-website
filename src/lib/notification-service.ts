@@ -128,7 +128,7 @@ function generateCustomerConfirmationHtml(type: NotificationType, data: Record<s
     <div style="background:white;padding:30px;border:1px solid #e0e0e0;">
       <p>Sehr geehrte/r ${name},</p>
       <p>vielen Dank für Ihre ${typeLabel} bei S&amp;S Messebau GbR!</p>
-      <p>Wir haben Ihre Nachricht erfolgreich erhalten und werden uns <strong>innerhalb von 24 Stunden</strong> bei Ihnen melden.</p>
+      <p>Wir haben Ihre Nachricht erfolgreich erhalten und werden uns <strong>innerhalb von 48 Stunden</strong> bei Ihnen melden.</p>
       <div style="background:#f5f7fa;padding:20px;border-radius:8px;margin:20px 0;border-left:4px solid #3B4CC0;">
         <p style="margin:0;"><strong>Referenz-Nr.:</strong> #${escapeHtml(inquiryId.slice(-8))}</p>
       </div>

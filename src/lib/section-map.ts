@@ -9,7 +9,7 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
     { id: 'hero', label: 'Startseite', page: '/' },
     { id: 'services', label: 'Leistungsübersicht', page: '/' },
     { id: 'advantages', label: 'Unsere Vorteile', page: '/' },
-    { id: '48h-garantie', label: 'Unverbindliche 48h-Angebotsgarantie', page: '/' },
+    { id: '48h-garantie', label: 'Unverbindliches 48h-Angebot', page: '/' },
     { id: 'references', label: 'Referenzen', page: '/' },
     { id: 'process', label: 'Ablauf', page: '/' },
     { id: 'cta', label: 'Kontakt', page: '/' }
@@ -61,9 +61,10 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
     { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/digital-experience' }
   ],
   '/branchen': [
-    { id: 'food', label: 'Food & Feinkost', page: '/branchen' },
-    { id: 'versicherungen', label: 'Versicherungen & Dienstleistungen', page: '/branchen' },
-    { id: 'industrie', label: 'Industrie & Technik', page: '/branchen' }
+    { id: 'messebau', label: 'Messebau', page: '/branchen' },
+    { id: 'eventbau', label: 'Eventbau & Roadshows', page: '/branchen' },
+    { id: 'ladenbau', label: 'Showroom & Ladenbau', page: '/branchen' },
+    { id: 'sport', label: 'Sport & Events', page: '/branchen' }
   ],
   '/referenzen': [
     { id: 'filter', label: 'Projektfilter', page: '/referenzen' },
@@ -79,7 +80,7 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
   '/ablauf': [
     { id: 'prozess', label: 'Unser Prozess', page: '/ablauf' },
     { id: 'timeline', label: 'Projekt-Ablauf', page: '/ablauf' },
-    { id: '48h-garantie', label: 'Unverbindliche 48h-Angebotsgarantie', page: '/ablauf' },
+    { id: '48h-garantie', label: 'Unverbindliches 48h-Angebot', page: '/ablauf' },
     { id: 'faq', label: 'Häufige Fragen', page: '/ablauf' }
   ],
   '/nachhaltigkeit': [

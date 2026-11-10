@@ -68,12 +68,12 @@ export function LeistungenMessebauPage() {
     {
       icon: Users,
       title: 'Erfahrene Messebauer',
-      desc: 'Unser Team hat über 500 Messestände realisiert – von 9m² Reihenständen bis zu 200m² Kopfständen auf internationalen Leitmessen.',
+      desc: 'Unser Team realisiert Messestände von 9m² Reihenständen bis zu 200m² Kopfständen auf internationalen Leitmessen.',
     },
     {
       icon: Clock,
       title: 'Schnell & zuverlässig',
-      desc: 'Unverbindliches Erstangebot innerhalb von 48 Stunden. Auch bei kurzfristigen Anfragen finden wir eine Lösung – garantiert termingerecht.',
+      desc: 'Unverbindliches Erstangebot innerhalb von 48 Stunden. Auch bei kurzfristigen Anfragen finden wir eine Lösung – mit fest vereinbarten Terminen.',
     },
   ]
 
@@ -292,8 +292,7 @@ export function LeistungenMessebauPage() {
             Warum S&S Messebau?
           </h2>
           <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Über 500 realisierte Messestände, zufriedene Kunden und ein Team, das für
-            perfekte Messeauftritte brennt.
+            Zufriedene Kunden und ein Team, das für perfekte Messeauftritte brennt.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
