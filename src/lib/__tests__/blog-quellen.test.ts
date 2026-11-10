@@ -11,9 +11,10 @@ import sitemap from '../../../public/sitemap.xml?raw'
  * Das Quellenprotokoll liegt unter docs/blog-quellen/<slug>.md, der Aufbau steht in docs/blog-quellen/README.md.
  *
  * Der Test prüft die Form und die Zahlen. Die Zahlenprobe ist grob: Sie verlangt nur, dass jede Zahl des Beitrags
- * in irgendeinem Auszug vorkommt, nicht, dass sie zur Aussage gehört (ein vertauschter Stichtag bleibt grün).
+ * in irgendeinem Auszug vorkommt, nicht, dass sie zur Aussage gehört (ein vertauschter Preis bleibt grün).
+ * Für volle Daten gilt mehr: Tag, Monat und Jahr stehen zusammen in einem Auszug oder unter den Annahmen.
  * Ob ein Auszug die Aussage auch dem Sinn nach trägt, prüft vor jedem
- * Beitrag eine zweite Person gegen das Protokoll; das Ergebnis steht im Abschnitt „Gegenprüfung“.
+ * Beitrag eine zweite Instanz gegen das Protokoll; das Ergebnis steht im Abschnitt „Gegenprüfung“.
  */
 
 /** Beiträge von vor dem 10.11.2026 ohne Protokoll. Die Liste wird nur kürzer: Wer einen überarbeitet, legt das Protokoll an. */
@@ -105,6 +106,58 @@ function zahlenOhneBeleg(beitrag: string, protokoll: string): string[] {
   return [...new Set(zahlenIm(aussagen).filter((z) => !belegt.has(z)))]
 }
 
+const MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
+const ENGLISCH = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+/** Jedes volle Datum eines Texts als [Tag, Monat, Jahr]: „27. Januar 2027“ und „27.01.2027“. */
+function datenIm(text: string): [number, number, number][] {
+  const funde: [number, number, number][] = []
+  for (const t of text.matchAll(new RegExp(`(?<![\\d.])(\\d{1,2})\\. (${MONATE.join('|')}) (\\d{4})(?!\\d)`, 'g'))) {
+    funde.push([Number(t[1]), MONATE.indexOf(t[2]) + 1, Number(t[3])])
+  }
+  for (const t of text.matchAll(/(?<![\d.])(\d{1,2})\.(\d{1,2})\.(\d{4})(?!\d)/g)) {
+    if (Number(t[2]) >= 1 && Number(t[2]) <= 12) funde.push([Number(t[1]), Number(t[2]), Number(t[3])])
+  }
+  return funde
+}
+
+/**
+ * Daten des Beitrags, die in keinem Auszug und unter keiner Annahme als Ganzes stehen (Tag, Monat und Jahr zusammen).
+ * Die Zahlenprobe zerlegt ein Datum in seine Teile und findet jeden Teil irgendwo; ein vertauschter Stichtag bleibt
+ * dort grün. Hier muss das ganze Datum an einer Stelle stehen, in deutscher, numerischer oder englischer Schreibweise.
+ */
+function datenOhneBeleg(beitrag: string, protokoll: string): string[] {
+  const belegtext = (
+    quellenDesProtokolls(protokoll)
+      .flatMap((q) => q.auszuege)
+      .join('\n') +
+    '\n' +
+    abschnitt(protokoll, 'Annahmen und eigene Rechnungen')
+  ).replace(/\s+/g, ' ')
+  const aussagen = beitrag.split(/^## Quellen\s*$/m)[0].replace(/\]\([^)]*\)/g, ']')
+  const zz = (n: number) => String(n).padStart(2, '0')
+  const ohne: string[] = []
+  for (const [t, m, j] of datenIm(aussagen)) {
+    const formen = [
+      `${t}. ${MONATE[m - 1]} ${j}`,
+      `${zz(t)}. ${MONATE[m - 1]} ${j}`,
+      `${zz(t)}.${zz(m)}.${j}`,
+      `${t}.${m}.${j}`,
+      `${zz(t)}.${zz(m)}.${String(j).slice(2)}`,
+      `${ENGLISCH[m - 1]} ${t}, ${j}`,
+      `${t} ${ENGLISCH[m - 1]} ${j}`,
+    ]
+    const steht = formen.some((f) => new RegExp(`(?<![\\d.])${f.replace(/[.]/g, '\\.')}(?!\\d)`).test(belegtext))
+    if (!steht) ohne.push(`${t}. ${MONATE[m - 1]} ${j}`)
+  }
+  return [...new Set(ohne)]
+}
+
+/** Wendungen einer nicht abgeschlossenen Gegenprüfung („Runde 2: steht noch aus“, „Runde 2: offen“, „wird nachgereicht“). */
+const GEGENPRUEFUNG_OFFEN = /steht (noch )?aus|ausstehend|läuft noch|nachgereicht|: (noch )?offen(?![a-zäöü])|: folgt(?![a-zäöü])/i
+/** Die Formel, mit der der Abschnitt die Zahl der geprüften Aussagen nennt; null zählt nicht. */
+const GEGENPRUEFUNG_ZAHL = /(?<!\d)[1-9]\d* (Aussagen|Stellen) geprüft/
+
 const mitProtokoll = DEMO_BLOG_POSTS.filter((p) => !OHNE_PROTOKOLL.includes(p.slug))
 const meta = seitenMeta as Record<string, { title: string; description: string; ogType?: string }>
 const inhalt = seitenInhalt as Record<string, { h1: string; absaetze: string[]; abschnitte: string[] }>
@@ -145,13 +198,20 @@ describe('Blog: Quellenprotokoll je Beitrag', () => {
     expect(post.content).toMatch(/^## Quellen\s*$/m)
     // Keine Zahl im Text ohne Auszug oder ausgewiesene Annahme
     expect(zahlenOhneBeleg(post.content, protokoll)).toEqual([])
+    // Jedes volle Datum steht als Ganzes in einem Auszug oder unter den Annahmen
+    expect(datenOhneBeleg([post.title, post.excerpt, post.content].join('\n'), protokoll), 'Datum ohne ganzen Beleg').toEqual([])
     // Die Gegenprüfung ist abgeschlossen und nennt ihr Ergebnis; ein Protokoll mit offener Prüfung geht nicht hinaus
     const gegen = abschnitt(protokoll, 'Gegenprüfung')
-    expect(gegen, 'Gegenprüfung nicht abgeschlossen').not.toMatch(/steht aus|noch offen|läuft noch/i)
+    expect(gegen, 'Gegenprüfung nicht abgeschlossen').not.toMatch(GEGENPRUEFUNG_OFFEN)
     expect(gegen).toMatch(/\d{2}\.\d{2}\.\d{4}/)
-    expect(gegen, 'Zahl der geprüften Aussagen').toMatch(/\d+ (Aussagen|Stellen) geprüft/)
-    // Nach „## Quellen“ stehen nur der Satz zum Abruftag und Verweise; dort wird sonst nichts geprüft
-    const nachQuellen = (post.content.split(/^## Quellen\s*$/m)[1] || '').split('\n').filter((z) => z.trim())
+    expect(gegen, 'Zahl der geprüften Aussagen').toMatch(GEGENPRUEFUNG_ZAHL)
+    // Nach der ersten Überschrift „## Quellen“ stehen nur der Satz zum Abruftag und Verweise, auch nach einer zweiten
+    const nachQuellen = post.content
+      .split(/^## Quellen\s*$/m)
+      .slice(1)
+      .join('\n## Quellen\n')
+      .split('\n')
+      .filter((z) => z.trim())
     const erlaubt = /^(- \[[^\]]+\]\(https:\/\/[^)\s]+\)|Alle (Seiten und )?Dokumente abgerufen am \d{1,2}\. [A-Za-zä]+ \d{4}\.)$/
     expect(nachQuellen.filter((z) => !erlaubt.test(z))).toEqual([])
     // Kein fremdes Bild ohne belegte Lizenz
@@ -198,6 +258,45 @@ describe('Blog: Quellenprotokoll je Beitrag', () => {
     // Zahlen in den Verweisen am Ende sind keine Aussagen
     expect(zahlenOhneBeleg('Text.\n\n## Quellen\n\n- [Bericht 2031](https://example.org/2031)', protokoll)).toEqual([])
   })
+
+  it('die Datumsprobe verlangt das ganze Datum an einer Stelle und erkennt einen vertauschten Stichtag', () => {
+    const protokoll = [
+      '# Quellenprotokoll: probe',
+      '## Quellen',
+      '### Q1 Veranstalter: Merkblatt',
+      '- Adresse: https://example.org/merkblatt',
+      '- Stand der Seite: 01.10.2026',
+      '- Abgerufen: 10.11.2026 18:40',
+      '- Auszug: „Standbaupläne sind bis spätestens 27. Januar 2027 einzureichen, der Aufbau beginnt am 14.03.2027.“',
+      '- Auszug: „Set-up starts on January 4, 2027; dismantling 18.–22.06.2027, Anmeldung bis 05.02.27.“',
+      '## Annahmen und eigene Rechnungen',
+      '- Der 3. Mai 2027 ist sechs Wochen vor dem Aufbau, eigene Rechnung.',
+      '## Gegenprüfung',
+      '- 10.11.2026',
+    ].join('\n')
+    // belegt in deutscher, numerischer und englischer Schreibweise, im Zeitraum und unter den Annahmen
+    const belegt = 'Pläne bis 27. Januar 2027, Aufbau ab 14. März 2027 und ab 04.01.2027, Abbau bis 22. Juni 2027, Anmeldung bis 5. Februar 2027, Frist 3. Mai 2027.'
+    expect(datenOhneBeleg(belegt, protokoll)).toEqual([])
+    // Die Zahlenprobe lässt vertauschte Stichtage durch, weil jeder Teil irgendwo vorkommt; die Datumsprobe nicht
+    const vertauscht = 'Pläne bis 14. Januar 2027, Aufbau ab 27. März 2027.'
+    expect(zahlenOhneBeleg(vertauscht, protokoll)).toEqual([])
+    expect(datenOhneBeleg(vertauscht, protokoll)).toEqual(['14. Januar 2027', '27. März 2027'])
+    // „7. Januar 2027“ ist nicht durch „27. Januar 2027“ belegt, der erste Tag eines Zeitraums nicht durch den letzten
+    expect(datenOhneBeleg('Frist 7. Januar 2027, Abbau ab 18. Juni 2027.', protokoll)).toEqual(['7. Januar 2027', '18. Juni 2027'])
+    // Ein Datum ohne Jahr und ein Datum in der Quellenliste werden hier nicht geprüft
+    expect(datenOhneBeleg('Am 9. März war Schluss.\n\n## Quellen\n\n- [Stand 9. März 2031](https://example.org/a)', protokoll)).toEqual([])
+  })
+
+  it('die Formprüfung der Gegenprüfung erkennt offene Runden und eine fehlende Zahl', () => {
+    for (const offen of ['Runde 2: steht aus.', 'Runde 2 steht noch aus.', 'Runde 2: ausstehend', 'Runde 2: offen', 'Runde 2: folgt', 'Ergebnis wird nachgereicht.', 'Runde 2 läuft noch.']) {
+      expect(offen, offen).toMatch(GEGENPRUEFUNG_OFFEN)
+    }
+    expect('Alle 17 Funde sind berichtigt, kein Punkt ist noch offen.').not.toMatch(GEGENPRUEFUNG_OFFEN)
+    expect('128 Aussagen geprüft, 111 trugen.').toMatch(GEGENPRUEFUNG_ZAHL)
+    expect('30 Stellen geprüft').toMatch(GEGENPRUEFUNG_ZAHL)
+    expect('0 Aussagen geprüft').not.toMatch(GEGENPRUEFUNG_ZAHL)
+    expect('Alle Aussagen geprüft').not.toMatch(GEGENPRUEFUNG_ZAHL)
+  })
 })
 
 describe('Blog: jeder Beitrag steht an allen Stellen', () => {
@@ -219,6 +318,7 @@ describe('Blog: jeder Beitrag steht an allen Stellen', () => {
       // Auch Titel, Anreißer und die vorab gebauten Absätze nennen keine Zahl ohne Beleg
       const vorab = [post.title, post.excerpt, ...inhalt[pfad].absaetze].join('\n')
       expect(zahlenOhneBeleg(vorab, protokolle[slug] ?? '')).toEqual([])
+      expect(datenOhneBeleg(vorab, protokolle[slug] ?? ''), 'Datum ohne ganzen Beleg').toEqual([])
     }
   })
 })

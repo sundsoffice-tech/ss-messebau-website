@@ -130,5 +130,10 @@
     "title": "Standbaugenehmigung 2027: Regeln, Fristen, Kosten | S&S Messebau",
     "description": "Ab wann ein Messestand genehmigt werden muss, welche Unterlagen die Messegesellschaften verlangen, bis wann und was es kostet. Mit Stichtagen für 2027.",
     "ogType": "article"
+  },
+  "/blog/messefoerderung-aussteller": {
+    "title": "Messeförderung 2027: Was es für Aussteller gibt | S&S Messebau",
+    "description": "Förderung für Messeauftritte 2027: Zuschuss für junge innovative Unternehmen, Gemeinschaftsstände im Ausland, Landesförderung NRW. Mit Fristen.",
+    "ogType": "article"
   }
 }
