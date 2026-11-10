@@ -20,6 +20,7 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import { isTrackingAllowed, onConsentChange, CONSENT_STORAGE_KEY } from '@/lib/analytics'
+import { getUtmParams } from '@/lib/utm-utils'
 import type {
   TrackingEvent,
   TrackingEventName,
@@ -170,15 +171,33 @@ function sanitizeUrl(url: string, utmWhitelist: string[]): string {
   }
 }
 
+const UTM_FIELDS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']
+
 function extractUtm(url: string): Record<string, string> {
   const result: Record<string, string> = {}
   try {
     const u = new URL(url)
-    for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) {
+    for (const key of UTM_FIELDS) {
       const v = u.searchParams.get(key)
       if (v) result[key] = v
     }
   } catch { /* ignore */ }
+  return result
+}
+
+/**
+ * Gemerkte Einstiegsquelle des Besuchs. Einzige Quelle ist `utm-utils.ts`
+ * (Arbeitsspeicher, mit Zustimmung `ss_utm_params`); nach einer Ablehnung ist
+ * sie dort geleert. Übernommen werden nur die fünf Felder als Zeichenketten,
+ * damit ein Speichereintrag kein anderes Feld des Ereignisses überschreibt.
+ */
+function entryUtm(): Record<string, string> {
+  const result: Record<string, string> = {}
+  const remembered: Record<string, unknown> = getUtmParams()
+  for (const key of UTM_FIELDS) {
+    const v = remembered[key]
+    if (typeof v === 'string' && v) result[key] = v
+  }
   return result
 }
 
@@ -294,12 +313,29 @@ export function trackFirstPartyEvent(
   eventName: TrackingEventName,
   props?: Record<string, string | number | boolean>,
 ): boolean {
+  return enqueueEvent(eventName, props, false)
+}
+
+/**
+ * Kampagnen-Angaben stammen aus der aktuellen Adresse. Nur beim Einstieg der
+ * Sitzung (`isEntry`: erster gezählter Seitenaufruf und sein Sitzungsstart)
+ * gilt ersatzweise die gemerkte Einstiegsquelle, wenn die Adresse keine trägt:
+ * Die Abschnittsverfolgung schreibt `/?utm_source=…` zu `/#hero` um, bevor ein
+ * Erstbesucher im Banner zustimmt. Alle anderen Ereignisse bleiben bei der
+ * Adresse, damit die Auswertung (Zählung je Ereignis) nichts mehrfach zählt.
+ */
+function enqueueEvent(
+  eventName: TrackingEventName,
+  props: Record<string, string | number | boolean> | undefined,
+  isEntry: boolean,
+): boolean {
   if (!canTrack(eventName)) return false
 
   const config = getTrackingConfig()
 
   const url = window.location.href
-  const utm = extractUtm(url)
+  const fromUrl = extractUtm(url)
+  const utm = isEntry && Object.keys(fromUrl).length === 0 ? entryUtm() : fromUrl
 
   const event: TrackingEvent = {
     event: eventName,
@@ -510,12 +546,12 @@ function getDeviceProps(): Record<string, string | number | boolean> {
  */
 let sessionListenersInstalled = false
 
-function sendSessionStartIfNeeded(): void {
+function sendSessionStartIfNeeded(isEntry: boolean): void {
   try {
     if (!canTrack('session_start')) return
     if (sessionStorage.getItem(SESSION_START_KEY)) return
     incrementVisitCount()
-    if (!trackFirstPartyEvent('session_start', getDeviceProps())) return
+    if (!enqueueEvent('session_start', getDeviceProps(), isEntry)) return
     sessionStorage.setItem(SESSION_START_KEY, '1')
     // Einmal je Seitenaufruf: Nach Widerruf und erneuter Zustimmung beginnt eine
     // neue Sitzung, die Lauscher hängen aber schon und dürfen nicht doppelt zählen.
@@ -759,18 +795,22 @@ export function trackPageView(): void {
     return
   }
   pageViewPending = false
-  sendSessionStartIfNeeded()
+  // Einstieg der Sitzung: noch kein Seitenaufruf gezählt (siehe `enqueueEvent`)
+  const isEntry = getPageCount() === 0
+  sendSessionStartIfNeeded(isEntry)
   incrementPageCount()
-  trackFirstPartyEvent('page_view', {
+  enqueueEvent('page_view', {
     page_count: getPageCount(),
     title: document.title.substring(0, 200),
-  })
+  }, isEntry)
   initScrollDepthTracking()
   initEngagementTracking()
 }
 
 // Nach der Zustimmung im Banner: Sitzungsstart und Seitenaufruf der laufenden
 // Seite nachsenden, damit Einstiegsseite und Quelle (UTM) nicht verloren gehen.
+// Ist die Adresse inzwischen umgeschrieben, kommt die Quelle aus der gemerkten
+// Einstiegsquelle (`utm-utils.ts`).
 // Nach „Ablehnen" (auch als Widerruf einer früheren Zustimmung): sofort
 // aufhören. Der Zeitgeber wird gestoppt, die Warteschlange verworfen statt
 // gesendet, Kennung und Zähler werden entfernt. Stimmt der Besucher später
