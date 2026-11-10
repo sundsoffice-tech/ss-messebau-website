@@ -22,11 +22,13 @@ const wege = vi.hoisted(() => ({
   mail: vi.fn(),
   webhook: vi.fn(),
   fehlermeldung: vi.fn(),
+  dateien: vi.fn(),
 }))
 
 vi.mock('@/lib/api-client', () => ({ ordersApi: { create: wege.bestellung } }))
 vi.mock('@/lib/email-service', () => ({ sendOrderConfirmationEmail: wege.mail }))
 vi.mock('@/lib/notification-service', () => ({ sendWebhooksOnly: wege.webhook }))
+vi.mock('@/lib/file-utils', () => ({ filesToSerializable: wege.dateien }))
 vi.mock('sonner', () => ({ toast: { error: wege.fehlermeldung, success: vi.fn() } }))
 
 type SchrittProps = {
@@ -44,6 +46,7 @@ function schritt(nummer: number) {
           Kontakt eintragen
         </button>
       )}
+      {nummer === 4 && <button onClick={() => onChange?.({ dateien: [{ name: 'druck.pdf' }] })}>Datei wählen</button>}
       {onNext && <button onClick={onNext}>Weiter</button>}
       {onSubmit && <button onClick={onSubmit}>Absenden</button>}
     </div>
@@ -94,6 +97,7 @@ beforeEach(() => {
   wege.mail.mockReset().mockResolvedValue({ success: true })
   wege.webhook.mockReset().mockResolvedValue(undefined)
   wege.fehlermeldung.mockReset()
+  wege.dateien.mockReset().mockResolvedValue([])
 })
 
 afterEach(() => {
@@ -138,6 +142,46 @@ describe('Banner-Bestellung: Entwurf im Browser', () => {
     await waitFor(() => expect(wege.fehlermeldung).toHaveBeenCalledTimes(1))
     expect(screen.queryByText(/Danke/)).toBeNull()
     expect(localStorage.getItem(ENTWURF)).toContain('Probe GmbH')
+  })
+
+  it('ist auch entfernt, wenn nur das Backend annahm und die Mail scheiterte', async () => {
+    wege.mail.mockResolvedValue({ success: false })
+
+    await bestelle()
+
+    await waitFor(() => expect(screen.getByText('Danke, Probe GmbH')).toBeTruthy())
+    expect(wege.fehlermeldung).not.toHaveBeenCalled()
+    expect(localStorage.getItem(ENTWURF)).toBeNull()
+  })
+
+  it('ein scheiternder Webhook hält weder die Bestellung noch das Entfernen auf', async () => {
+    wege.webhook.mockRejectedValue(new Error('Webhook nicht erreichbar'))
+
+    await bestelle()
+
+    await waitFor(() => expect(screen.getByText('Danke, Probe GmbH')).toBeTruthy())
+    expect(localStorage.getItem(ENTWURF)).toBeNull()
+  })
+
+  it('eine Datei, die erst nach der Annahme fertig aufbereitet ist, legt den Entwurf nicht wieder an', async () => {
+    let fertig: (wert: unknown[]) => void = () => {}
+    wege.dateien.mockReturnValue(new Promise<unknown[]>((loesen) => { fertig = loesen }))
+
+    render(mitSprache(<BannerBestellenPage />))
+    for (let i = 1; i <= 3; i++) fireEvent.click(screen.getByText('Weiter'))
+    fireEvent.click(screen.getByText('Datei wählen'))
+    await waitFor(() => expect(wege.dateien).toHaveBeenCalledTimes(1))
+    for (let i = 4; i <= 5; i++) fireEvent.click(screen.getByText('Weiter'))
+    fireEvent.click(screen.getByText('Kontakt eintragen'))
+    await waitFor(() => expect(localStorage.getItem(ENTWURF)).toContain('Probe GmbH'))
+    fireEvent.click(screen.getByText('Absenden'))
+    await waitFor(() => expect(screen.getByText('Danke, Probe GmbH')).toBeTruthy())
+    expect(localStorage.getItem(ENTWURF)).toBeNull()
+
+    fertig([{ name: 'druck.pdf', data: 'x' }])
+    await new Promise((weiter) => setTimeout(weiter, 30))
+
+    expect(localStorage.getItem(ENTWURF)).toBeNull()
   })
 
   it('beginnt nach angenommener Bestellung beim nächsten Aufruf leer', async () => {
