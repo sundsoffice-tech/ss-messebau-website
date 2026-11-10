@@ -1,0 +1,98 @@
+{
+  "/": {
+    "title": "S&S Messebau – Your Exhibition Stand Partner | Trade Fair Construction NRW",
+    "description": "S&S Messebau: exhibition stands for food, finance & industry. Non-binding quote within 48 hours with personal consultation. Get advice now!"
+  },
+  "/leistungen": {
+    "title": "Services – Trade Fair Construction, Event Construction, Showrooms & More | S&S Messebau",
+    "description": "Full-service trade fair construction: exhibition stands, event construction, showrooms, shopfitting, banner frames & equipment – all from one source. Overview of all services."
+  },
+  "/leistungen/showroom-ladenbau": {
+    "title": "Showroom & Shopfitting | Brand Spaces – Individual Room Concepts | S&S Messebau",
+    "description": "Showrooms, shopfitting and brand spaces from one source: individual room concepts, sales rooms and brand experience spaces. Full service from concept to assembly."
+  },
+  "/leistungen/showrooms": {
+    "title": "Showroom & Shopfitting | Brand Spaces – Individual Room Concepts | S&S Messebau",
+    "description": "Showrooms, shopfitting and brand spaces from one source: individual room concepts, sales rooms and brand experience spaces. Full service from concept to assembly."
+  },
+  "/leistungen/ladenbau": {
+    "title": "Showroom & Shopfitting | Brand Spaces – Individual Room Concepts | S&S Messebau",
+    "description": "Showrooms, shopfitting and brand spaces from one source: individual room concepts, sales rooms and brand experience spaces. Full service from concept to assembly."
+  },
+  "/leistungen/boeden": {
+    "title": "Flooring & Equipment – Complete Solutions | S&S Messebau",
+    "description": "High-quality exhibition flooring systems, furniture and lighting – complete solutions for trade fairs, events and showrooms."
+  },
+  "/leistungen/messebau": {
+    "title": "Trade Fair Construction – Professional Exhibition Stands | S&S Messebau NRW",
+    "description": "Full-service trade fair construction: individual exhibition stands for food, finance & industry. Concept, construction & support from one source. Non-binding quote within 48 hours!"
+  },
+  "/leistungen/eventbau": {
+    "title": "Event & Stage Construction – Unforgettable Events | S&S Messebau",
+    "description": "Event and stage construction by professionals: stages, platforms, event architecture & complete event equipment. Full service from NRW – plan now!"
+  },
+  "/leistungen/touren": {
+    "title": "Tours & Roadshows – Trade Fair Appearances Across Germany | S&S Messebau",
+    "description": "Tour packages for recurring trade fair appearances: modular systems, central logistics from NRW, cost-optimised. Request a tour package now!"
+  },
+  "/leistungen/boeden-ausstattung": {
+    "title": "Flooring & Equipment – Premium Exhibition Flooring & Furnishing | S&S Messebau",
+    "description": "Exhibition flooring & stand equipment: carpet, vinyl, parquet, furnishing & lighting. Sustainable premium quality for your exhibition stand."
+  },
+  "/leistungen/digital-experience": {
+    "title": "Digital Experience – AR/VR & Interactive Trade Fair Solutions | S&S Messebau",
+    "description": "Digital trade fair solutions: AR/VR experiences, interactive displays, lead tracking & data analysis. Technology meets brand experience – get advice now!"
+  },
+  "/branchen": {
+    "title": "Industry Expertise – Food, Finance & Industry | S&S Messebau",
+    "description": "S&S Messebau: industry-specific exhibition stands for food, insurance & industry. Experience at Anuga, DKM, Hannover Messe."
+  },
+  "/referenzen": {
+    "title": "References – Trade Fair Construction Projects | S&S Messebau",
+    "description": "See our trade fair construction projects for yourself: individual stands for food, finance & industry. View references!"
+  },
+  "/ueber-uns": {
+    "title": "About S&S Messebau – Your Exhibition Stand Partner from NRW",
+    "description": "S&S Messebau: owner-managed full-service trade fair construction from NRW. Personal support, implementation across Germany."
+  },
+  "/ablauf": {
+    "title": "Process – How Your Exhibition Stand Is Created | S&S Messebau",
+    "description": "From the initial consultation to dismantling: the project process at S&S Messebau. Transparent processes, non-binding quotes within 48 hours."
+  },
+  "/nachhaltigkeit": {
+    "title": "Sustainable Trade Fair Construction – System Construction & Reuse | S&S Messebau",
+    "description": "Sustainable exhibition stands with system construction and reuse. S&S Messebau for environmentally conscious trade fair appearances."
+  },
+  "/blog": {
+    "title": "Blog & Guides – Trade Fair Construction Tips | S&S Messebau",
+    "description": "Practical tips on trade fair construction, stand design and successful trade fair appearances. Blog by S&S Messebau."
+  },
+  "/aktuelles": {
+    "title": "News – Trade Fair Calendar & Updates | S&S Messebau",
+    "description": "Current trade fairs, events and news about S&S Messebau. Trade fair calendar with countdown and industry overview."
+  },
+  "/kontakt": {
+    "title": "Contact – Request Your Exhibition Stand Now | S&S Messebau",
+    "description": "Contact S&S Messebau for your exhibition stand project. Non-binding quote within 48 hours with personal consultation. Enquire now!"
+  },
+  "/bannerrahmen": {
+    "title": "Banner Frame Systems for Trade Fairs & Events | S&S Messebau",
+    "description": "Professional banner frame systems for trade fairs, events and point of sale. Flexible solutions from S&S Messebau."
+  },
+  "/banner-bestellen": {
+    "title": "Order Banners – Configurator | S&S Messebau",
+    "description": "Configure and order banners online. Individual formats for trade fairs and events at S&S Messebau."
+  },
+  "/impressum": {
+    "title": "Legal Notice | S&S Messebau GbR",
+    "description": "Legal notice of S&S Messebau GbR, Hückelhoven. Information pursuant to § 5 DDG."
+  },
+  "/datenschutz": {
+    "title": "Privacy Policy | S&S Messebau GbR",
+    "description": "Privacy policy of S&S Messebau GbR. Information on how we handle your data."
+  },
+  "/ki-berater": {
+    "title": "AI Trade Fair Advisor – Intelligent Consultation | S&S Messebau",
+    "description": "Let our AI trade fair advisor guide you on your exhibition stand. Immediate answers to your questions."
+  }
+}

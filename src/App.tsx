@@ -70,7 +70,7 @@ function App() {
   useSmoothScrollLinks()
   useCursorScale() // Premium hover scale + click compression
   useCardTilt() // 3D perspective tilt on [data-tilt] cards
-  usePageMeta(currentPage)
+  usePageMeta(currentPage, lang)
   usePageViewTracking() // First-party analytics page view tracking
   useHeartbeat() // Real-time visitor presence heartbeat
 
