@@ -20,7 +20,7 @@ $db = getDB();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Oeffentlich lesbar: die Einstellungen, die der Tracker im Browser braucht.
-    // Der Schluessel des Ortungsdienstes geht nur an den angemeldeten Admin
+    // Einziger Leser ist heute der Admin-Bereich. Der Schluessel des Ortungsdienstes geht nur an den angemeldeten Admin
     // (gemessen 10.11.2026: er stand fuer jeden Abruf im Klartext in der Antwort).
     $config = loadTrackingConfig($db);
     $angemeldet = false;
@@ -29,7 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $angemeldet = !empty($_SESSION['user_id']);
     }
     if (!$angemeldet) {
-        $config['geo_api_key'] = '';
+        // Feld entfernen statt leeren: Ein Panel, das mit abgelaufener Sitzung geladen wurde,
+        // schickt dann kein leeres Feld zurueck, das den gespeicherten Schluessel ueberschriebe.
+        unset($config['geo_api_key']);
     }
     echo json_encode($config);
     exit;
