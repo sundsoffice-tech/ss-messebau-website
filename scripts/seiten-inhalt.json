@@ -28,7 +28,7 @@
     "h1": "Banner online konfigurieren",
     "absaetze": [
       "Damit wir die passende Ausführung empfehlen können, teilen Sie uns den Einsatzzweck mit.",
-      "Sie erhalten binnen 24 Stunden ein auf Ihre Konfiguration zugeschnittenes Angebot per E-Mail."
+      "Sie erhalten binnen 48 Stunden ein auf Ihre Konfiguration zugeschnittenes Angebot per E-Mail."
     ],
     "abschnitte": [
       "Wofür benötigen Sie die Banner?"
@@ -101,7 +101,7 @@
   "/blog/messestand-food-unternehmen-anuga": {
     "h1": "Messestand für Food-Unternehmen: Worauf es wirklich ankommt",
     "absaetze": [
-      "Autor: S&S Messebau GbR Veröffentlicht: Februar 2026 Basis: Recherche von Hygiene-Richtlinien, Messe-Verordnungen und Praxis-Erfahrung",
+      "Autor: S&S Messebau GbR Basis: Recherche von Hygiene-Richtlinien, Messe-Verordnungen und Praxis-Erfahrung",
       "Ein Messestand für ein Food-Unternehmen ist grundlegend anders als ein klassischer B2B-Stand. Während ein Tech-Hersteller mit Displays und Broschüren arbeitet, müssen Food-Aussteller mit echten Produkten, Hygiene, Kühlketten und sensorischen Erlebnissen hantieren.",
       "Das macht Food-Stände komplex – aber auch enorm erfolgreich. Verkostung schafft emotionale Bindung, die kein Display erreicht. Aber: Diese emotionale Nähe bringt auch regulatorische Anforderungen mit sich."
     ],
@@ -123,12 +123,11 @@
   "/blog/messestand-kosten-mittelstand": {
     "h1": "Was kostet ein Messestand von 20 bis 200 m²? Der umfassende, faktengestützte Kostenüberblick für Aussteller",
     "absaetze": [
-      "Autor: S&S Messebau GbR Veröffentlicht: Februar 2026 Basis: Recherche aktueller Marktpreise und AUMA-Daten (Verband der deutschen Messewirtschaft)",
+      "Autor: S&S Messebau GbR Basis: Recherche aktueller Marktpreise und AUMA-Daten (Verband der deutschen Messewirtschaft)",
       "„Was kostet ein Messestand?\" ist eine der häufigsten Fragen, die wir bei S&S Messebau bekommen. Die ehrliche Antwort lautet: Es kommt darauf an. Aber „kommt drauf an\" hilft niemandem weiter, der ein realistisches Budget braucht.",
       "Die Realität ist: Ein 20-m²-Stand kann zwischen 10.000 und 60.000 Euro kosten. Ein 200-m²-Stand zwischen 80.000 und über 400.000 Euro. Diese riesige Spannweite verwirrt viele Entscheider – und führt zu unrealistischen Budgets oder zu fahrlässig billigen Angeboten, die Qualität opfern."
     ],
     "abschnitte": [
-      "Der umfassende, faktengestützte Kostenüberblick für Aussteller",
       "Einleitung: Warum diese Frage so wichtig – und so komplex – ist",
       "1. Die große Orientierung: Preisbereiche nach Standgröße",
       "2. Was steckt dahinter? Die AUMA-Kostenverteilung",
@@ -139,7 +138,8 @@
       "7. Die Kostenfaktoren – Wann wird's teuer?",
       "8. Häufige Kalkulations-Fehler (und wie ihr sie vermeidet)",
       "9. Wo kann man sparen – ohne Qualität zu ruinieren?",
-      "10. Zusammenfassung: Die Orientierungswerte"
+      "10. Zusammenfassung: Die Orientierungswerte",
+      "11. Checkliste: Diese Fragen stellt ihr VOR der Budgetierung"
     ]
   },
   "/blog/nachhaltiger-messebau": {
@@ -183,7 +183,7 @@
     ]
   },
   "/branchen": {
-    "h1": "Unsere Leistungen – Messebau, Eventbau, Showrooms & Sport",
+    "h1": "Branchen-Expertise – Food, Finance & Industrie",
     "absaetze": [
       "Professionelle Lösungen für Messen, Events, permanente Showrooms und Sportveranstaltungen. Von der Planung bis zur Umsetzung – alles aus einer Hand.",
       "Professionelle Messestände für individuelle Anforderungen – vom Kompaktsystem bis zum maßgeschneiderten Individualbau. Wir realisieren Ihre Messepräsenz effizient und wirkungsvoll.",
@@ -251,7 +251,7 @@
     "h1": "Unsere Leistungen im Überblick",
     "absaetze": [
       "Von Messebau über Eventbau bis zu Showrooms – alles aus einer Hand. Entdecken Sie unser Full-Service-Angebot.",
-      "Individuelle Messestände – Design, Planung & Umsetzung aus einer Hand. Unverbindliche 48h-Angebotsgarantie inklusive.",
+      "Individuelle Messestände – Design, Planung & Umsetzung aus einer Hand. Unverbindliches Angebot in 48 Stunden nach vollständiger Anfrage.",
       "Eindrucksvolle Event-Locations und Bühnenbauten – von Konferenzen bis Produktlaunches, technisch perfekt umgesetzt."
     ],
     "abschnitte": [
@@ -391,7 +391,7 @@
     "h1": "Messestände, die Ihre Marke verkaufen.",
     "absaetze": [
       "S&S Messebau – unverbindliches 48h-Angebot mit persönlicher Beratung. Full-Service Messebau, Eventbau & Showrooms für Food, Finance und Industrie – bundesweit aus NRW.",
-      "Unverbindliche 48h-Angebotsgarantie – schnell und unkompliziert",
+      "Unverbindliches Angebot in 48 Stunden nach vollständiger Anfrage",
       "Drei Leistungsbereiche, ein Ansprechpartner: Full-Service Messebau als Kernleistung, skalierbare Tourenlösungen für wiederkehrende Auftritte und professionelle Showrooms & Brand Spaces – alles kostenoptimiert aus einer Hand."
     ],
     "abschnitte": [

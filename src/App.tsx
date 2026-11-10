@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef, lazy, Suspense } from 'react'
+import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react'
 import { Toaster } from 'sonner'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
@@ -18,7 +18,6 @@ import { useHeartbeat } from './hooks/use-heartbeat'
 import { I18nContext, getTranslation, getStoredLanguage, storeLanguage, type Language } from './lib/i18n'
 import { useUIStore } from './store/ui-store'
 import { PageErrorBoundary } from './components/PageErrorBoundary'
-import { initContentProtection } from './lib/content-protection'
 
 // Eager load critical SEO pages so crawlers get content immediately
 import { HomePage } from './components/pages/HomePage'
@@ -63,15 +62,6 @@ function App() {
   useEffect(() => {
     document.documentElement.lang = lang
   }, [lang])
-
-  // Content-Schutz: Screenshots, Bild-Download, neue Fenster verhindern
-  const protectionCleanupRef = useRef<(() => void) | null>(null)
-  useEffect(() => {
-    protectionCleanupRef.current = initContentProtection()
-    return () => {
-      protectionCleanupRef.current?.()
-    }
-  }, [])
 
   useSmoothScrollLinks()
   useCursorScale() // Premium hover scale + click compression
