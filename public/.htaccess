@@ -27,8 +27,22 @@
   # Clean URLs: All routes are handled by the SPA fallback below.
   # Legacy hash-based URLs (#/page) are redirected client-side in App.tsx.
 
+  # Eigene HTML-Datei je Seite (seit 11/2026, Stufe 1): scripts/seiten-vorab.mjs legt beim
+  # Build dist/_s/<pfad>.html an, mit Titel, Beschreibung, Canonical und Rueckfalltext der
+  # jeweiligen Seite. Vorher bekam jede Adresse die index.html der Startseite.
+  # Greift diese Regel auf dem Hostinger-Server nicht, gilt die Auffangregel darunter,
+  # also das Verhalten von vorher.
+  RewriteCond %{REQUEST_URI} !^/api/ [NC]
+  RewriteCond %{REQUEST_URI} !^/_s/ [NC]
+  RewriteCond %{REQUEST_URI} !^/nicht-gefunden$ [NC]
+  RewriteCond %{DOCUMENT_ROOT}/_s%{REQUEST_URI}.html -f
+  RewriteRule ^ /_s%{REQUEST_URI}.html [L]
+
   # Handle SPA routing - Send all requests to index.html
   # except for files that actually exist and API routes
+  # Stufe 2 (eigener PR, erst nachdem die Regel oben live gemessen ist): diese Auffangregel
+  # auf /admin und /blog/ begrenzen und ErrorDocument 404 auf /_s/nicht-gefunden.html
+  # stellen, damit unbekannte Adressen mit Status 404 antworten.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-l
