@@ -439,7 +439,7 @@ function generateCustomerConfirmationEmail(config: BannerConfig, configId: strin
       
       <p>vielen Dank für Ihre Banner-Bestellung bei S&S Messebau GbR!</p>
       
-      <p>Wir haben Ihre Konfiguration erfolgreich erhalten und werden uns <strong>innerhalb von 24 Stunden</strong> mit einem individuellen Angebot bei Ihnen melden.</p>
+      <p>Wir haben Ihre Konfiguration erfolgreich erhalten und werden uns <strong>innerhalb von 48 Stunden</strong> mit einem individuellen Angebot bei Ihnen melden.</p>
       
       <div class="box">
         <h2>📋 Ihre Bestellung im Überblick</h2>

@@ -1,6 +1,13 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { Sparkle, Calculator, ClockClockwise, Lightbulb, CheckCircle, Microphone } from '@phosphor-icons/react'
+import { Sparkle, Calculator, ClockClockwise, Lightbulb, CheckCircle, Microphone, ArrowRight } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
+import { SectionLink } from '@/components/SectionLink'
+
+// Der Chat selbst liegt auf der Kontaktseite (Karte mit id "ki-berater"). Diese Seite beschreibt ihn nur,
+// deshalb führen Schritt 1 und die Beispiel-Fragen dorthin, statt ins Leere zu zeigen.
+const CHAT_SEITE = '/kontakt'
+const CHAT_ANKER = 'ki-berater'
+const BEISPIEL_FRAGEN = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6'] as const
 
 export function KIBeraterPage() {
   const { t } = useTranslation()
@@ -121,43 +128,23 @@ export function KIBeraterPage() {
                 </div>
                 <h3 className="font-bold text-xl">{t('advisor.examples.title')}{isVoiceSupported && ` (${t('advisor.examples.voiceHint')})`}</h3>
               </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                {t('advisor.examples.hint')}
+              </p>
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="flex items-start gap-3 p-4 rounded-lg bg-background hover:shadow-md transition-all duration-200 border border-border/50">
-                  <div className="mt-1.5 h-2 w-2 rounded-full bg-primary shrink-0" />
-                  <p className="text-sm leading-relaxed font-medium">
-                    {t('advisor.examples.q1')}
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 p-4 rounded-lg bg-background hover:shadow-md transition-all duration-200 border border-border/50">
-                  <div className="mt-1.5 h-2 w-2 rounded-full bg-primary shrink-0" />
-                  <p className="text-sm leading-relaxed font-medium">
-                    {t('advisor.examples.q2')}
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 p-4 rounded-lg bg-background hover:shadow-md transition-all duration-200 border border-border/50">
-                  <div className="mt-1.5 h-2 w-2 rounded-full bg-primary shrink-0" />
-                  <p className="text-sm leading-relaxed font-medium">
-                    {t('advisor.examples.q3')}
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 p-4 rounded-lg bg-background hover:shadow-md transition-all duration-200 border border-border/50">
-                  <div className="mt-1.5 h-2 w-2 rounded-full bg-primary shrink-0" />
-                  <p className="text-sm leading-relaxed font-medium">
-                    {t('advisor.examples.q4')}
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 p-4 rounded-lg bg-background hover:shadow-md transition-all duration-200 border border-border/50">
-                  <div className="mt-1.5 h-2 w-2 rounded-full bg-primary shrink-0" />
-                  <p className="text-sm leading-relaxed font-medium">
-                    {t('advisor.examples.q5')}
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 p-4 rounded-lg bg-background hover:shadow-md transition-all duration-200 border border-border/50">
-                  <div className="mt-1.5 h-2 w-2 rounded-full bg-primary shrink-0" />
-                  <p className="text-sm leading-relaxed font-medium">
-                    {t('advisor.examples.q6')}
-                  </p>
-                </div>
+                {BEISPIEL_FRAGEN.map((frage) => (
+                  <SectionLink
+                    key={frage}
+                    page={CHAT_SEITE}
+                    section={CHAT_ANKER}
+                    className="flex items-start gap-3 p-4 rounded-lg bg-background hover:shadow-md hover:border-primary/40 transition-all duration-200 border border-border/50 text-foreground"
+                  >
+                    <span className="mt-1.5 h-2 w-2 rounded-full bg-primary shrink-0" aria-hidden="true" />
+                    <span className="text-sm leading-relaxed font-medium">
+                      {t(`advisor.examples.${frage}`)}
+                    </span>
+                  </SectionLink>
+                ))}
               </div>
               {isVoiceSupported && (
                 <div className="mt-6 pt-6 border-t border-border">
@@ -188,6 +175,14 @@ export function KIBeraterPage() {
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {t('advisor.howItWorks.step1.description')}
                     </p>
+                    <SectionLink
+                      page={CHAT_SEITE}
+                      section={CHAT_ANKER}
+                      className="inline-block py-3 text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary/80"
+                    >
+                      {t('advisor.howItWorks.step1.link')}
+                      <ArrowRight className="ml-1.5 inline-block h-4 w-4 align-[-0.15em]" aria-hidden="true" />
+                    </SectionLink>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">

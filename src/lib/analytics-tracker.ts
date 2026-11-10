@@ -19,7 +19,8 @@
  */
 
 import { v4 as uuidv4 } from 'uuid'
-import { isTrackingAllowed, onConsentChange } from '@/lib/analytics'
+import { isTrackingAllowed, onConsentChange, CONSENT_STORAGE_KEY } from '@/lib/analytics'
+import { getUtmParams } from '@/lib/utm-utils'
 import type {
   TrackingEvent,
   TrackingEventName,
@@ -170,15 +171,33 @@ function sanitizeUrl(url: string, utmWhitelist: string[]): string {
   }
 }
 
+const UTM_FIELDS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']
+
 function extractUtm(url: string): Record<string, string> {
   const result: Record<string, string> = {}
   try {
     const u = new URL(url)
-    for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) {
+    for (const key of UTM_FIELDS) {
       const v = u.searchParams.get(key)
       if (v) result[key] = v
     }
   } catch { /* ignore */ }
+  return result
+}
+
+/**
+ * Gemerkte Einstiegsquelle des Besuchs. Einzige Quelle ist `utm-utils.ts`
+ * (Arbeitsspeicher, mit Zustimmung `ss_utm_params`); nach einer Ablehnung ist
+ * sie dort geleert. Übernommen werden nur die fünf Felder als Zeichenketten,
+ * damit ein Speichereintrag kein anderes Feld des Ereignisses überschreibt.
+ */
+function entryUtm(): Record<string, string> {
+  const result: Record<string, string> = {}
+  const remembered: Record<string, unknown> = getUtmParams()
+  for (const key of UTM_FIELDS) {
+    const v = remembered[key]
+    if (typeof v === 'string' && v) result[key] = v
+  }
   return result
 }
 
@@ -187,8 +206,28 @@ function extractUtm(url: string): Record<string, string> {
 /* ------------------------------------------------------------------ */
 
 const QUEUE_KEY = 'ss_analytics_queue'
+const SESSION_START_KEY = 'ss_session_start_sent'
+const SESSION_PAGE_COUNT_KEY = 'ss_page_count'
 const API_BASE = '/api'
 let flushTimer: ReturnType<typeof setTimeout> | null = null
+
+/**
+ * Alle Schlüssel, die die Statistik mit Zustimmung anlegt. `ss_tracking_config`
+ * gehört nicht dazu: Den Eintrag schreibt nur das Admin-Panel, er trägt die
+ * Schalter der Statistik und keine Angabe über den Besucher.
+ */
+const STATISTICS_LOCAL_KEYS = [VISITOR_KEY, VISIT_COUNT_KEY, LAST_VISIT_KEY, QUEUE_KEY]
+const STATISTICS_SESSION_KEYS = [SESSION_KEY, SESSION_START_KEY, SESSION_PAGE_COUNT_KEY]
+
+/** Entfernt Kennung, Zähler, Sitzungsmarken und die Warteschlange der Statistik. */
+function clearStatisticsStorage(): void {
+  try {
+    for (const key of STATISTICS_LOCAL_KEYS) localStorage.removeItem(key)
+  } catch { /* ignore */ }
+  try {
+    for (const key of STATISTICS_SESSION_KEYS) sessionStorage.removeItem(key)
+  } catch { /* ignore */ }
+}
 
 function getQueue(): TrackingEvent[] {
   try {
@@ -205,7 +244,26 @@ function saveQueue(queue: TrackingEvent[]): void {
   } catch { /* ignore */ }
 }
 
+/**
+ * Legt einen nicht zugestellten Stapel zurück. Nach einem Widerruf, der während
+ * der laufenden Anfrage kam, bleibt die Warteschlange leer.
+ */
+function requeue(batch: TrackingEvent[]): void {
+  if (!isTrackingAllowed()) return
+  saveQueue([...batch, ...getQueue()])
+}
+
+/**
+ * Sendet die Warteschlange. Die Zustimmung wird hier noch einmal geprüft, weil
+ * der Aufruf an Zeitgeber, `visibilitychange` und `beforeunload` hängt und die
+ * Zustimmung zwischen Einreihen und Senden widerrufen worden sein kann (auch in
+ * einem anderen Tab). Ohne Zustimmung wird nichts gesendet und der Rest verworfen.
+ */
 async function flushQueue(): Promise<void> {
+  if (!isTrackingAllowed()) {
+    clearStatisticsStorage()
+    return
+  }
   const queue = getQueue()
   if (queue.length === 0) return
 
@@ -220,10 +278,10 @@ async function flushQueue(): Promise<void> {
       keepalive: true,
     })
     if (!resp.ok) {
-      saveQueue([...batch, ...getQueue()])
+      requeue(batch)
     }
   } catch {
-    saveQueue([...batch, ...getQueue()])
+    requeue(batch)
   }
 }
 
@@ -255,12 +313,29 @@ export function trackFirstPartyEvent(
   eventName: TrackingEventName,
   props?: Record<string, string | number | boolean>,
 ): boolean {
+  return enqueueEvent(eventName, props, false)
+}
+
+/**
+ * Kampagnen-Angaben stammen aus der aktuellen Adresse. Nur beim Einstieg der
+ * Sitzung (`isEntry`: erster gezählter Seitenaufruf und sein Sitzungsstart)
+ * gilt ersatzweise die gemerkte Einstiegsquelle, wenn die Adresse keine trägt:
+ * Die Abschnittsverfolgung schreibt `/?utm_source=…` zu `/#hero` um, bevor ein
+ * Erstbesucher im Banner zustimmt. Alle anderen Ereignisse bleiben bei der
+ * Adresse, damit die Auswertung (Zählung je Ereignis) nichts mehrfach zählt.
+ */
+function enqueueEvent(
+  eventName: TrackingEventName,
+  props: Record<string, string | number | boolean> | undefined,
+  isEntry: boolean,
+): boolean {
   if (!canTrack(eventName)) return false
 
   const config = getTrackingConfig()
 
   const url = window.location.href
-  const utm = extractUtm(url)
+  const fromUrl = extractUtm(url)
+  const utm = isEntry && Object.keys(fromUrl).length === 0 ? entryUtm() : fromUrl
 
   const event: TrackingEvent = {
     event: eventName,
@@ -464,20 +539,24 @@ function getDeviceProps(): Record<string, string | number | boolean> {
 /*  Session Start (fired once per session with device info)            */
 /* ------------------------------------------------------------------ */
 
-const SESSION_START_KEY = 'ss_session_start_sent'
-
 /**
  * Die Marke „Sitzungsstart gesendet" wird erst gesetzt, wenn das Ereignis in der
  * Warteschlange liegt. Vorher setzte sie auch ein verworfener Versuch (keine
  * Zustimmung), und der Sitzungsstart fehlte nach dem „Akzeptieren" für immer.
  */
-function sendSessionStartIfNeeded(): void {
+let sessionListenersInstalled = false
+
+function sendSessionStartIfNeeded(isEntry: boolean): void {
   try {
     if (!canTrack('session_start')) return
     if (sessionStorage.getItem(SESSION_START_KEY)) return
     incrementVisitCount()
-    if (!trackFirstPartyEvent('session_start', getDeviceProps())) return
+    if (!enqueueEvent('session_start', getDeviceProps(), isEntry)) return
     sessionStorage.setItem(SESSION_START_KEY, '1')
+    // Einmal je Seitenaufruf: Nach Widerruf und erneuter Zustimmung beginnt eine
+    // neue Sitzung, die Lauscher hängen aber schon und dürfen nicht doppelt zählen.
+    if (sessionListenersInstalled) return
+    sessionListenersInstalled = true
     setupSessionEndTracking()
     setupOutboundClickTracking()
     setupErrorTracking()
@@ -488,8 +567,6 @@ function sendSessionStartIfNeeded(): void {
 /* ------------------------------------------------------------------ */
 /*  Session End Detection                                              */
 /* ------------------------------------------------------------------ */
-
-const SESSION_PAGE_COUNT_KEY = 'ss_page_count'
 
 function getPageCount(): number {
   try {
@@ -718,21 +795,52 @@ export function trackPageView(): void {
     return
   }
   pageViewPending = false
-  sendSessionStartIfNeeded()
+  // Einstieg der Sitzung: noch kein Seitenaufruf gezählt (siehe `enqueueEvent`)
+  const isEntry = getPageCount() === 0
+  sendSessionStartIfNeeded(isEntry)
   incrementPageCount()
-  trackFirstPartyEvent('page_view', {
+  enqueueEvent('page_view', {
     page_count: getPageCount(),
     title: document.title.substring(0, 200),
-  })
+  }, isEntry)
   initScrollDepthTracking()
   initEngagementTracking()
 }
 
 // Nach der Zustimmung im Banner: Sitzungsstart und Seitenaufruf der laufenden
 // Seite nachsenden, damit Einstiegsseite und Quelle (UTM) nicht verloren gehen.
+// Ist die Adresse inzwischen umgeschrieben, kommt die Quelle aus der gemerkten
+// Einstiegsquelle (`utm-utils.ts`).
+// Nach „Ablehnen" (auch als Widerruf einer früheren Zustimmung): sofort
+// aufhören. Der Zeitgeber wird gestoppt, die Warteschlange verworfen statt
+// gesendet, Kennung und Zähler werden entfernt. Stimmt der Besucher später
+// wieder zu, beginnt die Zählung mit neuer Kennung und der dann laufenden Seite.
+function stopStatistics(): void {
+  if (flushTimer) {
+    clearTimeout(flushTimer)
+    flushTimer = null
+  }
+  clearStatisticsStorage()
+  pageViewPending = true
+}
+
 onConsentChange((value) => {
-  if (value === 'granted' && pageViewPending) trackPageView()
+  if (value === 'granted') {
+    if (pageViewPending) trackPageView()
+    return
+  }
+  stopStatistics()
 })
+
+// Widerruf in einem anderen Tab: Der Browser meldet die geänderte Entscheidung
+// als `storage`-Ereignis; auch dieser Tab hört dann sofort auf.
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (ereignis) => {
+    const name = ereignis.key
+    if (name !== null && name !== CONSENT_STORAGE_KEY) return
+    if (!isTrackingAllowed()) stopStatistics()
+  })
+}
 
 /* ------------------------------------------------------------------ */
 /*  Kontaktwege: je Weg ein Ereignis, `source` = Ort des Knopfes       */
@@ -783,10 +891,6 @@ export function trackBlogArticleRead(articleSlug: string, readTimeSeconds: numbe
   })
 }
 
-export function trackDownloadClick(fileName: string): void {
-  trackFirstPartyEvent('download', { file_name: fileName })
-}
-
 export function trackFormInteraction(formType: string, field: string, action: 'focus' | 'blur' | 'change'): void {
   trackFirstPartyEvent('form_interaction', { form_type: formType, field, action })
 }
@@ -803,24 +907,6 @@ export function trackFormAbandon(formType: string, lastField: string, filledFiel
 
 export function trackExitIntent(pageName: string): void {
   trackFirstPartyEvent('exit_intent', { page: pageName })
-}
-
-export function trackConfiguratorStep(step: number, stepName: string): void {
-  trackFirstPartyEvent('configurator_step', { step, step_name: stepName })
-}
-
-export function trackSearch(query: string, resultCount: number): void {
-  trackFirstPartyEvent('search', {
-    query: query.substring(0, 200),
-    result_count: resultCount,
-  })
-}
-
-export function trackVideoPlay(videoId: string, title?: string): void {
-  trackFirstPartyEvent('video_play', {
-    video_id: videoId,
-    title: (title || '').substring(0, 200),
-  })
 }
 
 /* ------------------------------------------------------------------ */

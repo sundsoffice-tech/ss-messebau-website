@@ -2,8 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, ArrowRight, Clock } from '@phosphor-icons/react'
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
+import { blogInhaltZuHtml } from '@/lib/blog-inhalt'
 import { DEMO_BLOG_POSTS } from '@/lib/demo-blog-posts'
 import { useTranslation } from '@/lib/i18n'
 import { useUIStore } from '@/store/ui-store'
@@ -30,13 +29,11 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
     })
   }
 
-  const htmlContent = useMemo(() => {
-    const rawHtml = marked.parse(post.content, { async: false }) as string
-    return DOMPurify.sanitize(rawHtml, {
-      ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'ul', 'ol', 'li', 'strong', 'em', 'br', 'hr', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'blockquote', 'code', 'pre', 'span', 'div', 'figure', 'figcaption'],
-      ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'target', 'rel', 'width', 'height', 'loading', 'decoding'],
-    })
-  }, [post.content])
+  const tabellenBeschriftung = t('blog.tableScrollLabel')
+  const htmlContent = useMemo(
+    () => blogInhaltZuHtml(post.content, tabellenBeschriftung),
+    [post.content, tabellenBeschriftung]
+  )
 
   // Inject BlogPosting JSON-LD structured data for SEO
   useEffect(() => {
@@ -155,6 +152,8 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
               [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4
               [&_li]:mb-1 [&_li]:leading-relaxed
               [&_table]:w-full [&_table]:border-collapse [&_table]:mb-4
+              [&_.tabelle-rollbar]:max-w-full [&_.tabelle-rollbar]:overflow-x-auto [&_.tabelle-rollbar]:mb-4 [&_.tabelle-rollbar_table]:mb-0
+              [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:mb-4
               [&_th]:text-left [&_th]:text-foreground [&_th]:font-semibold [&_th]:py-2 [&_th]:pr-4 [&_th]:border-b
               [&_td]:py-2 [&_td]:pr-4 [&_td]:border-b [&_td]:border-border
               [&_a]:text-primary [&_a]:underline [&_a]:hover:text-primary/80"

@@ -37,5 +37,11 @@ public/api/data/*.sqlite3
 dist/api/data/*.sqlite
 dist/api/data/*.sqlite3
 
+# Laufzeitdateien der API (Marke der Bereinigung, Tageszähler des Chats)
+public/api/data/bereinigung_lauf.json
+public/api/data/chat_tagesdeckel.json
+dist/api/data/bereinigung_lauf.json
+dist/api/data/chat_tagesdeckel.json
+
 # Python-Bytecode (ops-Skripte)
 __pycache__/

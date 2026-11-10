@@ -16,6 +16,14 @@ interface UIState {
   openInquiry: (source?: unknown) => void
   closeInquiry: () => void
   setInquiryOpen: (open: boolean) => void
+  /**
+   * Der Besucher hat den Cookie-Banner über „Cookie-Einstellungen" im Footer
+   * erneut verlangt (Widerrufsweg). Der Banner zeigt sich dann auch, wenn schon
+   * eine Entscheidung gespeichert ist.
+   */
+  cookieSettingsOpen: boolean
+  openCookieSettings: () => void
+  closeCookieSettings: () => void
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -26,4 +34,7 @@ export const useUIStore = create<UIState>((set) => ({
   },
   closeInquiry: () => set({ inquiryDialogOpen: false }),
   setInquiryOpen: (open) => set({ inquiryDialogOpen: open }),
+  cookieSettingsOpen: false,
+  openCookieSettings: () => set({ cookieSettingsOpen: true }),
+  closeCookieSettings: () => set({ cookieSettingsOpen: false }),
 }))

@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef, lazy, Suspense } from 'react'
+import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react'
 import { Toaster } from 'sonner'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
@@ -15,10 +15,9 @@ import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 import { usePageMeta } from './hooks/use-page-meta'
 import { usePageViewTracking } from './hooks/use-page-view-tracking'
 import { useHeartbeat } from './hooks/use-heartbeat'
-import { I18nContext, getTranslation, getStoredLanguage, storeLanguage, type Language } from './lib/i18n'
+import { I18nContext, getTranslation, getInitialLanguage, storeLanguage, ohneSprachangabe, type Language } from './lib/i18n'
 import { useUIStore } from './store/ui-store'
 import { PageErrorBoundary } from './components/PageErrorBoundary'
-import { initContentProtection } from './lib/content-protection'
 
 // Eager load critical SEO pages so crawlers get content immediately
 import { HomePage } from './components/pages/HomePage'
@@ -50,12 +49,16 @@ const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage').then(m
 function App() {
   const { inquiryDialogOpen, openInquiry, setInquiryOpen } = useUIStore()
   const [currentPage, setCurrentPage] = useState('/')
-  const [lang, setLangState] = useState<Language>(getStoredLanguage)
+  const [lang, setLangState] = useState<Language>(() => getInitialLanguage())
 
   const setLang = (newLang: Language) => {
     setLangState(newLang)
     storeLanguage(newLang)
     document.documentElement.lang = newLang
+    // Die eigene Wahl geht vor einer Angabe `?lang=…` in der Adresse, auch nach dem Neuladen.
+    const { pathname, search, hash } = window.location
+    const ziel = ohneSprachangabe(pathname, search, hash)
+    if (ziel !== `${pathname}${search}${hash}`) window.history.replaceState(window.history.state, '', ziel)
   }
 
   const t = getTranslation(lang)
@@ -64,19 +67,10 @@ function App() {
     document.documentElement.lang = lang
   }, [lang])
 
-  // Content-Schutz: Screenshots, Bild-Download, neue Fenster verhindern
-  const protectionCleanupRef = useRef<(() => void) | null>(null)
-  useEffect(() => {
-    protectionCleanupRef.current = initContentProtection()
-    return () => {
-      protectionCleanupRef.current?.()
-    }
-  }, [])
-
   useSmoothScrollLinks()
   useCursorScale() // Premium hover scale + click compression
   useCardTilt() // 3D perspective tilt on [data-tilt] cards
-  usePageMeta(currentPage)
+  usePageMeta(currentPage, lang)
   usePageViewTracking() // First-party analytics page view tracking
   useHeartbeat() // Real-time visitor presence heartbeat
 

@@ -1,10 +1,16 @@
 import { ForkKnife, ShieldCheck, Factory } from '@phosphor-icons/react'
 import { useTranslation } from '@/lib/i18n'
+import { SectionLink } from '@/components/SectionLink'
+
+// Die Branchen-Seite hat keine eigenen Abschnitte je Branche, sondern die Reiter Messebau, Eventbau,
+// Showroom und Sport. Alle drei Karten nennen Messen (Anuga, DKM, Hannover Messe) und führen deshalb
+// auf den Reiter "messebau". Vorher zeigten sie auf #food, #versicherungen und #industrie, die es nicht gab.
+const BRANCHEN_ZIEL = 'messebau'
 
 const branchen = [
-  { labelKey: 'logowall.food.label', detailKey: 'logowall.food.detail', sectionId: 'food', icon: ForkKnife },
-  { labelKey: 'logowall.insurance.label', detailKey: 'logowall.insurance.detail', sectionId: 'versicherungen', icon: ShieldCheck },
-  { labelKey: 'logowall.industry.label', detailKey: 'logowall.industry.detail', sectionId: 'industrie', icon: Factory },
+  { labelKey: 'logowall.food.label', detailKey: 'logowall.food.detail', id: 'food', icon: ForkKnife },
+  { labelKey: 'logowall.insurance.label', detailKey: 'logowall.insurance.detail', id: 'versicherungen', icon: ShieldCheck },
+  { labelKey: 'logowall.industry.label', detailKey: 'logowall.industry.detail', id: 'industrie', icon: Factory },
 ]
 
 export function LogoWall() {
@@ -19,9 +25,10 @@ export function LogoWall() {
           {branchen.map((branche) => {
             const Icon = branche.icon
             return (
-              <a
-                key={branche.sectionId}
-                href={`/branchen#${branche.sectionId}`}
+              <SectionLink
+                key={branche.id}
+                page="/branchen"
+                section={BRANCHEN_ZIEL}
                 className="group flex items-center gap-4 rounded-xl border bg-card p-4 sm:p-5 shadow-xs transition-all duration-300 hover:border-primary hover:shadow-md"
               >
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
@@ -35,7 +42,7 @@ export function LogoWall() {
                     {t(branche.detailKey)}
                   </span>
                 </span>
-              </a>
+              </SectionLink>
             )
           })}
         </div>

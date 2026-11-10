@@ -14,6 +14,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+// Anstoß der Bereinigung (Messdaten nach ihrer Frist, Zähldateien mit
+// IP-Bezug): Der Wächter des Hauses ruft diesen Endpunkt regelmäßig ab, deshalb
+// läuft sie von hier auch an Tagen ohne Besucher, höchstens einmal je Tag und
+// erst nach dem Ende dieses Skripts. "status" und "checks" hängen davon nicht
+// ab: Fehlt die Datei oder scheitert der Lauf, steht das nur im Fehlerprotokoll.
+// Sichtbar wird Stillstand in "checks.bereinigung" (unten): "ok" oder
+// "ueberfaellig", gelesen aus der Marke des Anstoßes. Lässt sich der Zustand
+// nicht bestimmen (Datei fehlt oder ist kaputt), gilt er als überfällig.
+$bereinigungZustand = 'ueberfaellig';
+try {
+    if ((@include_once __DIR__ . '/bereinigung-anstoss.php') !== false
+        && function_exists('bereinigungVormerken')) {
+        if (function_exists('bereinigungZustand')) {
+            $bereinigungZustand = bereinigungZustand();
+        }
+        bereinigungVormerken();
+    }
+} catch (\Throwable $e) {
+    error_log('Bereinigung: Anstoß aus health.php gescheitert: ' . $e->getMessage());
+}
+
 $status = 'ok';
 $checks = [];
 
@@ -68,6 +89,15 @@ if (is_array($chatStand)
 
 // Timestamp
 $checks['timestamp'] = gmdate('c');
+
+// Bereinigung: "ok" oder "ueberfaellig" (letzter vollständiger Lauf länger als
+// zwei Tage her, siehe bereinigungZustand() in bereinigung-anstoss.php). Der
+// Wächter auf sunds-hub prüft auf "bereinigung": "ok" mit einem eigenen Ziel
+// (ops/sunds-hub/eintragen.py). "status" und der HTTP-Status bleiben davon
+// unberührt: Wer die Bereinigung von außen aufhält, soll damit nicht den
+// Alarm für API und Datenbank auslösen können. Hier steht nur der Zustand,
+// keine Zahl und kein Zeitpunkt.
+$checks['bereinigung'] = $bereinigungZustand;
 
 echo json_encode([
     'status' => $status,

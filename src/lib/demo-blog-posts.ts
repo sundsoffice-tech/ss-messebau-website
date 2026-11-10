@@ -569,8 +569,7 @@ Viel Erfolg beim Messeauftritt!`,
     title: 'Nachhaltiger Messebau: Gut für Umwelt und Budget',
     slug: 'nachhaltiger-messebau',
     excerpt: 'Wiederverwendbare Systeme, lokale Partner, effiziente Logistik: So geht moderner, nachhaltiger Messebau.',
-    content: `**Autor:** S&S Messebau GbR  
-**Veröffentlicht:** Februar 2026
+    content: `**Autor:** S&S Messebau GbR
 
 ---
 
@@ -816,11 +815,7 @@ Viel Erfolg bei eurem nächsten nachhaltigen Messeauftritt!`,
     title: 'Was kostet ein Messestand von 20 bis 200 m²? Der umfassende, faktengestützte Kostenüberblick für Aussteller',
     slug: 'messestand-kosten-mittelstand',
     excerpt: 'Transparente Kostenaufstellung mit realen Marktdaten: Von der Standmiete bis zur kompletten Montage – erfahren Sie, was ein professioneller Messestand wirklich kostet. Mit 4 kompletten Beispielkalkulationen und konkreten Spartipps.',
-    content: `# Was kostet ein Messestand von 20 bis 200 m²?
-## Der umfassende, faktengestützte Kostenüberblick für Aussteller
-
-**Autor:** S&S Messebau GbR  
-**Veröffentlicht:** Februar 2026  
+    content: `**Autor:** S&S Messebau GbR  
 **Basis:** Recherche aktueller Marktpreise und AUMA-Daten (Verband der deutschen Messewirtschaft)
 
 ---
@@ -1461,10 +1456,7 @@ Wenn ihr konkrete Zahlen für euer Projekt braucht, kontaktiert uns. Wir von S&S
     title: 'Messestand für Food-Unternehmen: Worauf es wirklich ankommt',
     slug: 'messestand-food-unternehmen-anuga',
     excerpt: 'Food-Stände sind komplexer als klassische Messestände. Von Hygiene-Richtlinien über Kühlketten bis zur Besucherführung – ein umfassender Leitfaden mit Rechtsgrundlagen, technischen Anforderungen und Praxisbeispielen.',
-    content: `# Messestand für Food-Unternehmen: Worauf es wirklich ankommt
-
-**Autor:** S&S Messebau GbR  
-**Veröffentlicht:** Februar 2026  
+    content: `**Autor:** S&S Messebau GbR  
 **Basis:** Recherche von Hygiene-Richtlinien, Messe-Verordnungen und Praxis-Erfahrung
 
 ---
