@@ -12,7 +12,6 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
     { id: '48h-garantie', label: 'Unverbindliche 48h-Angebotsgarantie', page: '/' },
     { id: 'references', label: 'Referenzen', page: '/' },
     { id: 'process', label: 'Ablauf', page: '/' },
-    { id: 'testimonials', label: 'Kundenstimmen', page: '/' },
     { id: 'cta', label: 'Kontakt', page: '/' }
   ],
   '/leistungen': [
@@ -24,48 +23,42 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
     { id: 'leistungen', label: 'Leistungen im Detail', page: '/leistungen/messebau' },
     { id: 'prozess', label: 'Ablauf', page: '/leistungen/messebau' },
     { id: 'vorteile', label: 'Vorteile', page: '/leistungen/messebau' },
-    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/messebau' },
-    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/messebau' }
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/messebau' }
   ],
   '/leistungen/eventbau': [
     { id: 'hero', label: 'Eventbau', page: '/leistungen/eventbau' },
     { id: 'leistungen', label: 'Leistungen im Detail', page: '/leistungen/eventbau' },
     { id: 'einsatzbereiche', label: 'Einsatzbereiche', page: '/leistungen/eventbau' },
     { id: 'prozess', label: 'Ablauf', page: '/leistungen/eventbau' },
-    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/eventbau' },
-    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/eventbau' }
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/eventbau' }
   ],
   '/leistungen/showroom-ladenbau': [
     { id: 'hero', label: 'Showroom & Ladenbau', page: '/leistungen/showroom-ladenbau' },
     { id: 'leistungen', label: 'Leistungen im Detail', page: '/leistungen/showroom-ladenbau' },
     { id: 'einsatzbereiche', label: 'Einsatzbereiche', page: '/leistungen/showroom-ladenbau' },
     { id: 'prozess', label: 'Ablauf', page: '/leistungen/showroom-ladenbau' },
-    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/showroom-ladenbau' },
-    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/showroom-ladenbau' }
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/showroom-ladenbau' }
   ],
   '/leistungen/touren': [
     { id: 'hero', label: 'Touren & Roadshows', page: '/leistungen/touren' },
     { id: 'leistungen', label: 'Leistungen im Detail', page: '/leistungen/touren' },
     { id: 'vorteile', label: 'Vorteile', page: '/leistungen/touren' },
     { id: 'prozess', label: 'Ablauf', page: '/leistungen/touren' },
-    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/touren' },
-    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/touren' }
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/touren' }
   ],
   '/leistungen/boeden-ausstattung': [
     { id: 'hero', label: 'Böden & Ausstattung', page: '/leistungen/boeden-ausstattung' },
     { id: 'leistungen', label: 'Leistungen im Detail', page: '/leistungen/boeden-ausstattung' },
     { id: 'materialien', label: 'Materialien', page: '/leistungen/boeden-ausstattung' },
     { id: 'prozess', label: 'Ablauf', page: '/leistungen/boeden-ausstattung' },
-    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/boeden-ausstattung' },
-    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/boeden-ausstattung' }
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/boeden-ausstattung' }
   ],
   '/leistungen/digital-experience': [
     { id: 'hero', label: 'Digital Experience', page: '/leistungen/digital-experience' },
     { id: 'leistungen', label: 'Digitale Messelösungen', page: '/leistungen/digital-experience' },
     { id: 'technologien', label: 'Technologie-Bereiche', page: '/leistungen/digital-experience' },
     { id: 'prozess', label: 'Ablauf', page: '/leistungen/digital-experience' },
-    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/digital-experience' },
-    { id: 'referenzen', label: 'Kundenstimmen', page: '/leistungen/digital-experience' }
+    { id: 'faq', label: 'Häufige Fragen', page: '/leistungen/digital-experience' }
   ],
   '/branchen': [
     { id: 'food', label: 'Food & Feinkost', page: '/branchen' },

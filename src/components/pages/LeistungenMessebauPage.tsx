@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import {
   Accordion,
@@ -19,7 +18,6 @@ import {
   TrendUp,
   Truck,
   Package,
-  Star,
   ChatCircleDots,
   Wrench,
 } from '@phosphor-icons/react'
@@ -103,27 +101,6 @@ export function LeistungenMessebauPage() {
     {
       q: 'Kann ich meinen bestehenden Messestand umbauen oder erweitern lassen?',
       a: 'Selbstverständlich. Wir modernisieren bestehende Messestände, passen sie an neue Standflächen an oder erweitern sie um zusätzliche Elemente. Das spart Kosten und ist nachhaltig.',
-    },
-  ]
-
-  const testimonials = [
-    {
-      text: 'S&S Messebau hat unseren Messestand für die MEDICA in Düsseldorf realisiert. Von der ersten Skizze bis zum fertigen Stand – alles aus einer Hand und in höchster Qualität. Die Besucherfrequenz war so hoch wie nie zuvor.',
-      author: 'Dr. Stefan Müller',
-      company: 'MedTech Solutions GmbH',
-      rating: 5,
-    },
-    {
-      text: 'Kurzfristig brauchten wir einen 60m²-Stand für die Hannover Messe. S&S hat das in nur 5 Wochen realisiert – inklusive Probeaufbau. Absolut professionell und zuverlässig.',
-      author: 'Claudia Weber',
-      company: 'IndustrieWerk AG',
-      rating: 5,
-    },
-    {
-      text: 'Wir arbeiten regelmäßig mit S&S Messebau zusammen. Die Stände werden jedes Mal besser, die Kommunikation ist erstklassig und das Preis-Leistungs-Verhältnis stimmt einfach.',
-      author: 'Markus Becker',
-      company: 'FoodBrand Deutschland',
-      rating: 5,
     },
   ]
 
@@ -362,44 +339,8 @@ export function LeistungenMessebauPage() {
         </div>
       </section>
 
-      {/* Kundenstimmen Section */}
-      <section id="referenzen" className="py-12 sm:py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2
-            className="font-bold text-center mb-4 heading-2"
-          >
-            Das sagen unsere Kunden
-          </h2>
-          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Vertrauen Sie auf die Erfahrung zufriedener Messeaussteller.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-500" weight="fill" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4 italic">
-                    &ldquo;{testimonial.text}&rdquo;
-                  </p>
-                  <Separator className="my-4" />
-                  <div>
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Interne Verlinkung Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4 heading-2"
@@ -434,7 +375,7 @@ export function LeistungenMessebauPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16">
+      <section className="py-12 sm:py-16 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
           <h2
             className="font-bold mb-6 heading-2"

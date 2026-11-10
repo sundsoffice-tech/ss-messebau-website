@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import {
   Accordion,
@@ -13,7 +12,6 @@ import {
   ArrowRight,
   Phone,
   CheckCircle,
-  Star,
   Shield,
   Eye,
   PaintBrush,
@@ -85,27 +83,6 @@ export function LeistungenShowroomLadenbauPage() {
     {
       q: 'Was unterscheidet Showroom, Ladenbau und Brand Space?',
       a: 'Ein Showroom dient der Produktpräsentation und Markeninszenierung. Ladenbau fokussiert sich auf verkaufsoptimierten Innenausbau. Brand Spaces vereinen beides und schaffen vollumfängliche Markenerlebnisräume. Wir bündeln alle drei Disziplinen aus einer Hand.',
-    },
-  ]
-
-  const testimonials = [
-    {
-      text: 'S&S Messebau hat unseren Showroom im Firmensitz komplett neu gestaltet. Das Ergebnis übertrifft alle Erwartungen – unsere Kunden sind begeistert und die Markenwahrnehmung hat sich spürbar verbessert.',
-      author: 'Thomas Richter',
-      company: 'LuxTech Industries GmbH',
-      rating: 5,
-    },
-    {
-      text: 'Vom ersten Entwurf bis zur Übergabe war die Zusammenarbeit erstklassig. Besonders die Liebe zum Detail bei den Materialien und der Beleuchtung hat uns überzeugt.',
-      author: 'Sandra Klein',
-      company: 'ModaVista AG',
-      rating: 5,
-    },
-    {
-      text: 'Unser Ausstellungsraum wurde termingerecht und in Premium-Qualität realisiert. Die interaktiven Elemente kommen bei Besuchern hervorragend an. Klare Empfehlung!',
-      author: 'Jürgen Hoffmann',
-      company: 'PräzisionsMechanik Hoffmann',
-      rating: 5,
     },
   ]
 
@@ -411,44 +388,8 @@ export function LeistungenShowroomLadenbauPage() {
         </div>
       </section>
 
-      {/* Kundenstimmen Section */}
-      <section id="referenzen" className="py-12 sm:py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2
-            className="font-bold text-center mb-4 heading-2"
-          >
-            Das sagen unsere Kunden
-          </h2>
-          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Vertrauen Sie auf die Erfahrung zufriedener Showroom-Kunden.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-500" weight="fill" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4 italic">
-                    &ldquo;{testimonial.text}&rdquo;
-                  </p>
-                  <Separator className="my-4" />
-                  <div>
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Interne Verlinkung Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4 heading-2"
@@ -483,7 +424,7 @@ export function LeistungenShowroomLadenbauPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16">
+      <section className="py-12 sm:py-16 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
           <h2
             className="font-bold mb-6 heading-2"

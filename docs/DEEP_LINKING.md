@@ -30,7 +30,6 @@ Examples:
 - `services` - Main services overview
 - `advantages` - Why S&S Messebau
 - `references` - Project references
-- `testimonials` - Customer testimonials
 - `cta` - Call to action section
 
 ### LeistungenPage (`/leistungen`)
