@@ -20,6 +20,7 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import { isTrackingAllowed, onConsentChange, CONSENT_STORAGE_KEY } from '@/lib/analytics'
+import { getUtmParams } from '@/lib/utm-utils'
 import type {
   TrackingEvent,
   TrackingEventName,
@@ -170,15 +171,33 @@ function sanitizeUrl(url: string, utmWhitelist: string[]): string {
   }
 }
 
+const UTM_FIELDS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']
+
 function extractUtm(url: string): Record<string, string> {
   const result: Record<string, string> = {}
   try {
     const u = new URL(url)
-    for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) {
+    for (const key of UTM_FIELDS) {
       const v = u.searchParams.get(key)
       if (v) result[key] = v
     }
   } catch { /* ignore */ }
+  return result
+}
+
+/**
+ * Gemerkte Einstiegsquelle des Besuchs. Einzige Quelle ist `utm-utils.ts`
+ * (Arbeitsspeicher, mit Zustimmung `ss_utm_params`); nach einer Ablehnung ist
+ * sie dort geleert. Übernommen werden nur die fünf Felder als Zeichenketten,
+ * damit ein Speichereintrag kein anderes Feld des Ereignisses überschreibt.
+ */
+function entryUtm(): Record<string, string> {
+  const result: Record<string, string> = {}
+  const remembered: Record<string, unknown> = getUtmParams()
+  for (const key of UTM_FIELDS) {
+    const v = remembered[key]
+    if (typeof v === 'string' && v) result[key] = v
+  }
   return result
 }
 
@@ -294,12 +313,29 @@ export function trackFirstPartyEvent(
   eventName: TrackingEventName,
   props?: Record<string, string | number | boolean>,
 ): boolean {
+  return enqueueEvent(eventName, props, false)
+}
+
+/**
+ * Kampagnen-Angaben stammen aus der aktuellen Adresse. Nur beim Einstieg der
+ * Sitzung (`isEntry`: erster gezählter Seitenaufruf und sein Sitzungsstart)
+ * gilt ersatzweise die gemerkte Einstiegsquelle, wenn die Adresse keine trägt:
+ * Die Abschnittsverfolgung schreibt `/?utm_source=…` zu `/#hero` um, bevor ein
+ * Erstbesucher im Banner zustimmt. Alle anderen Ereignisse bleiben bei der
+ * Adresse, damit die Auswertung (Zählung je Ereignis) nichts mehrfach zählt.
+ */
+function enqueueEvent(
+  eventName: TrackingEventName,
+  props: Record<string, string | number | boolean> | undefined,
+  isEntry: boolean,
+): boolean {
   if (!canTrack(eventName)) return false
 
   const config = getTrackingConfig()
 
   const url = window.location.href
-  const utm = extractUtm(url)
+  const fromUrl = extractUtm(url)
+  const utm = isEntry && Object.keys(fromUrl).length === 0 ? entryUtm() : fromUrl
 
   const event: TrackingEvent = {
     event: eventName,
@@ -467,7 +503,12 @@ function inferGeoFromTimezone(tz: string): { country: string; region: string } {
   }
 }
 
-function getDeviceProps(): Record<string, string | number | boolean> {
+/**
+ * `fruehereBesuche` und `letzterBesuch` sind der Stand VOR diesem Sitzungsstart.
+ * Vorher wurde erst hochgezählt und dann gelesen: `is_returning` war bei jedem
+ * Sitzungsstart wahr, `last_visit` trug den Zeitpunkt des laufenden Besuchs.
+ */
+function getDeviceProps(fruehereBesuche: number, letzterBesuch: string | null): Record<string, string | number | boolean> {
   const tz = detectTimezone()
   const geo = inferGeoFromTimezone(tz)
   return {
@@ -492,9 +533,9 @@ function getDeviceProps(): Record<string, string | number | boolean> {
     cookies_enabled: detectCookiesEnabled(),
     do_not_track: detectDoNotTrack(),
     ad_blocker: detectAdBlocker(),
-    visit_count: getVisitCount(),
-    is_returning: getVisitCount() > 0,
-    last_visit: getLastVisitDate() || '',
+    visit_count: fruehereBesuche + 1,
+    is_returning: fruehereBesuche > 0,
+    last_visit: letzterBesuch || '',
     page_count: 0,
   }
 }
@@ -510,12 +551,15 @@ function getDeviceProps(): Record<string, string | number | boolean> {
  */
 let sessionListenersInstalled = false
 
-function sendSessionStartIfNeeded(): void {
+function sendSessionStartIfNeeded(isEntry: boolean): void {
   try {
     if (!canTrack('session_start')) return
     if (sessionStorage.getItem(SESSION_START_KEY)) return
+    // Erst lesen, dann zählen: Das Ereignis trägt den Stand vor diesem Besuch.
+    const fruehereBesuche = getVisitCount()
+    const letzterBesuch = getLastVisitDate()
     incrementVisitCount()
-    if (!trackFirstPartyEvent('session_start', getDeviceProps())) return
+    if (!enqueueEvent('session_start', getDeviceProps(fruehereBesuche, letzterBesuch), isEntry)) return
     sessionStorage.setItem(SESSION_START_KEY, '1')
     // Einmal je Seitenaufruf: Nach Widerruf und erneuter Zustimmung beginnt eine
     // neue Sitzung, die Lauscher hängen aber schon und dürfen nicht doppelt zählen.
@@ -654,13 +698,22 @@ function collectPerformanceMetrics(): void {
 
 let maxScrollDepth = 0
 let scrollDepthReported = new Set<number>()
+// Die Lauscher hängen je Seite im Browser genau einmal. `trackPageView` ruft die
+// beiden init-Funktionen bei jedem Seitenaufruf; ohne diese Merker kam mit jedem
+// Seitenwechsel ein weiterer Satz Lauscher dazu, `tab_visibility` und
+// `page_engagement` gingen dann mehrfach hinaus und die Verweildauer zählte doppelt.
+let scrollLauscherHaengt = false
+let engagementLauscherHaengen = false
 
 export function initScrollDepthTracking(): void {
   if (typeof window === 'undefined') return
 
   const thresholds = [25, 50, 75, 90, 100]
+  // Je Seitenaufruf beginnt die Messung neu
   maxScrollDepth = 0
   scrollDepthReported = new Set<number>()
+  if (scrollLauscherHaengt) return
+  scrollLauscherHaengt = true
 
   const handleScroll = () => {
     const scrollTop = window.scrollY || document.documentElement.scrollTop
@@ -710,9 +763,12 @@ let isEngaged = true
 export function initEngagementTracking(): void {
   if (typeof window === 'undefined') return
 
+  // Je Seitenaufruf beginnt die Messung neu
   engagementStartTime = Date.now()
   totalEngagementTime = 0
   isEngaged = true
+  if (engagementLauscherHaengen) return
+  engagementLauscherHaengen = true
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
@@ -759,18 +815,22 @@ export function trackPageView(): void {
     return
   }
   pageViewPending = false
-  sendSessionStartIfNeeded()
+  // Einstieg der Sitzung: noch kein Seitenaufruf gezählt (siehe `enqueueEvent`)
+  const isEntry = getPageCount() === 0
+  sendSessionStartIfNeeded(isEntry)
   incrementPageCount()
-  trackFirstPartyEvent('page_view', {
+  enqueueEvent('page_view', {
     page_count: getPageCount(),
     title: document.title.substring(0, 200),
-  })
+  }, isEntry)
   initScrollDepthTracking()
   initEngagementTracking()
 }
 
 // Nach der Zustimmung im Banner: Sitzungsstart und Seitenaufruf der laufenden
 // Seite nachsenden, damit Einstiegsseite und Quelle (UTM) nicht verloren gehen.
+// Ist die Adresse inzwischen umgeschrieben, kommt die Quelle aus der gemerkten
+// Einstiegsquelle (`utm-utils.ts`).
 // Nach „Ablehnen" (auch als Widerruf einer früheren Zustimmung): sofort
 // aufhören. Der Zeitgeber wird gestoppt, die Warteschlange verworfen statt
 // gesendet, Kennung und Zähler werden entfernt. Stimmt der Besucher später
@@ -798,7 +858,23 @@ if (typeof window !== 'undefined') {
   window.addEventListener('storage', (ereignis) => {
     const name = ereignis.key
     if (name !== null && name !== CONSENT_STORAGE_KEY) return
-    if (!isTrackingAllowed()) stopStatistics()
+    // Maßgeblich ist der gemeldete Wert, nicht nur der Zustand beim Verarbeiten: Ein Tab im
+    // Hintergrund kann den Widerruf erst bekommen, nachdem dort wieder zugestimmt wurde. Auch
+    // dann endet die laufende Zählung; die nächste beginnt mit neuer Kennung.
+    const widerrufGemeldet = name !== null && ereignis.newValue !== 'granted'
+    if (!isTrackingAllowed()) {
+      stopStatistics()
+      return
+    }
+    if (!widerrufGemeldet) return
+    // Die Zustimmung besteht schon wieder: Der andere Tab hat beim Widerruf Kennung und
+    // Warteschlange entfernt und zählt seitdem neu. Was jetzt im gemeinsamen Speicher liegt,
+    // gehört zu dieser neuen Zählung und bleibt. Hier endet nur die alte Sitzung dieses Tabs;
+    // die neue beginnt sofort mit Sitzungsstart und Seitenaufruf der laufenden Seite.
+    try {
+      for (const key of STATISTICS_SESSION_KEYS) sessionStorage.removeItem(key)
+    } catch { /* ignore */ }
+    trackPageView()
   })
 }
 

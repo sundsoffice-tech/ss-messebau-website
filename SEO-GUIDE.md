@@ -232,7 +232,7 @@ Aktuell gibt es Unterschiede zwischen Website und messen.de-Eintrag (Hueckelhove
 
 ### Empfehlungen fuer externe Bilder
 
-Die Website nutzt aktuell Bilder von Unsplash und iStockPhoto. Fuer bessere SEO:
+Die Website nutzt aktuell noch einzelne Bilder von Unsplash (Stand 10.11.2026; Bilder eines Bildanbieters ohne belegte Lizenz sind entfernt). Fuer bessere SEO:
 
 1. **Eigene Fotos verwenden** - Echte Messestand-Fotos sind authentischer und einzigartig
 2. **WebP-Format** - Bilder lokal als WebP speichern (30-50% kleiner als JPG)

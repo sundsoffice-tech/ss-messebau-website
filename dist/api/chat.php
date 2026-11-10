@@ -291,6 +291,12 @@ try {
         ':status' => 'active',
     ]);
     $keyRecord = $stmt->fetch();
+    // Lesebefehl schließen, bevor die KI aufgerufen wird: Bleibt er offen, hält
+    // die Verbindung ihren Lesestand über den ganzen Aufruf fest, und das
+    // UPDATE unten scheitert mit "database is locked", sobald in dieser Zeit
+    // ein anderer Aufruf geschrieben hat. Der Besucher bekäme dann Status 500,
+    // obwohl die Antwort der KI schon da ist.
+    $stmt->closeCursor();
 
     if (!$keyRecord) {
         // Fallback to environment variable
