@@ -9,11 +9,15 @@
  *   Neuladen ist sie weg. Im Browser wird nichts abgelegt.
  * - Zustimmung: zusätzlich im sessionStorage (`ss_utm_params`), damit die Quelle
  *   ein Neuladen im selben Tab übersteht.
- * - Ablehnung (auch als Widerruf): Eintrag und Arbeitsspeicher werden geleert,
- *   Anfragen gehen ohne Quelle hinaus.
+ * - Ablehnung (auch als Widerruf, auch in einem anderen Tab): Eintrag und
+ *   Arbeitsspeicher werden geleert, Anfragen gehen ohne Quelle hinaus.
+ *
+ * Die Hausstatistik (`analytics-tracker.ts`) liest dieselbe gemerkte Quelle für
+ * den Einstieg der Sitzung, wenn die Adresse bei der Zustimmung schon
+ * umgeschrieben ist. Gemerkt wird sie nur hier.
  */
 
-import { getConsent, onConsentChange } from '@/lib/analytics'
+import { getConsent, onConsentChange, CONSENT_STORAGE_KEY } from '@/lib/analytics'
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const
 const UTM_STORAGE_KEY = 'ss_utm_params'
@@ -96,5 +100,12 @@ if (typeof window !== 'undefined') {
     // Zustimmung erst nach dem Laden: Einstiegsquelle jetzt ablegen
     if (!hasAny(inMemory)) inMemory = readFromUrl()
     if (hasAny(inMemory)) persist(inMemory)
+  })
+  // Ablehnung in einem anderen Tab: Der Browser meldet sie als `storage`-Ereignis;
+  // auch dieser Tab vergisst die gemerkte Quelle (wie der Tracker seine Zählung).
+  window.addEventListener('storage', (ereignis) => {
+    const name = ereignis.key
+    if (name !== null && name !== CONSENT_STORAGE_KEY) return
+    if (getConsent() === 'denied') forget()
   })
 }
