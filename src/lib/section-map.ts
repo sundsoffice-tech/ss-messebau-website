@@ -84,7 +84,7 @@ export const SECTION_MAP: Record<string, SectionConfig[]> = {
     { id: 'faq', label: 'Häufige Fragen', page: '/ablauf' }
   ],
   '/nachhaltigkeit': [
-    { id: 'systeme', label: 'Nachhaltige Systeme', page: '/nachhaltigkeit' },
+    { id: 'systeme', label: 'Wiederverwendbare Systeme', page: '/nachhaltigkeit' },
     { id: 'partnernetzwerk', label: 'Partnernetzwerk', page: '/nachhaltigkeit' },
     { id: 'vorteile', label: 'Vorteile', page: '/nachhaltigkeit' }
   ],
