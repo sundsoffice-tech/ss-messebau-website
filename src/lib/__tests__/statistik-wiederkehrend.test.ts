@@ -38,6 +38,9 @@ async function neuerBesuch(zeitpunkt: Date) {
   vi.setSystemTime(zeitpunkt)
   const geladen = await laden()
   geladen.tracker.trackPageView()
+  // Der Besuch wird gesendet, bevor der nächste beginnt: Was länger als 24 Stunden in der
+  // Warteschlange läge, fiele dort weg (Obergrenzen der Warteschlange).
+  await vi.advanceTimersByTimeAsync(2_100)
   return geladen
 }
 
