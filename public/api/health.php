@@ -14,6 +14,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+// Anstoß der Bereinigung (Messdaten nach ihrer Frist, Zähldateien mit
+// IP-Bezug): Der Wächter des Hauses ruft diesen Endpunkt regelmäßig ab, deshalb
+// läuft sie von hier auch an Tagen ohne Besucher, höchstens einmal je Tag und
+// erst nach dem Ende dieses Skripts. "status" und "checks" hängen davon nicht
+// ab: Fehlt die Datei oder scheitert der Lauf, steht das nur im Fehlerprotokoll.
+try {
+    if ((@include_once __DIR__ . '/bereinigung-anstoss.php') !== false
+        && function_exists('bereinigungVormerken')) {
+        bereinigungVormerken();
+    }
+} catch (\Throwable $e) {
+    error_log('Bereinigung: Anstoß aus health.php gescheitert: ' . $e->getMessage());
+}
+
 $status = 'ok';
 $checks = [];
 

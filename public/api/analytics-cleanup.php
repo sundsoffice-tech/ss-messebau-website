@@ -3,26 +3,43 @@
  * S&S Messebau - Analytics Cleanup Endpoint
  * POST: Delete old events based on retention settings
  * Requires auth.
+ *
+ * Zwei Wege führen in diese Datei:
+ *   1. Der Aufruf über HTTP (Knopf im Admin-Bereich): POST, nur angemeldet.
+ *   2. Der Anstoß ohne Handgriff: bereinigungAusfuehren() in
+ *      bereinigung-anstoss.php bindet die Datei ein und setzt dafür in ihrer
+ *      eigenen Funktion $bereinigungIntern = true. Dann entfallen HTTP-Teil,
+ *      Anmeldung und Ausgabe, die Regeln darunter sind dieselben.
+ * Jede Regel steht deshalb nur hier; eine neue Regel gilt für beide Wege.
  */
 
 require_once __DIR__ . '/db.php';
-require_once __DIR__ . '/auth.php';
 
-header('Content-Type: application/json; charset=utf-8');
-setCorsHeaders();
+// Fail-closed: Ohne das ausdrückliche Zeichen des Einbinders gilt der Weg über
+// HTTP mit Anmeldung, und ist diese Datei selbst das aufgerufene Skript, gilt
+// er immer. Eine Anfrage kann die Variable nicht setzen.
+$bereinigungIntern = isset($bereinigungIntern) && $bereinigungIntern === true
+    && realpath((string)($_SERVER['SCRIPT_FILENAME'] ?? '')) !== __FILE__;
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
+if (!$bereinigungIntern) {
+    require_once __DIR__ . '/auth.php';
+
+    header('Content-Type: application/json; charset=utf-8');
+    setCorsHeaders();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(200);
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        echo json_encode(['error' => 'Method not allowed']);
+        exit;
+    }
+
+    if (!requireAuth()) exit;
 }
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['error' => 'Method not allowed']);
-    exit;
-}
-
-if (!requireAuth()) exit;
 
 $db = getDB();
 
@@ -83,6 +100,11 @@ if (is_dir($geocacheDir)) {
             }
         }
     }
+}
+
+// Anstoß ohne Handgriff: Ergebnis an bereinigungAusfuehren() zurück, keine Ausgabe.
+if ($bereinigungIntern) {
+    return ['deleted' => $deleted, 'retention_days' => $retentionDays, 'cutoff_date' => $cutoff];
 }
 
 echo json_encode([
