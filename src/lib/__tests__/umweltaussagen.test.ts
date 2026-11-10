@@ -3,6 +3,10 @@ import de from '@/locales/de.json'
 import en from '@/locales/en.json'
 import seitenInhalt from '../../../scripts/seiten-inhalt.json'
 import startseite from '../../../index.html?raw'
+import { DEMO_BLOG_POSTS } from '../demo-blog-posts'
+import messeDaten from '../messe-data.ts?raw'
+import seitenMeta from '../seiten-meta.json'
+import seitenMetaEn from '../seiten-meta-en.json'
 
 /**
  * Umwelt- und Zahlenaussagen, die das Haus nicht belegen kann, bleiben draußen
@@ -10,17 +14,30 @@ import startseite from '../../../index.html?raw'
  * liegt weder Zertifikat noch Lizenz vor, die Einsparzahlen stammen aus keinem Projekt.
  * Wer eine dieser Wendungen wieder einführt, braucht zuerst den Beleg und nimmt sie
  * dann hier aus der Liste.
+ *
+ * Seit der Prüfung von PR #252 (Abschnitte 3.5 und 4.1) laufen auch der Blogbeitrag
+ * „nachhaltiger-messebau“, die Meldungen, die Seitentitel sowie Kopf und Fuß der Seite mit.
  */
 
 const deutsch = de as Record<string, string>
 const englisch = en as Record<string, string>
 
-// Jede Seite unter src/components/pages als Quelltext, ohne die Tests daneben.
-const seiten = import.meta.glob(['../../components/pages/**/*.tsx', '!**/__tests__/**'], {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-}) as Record<string, string>
+// Jede Seite unter src/components/pages als Quelltext, ohne die Tests daneben; dazu Kopf und Fuß.
+const seiten = import.meta.glob(
+  ['../../components/pages/**/*.tsx', '../../components/Header.tsx', '../../components/Footer.tsx', '!**/__tests__/**'],
+  {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+  }
+) as Record<string, string>
+
+// Vom Blog läuft nur dieser eine Beitrag mit, abgegrenzt über seinen Slug: Die übrigen Beiträge sind
+// redaktionelle Texte mit eigenen Zahlen und nicht geprüft; sie würden den Test rot machen.
+const BLOG_SLUG = 'nachhaltiger-messebau'
+const BLOG = `src/lib/demo-blog-posts.ts (${BLOG_SLUG})`
+const beitrag = DEMO_BLOG_POSTS.find((p) => p.slug === BLOG_SLUG)
+const beitragText = beitrag ? [beitrag.title, beitrag.excerpt, beitrag.category, beitrag.content].join('\n') : ''
 
 /** Geprüft wird der Text, den Besucher und Suchmaschinen bekommen; Schlüsselnamen zählen nicht. */
 // Die vorab gebauten Blogtexte laufen als eigene Quelle, damit eine Ausnahme nur sie trifft.
@@ -34,6 +51,10 @@ const quellen: Array<[string, string]> = [
   ['scripts/seiten-inhalt.json', JSON.stringify(inhaltOhneBlog, null, 1)],
   ['scripts/seiten-inhalt.json (Blog)', JSON.stringify(inhaltBlog, null, 1)],
   ['index.html', startseite],
+  [BLOG, beitragText],
+  ['src/lib/messe-data.ts', messeDaten],
+  ['src/lib/seiten-meta.json', JSON.stringify(seitenMeta, null, 1)],
+  ['src/lib/seiten-meta-en.json', JSON.stringify(seitenMetaEn, null, 1)],
   ...Object.entries(seiten).map(([pfad, text]): [string, string] => [pfad.replace(/^(\.\.\/)+/, 'src/'), text]),
 ]
 
@@ -60,6 +81,12 @@ const verboten: Array<[string, RegExp]> = [
   ['recycelbar', /recycelbar|recyclable/gi],
   ['papierlos', /papierlos|paperless/gi],
   ['ökologisch', /ökologisch|ecological/gi],
+  // Blogbeitrag (Prüfung 3.5): eigene Fälle ohne Projekt, Fahrzeuge der Partner, Rat zum ESG-Profil
+  ['Praxisbeispiele aus unserem Alltag', /Praxisbeispiele aus unserem Alltag/gi],
+  ['Wir bauten', /\bWir bauten\b/gi],
+  ['CNG', /\bCNG\b/g],
+  ['ESG', /\bESG\b/g],
+  ['amortisier', /amortisier|amorti[sz](e[sd]?|ing|ation)\b/gi],
   // A15: Einsparzahlen ohne Projektbeleg
   ['bis zu 60 % Material', /bis zu 60 ?%|up to 60 ?%/gi],
   ['73 % als Tatsache', /73 ?% (Ersparnis|savings)/gi],
@@ -80,11 +107,20 @@ const verboten: Array<[string, RegExp]> = [
 ]
 
 /**
- * Bekannte Reste als Paar aus Quelle und Wendung. Der Blogbeitrag „nachhaltiger-messebau“ trägt im vorab
- * gebauten Absatz noch „ökologisch sinnvoll“; er wird in einem eigenen PR überarbeitet (Prüfung 3.5).
- * Trifft eine Ausnahme nichts mehr, wird der Test rot: dann die Zeile hier entfernen.
+ * Bekannte Reste als Quelle, Wendung und Zahl der Stellen, alle im Blogbeitrag „nachhaltiger-messebau“.
+ * Die Zahl hält die Ausnahme eng: Kommt eine Stelle dazu oder fällt eine weg, wird der Test rot.
+ * Trifft eine Ausnahme nichts mehr: die Zeile hier entfernen.
  */
-const ausnahmen: Array<[string, string]> = [['scripts/seiten-inhalt.json (Blog)', 'ökologisch']]
+const ausnahmen: Array<[string, string, number]> = [
+  // Urteil „bleibt“ (Prüfung 3.5): Allgemeinwissen über Transport und Aluminium, keine Aussage über das Haus
+  // („Wege und CO₂ reduzieren“, „spart Transport-CO₂“, „Das unterschätzte CO₂-Potenzial“, „= mehr CO₂“,
+  // „Zu fast 100 % recycelbar“).
+  [BLOG, 'CO₂-Aussage', 4],
+  [BLOG, 'recycelbar', 1],
+  // Urteil „bleibt“ (Prüfung des Blog-Stands, 10.11.2026): „Die Investition amortisiert sich über nur eine Messe“
+  // ist eine Wertung über eine Bauart, keine Zusage des Hauses.
+  [BLOG, 'amortisier', 1],
+]
 const istAusnahme = (datei: string, name: string) => ausnahmen.some(([d, n]) => d === datei && n === name)
 
 describe('Umwelt- und Zahlenaussagen ohne Beleg (A12 bis A16)', () => {
@@ -92,6 +128,12 @@ describe('Umwelt- und Zahlenaussagen ohne Beleg (A12 bis A16)', () => {
     const namen = quellen.map(([datei]) => datei)
     expect(namen).toContain('src/components/pages/OtherPages.tsx')
     expect(namen).toContain('src/components/pages/LeistungenTourenPage.tsx')
+    expect(namen).toContain('src/components/Header.tsx')
+    expect(namen).toContain('src/components/Footer.tsx')
+    expect(namen).toContain(BLOG)
+    expect(namen).toContain('src/lib/messe-data.ts')
+    expect(namen).toContain('src/lib/seiten-meta.json')
+    expect(namen).toContain('src/lib/seiten-meta-en.json')
     expect(namen.filter((n) => n.includes('__tests__'))).toEqual([])
     expect(quellen.length).toBeGreaterThan(20)
     for (const [datei, text] of quellen) expect(text.length, datei).toBeGreaterThan(100)
@@ -106,13 +148,16 @@ describe('Umwelt- und Zahlenaussagen ohne Beleg (A12 bis A16)', () => {
     expect(funde).toEqual([])
   })
 
-  it('jede Ausnahme wird noch gebraucht', () => {
-    const ohneTreffer = ausnahmen.filter(([datei, name]) => {
-      const text = quellen.find(([d]) => d === datei)?.[1] ?? ''
-      const muster = verboten.find(([n]) => n === name)?.[1]
-      return !muster || !new RegExp(muster.source, muster.flags).test(text)
-    })
-    expect(ohneTreffer).toEqual([])
+  it('jede Ausnahme wird noch gebraucht und trifft nur ihre bekannten Stellen', () => {
+    const abweichend = ausnahmen
+      .map(([datei, name, erwartet]) => {
+        const text = quellen.find(([d]) => d === datei)?.[1] ?? ''
+        const muster = verboten.find(([n]) => n === name)?.[1]
+        const gefunden = muster ? (text.match(new RegExp(muster.source, muster.flags)) || []).length : 0
+        return `${datei}: ${name}: erwartet ${erwartet}, gefunden ${gefunden}`
+      })
+      .filter((zeile) => !/erwartet (\d+), gefunden \1$/.test(zeile) || / gefunden 0$/.test(zeile))
+    expect(abweichend).toEqual([])
   })
 
   it('die Liste erkennt jede Wendung am alten Wortlaut', () => {
@@ -144,6 +189,12 @@ describe('Umwelt- und Zahlenaussagen ohne Beleg (A12 bis A16)', () => {
       'Digital planning processes (paperless)',
       'Nachhaltige Messestände sind nicht nur ökologisch sinnvoll',
       'Nachhaltige Systeme amortisieren sich ab der 2. Messe deutlich.',
+      '## Praxisbeispiele aus unserem Alltag',
+      'Wir bauten einen modularen Stand, der bei der großen Messe 6x6m ist',
+      'Wir nutzen Logistik-Partner mit modernen Fahrzeugen (CNG, elektrifiziert)',
+      'Euer ESG-Profil verbessert sich (wichtig für große Unternehmen)',
+      'Amortisiert sich über 2–3 Messeauftritte',
+      'The system amortizes after three shows',
       '💡 Use Case: VR-Showroom für internationales Publikum',
       'Ergebnis: 40% mehr qualifizierte Leads',
       'Nach Layout-Anpassung: +55% mehr Interaktionen',
@@ -155,6 +206,60 @@ describe('Umwelt- und Zahlenaussagen ohne Beleg (A12 bis A16)', () => {
     ]
     const durchgerutscht = alt.filter((satz) => !verboten.some(([, muster]) => new RegExp(muster.source, muster.flags).test(satz)))
     expect(durchgerutscht).toEqual([])
+    // Die fünf Muster zum Blogbeitrag treffen je ihren eigenen alten Satz, nicht nur ein Nachbarmuster.
+    const eigene: Array<[string, string]> = [
+      ['Praxisbeispiele aus unserem Alltag', '## Praxisbeispiele aus unserem Alltag'],
+      ['Wir bauten', 'Wir bauten einen modularen Stand'],
+      ['CNG', 'modernen Fahrzeugen (CNG, elektrifiziert)'],
+      ['ESG', 'Euer ESG-Profil verbessert sich'],
+      ['amortisier', 'Amortisiert sich über 2–3 Messeauftritte'],
+    ]
+    for (const [name, satz] of eigene) {
+      const muster = verboten.find(([n]) => n === name)?.[1]
+      expect(muster && new RegExp(muster.source, muster.flags).test(satz), name).toBe(true)
+    }
+  })
+
+  it('der Blogbeitrag führt seine Zahlen als Rechenbeispiele und rechnet sie aus der eigenen Preisangabe', () => {
+    const text = beitrag?.content ?? ''
+    const euro = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    // Preisangabe des Hauses: individuelle Stände 600 bis 1.200 €/qm (Sprachdatei, FAQ zum Ablauf).
+    expect(deutsch['ablauf.faq.a1']).toContain('600-1.200 €/qm')
+    const [von, bis, qm, messen] = [600, 1200, 3 * 3, 5]
+    expect(text).toContain('**Rechenbeispiel mit angenommenen Preisen (3x3m Stand, 9 qm, 5 Messen):**')
+    expect(text).toContain(`kostet ${euro(von)} bis ${euro(bis)} € je qm`)
+    expect(text).toContain(`${qm} qm × ${euro(von)} € = ${euro(qm * von)} €`)
+    expect(text).toContain(`${qm} qm × ${euro(bis)} € = ${euro(qm * bis)} €`)
+    expect(text).toContain(`Systemstand = 8.000 € + ${messen} × 2.000 € = ${euro(8000 + messen * 2000)} €`)
+    expect(text).toContain(
+      `Individualstand = ${messen} × ${euro(qm * von)} € bis ${messen} × ${euro(qm * bis)} € = ${euro(messen * qm * von)} € bis ${euro(messen * qm * bis)} €`
+    )
+    // Die alte Preisbehauptung der Stelle und der Ersatz, der an einer Bestätigung des Inhabers hängt, stehen nicht da.
+    expect(text).not.toMatch(/15\.000 € pro Messe|75\.000 €|ca\. 9\.000 € pro Messe|~45\.000 €/)
+
+    // Die drei Beispiele: Überschrift, Annahme im Präsens, nachgerechnete Summen.
+    const von2 = text.indexOf('## Drei Rechenbeispiele')
+    const bis2 = text.indexOf('## Die häufigsten Einwände')
+    expect(von2).toBeGreaterThan(0)
+    expect(bis2).toBeGreaterThan(von2)
+    const beispiele = text.slice(von2, bis2)
+    expect(beispiele.match(/^Angenommen, ein /gm)).toHaveLength(3)
+    expect(beispiele).not.toMatch(/\b(wollte|hatte vorher|bauten|wurden|Unser nachhaltiger Ansatz)\b/)
+    expect(beispiele).toContain(`**Ersparnis im Beispiel:** ${euro(4 * 18000 - (12000 + 4 * 2500))} € im ersten Jahr`)
+    const [banner, led] = [4 * 3000 + 500, 4 * 500]
+    expect(beispiele).toContain(`Bannerdruck ${euro(banner)} €, LED-Wand ${euro(12000 + led)} € (12.000 € + ${euro(led)} €)`)
+    expect(beispiele).toContain(
+      `Bannerdruck ${euro(2 * banner)} €, LED-Wand ${euro(12000 + 2 * led)} € – ${euro(2 * banner - 12000 - 2 * led)} € weniger`
+    )
+    expect(beispiele).toContain('**Ergebnis:** ein Stand statt zwei, eine Lagerung, weniger Abfall.')
+  })
+
+  it('der vorab gebaute Blogtext trägt die Überschriften und den ersten Absatz des Beitrags', () => {
+    const vorab = inhalt[`/blog/${BLOG_SLUG}`] as { absaetze: string[]; abschnitte: string[] }
+    const ueberschriften = (beitrag?.content ?? '').match(/^## .+$/gm)?.map((z) => z.slice(3)) ?? []
+    expect(ueberschriften).toContain('Drei Rechenbeispiele')
+    expect(vorab.abschnitte.filter((a) => a !== 'Verwandte Artikel')).toEqual(ueberschriften)
+    for (const absatz of vorab.absaetze) expect(beitrag?.content, absatz).toContain(absatz)
   })
 
   it.each([
