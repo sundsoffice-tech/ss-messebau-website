@@ -255,6 +255,92 @@ describe('Ablehnen nach Einstieg mit Kampagne, später Zustimmung über „Cooki
 
     expect(utm.getUtmParams()).toEqual(QUELLE)
   })
+
+  it('Ablehnung fiel, während dieser Tab nicht geladen war: der alte Eintrag ist beim Laden vergessen', async () => {
+    // Aus einer früheren Zustimmung liegt die Quelle noch im Speicher des Tabs,
+    // inzwischen hat ein anderer Tab abgelehnt.
+    sessionStorage.setItem(UTM_KEY, JSON.stringify(QUELLE))
+    localStorage.setItem(CONSENT_KEY, 'denied')
+
+    const { analytics, utm } = await seiteLaden('/')
+    expect(sessionStorage.getItem(UTM_KEY)).toBeNull()
+
+    analytics.setConsent('granted')
+
+    const ereignisse = warteschlange()
+    expect(ereignisse.map((e) => e.event)).toEqual(['session_start', 'page_view'])
+    expect(ereignisse.map(quelle)).toEqual([{}, {}])
+    expect(utm.getUtmParams()).toEqual({})
+  })
+
+  it('ein Tab im Hintergrund verarbeitet die Ablehnung erst nach erneuter Zustimmung und vergisst trotzdem', async () => {
+    const { utm, deepLinking } = await seiteLaden(KAMPAGNE)
+    deepLinking.updateUrlWithSection('hero')
+    expect(utm.getUtmParams()).toEqual(QUELLE)
+
+    // Der andere Tab hat abgelehnt und danach wieder zugestimmt; hier kommt erst jetzt die Ablehnung an.
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    window.dispatchEvent(new StorageEvent('storage', { key: CONSENT_KEY, newValue: 'denied' }))
+
+    expect(utm.getUtmParams()).toEqual({})
+    expect(sessionStorage.getItem(UTM_KEY)).toBeNull()
+  })
+
+  it('Zustimmung in einem anderen Tab lässt die gemerkte Quelle stehen', async () => {
+    const { utm, deepLinking } = await seiteLaden(KAMPAGNE)
+    deepLinking.updateUrlWithSection('hero')
+
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    window.dispatchEvent(new StorageEvent('storage', { key: CONSENT_KEY, newValue: 'granted' }))
+
+    expect(utm.getUtmParams()).toEqual(QUELLE)
+  })
+
+  it('wird die Entscheidung in einem anderen Tab entfernt oder der Speicher geleert, ist die Quelle vergessen', async () => {
+    const erster = await seiteLaden(KAMPAGNE)
+    erster.deepLinking.updateUrlWithSection('hero')
+    window.dispatchEvent(new StorageEvent('storage', { key: CONSENT_KEY, newValue: null }))
+    expect(erster.utm.getUtmParams()).toEqual({})
+
+    const zweiter = await seiteLaden(KAMPAGNE)
+    zweiter.deepLinking.updateUrlWithSection('hero')
+    expect(zweiter.utm.getUtmParams()).toEqual(QUELLE)
+    window.dispatchEvent(new StorageEvent('storage', { key: null }))
+    expect(zweiter.utm.getUtmParams()).toEqual({})
+  })
+})
+
+describe('Zustimmung erst auf der zweiten Seite', () => {
+  it('der Einstieg trägt die gemerkte Quelle und die Adresse der Seite, auf der zugestimmt wurde', async () => {
+    const { analytics, tracker, deepLinking } = await seiteLaden(KAMPAGNE)
+    deepLinking.updateUrlWithSection('hero')
+
+    // Seitenwechsel in der Anwendung, noch ohne Zustimmung
+    window.history.pushState(null, '', '/kontakt')
+    tracker.trackPageView()
+    expect(warteschlange()).toEqual([])
+
+    analytics.setConsent('granted')
+
+    const ereignisse = warteschlange()
+    expect(ereignisse.map((e) => e.event)).toEqual(['session_start', 'page_view'])
+    expect(ereignisse.map(quelle)).toEqual([QUELLE, QUELLE])
+    expect(ereignisse.map((e) => e.url)).toEqual(['/kontakt', '/kontakt'])
+  })
+})
+
+describe('Beschädigter Eintrag im Speicher', () => {
+  it('ein Eintrag mit dem Inhalt null wirft nicht und liefert keine Quelle', async () => {
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    sessionStorage.setItem(UTM_KEY, 'null')
+
+    const { utm } = await seiteLaden('/')
+
+    expect(utm.getUtmParams()).toEqual({})
+    const ereignisse = warteschlange()
+    expect(ereignisse.map((e) => e.event)).toEqual(['session_start', 'page_view'])
+    expect(ereignisse.map(quelle)).toEqual([{}, {}])
+  })
 })
 
 describe('Form des Ereignisses bleibt die von collect.php', () => {
