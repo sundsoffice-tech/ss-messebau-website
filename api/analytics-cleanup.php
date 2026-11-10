@@ -56,6 +56,9 @@ $updateStmt->execute([':key' => 'last_cleanup', ':value' => gmdate('c')]);
 $updateStmt->execute([':key' => 'last_cleanup_count', ':value' => (string)$deleted]);
 
 // Also clean up old rate limit files (older than 1 hour)
+// rate_limit_*.json erfasst auch die IP-Zähler des Chats (rate_limit_chat_<md5>.json).
+// chat_tagesdeckel.json (Tageszähler des Chats, chat.php) gehört NICHT in diese
+// Liste: Er muss den ganzen Tag stehen bleiben und setzt sich am Folgetag selbst zurück.
 $rateLimitDir = __DIR__ . '/data/';
 $rateLimitPatterns = ['rate_limit_*.json', 'login_limit_*.json', 'email_limit_*.json', 'order_limit_*.json', 'inquiry_limit_*.json'];
 foreach ($rateLimitPatterns as $pattern) {

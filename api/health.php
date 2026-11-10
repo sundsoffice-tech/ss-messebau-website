@@ -35,8 +35,10 @@ if ($checks['data_writable'] !== 'ok') {
     $status = 'degraded';
 }
 
-// Check PHP version
-$checks['php_version'] = PHP_VERSION;
+// Die PHP-Fassung steht hier absichtlich nicht mehr: Der Endpunkt ist
+// öffentlich, und die genaue Fassung sagt einem Angreifer, welche bekannten
+// Lücken er probieren kann. Gelesen hat das Feld niemand (Wächter auf
+// sunds-hub prüft nur "status" und "database", siehe ops/sunds-hub/eintragen.py).
 
 // Timestamp
 $checks['timestamp'] = gmdate('c');
