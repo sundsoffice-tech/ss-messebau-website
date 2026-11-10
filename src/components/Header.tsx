@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { MediaFrame } from '@/components/ui/MediaFrame'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet'
 import { CONTACT, PHONE_HREF, EMAIL_HREF } from '@/lib/contact'
+import { trackPhoneClick, trackMailClick } from '@/lib/analytics-tracker'
 import { 
   List, 
   X,
@@ -654,7 +655,7 @@ export function Header() {
               </Button>
               <Button
                 variant="default"
-                onClick={openInquiry}
+                onClick={() => openInquiry('header_desktop')}
                 className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
                 size={scrolled ? 'sm' : 'default'}
               >
@@ -800,7 +801,7 @@ export function Header() {
             <div className="ml-1 flex items-center gap-1">
               <Button
                 variant="default"
-                onClick={openInquiry}
+                onClick={() => openInquiry('header_tablet')}
                 className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
                 size="sm"
               >
@@ -833,7 +834,7 @@ export function Header() {
             <Button
               variant="default"
               size="sm"
-              onClick={openInquiry}
+              onClick={() => openInquiry('header_mobil')}
               className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors text-sm px-3 py-2 min-h-[44px]"
             >
               {t('header.nav.inquiry')}
@@ -1019,6 +1020,7 @@ export function Header() {
                     <div className="space-y-2.5 text-sm">
                       <a
                         href={PHONE_HREF}
+                        onClick={() => trackPhoneClick('header_mobilmenue')}
                         className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                         aria-label={t('header.nav.call') + ': ' + CONTACT.phoneDisplay}
                       >
@@ -1027,6 +1029,7 @@ export function Header() {
                       </a>
                       <a
                         href={EMAIL_HREF}
+                        onClick={() => trackMailClick('header_mobilmenue')}
                         className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors min-h-[44px] -mx-2 px-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                         aria-label={t('header.nav.email') + ' ' + CONTACT.email}
                       >

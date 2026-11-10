@@ -3,9 +3,8 @@ import { render, screen, act, fireEvent } from '@testing-library/react'
 import { StickyCTA, MobileStickyCTA } from '@/components/StickyCTA'
 import { CONTACT } from '@/lib/contact'
 
-vi.mock('@/lib/analytics', () => ({
-  trackWhatsAppClick: vi.fn(),
-  trackHeroCTAClick: vi.fn(),
+vi.mock('@/lib/analytics-tracker', () => ({
+  trackWhatsAppLinkClick: vi.fn(),
 }))
 
 /** Simuliert Scrollen nach unten, so dass die Leiste visuell eingeklappt wird. */

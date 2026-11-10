@@ -1,7 +1,7 @@
 import { useCallback, useState, type FocusEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { PaperPlaneRight, WhatsappLogo } from '@phosphor-icons/react'
-import { trackWhatsAppClick, trackHeroCTAClick } from '@/lib/analytics'
+import { trackWhatsAppLinkClick } from '@/lib/analytics-tracker'
 import { useTranslation } from '@/lib/i18n'
 import { useScrollDirection } from '@/hooks/use-scroll-direction'
 import { whatsappUrl } from '@/lib/contact'
@@ -31,7 +31,8 @@ import { whatsappUrl } from '@/lib/contact'
  */
 
 interface StickyCTAProps {
-  onClick: () => void
+  /** Öffnet den Anfrage-Dialog; bekommt den Ort der Leiste für die Hausstatistik. */
+  onClick: (source?: string) => void
 }
 
 type Source = 'sticky_desktop' | 'sticky_mobile'
@@ -52,7 +53,7 @@ function useRevealOnFocus(scrollVisible: boolean) {
 
 interface ContactActionsProps {
   source: Source
-  onInquiry: () => void
+  onInquiry: (source?: string) => void
   /** Zusätzliche Klassen je Bedienelement (z. B. flex-1 auf Mobil) */
   itemClassName?: string
 }
@@ -71,7 +72,7 @@ function ContactActions({ source, onInquiry, itemClassName = '' }: ContactAction
           href={whatsappUrl(t('sticky.whatsappMessage'))}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={() => trackWhatsAppClick(source)}
+          onClick={() => trackWhatsAppLinkClick(source)}
         >
           <WhatsappLogo className="h-5 w-5" weight="fill" aria-hidden="true" />
           <span>{t('sticky.whatsapp')}</span>
@@ -81,10 +82,7 @@ function ContactActions({ source, onInquiry, itemClassName = '' }: ContactAction
       <Button
         size="lg"
         type="button"
-        onClick={() => {
-          trackHeroCTAClick(source)
-          onInquiry()
-        }}
+        onClick={() => onInquiry(source)}
         aria-haspopup="dialog"
         className={`min-h-[44px] px-5 text-base font-medium gap-2 bg-accent text-accent-foreground shadow-lg hover:bg-accent/90 hover:shadow-xl transition-[background-color,box-shadow,transform] motion-safe:hover:scale-105 ${itemClassName}`}
       >

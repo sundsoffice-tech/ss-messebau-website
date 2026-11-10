@@ -22,8 +22,6 @@ import { GuaranteeBanner } from '@/components/ui/GuaranteeBanner'
 import { FactBar } from '@/components/ui/FactBar'
 import { LogoWall } from '@/components/ui/LogoWall'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
-import { trackHeroCTAClick, trackReferenceDetailView } from '@/lib/analytics'
-import { useScrollDepthTracking, useDwellTimeTracking } from '@/hooks/use-analytics'
 import { useReveal } from '@/hooks/use-reveal'
 import { useUIStore } from '@/store/ui-store'
 
@@ -40,9 +38,6 @@ export function HomePage() {
     'process',
     'cta'
   ])
-
-  useScrollDepthTracking('home')
-  useDwellTimeTracking('home')
 
   const revealRef = useReveal<HTMLDivElement>()
   const prefersReducedMotion = useReducedMotion()
@@ -100,7 +95,7 @@ export function HomePage() {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Button 
                 size="lg" 
-                onClick={() => { trackHeroCTAClick('hero'); openInquiry() }}
+                onClick={() => openInquiry('hero')}
                 className="bg-accent text-accent-foreground hover:bg-accent/90 px-6 sm:px-8 py-6 text-base sm:text-lg font-medium min-h-[48px]"
                 aria-label={t('home.hero.ctaAria')}
               >
@@ -302,7 +297,7 @@ export function HomePage() {
                   key={reference.id}
                   className="reveal group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-primary active:scale-[0.98]"
                   style={{ '--reveal-delay': `${index * 0.1}s` } as React.CSSProperties}
-                  onClick={() => { trackReferenceDetailView(reference.id); handleNavigation('/referenzen') }}
+                  onClick={() => handleNavigation('/referenzen')}
                 >
                   <div className="aspect-video relative overflow-hidden bg-muted">
                     <img 
@@ -386,7 +381,7 @@ export function HomePage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg"
-              onClick={() => { trackHeroCTAClick('cta_section'); openInquiry() }}
+              onClick={() => openInquiry('cta_section')}
               className="bg-accent hover:bg-accent/90 text-accent-foreground"
             >
               {t('home.cta.button')}

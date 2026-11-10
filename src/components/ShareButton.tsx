@@ -13,7 +13,6 @@ import {
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/lib/i18n'
-import { trackSocialShare } from '@/lib/analytics'
 import {
   buildShareUrl,
   copyToClipboard,
@@ -37,6 +36,7 @@ interface ShareButtonProps {
   size?: 'sm' | 'md'
   className?: string
   campaign?: string
+  /** Ort des Knopfes; früher für GA4, derzeit ohne Zählung. */
   source?: string
 }
 
@@ -70,15 +70,12 @@ export const ShareButton = memo(function ShareButton({
   size = 'sm',
   className,
   campaign,
-  source = 'footer',
 }: ShareButtonProps) {
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
 
   const handleClick = useCallback(async () => {
     const shareUrl = buildShareUrl(url, platform, campaign)
-
-    trackSocialShare(platform, url, source)
 
     if (platform === 'copy') {
       const success = await copyToClipboard(shareUrl)
@@ -121,7 +118,7 @@ export const ShareButton = memo(function ShareButton({
     }
 
     openShareWindow(intentUrl, platform)
-  }, [platform, url, title, description, campaign, source])
+  }, [platform, url, title, description, campaign])
 
   // Hide native share button when API is not available
   if (platform === 'native' && !canUseNativeShare()) {

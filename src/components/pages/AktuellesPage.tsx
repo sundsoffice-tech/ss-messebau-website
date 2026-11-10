@@ -1,7 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { CalendarDot, ArrowRight } from '@phosphor-icons/react'
-import { trackHeroCTAClick } from '@/lib/analytics'
-import { useScrollDepthTracking, useDwellTimeTracking } from '@/hooks/use-analytics'
 import { useTranslation } from '@/lib/i18n'
 import { MesseCalendar } from '@/components/MesseCalendar'
 import { NewsSection } from '@/components/NewsSection'
@@ -10,9 +8,6 @@ import { useUIStore } from '@/store/ui-store'
 export function AktuellesPage() {
   const { t } = useTranslation()
   const { openInquiry } = useUIStore()
-
-  useScrollDepthTracking('aktuelles')
-  useDwellTimeTracking('aktuelles')
 
   return (
     <div>
@@ -43,7 +38,7 @@ export function AktuellesPage() {
           </p>
           <Button
             size="lg"
-            onClick={() => { trackHeroCTAClick('aktuelles_cta'); openInquiry() }}
+            onClick={() => openInquiry('aktuelles_cta')}
             className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg"
           >
             {t('aktuelles.cta.button')}

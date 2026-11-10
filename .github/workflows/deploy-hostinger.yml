@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Tests
+        run: npm test
+
       - name: Build project
         run: npm run build
       
@@ -49,6 +52,11 @@ jobs:
             exit 1
           fi
 
+          if [ ! -f "dist/_s/kontakt.html" ] || [ ! -f "dist/_s/nicht-gefunden.html" ]; then
+            echo "❌ ERROR: dist/_s/ fehlt (scripts/seiten-vorab.mjs); ohne diese Dateien antworten alle Unterseiten mit 404"
+            exit 1
+          fi
+          
           if [ ! -f "dist/.htaccess" ]; then
             echo "❌ ERROR: .htaccess not found in dist/ (Hostinger SPA routing would break)"
             exit 1
@@ -182,6 +190,42 @@ jobs:
             exit 1
           fi
           echo "Live = Branch. Deploy angekommen."
+
+          # Eigene HTML-Datei je Seite (scripts/seiten-vorab.mjs, .htaccess Stufe 1): Der Hostinger-Server
+          # (LiteSpeed) liess sich vorab nicht proben, nur Apache. Deshalb hier am Live-System:
+          # Unterseiten muessen Status 200 und ihre eigene Canonical-Adresse liefern, Startseite,
+          # Verwaltung und API wie bisher antworten. Greift die Regel nicht, liefert der Server das
+          # Verhalten von vorher (Kopf der Startseite); der Lauf wird trotzdem rot, damit es auffaellt.
+          FEHLER=0
+          for PFAD in kontakt leistungen/messebau blog/messestand-checkliste impressum; do
+            STATUS=$(curl -s --max-time 20 -o /tmp/seite.html -w '%{http_code}' "${LIVE_URL}${PFAD}" || true)
+            CANON=$(grep -o 'rel="canonical" href="[^"]*' /tmp/seite.html | cut -d'"' -f4 || true)
+            WURZEL=$(grep -c '<div id="root">' /tmp/seite.html || true)
+            echo "/${PFAD}: Status ${STATUS}, Canonical ${CANON}, root ${WURZEL}"
+            if [ "$STATUS" != "200" ] || [ "$CANON" != "${LIVE_URL}${PFAD}" ] || [ "$WURZEL" != "1" ]; then FEHLER=1; fi
+          done
+          for PFAD in "" admin leistungen/showrooms; do
+            STATUS=$(curl -s --max-time 20 -o /tmp/seite.html -w '%{http_code}' "${LIVE_URL}${PFAD}" || true)
+            WURZEL=$(grep -c '<div id="root">' /tmp/seite.html || true)
+            echo "/${PFAD}: Status ${STATUS}, root ${WURZEL}"
+            if [ "$STATUS" != "200" ] || [ "$WURZEL" != "1" ]; then FEHLER=1; fi
+          done
+          STATUS=$(curl -s --max-time 20 -o /dev/null -w '%{http_code}' "${LIVE_URL}api/health.php" || true)
+          echo "/api/health.php: Status ${STATUS}"
+          [ "$STATUS" = "200" ] || FEHLER=1
+          # Dateien duerfen nicht als HTML zurueckkommen (Fall: die Dateipruefung der neuen Regel
+          # traefe auf dem Server immer zu, dann waere die Seite weiss und die Adressen oben trotzdem 200).
+          TYP=$(curl -s --max-time 20 -o /dev/null -w '%{http_code} %{content_type}' "${LIVE_URL}${ERWARTET}" || true)
+          echo "/${ERWARTET}: ${TYP}"
+          case "$TYP" in "200 "*javascript*) ;; *) FEHLER=1 ;; esac
+          TYP=$(curl -s --max-time 20 -o /dev/null -w '%{http_code} %{content_type}' "${LIVE_URL}robots.txt" || true)
+          echo "/robots.txt: ${TYP}"
+          case "$TYP" in "200 text/plain"*) ;; *) FEHLER=1 ;; esac
+          if [ "$FEHLER" != "0" ]; then
+            echo "::error::Seiten-Dateien wirken live nicht wie in der Apache-Probe. Besucher sehen die Seite weiter (Auffangregel), Suchroboter den alten Kopf. Rueckweg: Merge-Commit auf main zuruecknehmen (git revert), der Deploy laeuft dann von selbst."
+            exit 1
+          fi
+          echo "Unterseiten mit eigenem Kopf: live bestaetigt."
 
       - name: Deployment Summary
         if: success()

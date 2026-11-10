@@ -4,6 +4,7 @@ import { Phone, Envelope, MapPin } from '@phosphor-icons/react'
 import logo from '@/assets/logo/ss-messebau-logo.png'
 import { useTranslation } from '@/lib/i18n'
 import { CONTACT, PHONE_HREF, EMAIL_HREF } from '@/lib/contact'
+import { trackPhoneClick, trackMailClick } from '@/lib/analytics-tracker'
 import { authApi } from '@/lib/api-client'
 import { navigate } from '@/lib/deep-linking'
 import { ShareButton } from './ShareButton'
@@ -208,6 +209,7 @@ export const Footer = memo(function Footer() {
                 <Phone className="h-5 w-5 shrink-0" aria-hidden="true" />
                 <a
                   href={PHONE_HREF}
+                  onClick={() => trackPhoneClick('footer')}
                   className="hover:text-white focus-visible:text-white transition-colors py-2 focus-visible:outline-none focus-visible:underline"
                   aria-label={t('footer.contact.call') + ': ' + CONTACT.phoneDisplay}
                 >
@@ -218,6 +220,7 @@ export const Footer = memo(function Footer() {
                 <Envelope className="h-5 w-5 shrink-0" aria-hidden="true" />
                 <a
                   href={EMAIL_HREF}
+                  onClick={() => trackMailClick('footer')}
                   className="hover:text-white focus-visible:text-white transition-colors py-2 break-all focus-visible:outline-none focus-visible:underline"
                   aria-label={t('footer.contact.email') + ' ' + CONTACT.email}
                 >

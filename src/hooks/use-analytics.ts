@@ -1,78 +1,18 @@
 import { useEffect, useRef, useCallback } from 'react';
-import {
-  trackScrollDepth,
-  trackPageEngagement,
-  trackBlogArticleRead,
-  isTrackingAllowed,
-} from '@/lib/analytics';
+import { isTrackingAllowed } from '@/lib/analytics';
 import {
   trackFormInteraction,
   trackFormAbandon,
   trackExitIntent,
+  trackBlogArticleRead,
 } from '@/lib/analytics-tracker';
 
-/* ------------------------------------------------------------------ */
-/*  useScrollDepthTracking – fires at 25 / 50 / 75 / 100 % thresholds */
-/* ------------------------------------------------------------------ */
-
-export function useScrollDepthTracking(pageName: string): void {
-  const firedRef = useRef<Set<number>>(new Set());
-
-  useEffect(() => {
-    const thresholds = [25, 50, 75, 100];
-    const fired = firedRef.current;
-    fired.clear();
-
-    const handler = () => {
-      if (!isTrackingAllowed()) return;
-      const scrollTop = window.scrollY;
-      const docHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      if (docHeight <= 0) return;
-      const pct = Math.round((scrollTop / docHeight) * 100);
-      for (const t of thresholds) {
-        if (pct >= t && !fired.has(t)) {
-          fired.add(t);
-          trackScrollDepth(pageName, t);
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handler, { passive: true });
-    return () => window.removeEventListener('scroll', handler);
-  }, [pageName]);
-}
-
-/* ------------------------------------------------------------------ */
-/*  useDwellTimeTracking – fires engagement event when user leaves      */
-/* ------------------------------------------------------------------ */
-
-export function useDwellTimeTracking(pageName: string): void {
-  useEffect(() => {
-    const start = Date.now();
-
-    const sendEngagement = () => {
-      if (!isTrackingAllowed()) return;
-      const seconds = Math.round((Date.now() - start) / 1000);
-      if (seconds > 2) {
-        trackPageEngagement(pageName, seconds);
-      }
-    };
-
-    // fire on page hide (works on mobile & desktop)
-    const handleVisibility = () => {
-      if (document.visibilityState === 'hidden') {
-        sendEngagement();
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibility);
-
-    return () => {
-      sendEngagement();
-      document.removeEventListener('visibilitychange', handleVisibility);
-    };
-  }, [pageName]);
-}
+/*
+ * Scrolltiefe und Verweildauer zählt die Hausstatistik selbst bei jedem
+ * Seitenaufruf (`initScrollDepthTracking`, `initEngagementTracking` in
+ * `analytics-tracker.ts`). Die früheren Hooks dafür sendeten nur an GA4,
+ * das nie geladen wurde, und sind entfernt.
+ */
 
 /* ------------------------------------------------------------------ */
 /*  useArticleReadTracking – fires when user has read > threshold secs  */

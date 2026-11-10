@@ -12,9 +12,8 @@ import { useVoiceInput } from '@/hooks/use-voice-input'
 import { navigate } from '@/lib/deep-linking'
 import { useSectionObserver } from '@/hooks/use-deep-linking'
 import { InternalLinkSection } from '@/components/InternalLinkSection'
-import { trackFormSubmit } from '@/lib/analytics'
-import { trackFormSubmission } from '@/lib/analytics-tracker'
-import { useScrollDepthTracking, useDwellTimeTracking, useExitIntentTracking } from '@/hooks/use-analytics'
+import { trackFormSubmission, trackPhoneClick, trackMailClick } from '@/lib/analytics-tracker'
+import { useExitIntentTracking } from '@/hooks/use-analytics'
 import { useFormSystem } from '@/hooks/use-form-system'
 import { FormField } from '@/components/form-system/FormField'
 import { sendFormNotification } from '@/lib/notification-service'
@@ -34,8 +33,6 @@ interface QuickAction {
 export function KontaktPage() {
   const { t } = useTranslation()
   useSectionObserver(['kontaktformular', 'anfahrt', 'ki-berater'])
-  useScrollDepthTracking('kontakt')
-  useDwellTimeTracking('kontakt')
   useExitIntentTracking('kontakt')
 
   const [, setInquiries] = useKV<ContactInquiry[]>('inquiries', [])
@@ -113,10 +110,6 @@ export function KontaktPage() {
         return
       }
 
-      trackFormSubmit('kontakt', {
-        budget: data.budget || 'nicht_angegeben',
-        size: data.size || 'nicht_angegeben',
-      })
       trackFormSubmission('kontakt', {
         branche: data.branche || '',
         wie_gefunden: data.wieGefunden || '',
@@ -433,7 +426,7 @@ ANTWORTRICHTLINIEN:
                       <div className="min-w-0">
                         <h3 className="font-semibold mb-1 text-sm sm:text-base">{t('kontakt.contact.phone')}</h3>
                         <div className="text-sm sm:text-base text-muted-foreground">
-                          <a href="tel:+4915140368754" className="hover:text-primary font-medium">+49 1514 0368754</a>
+                          <a href="tel:+4915140368754" onClick={() => trackPhoneClick('kontakt_seite')} className="hover:text-primary font-medium">+49 1514 0368754</a>
                         </div>
                       </div>
                     </div>
@@ -449,7 +442,7 @@ ANTWORTRICHTLINIEN:
                       <div className="min-w-0">
                         <h3 className="font-semibold mb-1 text-sm sm:text-base">{t('kontakt.contact.email')}</h3>
                         <p className="text-sm sm:text-base text-muted-foreground break-all">
-                          <a href="mailto:info@sundsmessebau.com" className="hover:text-primary font-medium">
+                          <a href="mailto:info@sundsmessebau.com" onClick={() => trackMailClick('kontakt_seite')} className="hover:text-primary font-medium">
                             info@sundsmessebau.com
                           </a>
                         </p>
