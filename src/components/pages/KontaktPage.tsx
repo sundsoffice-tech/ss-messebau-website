@@ -22,6 +22,7 @@ import { FIELD_TOKENS } from '@/lib/form-system/field-registry'
 import { sendChatMessage } from '@/lib/chat-service'
 import { getUtmParams } from '@/lib/utm-utils'
 import { GoogleMapConsent } from '@/components/GoogleMapConsent'
+import { RouterLink } from '@/components/RouterLink'
 
 interface QuickAction {
   id: string
@@ -392,6 +393,14 @@ ANTWORTRICHTLINIEN:
                   {form.loading ? t('kontakt.form.sending') : t('kontakt.form.send')}
                   <PaperPlaneRight className="ml-2" weight="fill" />
                 </Button>
+
+                {/* Art. 13 DSGVO: Hinweis mit Verweis dort, wo die Daten eingegeben werden */}
+                <p className="text-xs text-muted-foreground text-center">
+                  {t('inquiry.privacy')}{' '}
+                  <RouterLink to="/datenschutz" className="underline hover:text-primary transition-colors">
+                    {t('inquiry.privacyLink')}
+                  </RouterLink>
+                </p>
               </form>
             </div>
 
@@ -660,6 +669,13 @@ ANTWORTRICHTLINIEN:
                             <PaperPlaneRight weight="fill" />
                           </Button>
                         </div>
+                        {/* Art. 13 DSGVO: Hinweis am Eingabefeld, bevor die erste Frage abgeht */}
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          {t('kontakt.ai.datenhinweis')}{' '}
+                          <RouterLink to="/datenschutz" className="underline hover:text-primary transition-colors">
+                            {t('kontakt.ai.datenhinweisLink')}
+                          </RouterLink>
+                        </p>
                         <div className="flex items-center justify-between mt-2 text-[10px] sm:text-xs text-muted-foreground">
                           <span>
                             {t('kontakt.ai.poweredBy')}

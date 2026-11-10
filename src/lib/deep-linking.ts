@@ -1,4 +1,4 @@
-import { validateSectionExists, parseCurrentLocation, createSectionHash } from './section-map'
+import { validateSectionExists, parseCurrentLocation, createSectionHash, resolveSectionId } from './section-map'
 
 export interface DeepLinkConfig {
   page: string
@@ -44,7 +44,7 @@ export function parseDeepLink(_hash?: string): DeepLinkConfig {
     const parts = cleanHash.split('#')
     return {
       page: parts[0] || '/',
-      section: parts[1] || undefined
+      section: parts[1] ? resolveSectionId(parts[1]) : undefined
     }
   }
 
@@ -63,7 +63,7 @@ export function normalizePagePath(page: string): string {
 }
 
 export function navigateToSection(sectionId: string, headerOffset?: number): boolean {
-  const element = document.getElementById(sectionId)
+  const element = document.getElementById(resolveSectionId(sectionId))
 
   if (!element) {
     return false
@@ -102,7 +102,7 @@ export function scrollToSectionWithRetry(
   let attempts = 0
 
   const tryScroll = () => {
-    const element = document.getElementById(sectionId)
+    const element = document.getElementById(resolveSectionId(sectionId))
 
     if (element) {
       const offset = headerOffset ?? getHeaderHeight()

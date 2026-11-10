@@ -7,7 +7,7 @@ export function GuaranteeBanner() {
   const { openInquiry } = useUIStore()
   const { t } = useTranslation()
   return (
-    <section className="relative overflow-hidden bg-accent text-accent-foreground py-4 sm:py-5">
+    <section id="48h-angebot" className="relative overflow-hidden bg-accent text-accent-foreground py-4 sm:py-5 scroll-mt-20">
       <div
         className="absolute inset-0 bg-[linear-gradient(110deg,transparent_30%,rgba(255,255,255,0.08)_50%,transparent_70%)]"
         aria-hidden="true"

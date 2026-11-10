@@ -23,6 +23,10 @@ export function RouterLink({
   section
 }: RouterLinkProps) {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Strg, Meta, Umschalt, Alt oder eine andere als die linke Taste: Der Browser
+    // öffnet den Verweis selbst (neuer Tab, neues Fenster), wie bei jedem <a href>.
+    if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return
+
     e.preventDefault()
     
     if (section) {

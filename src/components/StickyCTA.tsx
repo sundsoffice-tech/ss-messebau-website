@@ -28,6 +28,10 @@ import { whatsappUrl } from '@/lib/contact'
  *   damit die Leiste nicht unter der Home-Leiste liegt (braucht viewport-fit=cover).
  * - Bewegung: Ein-/Ausklappen ist eine reine Transition; bei prefers-reduced-motion
  *   entfällt sie (motion-reduce + globaler Killswitch in index.css).
+ * - Solange der Cookie-Hinweis steht, sitzt die Leiste über ihm statt darunter:
+ *   Der Abstand zum unteren Rand wächst um --cookie-hinweis-hoehe (gesetzt von
+ *   `useHinweisPlatz`, ohne Hinweis 0px). Sonst wären beide Kontaktwege verdeckt,
+ *   bis jemand den Hinweis bedient.
  */
 
 interface StickyCTAProps {
@@ -106,7 +110,7 @@ export function StickyCTA({ onClick }: StickyCTAProps) {
       data-state={visible ? 'visible' : 'hidden'}
       onFocus={onFocus}
       onBlur={onBlur}
-      className={`fixed bottom-6 right-6 z-40 hidden lg:flex flex-col gap-3 transition-[transform,opacity] duration-300 motion-reduce:transition-none ${
+      className={`fixed bottom-[calc(var(--cookie-hinweis-hoehe,0px)+1.5rem)] right-6 z-40 hidden lg:flex flex-col gap-3 transition-[transform,opacity] duration-300 motion-reduce:transition-none ${
         visible
           ? 'translate-x-0 opacity-100'
           : 'translate-x-[calc(100%+1.5rem)] opacity-0 pointer-events-none'
@@ -129,7 +133,7 @@ export function MobileStickyCTA({ onClick }: StickyCTAProps) {
       data-state={visible ? 'visible' : 'hidden'}
       onFocus={onFocus}
       onBlur={onBlur}
-      className={`fixed inset-x-0 bottom-0 z-40 lg:hidden bg-background/95 backdrop-blur-sm border-t shadow-lg transition-[transform,opacity] duration-300 motion-reduce:transition-none ${
+      className={`fixed inset-x-0 bottom-[var(--cookie-hinweis-hoehe,0px)] z-40 lg:hidden bg-background/95 backdrop-blur-sm border-t shadow-lg transition-[transform,opacity] duration-300 motion-reduce:transition-none ${
         visible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
       }`}
       style={{ contain: 'layout style' }}

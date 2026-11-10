@@ -11,6 +11,7 @@ import { CustomCursor } from './components/CustomCursor'
 import { CursorGlow } from './components/CursorGlow'
 import { CursorRipple, useCursorScale, useCardTilt } from './components/CursorEffects'
 import { parseDeepLink, scrollToSectionWithRetry, normalizePagePath, navigate } from './lib/deep-linking'
+import { resolveSectionId } from './lib/section-map'
 import { useSmoothScrollLinks } from './hooks/use-smooth-scroll'
 import { usePageMeta } from './hooks/use-page-meta'
 import { usePageViewTracking } from './hooks/use-page-view-tracking'
@@ -110,6 +111,10 @@ function App() {
       if (hash && hash.startsWith('#/')) {
         const cleanPath = hash.slice(1) // #/leistungen -> /leistungen
         window.history.replaceState(null, '', cleanPath)
+      } else if (hash.length > 1 && resolveSectionId(hash.slice(1)) !== hash.slice(1)) {
+        // Früherer Ankername (z. B. #48h-garantie): Adresse auf den heutigen Namen stellen
+        const { pathname, search } = window.location
+        window.history.replaceState(null, '', `${pathname}${search}#${resolveSectionId(hash.slice(1))}`)
       }
       handleRouteChange()
     }
