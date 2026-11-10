@@ -1010,7 +1010,7 @@
   "privacy.statistik.widerruf.title": "Rechtsgrundlage, Widerruf und Dauer",
   "privacy.statistik.widerruf.text1": "Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 Buchstabe a DSGVO und § 25 Abs. 1 TDDDG).",
   "privacy.statistik.widerruf.text2": "Sie können Ihre Zustimmung jederzeit widerrufen: Klicken Sie am Fuß jeder Seite auf „Cookie-Einstellungen“ und dann auf „Ablehnen“. Die Statistik löscht dann ihre Einträge aus Ihrem Browser und sendet nichts mehr. Bereits übermittelte Messdaten bleiben bis zu ihrer Löschung gespeichert.",
-  "privacy.statistik.widerruf.text3": "Für die Messdaten ist eine Aufbewahrung von höchstens 365 Tagen eingestellt. Ältere Einträge entfernt eine Bereinigung, die wir in der Verwaltung der Website auslösen.",
+  "privacy.statistik.widerruf.text3": "Für die Messdaten ist eine Aufbewahrung von höchstens 365 Tagen eingestellt. Ältere Einträge entfernt die Bereinigung der Website, die von selbst läuft.",
   "privacy.karte.title": "7. Google Maps auf der Kontaktseite",
   "privacy.karte.text1": "Auf der Kontaktseite können Sie eine Karte von Google Maps einblenden. Die Karte wird erst geladen, wenn Sie auf „Karte laden (Google Maps)“ klicken. Vorher ruft Ihr Browser nichts bei Google ab.",
   "privacy.karte.text2": "Mit dem Klick lädt Ihr Browser die Karte direkt von Servern von Google. Google erhält dabei Ihre IP-Adresse und kann eigene Cookies setzen. Ihre Entscheidung gilt nur für den aktuellen Seitenaufruf, wir speichern sie nicht. Der Link „In Google Maps öffnen“ führt auf die Website von Google. Erst wenn Sie ihm folgen, findet ein Abruf bei Google statt.",
