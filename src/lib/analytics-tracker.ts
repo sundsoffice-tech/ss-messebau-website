@@ -503,7 +503,12 @@ function inferGeoFromTimezone(tz: string): { country: string; region: string } {
   }
 }
 
-function getDeviceProps(): Record<string, string | number | boolean> {
+/**
+ * `fruehereBesuche` und `letzterBesuch` sind der Stand VOR diesem Sitzungsstart.
+ * Vorher wurde erst hochgezählt und dann gelesen: `is_returning` war bei jedem
+ * Sitzungsstart wahr, `last_visit` trug den Zeitpunkt des laufenden Besuchs.
+ */
+function getDeviceProps(fruehereBesuche: number, letzterBesuch: string | null): Record<string, string | number | boolean> {
   const tz = detectTimezone()
   const geo = inferGeoFromTimezone(tz)
   return {
@@ -528,9 +533,9 @@ function getDeviceProps(): Record<string, string | number | boolean> {
     cookies_enabled: detectCookiesEnabled(),
     do_not_track: detectDoNotTrack(),
     ad_blocker: detectAdBlocker(),
-    visit_count: getVisitCount(),
-    is_returning: getVisitCount() > 0,
-    last_visit: getLastVisitDate() || '',
+    visit_count: fruehereBesuche + 1,
+    is_returning: fruehereBesuche > 0,
+    last_visit: letzterBesuch || '',
     page_count: 0,
   }
 }
@@ -550,8 +555,11 @@ function sendSessionStartIfNeeded(isEntry: boolean): void {
   try {
     if (!canTrack('session_start')) return
     if (sessionStorage.getItem(SESSION_START_KEY)) return
+    // Erst lesen, dann zählen: Das Ereignis trägt den Stand vor diesem Besuch.
+    const fruehereBesuche = getVisitCount()
+    const letzterBesuch = getLastVisitDate()
     incrementVisitCount()
-    if (!enqueueEvent('session_start', getDeviceProps(), isEntry)) return
+    if (!enqueueEvent('session_start', getDeviceProps(fruehereBesuche, letzterBesuch), isEntry)) return
     sessionStorage.setItem(SESSION_START_KEY, '1')
     // Einmal je Seitenaufruf: Nach Widerruf und erneuter Zustimmung beginnt eine
     // neue Sitzung, die Lauscher hängen aber schon und dürfen nicht doppelt zählen.
