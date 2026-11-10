@@ -84,7 +84,7 @@ export function LeistungenTourenPage() {
     },
     {
       q: 'Wie viel kann ich mit einem Tourenpaket sparen?',
-      a: 'Durch die Wiederverwendung modularer Standelemente sparen unsere Kunden durchschnittlich 30–50 % der Gesamtkosten im Vergleich zu Einzelbeauftragungen. Je mehr Messetermine, desto größer die Kostenersparnis.',
+      a: 'Die Wiederverwendung modularer Standelemente spart Material und Kosten gegenüber Einzelbeauftragungen. Je mehr Messetermine, desto größer die Ersparnis.',
     },
     {
       q: 'Können die Stände an verschiedene Standgrößen angepasst werden?',
@@ -200,7 +200,7 @@ export function LeistungenTourenPage() {
             <Card className="p-4 text-center">
               <Recycle className="w-8 h-8 mx-auto mb-2 text-primary" />
               <p className="font-semibold text-sm">Wiederverwendbar</p>
-              <p className="text-xs text-muted-foreground">Nachhaltig & effizient</p>
+              <p className="text-xs text-muted-foreground">Einlagern & wieder einsetzen</p>
             </Card>
           </div>
         </div>
