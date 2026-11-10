@@ -117,10 +117,9 @@ const ausnahmen: Array<[string, string, number]> = [
   // „Zu fast 100 % recycelbar“).
   [BLOG, 'CO₂-Aussage', 4],
   [BLOG, 'recycelbar', 1],
-  // Von der Rechtsrolle nicht beurteilt: „Die Investition amortisiert sich über nur eine Messe“,
-  // „Nach 3–4 Messeauftritte hat sich der Stand amortisiert“, „Umweltbewusste Zielgruppen“.
-  [BLOG, 'amortisier', 2],
-  [BLOG, 'umweltbewusst', 1],
+  // Urteil „bleibt“ (Prüfung des Blog-Stands, 10.11.2026): „Die Investition amortisiert sich über nur eine Messe“
+  // ist eine Wertung über eine Bauart, keine Zusage des Hauses.
+  [BLOG, 'amortisier', 1],
 ]
 const istAusnahme = (datei: string, name: string) => ausnahmen.some(([d, n]) => d === datei && n === name)
 

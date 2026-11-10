@@ -623,7 +623,7 @@ Ein professioneller Systemstand (z. B. auf Basis von Aluminium-Rahmensystemen) i
 - **Lagerung im Überblick** – standardisierte Komponenten sind leicht zu lagern
 
 **Material:** Derselbe Stand wird über viele Messen genutzt.  
-**Wirtschaftliche Bilanz:** Besser. Nach 3–4 Messeauftritte hat sich der Stand amortisiert – danach zahlt ihr nur noch Transport und Montage.
+**Wirtschaftliche Bilanz:** Besser. Nach wenigen Messeauftritten hat sich der Stand meist bezahlt gemacht, danach fallen vor allem Transport und Montage an.
 
 **Unser Praxis-Tipp:** Moderne Systemstände sehen nicht mehr „standardisiert" aus. Mit individuellem Grafikdesign, gezielten Material-Kombinationen und durchdachtem Layout entsteht ein professioneller, markanter Stand – der sich aber trotzdem wiederverwendet.
 
@@ -641,7 +641,7 @@ Das Rückgrat nachhaltiger Systemstände. Aluminium ist:
 - Wartbar (Beschädigungen lassen sich reparieren)
 
 **Textilbanner statt Kunststoff**  
-Statt PVC-Banner drucken wir auf Stoff-Materialien. Das spart:
+Statt PVC-Banner eignen sich Stoffbanner. Das spart:
 - Gewicht beim Transport
 - Lagerfläche (Stoffe sind leicht zu rollen)
 - Abfall (Stoffbanner lassen sich zu Hause waschen und wiederverwenden)
@@ -659,11 +659,11 @@ Viele Aussteller denken: „Transport – das ist halt notwendig." Stimmt, aber 
 
 **Worauf es ankommt:**
 - Ein loser, unoptimiert gepackter Stand braucht mehr Transportvolumen = größeres Fahrzeug = mehr CO₂
-- Ineffiziente Logistik (falsche Fristen, Leerfahrten) verdoppelt den Ausstoß schnell
+- Ineffiziente Logistik (falsche Fristen, Leerfahrten) bringt zusätzliche Fahrten
 
 **Was wir bei S&S tun:**
 - Wir optimieren Verpackung und Beladung (jeder cm zählt)
-- Wir koordinieren Transporte mehrerer Kunden, um Leerfahrten zu vermeiden
+- Wir bündeln Transporte und planen sie ab NRW, damit weniger Fahrten anfallen
 - Wir planen Auf- und Abbauten zeitnah hintereinander, um Hin- und Rückfahrten zu minimieren
 
 **Nachhaltigkeit im Transport reduziert oft auch die Kosten** – durch bessere Planung und Effizienz.
@@ -684,9 +684,9 @@ Das klingt teuer, rechnet sich aber über mehrere Messen schnell.
 Nachhaltigkeit kostet nicht mehr, oft sogar weniger:
 
 **Langfristige Kostenersparnis:**
-- Systemstand nach 4 Messen bezahlt (dann läuft es mit niedrigen Grenzkosten)
+- Systemstand nach wenigen Messen bezahlt (dann läuft es mit niedrigen Grenzkosten)
 - Keine Lagerverluste durch Verschleiß
-- Keine Entsorgungskosten (wie bei Einwegständen)
+- Weniger Entsorgungskosten als bei Einwegständen
 - Wiederverwendbare Grafiken sparen Druck-Budget
 
 **Rechenbeispiel mit angenommenen Preisen (3x3m Stand, 9 qm, 5 Messen):**  
@@ -709,13 +709,14 @@ Hier wird es interessant für Marketing-Teams: Nachhaltigkeit ist nicht egal.
 
 **Was das auslöst:**
 - Marken, die nachhaltig bauen, wirken professioneller
-- Umweltbewusste Zielgruppen sprechen euch gezielter an
 
 Das ist kein grüner Marketing-Gimmick – das ist echte Substanz, die Besucher und Kunden spüren.
 
 ---
 
 ## Drei Rechenbeispiele
+
+Alle Beträge sind angenommene Preise, kein Angebot.
 
 ### Beispiel 1: Systemstand für regelmäßige Teilnahme
 
