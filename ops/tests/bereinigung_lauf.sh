@@ -21,11 +21,11 @@ START=$(date +%s)
 
 echo "== php -l =="
 LINT=0
-for f in public/api/bereinigung-anstoss.php public/api/analytics-cleanup.php public/api/health.php public/api/collect.php public/api/chat.php public/api/email.php public/api/ai.php ops/tests/bereinigung_test.php; do
+for f in public/api/bereinigung-anstoss.php public/api/analytics-cleanup.php public/api/health.php public/api/collect.php public/api/statistik-zaehler.php public/api/analytics-export.php public/api/analytics-status.php public/api/chat.php public/api/email.php public/api/ai.php ops/tests/bereinigung_test.php; do
     php -l "$NEU/$f" || LINT=1
 done
 if [ -n "$ZUSAMMEN" ]; then
-    for f in public/api/analytics-cleanup.php public/api/health.php public/api/collect.php public/api/chat.php; do
+    for f in public/api/analytics-cleanup.php public/api/health.php public/api/collect.php public/api/statistik-zaehler.php public/api/analytics-export.php public/api/analytics-status.php public/api/chat.php; do
         php -l "$ZUSAMMEN/$f" || LINT=1
     done
 fi
