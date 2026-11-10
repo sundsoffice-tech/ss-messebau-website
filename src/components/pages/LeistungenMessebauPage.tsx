@@ -160,7 +160,7 @@ export function LeistungenMessebauPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                onClick={openInquiry}
+                onClick={() => openInquiry('leistungen_messebau_hero')}
                 className="bg-white text-primary hover:bg-white/80"
               >
                 Jetzt Messestand anfragen
@@ -169,7 +169,7 @@ export function LeistungenMessebauPage() {
               <Button
                 size="lg"
                 variant="outline"
-                onClick={openInquiry}
+                onClick={() => openInquiry('leistungen_messebau_hero_beratung')}
                 className="bg-transparent border-white text-white hover:bg-white/25"
               >
                 <Phone className="mr-2" />
@@ -446,11 +446,11 @@ export function LeistungenMessebauPage() {
             eine unverbindliche Beratung und ein individuelles Angebot – innerhalb von 48 Stunden.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" onClick={openInquiry}>
+            <Button size="lg" onClick={() => openInquiry('leistungen_messebau_cta')}>
               <Envelope className="mr-2" />
               Angebot anfordern
             </Button>
-            <Button size="lg" variant="outline" onClick={openInquiry}>
+            <Button size="lg" variant="outline" onClick={() => openInquiry('leistungen_messebau_cta_rueckruf')}>
               <Phone className="mr-2" />
               Rückruf vereinbaren
             </Button>

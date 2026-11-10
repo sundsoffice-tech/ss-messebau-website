@@ -1,9 +1,10 @@
 /**
  * First-Party Analytics Tracker - Enterprise Edition
  *
- * Extends the existing GA4 analytics (src/lib/analytics.ts) with
- * comprehensive first-party event collection that sends events to our own PHP backend.
- * Respects consent from CookieConsent / isTrackingAllowed().
+ * Hausstatistik: sammelt Ereignisse und sendet sie an das eigene PHP-Backend
+ * (`/api/collect.php`). Einziger Zähler der Seite; GA4 ist entfernt.
+ * Respects consent from CookieConsent / isTrackingAllowed(): ohne Zustimmung
+ * wird nichts gespeichert und nichts gesendet.
  *
  * Features:
  * - Persistent visitor ID (cross-session identification)
@@ -18,7 +19,7 @@
  */
 
 import { v4 as uuidv4 } from 'uuid'
-import { isTrackingAllowed } from '@/lib/analytics'
+import { isTrackingAllowed, onConsentChange } from '@/lib/analytics'
 import type {
   TrackingEvent,
   TrackingEventName,
@@ -238,15 +239,25 @@ function scheduleFlush(): void {
 /*  Public Tracking API                                                */
 /* ------------------------------------------------------------------ */
 
+/** Darf dieses Ereignis jetzt gezählt werden? Zustimmung zuerst, dann die Admin-Schalter. */
+function canTrack(eventName: TrackingEventName): boolean {
+  if (!isTrackingAllowed()) return false
+  const config = getTrackingConfig()
+  return Boolean(config.enabled && config.events[eventName])
+}
+
+/**
+ * Reiht ein Ereignis in die Warteschlange ein.
+ * Rückgabe: true, wenn es eingereiht wurde; false, wenn es mangels Zustimmung
+ * oder wegen eines Admin-Schalters verworfen wurde.
+ */
 export function trackFirstPartyEvent(
   eventName: TrackingEventName,
   props?: Record<string, string | number | boolean>,
-): void {
-  if (!isTrackingAllowed()) return
+): boolean {
+  if (!canTrack(eventName)) return false
 
   const config = getTrackingConfig()
-  if (!config.enabled) return
-  if (!config.events[eventName]) return
 
   const url = window.location.href
   const utm = extractUtm(url)
@@ -266,6 +277,7 @@ export function trackFirstPartyEvent(
   queue.push(event)
   saveQueue(queue)
   scheduleFlush()
+  return true
 }
 
 /* ------------------------------------------------------------------ */
@@ -454,11 +466,17 @@ function getDeviceProps(): Record<string, string | number | boolean> {
 
 const SESSION_START_KEY = 'ss_session_start_sent'
 
+/**
+ * Die Marke „Sitzungsstart gesendet" wird erst gesetzt, wenn das Ereignis in der
+ * Warteschlange liegt. Vorher setzte sie auch ein verworfener Versuch (keine
+ * Zustimmung), und der Sitzungsstart fehlte nach dem „Akzeptieren" für immer.
+ */
 function sendSessionStartIfNeeded(): void {
   try {
+    if (!canTrack('session_start')) return
     if (sessionStorage.getItem(SESSION_START_KEY)) return
     incrementVisitCount()
-    trackFirstPartyEvent('session_start', getDeviceProps())
+    if (!trackFirstPartyEvent('session_start', getDeviceProps())) return
     sessionStorage.setItem(SESSION_START_KEY, '1')
     setupSessionEndTracking()
     setupOutboundClickTracking()
@@ -689,7 +707,17 @@ export function initEngagementTracking(): void {
 /*  Convenience Wrappers (first-party)                                 */
 /* ------------------------------------------------------------------ */
 
+/** Seitenaufruf ohne Zustimmung gesehen: wird nach „Akzeptieren" nachgesendet. */
+let pageViewPending = false
+
 export function trackPageView(): void {
+  if (!isTrackingAllowed()) {
+    // Nichts speichern, nichts senden; nur im Arbeitsspeicher merken, dass
+    // der Aufruf der laufenden Seite noch aussteht.
+    pageViewPending = true
+    return
+  }
+  pageViewPending = false
   sendSessionStartIfNeeded()
   incrementPageCount()
   trackFirstPartyEvent('page_view', {
@@ -700,20 +728,59 @@ export function trackPageView(): void {
   initEngagementTracking()
 }
 
-export function trackCTAClick(ctaName: string): void {
-  trackFirstPartyEvent('cta_click', { cta_name: ctaName })
+// Nach der Zustimmung im Banner: Sitzungsstart und Seitenaufruf der laufenden
+// Seite nachsenden, damit Einstiegsseite und Quelle (UTM) nicht verloren gehen.
+onConsentChange((value) => {
+  if (value === 'granted' && pageViewPending) trackPageView()
+})
+
+/* ------------------------------------------------------------------ */
+/*  Kontaktwege: je Weg ein Ereignis, `source` = Ort des Knopfes       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Ereignisnamen müssen in der Liste `$validEvents` von `public/api/collect.php`
+ * stehen, sonst verwirft der Server sie stillschweigend. Eigene Namen für
+ * „Mail" und „Dialog geöffnet" kennt der Server nicht; beide laufen deshalb als
+ * `cta_click` und unterscheiden sich über `cta_name`.
+ */
+export const CTA_INQUIRY_OPEN = 'inquiry_open'
+export const CTA_MAIL_CLICK = 'mail_click'
+
+export function trackCTAClick(ctaName: string, source?: string): void {
+  trackFirstPartyEvent('cta_click', source ? { cta_name: ctaName, source } : { cta_name: ctaName })
+}
+
+/** Anfrage-Dialog geöffnet; `source` nennt den Knopf (z. B. `hero`, `header_desktop`). */
+export function trackInquiryOpen(source: string): void {
+  trackCTAClick(CTA_INQUIRY_OPEN, source)
+}
+
+/** Klick auf einen `mailto:`-Link. */
+export function trackMailClick(source: string): void {
+  trackCTAClick(CTA_MAIL_CLICK, source)
 }
 
 export function trackFormSubmission(formType: string, extraProps?: Record<string, string>): void {
   trackFirstPartyEvent('form_submit', { form_type: formType, ...extraProps })
 }
 
-export function trackPhoneClick(): void {
-  trackFirstPartyEvent('phone_click')
+/** Klick auf einen `tel:`-Link. */
+export function trackPhoneClick(source: string): void {
+  trackFirstPartyEvent('phone_click', { source })
 }
 
-export function trackWhatsAppLinkClick(): void {
-  trackFirstPartyEvent('whatsapp_click')
+/** Klick auf einen WhatsApp-Link (wa.me). */
+export function trackWhatsAppLinkClick(source: string): void {
+  trackFirstPartyEvent('whatsapp_click', { source })
+}
+
+/** Blogartikel länger als die Schwelle gelesen (vorher nur an GA4, also nie gezählt). */
+export function trackBlogArticleRead(articleSlug: string, readTimeSeconds: number): void {
+  trackFirstPartyEvent('blog_article_read', {
+    article_slug: articleSlug.substring(0, 200),
+    read_time_seconds: readTimeSeconds,
+  })
 }
 
 export function trackDownloadClick(fileName: string): void {

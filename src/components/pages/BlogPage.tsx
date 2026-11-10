@@ -3,8 +3,7 @@ import { Button } from '@/components/ui/button'
 import { DEMO_BLOG_POSTS } from '@/lib/demo-blog-posts'
 import { getBlogPosts } from '@/lib/admin-content-service'
 import { Article, ArrowRight } from '@phosphor-icons/react'
-import { trackHeroCTAClick } from '@/lib/analytics'
-import { useScrollDepthTracking, useDwellTimeTracking, useArticleReadTracking } from '@/hooks/use-analytics'
+import { useArticleReadTracking } from '@/hooks/use-analytics'
 import { useTranslation } from '@/lib/i18n'
 import { navigate } from '@/lib/deep-linking'
 import { BlogPostCard } from './BlogPostCard'
@@ -19,8 +18,6 @@ export function BlogPage() {
     ? window.location.pathname.replace('/blog/', '')
     : undefined
 
-  useScrollDepthTracking('blog')
-  useDwellTimeTracking('blog')
   useArticleReadTracking(currentSlug)
 
   // Fetch admin-managed blog posts asynchronously
@@ -93,7 +90,7 @@ export function BlogPage() {
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
             {t('blog.cta.text')}
           </p>
-          <Button size="lg" onClick={() => { trackHeroCTAClick('blog_cta'); openInquiry() }} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
+          <Button size="lg" onClick={() => openInquiry('blog_cta')} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto min-h-[52px] text-base md:text-lg">
             {t('blog.cta.button')}
             <ArrowRight className="ml-2" />
           </Button>

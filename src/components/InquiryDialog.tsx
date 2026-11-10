@@ -4,7 +4,6 @@ import { ShieldCheck } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { ContactInquiry } from '@/lib/types'
 import { useKV } from '@/hooks/use-kv'
-import { trackFormSubmit } from '@/lib/analytics'
 import { trackFormSubmission } from '@/lib/analytics-tracker'
 import { useTranslation } from '@/lib/i18n'
 import { useFormSystem } from '@/hooks/use-form-system'
@@ -85,10 +84,6 @@ export function InquiryDialog({ open, onOpenChange }: InquiryDialogProps) {
         return
       }
 
-      trackFormSubmit('inquiry', {
-        budget: data.budget || 'nicht_angegeben',
-        messen_pro_jahr: data.messesProJahr || 'nicht_angegeben',
-      })
       trackFormSubmission('inquiry', {
         branche: data.branche || '',
         wie_gefunden: data.wieGefunden || '',
