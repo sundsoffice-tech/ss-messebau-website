@@ -13,9 +13,13 @@
 # Exit 0 nur, wenn php -l sauber ist, der Test gegen <neu> grün endet (Exit 0),
 # jeder Mutant erkannt wird und, falls <main> angegeben ist, derselbe Test
 # gegen <main> rot endet (Exit 1).
+#
+# Der Wächter-Eintrag (ops/sunds-hub/eintragen.py) hat eine eigene Probe in
+# einem Python-Container, siehe Kopf von ops/tests/eintragen_probe.py.
 set -u
 NEU=${1:?Baum mit dem neuen Stand fehlt}
 MAIN=${2:-}
+START=$(date +%s)
 
 echo "== php -l =="
 LINT=0
@@ -42,5 +46,6 @@ php "$NEU/ops/tests/chat_bremse_mutanten.php" --ohne-netz "$NEU/public/api"
 RC_MUT=$?
 
 echo
+echo "DAUER $(( $(date +%s) - START )) s"
 echo "EXIT lint=$LINT neu=$RC_NEU main=$RC_MAIN mutanten=$RC_MUT"
 [ "$LINT" = 0 ] && [ "$RC_NEU" = 0 ] && [ "$RC_MUT" = 0 ] && { [ -z "$MAIN" ] || [ "$RC_MAIN" = 1 ]; }

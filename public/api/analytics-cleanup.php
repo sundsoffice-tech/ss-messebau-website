@@ -187,6 +187,10 @@ set_error_handler(function (int $nr, string $text) use (&$dateienFehler): bool {
 // rate_limit_*.json erfasst auch die IP-Zähler des Chats (rate_limit_chat_<md5>.json).
 // chat_tagesdeckel.json (Tageszähler des Chats, chat.php) gehört NICHT in diese
 // Liste: Er muss den ganzen Tag stehen bleiben und setzt sich am Folgetag selbst zurück.
+// Ebenso wenig chat_tageszahlen.json (Verlauf der Tageszahlen, wird nie gelöscht,
+// chat.php hält ihn selbst bei 90 Tagen) und chat_adresstag_<md5>.json (Tageslimit
+// je Adresse): Dessen Zähler muss bis Mitternacht stehen bleiben, auch nach einer
+// Stunde Ruhe, und hat deshalb unten eine eigene Regel.
 $rateLimitDir = __DIR__ . '/data/';
 $rateLimitPatterns = ['rate_limit_*.json', 'login_limit_*.json', 'email_limit_*.json', 'order_limit_*.json', 'inquiry_limit_*.json'];
 foreach ($rateLimitPatterns as $pattern) {
@@ -196,6 +200,20 @@ foreach ($rateLimitPatterns as $pattern) {
             if (filemtime($file) < time() - 3600) {
                 @unlink($file);
             }
+        }
+    }
+}
+
+// Tageszähler je Adresse des Chats: erst nach 48 Stunden ohne Änderung löschen.
+// Ein Kalendertag hat höchstens 25 Stunden, danach zählt die Datei nichts mehr;
+// ohne diese Regel bliebe je anfragender Adresse eine Datei für immer liegen.
+// (chat.php räumt dieselben Dateien beim ersten Chat-Aufruf eines Tages weg;
+// diese Regel greift auch an Tagen ohne Chat-Aufruf.)
+$chatAdressFiles = glob($rateLimitDir . 'chat_adresstag_*.json');
+if ($chatAdressFiles) {
+    foreach ($chatAdressFiles as $file) {
+        if (filemtime($file) < time() - 172800) {
+            @unlink($file);
         }
     }
 }

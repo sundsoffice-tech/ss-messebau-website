@@ -118,6 +118,25 @@ ZIELE_NEU = [
         "muss_enthalten": ["\"status\": \"ok\"", "\"database\": \"ok\""],
     },
     {
+        # Eigenes Ziel statt einer dritten Zeichenkette im Ziel darueber: Ein
+        # geschlossener Chat (Tagesdeckel aus public/api/chat.php erreicht,
+        # health.php meldet dann "chat": "deckel_erreicht") soll als Chat
+        # gemeldet werden, nicht als Stoerung von API und Datenbank. Der
+        # Endpunkt nennt nur den Zustand; die Tageszahlen liest der angemeldete
+        # Admin unter /api/chat.php?tageszahlen=1. Was dann zu tun ist, steht
+        # im Kopf von chat.php (Grenzen) -- der Chat oeffnet um Mitternacht
+        # Europe/Berlin von selbst wieder.
+        # Erst eintragen, wenn die Website das Feld "chat" schon ausliefert,
+        # sonst ist das Ziel vom ersten Lauf an rot. Dauerhaft bleibt es nur
+        # mit der Zeile aus TSV_ZEILE_CHAT (siehe dort).
+        "name": "Messebau-Website KI-Chat",
+        "typ": "url",
+        "kunde": "S&S Messebau",
+        "url": GESUND,
+        "max_sekunden": 5.0,
+        "muss_enthalten": ["\"chat\": \"frei\""],
+    },
+    {
         "name": "Messebau-Website Deploy-Abgleich",
         "typ": "abgleich",
         "kunde": "S&S Messebau",
@@ -128,6 +147,22 @@ ZIELE_NEU = [
                    "(Hostinger-Webhook zieht nicht, gemessen 21.08.2026).",
     },
 ]
+
+
+# Seit dem 22.08.2026 baut ziele-verteilen.sh (Leadmaschine, alle 15 Minuten)
+# die ziele.json aus leadmaschine/zentrale/waechter/ueberwachung.tsv neu. Ein
+# Ziel, das nur dieses Skript eintraegt, ist beim naechsten Lauf wieder weg.
+# Dauerhaft wird das Chat-Ziel erst mit dieser Zeile in der TSV (Tabulator
+# zwischen den Spalten). Die Adresse traegt absichtlich ?ziel=chat: Die
+# Verlustpruefung dort ordnet Ziele nach Typ und Adresse; eine zweite Zeile mit
+# derselben Adresse wie "Messebau-Website (Hostinger)" meldet sie als Verlust
+# und haelt dann die ganze Verteilung an (nachgerechnet am 10.11.2026 mit
+# ziele-erzeugen.py; health.php beachtet den Zusatz nicht).
+VERTEILER = "/opt/sunds-leadmaschine/ziele-verteilen.sh"
+TSV_ZEILE_CHAT = "\t".join([
+    "url", GESUND + "?ziel=chat", "Messebau-Website KI-Chat", "5.0",
+    "muss=\"chat\": \"frei\" ;; kunde=S&S Messebau",
+])
 
 
 def lade(pfad, standard):
@@ -191,6 +226,12 @@ def main():
         print("ziele.json: %d Ziel(e) ergaenzt, jetzt %d Ziele" % (ergaenzt, len(ziele)))
     else:
         print("ziele.json: alle Ziele waren schon vorhanden")
+    if os.path.exists(VERTEILER):
+        print("ACHTUNG: %s baut ziele.json alle 15 Minuten aus ueberwachung.tsv neu; "
+              "ein nur hier eingetragenes Ziel verschwindet dabei wieder. "
+              "Dauerhaft nur mit dieser Zeile in leadmaschine/zentrale/waechter/ueberwachung.tsv:"
+              % VERTEILER)
+        print(TSV_ZEILE_CHAT)
     return 0
 
 

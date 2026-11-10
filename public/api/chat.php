@@ -43,7 +43,39 @@ define('CHAT_TAGESDECKEL', 300);
 // werden Zähldateien nach einer Stunde ohne Änderung gelöscht, das würde den
 // Tageszähler vorzeitig auf null setzen. Die Datei wird nie gelöscht, sie
 // trägt ihr Datum und beginnt am nächsten Tag von selbst bei null.
+// health.php liest dieselbe Datei und nennt daraus nur den Zustand
+// ("frei" oder "deckel_erreicht"), nie die Zahl.
 define('CHAT_TAGESDECKEL_DATEI', __DIR__ . '/data/chat_tagesdeckel.json');
+
+// Tageslimit je Adresse: höchstens 30 gezählte Anfragen je Adresse und
+// Kalendertag (Europe/Berlin). Grund: Ohne dieses Limit verbraucht eine
+// einzige Adresse den Tagesdeckel in 29 Minuten (30 Schübe zu je 10), und der
+// Chat ist danach für alle bis Mitternacht zu. Zeit kostet einen Störer
+// nichts, Adressen kosten ihn etwas: Mit 30 je Adresse braucht er zehn
+// Adressen statt einer. Für Besucher sind 30 Nachrichten drei Gespräche zu je
+// zehn Nachrichten am Tag; der Höchstschaden einer Adresse sinkt auf rund
+// 0,36 bis 0,47 USD je Tag (Bericht Spieltheoretiker 10.11.2026, Spanne 20
+// bis 40; ab 75 trägt das Limit nicht mehr, weil dann vier Adressen reichen).
+// Gezählt wird nach der Eingabeprüfung (Müll hinter einer gemeinsamen Adresse
+// frisst kein Kontingent) und vor dem Tagesdeckel (was hier abgewiesen wird,
+// verbraucht den Deckel der anderen nicht).
+define('CHAT_ADRESSE_TAGESLIMIT', 30);
+// Eine Datei je Adresse, Inhalt nur Datum und Zahl. Der Name liegt absichtlich
+// außerhalb von rate_limit_*.json: Jenes Muster löscht analytics-cleanup.php
+// nach einer Stunde Ruhe, der Zähler stünde dann nach einer Pause wieder auf
+// null. Aufgeräumt wird nach 48 Stunden (ein Kalendertag hat höchstens 25
+// Stunden, danach ist die Zahl sicher verfallen): beim ersten gezählten
+// Chat-Aufruf eines neuen Tages hier und zusätzlich in analytics-cleanup.php.
+define('CHAT_ADRESSE_DATEI_ANFANG', __DIR__ . '/data/chat_adresstag_');
+define('CHAT_ADRESSE_AUFBEWAHREN', 172800); // Sekunden
+
+// Tageszahlen: Beim Tageswechsel wandert der Stand des abgelaufenen Tages in
+// diese Datei, statt überschrieben zu werden. So kennt das Haus den echten
+// Bedarf (Anfragen und Zahl der Adressen je Tag) und kann die Grenzen oben
+// an Zahlen statt an Schätzungen ausrichten. Höchstens 90 Tage, keine Adressen
+// darin. Lesbar für den angemeldeten Admin über GET chat.php?tageszahlen=1.
+define('CHAT_TAGESZAHLEN_DATEI', __DIR__ . '/data/chat_tageszahlen.json');
+define('CHAT_TAGESZAHLEN_TAGE', 90);
 
 /**
  * Zählschlüssel einer Adresse. IPv4 zählt je Adresse. IPv6 zählt je /64-Netz,
@@ -126,14 +158,162 @@ function chatFensterZaehlen(string $datei, int $max, int $fenster, int $jetzt): 
     });
 }
 
-/** Tageszähler: höchstens $max gezählte Anfragen am Kalendertag $tag (JJJJ-MM-TT). */
-function chatTagZaehlen(string $datei, int $max, string $tag): ?bool {
-    return chatZaehldatei($datei, function (?array $stand) use ($max, $tag): array {
-        $anzahl = 0;
-        // Anderes Datum oder unlesbarer Inhalt: Zähler beginnt bei null.
-        if (($stand['tag'] ?? null) === $tag && is_int($stand['anzahl'] ?? null) && $stand['anzahl'] > 0) {
-            $anzahl = $stand['anzahl'];
+/** Gilt ein gelesener Zählerstand für den Kalendertag $tag (JJJJ-MM-TT)? */
+function chatStandVomTag(?array $stand, string $tag): bool {
+    return ($stand['tag'] ?? null) === $tag;
+}
+
+/** Zählfeld aus einem gelesenen Stand; fehlend, unlesbar oder negativ zählt als null. */
+function chatZahl(?array $stand, string $feld): int {
+    $wert = $stand[$feld] ?? null;
+    return is_int($wert) && $wert > 0 ? $wert : 0;
+}
+
+/** Die Zahlen eines Tages, wie sie festgehalten und dem Admin gezeigt werden. Keine Adressen. */
+function chatTageseintrag(?array $stand): array {
+    return [
+        'anzahl' => chatZahl($stand, 'anzahl'),           // an OpenAI weitergegebene Anfragen
+        'adressen' => chatZahl($stand, 'adressen'),       // verschiedene Adressen mit gültiger Anfrage
+        'adresslimit' => chatZahl($stand, 'adresslimit'), // Adressen, die ihr Tageslimit ausgeschöpft haben
+        'abgewiesen' => chatZahl($stand, 'abgewiesen'),   // gültige Anfragen, die am Tagesdeckel scheiterten
+        // Stände von vor dieser Fassung tragen den Deckel nicht; dann galt der heutige Wert.
+        'deckel' => chatZahl($stand, 'deckel') ?: CHAT_TAGESDECKEL,
+    ];
+}
+
+/** Nur Einträge mit einem Datum als Schlüssel und einer Liste als Wert bleiben. */
+function chatTageSaeubern($tage): array {
+    $sauber = [];
+    foreach (is_array($tage) ? $tage : [] as $tag => $eintrag) {
+        if (is_string($tag) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $tag) && is_array($eintrag)) {
+            $sauber[$tag] = chatTageseintrag($eintrag);
         }
+    }
+    return $sauber;
+}
+
+/**
+ * Hält die Zahlen eines abgelaufenen Tages in CHAT_TAGESZAHLEN_DATEI fest,
+ * höchstens CHAT_TAGESZAHLEN_TAGE Tage, die ältesten fallen heraus. Aufgerufen
+ * beim Tageswechsel, solange der Tageszähler noch gesperrt ist: Genau eine
+ * Anfrage sieht den alten Stand, also wird jeder Tag genau einmal geschrieben.
+ * Ein Fehlschlag hält den Chat nicht auf (der Verlauf ist Auskunft, keine
+ * Schranke); die Zahl steht dann wenigstens im Fehlerprotokoll.
+ *
+ * Eine festgehaltene Tageszahl wird nie kleiner: Um Mitternacht kann eine
+ * Anfrage, die noch am alten Tag begann, den Zähler nach der ersten Anfrage
+ * des neuen Tages erreichen und ihn kurz auf den alten Tag zurückstellen. Der
+ * Stand, der danach für den alten Tag ankommt, ist ein Rest (1 oder 2) und
+ * darf die echte Zahl nicht überschreiben.
+ */
+function chatTageszahlFesthalten(array $stand): void {
+    $tag = $stand['tag'] ?? null;
+    if (!is_string($tag) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $tag)) {
+        return;
+    }
+    $eintrag = chatTageseintrag($stand);
+    $geschrieben = chatZaehldatei(CHAT_TAGESZAHLEN_DATEI, function (?array $verlauf) use ($tag, $eintrag): array {
+        $tage = chatTageSaeubern($verlauf['tage'] ?? null);
+        if (($tage[$tag]['anzahl'] ?? -1) < $eintrag['anzahl']) {
+            $tage[$tag] = $eintrag;
+        }
+        ksort($tage, SORT_STRING);
+        $tage = array_slice($tage, -CHAT_TAGESZAHLEN_TAGE, null, true);
+        return [true, ['tage' => $tage]];
+    });
+    if ($geschrieben !== true) {
+        error_log('Chat: Tageszahlen vom ' . $tag . ' nicht festgehalten: ' . json_encode($eintrag));
+    }
+}
+
+/**
+ * Tageszahlen für den angemeldeten Admin: der laufende Tag aus dem Tageszähler,
+ * die abgelaufenen Tage aus dem Verlauf. Liest ohne Sperre, schreibt nichts.
+ */
+function chatTageszahlenLesen(string $heute): array {
+    $lies = function (string $datei): ?array {
+        $roh = @file_get_contents($datei);
+        $inhalt = is_string($roh) ? json_decode($roh, true) : null;
+        return is_array($inhalt) ? $inhalt : null;
+    };
+    $tage = chatTageSaeubern($lies(CHAT_TAGESZAHLEN_DATEI)['tage'] ?? null);
+    $stand = $lies(CHAT_TAGESDECKEL_DATEI);
+    $laufend = null;
+    if (chatStandVomTag($stand, $heute)) {
+        $laufend = $stand;
+    } else {
+        // Heute noch keine gezählte Anfrage: Der Zähler trägt noch den letzten
+        // Tag mit Anfragen, der erst mit der nächsten Anfrage in den Verlauf
+        // wandert. Er gehört trotzdem schon in die Liste.
+        $tage += chatTageSaeubern(is_string($stand['tag'] ?? null) ? [$stand['tag'] => $stand] : null);
+    }
+    ksort($tage, SORT_STRING);
+    return [
+        'success' => true,
+        'heute' => ['tag' => $heute] + chatTageseintrag($laufend),
+        'tage' => (object)$tage,
+        'grenzen' => [
+            'tagesdeckel' => CHAT_TAGESDECKEL,
+            'je_adresse_und_tag' => CHAT_ADRESSE_TAGESLIMIT,
+            'je_adresse_und_minute' => CHAT_IP_LIMIT_MAX,
+        ],
+        'hinweis' => 'Ein Tag ohne Eintrag hatte keine gezählte Anfrage. Aufbewahrt werden '
+            . CHAT_TAGESZAHLEN_TAGE . ' Tage.',
+    ];
+}
+
+/**
+ * Tageslimit je Adresse: höchstens $max gezählte Anfragen am Kalendertag $tag.
+ * $anzahlNeu trägt danach den Stand der Adresse (1 = erste Anfrage des Tages).
+ */
+function chatAdresseZaehlen(string $datei, int $max, string $tag, int &$anzahlNeu): ?bool {
+    return chatZaehldatei($datei, function (?array $stand) use ($max, $tag, &$anzahlNeu): array {
+        // Anderes Datum oder unlesbarer Inhalt: Zähler beginnt bei null.
+        $bisher = chatStandVomTag($stand, $tag) ? chatZahl($stand, 'anzahl') : 0;
+        $frei = $bisher < $max;
+        $anzahlNeu = $bisher + ($frei ? 1 : 0);
+        return [$frei, ['tag' => $tag, 'anzahl' => $anzahlNeu]];
+    });
+}
+
+/**
+ * Räumt Tageszähler je Adresse weg, die seit CHAT_ADRESSE_AUFBEWAHREN Sekunden
+ * nicht mehr geschrieben wurden. Läuft einmal je Tag (beim Tageswechsel) und
+ * ohne Sperre: Ein Rennen mit einer gleichzeitig schreibenden Anfrage kostet
+ * höchstens eine Zählung einer Adresse, deren Zahl ohnehin verfallen war.
+ */
+function chatAdressdateienAufraeumen(int $jetzt): void {
+    foreach (glob(CHAT_ADRESSE_DATEI_ANFANG . '*.json') ?: [] as $datei) {
+        $geaendert = @filemtime($datei);
+        if ($geaendert !== false && $geaendert < $jetzt - CHAT_ADRESSE_AUFBEWAHREN) {
+            @unlink($datei);
+        }
+    }
+}
+
+/**
+ * Tageszähler über alle Besucher: höchstens $max gezählte Anfragen am
+ * Kalendertag $tag (JJJJ-MM-TT). Führt nebenbei die Zahlen, aus denen das Haus
+ * den Bedarf liest: $neueAdresse (erste gültige Anfrage dieser Adresse heute),
+ * $adresseAmLimit (diese Anfrage schöpft das Tageslimit der Adresse aus).
+ * $tageswechsel ist danach true, wenn diese Anfrage die erste des Tages war.
+ */
+function chatTagZaehlen(
+    string $datei,
+    int $max,
+    string $tag,
+    bool $neueAdresse = false,
+    bool $adresseAmLimit = false,
+    bool &$tageswechsel = false
+): ?bool {
+    return chatZaehldatei($datei, function (?array $stand) use ($max, $tag, $neueAdresse, $adresseAmLimit, &$tageswechsel): array {
+        // Anderes Datum oder unlesbarer Inhalt: Zähler beginnt bei null.
+        $heute = chatStandVomTag($stand, $tag) ? $stand : null;
+        if ($heute === null && $stand !== null) {
+            $tageswechsel = true;
+            chatTageszahlFesthalten($stand);
+        }
+        $anzahl = chatZahl($heute, 'anzahl');
         $erlaubt = $anzahl < $max;
         if ($erlaubt) {
             $anzahl++;
@@ -142,7 +322,15 @@ function chatTagZaehlen(string $datei, int $max, string $tag): ?bool {
                 error_log('Chat: Tagesdeckel von ' . $max . ' Anfragen am ' . $tag . ' erreicht');
             }
         }
-        return [$erlaubt, ['tag' => $tag, 'anzahl' => $anzahl]];
+        return [$erlaubt, [
+            'tag' => $tag,
+            'anzahl' => $anzahl,
+            // health.php vergleicht anzahl mit deckel und kennt die Konstante nicht.
+            'deckel' => $max,
+            'adressen' => chatZahl($heute, 'adressen') + ($neueAdresse ? 1 : 0),
+            'adresslimit' => chatZahl($heute, 'adresslimit') + ($adresseAmLimit ? 1 : 0),
+            'abgewiesen' => chatZahl($heute, 'abgewiesen') + ($erlaubt ? 0 : 1),
+        ]];
     });
 }
 
@@ -173,6 +361,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+$berlin = new DateTimeZone('Europe/Berlin');
+
+// Tageszahlen für den angemeldeten Admin (GET chat.php?tageszahlen=1). Zählt
+// nichts und ruft OpenAI nicht auf. Ohne Sitzungs-Cookie gibt es die Antwort
+// 401, ohne dass eine Sitzung angelegt wird: Sonst legte jeder Abruf ohne
+// Cookie eine neue Sitzungsdatei an, an der IP-Bremse vorbei.
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tageszahlen'])) {
+    if (empty($_COOKIE[session_name()])) {
+        http_response_code(401);
+        echo json_encode(['error' => 'Nicht autorisiert']);
+        exit;
+    }
+    if (!requireAuth()) {
+        exit;
+    }
+    echo json_encode(chatTageszahlenLesen((new DateTimeImmutable('now', $berlin))->format('Y-m-d')));
+    exit;
+}
+
 // Methode vor jeder Zählung und vor der Sitzung prüfen: Ein GET-Abruf
 // (Suchmaschine, Wächter, Neugier) verbraucht kein Kontingent.
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -185,9 +392,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Rate limiting and input validation are applied instead
 $now = time();
 
+// Ein Schlüssel je Adresse für beide Adresszähler (Minute und Tag)
+$adressSchluessel = md5(chatBremseSchluessel((string)($_SERVER['REMOTE_ADDR'] ?? '')));
+
 // 1. IP-Bremse: hält ohne Cookie
-$ipDatei = __DIR__ . '/data/rate_limit_chat_'
-    . md5(chatBremseSchluessel((string)($_SERVER['REMOTE_ADDR'] ?? ''))) . '.json';
+$ipDatei = __DIR__ . '/data/rate_limit_chat_' . $adressSchluessel . '.json';
 $ipErlaubt = chatFensterZaehlen($ipDatei, CHAT_IP_LIMIT_MAX, CHAT_IP_LIMIT_WINDOW, $now);
 if ($ipErlaubt === null) {
     chatZaehlerNichtNutzbar('IP-Bremse');
@@ -210,9 +419,9 @@ if (count($_SESSION['chat_requests']) >= CHAT_RATE_LIMIT_MAX) {
 }
 $_SESSION['chat_requests'][] = $now;
 
-// 3. Eingabe prüfen, bevor der Tagesdeckel zählt: Eine Anfrage, die ohnehin
-// mit 400 endet, erreicht OpenAI nicht und soll das Tageskontingent der
-// echten Besucher nicht verbrauchen.
+// 3. Eingabe prüfen, bevor die Tageszähler zählen: Eine Anfrage, die ohnehin
+// mit 400 endet, erreicht OpenAI nicht und soll weder das Tageslimit der
+// Adresse noch das Tageskontingent der echten Besucher verbrauchen.
 enforceRequestBodyLimit();
 $input = json_decode(file_get_contents('php://input'), true);
 
@@ -233,18 +442,47 @@ if (strlen($rawMessage) > 2000) {
     exit;
 }
 
-// 4. Tagesdeckel über alle Besucher: letzte Schranke vor dem OpenAI-Aufruf
-$berlin = new DateTimeZone('Europe/Berlin');
+// Kalendertag und Sekunden bis Mitternacht, beides Europe/Berlin
+$jetztBerlin = (new DateTimeImmutable('@' . $now))->setTimezone($berlin);
+$tag = $jetztBerlin->format('Y-m-d');
+$bisMitternacht = $jetztBerlin->modify('tomorrow')->getTimestamp() - $now;
+
+// 4. Tageslimit je Adresse: vor dem Tagesdeckel, damit eine einzelne Adresse
+// ihn nicht allein verbrauchen kann
+$adresseAnzahl = 0;
+$adresseErlaubt = chatAdresseZaehlen(
+    CHAT_ADRESSE_DATEI_ANFANG . $adressSchluessel . '.json',
+    CHAT_ADRESSE_TAGESLIMIT,
+    $tag,
+    $adresseAnzahl
+);
+if ($adresseErlaubt === null) {
+    chatZaehlerNichtNutzbar('Tageslimit je Adresse');
+}
+if ($adresseErlaubt === false) {
+    chatZuVieleAnfragen($bisMitternacht);
+}
+
+// 5. Tagesdeckel über alle Besucher: letzte Schranke vor dem OpenAI-Aufruf
+$tageswechsel = false;
 $tagErlaubt = chatTagZaehlen(
     CHAT_TAGESDECKEL_DATEI,
     CHAT_TAGESDECKEL,
-    (new DateTimeImmutable('@' . $now))->setTimezone($berlin)->format('Y-m-d')
+    $tag,
+    $adresseAnzahl === 1,
+    $adresseAnzahl === CHAT_ADRESSE_TAGESLIMIT,
+    $tageswechsel
 );
+if ($tageswechsel) {
+    // Erste gezählte Anfrage des Tages: verfallene Adresszähler wegräumen.
+    // Erst hier, nachdem die Sperre des Tageszählers wieder frei ist.
+    chatAdressdateienAufraeumen($now);
+}
 if ($tagErlaubt === null) {
     chatZaehlerNichtNutzbar('Tagesdeckel');
 }
 if ($tagErlaubt === false) {
-    chatZuVieleAnfragen((new DateTimeImmutable('tomorrow', $berlin))->getTimestamp() - $now);
+    chatZuVieleAnfragen($bisMitternacht);
 }
 
 // Wrap main logic in try-catch to ensure valid JSON is always returned
