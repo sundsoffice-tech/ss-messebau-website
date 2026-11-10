@@ -14,7 +14,7 @@ export const ALTBESTAND_SCHLUESSEL = ['ss_kv_inquiries', 'chat_audit_log', 'chat
 
 /**
  * Kopie einer Banner-Bestellung: `ss_kv_banner_<Zeitstempel>`. Der Entwurf des
- * Konfigurators (`ss_kv_banner_config_draft`) hat einen Leser und bleibt.
+ * Konfigurators (`ss_kv_banner_config_draft`) hat einen Leser und bleibt bis zur angenommenen Bestellung.
  */
 export const ALTBESTAND_BESTELLKOPIE = /^ss_kv_banner_\d+$/
 

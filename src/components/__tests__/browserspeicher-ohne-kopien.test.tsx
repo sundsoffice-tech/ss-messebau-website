@@ -166,7 +166,7 @@ describe('Formulare legen keine Kopie der Anfrage im Browser ab', () => {
     expect(speicherinhalt()).not.toContain(ANFRAGE.email)
   })
 
-  it('Banner-Bestellung: der Entwurf bleibt, eine Bestellkopie entsteht nicht', async () => {
+  it('Banner-Bestellung: der Entwurf geht mit der angenommenen Bestellung, eine Bestellkopie entsteht nicht', async () => {
     render(<BannerBestellenPage />)
 
     // Der Entwurf hat einen Leser und wird geschrieben, sobald der Besucher etwas ändert.
@@ -181,7 +181,8 @@ describe('Formulare legen keine Kopie der Anfrage im Browser ab', () => {
     expect(sonde.bestellung).toHaveBeenCalledTimes(1)
     expect(String(sonde.bestellung.mock.calls[0][0])).toMatch(/^banner_\d+$/)
     expect(schluessel().filter((k) => /^ss_kv_banner_\d+$/.test(k))).toEqual([])
-    expect(schluessel()).toEqual(['ss_kv_banner_config_draft'])
+    // Der Entwurf hat nach der angenommenen Bestellung keine Aufgabe mehr und ist entfernt.
+    expect(schluessel()).toEqual([])
   })
 })
 

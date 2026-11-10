@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from '@/lib/i18n'
 import { useKV } from '@/hooks/use-kv'
 import { Card } from '@/components/ui/card'
@@ -127,8 +127,11 @@ const initialConfig: BannerConfig = {
 export function BannerBestellenPage() {
   const { t } = useTranslation()
   const [currentStep, setCurrentStep] = useState(1)
-  const [config, setConfig] = useKV<BannerConfig>('banner_config_draft', initialConfig)
+  const [config, setConfig, entwurfEntfernen] = useKV<BannerConfig>('banner_config_draft', initialConfig)
   const [submitted, setSubmitted] = useState(false)
+  // Nach angenommener Bestellung schreibt nichts mehr in den Entwurf, auch keine
+  // Datei, deren Aufbereitung erst danach fertig wird.
+  const abgeschickt = useRef(false)
 
   const totalSteps = 6
   const progress = (currentStep / totalSteps) * 100
@@ -165,9 +168,11 @@ export function BannerBestellenPage() {
   }
 
   const updateConfig = async (step: string, data: any) => {
+    if (abgeschickt.current) return
     if (step === 'step4' && data.dateien) {
       const { filesToSerializable } = await import('@/lib/file-utils')
       const serializedFiles = await filesToSerializable(data.dateien)
+      if (abgeschickt.current) return
       
       setConfig((prev) => {
         if (!prev) return initialConfig
@@ -206,7 +211,8 @@ export function BannerBestellenPage() {
       }
       
       // Keine Kopie der Bestellung im Browser: Sie geht nur an Backend und Mail.
-      // Der Entwurf (`banner_config_draft`) bleibt, ihn liest der Konfigurator.
+      // Der Entwurf (`banner_config_draft`) bleibt bis zur angenommenen Bestellung,
+      // ihn liest der Konfigurator.
       // Save order to backend API
       let apiSaved = false
       try {
@@ -252,6 +258,11 @@ export function BannerBestellenPage() {
         return
       }
 
+      // Die Bestellung ist angekommen: Der Entwurf mit Kontaktdaten und Druckdateien
+      // hat im Browser keine Aufgabe mehr. Die Dankeseite zeigt den Stand aus dem
+      // Arbeitsspeicher; ein neuer Aufruf des Konfigurators beginnt leer.
+      abgeschickt.current = true
+      entwurfEntfernen()
       setSubmitted(true)
     } catch (error) {
       console.error('Error saving configuration:', error)

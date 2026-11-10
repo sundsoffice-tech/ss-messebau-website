@@ -12,8 +12,12 @@ const KV_PREFIX = 'ss_kv_'
  * Geschrieben wird erst, wenn der Aufrufer einen Wert setzt. Beim Einhängen
  * entsteht kein Eintrag: Der Vorgabewert lebt nur im Arbeitsspeicher, sonst
  * läge nach jedem ersten Seitenaufruf ein leerer `ss_kv_`-Schlüssel im Browser.
+ *
+ * Der dritte Rückgabewert entfernt den Eintrag aus dem Browser. Der Wert im
+ * Arbeitsspeicher bleibt, damit die laufende Ansicht ihn weiter zeigen kann;
+ * erst ein neues Setzen schreibt wieder.
  */
-export function useKV<T>(key: string, defaultValue: T): [T, (value: T | SetterFn<T>) => void] {
+export function useKV<T>(key: string, defaultValue: T): [T, (value: T | SetterFn<T>) => void, () => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = localStorage.getItem(`${KV_PREFIX}${key}`)
@@ -41,5 +45,15 @@ export function useKV<T>(key: string, defaultValue: T): [T, (value: T | SetterFn
     })
   }, [])
 
-  return [storedValue, setValue]
+  const removeStored = useCallback(() => {
+    // Ein Setzen aus demselben Zug darf den Eintrag nicht gleich wieder anlegen.
+    changed.current = false
+    try {
+      localStorage.removeItem(`${KV_PREFIX}${key}`)
+    } catch {
+      // localStorage gesperrt oder nicht vorhanden: dann liegt dort auch kein Eintrag
+    }
+  }, [key])
+
+  return [storedValue, setValue, removeStored]
 }
