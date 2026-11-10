@@ -1,0 +1,152 @@
+{
+  "/impressum": {
+    "titel": "imprint.title",
+    "abschnitte": [
+      { "titel": "imprint.tmg", "inhalt": [["zeilen", "imprint.address"]] },
+      { "titel": "imprint.partners.title", "inhalt": [["zeilen", "imprint.partners.names"]] },
+      { "titel": "imprint.contact.title", "inhalt": [["zeilen", "imprint.contact.details"]] },
+      { "titel": "imprint.vat.title", "inhalt": [["zeilen", "imprint.vat.text"]] },
+      {
+        "titel": "imprint.liability.title",
+        "inhalt": [
+          ["h3", "imprint.liability.subtitle"],
+          ["p", "imprint.liability.text"]
+        ]
+      }
+    ]
+  },
+  "/datenschutz": {
+    "titel": "privacy.title",
+    "abschnitte": [
+      {
+        "titel": "privacy.kurz.title",
+        "inhalt": [
+          ["p", "privacy.kurz.text1"],
+          ["p", "privacy.kurz.text2"]
+        ]
+      },
+      {
+        "titel": "privacy.verantwortlich.title",
+        "inhalt": [
+          ["p", "privacy.verantwortlich.intro"],
+          ["zeilen", "imprint.address"],
+          ["zeilen", "imprint.contact.details"],
+          ["p", "privacy.verantwortlich.text"]
+        ]
+      },
+      {
+        "titel": "privacy.hosting.title",
+        "inhalt": [
+          ["p", "privacy.hosting.text1"],
+          ["p", "privacy.hosting.text2"],
+          ["p", "privacy.hosting.text3"],
+          ["p", "privacy.hosting.text4"]
+        ]
+      },
+      {
+        "titel": "privacy.anfragen.title",
+        "inhalt": [
+          ["h3", "privacy.anfragen.daten.title"],
+          ["p", "privacy.anfragen.daten.text1"],
+          ["p", "privacy.anfragen.daten.text2"],
+          ["h3", "privacy.anfragen.weg.title"],
+          ["p", "privacy.anfragen.weg.text1"],
+          ["p", "privacy.anfragen.weg.text2"],
+          ["p", "privacy.anfragen.weg.text3"],
+          ["h3", "privacy.anfragen.zweck.title"],
+          ["p", "privacy.anfragen.zweck.text1"],
+          ["p", "privacy.anfragen.zweck.text2"]
+        ]
+      },
+      {
+        "titel": "privacy.kontakt.title",
+        "inhalt": [
+          ["p", "privacy.kontakt.text1"],
+          ["p", "privacy.kontakt.text2"]
+        ]
+      },
+      {
+        "titel": "privacy.statistik.title",
+        "inhalt": [
+          ["p", "privacy.statistik.text1"],
+          ["h3", "privacy.statistik.daten.title"],
+          ["ul", "privacy.statistik.daten.liste"],
+          ["p", "privacy.statistik.daten.text"],
+          ["h3", "privacy.statistik.ort.title"],
+          ["p", "privacy.statistik.ort.text"],
+          ["h3", "privacy.statistik.widerruf.title"],
+          ["p", "privacy.statistik.widerruf.text1"],
+          ["p", "privacy.statistik.widerruf.text2"],
+          ["p", "privacy.statistik.widerruf.text3"]
+        ]
+      },
+      {
+        "titel": "privacy.karte.title",
+        "inhalt": [
+          ["p", "privacy.karte.text1"],
+          ["p", "privacy.karte.text2"],
+          ["p", "privacy.karte.text3"]
+        ]
+      },
+      {
+        "titel": "privacy.chat.title",
+        "inhalt": [
+          ["p", "privacy.chat.text1"],
+          ["p", "privacy.chat.text2"],
+          ["p", "privacy.chat.text3"],
+          ["p", "privacy.chat.text4"],
+          ["p", "privacy.chat.text5"],
+          ["p", "privacy.chat.text6"]
+        ]
+      },
+      {
+        "titel": "privacy.speicher.title",
+        "inhalt": [
+          ["p", "privacy.speicher.text1"],
+          ["h3", "privacy.speicher.noetig.title"],
+          ["ul", "privacy.speicher.noetig.liste"],
+          ["h3", "privacy.speicher.statistik.title"],
+          ["ul", "privacy.speicher.statistik.liste"],
+          ["p", "privacy.speicher.text2"]
+        ]
+      },
+      {
+        "titel": "privacy.medien.title",
+        "inhalt": [
+          ["p", "privacy.medien.text1"],
+          ["p", "privacy.medien.text2"]
+        ]
+      },
+      {
+        "titel": "privacy.empfaenger.title",
+        "inhalt": [
+          ["p", "privacy.empfaenger.text1"],
+          ["ul", "privacy.empfaenger.liste"],
+          ["p", "privacy.empfaenger.text2"]
+        ]
+      },
+      {
+        "titel": "privacy.rechte.title",
+        "inhalt": [
+          ["p", "privacy.rechte.text1"],
+          ["ul", "privacy.rechte.liste"],
+          ["p", "privacy.rechte.text2"],
+          ["p", "privacy.rechte.text3"],
+          ["p", "privacy.rechte.text4"]
+        ]
+      },
+      {
+        "titel": "privacy.beschwerde.title",
+        "inhalt": [
+          ["p", "privacy.beschwerde.text1"],
+          ["zeilen", "privacy.beschwerde.adresse"],
+          ["p", "privacy.beschwerde.text2"]
+        ]
+      },
+      {
+        "titel": "privacy.stand.title",
+        "inhalt": [["p", "privacy.stand.text"]]
+      }
+    ]
+  }
+}

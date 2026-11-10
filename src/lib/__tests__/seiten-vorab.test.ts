@@ -3,15 +3,15 @@ import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 // @ts-ignore Build-Skript ohne Typen
-import { baueSeite, pfadeDerSitemap, rueckfalltext, maskiere } from '../../../scripts/seiten-vorab.mjs'
+import { baueSeite, pfadeDerSitemap, rueckfalltext, maskiere, ladeInhalte } from '../../../scripts/seiten-vorab.mjs'
 import seitenMeta from '../seiten-meta.json'
-import seitenInhalt from '../../../scripts/seiten-inhalt.json'
 
 const wurzel = resolve(__dirname, '../../..')
 const vorlage = readFileSync(resolve(wurzel, 'index.html'), 'utf8')
 const sitemap = pfadeDerSitemap(readFileSync(resolve(wurzel, 'public/sitemap.xml'), 'utf8'))
 const meta = seitenMeta as Record<string, { title: string; description: string }>
-const inhalt = seitenInhalt as Record<string, { h1: string; absaetze: string[]; abschnitte: string[] }>
+// seiten-inhalt.json plus die Rechtsseiten, deren Text aus rechtsseiten.json und de.json kommt
+const inhalt = ladeInhalte() as Record<string, { h1: string; absaetze?: string[]; abschnitte?: string[] }>
 
 function zaehle(html: string, muster: RegExp) {
   return (html.match(muster) || []).length

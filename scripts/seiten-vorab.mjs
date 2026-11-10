@@ -11,6 +11,8 @@
 // Quellen:
 //   src/lib/seiten-meta.json    Titel und Beschreibung je Pfad (dieselbe Datei nutzt use-page-meta.ts)
 //   scripts/seiten-inhalt.json  Überschriften und Absätze je Pfad für den Rückfalltext
+//   src/lib/rechtsseiten.json   Aufbau von /impressum und /datenschutz (dieselbe Datei nutzt OtherPages.tsx);
+//   src/locales/de.json         ihr Wortlaut: Diese zwei Seiten stehen mit vollem Text im Rückfalltext
 //   public/sitemap.xml          jede Adresse der Sitemap muss eine Datei bekommen, sonst Abbruch
 //
 // Aufruf: node scripts/seiten-vorab.mjs [dist-Ordner]   (Teil von "npm run build")
@@ -39,19 +41,83 @@ function ersetzeGenauEinmal(html, muster, ersatz, name) {
   return html.replace(muster, () => ersatz)
 }
 
+// Voller Text einer Rechtsseite (Impressum, Datenschutzerklärung) aus denselben Quellen wie die
+// Anwendung: Aufbau aus src/lib/rechtsseiten.json, Wortlaut aus src/locales/de.json. Ohne JavaScript
+// kamen von diesen zwei Seiten nur rund 140 Wörter an (gemessen 10.11.2026); eine zweite Handkopie
+// des Textes in seiten-inhalt.json wäre bei der nächsten Änderung auseinandergelaufen.
+export function rechtsInhalt(pfad, struktur, texte) {
+  const seite = struktur[pfad]
+  if (!seite) throw new Error(`rechtsseiten.json: kein Eintrag für ${pfad}`)
+  const t = (schluessel) => {
+    if (typeof texte[schluessel] !== 'string' || texte[schluessel] === '') {
+      throw new Error(`de.json: Schlüssel "${schluessel}" fehlt (rechtsseiten.json, ${pfad})`)
+    }
+    return texte[schluessel]
+  }
+  const bloecke = []
+  for (const abschnitt of seite.abschnitte) {
+    bloecke.push(['h2', t(abschnitt.titel)])
+    for (const [art, schluessel] of abschnitt.inhalt) {
+      bloecke.push([art, t(schluessel)])
+    }
+  }
+  return { h1: t(seite.titel), bloecke }
+}
+
+// Rückfalltext je Pfad: seiten-inhalt.json für die gewöhnlichen Seiten, dazu die Rechtsseiten mit
+// vollem Text. Ein Pfad in beiden Quellen ist ein Fehler, sonst gäbe es wieder zwei Fassungen.
+export function ladeInhalte(wurzel = WURZEL) {
+  const inhalte = JSON.parse(readFileSync(join(wurzel, 'scripts/seiten-inhalt.json'), 'utf8'))
+  const struktur = JSON.parse(readFileSync(join(wurzel, 'src/lib/rechtsseiten.json'), 'utf8'))
+  const texte = JSON.parse(readFileSync(join(wurzel, 'src/locales/de.json'), 'utf8'))
+  for (const pfad of Object.keys(struktur)) {
+    if (inhalte[pfad]) {
+      throw new Error(`${pfad} steht in seiten-inhalt.json und in rechtsseiten.json, erlaubt ist nur rechtsseiten.json`)
+    }
+    inhalte[pfad] = rechtsInhalt(pfad, struktur, texte)
+  }
+  return inhalte
+}
+
+function vollerText(bloecke) {
+  const teile = []
+  for (const [art, text] of bloecke) {
+    if (art === 'h2' || art === 'h3') {
+      teile.push(`<${art}>${maskiere(text)}</${art}>`)
+    } else if (art === 'p') {
+      teile.push(`<p>${maskiere(text)}</p>`)
+    } else if (art === 'zeilen') {
+      teile.push(`<p>${text.split('\n').map(maskiere).join('<br>')}</p>`)
+    } else if (art === 'ul') {
+      teile.push('<ul>')
+      for (const punkt of text.split('\n')) {
+        teile.push(`  <li>${maskiere(punkt)}</li>`)
+      }
+      teile.push('</ul>')
+    } else {
+      throw new Error(`rechtsseiten.json: unbekannte Blockart "${art}"`)
+    }
+  }
+  return teile
+}
+
 export function rueckfalltext(inhalt, beschreibung) {
   const teile = []
   teile.push(`<h1>${maskiere(inhalt.h1)}</h1>`)
-  teile.push(`<p>${maskiere(beschreibung)}</p>`)
-  for (const absatz of inhalt.absaetze || []) {
-    teile.push(`<p>${maskiere(absatz)}</p>`)
-  }
-  if ((inhalt.abschnitte || []).length > 0) {
-    teile.push('<ul>')
-    for (const abschnitt of inhalt.abschnitte) {
-      teile.push(`  <li>${maskiere(abschnitt)}</li>`)
+  if (inhalt.bloecke) {
+    teile.push(...vollerText(inhalt.bloecke))
+  } else {
+    teile.push(`<p>${maskiere(beschreibung)}</p>`)
+    for (const absatz of inhalt.absaetze || []) {
+      teile.push(`<p>${maskiere(absatz)}</p>`)
     }
-    teile.push('</ul>')
+    if ((inhalt.abschnitte || []).length > 0) {
+      teile.push('<ul>')
+      for (const abschnitt of inhalt.abschnitte) {
+        teile.push(`  <li>${maskiere(abschnitt)}</li>`)
+      }
+      teile.push('</ul>')
+    }
   }
   teile.push(
     '<p><a href="/kontakt">Messestand anfragen</a> · <a href="/leistungen">Alle Leistungen</a> · ' +
@@ -151,7 +217,7 @@ export function pfadeDerSitemap(xml) {
 export function erzeuge(dist) {
   const vorlage = readFileSync(join(dist, 'index.html'), 'utf8')
   const meta = JSON.parse(readFileSync(join(WURZEL, 'src/lib/seiten-meta.json'), 'utf8'))
-  const inhalte = JSON.parse(readFileSync(join(WURZEL, 'scripts/seiten-inhalt.json'), 'utf8'))
+  const inhalte = ladeInhalte()
   const sitemap = pfadeDerSitemap(readFileSync(join(WURZEL, 'public/sitemap.xml'), 'utf8'))
 
   const fehlend = sitemap.filter((pfad) => pfad !== '/' && (!meta[pfad] || !inhalte[pfad]))
