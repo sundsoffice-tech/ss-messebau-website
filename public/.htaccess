@@ -166,7 +166,7 @@
   # script-src: 'unsafe-inline' kept because index.html has inline bootstrap scripts
   # connect-src: 'self' covers /api/ calls (same-origin); leads.sundsconnect.de = Lead-Endpunkt des S&S-Oekosystems (zweiter Zustellweg fuer Anfragen, siehe SCHNITTSTELLE-LEADS.md)
   # frame-src: https://www.google.com needed for Google Maps embed on /kontakt
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://media.istockphoto.com; connect-src 'self' https://api.sendgrid.com https://leads.sundsconnect.de; frame-src 'self' https://www.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://images.unsplash.com https://media.istockphoto.com; connect-src 'self' https://api.sendgrid.com https://leads.sundsconnect.de; frame-src 'self' https://www.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
 
   # Cross-Origin isolation
   Header always set Cross-Origin-Opener-Policy "same-origin"
@@ -223,7 +223,7 @@ ErrorDocument 500 /index.html
 </FilesMatch>
 
 # Deny access to sensitive files
-<FilesMatch "(^package\.json$|^package-lock\.json$|^composer\.json$|^composer\.lock$|^\.git|^\.env)">
+<FilesMatch "(^php\.ini$|^package\.json$|^package-lock\.json$|^composer\.json$|^composer\.lock$|^\.git|^\.env)">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>
