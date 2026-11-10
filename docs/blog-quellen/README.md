@@ -38,7 +38,7 @@ Recherche am TT.MM.JJJJ. Ein Satz, worum es im Beitrag geht.
 
 ## Gegenprüfung
 
-- TT.MM.JJJJ: Wer jede Behauptung gegen die Auszüge gehalten hat, mit Ergebnis (Zahl der geprüften Behauptungen, Zahl der Funde, was daraufhin geändert wurde).
+- TT.MM.JJJJ, Runde 1: Wer jede Behauptung gegen die Auszüge gehalten hat, mit Ergebnis in der Form „128 Aussagen geprüft, 111 trugen, 17 trugen nicht oder nur teilweise“, und was daraufhin geändert wurde.
 ```
 
 ## Regeln
@@ -53,13 +53,14 @@ Recherche am TT.MM.JJJJ. Ein Satz, worum es im Beitrag geht.
 
 ## Was der Test verlangt
 
-- Im Beitrag: die Überschrift `## Quellen` am Ende, darunter nur der Satz zum Abruftag und mindestens drei Verweise als Liste, jede Adresse mit `https://`; kein Bild von fremder Adresse (`imageUrl` leer).
+- Im Beitrag: die Überschrift `## Quellen` am Ende, darunter nur der Satz zum Abruftag im Wortlaut „Alle Dokumente abgerufen am 10. November 2026.“ (oder „Alle Seiten und Dokumente …“) und mindestens drei Verweise als Liste mit Bindestrich, jede Adresse mit `https://`; kein Bild von fremder Adresse (`imageUrl` leer).
 - Im Protokoll: mindestens drei Quellen, jede mit einmaliger Kennung `Q1`, `Q2`, …, Adresse, Stand der Seite, Abrufzeit `TT.MM.JJJJ HH:MM` und mindestens einem Auszug von 40 Zeichen; jeder Auszug in der Form `- Auszug: „…“` mit mindestens 8 Zeichen.
 - Jede Adresse, auf die der Beitrag verweist, steht im Protokoll. Eine Adresse mit Klammern wird mit `%28` und `%29` geschrieben.
 - Jede Zahl im Beitrag, im Titel, im Anreißer und in den vorab gebauten Absätzen steht in einem Auszug oder unter „Annahmen und eigene Rechnungen“. Zahlwörter gelten nicht als Zahl: Steht in der Quelle „sechs Wochen“, schreibt der Beitrag „sechs Wochen“. Für eine Zahl, die aus Quellenzahlen folgt oder zu einem Namen gehört (eine Norm, ein Format), ist die Zeile unter „Annahmen und eigene Rechnungen“ der Weg.
-- Der Abschnitt „Gegenprüfung“ nennt Datum, Zahl der geprüften Aussagen und Ergebnis. Ein Protokoll mit offener Gegenprüfung macht den Test rot.
+- Jedes volle Datum im Beitrag, im Titel, im Anreißer und in den vorab gebauten Absätzen (Tag, Monat und Jahr, etwa „27. Januar 2027“ oder „27.01.2027“) steht als Ganzes in einem Auszug oder unter „Annahmen und eigene Rechnungen“. Als dasselbe Datum gelten die Schreibweisen „27. Januar 2027“, „27.01.2027“, „27.1.2027“, „27.01.27“, „January 27, 2027“ und „27 January 2027“. Nennt die Quelle nur einen Zeitraum („18.–22.06.2027“), trägt sie den letzten Tag; der erste braucht eine Zeile unter den Annahmen.
+- Der Abschnitt „Gegenprüfung“ nennt ein Datum und die Zahl der geprüften Aussagen in der Formel „128 Aussagen geprüft“ oder „30 Stellen geprüft“. Rot wird der Test bei den Wendungen „steht aus“, „steht noch aus“, „ausstehend“, „läuft noch“, „nachgereicht“ und bei „: offen“ oder „: folgt“ hinter einer Runde.
 
-Die Zahlenprobe ist eine Formprüfung. Sie merkt nicht, wenn zwei belegte Zahlen vertauscht sind; dafür ist die Gegenprüfung da.
+Zahlen- und Datumsprobe sind Formprüfungen. Die Zahlenprobe merkt nicht, wenn zwei belegte Zahlen vertauscht sind, die Datumsprobe nicht, wenn ein belegtes Datum bei der falschen Messe steht; dafür ist die Gegenprüfung da.
 
 ## Wo ein Beitrag eingetragen ist
 
