@@ -3,6 +3,11 @@
  * Die Datenschutzerklärung sagt zu, dass der Browser Bilder nicht von einem fremden
  * Dienst lädt (`privacy.medien.text1`), und die CSP erlaubt nur `img-src 'self' data:`.
  * Verwendet werden nur eigene Projektfotos, keine Stockbilder.
+ *
+ * Hat ein Artikel kein eigenes Bild und seine Kategorie keinen Eintrag hier, gibt es
+ * kein Bild: Die Karte zeigt dann ein neutrales Feld mit Symbol (`BlogBildErsatz`),
+ * im Beitrag entfällt der Bildblock. Ein neues Bild kommt nur als eigenes Foto unter
+ * `public/images/` hierher.
  */
 
 const BLOG_CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
@@ -14,9 +19,9 @@ const BLOG_CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
   sonstiges: '/images/messetouren-roadshow-aufbau.jpeg',
 }
 
-export function getBlogFallbackImage(category: string): string {
-  return BLOG_CATEGORY_FALLBACK_IMAGES[category]
-    || BLOG_CATEGORY_FALLBACK_IMAGES['messebau']
+/** Das Bild der Kategorie; Groß- und Kleinschreibung zählt nicht. Ohne Eintrag gibt es keines. */
+export function getBlogFallbackImage(category: string): string | undefined {
+  return BLOG_CATEGORY_FALLBACK_IMAGES[category.trim().toLowerCase()]
 }
 
 /**
@@ -35,10 +40,10 @@ export function istEigenesBild(url: string | null | undefined): url is string {
 }
 
 /**
- * Bildadresse eines Artikels. Trägt ein Artikel aus der Verwaltung eine fremde
- * Adresse, zeigt die Seite das eigene Kategoriebild, statt den Browser des Besuchers
- * zu einem fremden Server zu schicken.
+ * Das Bild eines Artikels: sein eigenes, sonst das der Kategorie, sonst keines.
+ * Trägt ein Artikel aus der Verwaltung eine fremde Adresse, zählt sie nicht: Die Seite
+ * schickt den Browser des Besuchers nicht zu einem fremden Server.
  */
-export function blogBild(imageUrl: string | null | undefined, category: string): string {
-  return istEigenesBild(imageUrl) ? imageUrl : getBlogFallbackImage(category)
+export function blogBild(post: { imageUrl?: string | null; category: string }): string | undefined {
+  return istEigenesBild(post.imageUrl) ? post.imageUrl : getBlogFallbackImage(post.category)
 }

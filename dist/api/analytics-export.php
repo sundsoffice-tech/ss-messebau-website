@@ -56,6 +56,25 @@ if ($action === 'kpis') {
 }
 
 /* ================================================================== */
+/*  Ende des Zeitraums                                                  */
+/* ================================================================== */
+/**
+ * Obere Grenze für "ts <= :to": der Folgetag als bloßes Datum.
+ *
+ * "ts" ist Text und wird als Text verglichen. Gespeichert sind Zeitstempel im
+ * Format des Browsers (2026-11-10T14:03:27.512Z) und des Servers
+ * (2026-11-10T14:03:27+00:00), aus alter Zeit auch mit Leerzeichen. Die frühere
+ * Grenze "<Tag> 23:59:59" lag im Textvergleich vor jedem Zeitstempel mit "T"
+ * (das Leerzeichen sortiert vor "T"): Der letzte Tag des Zeitraums fehlte in
+ * allen Kennzahlen bis auf die Zeilen im alten Format. Das bloße Datum des
+ * Folgetags liegt hinter jedem Zeitstempel des letzten Tages, gleich in
+ * welchem Format, und vor jedem des Folgetags (der ist länger als das Datum).
+ */
+function zeitraumEnde(string $to): string {
+    return gmdate('Y-m-d', strtotime($to . ' 00:00:00 UTC') + 86400);
+}
+
+/* ================================================================== */
 /*  Helper: count events by type within a date range                   */
 /* ================================================================== */
 function countEventsByType(PDO $db, string $from, string $toEnd, string $type): int {
@@ -86,7 +105,7 @@ function countTotal(PDO $db, string $from, string $toEnd): int {
 /*  KPI Handler - Enterprise Grade                                      */
 /* ================================================================== */
 function handleKPIs(PDO $db, string $from, string $to, ?string $eventType): void {
-    $toEnd = $to . ' 23:59:59';
+    $toEnd = zeitraumEnde($to);
     $baseParams = [':from' => $from, ':to' => $toEnd];
 
     // --- Calculate comparison period (same duration, previous period) ---
@@ -95,7 +114,7 @@ function handleKPIs(PDO $db, string $from, string $to, ?string $eventType): void
     $rangeDays = max(1, ($toTs - $fromTs) / 86400);
     $prevFrom = date('Y-m-d', $fromTs - ($rangeDays * 86400));
     $prevTo = date('Y-m-d', $fromTs - 86400);
-    $prevToEnd = $prevTo . ' 23:59:59';
+    $prevToEnd = zeitraumEnde($prevTo);
 
     // --- Core metrics ---
     $totalEvents = countTotal($db, $from, $toEnd);
@@ -127,16 +146,24 @@ function handleKPIs(PDO $db, string $from, string $to, ?string $eventType): void
     ];
 
     // --- Bounce rate ---
+    // Absprung: Sitzung mit genau einem Seitenaufruf (page_view) im Zeitraum,
+    // bezogen auf alle Sitzungen mit mindestens einem Seitenaufruf.
+    // Die frühere Zählung (Sitzungen mit genau einem Ereignis außer Herzschlag,
+    // Sichtbarkeit, Leistung und Fehler) traf keinen Besuch mit einer Seite:
+    // Der erzeugt immer session_start und page_view, also mindestens zwei. Sie
+    // zählte Bruchstücke von Sitzungen (Zeitraumgrenze, verlorene Ereignisse).
     $stmt = $db->prepare("
-        SELECT COUNT(*) FROM (
-            SELECT session_id FROM analytics_events
-            WHERE ts >= :from AND ts <= :to AND event NOT IN ('heartbeat','tab_visibility','performance','error')
-            GROUP BY session_id HAVING COUNT(*) = 1
+        SELECT COUNT(*) AS mit_aufruf, COALESCE(SUM(CASE WHEN aufrufe = 1 THEN 1 ELSE 0 END), 0) AS mit_einem FROM (
+            SELECT session_id, COUNT(*) AS aufrufe FROM analytics_events
+            WHERE ts >= :from AND ts <= :to AND event = 'page_view'
+            GROUP BY session_id
         )
     ");
     $stmt->execute($baseParams);
-    $singleEventSessions = (int)$stmt->fetchColumn();
-    $bounceRate = $uniqueSessions > 0 ? round(($singleEventSessions / $uniqueSessions) * 100, 1) : 0;
+    $absprung = $stmt->fetch();
+    $pageViewSessions = (int)($absprung['mit_aufruf'] ?? 0);
+    $bounceSessions = (int)($absprung['mit_einem'] ?? 0);
+    $bounceRate = $pageViewSessions > 0 ? round(($bounceSessions / $pageViewSessions) * 100, 1) : 0;
 
     // Average events per session
     $avgSessionEvents = $uniqueSessions > 0 ? round($totalEvents / $uniqueSessions, 1) : 0;
@@ -347,6 +374,19 @@ function handleKPIs(PDO $db, string $from, string $to, ?string $eventType): void
     $stmt->execute($baseParams);
     $leadSources = array_map(fn($r) => ['source' => $r['source'], 'conversions' => (int)$r['cnt']], $stmt->fetchAll());
 
+    // --- Sitzungen und Anfragen je Quelle und je Kampagne, über den Sitzungsstart ---
+    // "Top Quellen", "Top Kampagnen" und "Lead-Quellen" oben zählen Ereignisse,
+    // solange die Adresse die Angabe trug: Eine Sitzung wiegt je nach Landeseite
+    // und Verweildauer 2 bis 29, und ein zweiter Kampagnenklick im selben Tab
+    // zählt unter zwei Quellen. Hier gilt je Sitzung die Quelle ihres
+    // session_start; eine Anfrage (form_submit) zählt für die Quelle der
+    // Sitzung, in der sie abgeschickt wurde, auch wenn die Adresse die Angabe
+    // beim Absenden nicht mehr trug.
+    $sessionsBySource = sitzungenJeAngabe($db, $baseParams, 'utm_source', 'source');
+    $leadsBySource = anfragenJeAngabe($db, $baseParams, 'utm_source', 'source');
+    $sessionsByCampaign = sitzungenJeAngabe($db, $baseParams, 'utm_campaign', 'campaign');
+    $leadsByCampaign = anfragenJeAngabe($db, $baseParams, 'utm_campaign', 'campaign');
+
     // --- Performance metrics ---
     $perfMetrics = calculatePerformanceMetrics($db, $baseParams);
 
@@ -394,7 +434,48 @@ function handleKPIs(PDO $db, string $from, string $to, ?string $eventType): void
         'exit_intents' => $exitIntents,
         'performance_metrics' => $perfMetrics,
         'top_errors' => $topErrors,
+        // Neu, hinter den bisherigen Feldern (die bleiben, wie sie sind):
+        'bounce_sessions' => $bounceSessions,
+        'page_view_sessions' => $pageViewSessions,
+        'sessions_by_source' => $sessionsBySource,
+        'leads_by_source' => $leadsBySource,
+        'sessions_by_campaign' => $sessionsByCampaign,
+        'leads_by_campaign' => $leadsByCampaign,
     ]);
+}
+
+/**
+ * Sitzungen je Quelle oder Kampagne: gezählt wird die Sitzung bei der Angabe
+ * ihres session_start im Zeitraum. $spalte kommt nur aus dem Code oben.
+ */
+function sitzungenJeAngabe(PDO $db, array $params, string $spalte, string $feld): array {
+    $stmt = $db->prepare("
+        SELECT $spalte AS angabe, COUNT(DISTINCT session_id) AS cnt FROM analytics_events
+        WHERE ts >= :from AND ts <= :to AND event = 'session_start'
+        AND $spalte IS NOT NULL AND $spalte != ''
+        GROUP BY $spalte ORDER BY cnt DESC, angabe ASC LIMIT 10
+    ");
+    $stmt->execute($params);
+    return array_map(fn($r) => [$feld => $r['angabe'], 'sessions' => (int)$r['cnt']], $stmt->fetchAll());
+}
+
+/**
+ * Anfragen je Quelle oder Kampagne: Sitzungen mit mindestens einem form_submit
+ * im Zeitraum, gezählt bei der Angabe ihres session_start (der auch vor dem
+ * Zeitraum liegen darf). $spalte kommt nur aus dem Code oben.
+ */
+function anfragenJeAngabe(PDO $db, array $params, string $spalte, string $feld): array {
+    $stmt = $db->prepare("
+        SELECT s.$spalte AS angabe, COUNT(DISTINCT f.session_id) AS cnt
+        FROM analytics_events f
+        JOIN analytics_events s ON s.session_id = f.session_id AND s.event = 'session_start'
+        WHERE f.event = 'form_submit' AND f.ts >= :from AND f.ts <= :to
+        AND f.session_id IS NOT NULL AND f.session_id != ''
+        AND s.$spalte IS NOT NULL AND s.$spalte != ''
+        GROUP BY s.$spalte ORDER BY cnt DESC, angabe ASC LIMIT 10
+    ");
+    $stmt->execute($params);
+    return array_map(fn($r) => [$feld => $r['angabe'], 'conversions' => (int)$r['cnt']], $stmt->fetchAll());
 }
 
 /* ================================================================== */
@@ -649,7 +730,7 @@ function calculateNavigationPaths(PDO $db, array $params): array {
     $stmt = $db->prepare("
         SELECT session_id, url, ts FROM analytics_events
         WHERE ts >= :from AND ts <= :to AND event = 'page_view'
-        ORDER BY session_id, ts ASC
+        ORDER BY session_id, ts ASC, id ASC
         LIMIT 5000
     ");
     $stmt->execute($params);
@@ -775,7 +856,7 @@ function calculateTopErrors(PDO $db, array $params): array {
 /*  Export Handler                                                      */
 /* ================================================================== */
 function handleExport(PDO $db, string $from, string $to, ?string $eventType, string $format, int $limit): void {
-    $toEnd = $to . ' 23:59:59';
+    $toEnd = zeitraumEnde($to);
     $sql = "SELECT event, ts, session_id, visitor_id, url, referrer, utm_source, utm_medium, utm_campaign, utm_content, utm_term, props
             FROM analytics_events WHERE ts >= :from AND ts <= :to";
     $params = [':from' => $from, ':to' => $toEnd];

@@ -117,7 +117,7 @@ export const NEWS_ITEMS: NewsItem[] = [
   {
     id: 'news-2',
     title: 'Neues Nachhaltigkeitskonzept für Messestände',
-    excerpt: 'Ab sofort bieten wir ein erweitertes Nachhaltigkeitskonzept: Wiederverwendbare Systemelemente, CO₂-reduzierte Materialien und zertifizierte Recycling-Partner.',
+    excerpt: 'Unser Konzept für Messestände: wiederverwendbare Systemelemente, die wir einlagern und wieder einsetzen.',
     date: '2025-06-01',
     category: 'Nachhaltigkeit',
   },

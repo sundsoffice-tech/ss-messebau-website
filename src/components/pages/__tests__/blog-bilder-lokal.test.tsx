@@ -39,7 +39,7 @@ vi.mock('@/lib/admin-content-service', async (importOriginal) => {
   }
 })
 
-const KATEGORIEN = ['messebau', 'messen', 'nachhaltigkeit', 'service', 'branchen', 'sonstiges', 'gibt-es-nicht']
+const KATEGORIEN = ['messebau', 'messen', 'nachhaltigkeit', 'service', 'branchen', 'sonstiges']
 
 beforeAll(() => {
   installBrowserShims()
@@ -60,6 +60,10 @@ describe('Blogbilder liegen auf dem eigenen Server', () => {
       expect(existsSync(`public${adresse}`), `public${adresse} fehlt`).toBe(true)
     }
     expect(existsSync('public/images/gibt-es-nicht.jpeg')).toBe(false)
+    // Eine Kategorie ohne Eintrag bekommt kein Bild (die Karte zeigt dann ein neutrales Feld);
+    // Groß- und Kleinschreibung der Kategorie zählt nicht.
+    expect(getBlogFallbackImage('gibt-es-nicht')).toBeUndefined()
+    expect(getBlogFallbackImage('Service')).toBe(getBlogFallbackImage('service'))
     // Generiertes Titelbild mit fremdem Logo bleibt draußen.
     expect(adressen).not.toContain('/images/hero-messebau-startseite.jpg')
     // Sechs verschiedene Bilder in der Übersicht.
@@ -75,9 +79,11 @@ describe('Blogbilder liegen auf dem eigenen Server', () => {
     expect(istEigenesBild('/images/messetouren-roadshow-aufbau.jpeg')).toBe(true)
     expect(istEigenesBild(`${window.location.origin}/images/eigenes.jpg`)).toBe(true)
 
-    expect(blogBild(FREMD, 'messen')).toBe(getBlogFallbackImage('messen'))
-    expect(blogBild('', 'service')).toBe(getBlogFallbackImage('service'))
-    expect(blogBild('/images/eigenes.jpg', 'messen')).toBe('/images/eigenes.jpg')
+    expect(blogBild({ imageUrl: FREMD, category: 'messen' })).toBe(getBlogFallbackImage('messen'))
+    expect(blogBild({ imageUrl: '', category: 'service' })).toBe(getBlogFallbackImage('service'))
+    expect(blogBild({ imageUrl: '/images/eigenes.jpg', category: 'messen' })).toBe('/images/eigenes.jpg')
+    // Fremde Adresse in einer Kategorie ohne eigenes Bild: kein Bild, nie die fremde Adresse
+    expect(blogBild({ imageUrl: FREMD, category: 'gibt-es-nicht' })).toBeUndefined()
   })
 
   it('auf der gerenderten Blogseite zeigt kein Bild auf einen fremden Host', async () => {

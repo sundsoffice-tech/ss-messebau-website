@@ -6,11 +6,13 @@ interface Fact {
 }
 
 // Die Zahlen stehen fest da und zählen nicht hoch: Wer schnell rollt, las sonst Zwischenwerte.
+// Keine Kachel mit der Kennzahl „1“ (Fabrice 10.11.2026): Eine Eins macht keinen Eindruck; was sich nicht
+// als starke, belegbare Zahl sagen lässt, steht als Aussage ohne Ziffer da.
 const facts: Fact[] = [
   { value: '48h', labelKey: 'facts.48h' },
   { value: '200m²', labelKey: 'facts.200m' },
   { value: '3', labelKey: 'facts.3sectors' },
-  { value: '1', labelKey: 'facts.contact' },
+  { value: 'A–Z', labelKey: 'facts.fullservice' },
 ]
 
 export function FactBar() {
