@@ -62,7 +62,12 @@ function forget(): void {
  */
 export function captureUtmParams(): void {
   const consent = getConsent()
-  if (consent === 'denied') return
+  if (consent === 'denied') {
+    // Ein Eintrag aus einer früheren Zustimmung kann noch liegen, wenn die Ablehnung in einem
+    // anderen Tab fiel, während dieser nicht geladen war. Er wird hier mit vergessen.
+    forget()
+    return
+  }
   const utm = readFromUrl()
   if (!hasAny(utm)) return
   inMemory = utm
@@ -84,7 +89,8 @@ export function getUtmParams(): UtmParams {
   if (consent === 'granted') {
     try {
       const raw = sessionStorage.getItem(UTM_STORAGE_KEY)
-      if (raw) return JSON.parse(raw) as UtmParams
+      const gespeichert: unknown = raw ? JSON.parse(raw) : null
+      if (gespeichert && typeof gespeichert === 'object') return gespeichert as UtmParams
     } catch { /* ignore */ }
   }
   return {}
@@ -106,6 +112,11 @@ if (typeof window !== 'undefined') {
   window.addEventListener('storage', (ereignis) => {
     const name = ereignis.key
     if (name !== null && name !== CONSENT_STORAGE_KEY) return
-    if (getConsent() === 'denied') forget()
+    // Maßgeblich ist der gemeldete Wert, nicht der Zustand beim Verarbeiten: Ein Tab im
+    // Hintergrund kann das Ereignis erst bekommen, nachdem wieder zugestimmt wurde. Vergessen
+    // wird bei Ablehnung und wenn die Entscheidung entfernt oder der Speicher geleert wurde;
+    // nur eine gemeldete Zustimmung lässt die gemerkte Quelle stehen.
+    const zugestimmt = name === null ? getConsent() === 'granted' : ereignis.newValue === 'granted'
+    if (!zugestimmt) forget()
   })
 }
