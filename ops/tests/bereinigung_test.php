@@ -1256,7 +1256,7 @@ if ($fpm === null) {
 // ─── M: Abbruch im langen Datenbankbefehl ───────────────────────────────────
 // Mit Portionen gibt es im Betrieb keinen langen Befehl mehr. Der Fall stellt
 // ihn künstlich her (eine einzige Portion über die ganze Altlast, Zeitgrenze
-// 1 s Rechenzeit) und belegt, was dann geschieht: PHP beendet den Arbeiter,
+// 2 s Rechenzeit) und belegt, was dann geschieht: PHP beendet den Arbeiter,
 // die Datenbank bleibt heil, und der nächste Anlauf erkennt den Abbruch.
 echo "\nM  Abbruch mitten in einem langen Datenbankbefehl (nur unter PHP-FPM)\n";
 $u = $fpm === null ? null : starteFpm($apiQuelle, $fpm);
@@ -1266,19 +1266,16 @@ if ($u === null) {
 } else {
     schema($u);
     $soll = fuelle($u);
-    // So viele Zeilen, dass der eine DELETE länger rechnet als Zeitgrenze (1 s)
-    // plus Nachfrist von PHP (hard_timeout, 2 s): gemessen auf hel1 rund
-    // 4 µs je Zeile, 600.000 Zeilen waren in 2,8 s durch.
+    // So viele Zeilen, dass der eine DELETE länger rechnet als die Zeitgrenze
+    // im Test (2 s) plus Nachfrist von PHP (hard_timeout, 2 s): 600.000 Zeilen
+    // waren auf hel1 in 2,8 s durch, 2,5 Mio. brauchen ein Mehrfaches.
     $grosseAltlast = 2500000;
     altlast($u, $grosseAltlast);
-    $original = [];
-    foreach (['analytics-cleanup.php', 'bereinigung-anstoss.php'] as $datei) {
-        $original[$datei] = is_file($u['api'] . '/' . $datei) ? (string)file_get_contents($u['api'] . '/' . $datei) : '';
-    }
+    // Das Zeitbudget bleibt bei 3 s: Es wird nur zwischen Portionen geprüft und
+    // hält den einen langen Befehl deshalb nicht auf.
     if (ersetzeAlle($u, [
         ['analytics-cleanup.php', '$portionZeilen = 500;', '$portionZeilen = 100000000;'],
-        ['bereinigung-anstoss.php', "define('BEREINIGUNG_ZEITGRENZE', 10);", "define('BEREINIGUNG_ZEITGRENZE', 1);"],
-        ['bereinigung-anstoss.php', "define('BEREINIGUNG_BUDGET_MS', 3000);", "define('BEREINIGUNG_BUDGET_MS', 120000);"],
+        ['bereinigung-anstoss.php', "define('BEREINIGUNG_ZEITGRENZE', 10);", "define('BEREINIGUNG_ZEITGRENZE', 2);"],
     ])) {
         $t0 = microtime(true);
         $a = fcgi($u, 'health.php');
@@ -1289,7 +1286,7 @@ if ($u === null) {
         $protokoll = (string)@file_get_contents($u['log']) . (string)@file_get_contents($u['wurzel'] . '/fpm.aus');
         $hart = strpos($protokoll, 'terminated') !== false || strpos($protokoll, 'code 124') !== false;
         $weich = strpos($protokoll, 'Maximum execution time') !== false;
-        printf("HINWEIS ein DELETE über %d Zeilen, Zeitgrenze 1 s Rechenzeit: Sperre nach %.1f s frei; im Protokoll: %s\n",
+        printf("HINWEIS ein DELETE über %d Zeilen, Zeitgrenze 2 s Rechenzeit: Sperre nach %.1f s frei; im Protokoll: %s\n",
             $grosseAltlast, $bisEnde,
             $hart ? 'harter Abbruch (Prozess beendet)' : ($weich ? 'Abbruch nach dem Ende des Befehls' : 'kein Abbruch gefunden'));
         pruefe('der Lauf ist zu Ende (Sperre frei) und PHP hat ihn an der Zeitgrenze abgebrochen', $frei && ($hart || $weich),
@@ -1303,10 +1300,14 @@ if ($u === null) {
         $b = fcgi($u, 'health.php');
         pruefe(sprintf('PHP-FPM lebt: der nächste Abruf antwortet 200 nach %.0f ms, ohne neuen Lauf (Pause)', ($b['dauer'] ?? 99) * 1000),
             $b['status'] === 200 && ($b['dauer'] ?? 99) < 2.0 && markeIst($u, 'laeuft', 1), kurz($b) . ' ' . markeText($u));
-        // Zurück auf den echten Stand (Portionen zu 500, Budget 3 s), Pause abgelaufen.
-        foreach ($original as $datei => $inhalt) {
-            file_put_contents($u['api'] . '/' . $datei, $inhalt);
-        }
+        // Zurück auf Portionen zu 500 Zeilen, Pause abgelaufen. Die Zeitgrenze
+        // bleibt bei 2 s Rechenzeit; ein Lauf in Portionen mit 3 s Budget auf
+        // der Wanduhr rechnet deutlich weniger (gemessen rund 5 ms je Portion).
+        // Drei Sekunden Abstand, weil PHP-FPM in diesem Abbild eine eben
+        // geänderte Datei sonst noch in der alten Fassung ausführte (gemessen
+        // 10.11.2026 an bereinigung-anstoss.php; Ursache nicht untersucht).
+        copy($apiQuelle . '/analytics-cleanup.php', $u['api'] . '/analytics-cleanup.php');
+        sleep(3);
         $m = marke($u) ?? [];
         $m['zeit'] = time() - 601;
         setzeMarke($u, $m);
