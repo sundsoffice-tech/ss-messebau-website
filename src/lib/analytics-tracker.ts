@@ -503,7 +503,12 @@ function inferGeoFromTimezone(tz: string): { country: string; region: string } {
   }
 }
 
-function getDeviceProps(): Record<string, string | number | boolean> {
+/**
+ * `fruehereBesuche` und `letzterBesuch` sind der Stand VOR diesem Sitzungsstart.
+ * Vorher wurde erst hochgezählt und dann gelesen: `is_returning` war bei jedem
+ * Sitzungsstart wahr, `last_visit` trug den Zeitpunkt des laufenden Besuchs.
+ */
+function getDeviceProps(fruehereBesuche: number, letzterBesuch: string | null): Record<string, string | number | boolean> {
   const tz = detectTimezone()
   const geo = inferGeoFromTimezone(tz)
   return {
@@ -528,9 +533,9 @@ function getDeviceProps(): Record<string, string | number | boolean> {
     cookies_enabled: detectCookiesEnabled(),
     do_not_track: detectDoNotTrack(),
     ad_blocker: detectAdBlocker(),
-    visit_count: getVisitCount(),
-    is_returning: getVisitCount() > 0,
-    last_visit: getLastVisitDate() || '',
+    visit_count: fruehereBesuche + 1,
+    is_returning: fruehereBesuche > 0,
+    last_visit: letzterBesuch || '',
     page_count: 0,
   }
 }
@@ -550,8 +555,11 @@ function sendSessionStartIfNeeded(isEntry: boolean): void {
   try {
     if (!canTrack('session_start')) return
     if (sessionStorage.getItem(SESSION_START_KEY)) return
+    // Erst lesen, dann zählen: Das Ereignis trägt den Stand vor diesem Besuch.
+    const fruehereBesuche = getVisitCount()
+    const letzterBesuch = getLastVisitDate()
     incrementVisitCount()
-    if (!enqueueEvent('session_start', getDeviceProps(), isEntry)) return
+    if (!enqueueEvent('session_start', getDeviceProps(fruehereBesuche, letzterBesuch), isEntry)) return
     sessionStorage.setItem(SESSION_START_KEY, '1')
     // Einmal je Seitenaufruf: Nach Widerruf und erneuter Zustimmung beginnt eine
     // neue Sitzung, die Lauscher hängen aber schon und dürfen nicht doppelt zählen.
@@ -690,13 +698,22 @@ function collectPerformanceMetrics(): void {
 
 let maxScrollDepth = 0
 let scrollDepthReported = new Set<number>()
+// Die Lauscher hängen je Seite im Browser genau einmal. `trackPageView` ruft die
+// beiden init-Funktionen bei jedem Seitenaufruf; ohne diese Merker kam mit jedem
+// Seitenwechsel ein weiterer Satz Lauscher dazu, `tab_visibility` und
+// `page_engagement` gingen dann mehrfach hinaus und die Verweildauer zählte doppelt.
+let scrollLauscherHaengt = false
+let engagementLauscherHaengen = false
 
 export function initScrollDepthTracking(): void {
   if (typeof window === 'undefined') return
 
   const thresholds = [25, 50, 75, 90, 100]
+  // Je Seitenaufruf beginnt die Messung neu
   maxScrollDepth = 0
   scrollDepthReported = new Set<number>()
+  if (scrollLauscherHaengt) return
+  scrollLauscherHaengt = true
 
   const handleScroll = () => {
     const scrollTop = window.scrollY || document.documentElement.scrollTop
@@ -746,9 +763,12 @@ let isEngaged = true
 export function initEngagementTracking(): void {
   if (typeof window === 'undefined') return
 
+  // Je Seitenaufruf beginnt die Messung neu
   engagementStartTime = Date.now()
   totalEngagementTime = 0
   isEngaged = true
+  if (engagementLauscherHaengen) return
+  engagementLauscherHaengen = true
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
