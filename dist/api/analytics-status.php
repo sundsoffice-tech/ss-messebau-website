@@ -67,6 +67,21 @@ foreach ($configRows as $r) {
     $configMap[$r['config_key']] = $r['config_value'];
 }
 
+// Zahlen des Zuflusses von heute (UTC) aus der Zähldatei von collect.php:
+// angenommen (gespeichert), verworfen (über dem Gesamtdeckel), dichteste Minute.
+// Dazu unter "statistik_zaehler", was über dem Anteil einer Adresse lag, wie
+// oft "props" zu groß war, die geltenden Grenzen, der letzte Tag mit Verkehr
+// und der Zustand, den health.php zeigt. null heißt: Zähldatei nicht nutzbar.
+$zufluss = ['angenommen_tag' => null, 'verworfen_tag' => null, 'spitze_tag' => null];
+try {
+    if ((@include_once __DIR__ . '/statistik-zaehler.php') !== false
+        && function_exists('statistikTageszahlen')) {
+        $zufluss = statistikTageszahlen();
+    }
+} catch (\Throwable $e) {
+    error_log('Statistik: Tageszahlen für analytics-status.php nicht lesbar: ' . $e->getMessage());
+}
+
 echo json_encode([
     'total_events' => $totalEvents,
     'oldest_event' => $oldest ?: null,
@@ -78,4 +93,8 @@ echo json_encode([
     'unique_visitors_total' => $uniqueVisitorsTotal,
     'events_today' => $eventsToday,
     'sessions_today' => $sessionsToday,
+    'angenommen_tag' => $zufluss['angenommen_tag'] ?? null,
+    'verworfen_tag' => $zufluss['verworfen_tag'] ?? null,
+    'spitze_tag' => $zufluss['spitze_tag'] ?? null,
+    'statistik_zaehler' => array_diff_key($zufluss, ['angenommen_tag' => 1, 'verworfen_tag' => 1, 'spitze_tag' => 1]) ?: null,
 ]);
