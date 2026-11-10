@@ -4,7 +4,8 @@
 # Aufruf im Container php:8.3-cli (oder php:8.3-fpm, dann läuft auch Fall H):
 #   sh <neu>/ops/tests/bereinigung_lauf.sh <neu> [<main> [<zusammen>]]
 #   <neu>       Baum mit dem zu prüfenden Stand (public/api und ops/tests)
-#   <main>      Baum mit public/api von main für die Rotprobe (optional)
+#   <main>      Baum mit public/api des Vergleichsstands für die Rotprobe, etwa
+#               main oder der Vorgänger-PR (optional)
 #   <zusammen>  Baum, in dem der Stand mit einem zweiten Zweig verschmolzen ist,
 #               etwa mit PR #238 (optional); geprüft wird mit dem Test aus <neu>
 #
@@ -37,7 +38,7 @@ RC_NEU=$?
 RC_MAIN=-
 if [ -n "$MAIN" ]; then
     echo
-    echo "== Rotprobe: derselbe Test gegen public/api von main (erwartet: Exit 1) =="
+    echo "== Rotprobe: derselbe Test gegen public/api des Vergleichsstands $MAIN (erwartet: Exit 1) =="
     php "$NEU/ops/tests/bereinigung_test.php" --ohne-netz "$MAIN/public/api"
     RC_MAIN=$?
 fi
