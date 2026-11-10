@@ -15,11 +15,12 @@
  * Benutzer an, löscht nichts und schreibt das Passwort in keine Datei und kein
  * Protokoll.
  *
- * Bestehende Anmeldungen im Admin-Bereich bleiben bis zu ihrem Ablauf gültig.
+ * Bestehende Anmeldungen im Admin-Bereich bleiben gültig, solange sie benutzt
+ * werden; das Werkzeug beendet sie nicht.
  *
  * Aufrufe (nur vom Einstieg):
- *   php admin-passwort-setzen.php liste            eine Zeile je Benutzername
- *   php admin-passwort-setzen.php setzen <name>    liest zwei Zeilen: Passwort, Wiederholung
+ *   php admin-passwort-setzen.php liste     eine Zeile je Benutzername
+ *   php admin-passwort-setzen.php setzen    liest drei Zeilen: Benutzername, Passwort, Wiederholung
  */
 
 if (PHP_SAPI !== 'cli') {
@@ -125,7 +126,13 @@ try {
         if (!function_exists('stream_isatty') || !stream_isatty(STDOUT)) {
             abbruch('Dieses Werkzeug läuft nur in einem Terminal, in dem ein Mensch tippt.');
         }
-        $name = (string) ($argv[2] ?? '');
+        // Die Eingaben kommen vom Einstieg über ein Rohr. Von Hand am Terminal gestartet stünde
+        // das Passwort beim Tippen auf dem Schirm: Dann wird gar nicht erst gelesen.
+        if (stream_isatty(STDIN)) {
+            abbruch('Bitte den Einstieg starten: bash admin-passwort-setzen.sh');
+        }
+        // Auch der Benutzername kommt über das Rohr, nicht als Argument (Prozessliste).
+        $name = zeileLesen();
         $db = datenbank();
         $treffer = array_values(array_filter(admins($db), static function (array $zeile) use ($name): bool {
             return $zeile['username'] === $name;
