@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
     <!-- Security: CSP meta fallback (primary CSP is set via .htaccess) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://images.unsplash.com https://media.istockphoto.com; connect-src 'self' https://api.github.com https://api.sendgrid.com https://leads.sundsconnect.de https://*.amazonaws.com https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://www.google.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://images.unsplash.com https://media.istockphoto.com; connect-src 'self' https://api.sendgrid.com https://leads.sundsconnect.de; frame-src 'self' https://www.google.com; base-uri 'self'; form-action 'self'; object-src 'none'" />
     <title>Was kostet ein Messestand von 20 bis 200 m²? Der umfassende … | S&amp;S Messebau</title>
     <meta name="description" content="Transparente Kostenaufstellung mit realen Marktdaten: Von der Standmiete bis zur kompletten Montage – erfahren Sie, was ein professioneller Messestand …" />
     <meta name="keywords" content="Messebau, Messebau NRW, Messestand, Eventbau, Ladenbau, Full-Service Messebau, Messebau Düsseldorf, Messebau Köln" />
@@ -198,12 +198,21 @@
     }
     </script>
 
-    <!-- Performance: Preconnect für externe Ressourcen -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Schrift Inter liegt auf dem eigenen Server (public/fonts), kein Abruf bei Google -->
+    <link rel="preload" href="/fonts/inter-latin-variabel.woff2" as="font" type="font/woff2" crossorigin>
     
     <!-- Performance: Kritisches CSS inline -->
     <style>
+      /* Inter (SIL Open Font License), variable Datei fuer 400 bis 700, lateinischer Zeichensatz */
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400 700;
+        font-display: swap;
+        src: url('/fonts/inter-latin-variabel.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+
       /* Font fallback metrics to prevent CLS during font swap */
       @font-face {
         font-family: 'Inter-fallback';
@@ -284,23 +293,8 @@
       }, 8000);
     </script>
 
-    <!-- Fonts mit optimiertem Loading (swap für schnelleres Rendering) -->
-    <link 
-      rel="preload" 
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&subset=latin"
-    >
-    <link 
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&subset=latin" 
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-    >
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    </noscript>
     
-  <script type="module" crossorigin src="/assets/index-CIwLDTNA.js"></script>
+  <script type="module" crossorigin src="/assets/index-BMhMoONZ.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor-react-DjPCVcPo.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-ui-qNHxpggR.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-motion-CcmrN6dh.js">
