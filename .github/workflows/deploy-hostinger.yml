@@ -213,6 +213,14 @@ jobs:
           STATUS=$(curl -s --max-time 20 -o /dev/null -w '%{http_code}' "${LIVE_URL}api/health.php" || true)
           echo "/api/health.php: Status ${STATUS}"
           [ "$STATUS" = "200" ] || FEHLER=1
+          # Dateien duerfen nicht als HTML zurueckkommen (Fall: die Dateipruefung der neuen Regel
+          # traefe auf dem Server immer zu, dann waere die Seite weiss und die Adressen oben trotzdem 200).
+          TYP=$(curl -s --max-time 20 -o /dev/null -w '%{http_code} %{content_type}' "${LIVE_URL}${ERWARTET}" || true)
+          echo "/${ERWARTET}: ${TYP}"
+          case "$TYP" in "200 "*javascript*) ;; *) FEHLER=1 ;; esac
+          TYP=$(curl -s --max-time 20 -o /dev/null -w '%{http_code} %{content_type}' "${LIVE_URL}robots.txt" || true)
+          echo "/robots.txt: ${TYP}"
+          case "$TYP" in "200 text/plain"*) ;; *) FEHLER=1 ;; esac
           if [ "$FEHLER" != "0" ]; then
             echo "::error::Seiten-Dateien wirken live nicht wie in der Apache-Probe. Besucher sehen die Seite weiter (Auffangregel), Suchroboter den alten Kopf. Rueckweg: Merge-Commit auf main zuruecknehmen (git revert), der Deploy laeuft dann von selbst."
             exit 1
