@@ -66,6 +66,15 @@ ErrorDocument 500 default
     </IfModule>
 </Files>
 
+# bereinigung-anstoss.php wird nur eingebunden (health.php, collect.php).
+# Direkt aufgerufen antwortet die Datei selbst mit 404; das hier ist die
+# zweite Schranke davor.
+<Files "bereinigung-anstoss.php">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</Files>
+
 # Deny access to SQLite database files
 <FilesMatch "\.(sqlite|sqlite3|db)$">
     <IfModule mod_authz_core.c>

@@ -66,6 +66,23 @@ LEADS_ERGAENZUNG = {
     },
 }
 
+# Die Bereinigung der Statistik (Messzeilen nach ihrer Frist, Zaehldateien mit
+# IP-Bezug) laeuft auf der Website von selbst, angestossen aus health.php und
+# collect.php. health.php zeigt ihren Zustand als "bereinigung": "ok" oder
+# "ueberfaellig" (letzter vollstaendiger Lauf aelter als zwei Tage).
+# Dauerhaft bleibt das Ziel "Messebau-Website Bereinigung" nur mit dieser Zeile
+# in leadmaschine/zentrale/waechter/ueberwachung.tsv (Tabulator zwischen den
+# Spalten): ziele-verteilen.sh baut die ziele.json alle 15 Minuten aus der TSV
+# neu. Die Adresse traegt ?ziel=bereinigung, weil die Verlustpruefung dort
+# Ziele nach Typ und Adresse ordnet und eine zweite Zeile mit der Adresse von
+# "Messebau-Website (Hostinger)" als Verlust meldet; health.php beachtet den
+# Zusatz nicht.
+ZIELE_VERTEILER = "/opt/sunds-leadmaschine/ziele-verteilen.sh"
+TSV_ZEILE_BEREINIGUNG = "	".join([
+    "url", GESUND + "?ziel=bereinigung", "Messebau-Website Bereinigung", "5.0",
+    "muss=\"bereinigung\": \"ok\" ;; kunde=S&S Messebau",
+])
+
 ZIELE_NEU = [
     {
         "name": "Messebau-Website",
@@ -74,6 +91,23 @@ ZIELE_NEU = [
         "url": LIVE,
         "max_sekunden": 5.0,
         "muss_enthalten": ["S&S Messebau"],
+    },
+    {
+        # Eigenes Ziel statt einer dritten Zeichenkette im Ziel darunter:
+        # Steht die Bereinigung, soll das als Bereinigung gemeldet werden und
+        # nicht als Stoerung von API und Datenbank. "status" in health.php
+        # haengt deshalb nicht an ihr; wer die Bereinigung von aussen aufhaelt,
+        # haelt damit nur dieses Ziel rot.
+        # Was dann zu tun ist: Fehlerprotokoll bei Hostinger nach "Bereinigung:"
+        # durchsuchen; der Knopf "Bereinigung" im Admin-Bereich raeumt von Hand.
+        # Erst eintragen, wenn die Website das Feld "bereinigung" schon
+        # ausliefert, sonst ist das Ziel vom ersten Lauf an rot.
+        "name": "Messebau-Website Bereinigung",
+        "typ": "url",
+        "kunde": "S&S Messebau",
+        "url": GESUND,
+        "max_sekunden": 5.0,
+        "muss_enthalten": ["\"bereinigung\": \"ok\""],
     },
     {
         "name": "Messebau-Website API/Datenbank",
@@ -115,6 +149,12 @@ def vereinige(alt, neu):
 def main():
     if os.geteuid() != 0:
         sys.exit("Muss als root laufen (sudo).")
+
+    if os.path.exists(ZIELE_VERTEILER):
+        print("ACHTUNG: %s baut ziele.json aus ueberwachung.tsv neu. Das Ziel "
+              "'Messebau-Website Bereinigung' bleibt nur mit dieser Zeile in "
+              "leadmaschine/zentrale/waechter/ueberwachung.tsv:" % ZIELE_VERTEILER)
+        print(TSV_ZEILE_BEREINIGUNG)
 
     register = lade(REGISTER, {})
     vorher = json.dumps(register, sort_keys=True)
