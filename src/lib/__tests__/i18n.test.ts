@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { getTranslation, getStoredLanguage, storeLanguage } from '../i18n'
+import { getTranslation, getStoredLanguage, getInitialLanguage, storeLanguage } from '../i18n'
 
 describe('getTranslation', () => {
   it('returns a function', () => {
@@ -38,5 +38,42 @@ describe('language storage', () => {
   it('returns "de" for invalid stored values', () => {
     localStorage.setItem('ss-lang', 'fr')
     expect(getStoredLanguage()).toBe('de')
+  })
+})
+
+describe('Sprache beim Start', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
+  it('nimmt die Sprache aus der Adresse, wie hreflang sie nennt', () => {
+    expect(getInitialLanguage('?lang=en')).toBe('en')
+    expect(getInitialLanguage('?utm_source=x&lang=en')).toBe('en')
+  })
+
+  it('die Adresse geht vor der gespeicherten Wahl, in beide Richtungen', () => {
+    storeLanguage('de')
+    expect(getInitialLanguage('?lang=en')).toBe('en')
+    storeLanguage('en')
+    expect(getInitialLanguage('?lang=de')).toBe('de')
+  })
+
+  it('ohne oder mit unbekannter Angabe gilt die gespeicherte Wahl, sonst Deutsch', () => {
+    expect(getInitialLanguage('')).toBe('de')
+    expect(getInitialLanguage('?lang=fr')).toBe('de')
+    storeLanguage('en')
+    expect(getInitialLanguage('')).toBe('en')
+    expect(getInitialLanguage('?lang=fr')).toBe('en')
+  })
+
+  it('schreibt nichts in den Browserspeicher', () => {
+    getInitialLanguage('?lang=en')
+    expect(localStorage.length).toBe(0)
+  })
+
+  it('liest ohne Angabe die Adresse des Fensters', () => {
+    window.history.replaceState(null, '', '/branchen?lang=en')
+    expect(getInitialLanguage()).toBe('en')
+    window.history.replaceState(null, '', '/')
   })
 })
