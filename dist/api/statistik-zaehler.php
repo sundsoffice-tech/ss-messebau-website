@@ -3,7 +3,8 @@
  * S&S Messebau - Zähler der Statistik: was mehrere Dateien darüber wissen müssen.
  *
  * collect.php führt die Zähldatei data/collect_gesamt.json (Gesamtdeckel je
- * Minute, Zahlen des Tages). Hier steht, was außer collect.php noch jemand
+ * Minute, Zahlen des Tages, volle Minuten, gemerkter Ausfall einer Zähldatei).
+ * Hier steht, was außer collect.php noch jemand
  * braucht: der Ort der Datei, das Lesen, der Zustand für health.php
  * ("checks.statistik") und die Zahlen für analytics-status.php. Geschrieben
  * wird die Zähldatei nur in collect.php.
@@ -23,21 +24,50 @@ if (realpath((string)($_SERVER['SCRIPT_FILENAME'] ?? '')) === __FILE__) {
 // Datenordner (nicht öffentlich).
 define('STATISTIK_ZAEHLDATEI', __DIR__ . '/data/collect_gesamt.json');
 
-// "checks.statistik" zeigt "deckel" erst, wenn der Gesamtdeckel in so vielen
-// Kalenderminuten am Stück erreicht war, und danach noch so viele Minuten lang.
-// 5 Minuten am Stück: Ein einzelner Stoß (neun Abrufe zu 50 Ereignissen, auch
+// "checks.statistik" zeigt "deckel", sobald der Gesamtdeckel in
+// STATISTIK_DECKEL_MINUTEN Kalenderminuten innerhalb der letzten
+// STATISTIK_DECKEL_FENSTER_MINUTEN Minuten erreicht war, und von da an bis
+// STATISTIK_HALTEN_MINUTEN Minuten nach der letzten vollen Minute. Voll ist
+// eine Kalenderminute, wenn ein Abruf von collect.php in ihr den Gesamtdeckel
+// erreicht vorfand oder ihn selbst füllte.
+// 5 volle Minuten: Ein einzelner Stoß (neun Abrufe zu 50 Ereignissen, auch
 // von vier Adressen verteilt) füllt den Deckel für eine Minute, an einer
 // Minutengrenze für zwei. Das soll keinen Alarm auslösen; es kostet das Haus
 // bei wenigen Dutzend echten Ereignissen je Tag im Mittel weniger als ein
-// Ereignis. Wer den Deckel fünf Minuten hält, muss fünfmal nachlegen: Das ist
-// kein Versehen mehr, und ab da fehlt der Statistik ein Stück, das man sieht.
-// Echter Verkehr, der fünf Minuten am Deckel liegt, heißt: Der Deckel ist zu
-// niedrig; auch das soll das Haus erfahren.
+// Ereignis. Weil berührte Kalenderminuten zählen, reichen vier Füllungen im
+// Abstand von einer Minute für fünf volle Minuten (rund drei bis vier Minuten
+// Dauer). Ab da fehlt der Statistik ein Stück, das man sieht. Echter Verkehr,
+// der so oft am Deckel liegt, heißt: Der Deckel ist zu niedrig; auch das soll
+// das Haus erfahren.
+// Im Fenster von 30 Minuten statt am Stück: Gezählt wird die Summe der vollen
+// Minuten. Eine freie Minute dazwischen beginnt die Zählung nicht neu, und
+// ohne Alarm bleiben in jedem Fenster höchstens 4 von 30 Minuten voll.
 // 30 Minuten halten: Der Wächter des Hauses ruft health.php alle 15 Minuten
 // ab; mit 30 Minuten sieht er den Zustand in mindestens einem Abruf, auch wenn
-// der Deckel gleich nach der fünften Minute wieder frei war.
+// der Deckel gleich danach wieder frei war. Jede weitere volle Minute in
+// dieser Zeit verlängert das Halten; keine verkürzt es.
 define('STATISTIK_DECKEL_MINUTEN', 5);
-define('STATISTIK_DECKEL_HALTEN_MINUTEN', 30);
+define('STATISTIK_DECKEL_FENSTER_MINUTEN', 30);
+define('STATISTIK_HALTEN_MINUTEN', 30);
+
+// "checks.statistik" zeigt "menge", wenn collect.php an diesem Tag (UTC)
+// mindestens so viele Ereignisse angenommen hat. Der Zustand meldet Zufluss,
+// der unter dem Gesamtdeckel bleibt und deshalb nie "deckel" auslöst; verloren
+// geht dabei nichts, aber die Zahlen des Tages verdienen einen Blick.
+// Rechnung für 10.000:
+//   Gewöhnlicher Verkehr: Die Firmenseite hat wenige Dutzend Ereignisse je
+//   Tag. Ein Besuch bringt im Mittel rund 11 Ereignisse (Annahme aus dem
+//   Aufbau des Trackers, nicht gemessen); 10.000 sind rund 900 Besuche an
+//   einem Tag, etwa das 200-fache von heute. Ein echter Tag über dieser Menge
+//   heißt: Der Bedarf ist gewachsen; auch das soll das Haus erfahren.
+//   Gegen die Grenzen: Der Anteil je Adresse lässt 172.800 Ereignisse je Tag
+//   zu, der Gesamtdeckel 576.000. Bei vollem Anteil einer Adresse ist die
+//   Menge nach 83 Minuten erreicht, bei dreien nach 28. Bis zur Meldung sind
+//   höchstens 10.000 Zeilen dazugekommen (bei größter Zeilenlänge rund 137 MB).
+// Der Zustand gilt bis zum Ende des Tages (UTC) und mindestens
+// STATISTIK_HALTEN_MINUTEN Minuten nach dem letzten Abruf über der Menge, damit
+// der Wächter ihn auch kurz vor Mitternacht in mindestens einem Abruf sieht.
+define('STATISTIK_TAGESMENGE', 10000);
 
 /**
  * Stand der Zähldatei oder null (Datei fehlt, nicht lesbar, kein JSON).
@@ -68,10 +98,12 @@ function statistikZaehlerLesen(bool $mitSperre = false): ?array {
 }
 
 /**
- * Könnte collect.php die Zähldatei öffnen? Geprüft wird ohne Schreiben: Die
- * Datei ist eine beschreibbare Datei, oder es gibt sie noch nicht und der
- * Ordner ist beschreibbar. Nicht geprüft sind eine scheiternde Dateisperre und
- * ein scheiterndes Schreiben (volle Platte); das sieht nur collect.php selbst.
+ * Könnte collect.php die Zähldatei des Gesamtdeckels öffnen? Geprüft wird ohne
+ * Schreiben: Die Datei ist eine beschreibbare Datei, oder es gibt sie noch
+ * nicht und der Ordner ist beschreibbar. Eine scheiternde Dateisperre, ein
+ * scheiterndes Schreiben (volle Platte) und den Ausfall einer Zähldatei je
+ * Adresse sieht nur collect.php selbst; es merkt sie in der Zähldatei
+ * (statistikStoerung), soweit die sich noch schreiben lässt.
  */
 function statistikZaehlerNutzbar(): bool {
     $datei = STATISTIK_ZAEHLDATEI;
@@ -83,47 +115,136 @@ function statistikZaehlerNutzbar(): bool {
 }
 
 /**
- * Lauf "Deckel erreicht" fortschreiben: beginn und zuletzt sind Kalenderminuten
- * (Unixzeit durch 60). Eine Minute zählt, wenn in ihr der Gesamtdeckel erreicht
- * war ($voll). Schließt sie an die letzte volle Minute an (dieselbe oder die
- * davor), läuft der Lauf weiter, sonst beginnt ein neuer. Ohne volle Minute
- * bleibt der letzte Lauf stehen; statistikZustand() wertet ihn nach der Zeit.
+ * Was die Zähldatei über "Deckel erreicht" weiß, bezogen auf die Kalenderminute
+ * $minute (Unixzeit durch 60):
+ *   voll   die vollen Kalenderminuten der letzten STATISTIK_DECKEL_FENSTER_MINUTEN
+ *          Minuten, aufsteigend
+ *   alarm  die letzte volle Minute, seit die Schwelle erreicht ist, oder null;
+ *          null auch, wenn sie länger als STATISTIK_HALTEN_MINUTEN her ist
+ * Minuten aus der Zukunft (Uhr zurückgestellt) zählen nicht. Ein Stand der
+ * Fassung davor ("deckel_lauf" mit beginn und zuletzt) wird mitgelesen, damit
+ * ein Alarm den Wechsel der Fassung übersteht.
  */
-function statistikDeckelLauf($alt, int $minute, bool $voll): ?array {
-    $beginn = is_array($alt) && is_int($alt['beginn'] ?? null) ? $alt['beginn'] : null;
-    $zuletzt = is_array($alt) && is_int($alt['zuletzt'] ?? null) ? $alt['zuletzt'] : null;
-    $gueltig = $beginn !== null && $zuletzt !== null && $beginn <= $zuletzt && $zuletzt <= $minute;
-    if (!$voll) {
-        return $gueltig ? ['beginn' => $beginn, 'zuletzt' => $zuletzt] : null;
+function statistikDeckelStand(?array $stand, int $minute): array {
+    $voll = [];
+    $alarm = null;
+    if (is_array($stand) && (array_key_exists('deckel_voll', $stand) || array_key_exists('deckel_alarm', $stand))) {
+        foreach (is_array($stand['deckel_voll'] ?? null) ? $stand['deckel_voll'] : [] as $m) {
+            if (is_int($m) && $m <= $minute && $minute - $m < STATISTIK_DECKEL_FENSTER_MINUTEN) {
+                $voll[$m] = true;
+            }
+        }
+        if (is_int($stand['deckel_alarm'] ?? null) && $stand['deckel_alarm'] <= $minute) {
+            $alarm = $stand['deckel_alarm'];
+        }
+    } elseif (is_array($stand) && is_array($stand['deckel_lauf'] ?? null)) {
+        $beginn = $stand['deckel_lauf']['beginn'] ?? null;
+        $zuletzt = $stand['deckel_lauf']['zuletzt'] ?? null;
+        if (is_int($beginn) && is_int($zuletzt) && $beginn <= $zuletzt && $zuletzt <= $minute) {
+            for ($m = max($beginn, $minute - STATISTIK_DECKEL_FENSTER_MINUTEN + 1); $m <= $zuletzt; $m++) {
+                $voll[$m] = true;
+            }
+            if ($zuletzt - $beginn + 1 >= STATISTIK_DECKEL_MINUTEN) {
+                $alarm = $zuletzt;
+            }
+        }
     }
-    if ($gueltig && $minute - $zuletzt <= 1) {
-        return ['beginn' => $beginn, 'zuletzt' => $minute];
+    if ($alarm !== null && $minute - $alarm > STATISTIK_HALTEN_MINUTEN) {
+        $alarm = null;
     }
-    return ['beginn' => $minute, 'zuletzt' => $minute];
+    ksort($voll);
+    return ['voll' => array_keys($voll), 'alarm' => $alarm];
 }
 
 /**
- * Zustand für "checks.statistik" in health.php:
- *   zaehler  die Zähldatei ist nicht nutzbar; collect.php antwortet dann 503
- *            und speichert nichts
- *   deckel   der Gesamtdeckel war STATISTIK_DECKEL_MINUTEN Minuten am Stück
- *            erreicht, zuletzt vor höchstens STATISTIK_DECKEL_HALTEN_MINUTEN Minuten
+ * "Deckel erreicht" für die Kalenderminute $minute fortschreiben; $voll sagt,
+ * ob der Gesamtdeckel in ihr erreicht war. Die Schwelle ist erreicht, wenn im
+ * Fenster STATISTIK_DECKEL_MINUTEN volle Minuten stehen. Läuft der Alarm schon,
+ * verlängert ihn jede weitere volle Minute. Ohne volle Minute bleibt der Stand
+ * stehen und läuft nach der Zeit ab (statistikDeckelStand).
+ */
+function statistikDeckelFortschreiben(?array $stand, int $minute, bool $voll): array {
+    $deckel = statistikDeckelStand($stand, $minute);
+    if ($voll) {
+        if (!in_array($minute, $deckel['voll'], true)) {
+            $deckel['voll'][] = $minute;
+        }
+        if (count($deckel['voll']) >= STATISTIK_DECKEL_MINUTEN || $deckel['alarm'] !== null) {
+            $deckel['alarm'] = $minute;
+        }
+    }
+    return $deckel;
+}
+
+/**
+ * Letzter gemerkter Ausfall einer Zähldatei (collect.php hat 503 geantwortet),
+ * wenn er höchstens STATISTIK_HALTEN_MINUTEN Minuten her ist, sonst null.
+ * 'zaehler' nennt, welche Zähldatei es war: 'adresse' (Anteil je Adresse) oder
+ * 'gesamt' (Gesamtdeckel). Gemerkt wird in der Zähldatei des Gesamtdeckels
+ * (collectStoerungMerken in collect.php).
+ */
+function statistikStoerung(?array $stand, int $minute): ?array {
+    $stoerung = is_array($stand) ? ($stand['stoerung'] ?? null) : null;
+    if (!is_array($stoerung) || !is_int($stoerung['minute'] ?? null)
+        || !in_array($stoerung['zaehler'] ?? null, ['adresse', 'gesamt'], true)) {
+        return null;
+    }
+    $her = $minute - $stoerung['minute'];
+    if ($her < 0 || $her > STATISTIK_HALTEN_MINUTEN) {
+        return null;
+    }
+    return ['minute' => $stoerung['minute'], 'zaehler' => $stoerung['zaehler']];
+}
+
+/**
+ * Ist die Tagesmenge erreicht? Ja, wenn die Zähldatei den heutigen Tag (UTC)
+ * trägt und mindestens STATISTIK_TAGESMENGE angenommene Ereignisse zählt, oder
+ * wenn der letzte Abruf über der Menge ("menge_zuletzt", Kalenderminute)
+ * höchstens STATISTIK_HALTEN_MINUTEN Minuten her ist.
+ */
+function statistikMengeErreicht(?array $stand, int $jetzt): bool {
+    if (!is_array($stand)) {
+        return false;
+    }
+    if (($stand['tag'] ?? null) === gmdate('Y-m-d', $jetzt) && is_int($stand['angenommen_tag'] ?? null)
+        && $stand['angenommen_tag'] >= STATISTIK_TAGESMENGE) {
+        return true;
+    }
+    $her = is_int($stand['menge_zuletzt'] ?? null) ? intdiv($jetzt, 60) - $stand['menge_zuletzt'] : -1;
+    return $her >= 0 && $her <= STATISTIK_HALTEN_MINUTEN;
+}
+
+/**
+ * Zustand für "checks.statistik" in health.php, der erste zutreffende gilt:
+ *   zaehler  eine Zähldatei ist nicht nutzbar: die des Gesamtdeckels jetzt,
+ *            oder collect.php hat in den letzten STATISTIK_HALTEN_MINUTEN
+ *            Minuten wegen einer Zähldatei (Gesamtdeckel oder Anteil je
+ *            Adresse) mit 503 geantwortet und nichts gespeichert
+ *   deckel   der Gesamtdeckel war in STATISTIK_DECKEL_MINUTEN Kalenderminuten
+ *            eines Fensters von STATISTIK_DECKEL_FENSTER_MINUTEN Minuten
+ *            erreicht, die letzte volle Minute ist höchstens
+ *            STATISTIK_HALTEN_MINUTEN Minuten her; in dieser Zeit fehlen der
+ *            Statistik Ereignisse
+ *   menge    heute sind mindestens STATISTIK_TAGESMENGE Ereignisse angenommen;
+ *            es fehlt nichts, aber der Zufluss ist ungewöhnlich hoch
  *   ok       sonst
  * Nur der Zustand, keine Zahl: Der Endpunkt ist öffentlich.
  */
 function statistikZustand(?int $jetzt = null): string {
     $jetzt = $jetzt ?? time();
+    $minute = intdiv($jetzt, 60);
     if (!statistikZaehlerNutzbar()) {
         return 'zaehler';
     }
     $stand = statistikZaehlerLesen(false);
-    $lauf = is_array($stand) ? ($stand['deckel_lauf'] ?? null) : null;
-    if (is_array($lauf) && is_int($lauf['beginn'] ?? null) && is_int($lauf['zuletzt'] ?? null)) {
-        $her = intdiv($jetzt, 60) - $lauf['zuletzt'];
-        if ($lauf['zuletzt'] - $lauf['beginn'] + 1 >= STATISTIK_DECKEL_MINUTEN
-            && $her >= 0 && $her <= STATISTIK_DECKEL_HALTEN_MINUTEN) {
-            return 'deckel';
-        }
+    if (statistikStoerung($stand, $minute) !== null) {
+        return 'zaehler';
+    }
+    if (statistikDeckelStand($stand, $minute)['alarm'] !== null) {
+        return 'deckel';
+    }
+    if (statistikMengeErreicht($stand, $jetzt)) {
+        return 'menge';
     }
     return 'ok';
 }

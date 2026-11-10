@@ -75,6 +75,21 @@ ErrorDocument 500 default
     </IfModule>
 </Files>
 
+# admin-passwort-setzen.php und sein Einstieg admin-passwort-setzen.sh laufen
+# nur auf der Kommandozeile des Servers. Über das Netz antwortet die PHP-Datei
+# selbst mit 404; das hier ist die zweite Schranke davor und die einzige für
+# den Einstieg (er enthält kein Geheimnis).
+<Files "admin-passwort-setzen.php">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</Files>
+<Files "admin-passwort-setzen.sh">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</Files>
+
 # Deny access to SQLite database files
 <FilesMatch "\.(sqlite|sqlite3|db)$">
     <IfModule mod_authz_core.c>
