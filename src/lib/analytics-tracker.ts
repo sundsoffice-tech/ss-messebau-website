@@ -690,13 +690,22 @@ function collectPerformanceMetrics(): void {
 
 let maxScrollDepth = 0
 let scrollDepthReported = new Set<number>()
+// Die Lauscher hängen je Seite im Browser genau einmal. `trackPageView` ruft die
+// beiden init-Funktionen bei jedem Seitenaufruf; ohne diese Merker kam mit jedem
+// Seitenwechsel ein weiterer Satz Lauscher dazu, `tab_visibility` und
+// `page_engagement` gingen dann mehrfach hinaus und die Verweildauer zählte doppelt.
+let scrollLauscherHaengt = false
+let engagementLauscherHaengen = false
 
 export function initScrollDepthTracking(): void {
   if (typeof window === 'undefined') return
 
   const thresholds = [25, 50, 75, 90, 100]
+  // Je Seitenaufruf beginnt die Messung neu
   maxScrollDepth = 0
   scrollDepthReported = new Set<number>()
+  if (scrollLauscherHaengt) return
+  scrollLauscherHaengt = true
 
   const handleScroll = () => {
     const scrollTop = window.scrollY || document.documentElement.scrollTop
@@ -746,9 +755,12 @@ let isEngaged = true
 export function initEngagementTracking(): void {
   if (typeof window === 'undefined') return
 
+  // Je Seitenaufruf beginnt die Messung neu
   engagementStartTime = Date.now()
   totalEngagementTime = 0
   isEngaged = true
+  if (engagementLauscherHaengen) return
+  engagementLauscherHaengen = true
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
