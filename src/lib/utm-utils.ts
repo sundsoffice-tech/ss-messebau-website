@@ -1,66 +1,100 @@
 /**
- * UTM Parameter Utilities
- * Extracts and persists UTM parameters from URL for lead attribution.
- * UTM params are stored in sessionStorage so they survive SPA navigation.
+ * Herkunft einer Anfrage (UTM-Parameter der Einstiegsadresse).
+ *
+ * Gespeichert wird nur mit Zustimmung, weil der Banner zusagt, dass die Messung
+ * „nur mit Ihrer Zustimmung" geschieht:
+ * - keine Entscheidung: Die Parameter der Einstiegsadresse liegen nur im
+ *   Arbeitsspeicher der laufenden Seite. Eine Anfrage, die der Besucher in
+ *   diesem Seitenaufruf selbst absendet, behält damit ihre Quelle; nach einem
+ *   Neuladen ist sie weg. Im Browser wird nichts abgelegt.
+ * - Zustimmung: zusätzlich im sessionStorage (`ss_utm_params`), damit die Quelle
+ *   ein Neuladen im selben Tab übersteht.
+ * - Ablehnung (auch als Widerruf): Eintrag und Arbeitsspeicher werden geleert,
+ *   Anfragen gehen ohne Quelle hinaus.
  */
+
+import { getConsent, onConsentChange } from '@/lib/analytics'
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const
 const UTM_STORAGE_KEY = 'ss_utm_params'
 
 type UtmParams = Partial<Record<typeof UTM_KEYS[number], string>>
 
-/**
- * Extract UTM parameters from the current URL and persist them.
- * Called on page load to capture landing page UTM params.
- */
-export function captureUtmParams(): void {
+/** Quelle der Einstiegsadresse, nur für die Dauer dieses Seitenaufrufs. */
+let inMemory: UtmParams = {}
+
+function hasAny(utm: UtmParams): boolean {
+  return Object.keys(utm).length > 0
+}
+
+function readFromUrl(): UtmParams {
+  const utm: UtmParams = {}
   try {
     const params = new URLSearchParams(window.location.search)
-    const utm: UtmParams = {}
-    let hasAny = false
-
     for (const key of UTM_KEYS) {
       const value = params.get(key)
-      if (value) {
-        utm[key] = value
-        hasAny = true
-      }
+      if (value) utm[key] = value
     }
+  } catch { /* ignore */ }
+  return utm
+}
 
-    if (hasAny) {
-      sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(utm))
-    }
+function persist(utm: UtmParams): void {
+  try {
+    sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(utm))
+  } catch { /* ignore */ }
+}
+
+function forget(): void {
+  inMemory = {}
+  try {
+    sessionStorage.removeItem(UTM_STORAGE_KEY)
   } catch { /* ignore */ }
 }
 
 /**
- * Get persisted UTM parameters (from landing page).
- * Returns only non-empty values suitable for inclusion in form submissions.
+ * Liest die UTM-Parameter der aktuellen Adresse. Läuft beim Laden der Seite.
+ * In den Browser-Speicher schreibt die Funktion nur, wenn zugestimmt wurde.
+ */
+export function captureUtmParams(): void {
+  const consent = getConsent()
+  if (consent === 'denied') return
+  const utm = readFromUrl()
+  if (!hasAny(utm)) return
+  inMemory = utm
+  if (consent === 'granted') persist(utm)
+}
+
+/**
+ * Quelle für eine Anfrage: aktuelle Adresse, sonst die Einstiegsadresse.
+ * Nach einer Ablehnung leer.
  */
 export function getUtmParams(): UtmParams {
-  try {
-    // First check current URL
-    const params = new URLSearchParams(window.location.search)
-    const fromUrl: UtmParams = {}
-    let hasFromUrl = false
+  const consent = getConsent()
+  if (consent === 'denied') return {}
 
-    for (const key of UTM_KEYS) {
-      const value = params.get(key)
-      if (value) {
-        fromUrl[key] = value
-        hasFromUrl = true
-      }
-    }
-    if (hasFromUrl) return fromUrl
+  const fromUrl = readFromUrl()
+  if (hasAny(fromUrl)) return fromUrl
+  if (hasAny(inMemory)) return { ...inMemory }
 
-    // Fall back to stored params from landing page
-    const raw = sessionStorage.getItem(UTM_STORAGE_KEY)
-    if (raw) return JSON.parse(raw)
-  } catch { /* ignore */ }
+  if (consent === 'granted') {
+    try {
+      const raw = sessionStorage.getItem(UTM_STORAGE_KEY)
+      if (raw) return JSON.parse(raw) as UtmParams
+    } catch { /* ignore */ }
+  }
   return {}
 }
 
-// Auto-capture UTM params on module load
 if (typeof window !== 'undefined') {
   captureUtmParams()
+  onConsentChange((value) => {
+    if (value === 'denied') {
+      forget()
+      return
+    }
+    // Zustimmung erst nach dem Laden: Einstiegsquelle jetzt ablegen
+    if (!hasAny(inMemory)) inMemory = readFromUrl()
+    if (hasAny(inMemory)) persist(inMemory)
+  })
 }

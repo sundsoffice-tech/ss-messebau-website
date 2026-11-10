@@ -21,6 +21,7 @@ import { relayInquiryLead } from '@/lib/lead-relay'
 import { FIELD_TOKENS } from '@/lib/form-system/field-registry'
 import { sendChatMessage } from '@/lib/chat-service'
 import { getUtmParams } from '@/lib/utm-utils'
+import { GoogleMapConsent } from '@/components/GoogleMapConsent'
 
 interface QuickAction {
   id: string
@@ -684,17 +685,7 @@ ANTWORTRICHTLINIEN:
 
       <section className="py-8 sm:py-12 bg-muted">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="aspect-video rounded-lg overflow-hidden shadow-lg">
-            <iframe
-              src="https://www.google.com/maps?q=Marienstra%C3%9Fe+37,+41836+H%C3%BCckelhoven,+Deutschland&output=embed"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              title={t('kontakt.map.title')}
-            />
-          </div>
+          <GoogleMapConsent />
         </div>
       </section>
 
