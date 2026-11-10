@@ -1,8 +1,8 @@
 /**
  * Rückfallbilder je Blog-Kategorie für Beiträge ohne eigenes Bild.
  *
- * Für eine Kategorie ohne Eintrag gibt es kein Bild: Karte und Beitragskopf zeigen
- * dann ein neutrales Feld mit Symbol (`BlogBildErsatz`) statt eines fremden Fotos.
+ * Für eine Kategorie ohne Eintrag gibt es kein Bild: Die Karte zeigt dann ein neutrales
+ * Feld mit Symbol (`BlogBildErsatz`) statt eines fremden Fotos, im Beitrag entfällt der Bildblock.
  * Die früheren Einträge für „messebau“, „nachhaltigkeit“ und „sonstiges“ waren
  * eingebundene Vorschaubilder eines Bildanbieters ohne belegte Lizenz und sind
  * entfernt (Prüfung Wettbewerbsrecht 10.11.2026). Ein neues Bild kommt nur mit
