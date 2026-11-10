@@ -51,9 +51,12 @@ beforeEach(() => {
 })
 
 describe('Blogbilder liegen auf dem eigenen Server', () => {
-  it('jeder der sechs Artikel und jedes Kategoriebild zeigt auf eine vorhandene JPEG-Datei unter /images/', () => {
-    expect(DEMO_BLOG_POSTS).toHaveLength(6)
-    const adressen = [...DEMO_BLOG_POSTS.map((p) => p.imageUrl), ...KATEGORIEN.map(getBlogFallbackImage)]
+  it('jedes Artikelbild und jedes Kategoriebild zeigt auf eine vorhandene JPEG-Datei unter /images/', () => {
+    // Neue Artikel dürfen ohne Bild kommen (die Karte zeigt dann das Kategoriebild oder ein
+    // neutrales Feld); wer ein Bild trägt, trägt ein eigenes, und mindestens sechs tun es.
+    const eigene = DEMO_BLOG_POSTS.map((p) => p.imageUrl).filter((adresse) => adresse !== '')
+    expect(eigene.length).toBeGreaterThanOrEqual(6)
+    const adressen = [...eigene, ...KATEGORIEN.map(getBlogFallbackImage)]
     for (const adresse of adressen) {
       expect(adresse, adresse).toMatch(/^\/images\/[A-Za-z0-9/_-]+\.jpe?g$/)
       // Pfade relativ zum Arbeitsverzeichnis: vitest läuft in der Repo-Wurzel.
@@ -66,13 +69,15 @@ describe('Blogbilder liegen auf dem eigenen Server', () => {
     expect(getBlogFallbackImage('Service')).toBe(getBlogFallbackImage('service'))
     // Generiertes Titelbild mit fremdem Logo bleibt draußen.
     expect(adressen).not.toContain('/images/hero-messebau-startseite.jpg')
-    // Sechs verschiedene Bilder in der Übersicht.
-    expect(new Set(DEMO_BLOG_POSTS.map((p) => p.imageUrl)).size).toBe(6)
+    // Kein Artikelbild steht doppelt in der Übersicht.
+    expect(new Set(eigene).size).toBe(eigene.length)
   })
 
   it('eine fremde Bildadresse wird durch das eigene Kategoriebild ersetzt', () => {
     expect(istEigenesBild(FREMD)).toBe(false)
     expect(istEigenesBild('//images.unsplash.com/x.jpg')).toBe(false)
+    // Browser lesen auch einen Rückstrich nach dem ersten Schrägstrich als Beginn eines Hosts
+    expect(istEigenesBild('/\\images.unsplash.com/x.jpg')).toBe(false)
     expect(istEigenesBild('data:image/png;base64,AAAA')).toBe(false)
     expect(istEigenesBild('')).toBe(false)
     expect(istEigenesBild(undefined)).toBe(false)
