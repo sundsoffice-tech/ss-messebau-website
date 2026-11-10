@@ -47,10 +47,24 @@
  *      keine Adresse und fällt unter die Bereinigung
  *   W  Größe je Ereignis: zu großes "props" wird leer gespeichert und gezählt
  *   X  Zählerausfall: 503, health.php "statistik": "zaehler", Heilung; "deckel"
- *      erst nach fünf Minuten am Stück; Zahlen des Tages in analytics-status.php
+ *      erst nach fünf vollen Minuten; Zahlen des Tages in analytics-status.php
  *   Y  Auswertung: der letzte Tag des Zeitraums zählt mit, Absprung ist eine
  *      Sitzung mit genau einem Seitenaufruf
  *   Z  Sitzungen und Anfragen je Quelle über den Sitzungsstart
+ *   AA "deckel" zählt volle Minuten im Fenster von 30 Minuten statt am Stück;
+ *      eine spätere volle Minute verlängert den Alarm und verkürzt ihn nie
+ *      (mit vorgegebener Uhr, siehe uhrlauf())
+ *   AB "menge" ab der Tagesmenge angenommener Ereignisse, auch ohne volle Minute
+ *   AC Ausfall der Zähldatei je Adresse: 503, das Protokoll nennt den Zähler,
+ *      health.php zeigt "zaehler" und hält es eine halbe Stunde
+ *   AD der Anteil je Adresse wird erst nach dem Gesamtzähler gebucht; 429, wenn
+ *      der Anteil vom Stapel nichts annimmt; nachrangige Ereignisse füllen den
+ *      Anteil nicht allein
+ *
+ * Gegen main f0dc366 (mit PR #255) sind AA bis AD rot, dazu die Stellen in Q, V
+ * und X, die die Buchung nach dem Gesamtzähler, die Antwort 429 und die neuen
+ * Felder der Zähldatei verlangen. Die Mutantenprobe dazu steht in
+ * statistik_alarm_mutanten.php.
  *
  * Gegen den Stand von main vom 10.11.2026 (375ba93) ist der Test an den Fällen
  * O, P, Q, R und S rot. T und U sind dort grün: Sie belegen Verhalten, das es
@@ -58,7 +72,8 @@
  * sind A bis U grün bis auf die Stellen in Q, die den Anteil je Adresse und die
  * Antwort 503 verlangen, und V bis Z sind rot.
  *
- * Umgebung: BEREINIGUNG_OHNE_GROSS=1 lässt Fall M aus (seine Datenbank wird
+ * Umgebung: BEREINIGUNG_AB_V=1 fährt nur die Fälle ab V (für die Mutantenprobe).
+ * BEREINIGUNG_OHNE_GROSS=1 lässt Fall M aus (seine Datenbank wird
  * rund 600 MB groß). Jeder Fall räumt sein Verzeichnis unter dem
  * Temp-Ordner nach dem Stoppen des Servers wieder weg.
  */
@@ -825,6 +840,13 @@ pruefe('Vergleichsantwort von health.php: 200 mit "status": "ok" und "database":
 stoppe($u);
 echo "\n";
 
+// Umgebung BEREINIGUNG_AB_V=1: nur die Fälle zum Zufluss (V bis Z, AA bis AD),
+// für die Mutantenprobe in statistik_alarm_mutanten.php. Beleg ist der volle Lauf.
+if (getenv('BEREINIGUNG_AB_V') === '1') {
+    echo "HINWEIS BEREINIGUNG_AB_V=1: die Fälle A bis U, H und M laufen nicht\n";
+    goto ab_v;
+}
+
 // ─── A: erster Abruf von health.php räumt ───────────────────────────────────
 echo "A  erster Abruf von health.php räumt Fälliges und lässt Junges stehen\n";
 $u = starte($apiQuelle) ?? exit(2);
@@ -1548,8 +1570,23 @@ for ($nr = 0; $nr < $adressZahl; $nr++) {
     }
 }
 $gesendet = $stapelZahl * 50;
-$ueberAnteil = $adressZahl * ($stapelJeAdresse * 50 - $anteilJeAdresse);
-$ueberDeckel = $gesendet - $ueberAnteil - $rechneMit;
+// Erwartung nachgerechnet: Beim Anteil ist nur gebucht, was der Gesamtdeckel
+// angenommen hat. Eine Adresse, der der Deckel etwas verwirft, hat ihren Anteil
+// deshalb nicht aufgebraucht, und ihr Rest zählt als "über dem Deckel".
+$ueberAnteil = 0;
+$ueberDeckel = 0;
+$deckelBelegt = 0;
+for ($nr = 0; $nr < $adressZahl; $nr++) {
+    $anteilBelegt = 0;
+    for ($i = 0; $i < $stapelJeAdresse; $i++) {
+        $nimmtAnteil = min(50, $anteilJeAdresse - $anteilBelegt);
+        $nimmtDeckel = min($nimmtAnteil, $rechneMit - $deckelBelegt);
+        $ueberAnteil += 50 - $nimmtAnteil;
+        $ueberDeckel += $nimmtAnteil - $nimmtDeckel;
+        $anteilBelegt += $nimmtDeckel;
+        $deckelBelegt += $nimmtDeckel;
+    }
+}
 $gespeichert = count(zeilenVon($u, 'deckel'));
 pruefe("$gesendet Ereignisse in $stapelZahl POST von $adressZahl Adressen binnen Sekunden: gespeichert sind genau $rechneMit (Deckel), nicht mehr: $gespeichert",
     $gespeichert === $rechneMit);
@@ -1563,7 +1600,8 @@ pruefe('die Zähldatei nennt die Zahlen des Tages: angenommen ' . $rechneMit . '
     is_file($zaehlDatei) ? substr((string)file_get_contents($zaehlDatei), 0, 260) : 'Datei fehlt');
 pruefe('die Zähldatei trägt nur Zahlen, keine Adresse und keine Kennung',
     is_array($zaehler) && array_diff(array_keys($zaehler), ['tag', 'angenommen_tag', 'verworfen_tag', 'spitze_tag', 'verworfen_gesamt', 'deckel',
-            'verworfen_adresse_tag', 'props_gross_tag', 'je_adresse', 'deckel_lauf', 'vortag', 'sekunden']) === []
+            'verworfen_adresse_tag', 'props_gross_tag', 'je_adresse', 'deckel_lauf', 'deckel_voll', 'deckel_alarm',
+            'menge_zuletzt', 'stoerung', 'vortag', 'sekunden']) === []
         && strpos((string)file_get_contents($zaehlDatei), 'deckel-') === false && strpos((string)file_get_contents($zaehlDatei), '127.0.0.') === false);
 pruefe('der Deckel steht genau einmal im Protokoll, nicht je verworfenem Ereignis', protokollZahl($u, 'Gesamtdeckel von') === 1,
     protokollZahl($u, 'Gesamtdeckel von') . ' Zeilen');
@@ -1928,6 +1966,7 @@ if ($u === null) {
 }
 
 // ─── V: Anteil je Adresse am Gesamtdeckel ───────────────────────────────────
+ab_v:
 echo "\nV  Anteil je Adresse am Gesamtdeckel: eine Adresse füllt ihn nicht mehr allein\n";
 $u = starte($apiQuelle) ?? exit(2);
 schema($u);
@@ -1938,16 +1977,25 @@ pruefe('Anteil je Adresse steht als COLLECT_ADRESSE_JE_MINUTE in collect.php: mi
     $anteil >= 37 && $anteil * 3 < $deckel);
 $rechneAnteil = $anteil > 0 ? $anteil : 120;
 $stapelZahl = intdiv($deckel, 50) + 4; // mehr als der ganze Gesamtdeckel, unter 60 Anfragen je Minute
+// Solange der Anteil vom Stapel etwas annimmt, bleibt die Antwort 200 mit
+// "stored" 50; nimmt er nichts mehr an, kommt 429 und der Browser behält den Stapel.
+$mitPlatz = intdiv($rechneAnteil + 49, 50);
 $wieImmer = true;
+$danach429 = true;
 for ($i = 0; $i < $stapelZahl; $i++) {
     $k = anfrageVon($u, '127.0.0.61', 'POST', '/collect.php', stapel('viel', 'viel-' . $i, 50));
-    $wieImmer = $wieImmer && $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":50}';
+    if ($i < $mitPlatz) {
+        $wieImmer = $wieImmer && $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":50}';
+    } else {
+        $danach429 = $danach429 && $k['status'] === 429 && is_string($k['fehler']) && $k['fehler'] !== '' && !isset($k['json']['stored']);
+    }
 }
 warte($u, ['ok', 'fehler', 'teilweise']); // der erste POST hat den ersten Lauf der Bereinigung angestoßen
 $vonEiner = count(zeilenVon($u, 'viel'));
 pruefe('eine Adresse sendet ' . ($stapelZahl * 50) . " Ereignisse in $stapelZahl POST: gespeichert ist genau ihr Anteil von $rechneAnteil, nicht der ganze Deckel von $deckel: $vonEiner",
     $vonEiner === $rechneAnteil);
-pruefe('jeder ihrer POST antwortete unverändert 200 mit {"ok":true,"stored":50}', $wieImmer, kurz($k));
+pruefe("ihre ersten $mitPlatz POST (der Anteil nimmt noch etwas an) antworteten unverändert 200 mit {\"ok\":true,\"stored\":50}", $wieImmer, kurz($k));
+pruefe('jeder POST danach (der Anteil nimmt vom Stapel nichts an) antwortete 429 mit Fehlertext und ohne "stored"', $danach429, kurz($k));
 // Zweiter Besucher in derselben Minute: seine dichteste Minute bei einer Seite, 17 Ereignisse in 3 POST.
 $zweiterOk = true;
 foreach ([7, 5, 5] as $nr => $n) {
@@ -1961,7 +2009,8 @@ $zaehler = json_decode((string)@file_get_contents($u['daten'] . '/collect_gesamt
 $ueberAnteil = $stapelZahl * 50 - $rechneAnteil;
 pruefe('Zähldatei: angenommen ' . ($rechneAnteil + 17) . ", über dem Anteil einer Adresse $ueberAnteil, über dem Gesamtdeckel 0, kein Lauf \"Deckel erreicht\"",
     is_array($zaehler) && ($zaehler['angenommen_tag'] ?? null) === $rechneAnteil + 17 && ($zaehler['verworfen_adresse_tag'] ?? null) === $ueberAnteil
-        && ($zaehler['verworfen_tag'] ?? null) === 0 && !isset($zaehler['deckel_lauf']) && ($zaehler['je_adresse'] ?? null) === $rechneAnteil,
+        && ($zaehler['verworfen_tag'] ?? null) === 0 && !isset($zaehler['deckel_lauf']) && !isset($zaehler['deckel_voll'])
+        && !isset($zaehler['deckel_alarm']) && ($zaehler['je_adresse'] ?? null) === $rechneAnteil,
     substr((string)@file_get_contents($u['daten'] . '/collect_gesamt.json'), 0, 260));
 $anteilDateien = glob($u['daten'] . '/rate_limit_anteil_*.json') ?: [];
 $sauber = count($anteilDateien) === 2;
@@ -2142,21 +2191,21 @@ file_put_contents($zaehlDatei, json_encode($voll));
 $k = anfrageVon($u, '127.0.0.71', 'POST', '/collect.php', stapel('sicht', 'sicht-stoss', 5));
 $stand = json_decode((string)file_get_contents($zaehlDatei), true);
 $a = anfrage($u, 'GET', '/health.php');
-pruefe('ein einzelner Stoß (Deckel voll, ein POST darüber): Antwort unverändert, nichts gespeichert, der Lauf beginnt in dieser Minute, health.php bleibt "ok"',
+pruefe('ein einzelner Stoß (Deckel voll, ein POST darüber): Antwort unverändert, nichts gespeichert, diese Minute steht als einzige volle da, health.php bleibt "ok"',
     $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":5}' && count(zeilenVon($u, 'sicht')) === 7
-        && is_array($stand) && ($stand['deckel_lauf'] ?? null) === ['beginn' => $minute, 'zuletzt' => $minute] && ($stand['verworfen_tag'] ?? null) === 5
+        && is_array($stand) && ($stand['deckel_voll'] ?? null) === [$minute] && !isset($stand['deckel_alarm']) && ($stand['verworfen_tag'] ?? null) === 5
         && $statistik($a) === 'ok' && $sonstOk($a),
-    kurz($k) . ' ' . json_encode($stand['deckel_lauf'] ?? null) . ' | ' . kurz($a));
+    kurz($k) . ' ' . json_encode($stand['deckel_voll'] ?? null) . ' | ' . kurz($a));
 file_put_contents($zaehlDatei, json_encode($voll + ['deckel_lauf' => ['beginn' => $minute - 4, 'zuletzt' => $minute - 1]]));
 $davor = anfrage($u, 'GET', '/health.php');
 $k = anfrageVon($u, '127.0.0.72', 'POST', '/collect.php', stapel('sicht', 'sicht-dauer', 5));
 $stand = json_decode((string)file_get_contents($zaehlDatei), true);
 $a = anfrage($u, 'GET', '/health.php');
-pruefe('Deckel seit vier Minuten erreicht (health.php noch "ok"), ein POST in der fünften: der Lauf reicht bis zu dieser Minute, health.php zeigt "deckel"',
+pruefe('Deckel seit vier Minuten erreicht (Stand der Fassung davor, health.php noch "ok"), ein POST in der fünften: fünf volle Minuten bis zu dieser, health.php zeigt "deckel"',
     $statistik($davor) === 'ok' && $k['text'] === '{"ok":true,"stored":5}' && count(zeilenVon($u, 'sicht')) === 7
-        && is_array($stand) && ($stand['deckel_lauf'] ?? null) === ['beginn' => $minute - 4, 'zuletzt' => $minute]
+        && is_array($stand) && ($stand['deckel_voll'] ?? null) === range($minute - 4, $minute) && ($stand['deckel_alarm'] ?? null) === $minute
         && $statistik($a) === 'deckel' && $sonstOk($a),
-    kurz($davor) . ' | ' . json_encode($stand['deckel_lauf'] ?? null) . ' | ' . kurz($a));
+    kurz($davor) . ' | ' . json_encode($stand['deckel_voll'] ?? null) . ' | ' . kurz($a));
 // Die Zahlen sieht nur der angemeldete Admin.
 $p = db($u);
 $p->prepare('INSERT INTO admin_users (username, password_hash, display_name) VALUES (?, ?, ?)')
@@ -2312,6 +2361,360 @@ pruefe('die bisherigen Felder zählen weiter je Ereignis: top_sources newsletter
     ($j['top_sources'] ?? null) === [['source' => 'newsletter', 'count' => 5], ['source' => 'google', 'count' => 4]]
         && $leadAlt === [['source' => 'google', 'conversions' => 1], ['source' => 'newsletter', 'conversions' => 1]],
     json_encode($j['top_sources'] ?? null) . ' ' . json_encode($j['lead_sources'] ?? null));
+stoppe($u);
+
+// ─── AA bis AD: Alarm im Fenster, Tagesmenge, Ausfall je Adresse, Buchung und 429 ───
+/**
+ * Fährt collectGesamtdeckel() und statistikZustand() des Prüflings mit
+ * vorgegebener Uhr, beginnend ohne Zähldatei. Schritte des Plans:
+ * ['post', Zeit, Anzahl] und ['zustand', Zeit]. collect.php wird dazu auf der
+ * Kommandozeile eingebunden; es endet mit 405, seine Funktionen stehen danach
+ * bereit. Rückgabe: je Schritt das Ergebnis, oder null, wenn der Lauf scheitert.
+ */
+function uhrlauf(array $u, array $plan): ?array {
+    $skript = $u['wurzel'] . '/uhrlauf.php';
+    file_put_contents($skript, '<?php
+$plan = json_decode((string)file_get_contents($argv[2]), true);
+register_shutdown_function(function () use ($plan) {
+    $aus = [];
+    foreach ($plan as $schritt) {
+        $aus[] = $schritt[0] === "post"
+            ? collectGesamtdeckel(COLLECT_GESAMT_DATEI, $schritt[2], COLLECT_GESAMT_JE_MINUTE, $schritt[1])
+            : statistikZustand($schritt[1]);
+    }
+    echo "\nUHRLAUF=" . json_encode($aus) . "\n";
+});
+$_SERVER["REQUEST_METHOD"] = "GET";
+$_SERVER["REMOTE_ADDR"] = "127.0.0.1";
+require $argv[1] . "/collect.php";
+');
+    $planDatei = $u['wurzel'] . '/uhrlauf-plan.json';
+    file_put_contents($planDatei, json_encode($plan));
+    @unlink($u['daten'] . '/collect_gesamt.json');
+    $aus = [];
+    $rc = 1;
+    exec(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg($skript) . ' ' . escapeshellarg($u['api']) . ' '
+        . escapeshellarg($planDatei) . ' 2>&1', $aus, $rc);
+    foreach ($aus as $zeile) {
+        if (strncmp($zeile, 'UHRLAUF=', 8) === 0) {
+            $ergebnis = json_decode(substr($zeile, 8), true);
+            return is_array($ergebnis) ? $ergebnis : null;
+        }
+    }
+    return null;
+}
+
+/** Nur die Zustände aus dem Ergebnis eines Uhrlaufs, als Text für Vergleich und Anzeige. */
+function uhrZustaende(?array $aus): string {
+    return implode(',', array_filter($aus ?? ['kein Ergebnis'], 'is_string'));
+}
+
+echo "\nAA  Alarm \"deckel\": volle Minuten im Fenster von 30 Minuten statt am Stück, spätere volle Minuten verlängern nur\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$zaehlDatei = $u['daten'] . '/collect_gesamt.json';
+$t0 = strtotime('2030-01-15 10:00:00 UTC');
+$vollIn = function (int $m) use ($t0, $deckel): array { // ein Abruf, der den Deckel in Minute $m füllt
+    return ['post', $t0 + $m * 60 + 1, $deckel + 50];
+};
+$zustandIn = function (int $m) use ($t0): array {      // Zustand am Ende der Minute $m
+    return ['zustand', $t0 + $m * 60 + 50];
+};
+$plan = array_merge(array_map($vollIn, range(0, 4)), [$zustandIn(4), $vollIn(7)], array_map($zustandIn, [8, 20, 36, 37, 38]));
+$z = uhrZustaende(uhrlauf($u, $plan));
+pruefe('Episode von fünf vollen Minuten, drei Minuten danach ein einzelner Stoß: "deckel" in den Minuten 4, 8, 20, 36 und 37, "ok" erst in Minute 38 (30 Minuten nach dem Stoß)',
+    $z === 'deckel,deckel,deckel,deckel,deckel,ok', $z);
+$plan = array_merge(array_map($vollIn, range(0, 4)), array_map($zustandIn, [34, 35]));
+$z = uhrZustaende(uhrlauf($u, $plan));
+pruefe('Gegenprobe ohne den Stoß: dieselbe Episode hält bis Minute 34 und ist in Minute 35 "ok"; der Stoß hat das Halten verlängert, nicht verkürzt',
+    $z === 'deckel,ok', $z);
+// Der Stoß kommt erst, wenn die Episode schon fast aus dem Fenster ist: Er allein
+// erreicht die Schwelle nicht, verlängert aber den laufenden Alarm.
+$plan = array_merge(array_map($vollIn, range(0, 4)), [$vollIn(32)], array_map($zustandIn, [33, 40, 62, 63]));
+$z = uhrZustaende(uhrlauf($u, $plan));
+pruefe('ein Stoß 28 Minuten nach der Episode (nur noch drei volle Minuten im Fenster) verlängert den laufenden Alarm: "deckel" in den Minuten 33, 40 und 62, "ok" in Minute 63',
+    $z === 'deckel,deckel,deckel,ok', $z);
+$plan = [];
+for ($m = 0; $m < 60; $m++) {
+    if ($m % 5 !== 4) {
+        $plan[] = $vollIn($m);
+    }
+    $plan[] = $zustandIn($m);
+}
+$zListe = explode(',', uhrZustaende(uhrlauf($u, $plan)));
+$erste = array_search('deckel', $zListe, true);
+$mitDeckel = count(array_keys($zListe, 'deckel', true));
+pruefe('eine Stunde lang je vier Minuten voll und eine frei: "deckel" ab Minute 5 (der fünften vollen Minute) und in allen 55 Minuten danach',
+    count($zListe) === 60 && $erste === 5 && $mitDeckel === 55, 'erste Minute mit "deckel": ' . json_encode($erste) . ", $mitDeckel von " . count($zListe) . ' Minuten');
+$z = uhrZustaende(uhrlauf($u, [$vollIn(0), $vollIn(1), $zustandIn(1), $zustandIn(10)]));
+pruefe('Gegenprobe: ein einzelner Stoß über eine Minutengrenze (zwei volle Minuten) bleibt "ok"', $z === 'ok,ok', $z);
+$plan = [];
+for ($m = 0; $m < 120; $m++) {
+    if ($m % 8 === 0) {
+        $plan[] = $vollIn($m);
+    }
+    $plan[] = $zustandIn($m);
+}
+$zListe = explode(',', uhrZustaende(uhrlauf($u, $plan)));
+pruefe('Gegenprobe: zwei Stunden lang jede achte Minute voll (höchstens vier volle Minuten in 30) bleibt in allen 120 Minuten "ok"',
+    count($zListe) === 120 && count(array_keys($zListe, 'ok', true)) === 120, count(array_keys($zListe, 'ok', true)) . ' von ' . count($zListe) . ' Minuten "ok"');
+$zRand = uhrZustaende(uhrlauf($u, array_merge(array_map($vollIn, [0, 1, 2, 3, 29]), [$zustandIn(29)])))
+    . ' | ' . uhrZustaende(uhrlauf($u, array_merge(array_map($vollIn, [0, 1, 2, 3, 30]), [$zustandIn(30)])));
+pruefe('Rand des Fensters: vier volle Minuten und eine fünfte 29 Minuten nach der ersten ergibt "deckel", 30 Minuten nach der ersten "ok"',
+    $zRand === 'deckel | ok', $zRand);
+$minute = intdiv(time(), 60);
+file_put_contents($zaehlDatei, json_encode(['tag' => heute(), 'angenommen_tag' => 5, 'deckel_voll' => [$minute - 1],
+    'deckel_alarm' => $minute - 1, 'sekunden' => []]));
+$a = anfrage($u, 'GET', '/health.php');
+warte($u, ['ok', 'fehler', 'teilweise']);
+pruefe('health.php liest den Alarm aus der Zähldatei: "statistik": "deckel", "status" bleibt "ok", HTTP 200', $statistik($a) === 'deckel' && $sonstOk($a), kurz($a));
+stoppe($u);
+
+echo "\nAB  Tagesmenge: \"menge\" ab der Tagesmenge angenommener Ereignisse, auch ohne volle Minute\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$zaehlDatei = $u['daten'] . '/collect_gesamt.json';
+$menge = preg_match("/define\\('STATISTIK_TAGESMENGE',\\s*(\\d+)\\)/", (string)@file_get_contents($apiQuelle . '/statistik-zaehler.php'), $treffer)
+    ? (int)$treffer[1] : 0;
+pruefe('Tagesmenge steht als STATISTIK_TAGESMENGE in statistik-zaehler.php, zwischen 2.000 und 50.000 und durch 100 teilbar: ' . $menge,
+    $menge >= 2000 && $menge <= 50000 && $menge % 100 === 0);
+$rechneMenge = $menge > 0 ? $menge : 10000;
+$hundertIn = function (int $m, int $start) : array { // 100 Ereignisse in Minute $m, weit unter dem Deckel
+    return ['post', $start + $m * 60 + 1, 100];
+};
+$bis = intdiv($rechneMenge, 100); // so viele Abrufe zu 100 Ereignissen erreichen die Menge
+$plan = [];
+for ($m = 0; $m < $bis - 1; $m++) {
+    $plan[] = $hundertIn($m, $t0);
+}
+$tagDanach = $t0 + 14 * 3600 + 600; // 00:10 UTC am Folgetag
+array_push($plan, $zustandIn($bis - 2), $hundertIn($bis - 1, $t0), $zustandIn($bis - 1), $zustandIn($bis - 1 + 360), ['zustand', $tagDanach]);
+$z = uhrZustaende(uhrlauf($u, $plan));
+$stand = json_decode((string)@file_get_contents($zaehlDatei), true);
+pruefe('100 Ereignisse je Minute ab 10:00 UTC: "ok" bei ' . ($rechneMenge - 100) . ", \"menge\" bei $rechneMenge, sechs Stunden später weiter \"menge\", am Folgetag um 00:10 \"ok\"",
+    $z === 'ok,menge,menge,ok', $z);
+pruefe('dabei war keine Minute voll: die Zähldatei trägt weder volle Minuten noch einen Alarm "deckel"',
+    is_array($stand) && ($stand['angenommen_tag'] ?? null) === $rechneMenge && !isset($stand['deckel_voll']) && !isset($stand['deckel_alarm']),
+    substr((string)@file_get_contents($zaehlDatei), 0, 200));
+$t22 = $t0 + 12 * 3600; // 22:00 UTC
+$plan = [];
+for ($m = 0; $m < $bis; $m++) {
+    $plan[] = $hundertIn($m, $t22);
+}
+array_push($plan, ['post', $t22 + 110 * 60 + 1, 10], ['zustand', $t22 + 115 * 60], ['zustand', $t22 + 130 * 60], ['zustand', $t22 + 145 * 60]);
+$z = uhrZustaende(uhrlauf($u, $plan));
+pruefe('Menge kurz vor Mitternacht erreicht, letzter Abruf 23:50 UTC: "menge" um 23:55 und um 00:10 (20 Minuten danach), "ok" um 00:25 (35 Minuten danach)',
+    $z === 'menge,menge,ok', $z);
+$plan = [];
+for ($m = 0; $m < $bis; $m++) {
+    $plan[] = $hundertIn($m, $t0);
+}
+$plan = array_merge($plan, array_map($vollIn, range($bis, $bis + 4)), [$zustandIn($bis + 4), $zustandIn($bis + 35)]);
+$z = uhrZustaende(uhrlauf($u, $plan));
+pruefe('Rang: Menge erreicht und danach fünf volle Minuten ergibt "deckel"; 31 Minuten nach der letzten vollen Minute wieder "menge"',
+    $z === 'deckel,menge', $z);
+// Über HTTP: die Schwelle von beiden Seiten, und der Wert steht in der gewohnten Form da.
+if ((int)gmdate('s') >= 55) {
+    sleep(6);
+}
+$minute = intdiv(time(), 60);
+$knapp = ['tag' => heute(), 'angenommen_tag' => $rechneMenge - 2, 'verworfen_tag' => 0, 'spitze_tag' => 9, 'verworfen_gesamt' => 0,
+    'deckel' => $deckel, 'sekunden' => []];
+file_put_contents($zaehlDatei, json_encode($knapp));
+$davor = anfrage($u, 'GET', '/health.php');
+warte($u, ['ok', 'fehler', 'teilweise']);
+$k = anfrage($u, 'POST', '/collect.php', stapel('menge', 'menge-a', 3));
+$a = anfrage($u, 'GET', '/health.php');
+$stand = json_decode((string)@file_get_contents($zaehlDatei), true);
+pruefe('zwei unter der Menge: health.php zeigt "ok", im Text der Antwort steht "statistik": "ok" (darauf prüft das Wächterziel)',
+    $statistik($davor) === 'ok' && $sonstOk($davor) && strpos($davor['text'], '"statistik": "ok"') !== false, kurz($davor));
+pruefe('ein POST mit 3 Ereignissen hebt den Tag über die Menge: gespeichert wie sonst, health.php zeigt "statistik": "menge", "status" bleibt "ok", HTTP 200',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":3}' && count(zeilenVon($u, 'menge')) === 3
+        && is_array($stand) && ($stand['angenommen_tag'] ?? null) === $rechneMenge + 1 && in_array($stand['menge_zuletzt'] ?? null, [$minute, $minute + 1], true)
+        && $statistik($a) === 'menge' && $sonstOk($a) && strpos($a['text'], '"statistik": "menge"') !== false,
+    kurz($k) . ' | ' . kurz($a));
+pruefe('die Antwort nennt dabei keine Zahl und kein Feld aus der Zähldatei',
+    preg_match('/angenommen|verworfen|spitze|menge_zuletzt|sekunden|\d{4,}/', (string)preg_replace('/"timestamp": "[^"]*"/', '', $a['text'])) === 0, kurz($a));
+$k = anfrage($u, 'POST', '/collect.php', stapel('menge', 'menge-b', 2));
+pruefe('die Menge steht genau einmal im Protokoll, nicht je Abruf darüber', protokollZahl($u, 'Tagesmenge von') === 1,
+    protokollZahl($u, 'Tagesmenge von') . ' Zeilen');
+stoppe($u);
+
+echo "\nAC  Ausfall der Zähldatei je Adresse: 503, das Protokoll nennt den Zähler, checks.statistik zeigt \"zaehler\"\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$zaehlDatei = $u['daten'] . '/collect_gesamt.json';
+$anteilPfad = function (string $adresse) use (&$u): string { // wie statistikAdressSchluessel() für IPv4
+    return $u['daten'] . '/rate_limit_anteil_' . md5('anteil|v4|' . $adresse) . '.json';
+};
+$k = anfrageVon($u, '127.0.0.81', 'POST', '/collect.php', stapel('aus', 'aus-a', 3));
+warte($u, ['ok', 'fehler', 'teilweise']);
+mkdir($anteilPfad('127.0.0.82')); // ein Verzeichnis an der Stelle der Zähldatei dieser Adresse
+$k = anfrageVon($u, '127.0.0.82', 'POST', '/collect.php', stapel('aus', 'aus-b', 4));
+$a = anfrage($u, 'GET', '/health.php');
+pruefe('Zähldatei einer Adresse nicht nutzbar: collect.php antwortet ihr 503 mit Fehlertext und ohne "stored", nichts gespeichert',
+    $k['status'] === 503 && is_string($k['fehler']) && $k['fehler'] !== '' && !isset($k['json']['stored']) && count(zeilenVon($u, 'aus')) === 3,
+    kurz($k) . ' ' . count(zeilenVon($u, 'aus')) . ' Zeilen');
+pruefe('das Protokoll nennt den Zähler des Anteils je Adresse, nicht den des Gesamtdeckels',
+    protokollZahl($u, 'Zähler des Anteils je Adresse nicht nutzbar') === 1 && protokollZahl($u, 'Gesamtdeckels nicht nutzbar') === 0,
+    protokollZahl($u, 'Zähler des Anteils je Adresse nicht nutzbar') . ' und ' . protokollZahl($u, 'Gesamtdeckels nicht nutzbar') . ' Zeilen');
+pruefe('health.php zeigt dabei "statistik": "zaehler"; "status" bleibt "ok", HTTP 200', $statistik($a) === 'zaehler' && $sonstOk($a), kurz($a));
+$k = anfrageVon($u, '127.0.0.81', 'POST', '/collect.php', stapel('aus', 'aus-c', 2));
+$a = anfrage($u, 'GET', '/health.php');
+pruefe('eine andere Adresse wird währenddessen gezählt (200, 2 gespeichert); health.php zeigt weiter "zaehler"',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":2}' && count(zeilenVon($u, 'aus')) === 5 && $statistik($a) === 'zaehler' && $sonstOk($a),
+    kurz($k) . ' | ' . kurz($a));
+rmdir($anteilPfad('127.0.0.82'));
+$k = anfrageVon($u, '127.0.0.82', 'POST', '/collect.php', stapel('aus', 'aus-b', 4));
+$a = anfrage($u, 'GET', '/health.php');
+pruefe('geheilt: derselbe Stapel noch einmal gesendet wird gespeichert (200, "stored" 4, 9 Zeilen); health.php hält "zaehler" noch, der Ausfall ist keine halbe Stunde her',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":4}' && count(zeilenVon($u, 'aus')) === 9 && $statistik($a) === 'zaehler' && $sonstOk($a),
+    kurz($k) . ' ' . count(zeilenVon($u, 'aus')) . ' Zeilen | ' . kurz($a));
+$ausfallVor = function (int $minuten) use ($zaehlDatei, &$u): array {
+    $stand = json_decode((string)file_get_contents($zaehlDatei), true) ?: [];
+    $stand['stoerung'] = ['minute' => intdiv(time(), 60) - $minuten, 'zaehler' => 'adresse'];
+    file_put_contents($zaehlDatei, json_encode($stand));
+    return anfrage($u, 'GET', '/health.php');
+};
+$a29 = $ausfallVor(29);
+$a32 = $ausfallVor(32);
+pruefe('Ausfall vor 29 Minuten: noch "zaehler"; vor 32 Minuten: wieder "ok"',
+    $statistik($a29) === 'zaehler' && $sonstOk($a29) && $statistik($a32) === 'ok' && $sonstOk($a32), kurz($a29) . ' | ' . kurz($a32));
+stoppe($u);
+
+echo "\nAD  Anteil erst nach dem Gesamtzähler gebucht, 429 bei aufgebrauchtem Anteil, Platz für Einstieg und Anfragen\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$zaehlDatei = $u['daten'] . '/collect_gesamt.json';
+$anteilSumme = function (string $adresse) use ($anteilPfad): int {
+    $inhalt = json_decode((string)@file_get_contents($anteilPfad($adresse)), true);
+    return is_array($inhalt) && is_array($inhalt['sekunden'] ?? null) ? (int)array_sum($inhalt['sekunden']) : 0;
+};
+$zeilenZahl = function (string $besucher) use (&$u): int {
+    $s = db($u)->prepare('SELECT COUNT(*) FROM analytics_events WHERE visitor_id = ?');
+    $s->execute([$besucher]);
+    return (int)$s->fetchColumn();
+};
+$gemischt = function (string $besucher, string $vorsatz, array $namen): string {
+    $ereignisse = [];
+    foreach ($namen as $j => $name) {
+        $ereignisse[] = ['event' => $name, 'session_id' => $vorsatz . '-' . $j, 'visitor_id' => $besucher,
+            'url' => '/probe', 'ts' => browserZeit(time())];
+    }
+    return json_encode(['events' => $ereignisse]);
+};
+// Alle Abrufe des Falls liegen binnen weniger Sekunden, also im selben Fenster von 60 s.
+// a) Der Gesamtzähler fällt aus: Der Anteil der Adresse bleibt unberührt.
+mkdir($zaehlDatei);
+$alle503 = true;
+for ($i = 0; $i < 6; $i++) {
+    $k = anfrageVon($u, '127.0.0.83', 'POST', '/collect.php', stapel('heil', 'heil', 20));
+    $alle503 = $alle503 && $k['status'] === 503;
+}
+rmdir($zaehlDatei);
+$k = anfrageVon($u, '127.0.0.83', 'POST', '/collect.php', stapel('heil', 'heil', 20));
+warte($u, ['ok', 'fehler', 'teilweise']);
+pruefe('Gesamtzähler aus, eine Adresse sendet ihren Stapel sechsmal (je 503, zusammen 120 Ereignisse); nach der Heilung wird derselbe Stapel gespeichert: 200, 20 Zeilen',
+    $alle503 && $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":20}' && $zeilenZahl('heil') === 20,
+    kurz($k) . ' ' . $zeilenZahl('heil') . ' Zeilen');
+pruefe('in der Zähldatei der Adresse stehen danach 20, die sechs Versuche während des Ausfalls sind nicht gebucht', $anteilSumme('127.0.0.83') === 20,
+    (string)$anteilSumme('127.0.0.83'));
+// b) Der Gesamtdeckel verwirft: Auch dann ist der Anteil nicht verbraucht.
+$stand = json_decode((string)file_get_contents($zaehlDatei), true) ?: [];
+$stand['sekunden'] = [time() - 1 => $deckel];
+file_put_contents($zaehlDatei, json_encode($stand));
+$alle200 = true;
+for ($i = 0; $i < 3; $i++) {
+    $k = anfrageVon($u, '127.0.0.84', 'POST', '/collect.php', stapel('voll', 'voll-' . $i, 50));
+    $alle200 = $alle200 && $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":50}';
+}
+$waehrend = $zeilenZahl('voll');
+$stand = json_decode((string)file_get_contents($zaehlDatei), true) ?: [];
+$stand['sekunden'] = [];
+file_put_contents($zaehlDatei, json_encode($stand));
+$k = anfrageVon($u, '127.0.0.84', 'POST', '/collect.php', stapel('voll', 'voll-danach', 50));
+pruefe('Gesamtdeckel voll, eine Adresse sendet 150 Ereignisse (je 200, nichts gespeichert); sobald der Deckel frei ist, sind ihre nächsten 50 gespeichert',
+    $alle200 && $waehrend === 0 && $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":50}' && $zeilenZahl('voll') === 50
+        && $anteilSumme('127.0.0.84') === 50,
+    kurz($k) . " $waehrend und " . $zeilenZahl('voll') . ' Zeilen, Anteil ' . $anteilSumme('127.0.0.84'));
+// c) Anteil aufgebraucht: 429, der Stapel bleibt beim Browser und kommt wieder.
+$alle200 = true;
+for ($i = 0; $i < 3; $i++) {
+    $k = anfrageVon($u, '127.0.0.85', 'POST', '/collect.php', stapel('eng', 'eng-' . $i, 50));
+    $alle200 = $alle200 && $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":50}';
+}
+$k1 = anfrageVon($u, '127.0.0.85', 'POST', '/collect.php', stapel('eng', 'eng-spaeter', 20));
+$stand1 = json_decode((string)file_get_contents($zaehlDatei), true);
+$k2 = anfrageVon($u, '127.0.0.85', 'POST', '/collect.php', stapel('eng', 'eng-spaeter', 20));
+$stand2 = json_decode((string)file_get_contents($zaehlDatei), true);
+pruefe("eine Adresse sendet 150 Ereignisse: $rechneAnteil gespeichert, der dritte POST nur zum Teil und weiter mit 200; der nächste Stapel bekommt 429 mit Fehlertext und ohne \"stored\", nichts davon gespeichert",
+    $alle200 && $k1['status'] === 429 && is_string($k1['fehler']) && $k1['fehler'] !== '' && !isset($k1['json']['stored'])
+        && $zeilenZahl('eng') === $rechneAnteil,
+    kurz($k1) . ' ' . $zeilenZahl('eng') . ' Zeilen');
+pruefe('derselbe Stapel gleich noch einmal: wieder 429; die Zähldatei zählt beide Versuche als "über dem Anteil" (' . (150 - $rechneAnteil) . ' + 20 + 20)',
+    $k2['status'] === 429 && $zeilenZahl('eng') === $rechneAnteil
+        && ($stand1['verworfen_adresse_tag'] ?? null) === 150 - $rechneAnteil + 20 && ($stand2['verworfen_adresse_tag'] ?? null) === 150 - $rechneAnteil + 40,
+    kurz($k2) . ' ' . json_encode($stand1['verworfen_adresse_tag'] ?? null) . ' ' . json_encode($stand2['verworfen_adresse_tag'] ?? null));
+$inhalt = json_decode((string)file_get_contents($anteilPfad('127.0.0.85')), true) ?: ['sekunden' => []];
+$verschoben = [];
+foreach ($inhalt['sekunden'] as $sekunde => $n) {
+    $verschoben[(int)$sekunde - 61] = $n;
+}
+$inhalt['sekunden'] = $verschoben;
+file_put_contents($anteilPfad('127.0.0.85'), json_encode($inhalt));
+$k = anfrageVon($u, '127.0.0.85', 'POST', '/collect.php', stapel('eng', 'eng-spaeter', 20));
+pruefe('61 Sekunden später (Zähler der Adresse zurückgestellt) sendet der Browser denselben Stapel wieder: 200, alle 20 gespeichert, keines doppelt',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":20}' && $zeilenZahl('eng') === $rechneAnteil + 20
+        && count(zeilenVon($u, 'eng')) === $rechneAnteil + 20,
+    kurz($k) . ' ' . $zeilenZahl('eng') . ' Zeilen');
+// d) Platz für Einstieg und Anfragen: nachrangige Ereignisse füllen den Anteil nicht allein.
+$nachGrenze = preg_match("/define\\('COLLECT_ADRESSE_NACHRANGIG_JE_MINUTE',\\s*(\\d+)\\)/", $collectText, $treffer) ? (int)$treffer[1] : 0;
+pruefe('Grenze für nachrangige Ereignisse steht als COLLECT_ADRESSE_NACHRANGIG_JE_MINUTE in collect.php und lässt mindestens 37 vom Anteil frei: ' . $nachGrenze,
+    $nachGrenze >= 40 && $rechneAnteil - $nachGrenze >= 37);
+$rechneNach = $nachGrenze > 0 ? $nachGrenze : 80;
+$alle200 = true;
+for ($i = 0; $i < 3; $i++) {
+    $k = anfrageVon($u, '127.0.0.86', 'POST', '/collect.php', $gemischt('puls', 'puls-' . $i, array_fill(0, 40, 'heartbeat')));
+    $alle200 = $alle200 && $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":40}';
+}
+pruefe("eine Adresse sendet 120 Herzschläge: gespeichert sind $rechneNach, jede Antwort 200 mit \"stored\" 40",
+    $alle200 && $zeilenZahl('puls') === $rechneNach, kurz($k) . ' ' . $zeilenZahl('puls') . ' Zeilen');
+$k = anfrageVon($u, '127.0.0.86', 'POST', '/collect.php', $gemischt('puls', 'puls-mehr', array_fill(0, 10, 'heartbeat')));
+pruefe('weitere Herzschläge allein: 200 mit "stored" 10 und nichts gespeichert, kein 429',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":10}' && $zeilenZahl('puls') === $rechneNach, kurz($k) . ' ' . $zeilenZahl('puls') . ' Zeilen');
+$namen = [];
+$erwartet = [];
+for ($j = 0; $j < 40; $j++) {
+    $namen[] = $j % 4 === 3 ? 'heartbeat' : ($j % 4 === 1 ? 'form_submit' : 'page_view');
+    if ($j % 4 !== 3) {
+        $erwartet[] = 'wichtig-' . $j;
+    }
+}
+$k = anfrageVon($u, '127.0.0.86', 'POST', '/collect.php', $gemischt('wichtig', 'wichtig', $namen));
+pruefe('dieselbe Adresse sendet danach 30 Seitenaufrufe und Anfragen, gemischt mit 10 Herzschlägen: die 30 sind gespeichert, in der Reihenfolge des Stapels, die Herzschläge nicht',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":40}' && array_keys(zeilenVon($u, 'wichtig')) === $erwartet,
+    kurz($k) . ' ' . count(zeilenVon($u, 'wichtig')) . ' Zeilen');
+$inhalt = json_decode((string)@file_get_contents($anteilPfad('127.0.0.86')), true);
+pruefe('ihre Zähldatei trägt nur Sekunden und Zahlen in den Feldern sekunden und nachrangig (' . ($rechneNach + 30) . " und $rechneNach)",
+    is_array($inhalt) && array_keys($inhalt) === ['sekunden', 'nachrangig'] && array_filter($inhalt['sekunden'], 'is_int') === $inhalt['sekunden']
+        && array_filter($inhalt['nachrangig'], 'is_int') === $inhalt['nachrangig']
+        && array_sum($inhalt['sekunden']) === $rechneNach + 30 && array_sum($inhalt['nachrangig']) === $rechneNach,
+    substr((string)@file_get_contents($anteilPfad('127.0.0.86')), 0, 160));
+$rest = $rechneAnteil - $rechneNach - 30;
+$k = anfrageVon($u, '127.0.0.86', 'POST', '/collect.php', stapel('wichtig2', 'wichtig2', $rest));
+$kPuls = anfrageVon($u, '127.0.0.86', 'POST', '/collect.php', $gemischt('puls', 'puls-voll', array_fill(0, 5, 'heartbeat')));
+$kMit = anfrageVon($u, '127.0.0.86', 'POST', '/collect.php', $gemischt('wichtig3', 'wichtig3', ['heartbeat', 'page_view', 'heartbeat']));
+pruefe("Anteil ganz aufgebraucht (weitere $rest Seitenaufrufe gespeichert): Herzschläge allein bekommen weiter 200, ein Stapel mit einem Seitenaufruf 429",
+    $k['text'] === '{"ok":true,"stored":' . $rest . '}' && $zeilenZahl('wichtig2') === $rest
+        && $kPuls['status'] === 200 && $kPuls['text'] === '{"ok":true,"stored":5}' && $zeilenZahl('puls') === $rechneNach
+        && $kMit['status'] === 429 && $zeilenZahl('wichtig3') === 0,
+    kurz($k) . ' | ' . kurz($kPuls) . ' | ' . kurz($kMit));
+$namen = ['heartbeat', 'page_view', 'scroll_depth', 'form_submit', 'tab_visibility', 'performance'];
+$k = anfrageVon($u, '127.0.0.87', 'POST', '/collect.php', $gemischt('folge', 'folge', $namen));
+pruefe('Gegenprobe: bei freiem Anteil wird ein gemischter Stapel ganz und in seiner Reihenfolge gespeichert',
+    $k['status'] === 200 && $k['text'] === '{"ok":true,"stored":6}'
+        && array_keys(zeilenVon($u, 'folge')) === ['folge-0', 'folge-1', 'folge-2', 'folge-3', 'folge-4', 'folge-5'],
+    kurz($k) . ' ' . implode(',', array_keys(zeilenVon($u, 'folge'))));
 stoppe($u);
 
 // ─── Schluss: keine Antwort verrät Fehlertext oder Pfade ────────────────────

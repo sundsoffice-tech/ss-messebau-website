@@ -75,11 +75,13 @@ $checks['timestamp'] = gmdate('c');
 // keine Zahl und kein Zeitpunkt.
 $checks['bereinigung'] = $bereinigungZustand;
 
-// Statistik: "ok", "deckel" oder "zaehler" (statistikZustand() in
-// statistik-zaehler.php). "zaehler": Die Zähldatei von collect.php ist nicht
-// nutzbar, collect.php antwortet mit 503 und speichert nichts. "deckel": Der
-// Gesamtdeckel war mehrere Minuten am Stück erreicht, in dieser Zeit fehlen
-// der Statistik Ereignisse. Wie bei der Bereinigung bleiben "status" und der
+// Statistik: "ok", "menge", "deckel" oder "zaehler" (statistikZustand() in
+// statistik-zaehler.php). "zaehler": Eine Zähldatei von collect.php (Gesamtdeckel
+// oder Anteil je Adresse) ist nicht nutzbar oder war es in der letzten halben
+// Stunde, collect.php antwortet dann mit 503 und speichert nichts. "deckel": Der
+// Gesamtdeckel war in mehreren Minuten einer halben Stunde erreicht, in dieser
+// Zeit fehlen der Statistik Ereignisse. "menge": Heute sind ungewöhnlich viele
+// Ereignisse angenommen, es fehlt nichts. Wie bei der Bereinigung bleiben "status" und der
 // HTTP-Status davon unberührt, und hier steht nur der Zustand, keine Zahl
 // (die Zahlen sieht der angemeldete Admin in analytics-status.php). Gelesen
 // wird ohne Sperre und ohne Schreiben. Lässt sich der Zustand nicht bestimmen
