@@ -153,6 +153,7 @@ export function BlogPostDetail({ post, onNavigate }: BlogPostDetailProps) {
               [&_li]:mb-1 [&_li]:leading-relaxed
               [&_table]:w-full [&_table]:border-collapse [&_table]:mb-4
               [&_.tabelle-rollbar]:max-w-full [&_.tabelle-rollbar]:overflow-x-auto [&_.tabelle-rollbar]:mb-4 [&_.tabelle-rollbar_table]:mb-0
+              [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:mb-4
               [&_th]:text-left [&_th]:text-foreground [&_th]:font-semibold [&_th]:py-2 [&_th]:pr-4 [&_th]:border-b
               [&_td]:py-2 [&_td]:pr-4 [&_td]:border-b [&_td]:border-border
               [&_a]:text-primary [&_a]:underline [&_a]:hover:text-primary/80"

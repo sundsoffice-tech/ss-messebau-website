@@ -178,10 +178,10 @@ export function KIBeraterPage() {
                     <SectionLink
                       page={CHAT_SEITE}
                       section={CHAT_ANKER}
-                      className="mt-1 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary/80"
+                      className="inline-block py-3 text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary/80"
                     >
                       {t('advisor.howItWorks.step1.link')}
-                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                      <ArrowRight className="ml-1.5 inline-block h-4 w-4 align-[-0.15em]" aria-hidden="true" />
                     </SectionLink>
                   </div>
                 </div>
