@@ -143,6 +143,9 @@ function starte(string $apiQuelle, int $arbeiter = 1): ?array {
         PHP_BINARY,
         '-d', 'display_errors=1',
         '-d', 'error_reporting=-1',
+        // Das Abbild php:8.3-cli hat keine php.ini und damit log_errors=0; ohne
+        // diese Zeile stünde der Abbruch an der Zeitgrenze (Fall E) nirgends.
+        '-d', 'log_errors=1',
         '-d', 'disable_functions=curl_init,curl_exec,curl_multi_exec',
         '-d', 'session.save_path=' . $wurzel . '/sitzungen',
         '-S', '127.0.0.1:' . $port,
@@ -176,7 +179,7 @@ function starteFpm(string $apiQuelle, string $fpm): ?array {
     $alsRoot = function_exists('posix_geteuid') && posix_geteuid() === 0;
     $konf = "[global]\nerror_log = {$u['log']}\ndaemonize = no\n"
         . "[www]\nlisten = 127.0.0.1:$port\npm = static\npm.max_children = 2\n"
-        . "catch_workers_output = yes\nphp_flag[display_errors] = on\nphp_value[error_reporting] = -1\n"
+        . "catch_workers_output = yes\nphp_flag[display_errors] = on\nphp_flag[log_errors] = on\nphp_value[error_reporting] = -1\n"
         . ($alsRoot ? "user = root\ngroup = root\n" : '');
     file_put_contents($wurzel . '/fpm.conf', $konf);
     $befehl = [$fpm, '-F', '-y', $wurzel . '/fpm.conf'];
@@ -727,7 +730,8 @@ if (substr_count($anstoss, $anker) !== 1) {
     pruefe(sprintf('PHP bricht den Lauf ab: Zeitgrenze im Test 1 s, Verbindung nach %.1f s frei (Schranke 6 s)', $a['dauer']),
         $a['status'] === 200 && $a['dauer'] < 6.0);
     pruefe('der Abbruch steht im Protokoll des Servers (Maximum execution time)',
-        strpos((string)file_get_contents($u['log']), 'Maximum execution time') !== false);
+        strpos((string)file_get_contents($u['log']), 'Maximum execution time') !== false,
+        'Ende des Protokolls: ' . str_replace("\n", ' | ', substr((string)file_get_contents($u['log']), -500)));
     pruefe('Marke: heute, laeuft, 1 Versuch (kein Erfolg vermerkt)', markeIst($u, 'laeuft', 1), markeText($u));
     $b = anfrage($u, 'GET', '/health.php', null, [], 15);
     pruefe(sprintf('der nächste Abruf antwortet sofort und wie sonst (%.0f ms): Pause greift, der Server lebt', $b['dauer'] * 1000),
