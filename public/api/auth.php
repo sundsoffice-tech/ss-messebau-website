@@ -22,9 +22,43 @@ function startSession(): void {
     }
 }
 
+/**
+ * Marke, die eine Sitzung an den Stand des Passworts bindet: Ändert sich der Hash in admin_users,
+ * passt die Marke nicht mehr und die Sitzung gilt als abgemeldet.
+ */
+function sitzungsMarke(#[\SensitiveParameter] string $passwortHash): string {
+    return substr(hash('sha256', $passwortHash), 0, 16);
+}
+
+/**
+ * Admin-Zeile zur laufenden Sitzung oder null. Verlangt eine gestartete Sitzung.
+ * Gilt nur, wenn es die Zeile noch gibt und die Marke der Sitzung zum heutigen Passwort-Hash passt.
+ * Wirft, wenn die Datenbank nicht lesbar ist; der Aufrufer weist dann ab.
+ */
+function angemeldeterAdmin(): ?array {
+    if (empty($_SESSION['user_id']) || !is_string($_SESSION['pw_marke'] ?? null)) {
+        return null;
+    }
+    $stmt = getDB()->prepare('SELECT id, username, display_name, password_hash FROM admin_users WHERE id = :id LIMIT 1');
+    $stmt->execute([':id' => $_SESSION['user_id']]);
+    $zeile = $stmt->fetch();
+    if (!$zeile || !hash_equals(sitzungsMarke((string)$zeile['password_hash']), $_SESSION['pw_marke'])) {
+        unset($_SESSION['user_id'], $_SESSION['username'], $_SESSION['display_name'], $_SESSION['pw_marke']);
+        return null;
+    }
+    return ['id' => $zeile['id'], 'username' => $zeile['username'], 'display_name' => $zeile['display_name']];
+}
+
 function requireAuth(): bool {
     startSession();
-    if (empty($_SESSION['user_id'])) {
+    try {
+        $admin = angemeldeterAdmin();
+    } catch (\Throwable $e) {
+        http_response_code(503);
+        echo json_encode(['error' => 'Anmeldung derzeit nicht prüfbar']);
+        return false;
+    }
+    if ($admin === null) {
         http_response_code(401);
         echo json_encode(['error' => 'Nicht autorisiert']);
         return false;
@@ -137,6 +171,7 @@ function handleLogin(): void {
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['username'] = $user['username'];
     $_SESSION['display_name'] = $user['display_name'];
+    $_SESSION['pw_marke'] = sitzungsMarke((string)$user['password_hash']);
 
     echo json_encode([
         'success' => true,
@@ -154,12 +189,19 @@ function handleLogout(): void {
 }
 
 function handleMe(): void {
-    if (!empty($_SESSION['user_id'])) {
+    try {
+        $konto = angemeldeterAdmin();
+    } catch (\Throwable $e) {
+        http_response_code(503);
+        echo json_encode(['error' => 'Anmeldung derzeit nicht prüfbar']);
+        return;
+    }
+    if ($konto !== null) {
         echo json_encode([
             'authenticated' => true,
             'user' => [
-                'username' => $_SESSION['username'],
-                'displayName' => $_SESSION['display_name'],
+                'username' => $konto['username'],
+                'displayName' => $konto['display_name'],
             ],
         ]);
     } else {
@@ -218,6 +260,7 @@ function handleSetup(): void {
     $_SESSION['user_id'] = $db->lastInsertId();
     $_SESSION['username'] = $username;
     $_SESSION['display_name'] = $displayName;
+    $_SESSION['pw_marke'] = sitzungsMarke($hash);
 
     echo json_encode([
         'success' => true,

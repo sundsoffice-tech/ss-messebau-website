@@ -26,7 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $angemeldet = false;
     if (!empty($_COOKIE[session_name()])) {
         startSession();
-        $angemeldet = !empty($_SESSION['user_id']);
+        // Angemeldet ist nur, wessen Sitzung zum heutigen Passwort-Stand passt (auth.php, Sitzungsmarke).
+        try {
+            $angemeldet = angemeldeterAdmin() !== null;
+        } catch (\Throwable $e) {
+            $angemeldet = false;
+        }
     }
     if (!$angemeldet) {
         // Feld entfernen statt leeren: Ein Panel, das mit abgelaufener Sitzung geladen wurde,
