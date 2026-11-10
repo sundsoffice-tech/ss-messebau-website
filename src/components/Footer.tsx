@@ -7,6 +7,7 @@ import { CONTACT, PHONE_HREF, EMAIL_HREF } from '@/lib/contact'
 import { trackPhoneClick, trackMailClick } from '@/lib/analytics-tracker'
 import { authApi } from '@/lib/api-client'
 import { navigate } from '@/lib/deep-linking'
+import { useUIStore } from '@/store/ui-store'
 import { ShareButton } from './ShareButton'
 import type { SharePlatform } from '@/lib/share'
 
@@ -15,6 +16,7 @@ const FOOTER_SHARE_PLATFORMS: SharePlatform[] = ['linkedin', 'whatsapp', 'instag
 export const Footer = memo(function Footer() {
   const { t } = useTranslation()
   const [isAdmin, setIsAdmin] = useState(false)
+  const openCookieSettings = useUIStore((state) => state.openCookieSettings)
 
   useEffect(() => {
     authApi.me().then(res => setIsAdmin(res.authenticated)).catch(() => {
@@ -268,6 +270,13 @@ export const Footer = memo(function Footer() {
                 className="hover:text-white focus-visible:text-white transition-colors min-h-[44px] py-2 focus-visible:outline-none focus-visible:underline"
               >
                 {t('footer.legal.privacy')}
+              </button>
+              <button
+                type="button"
+                onClick={openCookieSettings}
+                className="hover:text-white focus-visible:text-white transition-colors min-h-[44px] py-2 focus-visible:outline-none focus-visible:underline"
+              >
+                {t('footer.legal.cookies')}
               </button>
               {isAdmin && (
               <button
