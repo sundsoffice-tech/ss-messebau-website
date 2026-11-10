@@ -5,7 +5,8 @@
 #
 # Aufruf auf dem Server (Beispiel hel1):
 #   bash <D>/neu/ops/tests/bereinigung_server.sh <D>
-#   <D>  frisches Verzeichnis mit neu/ (zu prüfender Stand), main/ (origin/main)
+#   <D>  frisches Verzeichnis mit neu/ (zu prüfender Stand), dem Vergleichsstand
+#        für die Rotprobe in alt/ (etwa der Vorgänger-PR) oder main/ (origin/main)
 #        und wahlweise zusammen/ (Stand mit PR #238 verschmolzen), alle aus
 #        git -c core.autocrlf=false archive <stand> public/api ops
 #
@@ -14,18 +15,21 @@
 #   fpm.log   php:8.3-fpm: dasselbe, dazu Fall H (Antwort vor dem Räumen)
 #   chat.log  Gegenprobe: die Belege der Chat-Bremsen laufen mit dem Anstoß weiter grün
 #   fertig    Zeitstempel, zuletzt
-# Alle Container laufen ohne Netz, lesen <D> nur und werden nach 300 s beendet.
+# Alle Container laufen ohne Netz, lesen <D> nur und werden nach 900 s beendet
+# (die Fälle mit großer Altlast füllen bis zu 600.000 Zeilen ein).
 set -u
-D=${1:?Verzeichnis mit neu/ und main/ fehlt}
+D=${1:?Verzeichnis mit neu/ und alt/ oder main/ fehlt}
 cd "$D" || exit 2
 KENNUNG="ber-$(basename "$D")-$$"
 ZUS=""
 [ -d "$D/zusammen" ] && ZUS=/app/zusammen
+ALT=/app/main
+[ -d "$D/alt" ] && ALT=/app/alt
 
 probe() { # <abbild> <name> <befehl...>
     local abbild=$1 name=$2
     shift 2
-    timeout 300 docker run --rm --name "$name" --network none -m 512m -v "$D":/app:ro -w /app "$abbild" "$@"
+    timeout 900 docker run --rm --name "$name" --network none -m 512m -v "$D":/app:ro -w /app "$abbild" "$@"
     local rc=$?
     [ "$rc" = 124 ] && docker stop -t 2 "$name" >/dev/null 2>&1
     return "$rc"
@@ -37,14 +41,14 @@ kopf() {
 
 {
     kopf
-    probe php:8.3-cli "$KENNUNG-cli" sh /app/neu/ops/tests/bereinigung_lauf.sh /app/neu /app/main $ZUS
+    probe php:8.3-cli "$KENNUNG-cli" sh /app/neu/ops/tests/bereinigung_lauf.sh /app/neu $ALT $ZUS
     echo "DOCKER_EXIT=$?"
     echo "ENDE $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 } > "$D/lauf.log" 2>&1
 
 {
     kopf
-    probe php:8.3-fpm "$KENNUNG-fpm" sh /app/neu/ops/tests/bereinigung_lauf.sh /app/neu /app/main $ZUS
+    probe php:8.3-fpm "$KENNUNG-fpm" sh /app/neu/ops/tests/bereinigung_lauf.sh /app/neu $ALT $ZUS
     echo "DOCKER_EXIT=$?"
     echo "ENDE $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 } > "$D/fpm.log" 2>&1

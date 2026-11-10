@@ -26,8 +26,17 @@
  *   G  Türen: ohne Anmeldung 401, der Admin-Knopf wie bisher
  *   H  unter PHP-FPM ist die Antwort fertig, bevor geräumt ist (nur wenn
  *      php-fpm im Abbild liegt, etwa php:8.3-fpm)
+ *   I  erst die Zähldateien, dann die Datenbank; last_cleanup und der Erfolg in
+ *      der Marke erst, wenn beide Teile durch sind; nicht löschbare Datei zählt
+ *   J  große Altlast: Löschen in Portionen über mehrere Anläufe, Fortschritt je Anlauf
+ *   K  ein zweiter Schreiber kommt während des Portionslaufs binnen einer Sekunde durch
+ *   L  checks.bereinigung in allen Zuständen, "status" bleibt "ok"
+ *   M  Abbruch mitten in einem langen Datenbankbefehl (nur unter PHP-FPM)
+ *   N  die Grenzen der Regeln gelten in UTC, auch bei Zeitzone Europe/Berlin
  *
- * Gegen public/api von main ist der Test rot: Dort räumt kein Abruf.
+ * Gegen public/api von main ist der Test rot: Dort räumt kein Abruf. Gegen den
+ * Stand von PR #241 (ee7a0bb) ist er an den Fällen I bis N und an den
+ * Ergänzungen in A und E rot.
  */
 
 if (PHP_SAPI !== 'cli') {
@@ -125,7 +134,7 @@ function umgebung(string $wurzel, string $apiQuelle): array {
 }
 
 /** Frische Kopie des API-Ordners samt eigenem Server (php -S). */
-function starte(string $apiQuelle, int $arbeiter = 1): ?array {
+function starte(string $apiQuelle, int $arbeiter = 1, array $zusatzIni = []): ?array {
     $wurzel = sys_get_temp_dir() . '/bereinigung-test-' . bin2hex(random_bytes(6));
     $u = umgebung($wurzel, $apiQuelle);
     $port = freierPort();
@@ -148,9 +157,12 @@ function starte(string $apiQuelle, int $arbeiter = 1): ?array {
         '-d', 'log_errors=1',
         '-d', 'disable_functions=curl_init,curl_exec,curl_multi_exec',
         '-d', 'session.save_path=' . $wurzel . '/sitzungen',
-        '-S', '127.0.0.1:' . $port,
-        '-t', $wurzel . '/api',
     ];
+    foreach ($zusatzIni as $ini) {
+        $befehl[] = '-d';
+        $befehl[] = $ini;
+    }
+    array_push($befehl, '-S', '127.0.0.1:' . $port, '-t', $wurzel . '/api');
     $rohre = [];
     $prozess = proc_open($befehl, [
         0 => ['file', PHP_OS_FAMILY === 'Windows' ? 'NUL' : '/dev/null', 'r'],
@@ -551,6 +563,102 @@ function wieSonst(array $a, string $basis): bool {
     return $a['status'] === 200 && normal($a['text']) === $basis;
 }
 
+/** Wie wieSonst, nur dass checks.bereinigung "ueberfaellig" zeigt; alles andere Wort für Wort gleich. */
+function wieSonstUeberfaellig(array $a, string $basis): bool {
+    return $a['status'] === 200
+        && normal($a['text']) === str_replace('"bereinigung": "ok"', '"bereinigung": "ueberfaellig"', $basis);
+}
+
+/** Ersetzt in einer Datei der Kopie eine Stelle, die genau einmal vorkommen muss. */
+function ersetzeAnker(array $u, string $datei, string $anker, string $neu): bool {
+    $pfad = $u['api'] . '/' . $datei;
+    $quelle = is_file($pfad) ? (string)file_get_contents($pfad) : '';
+    if (substr_count($quelle, $anker) !== 1) {
+        return false;
+    }
+    return file_put_contents($pfad, str_replace($anker, $neu, $quelle)) !== false;
+}
+
+/** Setzt mehrere Anker; meldet den ersten, der fehlt, als rote Prüfung. */
+function ersetzeAlle(array $u, array $stellen): bool {
+    foreach ($stellen as [$datei, $anker, $neu]) {
+        if (!ersetzeAnker($u, $datei, $anker, $neu)) {
+            pruefe("Anker steht genau einmal in $datei: $anker", false, 'nicht gefunden, dieser Fall wird nicht gefahren');
+            return false;
+        }
+    }
+    return true;
+}
+
+/** Altlast: $anzahl Herzschlag-Zeilen, drei Tage alt, im Format des Browsers. */
+function altlast(array $u, int $anzahl): void {
+    $p = db($u);
+    $s = $p->prepare("WITH RECURSIVE n(i) AS (SELECT 1 UNION ALL SELECT i + 1 FROM n WHERE i < :anzahl)
+        INSERT INTO analytics_events (event, ts, session_id, visitor_id, url)
+        SELECT 'heartbeat', :ts, 'altlast-' || i, 'altlast', '/probe' FROM n");
+    $s->execute([':anzahl' => $anzahl, ':ts' => gmdate('Y-m-d\TH:i:s', time() - 3 * TAG) . '.000Z']);
+}
+
+function altlastRest(array $u): int {
+    return (int)db($u)->query("SELECT COUNT(*) FROM analytics_events WHERE visitor_id = 'altlast'")->fetchColumn();
+}
+
+/** Messzeile mit frei gewähltem Zeitstempel (Fall N). */
+function zeileRoh(PDO $p, string $ereignis, string $marke, string $ts): string {
+    $p->prepare('INSERT INTO analytics_events (event, ts, session_id, visitor_id, url) VALUES (?, ?, ?, ?, ?)')
+        ->execute([$ereignis, $ts, $marke, 'probe', '/probe']);
+    return $marke;
+}
+
+/** Wartet, bis niemand mehr die Sperre auf der Marke hält (der Lauf ist zu Ende oder sein Prozess ist tot). */
+function warteSperreFrei(array $u, float $sekunden): bool {
+    $datei = $u['daten'] . '/bereinigung_lauf.json';
+    $ende = microtime(true) + $sekunden;
+    do {
+        if (is_file($datei) && filesize($datei) > 0) {
+            $fp = fopen($datei, 'r');
+            $frei = $fp && flock($fp, LOCK_EX | LOCK_NB);
+            if ($frei) {
+                flock($fp, LOCK_UN);
+            }
+            if ($fp) {
+                fclose($fp);
+            }
+            if ($frei) {
+                return true;
+            }
+        }
+        clearstatcache();
+        usleep(100000);
+    } while (microtime(true) < $ende);
+    return false;
+}
+
+/** health.php mit vorgegebener Marke: was zeigt checks.bereinigung, und bleibt der Rest wie sonst? */
+function zustandMit(array $u, ?array $stand): array {
+    if ($stand === null) {
+        @unlink($u['daten'] . '/bereinigung_lauf.json');
+    } else {
+        setzeMarke($u, $stand);
+    }
+    $a = anfrage($u, 'GET', '/health.php');
+    return [
+        'bereinigung' => $a['json']['checks']['bereinigung'] ?? null,
+        'status' => $a['json']['status'] ?? null,
+        'datenbank' => $a['json']['checks']['database'] ?? null,
+        'http' => $a['status'],
+        'antwort' => $a,
+    ];
+}
+
+function zustandIst(array $z, string $soll): bool {
+    return $z['bereinigung'] === $soll && $z['status'] === 'ok' && $z['datenbank'] === 'ok' && $z['http'] === 200;
+}
+
+function zustandText(array $z): string {
+    return 'bereinigung=' . json_encode($z['bereinigung']) . ' status=' . json_encode($z['status']) . ' HTTP ' . $z['http'];
+}
+
 // ─── Vorbedingungen ─────────────────────────────────────────────────────────
 echo "Prüfling: $apiQuelle\n";
 echo 'PHP ' . PHP_VERSION . ', ' . gmdate('Y-m-d H:i:s') . " UTC\n";
@@ -607,6 +715,12 @@ $letzter = konfig($u, 'last_cleanup');
 pruefe('last_cleanup in der Datenbank trägt das heutige Datum (' . heute() . ')',
     $letzter !== null && strncmp($letzter, heute(), 10) === 0, (string)$letzter);
 pruefe('last_cleanup_count ist 2', konfig($u, 'last_cleanup_count') === '2', (string)konfig($u, 'last_cleanup_count'));
+pruefe('Marke nennt die gelöschten Dateien (' . count($soll['weg']) . '), keine nicht löschbare, keinen Rest, und den vollständigen Erfolg von heute',
+    ($m['dateien'] ?? null) === count($soll['weg']) && ($m['dateien_fehler'] ?? null) === 0 && ($m['rest'] ?? null) === false
+        && ($m['erfolg_tag'] ?? null) === heute() && is_int($m['erfolg_zeit'] ?? null) && abs($m['erfolg_zeit'] - time()) < 60,
+    markeText($u));
+pruefe('health.php zeigte dabei "bereinigung": "ok" (frisch, noch keine Marke) und "status": "ok"',
+    ($a['json']['checks']['bereinigung'] ?? null) === 'ok' && ($a['json']['status'] ?? null) === 'ok', kurz($a));
 $c = anfrage($u, 'GET', '/analytics-config.php');
 pruefe('GET analytics-config.php ohne Anmeldung zeigt last_cleanup von heute (so wird nach dem Deploy gemessen)',
     $c['status'] === 200 && strncmp((string)($c['json']['last_cleanup'] ?? ''), heute(), 10) === 0, kurz($c));
@@ -703,13 +817,15 @@ if (is_file($u['api'] . '/bereinigung-anstoss.php')) {
 }
 $a = anfrage($u, 'GET', '/health.php');
 $k = anfrage($u, 'POST', '/collect.php', ereignis());
-pruefe('bereinigung-anstoss.php fehlt (halb hochgeladener Stand): health.php wie sonst, collect.php ' . LEERE_ANTWORT_COLLECT,
-    wieSonst($a, $basis) && $k['status'] === 200 && $k['text'] === LEERE_ANTWORT_COLLECT, kurz($a) . ' | ' . kurz($k));
+// Ohne lauffähigen Anstoß kann nicht geräumt werden: checks.bereinigung zeigt
+// dann "ueberfaellig", alles andere bleibt Wort für Wort gleich ("status": "ok", 200).
+pruefe('bereinigung-anstoss.php fehlt (halb hochgeladener Stand): health.php wie sonst bis auf "bereinigung": "ueberfaellig", collect.php ' . LEERE_ANTWORT_COLLECT,
+    wieSonstUeberfaellig($a, $basis) && $k['status'] === 200 && $k['text'] === LEERE_ANTWORT_COLLECT, kurz($a) . ' | ' . kurz($k));
 file_put_contents($u['api'] . '/bereinigung-anstoss.php', KAPUTT);
 $a = anfrage($u, 'GET', '/health.php');
 $k = anfrage($u, 'POST', '/collect.php', ereignis());
-pruefe('bereinigung-anstoss.php mit Syntaxfehler: health.php wie sonst, collect.php ' . LEERE_ANTWORT_COLLECT,
-    wieSonst($a, $basis) && $k['status'] === 200 && $k['text'] === LEERE_ANTWORT_COLLECT, kurz($a) . ' | ' . kurz($k));
+pruefe('bereinigung-anstoss.php mit Syntaxfehler: health.php wie sonst bis auf "bereinigung": "ueberfaellig", collect.php ' . LEERE_ANTWORT_COLLECT,
+    wieSonstUeberfaellig($a, $basis) && $k['status'] === 200 && $k['text'] === LEERE_ANTWORT_COLLECT, kurz($a) . ' | ' . kurz($k));
 pruefeUnberuehrt($u, $soll, 'ohne lauffähigen Anstoß');
 stoppe($u);
 
@@ -737,6 +853,29 @@ if (substr_count($anstoss, $anker) !== 1) {
     pruefe(sprintf('der nächste Abruf antwortet sofort und wie sonst (%.0f ms): Pause greift, der Server lebt', $b['dauer'] * 1000),
         wieSonst($b, $basis) && $b['dauer'] < 1.0, kurz($b));
     pruefeUnberuehrt($u, $soll, 'nach dem abgebrochenen Lauf');
+
+    // Der nächste Anlauf nach der Pause findet "laeuft" bei freier Sperre: Das
+    // ist ein abgebrochener Lauf, kein laufender. Er wird gezählt, dann wird geräumt.
+    copy($apiQuelle . '/analytics-cleanup.php', $u['api'] . '/analytics-cleanup.php');
+    $m = marke($u) ?? [];
+    $m['zeit'] = time() - 601;
+    setzeMarke($u, $m);
+    $c = anfrage($u, 'GET', '/health.php', null, [], 15);
+    warte($u, ['ok', 'fehler', 'teilweise']);
+    $m = marke($u) ?? [];
+    pruefe('nach der Pause: der abgebrochene Lauf ist erkannt und gezählt (abbrueche 1, fehlschlaege 1), der neue Anlauf ist Versuch 2 und endet ok',
+        markeIst($u, 'ok', 2) && ($m['abbrueche'] ?? null) === 1 && ($m['fehlschlaege'] ?? null) === 1, markeText($u));
+    pruefe('der Abbruch steht als Zeile "Bereinigung: … endete ohne Abschluss" im Protokoll',
+        strpos((string)file_get_contents($u['log']), 'endete ohne Abschluss') !== false);
+    pruefeGeraeumt($u, $soll, 'nach dem Anlauf, der den Abbruch erkannt hat');
+    // Dritter Abbruch des Tages: Obergrenze erreicht, es wird nicht mehr gelaufen.
+    setzeMarke($u, ['tag' => heute(), 'versuche' => 3, 'fehlschlaege' => 2, 'abbrueche' => 2, 'zeit' => time() - 601,
+        'ergebnis' => 'laeuft', 'seit' => time() - 3600]);
+    $c = anfrage($u, 'GET', '/health.php', null, [], 15);
+    usleep(300000);
+    $m = marke($u) ?? [];
+    pruefe('steht die Marke nach zwei Fehlschlägen wieder auf laeuft: dritter Fehlschlag gezählt, Marke fehler, kein vierter Lauf (Versuche 3, fehlschlaege 3, abbrueche 3)',
+        markeIst($u, 'fehler', 3) && ($m['fehlschlaege'] ?? null) === 3 && ($m['abbrueche'] ?? null) === 3, markeText($u));
 }
 stoppe($u);
 
@@ -797,6 +936,279 @@ $letzter = konfig($u, 'last_cleanup');
 pruefe('last_cleanup trägt das heutige Datum', $letzter !== null && strncmp($letzter, heute(), 10) === 0, (string)$letzter);
 stoppe($u);
 
+// ─── I: Reihenfolge und Zeuge ───────────────────────────────────────────────
+echo "\nI  erst die Zähldateien, dann die Datenbank; Erfolg erst, wenn beide Teile durch sind\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$soll = fuelle($u);
+if (ersetzeAlle($u, [['analytics-cleanup.php', "    \$datenbankTeil();\n", "    throw new \\RuntimeException('Probe: Datenbank kaputt');\n"]])) {
+    $a = anfrage($u, 'GET', '/health.php');
+    warte($u, ['ok', 'fehler', 'teilweise']);
+    $m = marke($u) ?? [];
+    pruefe('Datenbankteil wirft: health.php antwortet 200 und Wort für Wort wie sonst', wieSonst($a, $basis), kurz($a));
+    $rest = nochDa($u, $soll['weg'], []);
+    pruefe('die fälligen Dateien sind trotzdem gelöscht (' . count($soll['weg']) . '): der Dateiteil läuft vor der Datenbank',
+        $rest === [], 'noch da: ' . implode(', ', $rest));
+    pruefe('die fälligen Messzeilen stehen noch (' . count($soll['zeilenWeg']) . ')',
+        count(nochDa($u, [], $soll['zeilenWeg'])) === count($soll['zeilenWeg']));
+    pruefe('Marke: heute, fehler, 1 Versuch, 1 Fehlschlag, ' . count($soll['weg']) . ' gelöschte Dateien, kein Erfolg vermerkt',
+        markeIst($u, 'fehler', 1) && ($m['fehlschlaege'] ?? null) === 1 && ($m['dateien'] ?? null) === count($soll['weg'])
+            && !array_key_exists('erfolg_zeit', $m), markeText($u));
+    pruefe('last_cleanup ist nicht geschrieben', konfig($u, 'last_cleanup') === null, (string)konfig($u, 'last_cleanup'));
+    pruefe('der Fehler steht im Protokoll des Servers', strpos((string)file_get_contents($u['log']), 'Probe: Datenbank kaputt') !== false);
+}
+stoppe($u);
+
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$soll = fuelle($u);
+// Eine "Datei", die ins Muster passt, alt ist und sich nicht löschen lässt:
+// ein Verzeichnis mit Inhalt (unlink scheitert daran auch als root).
+$sperrig = $u['daten'] . '/rate_limit_nichtloeschbar.json';
+mkdir($sperrig);
+file_put_contents($sperrig . '/inhalt', 'x');
+touch($sperrig, time() - 7200);
+$a = anfrage($u, 'GET', '/health.php');
+warte($u, ['ok', 'fehler', 'teilweise']);
+$m = marke($u) ?? [];
+pruefe('eine Datei lässt sich nicht löschen: health.php antwortet 200 und Wort für Wort wie sonst', wieSonst($a, $basis), kurz($a));
+pruefe('Marke: der Lauf gilt nicht als ok, sondern als fehler, mit dateien_fehler 1 und ohne Erfolg',
+    markeIst($u, 'fehler', 1) && ($m['dateien_fehler'] ?? null) === 1 && !array_key_exists('erfolg_zeit', $m), markeText($u));
+pruefe('die löschbaren Dateien (' . count($soll['weg']) . ') und die 2 fälligen Messzeilen sind dabei gelöscht',
+    nochDa($u, $soll['weg'], $soll['zeilenWeg']) === [] && ($m['dateien'] ?? null) === count($soll['weg']) && ($m['geloescht'] ?? null) === 2,
+    markeText($u));
+pruefe('last_cleanup ist nicht geschrieben: kein stiller Erfolg', konfig($u, 'last_cleanup') === null, (string)konfig($u, 'last_cleanup'));
+pruefe('die Zeile "ließen sich nicht löschen" steht im Protokoll',
+    strpos((string)file_get_contents($u['log']), 'ließen sich nicht löschen') !== false);
+unlink($sperrig . '/inhalt');
+rmdir($sperrig);
+$m['zeit'] = time() - 601;
+setzeMarke($u, $m);
+$a = anfrage($u, 'GET', '/health.php');
+warte($u, ['ok']);
+$m = marke($u) ?? [];
+$letzter = konfig($u, 'last_cleanup');
+pruefe('Hindernis weg, nächster Anlauf nach der Pause: Marke ok, Versuch 2, Erfolg von heute, last_cleanup von heute',
+    markeIst($u, 'ok', 2) && ($m['erfolg_tag'] ?? null) === heute() && $letzter !== null && strncmp($letzter, heute(), 10) === 0,
+    markeText($u) . ' / ' . $letzter);
+pruefe('last_cleanup_count nennt die Summe seit dem letzten vollständigen Lauf (2 aus dem ersten Anlauf, 0 aus dem zweiten)',
+    konfig($u, 'last_cleanup_count') === '2', (string)konfig($u, 'last_cleanup_count'));
+stoppe($u);
+
+// ─── J: große Altlast in Portionen ──────────────────────────────────────────
+echo "\nJ  große Altlast: Löschen in Portionen über mehrere Anläufe\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$soll = fuelle($u);
+$altlastZeilen = 30000;
+altlast($u, $altlastZeilen);
+// Budget im Test 300 ms statt 3000 ms, damit ein Anlauf sicher nicht reicht.
+if (ersetzeAlle($u, [['bereinigung-anstoss.php', "define('BEREINIGUNG_BUDGET_MS', 3000);", "define('BEREINIGUNG_BUDGET_MS', 300);"]])) {
+    $verlauf = [];
+    $ersteAntwort = null;
+    $nachErstem = null;
+    for ($i = 1; $i <= 80; $i++) {
+        $a = anfrage($u, 'GET', '/health.php');
+        warte($u, ['ok', 'fehler', 'teilweise']);
+        $m = marke($u) ?? [];
+        $verlauf[] = ['rest' => altlastRest($u), 'ergebnis' => $m['ergebnis'] ?? null, 'geloescht' => $m['geloescht'] ?? null,
+            'dauer' => $m['dauer_ms'] ?? null, 'portion' => $m['laengste_portion_ms'] ?? null, 'versuche' => $m['versuche'] ?? null];
+        if ($i === 1) {
+            $ersteAntwort = $a;
+            $nachErstem = ['marke' => $m, 'dateien' => nochDa($u, $soll['weg'], []), 'last_cleanup' => konfig($u, 'last_cleanup')];
+        }
+        if (($m['ergebnis'] ?? null) !== 'teilweise') {
+            break;
+        }
+        $m['zeit'] = time() - 61; // Pause nach einem Teillauf (60 s) abgelaufen
+        setzeMarke($u, $m);
+    }
+    $reste = array_column($verlauf, 'rest');
+    echo 'HINWEIS Rest der Altlast nach jedem Anlauf: ' . implode(', ', $reste) . "\n";
+    echo 'HINWEIS Dauer je Anlauf in ms: ' . implode(', ', array_column($verlauf, 'dauer'))
+        . '; längste Portion je Anlauf in ms: ' . implode(', ', array_column($verlauf, 'portion')) . "\n";
+    pruefe("erster Anlauf bei $altlastZeilen fälligen Zeilen und 300 ms Budget: Marke teilweise mit Rest, kein Fehler",
+        ($nachErstem['marke']['ergebnis'] ?? null) === 'teilweise' && ($nachErstem['marke']['rest'] ?? null) === true
+            && ($nachErstem['marke']['fehlschlaege'] ?? null) === 0, json_encode($nachErstem['marke'] ?? null));
+    pruefe('die Dateien sind schon nach dem ersten Anlauf gelöscht, obwohl die Datenbank nicht fertig ist',
+        ($nachErstem['dateien'] ?? ['?']) === [], 'noch da: ' . implode(', ', $nachErstem['dateien'] ?? []));
+    pruefe('last_cleanup ist nach dem ersten Anlauf nicht geschrieben, kein Erfolg in der Marke',
+        ($nachErstem['last_cleanup'] ?? 'x') === null && !array_key_exists('erfolg_zeit', $nachErstem['marke'] ?? []),
+        json_encode($nachErstem['last_cleanup'] ?? null));
+    pruefe('health.php antwortete dabei Wort für Wort wie sonst ("status": "ok", "bereinigung": "ok")',
+        $ersteAntwort !== null && wieSonst($ersteAntwort, $basis), $ersteAntwort !== null ? kurz($ersteAntwort) : '');
+    $faellt = count($reste) >= 2;
+    for ($i = 1; $i < count($reste); $i++) {
+        $faellt = $faellt && $reste[$i] < $reste[$i - 1];
+    }
+    pruefe('jeder Anlauf macht Fortschritt: der Rest fällt von Anlauf zu Anlauf und der erste hat schon gelöscht',
+        $faellt && $reste[0] < $altlastZeilen && $reste[0] > 0, implode(', ', $reste));
+    pruefe('es braucht mindestens 3 Anläufe (das Budget reicht nicht für alles): ' . count($verlauf),
+        count($verlauf) >= 3);
+    $letzterAnlauf = end($verlauf);
+    pruefe('am Ende ist die Altlast ganz abgebaut: Rest 0, Marke ok, Versuche = Zahl der Anläufe',
+        $letzterAnlauf['rest'] === 0 && $letzterAnlauf['ergebnis'] === 'ok' && $letzterAnlauf['versuche'] === count($verlauf),
+        json_encode($letzterAnlauf));
+    $maxDauer = max(array_map('intval', array_column($verlauf, 'dauer')));
+    $maxPortion = max(array_map('intval', array_column($verlauf, 'portion')));
+    pruefe("kein Anlauf überzieht das Budget grob: längster $maxDauer ms bei 300 ms Budget (Schranke 1500 ms, Wanduhr)", $maxDauer < 1500);
+    pruefe("keine Portion hält die Schreibsperre lange: längste $maxPortion ms (Schranke 1000 ms)", $maxPortion < 1000);
+    pruefeGeraeumt($u, $soll, 'nach dem letzten Anlauf');
+    $letzter = konfig($u, 'last_cleanup');
+    pruefe('erst jetzt trägt last_cleanup das heutige Datum, last_cleanup_count die Summe aller Anläufe (' . ($altlastZeilen + 2) . ')',
+        $letzter !== null && strncmp($letzter, heute(), 10) === 0 && konfig($u, 'last_cleanup_count') === (string)($altlastZeilen + 2),
+        $letzter . ' / ' . konfig($u, 'last_cleanup_count'));
+    pruefe('ein Teillauf steht als "teilweise" im Protokoll, nicht als gescheitert',
+        strpos((string)file_get_contents($u['log']), ' teilweise: ') !== false && strpos((string)file_get_contents($u['log']), 'gescheitert') === false);
+}
+stoppe($u);
+
+// ─── K: zweiter Schreiber ───────────────────────────────────────────────────
+echo "\nK  ein zweiter Schreiber kommt während des Portionslaufs binnen einer Sekunde durch\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$soll = fuelle($u);
+altlast($u, 150000); // mehr, als ein Lauf mit 3 s Budget schafft: der Lauf dauert das ganze Budget
+$url = $u['basis'] . '/health.php';
+$ch = curlGriff($url, 'GET', null, [], 40);
+$mh = curl_multi_init();
+curl_multi_add_handle($mh, $ch);
+$ende = microtime(true) + 5;
+do {
+    curl_multi_exec($mh, $laeuft);
+    usleep(5000);
+} while (((marke($u) ?? [])['ergebnis'] ?? null) !== 'laeuft' && microtime(true) < $ende && $hatAnstoss);
+$dauern = ['collect' => [], 'inquiry' => []];
+$schreibFehler = [];
+for ($i = 0; $i < 400; $i++) {
+    curl_multi_exec($mh, $laeuft);
+    if (((marke($u) ?? [])['ergebnis'] ?? null) !== 'laeuft') {
+        break;
+    }
+    $art = $i % 2 === 0 ? 'collect' : 'inquiry';
+    $t0 = microtime(true);
+    try {
+        $p = db($u); // eigene Verbindung je Schreiber, wartet höchstens 5 s
+        if ($art === 'collect') {
+            $p->prepare('INSERT INTO analytics_events (event, ts, session_id, visitor_id, url, referrer, utm_source, utm_medium, utm_campaign, utm_content, utm_term, props)
+                VALUES (:event, :ts, :session_id, :visitor_id, :url, :referrer, :utm_source, :utm_medium, :utm_campaign, :utm_content, :utm_term, :props)')
+                ->execute([':event' => 'page_view', ':ts' => gmdate('c'), ':session_id' => 'schreiber-' . $i, ':visitor_id' => 'schreiber',
+                    ':url' => '/probe', ':referrer' => '', ':utm_source' => '', ':utm_medium' => '', ':utm_campaign' => '',
+                    ':utm_content' => '', ':utm_term' => '', ':props' => null]);
+        } else {
+            $p->prepare('INSERT INTO inquiries (inquiry_id, type, name, email, company, phone, message, form_data)
+                VALUES (:inquiry_id, :type, :name, :email, :company, :phone, :message, :form_data)')
+                ->execute([':inquiry_id' => 'schreiber-' . $i, ':type' => 'kontakt', ':name' => 'Probe', ':email' => 'probe@example.invalid',
+                    ':company' => '', ':phone' => '', ':message' => 'Probe', ':form_data' => '{}']);
+        }
+        $p = null;
+    } catch (\Throwable $e) {
+        $schreibFehler[] = $art . ': ' . $e->getMessage();
+    }
+    $dauern[$art][] = microtime(true) - $t0;
+    usleep(40000);
+}
+do {
+    curl_multi_exec($mh, $laeuft);
+    if ($laeuft) {
+        curl_multi_select($mh, 0.5);
+    }
+} while ($laeuft);
+$a = lies($ch, curl_multi_getcontent($ch), $url);
+curl_multi_remove_handle($mh, $ch);
+curl_multi_close($mh);
+warte($u, ['ok', 'fehler', 'teilweise']);
+$m = marke($u) ?? [];
+$alleDauern = array_merge($dauern['collect'], $dauern['inquiry']);
+$laengste = $alleDauern === [] ? 99.0 : max($alleDauern);
+sort($alleDauern);
+$mitte = $alleDauern === [] ? 99.0 : $alleDauern[intdiv(count($alleDauern), 2)];
+pruefe('während des Laufs (Marke laeuft) begonnen: mindestens 5 INSERT wie collect.php und 5 wie inquiries.php ('
+    . count($dauern['collect']) . ' und ' . count($dauern['inquiry']) . ')',
+    count($dauern['collect']) >= 5 && count($dauern['inquiry']) >= 5);
+pruefe(sprintf('jeder davon war binnen einer Sekunde durch: längster %.0f ms, mittlerer %.0f ms', $laengste * 1000, $mitte * 1000),
+    $laengste < 1.0 && $schreibFehler === [], implode(' | ', array_slice($schreibFehler, 0, 3)));
+pruefe('der Lauf hat dabei weitergelöscht und endete teilweise oder ok, ohne Fehlschlag: '
+    . ($m['geloescht'] ?? '?') . ' Zeilen in ' . ($m['portionen'] ?? '?') . ' Portionen, ' . ($m['dauer_ms'] ?? '?') . ' ms',
+    in_array($m['ergebnis'] ?? null, ['teilweise', 'ok'], true) && ($m['geloescht'] ?? 0) > 0 && ($m['fehlschlaege'] ?? null) === 0, markeText($u));
+pruefe('health.php antwortete Wort für Wort wie sonst', wieSonst($a, $basis), kurz($a));
+$geschrieben = (int)db($u)->query("SELECT COUNT(*) FROM analytics_events WHERE visitor_id = 'schreiber'")->fetchColumn();
+pruefe('die Zeilen des zweiten Schreibers stehen in der Datenbank (' . $geschrieben . ')', $geschrieben === count($dauern['collect']) && $geschrieben > 0);
+stoppe($u);
+
+// ─── L: checks.bereinigung ──────────────────────────────────────────────────
+echo "\nL  checks.bereinigung in allen Zuständen, \"status\" bleibt \"ok\"\n";
+$u = starte($apiQuelle) ?? exit(2);
+schema($u);
+$jetzt = time();
+$gesperrt = ['tag' => heute(), 'versuche' => 3, 'fehlschlaege' => 3, 'abbrueche' => 0, 'zeit' => $jetzt, 'ergebnis' => 'fehler'];
+$teil = ['tag' => heute(), 'versuche' => 5, 'fehlschlaege' => 0, 'abbrueche' => 0, 'zeit' => $jetzt, 'ergebnis' => 'teilweise', 'rest' => true];
+$z = zustandMit($u, null);
+warte($u, ['ok', 'fehler', 'teilweise']);
+pruefe('frisch nach dem Deploy (noch keine Marke): "bereinigung": "ok"', zustandIst($z, 'ok'), zustandText($z));
+$z = zustandMit($u, marke($u));
+pruefe('nach dem ersten vollständigen Lauf: "ok"', zustandIst($z, 'ok') && (marke($u)['erfolg_tag'] ?? null) === heute(), zustandText($z) . ' ' . markeText($u));
+$z = zustandMit($u, $gesperrt + ['seit' => $jetzt - 10 * TAG, 'erfolg_zeit' => $jetzt - 3 * TAG, 'erfolg_tag' => gmdate('Y-m-d', $jetzt - 3 * TAG)]);
+pruefe('letzter vollständiger Lauf vor drei Tagen, seither nur Fehlschläge: "ueberfaellig", dabei "status": "ok", "database": "ok", HTTP 200',
+    zustandIst($z, 'ueberfaellig'), zustandText($z));
+pruefe('die Antwort ist sonst Wort für Wort dieselbe', wieSonstUeberfaellig($z['antwort'], $basis), kurz($z['antwort']));
+$z = zustandMit($u, $gesperrt + ['seit' => $jetzt - 3 * TAG]);
+pruefe('noch nie ein vollständiger Lauf, erster Anlauf vor drei Tagen: "ueberfaellig"', zustandIst($z, 'ueberfaellig'), zustandText($z));
+$z = zustandMit($u, $gesperrt + ['seit' => $jetzt - TAG]);
+pruefe('noch nie ein vollständiger Lauf, erster Anlauf vor einem Tag (erster Tag nach dem Deploy): "ok"', zustandIst($z, 'ok'), zustandText($z));
+$z = zustandMit($u, $teil + ['seit' => $jetzt - 10 * TAG, 'erfolg_zeit' => $jetzt - TAG, 'erfolg_tag' => gmdate('Y-m-d', $jetzt - TAG)]);
+pruefe('teilweise, letzter vollständiger Lauf gestern: "ok"', zustandIst($z, 'ok'), zustandText($z));
+$z = zustandMit($u, $teil + ['seit' => $jetzt - 10 * TAG, 'erfolg_zeit' => $jetzt - 3 * TAG, 'erfolg_tag' => gmdate('Y-m-d', $jetzt - 3 * TAG)]);
+pruefe('teilweise seit drei Tagen ohne vollständigen Lauf: "ueberfaellig", "status" bleibt "ok"', zustandIst($z, 'ueberfaellig'), zustandText($z));
+$z = zustandMit($u, ['ergebnis' => 'laeuft'] + $gesperrt + ['seit' => $jetzt - 10 * TAG, 'erfolg_zeit' => $jetzt - 3 * TAG]);
+pruefe('laeuft, letzter vollständiger Lauf vor drei Tagen: "ueberfaellig"', zustandIst($z, 'ueberfaellig'), zustandText($z));
+$z1 = zustandMit($u, $gesperrt + ['seit' => $jetzt - 10 * TAG, 'erfolg_zeit' => time() - 2 * TAG + 120]);
+$z2 = zustandMit($u, $gesperrt + ['seit' => $jetzt - 10 * TAG, 'erfolg_zeit' => time() - 2 * TAG - 120]);
+pruefe('Schwelle zwei Tage: zwei Minuten davor "ok", zwei Minuten danach "ueberfaellig"',
+    zustandIst($z1, 'ok') && zustandIst($z2, 'ueberfaellig'), zustandText($z1) . ' | ' . zustandText($z2));
+pruefe('keine dieser Anfragen hat einen Lauf ausgelöst (Marke unverändert gesperrt)', markeIst($u, 'fehler', 3), markeText($u));
+// Der letzte vollständige Erfolg übersteht spätere Anläufe: gestern ok, heute Fehlschlag.
+$erfolgZeit = $jetzt - TAG;
+setzeMarke($u, ['tag' => gmdate('Y-m-d', $erfolgZeit), 'versuche' => 1, 'fehlschlaege' => 0, 'abbrueche' => 0, 'zeit' => $erfolgZeit,
+    'ergebnis' => 'ok', 'seit' => $jetzt - 10 * TAG, 'erfolg_zeit' => $erfolgZeit, 'erfolg_tag' => gmdate('Y-m-d', $erfolgZeit)]);
+vorneEin($u, 'analytics-cleanup.php', "if (isset(\$bereinigungIntern)) { throw new \\RuntimeException('Probe: Bereinigung kaputt'); }");
+$a = anfrage($u, 'GET', '/health.php');
+warte($u, ['ok', 'fehler', 'teilweise']);
+$m = marke($u) ?? [];
+pruefe('gestern ok, heute Fehlschlag: die Marke behält Tag und Zeit des letzten vollständigen Erfolgs und den Beginn der Beobachtung',
+    markeIst($u, 'fehler', 1) && ($m['erfolg_zeit'] ?? null) === $erfolgZeit && ($m['erfolg_tag'] ?? null) === gmdate('Y-m-d', $erfolgZeit)
+        && ($m['seit'] ?? null) === $jetzt - 10 * TAG, markeText($u));
+stoppe($u);
+
+// ─── N: Zeitzone ────────────────────────────────────────────────────────────
+echo "\nN  die Grenzen der Regeln gelten in UTC, auch bei Zeitzone Europe/Berlin\n";
+$u = starte($apiQuelle, 1, ['date.timezone=Europe/Berlin']) ?? exit(2);
+schema($u);
+$p = db($u);
+$p->exec("INSERT INTO analytics_config (config_key, config_value) VALUES ('retention_days', '365')");
+// Zeitstempel in UTC mit Leerzeichen, damit die halbe Stunde zählt (das Format
+// des Browsers mit "T" vergleicht gegen die Grenze nur tagesgenau).
+$utc = function (int $alter): string {
+    return gmdate('Y-m-d H:i:s', time() - $alter);
+};
+$tzBleibt = [
+    zeileRoh($p, 'heartbeat', 'tz-herzschlag-23h30', $utc(TAG - 1800)),
+    zeileRoh($p, 'page_view', 'tz-seite-365-tage-weniger-30-min', $utc(365 * TAG - 1800)),
+];
+$tzWeg = [
+    zeileRoh($p, 'heartbeat', 'tz-herzschlag-24h30', $utc(TAG + 1800)),
+    zeileRoh($p, 'page_view', 'tz-seite-365-tage-mehr-30-min', $utc(365 * TAG + 1800)),
+];
+$p = null;
+$a = anfrage($u, 'GET', '/health.php');
+warte($u, ['ok', 'fehler', 'teilweise']);
+$da = zeilenDa($u);
+pruefe('Server in Europe/Berlin: Herzschlag 23,5 h alt und Seitenaufruf 365 Tage weniger 30 Minuten alt (UTC) stehen noch',
+    array_values(array_intersect($tzBleibt, $da)) === $tzBleibt, 'da: ' . implode(', ', $da));
+pruefe('Herzschlag 24,5 h alt und Seitenaufruf 365 Tage plus 30 Minuten alt sind gelöscht',
+    array_intersect($tzWeg, $da) === [] && markeIst($u, 'ok', 1), 'da: ' . implode(', ', $da) . ' ' . markeText($u));
+stoppe($u);
+
 // ─── H: PHP-FPM ─────────────────────────────────────────────────────────────
 echo "\nH  unter PHP-FPM ist die Antwort fertig, bevor geräumt ist\n";
 $fpm = null;
@@ -836,6 +1248,76 @@ if ($fpm === null) {
         pruefeGeraeumt($u, $soll, 'nach dem Lauf unter FPM');
         stoppe($u);
     }
+}
+
+// ─── M: Abbruch im langen Datenbankbefehl ───────────────────────────────────
+// Mit Portionen gibt es im Betrieb keinen langen Befehl mehr. Der Fall stellt
+// ihn künstlich her (eine einzige Portion über die ganze Altlast, Zeitgrenze
+// 1 s Rechenzeit) und belegt, was dann geschieht: PHP beendet den Arbeiter,
+// die Datenbank bleibt heil, und der nächste Anlauf erkennt den Abbruch.
+echo "\nM  Abbruch mitten in einem langen Datenbankbefehl (nur unter PHP-FPM)\n";
+$u = $fpm === null ? null : starteFpm($apiQuelle, $fpm);
+if ($u === null) {
+    $uebersprungen++;
+    echo "UEBERSPRUNGEN  php-fpm liegt nicht in diesem Abbild oder startet nicht\n";
+} else {
+    schema($u);
+    $soll = fuelle($u);
+    $grosseAltlast = 600000;
+    altlast($u, $grosseAltlast);
+    $original = [];
+    foreach (['analytics-cleanup.php', 'bereinigung-anstoss.php'] as $datei) {
+        $original[$datei] = is_file($u['api'] . '/' . $datei) ? (string)file_get_contents($u['api'] . '/' . $datei) : '';
+    }
+    if (ersetzeAlle($u, [
+        ['analytics-cleanup.php', '$portionZeilen = 500;', '$portionZeilen = 100000000;'],
+        ['bereinigung-anstoss.php', "define('BEREINIGUNG_ZEITGRENZE', 10);", "define('BEREINIGUNG_ZEITGRENZE', 1);"],
+        ['bereinigung-anstoss.php', "define('BEREINIGUNG_BUDGET_MS', 3000);", "define('BEREINIGUNG_BUDGET_MS', 120000);"],
+    ])) {
+        $t0 = microtime(true);
+        $a = fcgi($u, 'health.php');
+        pruefe('health.php antwortet 200 mit "status": "ok"', $a['status'] === 200 && strpos($a['text'], '"status": "ok"') !== false, kurz($a));
+        $frei = warteSperreFrei($u, 90.0);
+        $bisEnde = microtime(true) - $t0;
+        usleep(500000); // FPM schreibt den Tod des Arbeiters erst danach ins Protokoll
+        $protokoll = (string)@file_get_contents($u['log']) . (string)@file_get_contents($u['wurzel'] . '/fpm.aus');
+        $hart = strpos($protokoll, 'terminated') !== false || strpos($protokoll, 'code 124') !== false;
+        $weich = strpos($protokoll, 'Maximum execution time') !== false;
+        printf("HINWEIS ein DELETE über %d Zeilen, Zeitgrenze 1 s Rechenzeit: Sperre nach %.1f s frei; im Protokoll: %s\n",
+            $grosseAltlast, $bisEnde,
+            $hart ? 'harter Abbruch (Prozess beendet)' : ($weich ? 'Abbruch nach dem Ende des Befehls' : 'kein Abbruch gefunden'));
+        pruefe('der Lauf ist zu Ende (Sperre frei) und PHP hat ihn an der Zeitgrenze abgebrochen', $frei && ($hart || $weich),
+            'Ende des Protokolls: ' . str_replace("\n", ' | ', substr($protokoll, -400)));
+        pruefe('die Marke steht noch auf laeuft, 1 Versuch: kein Erfolg vermerkt', markeIst($u, 'laeuft', 1), markeText($u));
+        $rest = altlastRest($u);
+        pruefe("alles oder nichts: von der einen Portion ist nichts halb gelöscht (Rest $rest von $grosseAltlast)",
+            $rest === $grosseAltlast || $rest === 0);
+        pruefe('die Datenbank ist heil (PRAGMA integrity_check: ok)', db($u)->query('PRAGMA integrity_check')->fetchColumn() === 'ok');
+        pruefe('last_cleanup ist nicht geschrieben', konfig($u, 'last_cleanup') === null, (string)konfig($u, 'last_cleanup'));
+        $b = fcgi($u, 'health.php');
+        pruefe(sprintf('PHP-FPM lebt: der nächste Abruf antwortet 200 nach %.0f ms, ohne neuen Lauf (Pause)', ($b['dauer'] ?? 99) * 1000),
+            $b['status'] === 200 && ($b['dauer'] ?? 99) < 2.0 && markeIst($u, 'laeuft', 1), kurz($b) . ' ' . markeText($u));
+        // Zurück auf den echten Stand (Portionen zu 500, Budget 3 s), Pause abgelaufen.
+        foreach ($original as $datei => $inhalt) {
+            file_put_contents($u['api'] . '/' . $datei, $inhalt);
+        }
+        $m = marke($u) ?? [];
+        $m['zeit'] = time() - 601;
+        setzeMarke($u, $m);
+        $c = fcgi($u, 'health.php');
+        usleep(300000);
+        warteSperreFrei($u, 30.0);
+        $m = marke($u) ?? [];
+        $restDanach = altlastRest($u);
+        pruefe('nächster Anlauf: Abbruch erkannt und gezählt (abbrueche 1, fehlschlaege 1), Versuch 2 endet teilweise oder ok',
+            ($m['abbrueche'] ?? null) === 1 && ($m['fehlschlaege'] ?? null) === 1 && ($m['versuche'] ?? null) === 2
+                && in_array($m['ergebnis'] ?? null, ['teilweise', 'ok'], true), markeText($u));
+        pruefe("und er macht in Portionen Fortschritt oder findet nichts mehr vor: Rest $restDanach nach $rest",
+            $rest === 0 ? $restDanach === 0 : $restDanach < $rest);
+        printf("HINWEIS dieser Anlauf mit echtem Budget (3 s): %s Zeilen in %s Portionen, %s ms, längste Portion %s ms\n",
+            $m['geloescht'] ?? '?', $m['portionen'] ?? '?', $m['dauer_ms'] ?? '?', $m['laengste_portion_ms'] ?? '?');
+    }
+    stoppe($u);
 }
 
 // ─── Schluss: keine Antwort verrät Fehlertext oder Pfade ────────────────────
