@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import {
   Accordion,
@@ -13,7 +12,6 @@ import {
   ArrowRight,
   Phone,
   CheckCircle,
-  Star,
   Users,
   Truck,
   Package,
@@ -103,27 +101,6 @@ export function LeistungenTourenPage() {
     {
       q: 'Ab wie vielen Messen lohnt sich ein Tourenpaket?',
       a: 'Bereits ab drei Messeterminen pro Jahr rechnet sich ein Tourenpaket gegenüber Einzelbeauftragungen. Bei mehr als fünf Terminen ist die Kostenersparnis besonders deutlich. Wir beraten Sie gerne individuell.',
-    },
-  ]
-
-  const testimonials = [
-    {
-      text: 'Dank des Tourenpakets von S&S Messebau sind wir auf sechs Fachmessen pro Jahr vertreten – mit einem einheitlichen, professionellen Auftritt. Die Koordination läuft reibungslos und die Kosteneinsparung ist enorm.',
-      author: 'Thomas Richter',
-      company: 'ProTech Industrielösungen GmbH',
-      rating: 5,
-    },
-    {
-      text: 'Unser modulares Standsystem passt sich an jede Messefläche an – ob 12 m² oder 80 m². S&S kümmert sich um alles: Transport, Aufbau, Abbau und Einlagerung. Besser geht es nicht.',
-      author: 'Sandra Klein',
-      company: 'HealthVision AG',
-      rating: 5,
-    },
-    {
-      text: 'Seit wir mit S&S Messebau als Tourenpartner arbeiten, sparen wir nicht nur Kosten, sondern auch enorm viel Zeit bei der Messeplanung. Absolute Empfehlung für Unternehmen mit mehreren Messeauftritten.',
-      author: 'Frank Meier',
-      company: 'EcoSystems Deutschland',
-      rating: 5,
     },
   ]
 
@@ -379,44 +356,8 @@ export function LeistungenTourenPage() {
         </div>
       </section>
 
-      {/* Kundenstimmen Section */}
-      <section id="referenzen" className="py-12 sm:py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2
-            className="font-bold text-center mb-4 heading-2"
-          >
-            Das sagen unsere Tourenkunden
-          </h2>
-          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Unternehmen, die auf unsere Tourenpakete für wiederkehrende Messeauftritte vertrauen.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-500" weight="fill" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4 italic">
-                    &ldquo;{testimonial.text}&rdquo;
-                  </p>
-                  <Separator className="my-4" />
-                  <div>
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Interne Verlinkung Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4 heading-2"
@@ -451,7 +392,7 @@ export function LeistungenTourenPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16">
+      <section className="py-12 sm:py-16 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
           <h2
             className="font-bold mb-6 heading-2"

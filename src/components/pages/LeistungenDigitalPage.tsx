@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import {
   Accordion,
@@ -13,7 +12,6 @@ import {
   ArrowRight,
   Phone,
   CheckCircle,
-  Star,
   Users,
   Lightning,
   Eye,
@@ -112,27 +110,6 @@ export function LeistungenDigitalPage() {
     {
       q: 'Bieten Sie technischen Support während der Messe?',
       a: 'Ja, unser technisches Team ist während der gesamten Messelaufzeit vor Ort oder per Remote-Zugriff erreichbar. Wir überwachen alle Systeme in Echtzeit und reagieren sofort bei technischen Störungen.',
-    },
-  ]
-
-  const testimonials = [
-    {
-      text: 'Die AR-Produktvisualisierung von S&S hat unseren Messestand zur Attraktion der gesamten Halle gemacht. Die Besucherverweildauer hat sich verdreifacht und wir haben 40% mehr Leads generiert als im Vorjahr.',
-      author: 'Thomas Richter',
-      company: 'AutoTech Innovations GmbH',
-      rating: 5,
-    },
-    {
-      text: 'Das digitale Lead-Tracking-System war ein Gamechanger. Alle Kontakte direkt im CRM, mit Gesprächsnotizen und Interessenprofil. Die Nachbearbeitung nach der Messe war so effizient wie nie zuvor.',
-      author: 'Sandra Klein',
-      company: 'PharmaCare AG',
-      rating: 5,
-    },
-    {
-      text: 'Die interaktive Social-Media-Wall hat für enormes Engagement gesorgt. Über 500 Posts mit unserem Hashtag während der drei Messetage – unbezahlbare Reichweite für unsere Marke.',
-      author: 'Florian Hartmann',
-      company: 'DigitalBrands GmbH',
-      rating: 5,
     },
   ]
 
@@ -372,44 +349,8 @@ export function LeistungenDigitalPage() {
         </div>
       </section>
 
-      {/* Kundenstimmen Section */}
-      <section id="referenzen" className="py-12 sm:py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2
-            className="font-bold text-center mb-4 heading-2"
-          >
-            Das sagen unsere Kunden
-          </h2>
-          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Erfahrungen von Unternehmen, die mit unseren digitalen Messelösungen begeistern.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-500" weight="fill" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4 italic">
-                    &ldquo;{testimonial.text}&rdquo;
-                  </p>
-                  <Separator className="my-4" />
-                  <div>
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Interne Verlinkung Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4 heading-2"
@@ -444,7 +385,7 @@ export function LeistungenDigitalPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16">
+      <section className="py-12 sm:py-16 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
           <h2
             className="font-bold mb-6 heading-2"

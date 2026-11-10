@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import {
   Accordion,
@@ -107,27 +106,6 @@ export function LeistungenBoedenPage() {
     {
       q: 'Können Sie auch Beleuchtung und Dekoration übernehmen?',
       a: 'Selbstverständlich. Wir bieten einen Full-Service für die komplette Standausstattung: Bodenbelag, Möblierung, Beleuchtungskonzept, Wandsysteme, Pflanzen, Dekoration und Akustiklösungen – alles aus einer Hand.',
-    },
-  ]
-
-  const testimonials = [
-    {
-      text: 'Der Vinylboden in Eichenoptik hat unserem Messestand auf der EuroShop ein ganz neues Niveau gegeben. Die Besucher waren begeistert – und wir auch. Perfekte Verarbeitung und pünktliche Lieferung.',
-      author: 'Andrea Schulz',
-      company: 'DesignHaus Retail GmbH',
-      rating: 5,
-    },
-    {
-      text: 'Böden, Möbel, Beleuchtung – alles aus einer Hand. S&S hat unseren 80m²-Stand komplett ausgestattet. Die Koordination war erstklassig und der Stand sah fantastisch aus.',
-      author: 'Thomas Richter',
-      company: 'ProTech Industries AG',
-      rating: 5,
-    },
-    {
-      text: 'Wir setzen auf die Mietmöbel von S&S Messebau. Immer top-gepflegt, pünktlich geliefert und flexibel konfigurierbar. Absolute Empfehlung für die Standausstattung.',
-      author: 'Sabine Hartmann',
-      company: 'Eventwerk Köln',
-      rating: 5,
     },
   ]
 
@@ -433,44 +411,8 @@ export function LeistungenBoedenPage() {
         </div>
       </section>
 
-      {/* Kundenstimmen Section */}
-      <section id="referenzen" className="py-12 sm:py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2
-            className="font-bold text-center mb-4 heading-2"
-          >
-            Das sagen unsere Kunden
-          </h2>
-          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Überzeugen Sie sich von der Qualität unserer Bodenbeläge und Ausstattungslösungen.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-500" weight="fill" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4 italic">
-                    &ldquo;{testimonial.text}&rdquo;
-                  </p>
-                  <Separator className="my-4" />
-                  <div>
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Interne Verlinkung Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4 heading-2"
@@ -505,7 +447,7 @@ export function LeistungenBoedenPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16">
+      <section className="py-12 sm:py-16 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
           <h2
             className="font-bold mb-6 heading-2"

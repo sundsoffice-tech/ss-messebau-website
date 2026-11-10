@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import {
   Accordion,
@@ -15,7 +14,6 @@ import {
   Phone,
   Envelope,
   CheckCircle,
-  Star,
   Users,
   Shield,
   Wrench,
@@ -113,27 +111,6 @@ export function LeistungenEventbauPage() {
     {
       q: 'Sind Sie auch außerhalb von NRW tätig?',
       a: 'Ja, wir sind bundesweit im Einsatz und realisieren Events an allen Standorten in Deutschland. Auch internationale Projekte setzen wir auf Anfrage um.',
-    },
-  ]
-
-  const testimonials = [
-    {
-      text: 'S&S hat unser 25-jähriges Firmenjubiläum in eine unvergessliche Veranstaltung verwandelt. Die Bühne, die Beleuchtung, die Dekoration – alles war perfekt aufeinander abgestimmt. Unsere Mitarbeiter schwärmen heute noch davon.',
-      author: 'Andrea Hoffmann',
-      company: 'TechVision GmbH',
-      rating: 5,
-    },
-    {
-      text: 'Für unsere Produktpräsentation brauchten wir eine beeindruckende Bühne mit modernster Technik. S&S hat nicht nur geliefert, sondern unsere Erwartungen übertroffen. Der Launch war ein voller Erfolg.',
-      author: 'Thomas Richter',
-      company: 'InnoWare Solutions AG',
-      rating: 5,
-    },
-    {
-      text: 'Wir vertrauen bei unseren Konferenzen und Galas auf S&S Messebau. Die Zusammenarbeit ist unkompliziert, das Ergebnis immer erstklassig. Absolute Empfehlung für professionellen Eventbau!',
-      author: 'Julia Engel',
-      company: 'EventPartner Deutschland',
-      rating: 5,
     },
   ]
 
@@ -388,44 +365,8 @@ export function LeistungenEventbauPage() {
         </div>
       </section>
 
-      {/* Kundenstimmen Section */}
-      <section id="referenzen" className="py-12 sm:py-16 scroll-mt-20">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2
-            className="font-bold text-center mb-4 heading-2"
-          >
-            Das sagen unsere Event-Kunden
-          </h2>
-          <p className="text-center text-muted-foreground text-lg mb-12 max-w-3xl mx-auto">
-            Vertrauen Sie auf die Erfahrung zufriedener Veranstalter und Unternehmen.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-500" weight="fill" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4 italic">
-                    &ldquo;{testimonial.text}&rdquo;
-                  </p>
-                  <Separator className="my-4" />
-                  <div>
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Interne Verlinkung Section */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section className="py-12 sm:py-16">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2
             className="font-bold text-center mb-4 heading-2"
@@ -460,7 +401,7 @@ export function LeistungenEventbauPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16">
+      <section className="py-12 sm:py-16 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
           <h2
             className="font-bold mb-6 heading-2"

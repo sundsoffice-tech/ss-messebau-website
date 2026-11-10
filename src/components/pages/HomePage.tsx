@@ -2,14 +2,12 @@ import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
 import { 
   Warehouse, 
   CalendarDot, 
   Storefront, 
   CheckCircle,
   ArrowRight,
-  Star,
   Handshake,
   Target
 } from '@phosphor-icons/react'
@@ -40,7 +38,6 @@ export function HomePage() {
     'advantages',
     'references',
     'process',
-    'testimonials',
     'cta'
   ])
 
@@ -355,80 +352,6 @@ export function HomePage() {
       <ProcessTimeline />
 
       <LogoWall />
-
-      <section id="testimonials" className="section">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="font-bold mb-4 heading-2">{t('home.testimonials.title')}</h2>
-            <p className="text-lg text-muted-foreground mb-4">
-              {t('home.testimonials.subtitle')}
-            </p>
-            <Button 
-              variant="outline" 
-              asChild
-              className="gap-2"
-            >
-              <a 
-                href="https://www.google.com/search?q=sundsmessebau" 
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                <Star className="h-4 w-4 text-[oklch(0.75_0.15_85)]" weight="fill" />
-                {t('home.testimonials.google')}
-              </a>
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                text: t('home.testimonials.t1.text'),
-                author: t('home.testimonials.t1.author'),
-                company: t('home.testimonials.t1.company'),
-                rating: 5
-              },
-              {
-                text: t('home.testimonials.t2.text'),
-                author: t('home.testimonials.t2.author'),
-                company: t('home.testimonials.t2.company'),
-                rating: 5
-              },
-              {
-                text: t('home.testimonials.t3.text'),
-                author: t('home.testimonials.t3.author'),
-                company: t('home.testimonials.t3.company'),
-                rating: 5
-              }
-            ].map((testimonial, index) => (
-              <Card
-                key={index}
-                className="reveal relative h-full"
-                style={{ '--reveal-delay': `${index * 0.1}s` } as React.CSSProperties}
-              >
-                <span
-                  className="absolute top-3 left-4 text-7xl font-serif leading-none text-primary/10 select-none"
-                  aria-hidden="true"
-                >
-                  „
-                </span>
-                <CardContent className="p-6 flex flex-col h-full">
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-[oklch(0.75_0.15_85)]" weight="fill" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4 italic">"{testimonial.text}"</p>
-                  <div className="mt-auto">
-                    <Separator className="my-4" />
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <InternalLinkSection
         title={t('home.links.title')}
