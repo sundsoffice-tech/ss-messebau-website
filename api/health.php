@@ -75,6 +75,26 @@ $checks['timestamp'] = gmdate('c');
 // keine Zahl und kein Zeitpunkt.
 $checks['bereinigung'] = $bereinigungZustand;
 
+// Statistik: "ok", "deckel" oder "zaehler" (statistikZustand() in
+// statistik-zaehler.php). "zaehler": Die Zähldatei von collect.php ist nicht
+// nutzbar, collect.php antwortet mit 503 und speichert nichts. "deckel": Der
+// Gesamtdeckel war mehrere Minuten am Stück erreicht, in dieser Zeit fehlen
+// der Statistik Ereignisse. Wie bei der Bereinigung bleiben "status" und der
+// HTTP-Status davon unberührt, und hier steht nur der Zustand, keine Zahl
+// (die Zahlen sieht der angemeldete Admin in analytics-status.php). Gelesen
+// wird ohne Sperre und ohne Schreiben. Lässt sich der Zustand nicht bestimmen
+// (Datei fehlt oder ist kaputt), gilt er als "zaehler".
+$statistikZustand = 'zaehler';
+try {
+    if ((@include_once __DIR__ . '/statistik-zaehler.php') !== false
+        && function_exists('statistikZustand')) {
+        $statistikZustand = statistikZustand();
+    }
+} catch (\Throwable $e) {
+    error_log('Statistik: Zustand für health.php nicht bestimmbar: ' . $e->getMessage());
+}
+$checks['statistik'] = $statistikZustand;
+
 echo json_encode([
     'status' => $status,
     'checks' => $checks,
