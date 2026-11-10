@@ -16,8 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // Anstoß der Bereinigung (Messdaten nach ihrer Frist, Zähldateien mit
 // IP-Bezug): Der Wächter des Hauses ruft diesen Endpunkt regelmäßig ab, deshalb
-// läuft sie von hier auch an Tagen ohne Besucher, höchstens einmal je Tag und
-// erst nach dem Ende dieses Skripts. "status" und "checks" hängen davon nicht
+// läuft sie von hier auch an Tagen ohne Besucher: nach einem vollständigen Lauf
+// am selben Tag nicht noch einmal, bei großer Altlast in Teilläufen im Abstand
+// von mindestens 60 Sekunden, bis nichts Fälliges mehr da ist; immer erst nach
+// dem Ende dieses Skripts. "status" und "checks" hängen davon nicht
 // ab: Fehlt die Datei oder scheitert der Lauf, steht das nur im Fehlerprotokoll.
 // Sichtbar wird Stillstand in "checks.bereinigung" (unten): "ok" oder
 // "ueberfaellig", gelesen aus der Marke des Anstoßes. Lässt sich der Zustand

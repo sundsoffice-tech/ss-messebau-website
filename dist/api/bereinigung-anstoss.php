@@ -43,6 +43,7 @@
  *   rest, portionen, laengste_portion_ms,
  *   dauer_ms                                 was der letzte Anlauf getan hat
  *   erfolg_tag, erfolg_zeit                  letzter VOLLSTÄNDIGER Lauf; bleibt über Anläufe stehen
+ *   von_hand                                 letzter vollständiger Lauf über den Admin-Knopf (Zeit)
  *   seit                                     erster Anlauf überhaupt (Beginn der Beobachtung)
  * Vollständig heißt: Zähldateien durch, keine ließ sich nicht löschen, keine
  * fällige Messzeile mehr da. Daraus liest health.php "checks.bereinigung".
@@ -61,8 +62,11 @@ define('BEREINIGUNG_ZEITGRENZE', 10);
 // (ops/sunds-hub/eintragen.py) und der Lauf an seinem Abruf hängen bleibt, wenn
 // der Server die Antwort nicht vorab abschließen kann: 5 s abzüglich der
 // Antwort selbst (gemessen 0,15 s), einer letzten Portion (bis 0,16 s bei
-// Faktor 3) und gut einer Sekunde Luft. Der Dateiteil steht vor der ersten
-// Prüfung des Budgets; er zählt mit, wird aber nicht unterbrochen.
+// Faktor 3) und gut einer Sekunde Luft. Geprüft wird vor jeder Portion und
+// gleich nach ihr, vor der Pause; der Lauf überzieht also um höchstens eine
+// Portion. Der Dateiteil steht vor der ersten Prüfung des Budgets; er zählt
+// mit, wird aber nicht unterbrochen. Wartet eine Portion auf die Schreibsperre,
+// kommen bis zu BEREINIGUNG_DB_WARTEN Sekunden dazu.
 define('BEREINIGUNG_BUDGET_MS', 3000);
 define('BEREINIGUNG_DB_WARTEN', 2);
 define('BEREINIGUNG_PAUSE', 600);
@@ -320,6 +324,16 @@ function bereinigungLaufen(): void {
                 // Halb hochgeladener Stand: analytics-cleanup.php ist noch die alte Fassung.
                 $neu['ergebnis'] = 'fehler';
                 error_log('Bereinigung: Lauf ' . $neu['versuche'] . ': analytics-cleanup.php meldet nicht, ob es fertig wurde');
+            } elseif (($ergebnis['db_fehler'] ?? null) !== null && !empty($ergebnis['db_sperre']) && $neu['geloescht'] > 0) {
+                // Die Datenbank war belegt, nachdem schon Portionen gelöscht
+                // waren: Fortschritt, nichts kaputt. Das zählt als Teillauf mit
+                // kurzer Pause und nicht als Fehlschlag, sonst wäre der
+                // Datenbankteil unter Dauerlast nach drei Anläufen für den Tag aus.
+                $neu['ergebnis'] = 'teilweise';
+                $neu['rest'] = true;
+                error_log('Bereinigung: Lauf ' . $neu['versuche'] . ' teilweise: ' . $neu['geloescht']
+                    . ' Messzeilen in ' . $neu['portionen'] . ' Portionen gelöscht, dann war die Datenbank belegt, der Rest folgt ('
+                    . $ergebnis['db_fehler'] . ')');
             } elseif (($ergebnis['db_fehler'] ?? null) !== null) {
                 $neu['ergebnis'] = 'fehler';
                 error_log('Bereinigung: Lauf ' . $neu['versuche'] . ' gescheitert im Datenbankteil nach '
@@ -347,6 +361,57 @@ function bereinigungLaufen(): void {
         $neu['zeit'] = time();
         $neu['dauer_ms'] = intdiv(hrtime(true) - $beginnNs, 1000000);
         bereinigungMarkeSchreiben($fp, $neu);
+    } finally {
+        if ($gesperrt) {
+            flock($fp, LOCK_UN);
+        }
+        fclose($fp);
+    }
+}
+
+/**
+ * Für den Admin-Knopf (analytics-cleanup.php über HTTP): vermerkt einen
+ * vollständigen Lauf von Hand als Erfolg in der Marke, unter derselben
+ * Dateisperre wie der Lauf ohne Handgriff. Danach zeigt health.php
+ * "bereinigung": "ok", und heute läuft die Bereinigung nicht noch einmal von
+ * selbst. Steht der Selbstlauf weiter, wird das Feld nach
+ * BEREINIGUNG_UEBERFAELLIG wieder "ueberfaellig": Der Knopf ist kein Ersatz.
+ * Die Zähler des Tages (versuche, fehlschlaege, abbrueche) bleiben, wie sie sind.
+ * Rückgabe: true, wenn vermerkt.
+ */
+function bereinigungErfolgVermerken(array $ergebnis): bool {
+    $fp = @fopen(BEREINIGUNG_MARKE, 'c+');
+    if (!$fp) {
+        return false;
+    }
+    $gesperrt = false;
+    try {
+        // Räumt gerade ein Lauf ohne Handgriff, hält er die Sperre für wenige
+        // Sekunden: bis zu 6 Sekunden darauf warten, dann ohne Vermerk gehen.
+        for ($i = 0; $i < 60 && !$gesperrt; $i++) {
+            $gesperrt = flock($fp, LOCK_EX | LOCK_NB);
+            if (!$gesperrt) {
+                usleep(100000);
+            }
+        }
+        if (!$gesperrt) {
+            error_log('Bereinigung: Erfolg des Laufs von Hand nicht vermerkt, die Sperre auf '
+                . basename(BEREINIGUNG_MARKE) . ' war nicht zu bekommen');
+            return false;
+        }
+        $jetzt = time();
+        $neu = bereinigungNeuerStand(json_decode((string)stream_get_contents($fp), true), $jetzt);
+        $neu['ergebnis'] = 'ok';
+        $neu['erfolg_zeit'] = $jetzt;
+        $neu['erfolg_tag'] = gmdate('Y-m-d', $jetzt);
+        $neu['von_hand'] = $jetzt;
+        foreach (['dateien', 'dateien_fehler', 'portionen', 'laengste_portion_ms'] as $feld) {
+            $neu[$feld] = (int)($ergebnis[$feld] ?? 0);
+        }
+        $neu['geloescht'] = (int)($ergebnis['deleted'] ?? 0);
+        $neu['rest'] = false;
+        bereinigungMarkeSchreiben($fp, $neu);
+        return true;
     } finally {
         if ($gesperrt) {
             flock($fp, LOCK_UN);
