@@ -94,6 +94,31 @@ describe('Cookie-Hinweis: Verweise im Hinweis', () => {
   })
 })
 
+describe('Cookie-Hinweis: Verweise führen weiter, ohne zu wählen', () => {
+  it.each([
+    ['Impressum', '/impressum'],
+    ['Datenschutzerklärung', '/datenschutz'],
+  ])('Klick auf „%s" wechselt die Seite über den Router; der Hinweis steht noch, gewählt ist nichts', (name, pfad) => {
+    window.history.replaceState(null, '', '/')
+    vi.stubGlobal('scrollTo', vi.fn())
+    const wechsel = vi.fn()
+    window.addEventListener('popstate', wechsel)
+    render(mitSprache('de', <CookieConsent />))
+
+    // false heißt: Der Klick wurde abgefangen, der Browser lädt die Seite nicht neu
+    const durchgelassen = fireEvent.click(screen.getByRole('link', { name }))
+    window.removeEventListener('popstate', wechsel)
+
+    expect(durchgelassen).toBe(false)
+    expect(window.location.pathname).toBe(pfad)
+    expect(wechsel).toHaveBeenCalledTimes(1)
+    expect(screen.getByRole('dialog', { name: 'Cookie-Einstellungen' })).toBeInTheDocument()
+    expect(getConsent()).toBeNull()
+    expect(localStorage.getItem(CONSENT_KEY)).toBeNull()
+    expect(platz()).toBe('167px')
+  })
+})
+
 describe('Cookie-Hinweis: Platz am unteren Rand', () => {
   it('offen: die gemessene Höhe steht als Platz am Dokument', () => {
     render(mitSprache('de', <CookieConsent />))
