@@ -662,11 +662,11 @@ Viele Aussteller denken: „Transport – das ist halt notwendig." Stimmt, aber 
 - Ineffiziente Logistik (falsche Fristen, Leerfahrten) bringt zusätzliche Fahrten
 
 **Was wir bei S&S tun:**
-- Wir optimieren Verpackung und Beladung (jeder cm zählt)
+- Wir planen Verpackung und Beladung je Stand (jeder cm zählt)
 - Wir planen Transporte zentral ab NRW, zusammen mit Aufbau und Einlagerung
 - Wir stimmen Auf- und Abbautermine mit der Transportplanung ab
 
-**Nachhaltigkeit im Transport reduziert oft auch die Kosten** – durch bessere Planung und Effizienz.
+**Effizienter Transport senkt oft auch die Kosten** – weniger Volumen, abgestimmte Termine.
 
 ### Digitale Grafiken statt Endlosdruck
 
