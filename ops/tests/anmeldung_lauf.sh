@@ -24,7 +24,7 @@ ROT_TEILE=${3:-}
 
 echo "== php -l =="
 LINT=0
-for f in "$NEU"/public/api/auth.php "$NEU"/public/api/analytics-config.php "$NEU"/ops/tests/anmeldung_*.php; do
+for f in "$NEU"/public/api/auth.php "$NEU"/public/api/analytics-config.php "$NEU"/public/api/health.php "$NEU"/ops/tests/anmeldung_*.php; do
     php -l "$f" || LINT=1
 done
 
@@ -36,6 +36,15 @@ RC_NEU=$?
 RC_MAIN=-
 if [ -n "$MAIN" ]; then
     RC_MAIN=1
+    ROT_GELAUFEN=0
+    # Jeder Teil der angegebenen Liste muss als Datei da sein: Ein Tippfehler in der Liste
+    # ließe sonst die Rotprobe still aus.
+    for T in $ROT_TEILE; do
+        if [ ! -f "$NEU/ops/tests/anmeldung_faelle_$T.php" ]; then
+            echo "ROTPROBE $T: diesen Teil gibt es nicht"
+            RC_MAIN=fehlt
+        fi
+    done
     for f in "$NEU"/ops/tests/anmeldung_faelle_*.php; do
         TEIL=$(basename "$f" .php)
         TEIL=${TEIL#anmeldung_faelle_}
@@ -47,8 +56,13 @@ if [ -n "$MAIN" ]; then
         php "$NEU/ops/tests/anmeldung_test.php" --ohne-netz "--teil=$TEIL" "$MAIN/public/api"
         RC=$?
         echo "ROTPROBE $TEIL: Exit $RC"
+        ROT_GELAUFEN=$((ROT_GELAUFEN + 1))
         [ "$RC" = 1 ] || RC_MAIN=$RC
     done
+    echo
+    echo "ROTPROBEN gelaufen: $ROT_GELAUFEN"
+    # Ein Vergleichsstand ohne eine einzige gelaufene Rotprobe belegt nichts.
+    [ "$ROT_GELAUFEN" -gt 0 ] || RC_MAIN=keine
 fi
 
 echo

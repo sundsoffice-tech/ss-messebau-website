@@ -112,10 +112,20 @@ function freierPort(): int {
  * $ersetzen: [Datei => [alt => neu]], wird in der Kopie angewandt, wenn "alt" dort steht
  * (für Schalter, die es nicht in jedem geprüften Stand gibt).
  */
-function starte(string $apiQuelle, array $admins = ['chef'], int $arbeiter = 1, array $ersetzen = []): array {
+function starte(string $apiQuelle, array $admins = ['chef'], int $arbeiter = 1, array $ersetzen = [], ?string $datenOrdner = null): array {
     global $umgebungen;
     $wurzel = sys_get_temp_dir() . '/anmeldung-' . bin2hex(random_bytes(6));
     kopiereApi($apiQuelle, $wurzel . '/api');
+    $dbPfad = $wurzel . '/api/data/database.sqlite';
+    if ($datenOrdner !== null) {
+        // data/ liegt auf einem anderen Dateisystem (Verweis), die Datenbank daneben in der Instanz:
+        // So lässt sich data/ füllen, ohne dass die Datenbank mit voll läuft.
+        rmdir($wurzel . '/api/data');
+        symlink($datenOrdner, $wurzel . '/api/data');
+        mkdir($wurzel . '/datenbank', 0755);
+        $dbPfad = $wurzel . '/datenbank/database.sqlite';
+        $ersetzen['config.php'] = ($ersetzen['config.php'] ?? []) + ["__DIR__ . '/data/database.sqlite'" => var_export($dbPfad, true)];
+    }
     foreach ($ersetzen as $datei => $paare) {
         $text = (string)file_get_contents($wurzel . '/api/' . $datei);
         file_put_contents($wurzel . '/api/' . $datei, strtr($text, $paare));
@@ -144,7 +154,7 @@ function starte(string $apiQuelle, array $admins = ['chef'], int $arbeiter = 1, 
         2 => ['file', $wurzel . '/server.log', 'a'],
     ], $rohre, $wurzel, $umgebung);
     $u = ['basis' => 'http://127.0.0.1:' . $port, 'wurzel' => $wurzel, 'api' => $wurzel . '/api',
-          'daten' => $wurzel . '/api/data', 'sitzungen' => $wurzel . '/sitzungen', 'prozess' => $prozess];
+          'daten' => $wurzel . '/api/data', 'db' => $dbPfad, 'sitzungen' => $wurzel . '/sitzungen', 'prozess' => $prozess];
     $bereit = false;
     for ($i = 0; $i < 100 && !$bereit; $i++) {
         $probe = @stream_socket_client('tcp://127.0.0.1:' . $port, $nr, $text, 0.2);
@@ -181,7 +191,7 @@ function stoppe(array $u): void {
 }
 
 function db(array $u): PDO {
-    $db = new PDO('sqlite:' . $u['daten'] . '/database.sqlite', null, null, [
+    $db = new PDO('sqlite:' . $u['db'], null, null, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
     $db->exec('PRAGMA busy_timeout=5000');
     return $db;
@@ -294,8 +304,20 @@ function gleichzeitig(array $u, array $liste, ?string $sperrdatei = null, ?strin
     return $ergebnis;
 }
 
+// Feste Soll-Liste der Teile. Sie hängt nicht davon ab, welche Dateien gerade im Ordner liegen:
+// Fehlt eine Datei oder liegt eine unbekannte dort, endet der Lauf mit Exit 2 statt mit einem
+// kleineren, scheinbar grünen Ergebnis. Ein neuer Teil wird hier eingetragen.
+const SOLL_TEILE = ['bremse', 'bremse_datenbank', 'bremse_sichern', 'bremse_zaehler', 'bremse_zukunft',
+    'eingabe', 'health', 'platzhalter', 'setup', 'sitzung'];
+
 $dateien = glob(__DIR__ . '/anmeldung_faelle_*.php') ?: [];
 sort($dateien);
+$vorhanden = array_map(fn($d) => substr(basename($d, '.php'), strlen('anmeldung_faelle_')), $dateien);
+$abweichung = array_merge(array_diff(SOLL_TEILE, $vorhanden), array_diff($vorhanden, SOLL_TEILE), array_diff($teile, SOLL_TEILE));
+if ($abweichung !== []) {
+    fwrite(STDERR, "Teile weichen von der Soll-Liste ab: " . implode(' ', $abweichung) . "\n");
+    exit(2);
+}
 $gelaufeneTeile = [];
 foreach ($dateien as $datei) {
     $teil = substr(basename($datei, '.php'), strlen('anmeldung_faelle_'));
@@ -315,7 +337,7 @@ foreach ($umgebungen as $u) {
     stoppe($u);
     exec('rm -rf ' . escapeshellarg($u['wurzel']));
 }
-$erwartet = $teile !== [] ? $teile : array_map(fn($d) => substr(basename($d, '.php'), strlen('anmeldung_faelle_')), $dateien);
+$erwartet = $teile !== [] ? $teile : SOLL_TEILE;
 $fehlend = array_diff($erwartet, $gelaufeneTeile);
 if ($gelaufeneTeile === [] || $fehlend !== []) {
     fwrite(STDERR, "Nicht gelaufen: " . ($fehlend !== [] ? implode(' ', $fehlend) : 'kein Teil') . "\n");

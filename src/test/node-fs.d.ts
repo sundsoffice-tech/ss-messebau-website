@@ -5,4 +5,9 @@
  */
 declare module 'node:fs' {
   export function readFileSync(path: string, encoding: 'utf8'): string
+  // Für den Wächter der Ersteinrichtung (setup-schalter.test.ts): alle PHP-Dateien unter public/api.
+  export function readdirSync(
+    path: string,
+    options: { withFileTypes: true },
+  ): Array<{ name: string; isDirectory(): boolean }>
 }
