@@ -30,7 +30,7 @@ return [
         [['auth.php', '$windowSeconds, $eingabeFehler === null,', '$windowSeconds, true,']],
         'sieben leere oder unvollständige Eingaben'],
     ['alte Stempel verfallen nicht',
-        [['auth.php', 'fn($ts) => ($jetzt - $ts) < $fenster', 'fn($ts) => true']],
+        [['auth.php', 'fn($ts) => abs($jetzt - $ts) < $fenster', 'fn($ts) => true']],
         'fünf Stempel älter als 15 Minuten sperren nicht'],
     ['Wartezeit wird nicht aus dem ältesten Stempel gerechnet',
         [['auth.php', "return ['voll', \$fenster - (\$jetzt - min(\$stempel))];", "return ['voll', \$fenster];"]],

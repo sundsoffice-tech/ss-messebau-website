@@ -142,7 +142,10 @@ function bremseVersuch(string $datei, int $max, int $fenster, bool $zaehlbar, ca
         // Zehn Ziffern am Stück sind ein Stempel. So zählt auch eine Datei im früheren Format
         // (JSON-Liste) weiter, und ein abgerissener Rest zählt nicht.
         preg_match_all('/(?<!\d)\d{10}(?!\d)/', $inhalt, $treffer);
-        $stempel = array_values(array_filter(array_map('intval', $treffer[0]), fn($ts) => ($jetzt - $ts) < $fenster));
+        // abs(): Ein Stempel aus der Zukunft (Uhr zurückgestellt) zählt mit, aber nur, solange er
+        // weniger als ein Fenster entfernt ist. Weiter entfernte zählen nicht und verschwinden mit
+        // dem nächsten gezählten Versuch.
+        $stempel = array_values(array_filter(array_map('intval', $treffer[0]), fn($ts) => abs($jetzt - $ts) < $fenster));
         if (count($stempel) >= $max) {
             return ['voll', $fenster - ($jetzt - min($stempel))];
         }
