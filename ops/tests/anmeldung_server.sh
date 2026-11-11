@@ -63,3 +63,13 @@ done
 } > "$D/cli.log" 2>&1
 
 date -u +%Y-%m-%dT%H:%M:%SZ > "$D/fertig"
+
+# Exit wie die Proben: 0 nur, wenn alle drei Container mit 0 endeten. Bis 11.11.2026 endete das Skript
+# immer mit 0, und ein Aufrufer, der nur den Exit las, hielt einen überlebenden Mutanten für grün.
+GESAMT=0
+for LOG in lauf.log fpm.log cli.log; do
+    RC=$(sed -n 's/^DOCKER_EXIT=//p' "$D/$LOG" | tail -n 1)
+    echo "$LOG DOCKER_EXIT=${RC:-fehlt}"
+    [ "${RC:-x}" = 0 ] || GESAMT=1
+done
+exit "$GESAMT"
