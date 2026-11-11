@@ -56,6 +56,12 @@ pruefe('das Werkzeug der Kommandozeile erzeugt Hashes mit denselben Kosten wie a
     preg_match("/password_hash\(\\\$passwort, PASSWORD_BCRYPT, \['cost' => (\d+)\]\)/", $werkzeug, $w) === 1 && (int)$w[1] === $kosten,
     'Werkzeug ' . ($w[1] ?? 'ohne Angabe') . ', auth.php ' . $kosten);
 
+// Fehlt die Konstante (Vergleichsstand vor dieser Änderung), ist die erste Prüfung oben schon rot. Die Messungen
+// laufen dann mit 10 weiter, damit die Rotprobe mit Exit 1 endet statt mit einem Abbruch (Kosten -1).
+if ($kosten < 4) {
+    $kosten = 10;
+}
+
 $u = starte($apiQuelle, ['chef'], 1, ['auth.php' => ['usleep(random_int(100000, 300000));' => '']]);
 pruefe('Vorbedingung: die zufällige Pause steht im Prüfling und ist in dieser Instanz abgeschaltet',
     substr_count($quelltext, 'usleep(random_int(100000, 300000));') === 1
