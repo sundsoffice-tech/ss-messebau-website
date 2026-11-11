@@ -11,7 +11,7 @@
  * Fehlt er (weil der Code umgebaut wurde), ist das ein Fehler dieses Skripts
  * und kein bestandener Mutant.
  *
- * Aufruf:  php ops/tests/anmeldung_mutanten.php [--ohne-netz] [<Pfad zu public/api>]
+ * Aufruf:  php ops/tests/anmeldung_mutanten.php [--ohne-netz] [--ganz] [<Pfad zu public/api>]
  * Exit:    0 = jeder Mutant wurde erkannt, 1 = ein Mutant überlebte oder ein Anker fehlt
  */
 
@@ -21,10 +21,13 @@ if (PHP_SAPI !== 'cli') {
 }
 
 $testArgumente = [];
+$ganz = false;
 $apiQuelle = __DIR__ . '/../../public/api';
 foreach (array_slice($argv, 1) as $arg) {
     if ($arg === '--ohne-netz') {
         $testArgumente[] = $arg;
+    } elseif ($arg === '--ganz') {
+        $ganz = true;
     } else {
         $apiQuelle = $arg;
     }
@@ -77,9 +80,18 @@ $mutanten = [
         [['auth.php', "return substr(hash('sha256', \$passwortHash), 0, 16);", 'return $passwortHash;']],
         'Sitzungsdatei trägt eine Marke aus 16 Hex-Zeichen'],
 ];
-// Weitere Teile hängen ihre Mutanten an (Dateien anmeldung_mutanten_<teil>.php).
+// Jeder Mutant gehört zu einem Teil des Tests: die Liste oben zum Teil "sitzung", die Listen der
+// Dateien anmeldung_mutanten_<teil>.php zum Teil <teil>. Gefahren wird je Mutant nur dieser Teil;
+// dort steht die Prüfung, die rot werden muss. Mit --ganz läuft je Mutant der ganze Test.
+$mutanten = array_map(fn($m) => array_merge($m, ['sitzung']), $mutanten);
 foreach (glob(__DIR__ . '/anmeldung_mutanten_*.php') ?: [] as $datei) {
-    $mutanten = array_merge($mutanten, require $datei);
+    $teil = substr(basename($datei, '.php'), strlen('anmeldung_mutanten_'));
+    if (!is_file(__DIR__ . '/anmeldung_faelle_' . $teil . '.php')) {
+        fwrite(STDERR, "Zu den Mutanten in " . basename($datei) . " gibt es keinen Teil $teil
+");
+        exit(2);
+    }
+    $mutanten = array_merge($mutanten, array_map(fn($m) => array_merge($m, [$teil]), require $datei));
 }
 
 function kopiere(string $von, string $nach): void {
@@ -101,7 +113,7 @@ function kopiere(string $von, string $nach): void {
 $erkannt = 0;
 $fehler = 0;
 echo "Prüfling: $apiQuelle\n";
-foreach ($mutanten as [$name, $ersetzungen, $pruefung]) {
+foreach ($mutanten as [$name, $ersetzungen, $pruefung, $teil]) {
     $kopie = sys_get_temp_dir() . '/anmeldung-mutant-' . bin2hex(random_bytes(6));
     kopiere($apiQuelle, $kopie);
     $ankerFehlt = false;
@@ -123,7 +135,7 @@ foreach ($mutanten as [$name, $ersetzungen, $pruefung]) {
 
     $rohre = [];
     $prozess = proc_open(
-        array_merge([PHP_BINARY, __DIR__ . '/anmeldung_test.php'], $testArgumente, [$kopie]),
+        array_merge([PHP_BINARY, __DIR__ . '/anmeldung_test.php'], $testArgumente, $ganz ? [] : ['--teil=' . $teil], [$kopie]),
         [1 => ['pipe', 'w'], 2 => ['file', '/dev/null', 'w']],
         $rohre
     );
@@ -135,10 +147,10 @@ foreach ($mutanten as [$name, $ersetzungen, $pruefung]) {
     $zugehoerig = array_filter($roteZeilen, fn($z) => strpos($z, $pruefung) !== false);
     if ($exit === 1 && $zugehoerig !== []) {
         $erkannt++;
-        echo "ERKANNT       $name: Test Exit 1, " . count($roteZeilen) . " rot, darunter \"$pruefung\"\n";
+        echo "ERKANNT       [$teil] $name: Test Exit 1, " . count($roteZeilen) . " rot, darunter \"$pruefung\"\n";
     } else {
         $fehler++;
-        echo "UEBERLEBT     $name: Test Exit $exit, " . count($roteZeilen) . " rot, \"$pruefung\" nicht darunter\n";
+        echo "UEBERLEBT     [$teil] $name: Test Exit $exit, " . count($roteZeilen) . " rot, \"$pruefung\" nicht darunter\n";
     }
 }
 
