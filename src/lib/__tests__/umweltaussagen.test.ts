@@ -333,8 +333,9 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
     ],
     [
       'alle Systeme wiederverwendbar',
-      // Jede absolute Fassung („alle Systeme/Böden … wiederverwendbar“), nicht nur der alte Satz.
-      /alle\s+(Systeme|Böden|Bodenbeläge)\b[^.]*wiederverwendbar|all\s+(systems|floors|floorings?)\b[^.]*reusable/i,
+      // Jede absolute Fassung („alle (unsere) Systeme/Böden … wiederverwendbar“), nicht nur der alte Satz;
+      // höchstens bis zum Satz- oder Zeilenende, damit zwei verschiedene Texte nicht zusammen anschlagen.
+      /alle\s+(unsere\s+)?(Systeme|Böden|Bodenbeläge)\b[^.\n]*wiederverwendbar|all\s+(of\s+)?(our\s+)?(systems|floors|floorings?)\b[^.\n]*reusable/i,
       'Von klassischem Messebau-Teppich bis zu hochwertigen Klick-Parkett-Systemen – alle Systeme sind schnell verlegbar, strapazierfähig und wiederverwendbar.',
       'From classic exhibition carpet to high-quality click-parquet systems – all systems are quick to install, durable and reusable.',
     ],
@@ -367,11 +368,16 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
     ['langlebige Qualität', /langlebige\s+Qualität|long-lasting\s+quality/i, 'Langlebige Qualität', 'Long-Lasting Quality'],
   ]
 
+  // Die ersten drei Einträge nutzt die Musterprobe unten über ihren Platz in der Liste.
   const vier: Array<[string, string]> = [
     ['src/locales/de.json', Object.values(deutsch).join('\n')],
     ['src/locales/en.json', Object.values(englisch).join('\n')],
     ['scripts/seiten-inhalt.json', JSON.stringify(inhalt, null, 1)],
     ['index.html', startseite],
+    // Seit der Folge vom 11.11.2026 auch Seitentitel, Beschreibungen und der Blogbeitrag zum Thema.
+    ['src/lib/seiten-meta.json', JSON.stringify(seitenMeta, null, 1)],
+    ['src/lib/seiten-meta-en.json', JSON.stringify(seitenMetaEn, null, 1)],
+    [BLOG, beitragText],
   ]
 
   const funde = (quellenListe: Array<[string, string]>) =>
@@ -382,7 +388,7 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
       })
     )
 
-  it('keine der ersetzten Wendungen steht in den Sprachdateien, den vorab gebauten Texten oder index.html', () => {
+  it('keine der ersetzten Wendungen steht in Sprachdateien, Vorabtext, index.html, Seitentiteln oder im Blogbeitrag', () => {
     for (const [datei, text] of vier) expect(text.length, datei).toBeGreaterThan(1000)
     expect(funde(vier)).toEqual([])
   })
@@ -406,6 +412,21 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
       expect(stand.some((f) => f.startsWith(`src/locales/en.json: ${name}:`)), `en: ${name}`).toBe(true)
     }
     expect(stand.some((f) => f.startsWith('scripts/seiten-inhalt.json: kurze Transportwege:'))).toBe(true)
+  })
+
+  it('Gegenprobe: das Muster „alle Systeme … wiederverwendbar“ erkennt Umstellungen und bleibt im Satz', () => {
+    const muster = wendungen.find(([name]) => name === 'alle Systeme wiederverwendbar')![1]
+    for (const satz of [
+      'Alle unsere Systeme sind wiederverwendbar.',
+      'Alle Böden sind mehrfach wiederverwendbar.',
+      'All of our systems are reusable.',
+      'all floors can be reusable',
+    ]) {
+      expect(muster.test(satz), satz).toBe(true)
+    }
+    // Zwei Texte, je für sich harmlos, ergeben über Satz- oder Zeilengrenze keinen Treffer.
+    expect(muster.test('Alle Systeme sind schnell verlegbar\nVinyl ist wiederverwendbar')).toBe(false)
+    expect(muster.test('Alle Systeme sind schnell verlegbar. Vinyl ist wiederverwendbar.')).toBe(false)
   })
 
   it('die neuen Sätze beschreiben das Angebot und nennen die Grenze beim Messeteppich', () => {
@@ -437,15 +458,26 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
   const wendungen: Array<[string, RegExp, string, string]> = [
     [
       'gebündelte Transporte',
-      /Transporte bündeln|bündeln Transporte|gebündelten? Transporte|bundle transports|bundled transports/i,
+      // Wortstamm statt einzelner Fassungen („gebündelter Transport“, „bündeln wir Transporte“, „Bündelung“).
+      // Am Stand vom 11.11.2026 trifft er in keiner Quelle; ein neuer Treffer braucht Tourenplan oder Frachtbrief.
+      /bündel|bundl/i,
       'Transporte bündeln wir und planen sie ab NRW, damit weniger Fahrten anfallen.',
       'We bundle transports and plan them from NRW so that fewer trips are needed.',
     ],
     [
       'lokale Partner',
-      /lokalen? Partnern?\b|local partners?\b/i,
+      // auch gebeugt und zusammengesetzt, wie im Block davor: „lokaler Partner“, „lokalen Partnerbetrieben“
+      /lokal\w*\s+Partner|local\s+partner/i,
       'Wiederverwendbare Systeme, lokale Partner, effiziente Logistik: So geht moderner, nachhaltiger Messebau.',
       'Reusable systems, local partners, efficient logistics.',
+    ],
+    [
+      'weniger Fahrten',
+      // Wirkung auf die Zahl der Fahrten (Blogtext bis 11.11.2026); eine englische Fassung gab es nicht,
+      // der zweite Satz prüft nur das Muster.
+      /weniger\s+Fahrten|Fahrten\s+(zu\s+)?(minimieren|reduzieren|vermeiden|sparen)|fewer\s+trips|(minimi[sz]e|reduce|avoid)\s+(round\s+|empty\s+)?trips/i,
+      'Wir planen Auf- und Abbauten zeitnah hintereinander, um Hin- und Rückfahrten zu minimieren',
+      'We schedule set-ups back to back to minimise round trips.',
     ],
   ]
 
@@ -469,6 +501,25 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
   it('keine der Wendungen steht in Sprachdateien, Vorabtext, index.html, Seitentiteln oder im Blogbeitrag', () => {
     for (const [datei, text] of quellen) expect(text.length, datei).toBeGreaterThan(1000)
     expect(funde(quellen)).toEqual([])
+  })
+
+  it('Gegenprobe: gebeugte und umgestellte Fassungen schlagen an', () => {
+    const muster = Object.fromEntries(wendungen.map(([name, m]) => [name, m]))
+    const faelle: Array<[string, string]> = [
+      ['gebündelte Transporte', 'ein gebündelter Transport'],
+      ['gebündelte Transporte', 'Wir bündeln Transporte ab NRW.'],
+      ['gebündelte Transporte', 'Bündelung der Fahrten'],
+      ['gebündelte Transporte', 'We bundle all transports.'],
+      ['lokale Partner', 'mit lokalen Partnerbetrieben'],
+      ['lokale Partner', 'ein lokaler Partner'],
+      ['lokale Partner', 'local partnerships'],
+      ['weniger Fahrten', 'damit weniger Fahrten anfallen'],
+      ['weniger Fahrten', 'um Fahrten zu vermeiden'],
+      ['weniger Fahrten', 'to reduce empty trips'],
+    ]
+    for (const [name, satz] of faelle) expect(muster[name].test(satz), `${name}: ${satz}`).toBe(true)
+    // „Leerfahrten … zusätzliche Fahrten“ beschreibt das Problem, keine eigene Wirkung, und bleibt erlaubt.
+    expect(muster['weniger Fahrten'].test('Ineffiziente Logistik (falsche Fristen, Leerfahrten) bringt zusätzliche Fahrten')).toBe(false)
   })
 
   it('Gegenprobe: der alte Wortlaut schlägt in jeder Quelle an', () => {
@@ -498,6 +549,7 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
     expect(startseite).toContain(`<strong>Transporte ab NRW</strong> – ${neu}`)
     expect(beitrag?.excerpt).toBe('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik: So geht moderner, nachhaltiger Messebau.')
     expect(JSON.stringify(seitenMeta)).toContain('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik')
+    expect(beitrag?.content).toContain('- Wir stimmen Auf- und Abbautermine mit der Transportplanung ab\n')
   })
 
   // Rückfallschutz für jeden der 20 geänderten Texte je Sprache, nicht nur für die mit Muster:
