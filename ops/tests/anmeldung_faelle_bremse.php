@@ -10,20 +10,7 @@ if (PHP_SAPI !== 'cli' || !function_exists('starte')) {
     exit;
 }
 
-define('TEXT_BREMSE_503', json_encode(['error' => 'Anmeldung derzeit nicht möglich']));
-
-function bremsdatei(array $u, string $adresse): string {
-    return $u['daten'] . '/login_limit_' . md5($adresse) . '.json';
-}
-
-/** Status einer Folge von Anmeldungen von einer Adresse. */
-function folge(array $u, string $adresse, array $passwoerter): array {
-    $status = [];
-    foreach ($passwoerter as $passwort) {
-        $status[] = anmelden($u, 'chef', $passwort, $adresse)['status'];
-    }
-    return $status;
-}
+require_once __DIR__ . '/anmeldung_bremse_helfer.php';
 
 // ─── Fall B1: Grenze je Adresse ──────────────────────────────────────────────
 echo "\n== Fall B1: fünf Fehlversuche je Adresse ==\n";
@@ -41,7 +28,7 @@ $a = anmelden($u, 'chef', ALT, '127.0.9.2');
 pruefe('richtiges Passwort von anderer Adresse: 200 (keine Sperre für alle)', $a['status'] === 200, kurz($a));
 $a = anmelden($u, 'gibt-es-nicht', ALT, '127.0.9.2');
 pruefe('unbekannter Benutzername: 401 und gezählt',
-    $a['status'] === 401 && count(json_decode((string)file_get_contents(bremsdatei($u, '127.0.9.2')), true)) === 1, kurz($a));
+    $a['status'] === 401 && stempelZahl(bremsdatei($u, '127.0.9.2')) === 1, kurz($a));
 
 // ─── Fall B2: Erfolg leert, Eingabefehler zählen nicht, Fenster ──────────────
 echo "\n== Fall B2: was zählt und was nicht ==\n";
@@ -68,7 +55,7 @@ pruefe('fünf Stempel von vor zehn Minuten: 429 mit "5 Minuten"',
 file_put_contents(bremsdatei($u, '127.0.9.8'), 'kein json');
 $a = anmelden($u, 'chef', 'falsch-falsch', '127.0.9.8');
 pruefe('unlesbarer Zähler gilt als leer und wird neu geschrieben: 401, danach ein Stempel',
-    $a['status'] === 401 && count((array)json_decode((string)file_get_contents(bremsdatei($u, '127.0.9.8')), true)) === 1, kurz($a));
+    $a['status'] === 401 && stempelZahl(bremsdatei($u, '127.0.9.8')) === 1, kurz($a));
 
 // ─── Fall B3: gleichzeitige Versuche ─────────────────────────────────────────
 echo "\n== Fall B3: gleichzeitige Fehlversuche ==\n";
