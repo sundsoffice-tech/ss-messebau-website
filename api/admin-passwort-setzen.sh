@@ -97,7 +97,7 @@ anzeige_an
 trap - INT TERM HUP
 
 # printf ist ein Teil der Shell: Das Passwort erscheint in keiner Prozessliste.
-printf '%s\n%s\n' "$ERSTES" "$ZWEITES" | "$PHP" "$WERKZEUG" setzen "$NAME"
+printf '%s\n%s\n%s\n' "$NAME" "$ERSTES" "$ZWEITES" | "$PHP" "$WERKZEUG" setzen
 ERGEBNIS=$?
 ERSTES=''
 ZWEITES=''
