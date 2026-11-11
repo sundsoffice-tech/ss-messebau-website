@@ -99,7 +99,9 @@ function passwortSetzen(
     #[\SensitiveParameter]
     string $passwort
 ): void {
-    $hash = password_hash($passwort, PASSWORD_BCRYPT);
+    // Dieselben Kosten wie BCRYPT_KOSTEN in auth.php (der Beleg ops/tests/anmeldung_faelle_platzhalter.php
+    // verlangt Gleichheit): Sonst rechnete der echte Hash anders lange als der Platzhalter der Anmeldung.
+    $hash = password_hash($passwort, PASSWORD_BCRYPT, ['cost' => 10]);
     $stmt = $db->prepare("UPDATE admin_users SET password_hash = :hash, updated_at = datetime('now') WHERE id = :id");
     $stmt->execute([':hash' => $hash, ':id' => $id]);
     if ($stmt->rowCount() !== 1) {
