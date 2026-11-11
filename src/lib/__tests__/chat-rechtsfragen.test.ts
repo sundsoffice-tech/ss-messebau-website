@@ -49,7 +49,7 @@ const ANWEISUNG = [
 // 11.11.2026, P1).
 const VOR_ANWEISUNG = String.raw`$message = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', strip_tags($rawMessage));`
 const NACH_ANWEISUNG = '$db = getDB();'
-// Vom ersten $messages bis vor curl_exec: genau eine Systemnachricht mit der Anweisung, danach nur die
+// Vom ersten $messages bis einschließlich curl_exec: genau eine Systemnachricht mit der Anweisung, danach nur die
 // Nachricht des Besuchers, und genau diese Liste geht an das Modell. Ein Verlauf aus dem Browser, eine
 // zweite Anweisung (auch als Rolle developer), Zusatzwissen in der Nachricht des Besuchers, ein zweiter
 // Schlüssel 'messages' oder ein späteres curl_setopt ändern diesen Block (P2). Das Modell ist frei.
@@ -83,9 +83,11 @@ const NACHRICHTEN = `
     ]);
     $response = curl_exec($ch);
 `
-// Genau eine Anfrage: Ein zweites curl_init oder curl_exec könnte die Frage des Besuchers ohne die
-// Anweisung senden (Programmierer 11.11.2026).
-const ANFRAGEN = ['curl_init(', 'curl_exec(']
+// Genau ein curl_init und ein curl_exec, gezählt wie PHP sie liest (Groß- und Kleinschreibung egal,
+// Leerraum vor der Klammer erlaubt): Ein zweites könnte die Frage des Besuchers ohne die Anweisung
+// senden (Programmierer 11.11.2026). Andere Anfragewege (file_get_contents, fsockopen, curl_multi_*)
+// fängt das nicht; gegen sie hilft nur, dass hinter der Anweisung keine Eingabequelle steht (6.).
+const ANFRAGEN: [string, RegExp][] = [['curl_init(', /\bcurl_init\s*\(/gi], ['curl_exec(', /\bcurl_exec\s*\(/gi]]
 const MODELL_FREI = (text: string) => text.replace(/'model' => '[^']*'/g, "'model' => …")
 // Zwischen fester Anweisung und Anfrage greift der Code auf keine dieser Eingabequellen zu (P3), damit
 // weder Anweisung, Zusatzwissen noch Nachrichtenliste Eingaben aufnehmen, außer der geprüften $message.
@@ -178,7 +180,7 @@ function zusatzFehler(roh: string): string[] {
   if (iZusatz < 0 || !/^\s*\$systemPrompt \.= 'Die[^']*';\s*$/.test(ohneLeer[iZusatz + 1] ?? '')) {
     fehler.push('der Vorrangsatz steht nicht direkt nach dem Zusatzwissen')
   }
-  // 3. Der Nachrichtenblock, vom ersten $messages bis vor curl_exec, Wort für Wort.
+  // 3. Der Nachrichtenblock, vom ersten $messages bis einschließlich curl_exec, Wort für Wort.
   const text = code.join('\n')
   const von = text.indexOf('$messages')
   const exec = text.indexOf('$response = curl_exec(')
@@ -201,14 +203,14 @@ function zusatzFehler(roh: string): string[] {
     const ist = (text.match(new RegExp(`\\$${name}\\b`, 'g')) ?? []).length
     if (ist !== soll) fehler.push(`$${name} steht ${ist}-mal statt ${soll}-mal im Code. ${RUECKWEG}`)
   }
-  for (const aufruf of ANFRAGEN) {
-    const anzahl = text.split(aufruf).length - 1
+  for (const [aufruf, muster] of ANFRAGEN) {
+    const anzahl = (text.match(muster) ?? []).length
     if (anzahl !== 1) fehler.push(`${aufruf} steht ${anzahl}-mal statt einmal im Code`)
   }
-  // 6. Keine der bekannten Eingabequellen zwischen fester Anweisung und Anfrage.
-  const bisAnfrage = code.findIndex((z, k) => k > beginn && z.includes('$response = curl_exec('))
-  for (const zeile of code.slice(beginn, bisAnfrage < 0 ? code.length : bisAnfrage)) {
-    if (BROWSER.test(zeile)) fehler.push(`Eingabe aus dem Browser zwischen Anweisung und Anfrage: „${zeile.trim().slice(0, 60)}“`)
+  // 6. Keine der bekannten Eingabequellen von der festen Anweisung bis zum Dateiende, also auch keine
+  // zweite Anfrage nach der ersten, die die Frage des Besuchers auf anderem Weg sendet.
+  for (const zeile of code.slice(beginn)) {
+    if (BROWSER.test(zeile)) fehler.push(`Eingabe aus dem Browser nach der festen Anweisung: „${zeile.trim().slice(0, 60)}“`)
   }
   // 7. Keine Umwege an den Zuweisungen vorbei, mit Zeile und Treffer.
   // eval führt Text als Code aus, parse_str setzte bis PHP 7 Variablen aus Text (in PHP 8 nur mit
@@ -336,7 +338,7 @@ describe('KI-Berater: keine Rechtsauskunft', () => {
     expect(zusatzFehler(verlauf)).toEqual([
       blockAb('messages = array_merge'),
       stellen('messages', 6),
-      beginntMit('Eingabe aus dem Browser zwischen Anweisung und Anfrage: „$messages = array_merge'),
+      beginntMit('Eingabe aus dem Browser nach der festen Anweisung: „$messages = array_merge'),
     ])
     // Zusatzwissen in der Nachricht des Besuchers: Dort gilt der Vorrangsatz nicht.
     const inNachricht = ersetze("'content' => $message\n", "'content' => $message . ($trainingContext ?? '')\n")
@@ -360,8 +362,18 @@ describe('KI-Berater: keine Rechtsauskunft', () => {
     expect(zusatzFehler(eigene)).toEqual([
       blockAb('2);'),
       'curl_init( steht 2-mal statt einmal im Code',
-      beginntMit('Eingabe aus dem Browser zwischen Anweisung und Anfrage: „curl_setopt($ch2'),
+      beginntMit('Eingabe aus dem Browser nach der festen Anweisung: „curl_setopt($ch2'),
     ])
+    // Ein zweites curl_exec in anderer Schreibweise: PHP unterscheidet bei Funktionsnamen nicht nach
+    // Groß- und Kleinschreibung und erlaubt Leerraum vor der Klammer.
+    const andereSchreibweise = ersetze(exec, exec + '    $response2 = Curl_Exec ($ch);\n')
+    expect(regelFehler(andereSchreibweise)).toEqual([])
+    expect(zusatzFehler(andereSchreibweise)).toEqual(['curl_exec( steht 2-mal statt einmal im Code'])
+    // Eine zweite Anfrage ohne curl, nach der ersten, mit der Frage des Besuchers (Programmierer 11.11.2026).
+    const ohneCurl = ersetze(exec, exec +
+      "    $antwort2 = file_get_contents('https://api.openai.com/v1/chat/completions', false, stream_context_create(['http' => ['content' => $rawMessage]]));\n")
+    expect(regelFehler(ohneCurl)).toEqual([])
+    expect(zusatzFehler(ohneCurl)).toEqual([beginntMit('Eingabe aus dem Browser nach der festen Anweisung: „$antwort2 = file_get_contents')])
     // Ein zweiter Schlüssel 'messages' in der Anfrage: Der letzte gewinnt, die Anweisung fiele weg (P2).
     const zweiterSchluessel = ersetze("            'max_tokens' => 1000,\n", "            'max_tokens' => 1000,\n            'messages' => [['role' => 'user', 'content' => $message]],\n")
     expect(regelFehler(zweiterSchluessel)).toEqual([])
@@ -389,7 +401,7 @@ describe('KI-Berater: keine Rechtsauskunft', () => {
     expect(regelFehler(zusatzWissen)).toEqual([])
     expect(zusatzFehler(zusatzWissen)).toEqual([
       stellen('trainingContext', 4),
-      beginntMit("Eingabe aus dem Browser zwischen Anweisung und Anfrage: „$trainingContext .= $input['context']"),
+      beginntMit("Eingabe aus dem Browser nach der festen Anweisung: „$trainingContext .= $input['context']"),
     ])
     // ?> beendet einen Zeilenkommentar, der Rest läuft als Code (E1).
     const zeileNachDb = quelltext.split('\n').findIndex((z) => z.includes('$db = getDB();')) + 2
