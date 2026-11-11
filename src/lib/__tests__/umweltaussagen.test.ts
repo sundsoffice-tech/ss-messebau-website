@@ -526,9 +526,11 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
   // bündeln“) wird eingetragen. Der Vergleich gilt der ganzen Zeile: Wer eine eingetragene Zeile ändert,
   // prüft sie neu.
   const STELLEN_WOERTER: Array<[string, RegExp]> = [
-    // Wortgrenzen, damit Zufahrt, Anfahrt, Fahrtkosten, LED-Strips nicht anschlagen (Spieltheoretiker 11.11.2026);
-    // „Leerfahrten“ und „Rückfahrten“ treffen über „fahrten\b“.
-    ['Fahrten', /fahrten\b|\bfahrt\b|\btrips?\b/i],
+    // „fahrt“ ohne Wortgrenze, damit Leerfahrt, Rückfahrt, Rundfahrt und Fahrtwege anschlagen (Wissenschaftler
+    // 11.11.2026: mit Wortgrenze rutschten gerade diese Wirkungswörter durch, 6 statt 10 von 34 Umformulierungen,
+    // bei derselben einen Zeile im Bestand). Eine harmlose Zufahrt oder Anfahrt wird eingetragen.
+    // „trip“ nur als Wort, damit LED-Strips und „striped“ nicht anschlagen.
+    ['Fahrten', /fahrt|\btrips?\b/i],
     // Wortstamm: „gebündelt“, „Bündelung“, „bundle“, „bundled“
     ['gebündelt', /bündel|bundl/i],
   ]
@@ -558,13 +560,19 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
     expect(stellen(quellen), HINWEIS).toEqual(geprueft)
   })
 
-  it('Gegenprobe: jede Umformulierung einer Wirkung wird eine neue Stelle, Harmloses ohne Wortgrenze nicht', () => {
+  // Die Proben tragen das Wort; eine Umformulierung ohne „fahrt“, „trip“ oder „bündel“ („weniger Touren“) sieht
+  // diese Prüfung nicht.
+  it('Gegenprobe: die gewählten Umformulierungen werden je eine neue Stelle, „trip“ nur als Wort', () => {
     for (const satz of [
       'Wir planen Auf- und Abbauten zeitnah hintereinander, um Hin- und Rückfahrten zu minimieren',
       'damit weniger Leerfahrten anfallen',
       'Wir senken die Anzahl der Fahrten.',
       'Leerfahrten werden vermieden.',
       'eine Fahrt statt zwei',
+      'keine Leerfahrt',
+      'nur eine Rückfahrt',
+      'eine Rundfahrt für drei Stände',
+      'Fahrtwege verkürzen',
       'We reduce the number of trips.',
       'fewer trips',
       'Transporte bündeln wir ab NRW.',
@@ -577,7 +585,7 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
         expect(stellen([[datei, `${text}\n${satz}`]]).length, `${datei}: ${satz}`).toBe(vorher + 1)
       }
     }
-    for (const harmlos of ['Zufahrt zur Halle', 'Anfahrt und Parken', 'Einfahrtsgenehmigung', 'Fahrtkosten', 'LED-Strips', 'striped carpet']) {
+    for (const harmlos of ['LED-Strips', 'striped carpet']) {
       expect(stellen([[BLOG, harmlos]]), harmlos).toEqual([])
     }
   })
@@ -610,8 +618,6 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
     expect(beitrag?.excerpt).toBe('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik: So geht moderner, nachhaltiger Messebau.')
     expect(JSON.stringify(seitenMeta)).toContain('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik')
     expect(beitrag?.content).toContain('- Wir stimmen Auf- und Abbautermine mit der Transportplanung ab\n')
-    // Am Stand vom 11.11.2026 trägt der Beitrag kein „gebündelt“ mehr.
-    expect(/bündel|bundl/i.test(beitragText)).toBe(false)
     expect(beitrag?.content).toContain('- Wir planen Verpackung und Beladung je Stand (jeder cm zählt)\n')
     expect(beitrag?.content).toContain('**Effizienter Transport senkt oft auch die Kosten** – weniger Volumen, abgestimmte Termine.')
   })
