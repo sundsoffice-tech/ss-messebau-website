@@ -17,6 +17,12 @@ const SETUP_ERLAUBT = false;
 // Steht hier oben, weil die Verteilung der Aktionen weiter unten läuft, bevor spätere Zeilen gelten.
 const BREMSE_DATEI_MAX = 4096;
 
+// Platzhalter für die Anmeldung mit unbekanntem Benutzernamen: ein bcrypt-Hash eines verworfenen
+// Zufallswerts, erzeugt mit password_hash() und denselben Kosten wie neue Passwort-Hashes (10).
+// Gegen ihn wird geprüft, wenn es den Namen nicht gibt, damit die Antwort so lange braucht wie bei
+// einem bekannten Namen mit falschem Passwort. Zu ihm gehört kein Konto; kein Passwort meldet damit an.
+const ANMELDUNG_PLATZHALTER_HASH = '$2y$10$Kbaf0jELaT3AQb1wOGKwbeASrtUx86cIwu6rsjLVkf23dM0wmapLW';
+
 function startSession(): void {
     if (session_status() === PHP_SESSION_NONE) {
         $isSecure = isset($_SERVER['HTTPS']) || 
@@ -143,8 +149,8 @@ function bremseVersuch(string $datei, int $max, int $fenster, bool $zaehlbar, ca
         // (JSON-Liste) weiter, und ein abgerissener Rest zählt nicht.
         preg_match_all('/(?<!\d)\d{10}(?!\d)/', $inhalt, $treffer);
         // abs(): Ein Stempel aus der Zukunft (Uhr zurückgestellt) zählt mit, aber nur, solange er
-        // weniger als ein Fenster entfernt ist. Weiter entfernte zählen nicht und verschwinden mit
-        // dem nächsten gezählten Versuch.
+        // weniger als ein Fenster entfernt ist. Weiter entfernte zählen nicht; sie verschwinden,
+        // sobald die Datei von vorn beginnt oder gekürzt wird (bremseStempeln).
         $stempel = array_values(array_filter(array_map('intval', $treffer[0]), fn($ts) => abs($jetzt - $ts) < $fenster));
         if (count($stempel) >= $max) {
             return ['voll', $fenster - ($jetzt - min($stempel))];
@@ -244,7 +250,9 @@ function handleLogin(): void {
             $stmt = getDB()->prepare('SELECT * FROM admin_users WHERE username = :username LIMIT 1');
             $stmt->execute([':username' => $username]);
             $zeile = $stmt->fetch();
-            if (!$zeile || !password_verify($password, $zeile['password_hash'])) {
+            // Auch bei unbekanntem Namen einmal bcrypt rechnen (gegen den Platzhalter).
+            $stimmt = password_verify($password, $zeile ? (string)$zeile['password_hash'] : ANMELDUNG_PLATZHALTER_HASH);
+            if (!$zeile || !$stimmt) {
                 return false;
             }
             $user = $zeile;
