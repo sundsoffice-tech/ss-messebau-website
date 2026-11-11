@@ -61,6 +61,8 @@ Recherche am TT.MM.JJJJ. Ein Satz, worum es im Beitrag geht.
 - Der Abschnitt „Gegenprüfung“ ist eine Liste, und jede Zeile hat denselben Kopf: `- TT.MM.JJJJ, Runde 1: …`, `- TT.MM.JJJJ, Runde 2: …`, dazu nach Bedarf `- TT.MM.JJJJ, Vorprüfung <wovon>: …` und `- TT.MM.JJJJ, Nachtrag <wozu>: …`. Es gibt eine Runde 1, und jede Runde nennt die Zahl der geprüften Aussagen in der Formel „128 Aussagen geprüft“ oder „30 Stellen geprüft“. Rot wird der Test bei einer Zeile ohne diesen Kopf, bei einer Runde ohne die Formel, bei einem Eintrag, dessen Text mit „offen“, „in Arbeit“, „geplant“, „folgt“, „begonnen“, „ausstehend“, „steht noch …“, „wird noch geprüft“ oder „wird nachgereicht“ beginnt, und bei „steht aus“, „steht noch aus“, „ausstehend“ oder „läuft noch“ im Text. Ob die Prüfung stattfand und was sie fand, prüft kein Test.
 - Die Liste der Altbeiträge ohne Protokoll hat höchstens sechs Einträge.
 
+- Daneben gilt `src/lib/__tests__/umweltaussagen.test.ts`. In Sprachdateien, `index.html`, `scripts/seiten-inhalt.json`, den Seitentiteln und im Beitrag „Nachhaltiger Messebau“ wird jede Zeile mit „Fahrten“, „Fahrt“, „trip“ oder dem Wortstamm „bündel“/„bundl“ rot, bis sie in `STELLEN_GEPRUEFT` steht. Eine Wirkung auf Fahrten oder Transporte („weniger Fahrten“, „Transporte bündeln“) braucht einen Tourenplan oder Frachtbrief als Beleg. Eine harmlose Stelle wird mit Begründung eingetragen. Gesperrt sind dort außerdem „lokale“ oder „regionale Partner“, „kurze Transportwege“ und „langlebige Materialien“.
+
 Zahlen- und Datumsprobe sind Formprüfungen. Die Zahlenprobe merkt nicht, wenn zwei belegte Zahlen vertauscht sind, die Datumsprobe nicht, wenn ein belegtes Datum bei der falschen Messe steht; dafür ist die Gegenprüfung da.
 
 ## Wo ein Beitrag eingetragen ist

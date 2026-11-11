@@ -469,16 +469,6 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
   // [Name, Muster, alter deutscher Satz, alter englischer Satz]
   const wendungen: Array<[string, RegExp, string, string]> = [
     [
-      'gebündelte Transporte',
-      // Wortstamm statt einzelner Fassungen („gebündelter Transport“, „bündeln wir Transporte“, „Bündelung“).
-      // Am Stand vom 11.11.2026 trifft er in keiner Quelle. Er trifft auch Harmloses („Leistungen bündeln“,
-      // „Bundle“, „Kabelbündel“): Ein Treffer heißt „prüfen“. Geht es um Transporte, braucht der Satz
-      // Tourenplan oder Frachtbrief; sonst kommt die Stelle mit Begründung in eine Ausnahme.
-      /bündel|bundl/i,
-      'Transporte bündeln wir und planen sie ab NRW, damit weniger Fahrten anfallen.',
-      'We bundle transports and plan them from NRW so that fewer trips are needed.',
-    ],
-    [
       'lokale Partner',
       // auch gebeugt und zusammengesetzt, wie im Block davor: „lokaler Partner“, „lokalen Partnerbetrieben“
       /lokal\w*\s+Partner|local\s+partner/i,
@@ -520,10 +510,6 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
   it('Gegenprobe: gebeugte und umgestellte Fassungen schlagen an', () => {
     const muster = Object.fromEntries(wendungen.map(([name, m]) => [name, m]))
     const faelle: Array<[string, string]> = [
-      ['gebündelte Transporte', 'ein gebündelter Transport'],
-      ['gebündelte Transporte', 'Wir bündeln Transporte ab NRW.'],
-      ['gebündelte Transporte', 'Bündelung der Fahrten'],
-      ['gebündelte Transporte', 'We bundle all transports.'],
       ['lokale Partner', 'mit lokalen Partnerbetrieben'],
       ['lokale Partner', 'ein lokaler Partner'],
       ['lokale Partner', 'local partnerships'],
@@ -532,41 +518,67 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
     for (const [name, satz] of faelle) expect(muster[name].test(satz), `${name}: ${satz}`).toBe(true)
   })
 
-  // Fahrten und Wege: eine Liste geprüfter Stellen statt einer Liste verbotener Sätze. Ein Muster für
+  // Fahrten und gebündelte Transporte: Listen geprüfter Stellen statt Listen verbotener Sätze. Ein Muster für
   // „weniger Fahrten“ erkannte von 26 Umformulierungen derselben Wirkung keine (Wissenschaftler 11.11.2026).
-  // Jede Zeile mit „fahrt“ oder „trip“ in den Quellen muss hier stehen; eine neue Stelle wird rot, bis jemand
-  // sie geprüft und eingetragen hat. Eine Wirkung („weniger Fahrten“, „Leerfahrten vermeiden“) braucht vorher
-  // Tourenplan oder Frachtbrief.
-  const FAHRTEN_GEPRUEFT: Array<[string, string]> = [
-    // beschreibt das Problem, keine eigene Wirkung
-    [BLOG, '- Ineffiziente Logistik (falsche Fristen, Leerfahrten) bringt zusätzliche Fahrten'],
+  // Jede Zeile, die das Wort trägt, muss in der Liste stehen; eine neue Stelle wird rot, bis jemand sie geprüft
+  // und mit Begründung eingetragen hat. Eine Wirkung („weniger Fahrten“, „Transporte bündeln“, „Leerfahrten
+  // vermeiden“) braucht vorher Tourenplan oder Frachtbrief; eine harmlose Stelle („Zufahrten“, „Leistungen
+  // bündeln“) wird eingetragen. Der Vergleich gilt der ganzen Zeile: Wer eine eingetragene Zeile ändert,
+  // prüft sie neu.
+  const STELLEN_WOERTER: Array<[string, RegExp]> = [
+    // Wortgrenzen, damit Zufahrt, Anfahrt, Fahrtkosten, LED-Strips nicht anschlagen (Spieltheoretiker 11.11.2026);
+    // „Leerfahrten“ und „Rückfahrten“ treffen über „fahrten\b“.
+    ['Fahrten', /fahrten\b|\bfahrt\b|\btrips?\b/i],
+    // Wortstamm: „gebündelt“, „Bündelung“, „bundle“, „bundled“
+    ['gebündelt', /bündel|bundl/i],
   ]
-  const fahrtStellen = (liste: Array<[string, string]>): Array<[string, string]> =>
-    liste.flatMap(([datei, text]) =>
-      text
-        .split('\n')
-        .filter((zeile) => /fahrt|trip/i.test(zeile))
-        .map((zeile): [string, string] => [datei, zeile.trim()])
-    )
+  const STELLEN_GEPRUEFT: Array<[string, string, string]> = [
+    // [Wort, Datei, Zeile] – Begründung im Kommentar darüber
+    // beschreibt das Problem, keine eigene Wirkung
+    ['Fahrten', BLOG, '- Ineffiziente Logistik (falsche Fristen, Leerfahrten) bringt zusätzliche Fahrten'],
+  ]
+  const HINWEIS =
+    'Neue Stelle mit „Fahrten“ oder „gebündelt“: prüfen. Eine Wirkung auf Fahrten oder Transporte braucht einen ' +
+    'Tourenplan oder Frachtbrief als Beleg; eine harmlose Stelle mit Begründung in STELLEN_GEPRUEFT ' +
+    '(src/lib/__tests__/umweltaussagen.test.ts) eintragen.'
+  const stellen = (liste: Array<[string, string]>): string[] =>
+    liste
+      .flatMap(([datei, text]) =>
+        STELLEN_WOERTER.flatMap(([wort, muster]) =>
+          text
+            .split('\n')
+            .filter((zeile) => muster.test(zeile))
+            .map((zeile) => `${wort} | ${datei} | ${zeile.trim()}`)
+        )
+      )
+      .sort()
+  const geprueft = STELLEN_GEPRUEFT.map(([wort, datei, zeile]) => `${wort} | ${datei} | ${zeile}`).sort()
 
-  it('jede Stelle mit „fahrt“ oder „trip“ in den Quellen ist geprüft', () => {
-    expect(fahrtStellen(quellen)).toEqual(FAHRTEN_GEPRUEFT)
+  it('jede Stelle mit „Fahrten“ oder „gebündelt“ in den Quellen ist geprüft', () => {
+    expect(stellen(quellen), HINWEIS).toEqual(geprueft)
   })
 
-  it('Gegenprobe: jede Umformulierung einer Wirkung auf die Fahrten wird eine neue Stelle', () => {
+  it('Gegenprobe: jede Umformulierung einer Wirkung wird eine neue Stelle, Harmloses ohne Wortgrenze nicht', () => {
     for (const satz of [
       'Wir planen Auf- und Abbauten zeitnah hintereinander, um Hin- und Rückfahrten zu minimieren',
       'damit weniger Leerfahrten anfallen',
       'Wir senken die Anzahl der Fahrten.',
       'Leerfahrten werden vermieden.',
-      'Vermeidung von Leerfahrten',
+      'eine Fahrt statt zwei',
       'We reduce the number of trips.',
       'fewer trips',
+      'Transporte bündeln wir ab NRW.',
+      'ein gebündelter Transport',
+      'Bündelung der Wege',
+      'We bundle all transports.',
     ]) {
       for (const [datei, text] of quellen) {
-        const stellen = fahrtStellen([[datei, `${text}\n${satz}`]])
-        expect(stellen.length, `${datei}: ${satz}`).toBe(FAHRTEN_GEPRUEFT.filter(([d]) => d === datei).length + 1)
+        const vorher = stellen([[datei, text]]).length
+        expect(stellen([[datei, `${text}\n${satz}`]]).length, `${datei}: ${satz}`).toBe(vorher + 1)
       }
+    }
+    for (const harmlos of ['Zufahrt zur Halle', 'Anfahrt und Parken', 'Einfahrtsgenehmigung', 'Fahrtkosten', 'LED-Strips', 'striped carpet']) {
+      expect(stellen([[BLOG, harmlos]]), harmlos).toEqual([])
     }
   })
 
@@ -598,6 +610,8 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
     expect(beitrag?.excerpt).toBe('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik: So geht moderner, nachhaltiger Messebau.')
     expect(JSON.stringify(seitenMeta)).toContain('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik')
     expect(beitrag?.content).toContain('- Wir stimmen Auf- und Abbautermine mit der Transportplanung ab\n')
+    // Am Stand vom 11.11.2026 trägt der Beitrag kein „gebündelt“ mehr.
+    expect(/bündel|bundl/i.test(beitragText)).toBe(false)
     expect(beitrag?.content).toContain('- Wir planen Verpackung und Beladung je Stand (jeder cm zählt)\n')
     expect(beitrag?.content).toContain('**Effizienter Transport senkt oft auch die Kosten** – weniger Volumen, abgestimmte Termine.')
   })
