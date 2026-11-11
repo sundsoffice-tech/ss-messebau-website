@@ -103,10 +103,29 @@ function bremseDirekt(array $u, string $datei, string $art): array {
 require $argv[1];
 $lief = false;
 $erg = bremseVersuch($argv[2], 5, 900, true, function () use (&$lief, $argv) { $lief = true; return $argv[3] === "richtig"; });
-echo json_encode(["stand" => $erg[0], "lief" => $lief]);
+echo json_encode(["stand" => $erg[0], "warten" => $erg[1], "lief" => $lief]);
 ');
     exec(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg($skript) . ' ' . escapeshellarg($u['api'] . '/auth.php') . ' '
         . escapeshellarg($datei) . ' ' . escapeshellarg($art) . ' 2>&1', $zeilen);
     $json = json_decode(implode('', $zeilen), true);
-    return is_array($json) ? $json : ['stand' => 'Fehler: ' . substr(implode(' ', $zeilen), 0, 140), 'lief' => null];
+    return is_array($json) ? $json : ['stand' => 'Fehler: ' . substr(implode(' ', $zeilen), 0, 140), 'warten' => null, 'lief' => null];
+}
+
+/**
+ * Grenzfall auf die Sekunde: Schreibt fünf Stempel im Abstand $abstand zur Uhr in eine Zähldatei und
+ * ruft bremseVersuch() direkt auf. Wiederholt, bis Schreiben und Aufruf in derselben Sekunde lagen
+ * (höchstens zwölfmal); sonst wäre der Abstand beim Aufruf schon ein anderer. Rückgabe wie
+ * bremseDirekt(), mit 'takt' => false, wenn es nie in einer Sekunde gelang.
+ */
+function bremseAufDieSekunde(array $u, string $datei, int $abstand): array {
+    for ($versuch = 0; $versuch < 12; $versuch++) {
+        usleep((int)((1 - fmod(microtime(true), 1)) * 1000000) + 20000); // an den Anfang der nächsten Sekunde
+        $t = time();
+        file_put_contents($datei, str_repeat(($t + $abstand) . "\n", 5));
+        $r = bremseDirekt($u, $datei, 'falsch');
+        if (time() === $t) {
+            return $r + ['takt' => true];
+        }
+    }
+    return ['stand' => 'kein gemeinsamer Takt', 'warten' => null, 'lief' => null, 'takt' => false];
 }

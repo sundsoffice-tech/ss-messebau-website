@@ -304,8 +304,20 @@ function gleichzeitig(array $u, array $liste, ?string $sperrdatei = null, ?strin
     return $ergebnis;
 }
 
+// Feste Soll-Liste der Teile. Sie hängt nicht davon ab, welche Dateien gerade im Ordner liegen:
+// Fehlt eine Datei oder liegt eine unbekannte dort, endet der Lauf mit Exit 2 statt mit einem
+// kleineren, scheinbar grünen Ergebnis. Ein neuer Teil wird hier eingetragen.
+const SOLL_TEILE = ['bremse', 'bremse_datenbank', 'bremse_sichern', 'bremse_zaehler', 'bremse_zukunft',
+    'eingabe', 'health', 'platzhalter', 'setup', 'sitzung'];
+
 $dateien = glob(__DIR__ . '/anmeldung_faelle_*.php') ?: [];
 sort($dateien);
+$vorhanden = array_map(fn($d) => substr(basename($d, '.php'), strlen('anmeldung_faelle_')), $dateien);
+$abweichung = array_merge(array_diff(SOLL_TEILE, $vorhanden), array_diff($vorhanden, SOLL_TEILE), array_diff($teile, SOLL_TEILE));
+if ($abweichung !== []) {
+    fwrite(STDERR, "Teile weichen von der Soll-Liste ab: " . implode(' ', $abweichung) . "\n");
+    exit(2);
+}
 $gelaufeneTeile = [];
 foreach ($dateien as $datei) {
     $teil = substr(basename($datei, '.php'), strlen('anmeldung_faelle_'));
@@ -325,7 +337,7 @@ foreach ($umgebungen as $u) {
     stoppe($u);
     exec('rm -rf ' . escapeshellarg($u['wurzel']));
 }
-$erwartet = $teile !== [] ? $teile : array_map(fn($d) => substr(basename($d, '.php'), strlen('anmeldung_faelle_')), $dateien);
+$erwartet = $teile !== [] ? $teile : SOLL_TEILE;
 $fehlend = array_diff($erwartet, $gelaufeneTeile);
 if ($gelaufeneTeile === [] || $fehlend !== []) {
     fwrite(STDERR, "Nicht gelaufen: " . ($fehlend !== [] ? implode(' ', $fehlend) : 'kein Teil') . "\n");

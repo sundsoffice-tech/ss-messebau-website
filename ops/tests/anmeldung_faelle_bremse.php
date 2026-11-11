@@ -72,7 +72,14 @@ $a = anmelden($u, 'chef', 'falsch-falsch', '127.0.9.9', 2);
 flock($fp, LOCK_UN);
 fclose($fp);
 pruefe('Zähldatei von außen gesperrt: die Anmeldung wartet (keine Antwort in 2 s) statt ungezählt durchzulaufen', $a['status'] === 0, kurz($a));
-sleep(1); // der wartende Aufruf läuft im Server zu Ende
+// Der wartende Aufruf läuft im Server zu Ende und zählt dann genau einmal.
+for ($i = 0; $i < 50 && stempelZahl(bremsdatei($u, '127.0.9.9')) === 0; $i++) {
+    usleep(100000);
+}
+usleep(300000);
+pruefe('nach der Freigabe der Sperre steht genau ein Stempel des wartenden Versuchs in der Zähldatei',
+    stempelZahl(bremsdatei($u, '127.0.9.9')) === 1 && groesse(bremsdatei($u, '127.0.9.9')) === 11,
+    stempelZahl(bremsdatei($u, '127.0.9.9')) . ' / ' . groesse(bremsdatei($u, '127.0.9.9')));
 
 // ─── Fall B4: Zähler lässt sich nicht führen ─────────────────────────────────
 echo "\n== Fall B4: Zähler nicht zu schreiben ==\n";
@@ -92,3 +99,26 @@ $a = anmelden($u, 'chef', 'falsch-falsch', '127.0.9.11');
 pruefe('Zähldatei schreibgeschützt: 503', $a['status'] === 503, kurz($a));
 $a = anmelden($u, 'chef', ALT, '127.0.9.10');
 pruefe('Gegenprobe: ohne das Hindernis gelingt dieselbe Anmeldung (200)', $a['status'] === 200, kurz($a));
+
+// ─── Fall B5: Grenzen des Fensters und der Lesart ────────────────────────────
+echo "\n== Fall B5: Grenzen des Fensters, gemischte Stempel, lange Ziffernfolgen ==\n";
+$u = starte($apiQuelle);
+$grenze = $u['wurzel'] . '/grenze.zaehler';
+$r = bremseAufDieSekunde($u, $grenze, -899);
+pruefe('fünf Stempel genau 899 s alt zählen noch: Stand voll, Wartezeit 1 s',
+    $r['stand'] === 'voll' && $r['warten'] === 1 && $r['lief'] === false, json_encode($r));
+$r = bremseAufDieSekunde($u, $grenze, -900);
+pruefe('fünf Stempel genau 900 s alt sind verfallen: der Versuch wird gezählt und geprüft, danach steht nur sein Stempel in der Datei',
+    $r['stand'] === 'falsch' && $r['lief'] === true && stempelZahl($grenze) === 1, json_encode($r) . ' / ' . stempelZahl($grenze));
+$r = bremseAufDieSekunde($u, $grenze, 899);
+pruefe('fünf Stempel genau 899 s voraus zählen: Stand voll', $r['stand'] === 'voll' && $r['lief'] === false, json_encode($r));
+$r = bremseAufDieSekunde($u, $grenze, 900);
+pruefe('fünf Stempel genau 900 s voraus zählen nicht: der Versuch wird gezählt und geprüft', $r['stand'] === 'falsch' && $r['lief'] === true, json_encode($r));
+$jetzt = time();
+file_put_contents(bremsdatei($u, '127.0.9.12'), implode("\n", [$jetzt - 10, $jetzt - 800, $jetzt - 200, $jetzt - 600, $jetzt - 400]) . "\n");
+$a = anmelden($u, 'chef', ALT, '127.0.9.12');
+pruefe('gemischte Stempel (10 bis 800 s alt, ungeordnet): 429 mit "2 Minuten", gerechnet vom ältesten',
+    $a['status'] === 429 && strpos((string)($a['json']['error'] ?? ''), 'Bitte warten Sie 2 Minuten') !== false, kurz($a));
+file_put_contents(bremsdatei($u, '127.0.9.13'), str_repeat(($jetzt - 60) . "123\n", 5));
+$a = anmelden($u, 'chef', 'falsch-falsch', '127.0.9.13');
+pruefe('fünf Folgen von 13 Ziffern am Stück (Stempel plus drei Ziffern) sind keine Stempel: Fehlversuch 401 statt 429', $a['status'] === 401, kurz($a));
