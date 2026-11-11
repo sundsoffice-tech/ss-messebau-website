@@ -13,6 +13,10 @@ require_once __DIR__ . '/db.php';
 // wird der Schalter mit einem eigenen Commit geöffnet und nach der Einrichtung wieder geschlossen.
 const SETUP_ERLAUBT = false;
 
+// Zähldatei der Anmeldebremse: Über dieser Größe (Byte) wird sie auf die gültigen Stempel gekürzt.
+// Steht hier oben, weil die Verteilung der Aktionen weiter unten läuft, bevor spätere Zeilen gelten.
+const BREMSE_DATEI_MAX = 4096;
+
 function startSession(): void {
     if (session_status() === PHP_SESSION_NONE) {
         $isSecure = isset($_SERVER['HTTPS']) || 
@@ -108,15 +112,23 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'auth.php') {
 }
 
 /**
- * Bremse je Adresse: Zeitstempel der Fehlversuche in einer Datei unter data/, gelesen, geprüft und
- * geschrieben unter exklusiver Sperre, damit gleichzeitige Versuche nacheinander zählen.
- * $pruefung läuft unter der Sperre und liefert true (gelungen: Zähler leeren), false (Fehlversuch:
- * zählen) oder null (nicht zählen).
- * Rückgabe: [Stand, Sekunden bis zum nächsten Versuch]. Stand ist 'voll' (Grenze erreicht, $pruefung
- * lief nicht), 'ok', 'falsch', 'ungezaehlt' oder 'defekt' (Datei nicht zu öffnen, zu sperren oder
- * zu schreiben; der Aufrufer weist dann ab).
+ * Bremse je Adresse. Die Zähldatei unter data/ trägt je Versuch einen Zeitstempel (zehn Ziffern,
+ * eine Zeile). Gelesen, gezählt und geprüft wird unter exklusiver Sperre, damit gleichzeitige
+ * Versuche nacheinander zählen.
+ *
+ * Reihenfolge: erst zählen, dann prüfen. Der Stempel des Versuchs steht in der Datei, bevor
+ * $pruefung läuft; lässt er sich nicht schreiben, läuft $pruefung nicht. Ein Versuch, dessen Ausgang
+ * niemand zählen kann, verrät so nicht, ob das Passwort stimmt. Gelingt die Prüfung, wird der
+ * Zähler geleert.
+ *
+ * $zaehlbar false: Der Versuch wird weder gezählt noch geprüft (unvollständige Eingabe).
+ * Rückgabe: [Stand, Sekunden bis zum nächsten Versuch]. Stand ist 'voll' (Grenze erreicht),
+ * 'ungezaehlt', 'ok', 'falsch' oder 'defekt'. 'defekt' heißt: Die Datei war nicht zu öffnen, zu
+ * sperren oder zu schreiben ($pruefung lief nicht), oder $pruefung hat eine Ausnahme geworfen (der
+ * Versuch zählt dann nicht). In beiden Fällen weist der Aufrufer ab.
  */
-function bremseVersuch(string $datei, int $max, int $fenster, callable $pruefung): array {
+function bremseVersuch(string $datei, int $max, int $fenster, bool $zaehlbar, callable $pruefung): array {
+    $vorher = null; // Länge der Zähldatei vor dem Stempel dieses Versuchs, sobald er geschrieben ist
     $fp = @fopen($datei, 'c+');
     if ($fp === false) {
         return ['defekt', 0];
@@ -126,29 +138,74 @@ function bremseVersuch(string $datei, int $max, int $fenster, callable $pruefung
             return ['defekt', 0];
         }
         $jetzt = time();
-        $stempel = json_decode((string)stream_get_contents($fp), true);
-        $stempel = is_array($stempel) ? $stempel : [];
-        $stempel = array_values(array_filter($stempel, fn($ts) => is_int($ts) && ($jetzt - $ts) < $fenster));
+        $inhalt = (string)stream_get_contents($fp);
+        // Zehn Ziffern am Stück sind ein Stempel. So zählt auch eine Datei im früheren Format
+        // (JSON-Liste) weiter, und ein abgerissener Rest zählt nicht.
+        preg_match_all('/(?<!\d)\d{10}(?!\d)/', $inhalt, $treffer);
+        $stempel = array_values(array_filter(array_map('intval', $treffer[0]), fn($ts) => ($jetzt - $ts) < $fenster));
         if (count($stempel) >= $max) {
             return ['voll', $fenster - ($jetzt - min($stempel))];
         }
-        $gelungen = $pruefung();
-        if ($gelungen === null) {
+        if (!$zaehlbar) {
             return ['ungezaehlt', 0];
         }
-        if ($gelungen && $stempel === []) {
-            return ['ok', 0];
-        }
-        $stempel = $gelungen ? [] : array_merge($stempel, [$jetzt]);
-        $neu = json_encode($stempel);
-        if (!ftruncate($fp, 0) || !rewind($fp) || fwrite($fp, $neu) !== strlen($neu) || !fflush($fp)) {
+        // Erst zählen, dann prüfen.
+        $vorher = bremseStempeln($fp, $inhalt, $stempel, $jetzt);
+        if ($vorher === null) {
             return ['defekt', 0];
         }
-        return [$gelungen ? 'ok' : 'falsch', 0];
+        if (!$pruefung()) {
+            return ['falsch', 0];
+        }
+        // Gelungen: Zähler leeren. Misslingt das, bleibt er stehen; das macht die Bremse strenger, nie lockerer.
+        @ftruncate($fp, 0);
+        return ['ok', 0];
+    } catch (\Throwable $e) {
+        // Die Prüfung selbst ist ausgefallen (etwa Datenbank nicht lesbar). Der Versuch zählt dann
+        // nicht: Der eben geschriebene Stempel wird zurückgenommen. Ins Protokoll geht nur die Art
+        // des Fehlers, nie sein Text oder seine Spur.
+        if ($vorher !== null) {
+            @ftruncate($fp, $vorher);
+        }
+        error_log('Anmeldung nicht prüfbar: ' . get_class($e));
+        return ['defekt', 0];
     } finally {
         flock($fp, LOCK_UN);
         fclose($fp);
     }
+}
+
+/**
+ * Hängt den Stempel dieses Versuchs an die Zähldatei an. Rückgabe: die Länge der Datei vor dem
+ * Stempel, oder null, wenn er nicht vollständig geschrieben ist. Gültige Stempel aus dem Bestand
+ * bleiben in jedem Ausgang stehen: Geschrieben wird hinter sie, nie über sie.
+ */
+function bremseStempeln($fp, string $inhalt, array $gueltig, int $jetzt): ?int {
+    $laenge = strlen($inhalt);
+    $trenner = ($laenge > 0 && substr($inhalt, -1) !== "\n") ? "\n" : '';
+    if ($gueltig === []) {
+        // Nichts Gültiges im Bestand: von vorn beginnen. Kürzen braucht keinen Platz.
+        if (!@ftruncate($fp, 0)) {
+            return null;
+        }
+        $laenge = 0;
+        $trenner = '';
+    } elseif ($laenge > BREMSE_DATEI_MAX) {
+        // Datei gewachsen (viele verfallene Stempel): die gültigen an den Anfang, den Rest abschneiden.
+        // Das überschreibt nur Platz, den die Datei schon belegt.
+        $kopf = implode("\n", $gueltig) . "\n";
+        if (!rewind($fp) || @fwrite($fp, $kopf) !== strlen($kopf) || !@ftruncate($fp, strlen($kopf))) {
+            return null;
+        }
+        $laenge = strlen($kopf);
+        $trenner = '';
+    }
+    $zeile = $trenner . $jetzt . "\n";
+    if (fseek($fp, $laenge) !== 0 || @fwrite($fp, $zeile) !== strlen($zeile) || !@fflush($fp)) {
+        @ftruncate($fp, $laenge); // einen abgerissenen Rest wieder abschneiden
+        return null;
+    }
+    return $laenge;
 }
 
 function handleLogin(): void {
@@ -168,19 +225,17 @@ function handleLogin(): void {
     $username = trim($input['username'] ?? '');
     $password = $input['password'] ?? '';
 
-    $user = null;
+    // Unvollständige oder überlange Eingaben zählen nicht als Versuch und werden nicht geprüft.
     $eingabeFehler = null;
-    [$stand, $warten] = bremseVersuch($rateLimitFile, $maxAttempts, $windowSeconds,
-        function () use ($username, $password, &$user, &$eingabeFehler): ?bool {
-            // Unvollständige oder überlange Eingaben zählen nicht als Fehlversuch.
-            if (empty($username) || empty($password)) {
-                $eingabeFehler = 'Benutzername und Passwort erforderlich';
-                return null;
-            }
-            if (strlen($username) > 100 || strlen($password) > 256) {
-                $eingabeFehler = 'Eingabe zu lang';
-                return null;
-            }
+    if (empty($username) || empty($password)) {
+        $eingabeFehler = 'Benutzername und Passwort erforderlich';
+    } elseif (strlen($username) > 100 || strlen($password) > 256) {
+        $eingabeFehler = 'Eingabe zu lang';
+    }
+
+    $user = null;
+    [$stand, $warten] = bremseVersuch($rateLimitFile, $maxAttempts, $windowSeconds, $eingabeFehler === null,
+        function () use ($username, $password, &$user): bool {
             $stmt = getDB()->prepare('SELECT * FROM admin_users WHERE username = :username LIMIT 1');
             $stmt->execute([':username' => $username]);
             $zeile = $stmt->fetch();
@@ -192,7 +247,8 @@ function handleLogin(): void {
         });
 
     if ($stand === 'defekt') {
-        // Lässt sich der Zähler nicht führen, gibt es keinen Versuch: Sonst liefe die Bremse leer.
+        // Lässt sich der Versuch nicht zählen, wird er nicht geprüft: Sonst liefe die Bremse leer.
+        // Dieselbe Antwort, wenn die Prüfung selbst ausfällt (Datenbank nicht lesbar).
         http_response_code(503);
         echo json_encode(['error' => 'Anmeldung derzeit nicht möglich']);
         return;
