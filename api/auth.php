@@ -17,6 +17,12 @@ const SETUP_ERLAUBT = false;
 // Steht hier oben, weil die Verteilung der Aktionen weiter unten läuft, bevor spätere Zeilen gelten.
 const BREMSE_DATEI_MAX = 4096;
 
+// Platzhalter für die Anmeldung mit unbekanntem Benutzernamen: ein bcrypt-Hash eines verworfenen
+// Zufallswerts, erzeugt mit password_hash() und denselben Kosten wie neue Passwort-Hashes (10).
+// Gegen ihn wird geprüft, wenn es den Namen nicht gibt, damit die Antwort so lange braucht wie bei
+// einem bekannten Namen mit falschem Passwort. Zu ihm gehört kein Konto; kein Passwort meldet damit an.
+const ANMELDUNG_PLATZHALTER_HASH = '$2y$10$Kbaf0jELaT3AQb1wOGKwbeASrtUx86cIwu6rsjLVkf23dM0wmapLW';
+
 function startSession(): void {
     if (session_status() === PHP_SESSION_NONE) {
         $isSecure = isset($_SERVER['HTTPS']) || 
@@ -142,7 +148,10 @@ function bremseVersuch(string $datei, int $max, int $fenster, bool $zaehlbar, ca
         // Zehn Ziffern am Stück sind ein Stempel. So zählt auch eine Datei im früheren Format
         // (JSON-Liste) weiter, und ein abgerissener Rest zählt nicht.
         preg_match_all('/(?<!\d)\d{10}(?!\d)/', $inhalt, $treffer);
-        $stempel = array_values(array_filter(array_map('intval', $treffer[0]), fn($ts) => ($jetzt - $ts) < $fenster));
+        // abs(): Ein Stempel aus der Zukunft (Uhr zurückgestellt) zählt mit, aber nur, solange er
+        // weniger als ein Fenster entfernt ist. Weiter entfernte zählen nicht; sie verschwinden,
+        // sobald die Datei von vorn beginnt oder gekürzt wird (bremseStempeln).
+        $stempel = array_values(array_filter(array_map('intval', $treffer[0]), fn($ts) => abs($jetzt - $ts) < $fenster));
         if (count($stempel) >= $max) {
             return ['voll', $fenster - ($jetzt - min($stempel))];
         }
@@ -201,11 +210,21 @@ function bremseStempeln($fp, string $inhalt, array $gueltig, int $jetzt): ?int {
         $trenner = '';
     }
     $zeile = $trenner . $jetzt . "\n";
-    if (fseek($fp, $laenge) !== 0 || @fwrite($fp, $zeile) !== strlen($zeile) || !@fflush($fp)) {
+    if (fseek($fp, $laenge) !== 0 || @fwrite($fp, $zeile) !== strlen($zeile) || !@fflush($fp) || !bremseGesichert($fp)) {
         @ftruncate($fp, $laenge); // einen abgerissenen Rest wieder abschneiden
         return null;
     }
     return $laenge;
+}
+
+/**
+ * Lässt den Stempel bis auf den Datenträger schreiben und meldet, ob das gelang. Manche Dateisysteme
+ * melden einen vollen Speicher erst hier und nicht schon beim Schreiben; ohne diese Probe gälte der
+ * Versuch dann als gezählt, obwohl der Stempel verloren gehen kann. fsync() gibt es ab PHP 8.1;
+ * fehlt die Funktion, bleibt es beim Ergebnis des Schreibens.
+ */
+function bremseGesichert($fp): bool {
+    return !function_exists('fsync') || @fsync($fp);
 }
 
 function handleLogin(): void {
@@ -221,9 +240,11 @@ function handleLogin(): void {
     $maxAttempts = 5;
     $windowSeconds = 900; // 15 minutes
 
+    // Benutzername und Passwort gelten nur als Text. Alles andere (Liste, Objekt, Zahl, kein
+    // JSON-Objekt als Rumpf) zählt wie eine fehlende Eingabe.
     $input = json_decode(file_get_contents('php://input'), true);
-    $username = trim($input['username'] ?? '');
-    $password = $input['password'] ?? '';
+    $username = is_string($input['username'] ?? null) ? trim($input['username']) : '';
+    $password = is_string($input['password'] ?? null) ? $input['password'] : '';
 
     // Unvollständige oder überlange Eingaben zählen nicht als Versuch und werden nicht geprüft.
     $eingabeFehler = null;
@@ -239,7 +260,9 @@ function handleLogin(): void {
             $stmt = getDB()->prepare('SELECT * FROM admin_users WHERE username = :username LIMIT 1');
             $stmt->execute([':username' => $username]);
             $zeile = $stmt->fetch();
-            if (!$zeile || !password_verify($password, $zeile['password_hash'])) {
+            // Auch bei unbekanntem Namen einmal bcrypt rechnen (gegen den Platzhalter).
+            $stimmt = password_verify($password, $zeile ? (string)$zeile['password_hash'] : ANMELDUNG_PLATZHALTER_HASH);
+            if (!$zeile || !$stimmt) {
                 return false;
             }
             $user = $zeile;
