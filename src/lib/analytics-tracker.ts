@@ -238,9 +238,44 @@ function getQueue(): TrackingEvent[] {
   }
 }
 
+/**
+ * Obergrenzen der Warteschlange. Nimmt der Server länger nichts an (Störung, Bremse,
+ * kein Netz), wuchs sie sonst mit jedem Ereignis weiter und blieb im Browser liegen.
+ * - Alter: Was länger als 24 Stunden liegt, wird nicht mehr gesendet. Der Server nähme es
+ *   zwar an, zählte es aber mit der Ankunftszeit (collect.php, COLLECT_TS_ZURUECK): Es
+ *   stünde am falschen Tag und läge länger, als sein wahres Alter erlaubt. Die Grenze
+ *   gilt beim Speichern und beim Senden.
+ * - Zahl: Bei mehr als 200 fallen zuerst die nachrangigen Ereignisse weg (dieselbe Liste
+ *   wie am Server: Herzschlag, Scrolltiefe, Leistung, Sichtbarkeit), die ältesten zuerst.
+ *   Reicht das nicht, fallen die jüngsten übrigen weg: Sitzungsstart und Einstiegsseite
+ *   stehen vorn und tragen die Herkunft des Besuchs, sie bleiben.
+ */
+const QUEUE_MAX_EREIGNISSE = 200
+const QUEUE_MAX_ALTER_MS = 24 * 60 * 60 * 1000
+const QUEUE_NACHRANGIG: readonly string[] = ['heartbeat', 'scroll_depth', 'performance', 'tab_visibility']
+
+function begrenzeQueue(queue: TrackingEvent[]): TrackingEvent[] {
+  const fruehestens = Date.now() - QUEUE_MAX_ALTER_MS
+  // Ein Ereignis ohne lesbaren Zeitstempel bleibt: Über sein Alter lässt sich nichts sagen.
+  let rest = queue.filter((e) => {
+    const zeit = Date.parse(e.ts)
+    return Number.isNaN(zeit) || zeit >= fruehestens
+  })
+  let zuViel = rest.length - QUEUE_MAX_EREIGNISSE
+  if (zuViel <= 0) return rest
+  rest = rest.filter((e) => {
+    if (zuViel > 0 && QUEUE_NACHRANGIG.includes(e.event)) {
+      zuViel--
+      return false
+    }
+    return true
+  })
+  return zuViel > 0 ? rest.slice(0, rest.length - zuViel) : rest
+}
+
 function saveQueue(queue: TrackingEvent[]): void {
   try {
-    localStorage.setItem(QUEUE_KEY, JSON.stringify(queue))
+    localStorage.setItem(QUEUE_KEY, JSON.stringify(begrenzeQueue(queue)))
   } catch { /* ignore */ }
 }
 
@@ -264,8 +299,12 @@ async function flushQueue(): Promise<void> {
     clearStatisticsStorage()
     return
   }
-  const queue = getQueue()
-  if (queue.length === 0) return
+  const queue = begrenzeQueue(getQueue())
+  if (queue.length === 0) {
+    // Auch die Reste im Speicher räumen, wenn alles Wartende zu alt war.
+    saveQueue(queue)
+    return
+  }
 
   const batch = queue.splice(0, 20)
   saveQueue(queue)

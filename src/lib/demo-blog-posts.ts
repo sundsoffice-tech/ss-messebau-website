@@ -2232,5 +2232,345 @@ Wenn euer Messebauer 2–3 Wochen auf ein Angebot braucht, fragt nach dem Grund.
     category: 'Service',
     imageUrl: 'https://images.unsplash.com/photo-1553034545-32d4cd2168f1?w=800&h=450&fit=crop',
     publishedAt: Date.now() - 1 * 24 * 60 * 60 * 1000
+  },
+  {
+    id: '7',
+    title: 'Standbaugenehmigung 2027: Regeln, Fristen, Kosten',
+    slug: 'standbaugenehmigung-messestand',
+    excerpt: 'Ab wann ein Messestand genehmigt werden muss, welche Unterlagen die Messegesellschaften verlangen, bis wann und was es kostet. Mit Stichtagen für 2027.',
+    content: `Wer für 2027 einen Messestand plant, sollte früh klären, ob der Stand genehmigt werden muss. Die ersten Fristen stehen fest: Für die ISH in Frankfurt müssen genehmigungspflichtige Standbaupläne bis spätestens 27. Januar 2027 eingereicht sein, für die ACHEMA bis zum 14. April 2027 und für die EUROBIKE bis spätestens 18. Mai 2027.
+
+Die Regeln dazu stehen in den Technischen Richtlinien der Messegesellschaften. Sie sind ähnlich aufgebaut, aber nicht gleich: Schwellen, Fristen und Gebühren unterscheiden sich von Gelände zu Gelände. Dieser Beitrag stellt nebeneinander, was die Richtlinien in Frankfurt, Köln, Düsseldorf, Essen und Dortmund verlangen, und wirft einen Blick auf München, Hannover, Hamburg, Berlin und Nürnberg.
+
+Jede Angabe stammt aus dem Dokument der jeweiligen Gesellschaft oder des Veranstalters, die Quellen stehen am Ende. Abgerufen haben wir sie am 10. November 2026. Nicht jede Gesellschaft hatte an diesem Tag schon eine Fassung für 2027 veröffentlicht; welche Fassung wir gelesen haben, steht in den Tabellen und in der Quellenliste. Die Preise aus Frankfurt und Berlin gelten für 2026. Richtlinien und Preise können sich bis zu Ihrer Messe ändern. Maßgeblich ist immer die Fassung, die für Ihre Veranstaltung gilt, zusammen mit den besonderen Bestimmungen der einzelnen Messe. Verbindlich Auskunft gibt die Messegesellschaft.
+
+## Das Wichtigste in Kürze
+
+- Eingeschossige Stände in der Halle kommen in Frankfurt, Köln, Düsseldorf, Essen und Dortmund ohne Planeinreichung aus, solange sie die Technischen Richtlinien einhalten und keine Sonderkonstruktion enthalten, in Dortmund bis 4 m Höhe. Die Messe Frankfurt zieht die Grenze bei 100 m² Grundfläche und 4,00 m Bauhöhe.
+- Zweigeschossige Stände, Sonderkonstruktionen, mobile Stände und Stände im Freigelände müssen auf allen fünf Geländen freigegeben werden.
+- Üblich ist eine Frist von sechs Wochen vor Aufbaubeginn. Die Messe Dortmund verlangt die Unterlagen für Sonderkonstruktionen 10 Wochen vorher, die Hamburg Messe für Stände, die Statik und Baubeschreibung brauchen, 8 Wochen vorher.
+- Die Kosten des Verfahrens werden dem Aussteller oder Standbauer in Rechnung gestellt. In Frankfurt kostet die Abnahme eines zweigeschossigen Aufbaus im Jahr 2026 je Abnahme 1.495,00 €.
+- Für 2027 gibt es neue Fassungen: Die Messe Düsseldorf hat Richtlinien veröffentlicht, die ab 01.01.2027 gelten, die Messe Frankfurt aktualisiert ihr Factsheet zur Standbaugenehmigung laut EUROBIKE Ende 2026.
+
+## Welche Stände ohne Planeinreichung auskommen
+
+Die Richtlinien der fünf Gelände gehen vom selben Grundsatz aus: Wer eingeschossig in der Halle baut und die Technischen Richtlinien einhält, muss keine Zeichnungen zur Freigabe einreichen. Im Einzelnen:
+
+| Gelände | Ohne Planeinreichung | Fassung der Richtlinie |
+|---|---|---|
+| Messe Frankfurt | eingeschossig, keine Sonderkonstruktion, Grundfläche nicht mehr als 100 m², Bauhöhe nicht mehr als 4,00 m | Stand September 2025 |
+| Koelnmesse | eingeschossige Standbauten in den Hallen | Stand Juli 2024 |
+| Messe Düsseldorf | eingeschossige Standbauten in den Hallen | gültig ab 01.01.2027 |
+| Messe Essen | eingeschossige Standbauten in den Hallen | Stand September 2026 |
+| Messe Dortmund | eingeschossige Standbauten in den Hallen bis zu einer Höhe von 4 m | Stand 01/2026 |
+
+Drei Dinge sind dabei zu beachten. Erstens ist die Messe Frankfurt bei der Flächengrenze nicht einheitlich: Die Technischen Richtlinien sprechen von einer Grundfläche von nicht mehr als 100 m², das Factsheet zur Standbaugenehmigung von einer Grundfläche kleiner als 100 m². Wer genau diese Fläche plant, fragt besser nach.
+
+Zweitens heißt genehmigungsfrei nicht regelfrei. Die zulässige Bauhöhe hängt von der Halle ab. In Düsseldorf reicht sie laut Tabelle der Richtlinie von 2,00 m im Obergeschoss der EN-Mall bis 8,00 m, zum Beispiel in den Hallen 15 bis 17; an den Hallenleisten sind es höchstens 3,20 m. In Essen sind es in den meisten Hallen 6,00 m. In Dortmund beträgt die Normhöhe für Standbauten 2,50 m, soweit für die Messe nichts anderes beschrieben ist, und Bauhöhen über 4 m müssen freigegeben werden. Die Koelnmesse verweist für die Bauhöhe auf die Anmeldeunterlagen der jeweiligen Veranstaltung.
+
+Drittens können einzelne Veranstaltungen strenger sein als das Gelände. Bei der DMEXCO 2027 in Köln ist für alle Stände eine technische und gestalterische Freigabe nötig.
+
+Wer unsicher ist, kann seine Pläne auch freiwillig prüfen lassen. Die Messe Düsseldorf bietet das gegen eine Prüfgebühr an: 105,00 € für Veranstaltungen bis 31.12.2026 und 115,00 € für Veranstaltungen ab 01.01.2027. Die Messe Essen lässt fristgerecht eingereichte Pläne kostenpflichtig durch einen externen Statiker prüfen, und auch die Messe Dortmund prüft auf Wunsch digital eingereichte Pläne.
+
+## Was immer zur Prüfung muss
+
+Die Messe Frankfurt nennt als freigabepflichtig: Messestände mit einer Grundfläche größer als 100 m², Messestände im Freigelände, Fliegende Bauten, mobile Stände, zweigeschossige Stände sowie Sonderaufbauten und Sonderkonstruktionen. Zu den Sonderkonstruktionen zählt sie unter anderem:
+
+- Standaufbauten und Exponate über 4 m Höhe
+- geschlossene Decken
+- Podeste und Bühnen höher als 0,20 m
+- Glaskonstruktionen
+- bewegte Bauteile
+- Decken-Boden-Verbindungen
+
+Auch Fahrzeuge und Container, die als Ausstellungsstand dienen, sind in Frankfurt freigabepflichtig, in der Halle wie im Freigelände.
+
+Die Gelände in Nordrhein-Westfalen fassen es kürzer. In Köln, Düsseldorf, Essen und Dortmund sind alle Standbauten freigabepflichtig, die nicht eingeschossig in der Halle stehen, dazu mobile Stände und Sonderkonstruktionen. Die Messe Düsseldorf nennt ausdrücklich textile Standbaukonstruktionen, und im Freigelände ist dort jeder Standbau freigabe- oder genehmigungspflichtig. Eine Freigabe gilt in Düsseldorf, Essen und Dortmund nur für die jeweilige Veranstaltung. Wer denselben Stand auf mehreren Messen einsetzt, reicht also jedes Mal neu ein.
+
+## Diese Unterlagen werden verlangt
+
+Für einen freigabepflichtigen Stand ohne besondere Konstruktion genügen in Düsseldorf, Essen und Dortmund vermaßte Standpläne mit Grundrissen und Ansichten. Die Frankfurter Richtlinie nennt zusätzlich Schnitte, Köln fragt die Angaben über einen Fragenkatalog ab. Als Maßstab nennen die Richtlinien 1:100. In Frankfurt und Düsseldorf dürfen die Pläne deutsch oder englisch beschriftet sein. Eingereicht wird digital:
+
+- Messe Frankfurt: als PDF über das Portal zur Standgenehmigung
+- Koelnmesse: über einen digital geführten Fragenkatalog auf der Plattform Delegatis; für Gastveranstaltungen können abweichende Verfahren gelten
+- Messe Düsseldorf: per E-Mail als PDF
+- Messe Dortmund: in digitaler Ausfertigung
+
+Für zweigeschossige Bauten, Sonderkonstruktionen, Kino- oder Zuschauerräume und Bauten im Freigelände kommen weitere Unterlagen dazu. Die Listen der Gesellschaften decken sich weitgehend:
+
+1. eine statische Berechnung nach deutschen Normen: Frankfurt, Essen und Dortmund nehmen eine von einem zweiten, unabhängigen Statiker geprüfte oder eine prüffähige Berechnung an, Köln nennt eine geprüfte, Düsseldorf eine prüffähige
+2. eine Baubeschreibung, in Frankfurt mit Angaben zu den verwendeten Materialien
+3. Standbauzeichnungen im Maßstab 1:100 mit Grundrissen, Ansichten und Schnitten, in Frankfurt dazu ein Deckenplan mit Vermaßung der geschlossenen Deckenflächen
+4. ein Rettungswegplan mit Nachweis der Rettungsweglängen
+
+Liegt eine Typenprüfung oder ein Prüfbuch vor, entfällt die statische Berechnung. Fehlt eine geprüfte Statik, beauftragen die Messe Frankfurt und die Messe Essen ein Ingenieurbüro mit der Prüfung und stellen sie dem Aussteller oder Standbauer gesondert in Rechnung.
+
+Wichtig für den Zeitplan: In Frankfurt und Essen ist der Standbau erst mit dem Freigabevermerk auf den zurückgesandten Plänen freigegeben. In Düsseldorf und Dortmund gilt die Freigabe erst als erteilt, wenn alle Ausführungsbedingungen bei der Fertigstellung umgesetzt sind.
+
+## Fristen: meist sechs Wochen vor Aufbaubeginn
+
+| Gelände | Frist für die Einreichung |
+|---|---|
+| Messe Frankfurt | spätestens sechs Wochen vor Aufbaubeginn |
+| Koelnmesse | spätestens 6 Wochen vor Aufbaubeginn |
+| Messe Düsseldorf | spätestens sechs Wochen vor Beginn der Aufbauzeit |
+| Messe Essen | spätestens 6 Wochen vor Aufbaubeginn |
+| Messe Dortmund | zum genannten Abgabetermin der Veranstaltung, für Sonderkonstruktionen und zweigeschossige Bauten spätestens 10 Wochen vor Aufbaubeginn |
+
+Einzelne Veranstalter nennen feste Stichtage oder eigene Fristen. Für 2027 sind bisher veröffentlicht:
+
+- ISH, Frankfurt: genehmigungspflichtige Standbaupläne bis spätestens 27. Januar 2027
+- ACHEMA, Frankfurt: Unterlagen bis zum 14. April 2027 im Ausstellerportal hochladen
+- EUROBIKE, Frankfurt: genehmigungspflichtige Standbaupläne bis spätestens 18. Mai 2027
+- DMEXCO, Köln: Fragebogen zur Freigabe mindestens 8 Wochen vor Aufbaubeginn ausfüllen; Aufbaubeginn ist Sonntag, der 19. September 2027
+
+Für zweigeschossige Stände gilt in Düsseldorf eine Besonderheit: Die Bauanfrage muss unmittelbar nach der Standzulassung gestellt werden.
+
+Wer zu spät einreicht, zahlt mehr. Bei der ACHEMA 2027 fällt für verspätete oder fehlende Unterlagen zur Statik ein Versäumniszuschlag von 50 % an. Die Messe Düsseldorf erhebt auf verspätete Aufträge zur freiwilligen Planprüfung einen Zuschlag von 35 Prozent und weist darauf hin, dass sie solche Aufträge eventuell nicht mehr berücksichtigen kann.
+
+## Was die Genehmigung kostet
+
+Die Kosten des Freigabeverfahrens stellen alle fünf Gesellschaften in Rechnung, je nach Richtlinie dem Aussteller oder dem Standbauer. Konkrete Preise veröffentlicht die Messe Frankfurt in ihrem Factsheet für das Jahr 2026:
+
+| Leistung der Messe Frankfurt, Preise 2026 | Preis |
+|---|---|
+| Überprüfung der Standsicherheit vor Ort, Wände und Konstruktionen höher als 4,00 m oder LED-Wände, je Abnahme | 499,00 € |
+| Überprüfung der Standsicherheit vor Ort, statisch komplexe Konstruktionen, je Abnahme | 965,00 € |
+| Überprüfung der Standsicherheit vor Ort, zweigeschossiger Aufbau, je Abnahme | 1.495,00 € |
+| Brandmeldeanlage (1 bis 800 m²), je m² überbauter Fläche | 54,00 € |
+| Sprinklerkopf, je Stück | 939,00 € |
+
+Für dieselben Positionen nennt das Factsheet der ACHEMA 2027 mit Stand März 2026 höhere Beträge. Die Abnahmen berechnet dort ebenfalls die Messe Frankfurt:
+
+| ACHEMA 2027 | Preis |
+|---|---|
+| Statikabnahme für Wände, Werbeträger und Konstruktionen höher als 4 m, je Abnahme | 515,00 € |
+| Statikabnahme für statisch komplexe Konstruktionen, je Abnahme | 990,00 € |
+| Statikabnahme zweigeschossiger Aufbau, je Abnahme | 1.520,00 € |
+| Überprüfung der Statikberechnung, wenn keine geprüfte Statik vorliegt | 420,00 € |
+| Grundlagenermittlung vor Ort und Vergleichsberechnung bei verspäteten oder fehlenden Unterlagen, einschließlich Versäumniszuschlag; das Factsheet nennt dazu als Deadline den 24. Mai 2027 | 630,00 € |
+| Brandmeldeanlage (1 bis 800 m²), je m² geschlossener Fläche | 55,00 € |
+| Sprinklerkopf, je Stück | 980,00 € |
+
+Ob die genannten Beträge die Umsatzsteuer enthalten, sagen nicht alle Dokumente. Das Factsheet der ACHEMA nennt seine Preise zuzüglich der gesetzlichen Umsatzsteuer, die Technischen Richtlinien der Messe Düsseldorf nennen die Prüfgebühr von 115,00 Euro zuzüglich Mehrwertsteuer. Das Factsheet der Messe Frankfurt und das Gebührenblatt der Messe Berlin sagen dazu nichts. Die Kosten der Statikprüfung fallen bei der ACHEMA je zu prüfendem Bauteil an. Ein Stand mit hoher Rückwand, Podest und geschlossener Decke kann also mehrere Positionen auslösen.
+
+Köln, Düsseldorf, Essen und Dortmund nennen in ihren Richtlinien keine Beträge für das Freigabeverfahren. Die Messe Essen verweist dafür auf ihr Online Service Center.
+
+## Zweigeschossig bauen
+
+Ein zweites Geschoss ist in Frankfurt, Köln, Düsseldorf und Essen nur mit Zustimmung der Messegesellschaft möglich. In einzelnen Hallen scheidet es aus: in Frankfurt in der Halle 5.0, in Düsseldorf unter anderem im Foyer der Halle 1. Die Messe Essen begrenzt den Umfang: Stände an Hallenwänden dürfen höchstens bis zu einer Tiefe von 8 m zweigeschossig bebaut werden, alle übrigen bis zu 50 % ihrer Standfläche und im Einzelfall nicht mehr als 300 m². Dieselbe Obergrenze von 50 % und 300 m² nennt die Messe Düsseldorf; werden dort mehr als 30 m² überbaut, sind Sprinkleranlagen erforderlich.
+
+In Düsseldorf und Essen brauchen Sie außerdem die Zustimmung des Standnachbarn, wenn das Obergeschoss offen gebaut ist, in Düsseldorf auch bei transparenter Bauweise.
+
+Zu den Abnahmekosten kommt die Fläche. Die ACHEMA 2027 berechnet für die Mietfläche im Doppelgeschoss 150,00 € pro m². Bei der DMEXCO 2027 wird die zugelassene Fläche im Obergeschoss mit 100 % des Beteiligungspreises je m² berechnet, zuzüglich Digital- und Marketing-Paket, AUMA-Beitrag und Energiekostenpauschale. Bei der ISH 2027 ermittelt die Messe nach dem Aufbau die tatsächliche Fläche der zweigeschossigen Bauweise und stellt sie nach Veranstaltungsende laut Preisliste in Rechnung.
+
+## Regeln, die auch kleine Stände treffen
+
+Auch ein Stand, der keine Freigabe braucht, muss die Richtlinien einhalten. Diese Vorgaben betreffen fast jeden Stand:
+
+- **Rückseiten zum Nachbarn:** In Frankfurt sind Rückseiten zu Nachbarständen ab einer Höhe von 2,50 m glatt und weiß auszubilden, in Köln oberhalb von 2,50 m neutral zu gestalten. In Dortmund ist bei Überschreitung der Normhöhe von 2,50 m eine neutrale Trennwand in Weiß oder Schwarz Pflicht.
+- **Material:** Dekorationsmaterialien müssen mindestens schwer entflammbar sein, Baustoffklasse B1 nach DIN 4102. Die Messe Essen verlangt, ein Prüfzeugnis über die Baustoffklasse vorzuhalten.
+- **Decken:** Damit die Sprinkler wirken, müssen Stände in Köln und Düsseldorf nach oben grundsätzlich offen sein, in Essen und Dortmund in den gesprinklerten Hallen. Köln und Essen betrachten eine Decke als offen, wenn nicht mehr als 50 % der Fläche je Quadratmeter geschlossen sind. Dortmund ist strenger und wertet eine Decke schon als geschlossen, wenn 70 % der Fläche oder weniger offen sind. Für geschlossene Decken kann dort eine temporäre Sprinkleranlage auf Kosten des Ausstellers nötig werden.
+- **Abhängungen:** Von der Hallendecke hängen in Frankfurt nur die Messe und ihre Vertragsfirmen ab, in Köln nur die Koelnmesse; in Düsseldorf bringt nur die Messe die Halterungen an. Die Messe Dortmund garantiert die termingerechte Bereitstellung nur, wenn die Bestellung spätestens fünf Wochen vor Veranstaltungsbeginn eingegangen ist; in der Halle 4 sind dort keine Abhängungen von der Hallendecke möglich.
+- **Rettungswege:** Von jeder Stelle des Standes dürfen es höchstens 20 m Lauflinie bis zum Hallengang sein, in Düsseldorf bis zur Standgrenze. Bei mehr als 100 m² Grundfläche sind in Köln und Düsseldorf zwei getrennte Ausgänge nötig, in Düsseldorf mit mindestens 5,00 m Abstand voneinander. In Essen und Dortmund nennt die Richtlinie zwei Ausgänge für Aufenthaltsräume dieser Größe und sieht in ihrer Liste der Rettungswege ab mehr als 100 m² ebenfalls zwei vor. In Frankfurt sind zwei Ausgänge schon ab 100 m² oder bei mehr als 100 Besuchern nötig.
+- **Glas:** Die Koelnmesse lässt nur Sicherheitsglas zu, die Messe Düsseldorf nur Sicherheitsglas, das für den Einsatzzweck geeignet ist.
+
+Dazu kommen Vorgaben einzelner Messen. Bei der ISH 2027 muss der Standbau zu allen Ganggrenzen hin mindestens 70% offen oder transparent sein.
+
+## Ein Blick auf andere Gelände
+
+Außerhalb von Frankfurt und Nordrhein-Westfalen gelten teils andere Schwellen und Fristen:
+
+| Gelände | Ohne Planeinreichung | Frist | Fassung |
+|---|---|---|---|
+| Messe München | eingeschossig in der Halle, Grundfläche nicht mehr als 100 m², nicht höher als 3 m | Termin laut Bestellmedien der Veranstaltung | Stand 02/2025 |
+| Deutsche Messe, Hannover | eingeschossige Stände bis 100 m² Grundfläche in der Regel; im folgenden Satz verlangt die Richtlinie Pläne ab einer Größe von 100 m² | Zeichnungen spätestens vier Wochen vor Baubeginn, Unterlagen für die Bauerlaubnis spätestens zwei Wochen vor Baubeginn | Technische Richtlinien 2027 |
+| Hamburg Messe | eingeschossig bis 4,0 m Bauhöhe (bei Eigenveranstaltungen der Hamburg Messe unter 4 m), an den Hallenwänden der Hallen B1 bis B4 bis 3,4 m, sofern der Veranstalter nichts anderes festlegt | Unterlagen mit Statik und Baubeschreibung spätestens 8 Wochen vor Aufbaubeginn; Standpläne für Stände, die nur wegen der Bauhöhe freigegeben werden müssen, spätestens 6 Wochen vorher | gültig ab 01.08.2025 |
+| Messe Berlin | eingeschossige Standbauten in den Hallen, außer der Stand belegt eine ganze Halle oder einen großen Teil davon und öffentliche Gänge führen hindurch | 6 Wochen vor Beginn des Bauzeitraums | Stand 03/2025 |
+| NürnbergMesse | eingeschossige Standbauten in den Hallen | keine Wochenfrist in der Richtlinie, Bearbeitungszeit bei aufwendigen Verfahren bis zu 42 Tage | Technische Richtlinien 2026 |
+
+München setzt die Höhengrenze also einen Meter niedriger an als Frankfurt. In Hannover sind neben mehrgeschossigen Ständen, Bauten im Freigelände und mobilen Ständen auch Zelte, Container und LED-Wände generell genehmigungspflichtig.
+
+Beträge für das Freigabeverfahren nennt außerhalb Frankfurts die Messe Berlin, und zwar für die ITB 2026: Für die Prüfung der Unterlagen und die Überwachung vor Ort berechnet sie bei aufwendigen Standbauten 10,00 € je m² Standaufbau oder Obergeschossfläche, mindestens 600,00 €. Soll die Messe auch die Statik prüfen, kommen 13,00 € je m² hinzu, mindestens 780,00 €. Auf Pläne, die nach der Frist eingehen, erhebt sie einen Zuschlag von 100 %.
+
+## Welche Fassungen für 2027 vorliegen
+
+- **Messe Düsseldorf:** Die neuen Technischen Richtlinien gelten ab 01.01.2027. Die Gebühr für die freiwillige Planprüfung steigt von 105,00 € auf 115,00 €.
+- **Messe Frankfurt:** Das Factsheet zur Standbaugenehmigung mit den Preisen für 2026 wird laut EUROBIKE Ende 2026 für 2027 aktualisiert. Bei den fünf oben verglichenen Positionen liegen die Preise der ACHEMA 2027 über denen des Factsheets 2026.
+- **Messe Essen:** Die Richtlinien liegen in einer Fassung mit Stand September 2026 vor.
+- **Deutsche Messe, Hannover:** Die Technischen Richtlinien tragen die Ausgabe 2027, mit Druckvermerk 03/2025.
+
+## Wer verantwortlich ist und was bei Verstößen passiert
+
+Der Messe gegenüber ist der Aussteller verantwortlich. Die Koelnmesse schreibt, dass der Aussteller für die statische Sicherheit und die Verkehrssicherheit des Standes verantwortlich und gegebenenfalls nachweispflichtig ist, und zwar während Aufbau, Veranstaltung und Abbau. Nach den Richtlinien der Messe Essen haftet der Aussteller oder der von ihm beauftragte Standbauer für alle Schäden, die aus der Verletzung der Standbaubestimmungen entstehen.
+
+Standbauten, die nicht freigegeben sind oder den Richtlinien nicht entsprechen, müssen geändert oder beseitigt werden. Geschieht das nicht fristgerecht, dürfen die Messegesellschaften die Änderung auf Kosten des Ausstellers selbst vornehmen. Die Koelnmesse kann bei gravierenden Sicherheitsmängeln auch die teilweise oder vollständige Schließung eines Standes anordnen. Sie behält sich außerdem vor, die Standsicherheit in begründeten Fällen vor Ort kostenpflichtig durch einen Statiker prüfen zu lassen, auch wenn vorher eine Freigabe erteilt wurde.
+
+## So planen Sie die Genehmigung ein
+
+1. Lesen Sie mit der Standzulassung die Technischen Richtlinien des Geländes und die besonderen Bestimmungen Ihrer Messe. Prüfen Sie Fläche, Bauhöhe und Konstruktion gegen die Listen oben.
+2. Klären Sie früh, ob Ihr Entwurf Sonderkonstruktionen enthält: geschlossene Decke, Podest, Glas, hohe Rückwand, bewegte Teile, zweites Geschoss.
+3. Beauftragen Sie die Statik so, dass sie vor der Frist geprüft vorliegt. Eine ungeprüfte Statik kostet nach den Preislisten zusätzlich.
+4. Rechnen Sie von Aufbaubeginn zurück, nicht vom ersten Messetag, und tragen Sie den Stichtag Ihrer Messe in den Projektplan ein.
+5. Bauen Sie erst nach der Freigabe und halten Sie Prüfzeugnisse für die Materialien am Stand bereit.
+
+Sie sind unsicher, ob Ihr Standentwurf freigabepflichtig ist? [Schicken Sie uns Ihre Skizze und den Namen der Messe](/kontakt). Wir sehen in den Richtlinien des Geländes nach und nennen Ihnen unverbindlich, welche Unterlagen dort verlangt werden. Ob ein Stand freigegeben wird, entscheidet die Messegesellschaft.
+
+## Quellen
+
+Alle Dokumente abgerufen am 10. November 2026.
+
+- [Messe Frankfurt: Technische Richtlinien, Stand September 2025](https://www.messefrankfurt.com/content/dam/messefrankfurt-redaktion/corporate/documents/de/services/technische-richtlinien/technische-richtlinien-messe-frankfurt-2026-inkl-bauhoehen.pdf)
+- [Messe Frankfurt: Factsheet Standbaugenehmigung 2026](https://www.messefrankfurt.com/content/dam/messefrankfurt-redaktion/corporate/documents/de/services/technische-richtlinien/factsheet-standbaugenehmigung-2026.pdf)
+- [ISH 2027: Merkblatt Standbestimmungen](https://ish.messefrankfurt.com/content/dam/messefrankfurt-redaktion/ish/2027/documents/de/merkblatt-standbestimmungen-ish-2027.pdf)
+- [ACHEMA 2027: Factsheet Standbaufreigabe, März 2026](https://www.achema.de/fileadmin/user_upload/Content/_Storage/PDF/ACHEMA2027/Factsheets_Standbau/DE_FS_Standbau/ac_27_factsheet_Standbaufreigabe_D.pdf)
+- [EUROBIKE 2027: Spezielle Standbaubestimmungen, Stand August 2026](https://eurobike.com/content/dam/messefrankfurt-fairnamic/2027/documents/de/eb27-spezielle-standbaubestimmungen-de.pdf)
+- [Koelnmesse: Technische Richtlinien, Stand Juli 2024 (abgelegt bei der ART COLOGNE)](https://media.koelnmesse.io/artcologne/redaktionell/art-cologne/downloads/pdf/fuer-aussteller/technische_richtlinien.pdf)
+- [DMEXCO 2027: Teilnahmebedingungen, Allgemeiner Teil Stand Juni 2026, Besonderer Teil Stand August 2026](https://support.dmexco.com/hubfs/General/2027/Legal/ATBs+BTBs/DMEXCO2027_ATBs+BTBs%20%28DE%29.pdf)
+- [Messe Düsseldorf: Technische Richtlinien, gültig ab 01.01.2027](https://standbau.messe-duesseldorf.de/cgi-bin/md_sb/lib/all/lob/return_download.cgi/tr2027_de.pdf?ticket=g_u_e_s_t&bid=5123&no_mime_type=0)
+- [Messe Düsseldorf: Merkblatt Prüfgebühr 2026 / 2027](https://standbau.messe-duesseldorf.de/cgi-bin/md_sb/lib/all/lob/return_download.cgi/Merkblatt_Pruefgebuehr_Standbaufreigaben_26_27_DE_EN.pdf?ticket=g_u_e_s_t&bid=5097&no_mime_type=0)
+- [Messe Düsseldorf: Standbauerportal, Hinweis zur Prüfgebühr](https://standbau.messe-duesseldorf.de/)
+- [Messe Essen: Technische Richtlinien, Stand September 2026 (abgelegt bei der E-world)](https://e-world-essen.com/downloads/technische-richtlinien/)
+- [Messe Dortmund: Technische Richtlinien, Stand 01/2026](https://osc.messe-dortmund.de/whdo/download/_all/2017/Technische_Richtlinien.pdf)
+- [Messe München: Technische Richtlinien, Stand 02/2025 (abgelegt unter intersolar.de)](https://intersolar.de/media/doc/604096f24ad933059b3586f7)
+- [Deutsche Messe: Technische Richtlinien 2027](https://shop.hannovermesse.de/obsmedia/de/media/neutral/content/knowhow/contentteaser/2027_standbau/technical_regulations_2027/download_neutral/0-Deutsche_Messe_AG_-_Technische_Richtlinien_2027__Technical_Regulations_2027.pdf)
+- [Hamburg Messe und Congress: Technische Richtlinien 2026 / 2027 (abgelegt bei der Nordstil)](https://nordstil.messefrankfurt.com/content/dam/messefrankfurt-redaktion/nordstil/agb/hmc-technische-richtlinien-aktuell-de.pdf)
+- [Messe Berlin: Regeln für freigabepflichtige Standbauten, Stand 03/2025](https://messe-berlinprod-media.e-spirit.cloud/eb9073d7-d515-4782-a31b-1ef49560ea39/itb/downloads-alle-sprachen/ausstellen/messeplanung/standbau/25_itb-berlin_regeln-und-richtlinien-fuer-freigabepflichtige-standbauten.pdf)
+- [Messe Berlin: Gebühren des Freigabeverfahrens zur ITB 2026](https://messe-berlinprod-media.e-spirit.cloud/eb9073d7-d515-4782-a31b-1ef49560ea39/itb/downloads-alle-sprachen/ausstellen/messeplanung/standbau/invoicing-and-fees-for-constructions-approval-process-itb26.pdf)
+- [NürnbergMesse: Technische Richtlinien 2026](https://edge.sitecorecloud.io/nurnbergmes0e18-nmmultisite6e34-prod50da-6065/media/Project/NuernbergMesse/shared/PDFs/Infos-und-Technische-Richtlinien/technische-richtlinien/nuernbergmesse-20260202-n-technische-richtlinien-technical-regulations.pdf?sc_lang=de-DE)`,
+    category: 'Planung',
+    imageUrl: '',
+    publishedAt: new Date('2026-11-10').getTime()
+  },
+  {
+    id: '8',
+    title: 'Messeförderung 2027: Was es für Aussteller gibt',
+    slug: 'messefoerderung-aussteller',
+    excerpt: 'Förderung für Messeauftritte 2027: Zuschuss für junge innovative Unternehmen, Gemeinschaftsstände im Ausland, Landesförderung NRW. Mit Fristen.',
+    content: `Ein Messeauftritt kostet Geld, und einen Teil davon können manche Aussteller über öffentliche Programme zurückholen. Für 2027 liegen die Bedingungen vor: Das Bundesministerium für Wirtschaft und Energie hat die Liste der Messen veröffentlicht, auf denen junge innovative Unternehmen gefördert werden können, mit Stand 04.11.2026. Nordrhein-Westfalen fördert Auslandsmessen nach einer Richtlinie, die bis Ende 2027 gilt.
+
+Dieser Beitrag stellt drei Wege vor: das Bundesprogramm für junge innovative Unternehmen auf Leitmessen in Deutschland, die Gemeinschaftsstände des Bundes auf Auslandsmessen und das Landesprogramm in Nordrhein-Westfalen.
+
+Die Angaben stammen von den Seiten der bewilligenden Stellen, aus den Förderrichtlinien und aus der Förderdatenbank des Bundes, abgerufen am 10. November 2026; zwei Messetermine zum Vergleich stammen von den Veranstaltern. Die Quellen stehen am Ende. Sätze, Höchstbeträge, Fristen und die Messeliste können sich ändern; maßgeblich ist, was am Tag Ihres Antrags gilt. Auf die Zuschüsse des Bundesprogramms und des Landes Nordrhein-Westfalen besteht kein Rechtsanspruch. Ob Ihr Unternehmen und Ihre Messe förderfähig sind, entscheidet die Bewilligungsstelle.
+
+## Das Wichtigste in Kürze
+
+- **Bund, Messen in Deutschland:** Junge innovative Unternehmen können für einen Platz auf dem Gemeinschaftsstand des Bundes einen Zuschuss erhalten: 60 Prozent der Kosten für Standmiete und Standbau bei den ersten zwei Teilnahmen, danach 50 Prozent, höchstens 7.500 Euro pro Aussteller und Messe, gerechnet ohne Umsatzsteuer.
+- **Bund, Auslandsmessen:** Hier gibt es keinen Zuschuss auf das Konto, sondern einen Platz auf einem deutschen Gemeinschaftsstand gegen einen Beteiligungspreis.
+- **Nordrhein-Westfalen:** Kleine und mittlere Unternehmen erhalten für Auslandsmessen bis zu 50 Prozent der förderfähigen Kosten, höchstens 7.500 Euro pro Unternehmen und Jahr. Messen in Deutschland fördert das Land nach der geltenden Richtlinie nicht mehr.
+- **Fristen:** Beim Bundesprogramm melden Sie sich spätestens acht Wochen vor Messebeginn beim Veranstalter an. In Nordrhein-Westfalen muss der Antrag spätestens zwei Monate vor Beginn des Vorhabens gestellt sein.
+
+## Bundesprogramm für junge innovative Unternehmen
+
+Das Programm heißt bei der Bewilligungsstelle, dem Bundesamt für Wirtschaft und Ausfuhrkontrolle (BAFA), „Young Innovators“. Gefördert wird die Teilnahme an einem Gemeinschaftsstand, den der Messeveranstalter auf einer internationalen Leitmesse in Deutschland organisiert.
+
+**Wer gefördert wird:** rechtlich selbstständige Unternehmen mit Sitz und Geschäftsbetrieb in Deutschland, die weniger als 50 Mitarbeiter haben, deren Jahresbilanzsumme oder Jahresumsatz höchstens zehn Millionen Euro beträgt und die jünger als zehn Jahre sind. Sie müssen Produkte, Verfahren oder Dienstleistungen neu entwickelt oder wesentlich verbessert haben. Ausgenommen sind nach der Förderrichtlinie unter anderem Consulting-Unternehmen, Marketing-Unternehmen und Research-Anbieter.
+
+**Was gefördert wird:** die vom Messeveranstalter in Rechnung gestellten Kosten für Standmiete und Standbau auf dem Gemeinschaftsstand. Weitere Leistungen, die Sie beim Veranstalter zusätzlich bestellen, sind nicht förderfähig. Wer außerhalb des Gemeinschaftsstands ausstellt, wird nicht gefördert.
+
+**Wie viel:** 60 Prozent der förderfähigen Ausgaben bei den ersten zwei Teilnahmen und 50 Prozent ab der dritten, bis zu 7.500 Euro pro Aussteller und Messe. Förderfähig sind höchstens drei Teilnahmen an derselben Messe. Ergibt die Berechnung weniger als 500 Euro, gibt es keine Förderung.
+
+**Der Ablauf laut BAFA:**
+
+1. Fragen Sie beim Messeveranstalter nach, ob auf dem Gemeinschaftsstand noch Platz ist.
+2. Melden Sie sich spätestens acht Wochen vor Messebeginn beim Veranstalter für den Gemeinschaftsstand an und stellen Sie direkt danach den Antrag beim BAFA.
+3. Das BAFA prüft die Förderfähigkeit und teilt ein positives Ergebnis Ihnen und dem Veranstalter per E-Mail mit. Erst dann lässt der Veranstalter Sie offiziell zu.
+4. Sie leiten die Standrechnung des Veranstalters an das BAFA weiter und erhalten den Zuwendungsbescheid.
+5. Nach Bezahlung der Standrechnung reichen Sie den Verwendungsnachweis online ein, mit einem Kontoauszug als Zahlungsbeleg. Das Geld kommt laut BAFA etwa zehn Tage nach Eingang des Nachweises.
+
+Die Förderrichtlinie ist bis zum 31. Dezember 2028 befristet. Über Anträge wird in der Reihenfolge ihres Eingangs entschieden, und die Förderung steht unter dem Vorbehalt verfügbarer Haushaltsmittel.
+
+## Die Liste der Messen 2027
+
+Welche Messen dazugehören, legt das Ministerium jedes Jahr fest. Die Liste für 2027 trägt den Stand 04.11.2026; auf der Programmseite des BAFA war am Recherchetag noch der Stand 21.10.2026 angegeben. Wir haben in der Liste 45 Einträge gezählt, davon 30 im ersten Halbjahr.
+
+Aus Nordrhein-Westfalen stehen unter anderem auf der Liste:
+
+- IPM Essen, 26. bis 29. Januar 2027
+- E-world energy & water in Essen, 16. bis 18. Februar 2027
+- Anuga FoodTec in Köln, 23. bis 26. Februar 2027
+- FIBO in Köln, 8. bis 11. April 2027
+- interzum in Köln, 11. bis 14. Mai 2027
+- GIFA, METEC, THERMPROCESS und NEWCAST in Düsseldorf, 21. bis 25. Juni 2027
+- A+A in Düsseldorf, 19. bis 22. Oktober 2027
+- MEDICA und COMPAMED in Düsseldorf, 15. bis 18. November 2027
+
+Außerhalb des Landes gehören zum Beispiel die BAU in München (11. bis 15. Januar 2027), die LogiMAT in Stuttgart (16. bis 18. März 2027) und die HANNOVER MESSE (5. bis 8. April 2027) dazu.
+
+Prüfen Sie den Termin Ihrer Messe beim Veranstalter. Die Liste weicht an mindestens zwei Stellen von dessen Angaben ab: Für die DMEXCO nennt sie den 12. bis 22. September 2027, der Veranstalter den 22. und 23. September 2027. Die spoga+gafa steht in der Liste im September, der Veranstalter nennt den 15. bis 17. Juni 2027.
+
+## Auslandsmessen: Gemeinschaftsstände des Bundes
+
+Für Messen im Ausland arbeitet der Bund anders. Das Ministerium beteiligt sich an internationalen Messen und bietet deutschen Unternehmen Plätze auf Gemeinschaftsständen unter dem Dach „made in Germany“ an. Die teilnehmenden Unternehmen zahlen einen Beteiligungspreis für Standfläche, Standbau und Betreuung. Das BAFA schreibt dazu ausdrücklich: Das Programm kommt den Firmen indirekt zugute, direkte Zahlungen an Aussteller werden nicht geleistet.
+
+Ein Antragsverfahren gibt es nach dem Flyer des Ministeriums nicht, Unternehmen melden sich an. Teilnahmeberechtigt sind Unternehmen, die Produkte oder Dienstleistungen mit Bezug zu „made in Germany“ zeigen. Der Flyer mit Stand Februar 2026 spricht von rund 250 Gemeinschaftsbeteiligungen jährlich in etwa 50 Ländern. Das aktuelle Programm mit Terminen, Ländern und Ansprechpartnern steht auf dem Portal german-pavilion.com.
+
+Für den eigenen Standbau heißt das: Auf einem Gemeinschaftsstand des Bundes ist der Standbau einheitlich und Teil des Pakets.
+
+## Nordrhein-Westfalen: Messe meets Mittelstand
+
+Das Landesprogramm richtet sich an kleine und mittlere Unternehmen mit Haupt- oder Zweigniederlassung oder selbstständiger Betriebsstätte in Nordrhein-Westfalen. Es gilt in der Fassung des Runderlasses vom 22. Oktober 2025.
+
+**Nur noch Auslandsmessen:** Die frühere Fassung, gültig bis 23.10.2025, förderte auch internationale Messen im Inland. Die geltende Richtlinie nennt nur noch Auslandsmessen. Gefördert werden grundsätzlich Messen, die beim Ausstellungs- und Messe-Ausschuss der Deutschen Wirtschaft (AUMA) gelistet sind. Für Messen, auf denen Land oder Bund schon mit einem Firmengemeinschaftsstand vertreten sind, gibt es keine Förderung.
+
+**Wer gefördert wird:** Unternehmen mit weniger als 250 Mitarbeitern. Bei Messen in der Europäischen Union und der Europäischen Freihandelszone gilt: Jahresumsatz des Vorjahres höchstens zehn Millionen Euro oder Bilanzsumme nicht mehr als zehn Millionen Euro. Bei Messen in allen übrigen Ländern liegt die Grenze bei höchstens 50 Millionen Euro Jahresumsatz oder 43 Millionen Euro Bilanzsumme. In beiden Fällen verlangt die Richtlinie außerdem, dass das Unternehmen unabhängig ist. Unternehmensberatungen, Messevertreter, Kammern, Verbände und Cluster sind von der Förderung ausgeschlossen.
+
+**Was gefördert wird**, jeweils mit den Nettobeträgen der Rechnungen:
+
+- Maßnahmen zur Vorbereitung wie Mailings, Anzeigen oder der Eintrag in den Veranstaltungskatalog
+- Standmiete
+- Standauf- und -abbau durch Dritte
+- externe Dolmetscher während der Messelaufzeit
+- Transportkosten für Exponate einschließlich Transportversicherung
+
+**Wie viel:** bis zu 50 Prozent der förderfähigen Kosten, höchstens 7.500 Euro pro Unternehmen und Jahr. Bleibt die Förderung für eine Messe darunter, kann im selben Jahr eine weitere Messe gefördert werden. Für Messen in einem bestimmten Zielland gibt es grundsätzlich höchstens für drei Messejahre Geld; Förderungen für dasselbe Zielland aus den letzten zehn Jahren werden angerechnet.
+
+**Antrag:** spätestens zwei Monate vor Beginn des Vorhabens bei der NRW.Global Business GmbH, zusammen mit der De-minimis-Erklärung und einem Kostenplan. Nach Abschluss der Maßnahme legen Sie innerhalb von drei Monaten die Nachweise vor; als Zahlungsbelege werden nur Kontoauszüge anerkannt. Die Richtlinie tritt am 31. Dezember 2027 außer Kraft.
+
+**Auflage für den Stand:** Das Erscheinungsbild auf der Messe soll deutlich machen, dass es sich um eine Beteiligung nordrhein-westfälischer Unternehmen handelt. Die Richtlinie verlangt dafür das Landeslogo Nordrhein-Westfalens.
+
+## Andere Länder: eigene Programme
+
+Jedes Land regelt seine Messeförderung selbst. Die Förderdatenbank des Bundes führt Programme mehrerer Länder, unter anderem für Hessen, Niedersachsen und Bayern. Ob die dort abgelegten Fassungen 2027 gelten, konnten wir am Recherchetag für keines davon belegen; wir nennen deshalb keine Sätze und Beträge. Fragen Sie bei der Förderbank oder der Wirtschaftsförderung Ihres Landes nach, bevor Sie sich zur Messe anmelden.
+
+## Was bei den Zuschüssen gilt
+
+- **Die Fristen laufen vor der Messe ab.** Beim Bundesprogramm melden Sie sich erst beim Veranstalter an und stellen direkt danach den Antrag. In Nordrhein-Westfalen muss der Antrag spätestens zwei Monate vor Beginn des Vorhabens gestellt sein; klären Sie mit NRW.Global Business, ab wann Sie Verträge schließen dürfen.
+- **Kein Rechtsanspruch.** Beim Bundesprogramm für junge Unternehmen und in Nordrhein-Westfalen entscheidet die Bewilligungsstelle nach Ermessen und im Rahmen der verfügbaren Haushaltsmittel.
+- **Keine doppelte Förderung.** Wer für dieselbe Messeteilnahme schon andere öffentliche Mittel erhält, ist beim Bundesprogramm und in Nordrhein-Westfalen ausgeschlossen.
+- **De-minimis.** Die Zuschüsse des Bundesprogramms und des Landes Nordrhein-Westfalen sind De-minimis-Beihilfen. Das Bundesprogramm schließt Unternehmen aus, die in drei Jahren bereits 300.000 Euro solcher Beihilfen erhalten haben.
+- **Belege.** Beide Programme zahlen gegen Rechnung und Kontoauszug. In Nordrhein-Westfalen gehören außerdem ein Fragebogen und eine Fotodokumentation zu den Nachweisen, auf der die Logo-Aufkleber von NRW.Global Business zu erkennen sind.
+
+## Was das für Ihren Messestand heißt
+
+Die folgenden Punkte sind unsere Einordnung für die Standplanung. Ob und in welcher Höhe ein Posten gefördert wird, entscheidet die Bewilligungsstelle.
+
+1. Beim Bundesprogramm für junge Unternehmen stellt der Messeveranstalter Standmiete und Standbau in Rechnung; ein Stand außerhalb des Gemeinschaftsstands wird nicht gefördert. Auf den Gemeinschaftsständen im Ausland gehört der einheitliche Standbau zum Beteiligungspreis.
+2. Beim Landesprogramm in Nordrhein-Westfalen ist der Standauf- und -abbau durch Dritte ausdrücklich förderfähig. Der Auf- und Abbau Ihres Standes durch einen Messebauer kann also in den Kostenplan. Ob die Kosten des Standbaus selbst dazugehören, also Fertigung und Gestaltung oder ein gemieteter Stand, sagt die Richtlinie nicht; fragen Sie NRW.Global Business. Transport fördert sie für Exponate.
+3. Planen Sie die Förderung vor dem Standkonzept ein. Wer zwei Monate vor Beginn des Vorhabens den Antrag stellen muss, braucht bis dahin belastbare Zahlen für Standmiete, Auf- und Abbau und den Transport der Exponate.
+4. Achten Sie darauf, dass Angebot und Rechnung die förderfähigen Leistungen getrennt ausweisen. Die Förderung bezieht sich in Nordrhein-Westfalen auf Nettobeträge.
+
+Sie planen eine Auslandsmesse und brauchen Zahlen für den Kostenplan? [Schreiben Sie uns](/kontakt), wir nennen Ihnen die Kosten für Ihren Stand. Ob und welche Posten davon gefördert werden, entscheidet die Bewilligungsstelle; Auskunft zur Förderung erhalten Sie dort.
+
+## Quellen
+
+Alle Dokumente abgerufen am 10. November 2026.
+
+- [BAFA: Messeprogramm Young Innovators](https://www.bafa.de/DE/Wirtschaft/Auslandsmarkterschliessung/Messeprogramm_junge_innovative_Unternehmen/messeprogramm_junge_innovative_unternehmen_node.html)
+- [Bundesministerium für Wirtschaft und Energie: Liste der förderfähigen Messen 2027, Stand 04.11.2026](https://www.bafa.de/SharedDocs/Downloads/DE/Wirtschaft/miu_veranstaltungen_2027.pdf?__blob=publicationFile)
+- [Förderdatenbank des Bundes: Young Innovators mit Wortlaut der Förderrichtlinie vom 6. März 2024](https://www.foerderdatenbank.de/FDB/Content/DE/Foerderprogramm/Bund/BMWi/teilnahme-junger-unternehmen-leitmessen.html)
+- [BAFA: Auslandsmesseprogramm](https://www.bafa.de/DE/Wirtschaft/Auslandsmarkterschliessung/Auslandsmesseprogramm/auslandsmesseprogramm_node.html)
+- [Bundesministerium für Wirtschaft und Energie: Flyer zum Auslandsmesseprogramm, Stand Februar 2026](https://www.bafa.de/SharedDocs/Downloads/DE/Wirtschaft/amp_flyer_2026.pdf?__blob=publicationFile&v=3)
+- [Land Nordrhein-Westfalen: Förderrichtlinie Messe meets Mittelstand NRW vom 22. Oktober 2025](https://nrwglobalbusiness.com/fileadmin/Trade_Events/Messe_meets_Mittelstand/Formulare/Foerderrichtlinie_MMM.pdf)
+- [Land Nordrhein-Westfalen: frühere Fassung der Förderrichtlinie, gültig bis 23.10.2025](https://recht.nrw.de/lrmb/verwaltungsvorschrift/foerderrichtlinie-messe-meets-mittelstand-nrw-runderlass-des/)
+- [NRW.BANK: Messe meets Mittelstand NRW](https://www.nrwbank.de/de/foerderung/foerderprodukte/15385/messe-meets-mittelstand-nrw.html)
+- [Förderdatenbank des Bundes: Messeförderung Hessen](https://www.foerderdatenbank.de/FDB/Content/DE/Foerderprogramm/Land/Hessen/messefoerderung.html)
+- [Förderdatenbank des Bundes: Messepräsentationen Niedersachsen](https://www.foerderdatenbank.de/FDB/Content/DE/Foerderprogramm/Land/Niedersachsen/messepraesentationen.html)
+- [Förderdatenbank des Bundes: Mittelständisches Messeprogramm Bayern](https://www.foerderdatenbank.de/FDB/Content/DE/Foerderprogramm/Land/Bayern/mittelstaendisches-messeprogramm.html)
+- [DMEXCO: Termin 2027](https://dmexco.com/de/)
+- [spoga+gafa: Termin 2027](https://www.spogagafa.de/)`,
+    category: 'Förderung',
+    imageUrl: '',
+    publishedAt: new Date('2026-11-10').getTime()
   }
 ]
