@@ -2826,5 +2826,163 @@ Alle Dokumente abgerufen am 10. November 2026.
     category: 'Recht',
     imageUrl: '',
     publishedAt: new Date('2026-11-11').getTime()
+  },
+  {
+    id: '11',
+    title: 'Messen im 1. Halbjahr 2027: Termine und Fristen',
+    slug: 'messekalender-2027-erstes-halbjahr',
+    excerpt: 'Stand 10. und 11. November 2026: 15 Fachmessen von Januar bis Juni 2027 mit Terminen, Auf- und Abbauzeiten, soweit veröffentlicht, und Ausstellerfristen.',
+    content: `Wer im ersten Halbjahr 2027 ausstellt, steckt im November 2026 mitten in der Planung. Die Veranstalter haben Termine, Aufbauzeiten und erste Fristen veröffentlicht, und einige dieser Fristen liegen noch im November und Dezember 2026. Für die E-world in Essen etwa ist der Anmeldeschluss der 30.11.2026.
+
+Dieser Beitrag stellt 15 Fachmessen zwischen Januar und Juni 2027 zusammen, mit Schwerpunkt auf Nordrhein-Westfalen und den großen Terminen in München, Frankfurt, Hannover, Nürnberg, Stuttgart, Berlin und Hamburg. Zu jeder Messe stehen Termin, Aufbau und Abbau, soweit der Veranstalter sie nennt, und die Fristen, die wir auf seinen Seiten gefunden haben.
+
+Alle Angaben stammen von den Seiten und aus den Unterlagen der Veranstalter, abgerufen am 10. November 2026, die Auf- und Abbautermine der LIGNA und der Zeitplan der FRUIT LOGISTICA am 11. November 2026; nur bei der imm cologne ziehen wir zum Abgleich die Förderliste des Bundes heran. Die Quellen stehen am Ende. Die Auswahl und die Zusammenstellung sind unsere eigenen: kein vollständiger Messekalender und mit den Veranstaltern nicht abgestimmt. Englische Unterlagen geben wir in eigener Übersetzung wieder. Termine und Fristen können sich ändern, und nicht jeder Veranstalter veröffentlicht alles offen: Bestellfristen stehen zum Teil erst im Aussteller-Shop, für den es Zugangsdaten braucht; so beschreibt es die BAU. Verbindlich sind die Unterlagen, die Sie mit Ihrer Zulassung erhalten.
+
+## Das Wichtigste in Kürze
+
+- Den Anfang macht die BAU in München vom 11. bis 15. Januar 2027. Als Stichtag für technische Bestellungen im Aussteller-Shop nennt die Messe den 11. November 2026.
+- In Nordrhein-Westfalen folgen IPM ESSEN, E-world und elektrotechnik im Januar und Februar, Anuga FoodTec und IDS in Köln im Februar und März und die GIFA in Düsseldorf im Juni.
+- Die HANNOVER MESSE läuft 2027 von Montag, 5. April, bis Donnerstag, 8. April.
+- Die imm cologne findet nach Angabe der Koelnmesse im Januar 2027 nicht statt.
+- Feste Stichtage für Standbaupläne nennen unter anderem die BAU (11.11.2026), die FRUIT LOGISTICA (7. Dezember 2026, Unterlagen für genehmigungspflichtige Standbauten), die Anuga FoodTec (12.01.2027), die ISH (27. Januar 2027), die IDS (02.02.2027) und die ACHEMA (14. April 2027); die Spielwarenmesse nennt den 30. November ohne Jahreszahl. Bei Anuga FoodTec und IDS nennt die Messe zusätzlich eine Frist von sechs Wochen vor Baubeginn, die früher liegen kann.
+
+## Die Termine im Überblick, Stand 10. und 11. November 2026
+
+| Messe | Ort | Termin | Aufbau ab | Abbau bis |
+|---|---|---|---|---|
+| BAU | München | 11. bis 15.01.2027 | 04.01.2027, Halle B0 ab 09.01.2027 | 19.01.2027, für Halle B0 nennt die Messe eigene Zeiten |
+| IPM ESSEN | Essen | 26. bis 29.01.2027 | 20.01.2027 | 01.02.2027 |
+| Spielwarenmesse | Nürnberg | 2. bis 6.02.2027 | 25.01.2027 | 09.02.2027 |
+| FRUIT LOGISTICA | Berlin | 3. bis 5.02.2027 | 28.01.2027 in einzelnen Hallen, sonst 29.01.2027 | 08.02.2027 |
+| E-world energy & water | Essen | 16. bis 18.02.2027 | 11.02.2027 | 20.02.2027 |
+| elektrotechnik | Dortmund | 16. bis 18.02.2027 | 11.02.2027 | 21.02.2027, in Halle 6 nur am 18.02.2027 bis 22 Uhr |
+| Anuga FoodTec | Köln | 23. bis 26.02.2027 | 15.02.2027 | 02.03.2027 |
+| INTERNORGA | Hamburg | 12. bis 16.03.2027 | 04.03.2027 für Stände ab 90 m² und mehrgeschossige Stände, sonst 07.03.2027 | 19.03.2027 |
+| ISH | Frankfurt am Main | 15. bis 19.03.2027 | siehe Terminübersicht der Messe; vorgezogener Aufbau je Halle verschieden | siehe Terminübersicht der Messe; verlängerter Abbau je Halle verschieden |
+| IDS | Köln | 16. bis 20.03.2027 | 09.03.2027 | 23.03.2027 |
+| LogiMAT | Stuttgart | 16. bis 18.03.2027 | 11.03.2027 | 20.03.2027, 22:00 Uhr (Fixtermin) |
+| HANNOVER MESSE | Hannover | 5. bis 8.04.2027 | 24.03.2027 | 13.04.2027 |
+| LIGNA | Hannover | 10. bis 14.05.2027 | 30.04.2027 | 20.05.2027 |
+| ACHEMA | Frankfurt am Main | 14. bis 18.06.2027 | 07.06.2027 | 22.06.2027 |
+| GIFA | Düsseldorf | 21. bis 25.06.2027 | 11.06.2027 | 30.06.2027 |
+
+Stand der Tabelle: 10. November 2026 (LIGNA: 11. November 2026), nach den Seiten und Unterlagen der Veranstalter. Termine können sich ändern; die Seiten der HANNOVER MESSE und der LIGNA mit den Auf- und Abbauterminen etwa tragen den Zusatz „Änderungen vorbehalten“. Verbindlich sind die Unterlagen, die Sie mit Ihrer Zulassung erhalten.
+
+BAU, ISH und IDS finden alle zwei Jahre statt. Die LIGNA verlässt 2027 nach Angabe der Deutschen Messe ihren gewohnten Termin in der Himmelfahrtswoche.
+
+## Fristen ab November 2026
+
+**BAU, München.** Der 11. November 2026 ist nach der Fristenseite der Stichtag für technische Bestellungen über den Aussteller-Shop und nach den Teilnahmebedingungen der späteste Tag für Standpläne, die eingereicht werden müssen. Wer danach bestellt, sollte den Veranstalter fragen, was noch geht und was es kostet.
+
+**E-world, Essen.** Anmeldeschluss für die Veranstaltung ist der 30.11.2026.
+
+**Anuga FoodTec, Köln.** Die Koelnmesse nennt gestaffelte Bestellfristen: 21.12.2026 für den Service-Shop, unter anderem für Abhängungen, 12.01.2027 für Standbaupläne und 18.01.2027 unter anderem für Elektroinstallation und Wasseranschlüsse. Spätere Bestellungen sind nach Angabe der Messe bei den Leistungen des ersten Stichtags und bei den markierten Leistungen des letzten gegen Aufschlag möglich. Standbaupläne sollen außerdem mindestens sechs Wochen vor Baubeginn eingereicht sein. Vom ersten Aufbautag der Tabelle (15.02.2027) gerechnet wäre das der 04.01.2027, also früher als der genannte Stichtag; welche Angabe vorgeht, sagt die Seite nicht.
+
+**ISH, Frankfurt.** Genehmigungspflichtige Standbaupläne müssen bis spätestens 27. Januar 2027 eingereicht sein. Für vermaßte Standpläne nennt das Merkblatt außerdem eine Frist von sechs Wochen vor Aufbaubeginn. Der Standbau muss zu den Gängen hin mindestens 70% offen oder transparent sein.
+
+**ACHEMA, Frankfurt.** Standpläne freigabepflichtiger Bauten sind bis spätestens 14. April 2027 fällig. Einen vorgezogenen Aufbau am 5. und 6. Juni 2027 gibt es kostenfrei auf Antrag und nach Genehmigung, die Frist dafür endet am 03.05.2027.
+
+**IDS, Köln.** Die Koelnmesse nennt den 05.01.2027 als Bestellschluss im Service-Shop unter anderem für Abhängungen von der Hallendecke und den 02.02.2027 unter anderem für Elektroinstallation und Wasseranschlüsse sowie für die Einreichung der Standbaupläne. Markierte Leistungen lassen sich danach noch gegen Aufschlag bestellen. Auch hier sollen Standbaupläne mindestens sechs Wochen vor Baubeginn eingereicht sein; vom ersten regulären Aufbautag (09.03.2027) gerechnet wäre das der 26.01.2027, also ebenfalls früher als der genannte Stichtag. Ein vorgezogener Aufbau ist ab 06.03.2027 gegen Entgelt möglich.
+
+**Spielwarenmesse, Nürnberg.** Die Terminseite nennt ihre Fristen ohne Jahreszahl: 30. November für den Standplan, 18. Dezember für Abhängungen ohne Zuschläge und 11. Januar unter anderem für Strom sowie Wasser und Abwasser ohne Zuschläge.
+
+**E-world und IPM ESSEN, Essen.** Beide Messen erheben nach ihren Teilnahmebedingungen einen Expresszuschlag auf Dienstleistungen, die weniger als sechs Wochen vor der Veranstaltung oder währenddessen bestellt werden.
+
+**FRUIT LOGISTICA, Berlin.** Der Zeitplan der Messe für Aussteller, den die Messe nach eigener Angabe laufend aktualisiert, nennt den 7. Dezember 2026 als Einreichungsfrist für die Standbaugenehmigung. Einzureichen sind die Unterlagen zur Prüfung genehmigungspflichtiger Standbauten; für alle anderen Standbauten genügt nach dem Zeitplan die Einhaltung der Technischen Richtlinien und der besonderen Teilnahmebedingungen. Mitaussteller sollten bis 30. November 2026 angemeldet sein, damit sie im gedruckten Katalog erscheinen.
+
+Schon abgelaufen sind der Anmeldeschluss der LogiMAT (20. September 2026) und die Registrierungsfrist der FRUIT LOGISTICA (31. Juli 2026); die FRUIT LOGISTICA führt seitdem eine Warteliste.
+
+Wann ein Stand überhaupt genehmigt werden muss und welche Unterlagen die Messegesellschaften verlangen, steht in unserem Beitrag zur [Standbaugenehmigung 2027](/blog/standbaugenehmigung-messestand).
+
+## Was die Aufbauzeiten für die Planung bedeuten
+
+Die Aufbauzeiten unterscheiden sich stark. Bei der GIFA in Düsseldorf stehen zehn Tage zur Verfügung, vom 11.06. bis 20.06.2027. Bei der E-world sind es fünf Tage, vom 11.02. bis 15.02.2027. Bei der HANNOVER MESSE beginnt der Aufbau am 24.03.2027, der Standaufbau muss am 04.04.2027 fertig sein, am letzten Aufbautag um 18:00 Uhr.
+
+Einzelne Hallen haben eigene Zeiten. Bei der BAU beginnt der Aufbau nach den Teilnahmebedingungen in der Halle B0 erst am 9. Januar 2027, während die Fristenseite allgemein den 4. bis 10. Januar 2027 nennt. Bei der ISH zeigt die Terminübersicht der Messe für jede Halle, an welchen Tagen aufgebaut und abgebaut werden darf; in den Hallen 12.0 und 12.1 startet der vorgezogene Aufbau bereits am 27.02.2027. Bei der INTERNORGA beginnen Stände ab 90 m² und mehrgeschossige Stände drei Tage früher als kleinere, und am letzten Aufbautag, dem 11.03.2027, ist um 15:00 Uhr Schluss.
+
+Auch beim Abbau lohnt der Blick in die Unterlagen. Bei IPM ESSEN und E-world darf am Stand schon am letzten Messetag nach Messeschluss abgebaut werden; die Abbauzeiten der Teilnahmebedingungen beginnen am Folgetag. Bei der Spielwarenmesse beginnt der Abbau am letzten Messetag um 14:00 Uhr; wer vorher räumt, riskiert nach den Angaben der Messe eine Vertragsstrafe.
+
+## Wie groß die Messen zuletzt waren
+
+Nicht jeder Veranstalter nennt Zahlen der letzten Ausgabe auf den Seiten, die wir abgerufen haben. Die folgenden Zahlen sind Angaben der Veranstalter:
+
+- **IPM ESSEN 2026:** 1.476 Aussteller, 41 Nationen, nahezu 40.000 Fachbesucher
+- **Spielwarenmesse 2026:** 2.313 Aussteller aus 68 Ländern, 58.941 Fachbesucher aus 123 Ländern
+- **E-world 2026:** 1.136 Aussteller, mehr als 37.000 Fachbesucher, 126 Nationen
+- **LogiMAT 2026:** 1.671 Aussteller, 69.856 Besucher
+- **ISH 2025:** 2.183 Aussteller aus 55 Ländern, 163.237 Besucher aus 149 Ländern
+- **HANNOVER MESSE 2026:** 110.000 Besucher laut Abschlussmeldung der Deutschen Messe
+
+## Was sich 2027 ändert
+
+- **HANNOVER MESSE:** ab 2027 von Montag bis Donnerstag.
+- **LIGNA:** neuer Termin vom 10. bis 14. Mai 2027.
+- **INTERNORGA:** Die 100. Ausgabe bekommt eine neue Hallenbelegung.
+- **imm cologne:** Die Messeseite der Koelnmesse teilt mit, dass die imm cologne im Januar 2027 nicht stattfindet. Im Messekalender der Koelnmesse und in der Förderliste des Bundes stand sie am 10. November 2026 noch mit dem Termin 19. bis 22. Januar 2027.
+
+## Was wir nicht gefunden haben
+
+Feste Bestellstichtage für Strom, Wasser und Abhängungen nennen unter den abgerufenen Seiten Anuga FoodTec, IDS und Spielwarenmesse offen; die BAU nennt einen Sammelstichtag für technische Bestellungen, E-world und IPM ESSEN nennen die Sechs-Wochen-Regel mit Expresszuschlag. Für die übrigen Messen haben wir auf den abgerufenen Seiten keine festen Bestellstichtage gefunden. Die Seiten einiger Veranstalter lassen sich ohne Browser nicht auslesen. Das heißt nicht, dass es dort keine Fristen gibt.
+
+## So gehen Sie mit dem Kalender um
+
+Die folgenden Punkte sind unsere Einordnung, keine Angaben der Veranstalter.
+
+1. Tragen Sie drei Daten je Messe in den Projektplan ein, und zwar aus den Unterlagen des Veranstalters: den Stichtag für Standbaupläne, den Bestellschluss für technische Leistungen und den ersten Aufbautag Ihrer Halle. Diese Übersicht zeigt, wonach Sie dort suchen.
+2. Rechnen Sie vom Aufbaubeginn zurück. Standbau, Grafik und Transport müssen fertig sein, bevor die Halle öffnet, nicht bevor die Messe beginnt.
+3. Zwei Messen in derselben Woche brauchen zwei Montageteams oder zwei Stände. Im Februar und März 2027 überschneiden sich mehrere Termine.
+4. Lesen Sie die Unterlagen Ihrer Halle. Die allgemeinen Aufbauzeiten gelten nicht immer für jede Halle.
+
+Sie stellen 2027 auf einer dieser Messen aus? [Schreiben Sie uns](/kontakt) den Namen der Messe, Ihre Standgröße und den ersten Aufbautag Ihrer Halle. Wenn wir Ihren Stand bauen, planen wir Aufbau und Fristen mit Ihnen; maßgeblich bleiben die Unterlagen des Veranstalters.
+
+## Quellen
+
+Alle Seiten und Dokumente abgerufen am 10. November 2026, die Auf- und Abbautermine der LIGNA und der Zeitplan der FRUIT LOGISTICA am 11. November 2026.
+
+- [BAU 2027: Tipps, Termine und Fristen](https://bau-muenchen.com/de/messe/aussteller/tipps-termine-fristen/)
+- [BAU 2027: Besondere Teilnahmebedingungen (englisch)](https://d2n1n6byqxibyi.cloudfront.net/asset/933560888063/document_9kejorto9t7k79v1t17255pl0i/BAU27_Application_SpecialTerms_E_low.pdf)
+- [BAU: Startseite](https://bau-muenchen.com/de/)
+- [IPM ESSEN: Infos für Messebauer](https://www.ipm-essen.de/aussteller/infos-fuer-messebauer/)
+- [IPM ESSEN 2027: Teilnahmebedingungen (englisch)](https://www.ipm-essen.de/media/neue-medien/messen/ipm/essen/2027/teilnahmebedingungen-ipm-2027dt-aktualisiert-2.pdf)
+- [IPM ESSEN: Die Weltleitmesse des Gartenbaus](https://www.ipm-essen.de/weltleitmesse/)
+- [Spielwarenmesse: Termine und Deadlines der Messe](https://www.spielwarenmesse.de/de/ausstellen/termine-und-deadlines/messe/)
+- [Spielwarenmesse: Termine und Deadlines für Aussteller](https://www.spielwarenmesse.de/de/ausstellen/termine-und-deadlines/)
+- [Spielwarenmesse: Organisation Messestand](https://www.spielwarenmesse.de/de/ausstellen/organisation-messestand/)
+- [Spielwarenmesse: Messeprofil](https://www.spielwarenmesse.de/de/messeprofil/)
+- [FRUIT LOGISTICA 2027: Messeplanung für Aussteller](https://www.fruitlogistica.com/de/aussteller/messeplanung)
+- [FRUIT LOGISTICA 2027: Zeitplan für Aussteller](https://www.fruitlogistica.com/de/ausstellen/messeplanung/zeitplan/)
+- [FRUIT LOGISTICA: Startseite](https://www.fruitlogistica.com/)
+- [E-world 2027: Services für Aussteller (englisch)](https://e-world-essen.com/en/exhibit/exhibitor-fair-service/)
+- [E-world 2027: Teilnahmebedingungen](https://e-world-essen.com/downloads/e-world-2027-teilnahmebedingungen/)
+- [E-world: Abschlussmeldung 2026 (englisch)](https://e-world-essen.com/en/neuigkeiten/strong-growth-in-exhibitors-visitors-and-international-participation-e-world-energy-water-on-record-course-in-its-anniversary-year/)
+- [elektrotechnik 2027: Startseite](https://www.messe-elektrotechnik.de/)
+- [elektrotechnik 2027: Informationen für Aussteller](https://www.messe-elektrotechnik.de/informationen-aussteller/)
+- [Anuga FoodTec 2027: Aufbau- und Abbauzeiten (englisch)](https://www.anugafoodtec.com/for-exhibitors/booth-construction-dismantling/set-up-and-dismantling-times/)
+- [Anuga FoodTec 2027: Bestellfristen (englisch)](https://www.anugafoodtec.com/for-exhibitors/plan-trade-fair-presence-on-site/order-deadlines/)
+- [INTERNORGA 2027: Auf- und Abbau](https://www.internorga.com/ausstellen-besuchen/ausstellen/auf-abbau)
+- [Hamburg Messe: Meldung zur 100. INTERNORGA](https://www.hamburg-messe.de/news/aktuelle-meldungen/news-details/article/die-100-ausgabe-der-internorga-gibt-den-wachstumsthemen-der-branche-mehr-flaeche)
+- [ISH 2027: Terminübersicht Aufbau und Abbau](https://ish.messefrankfurt.com/content/dam/messefrankfurt-redaktion/ish/2027/documents/de/ish27-auf-abbauzeiten.pdf)
+- [ISH 2027: Merkblatt Standbestimmungen](https://ish.messefrankfurt.com/content/dam/messefrankfurt-redaktion/ish/2027/documents/de/merkblatt-standbestimmungen-ish-2027.pdf)
+- [ISH 2027: Aussteller-Guide](https://ish.messefrankfurt.com/content/dam/messefrankfurt-redaktion/ish/2027/documents/de/ish27-aussteller-guide-de.pdf)
+- [IDS 2027: Aufbau- und Abbauzeiten (englisch)](https://www.english.ids-cologne.de/for-exhibitors/booth-construction-dismantling/set-up-and-dismantling-times/)
+- [IDS 2027: Bestellfristen (englisch)](https://www.english.ids-cologne.de/for-exhibitors/plan-trade-fair-presence-on-site/order-deadlines/)
+- [IDS 2027: vorgezogener Aufbau (englisch)](https://www.english.ids-cologne.de/for-exhibitors/booth-construction-dismantling/advanced-build-up/)
+- [IDS: Zahlen und Fakten (englisch)](https://www.english.ids-cologne.de/trade-fair/ids/facts-and-figures/)
+- [LogiMAT 2027: Auf- und Abbauinformationen](https://www.logimat-messe.de/de/aussteller/ausstellen/auf-abbauinformationen)
+- [LogiMAT 2027: Aussteller-Information](https://www.logimat-messe.de/sites/default/files/downloads/logimat_2027_de-en_aussteller_low_0.pdf)
+- [LogiMAT 2027: Auf- und Abbau, Einfahrtregelung](https://www.logimat-messe.de/sites/default/files/lm27_auf_abbau_einfahrtregelung_de.pdf)
+- [HANNOVER MESSE 2027: Auf- und Abbautermine](https://shop.hannovermesse.de/de/00/2027/knowhow/gut/dates_001_2027/index_4_1.html)
+- [Deutsche Messe: Abschlussmeldung zur HANNOVER MESSE 2026 (englisch)](https://www.messe.de/en/newsroom/press-releases/deutsche-messe-ag/press-release_10304)
+- [LIGNA: neue Termine ab 2027 (englisch)](https://www.ligna.de/en/news/news-articles/ligna-with-new-event-dates-from-2027-onwards)
+- [LIGNA 2027: Auf- und Abbautermine im Ausstellershop](https://shop.ligna.de/de/00/2027/knowhow/gut/termine_2027/index_15_1.html)
+- [ACHEMA 2027: Allgemeine Teilnahmebedingungen](https://www.achema.de/fileadmin/user_upload/Content/_Storage/PDF/ACHEMA2027/Anmeldeunterlagen/General-Terms-and-Conditions_Allgemeine-Teilnahmebedingungen_AC2027.pdf)
+- [ACHEMA 2027: Technische Richtlinien](https://www.achema.de/fileadmin/user_upload/Content/_Storage/PDF/ACHEMA2027/Anmeldeunterlagen/AC27_technische_richtlinien_DE.pdf)
+- [GIFA 2027: Daten und Fakten](https://www.gifa.de/de/Ausstellen/Informationen/Daten_Fakten)
+- [Koelnmesse: Messekalender (englisch)](https://www.koelnmesse.com/current-dates/all-trade-fairs/)
+- [Koelnmesse: Seite der imm cologne (englisch, leitet auf die Startseite der Messe weiter)](https://www.imm-cologne.com/trade-fair/imm-cologne/)
+- [Bundesministerium für Wirtschaft und Energie: Liste der förderfähigen Messen 2027](https://www.bafa.de/SharedDocs/Downloads/DE/Wirtschaft/miu_veranstaltungen_2027.pdf?__blob=publicationFile)`,
+    category: 'Messen',
+    imageUrl: '',
+    publishedAt: new Date('2026-11-11').getTime()
   }
 ]
