@@ -7,6 +7,7 @@ import { DEMO_BLOG_POSTS } from '../demo-blog-posts'
 import messeDaten from '../messe-data.ts?raw'
 import seitenMeta from '../seiten-meta.json'
 import seitenMetaEn from '../seiten-meta-en.json'
+import festwerte from './umweltaussagen-festwerte.json'
 
 /**
  * Umwelt- und Zahlenaussagen, die das Haus nicht belegen kann, bleiben draußen
@@ -326,13 +327,14 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
     ],
     [
       'lokales Partnernetzwerk',
-      /lokale[sm]? Partnernetzwerk|local partner network/i,
+      /lokal\w*\s+Partner-?netzwerk|local\s+partner\s+network/i,
       'Lokales Partnernetzwerk',
       'Local Partner Network',
     ],
     [
       'alle Systeme wiederverwendbar',
-      /alle Systeme sind schnell verlegbar, strapazierfähig und wiederverwendbar|all systems are quick to install, durable and reusable/i,
+      // Jede absolute Fassung („alle Systeme/Böden … wiederverwendbar“), nicht nur der alte Satz.
+      /alle\s+(Systeme|Böden|Bodenbeläge)\b[^.]*wiederverwendbar|all\s+(systems|floors|floorings?)\b[^.]*reusable/i,
       'Von klassischem Messebau-Teppich bis zu hochwertigen Klick-Parkett-Systemen – alle Systeme sind schnell verlegbar, strapazierfähig und wiederverwendbar.',
       'From classic exhibition carpet to high-quality click-parquet systems – all systems are quick to install, durable and reusable.',
     ],
@@ -351,17 +353,18 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
     // Aus denselben geänderten Sätzen, über die sechs genannten Wendungen hinaus:
     [
       'lokale Partner',
-      /lokalen? Partnern?\b|local partners?\b/i,
+      // auch gebeugt und zusammengesetzt: „lokaler Partner“, „lokalen Partnerbetrieben“, „local partnerships“
+      /lokal\w*\s+Partner|local\s+partner/i,
       'Wiederverwendbare Systeme, lokale Partner, langlebige Qualität.',
       'Reusable systems, local partners, long-lasting quality.',
     ],
     [
       'regionale Partner',
-      /regionalen? Partnern?\b|regional partners?\b/i,
+      /regional\w*\s+Partner|regional\s+partner/i,
       'Regionale Partner, gebündelte Transporte und Planung ab NRW.',
       'Regional partners, bundled transports and planning from NRW.',
     ],
-    ['langlebige Qualität', /langlebige Qualität|long-lasting quality/i, 'Langlebige Qualität', 'Long-Lasting Quality'],
+    ['langlebige Qualität', /langlebige\s+Qualität|long-lasting\s+quality/i, 'Langlebige Qualität', 'Long-Lasting Quality'],
   ]
 
   const vier: Array<[string, string]> = [
@@ -389,7 +392,8 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
       expect(muster.test(alt), `${name}: deutscher Satz`).toBe(true)
       expect(muster.test(old), `${name}: englischer Satz`).toBe(true)
     }
-    // Der Stand von main als Ganzes: Mit den alten Sätzen an ihrem Platz meldet dieselbe Suche jede Wendung.
+    // Musterprobe (eine Simulation, nicht der Stand von main; der echte Lauf gegen main ist die Rotprobe
+    // außerhalb der Suite): Mit den alten Sätzen neben dem heutigen Text meldet dieselbe Suche jede Wendung.
     const alteDe = wendungen.map(([, , alt]) => alt).join('\n')
     const alteEn = wendungen.map(([, , , old]) => old).join('\n')
     const stand = funde([
@@ -494,5 +498,24 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
     expect(startseite).toContain(`<strong>Transporte ab NRW</strong> – ${neu}`)
     expect(beitrag?.excerpt).toBe('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik: So geht moderner, nachhaltiger Messebau.')
     expect(JSON.stringify(seitenMeta)).toContain('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik')
+  })
+
+  // Rückfallschutz für jeden der 20 geänderten Texte je Sprache, nicht nur für die mit Muster:
+  // Wert wie geprüft, und kein alter Wert taucht irgendwo in der Sprachdatei wieder auf.
+  it('jeder geänderte Text steht wie geprüft, kein alter Wert ist zurück', () => {
+    const fest = festwerte as Record<'de' | 'en', Record<string, { alt: string; neu: string }>>
+    for (const [sprache, datei] of [['de', deutsch], ['en', englisch]] as const) {
+      const eintraege = Object.entries(fest[sprache])
+      expect(eintraege.length, sprache).toBe(20)
+      const alleWerte = new Set(Object.values(datei))
+      for (const [schluessel, { alt, neu }] of eintraege) {
+        expect(datei[schluessel], `${sprache}: ${schluessel}`).toBe(neu)
+        // Nur ganze Sätze: Ein einzelnes Wort wie „Nachhaltigkeit“ (alter Wert von about.compare.r6.aspect)
+        // steht an anderer Stelle zu Recht.
+        if (alt.length >= 20) {
+          expect(alleWerte.has(alt), `${sprache}: alter Wert von ${schluessel} steht wieder in der Datei`).toBe(false)
+        }
+      }
+    }
   })
 })
