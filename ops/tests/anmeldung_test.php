@@ -296,24 +296,31 @@ function gleichzeitig(array $u, array $liste, ?string $sperrdatei = null, ?strin
 
 $dateien = glob(__DIR__ . '/anmeldung_faelle_*.php') ?: [];
 sort($dateien);
-$gelaufen = 0;
+$gelaufeneTeile = [];
 foreach ($dateien as $datei) {
     $teil = substr(basename($datei, '.php'), strlen('anmeldung_faelle_'));
     if ($teile !== [] && !in_array($teil, $teile, true)) {
         continue;
     }
     echo "\n#### Teil: $teil ####\n";
-    require $datei;
-    $gelaufen++;
+    // Eigener Geltungsbereich je Teil: Eine Variable dort kann keine dieses Läufers überschreiben
+    // (etwa die Liste der gewählten Teile) und damit still weitere Teile auslassen.
+    (static function (string $datei, string $apiQuelle): void {
+        require $datei;
+    })($datei, $apiQuelle);
+    $gelaufeneTeile[] = $teil;
 }
 
 foreach ($umgebungen as $u) {
     stoppe($u);
     exec('rm -rf ' . escapeshellarg($u['wurzel']));
 }
-if ($gelaufen === 0) {
-    fwrite(STDERR, "Kein Teil gelaufen\n");
+$erwartet = $teile !== [] ? $teile : array_map(fn($d) => substr(basename($d, '.php'), strlen('anmeldung_faelle_')), $dateien);
+$fehlend = array_diff($erwartet, $gelaufeneTeile);
+if ($gelaufeneTeile === [] || $fehlend !== []) {
+    fwrite(STDERR, "Nicht gelaufen: " . ($fehlend !== [] ? implode(' ', $fehlend) : 'kein Teil') . "\n");
     exit(2);
 }
-echo "\nERGEBNIS: $gruen grün, $rot rot\n";
+echo "\nTEILE: " . implode(' ', $gelaufeneTeile) . "\n";
+echo "ERGEBNIS: $gruen grün, $rot rot\n";
 exit($rot === 0 ? 0 : 1);
