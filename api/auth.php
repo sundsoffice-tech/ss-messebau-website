@@ -17,8 +17,13 @@ const SETUP_ERLAUBT = false;
 // Steht hier oben, weil die Verteilung der Aktionen weiter unten läuft, bevor spätere Zeilen gelten.
 const BREMSE_DATEI_MAX = 4096;
 
+// Kosten jedes neuen Passwort-Hashs: Ersteinrichtung, Neuberechnung bei der Anmeldung und das Werkzeug der
+// Kommandozeile (admin-passwort-setzen.php nennt dieselbe Zahl). Fest statt der PHP-Vorgabe, weil diese mit
+// der PHP-Fassung steigt (ab 8.4: 12) und ein echter Hash dann langsamer rechnete als der Platzhalter.
+const BCRYPT_KOSTEN = 10;
+
 // Platzhalter für die Anmeldung mit unbekanntem Benutzernamen: ein bcrypt-Hash eines verworfenen
-// Zufallswerts, erzeugt mit password_hash() und denselben Kosten wie neue Passwort-Hashes (10).
+// Zufallswerts mit den Kosten BCRYPT_KOSTEN.
 // Gegen ihn wird geprüft, wenn es den Namen nicht gibt, damit die Antwort so lange braucht wie bei
 // einem bekannten Namen mit falschem Passwort. Zu ihm gehört kein Konto; kein Passwort meldet damit an.
 const ANMELDUNG_PLATZHALTER_HASH = '$2y$10$Kbaf0jELaT3AQb1wOGKwbeASrtUx86cIwu6rsjLVkf23dM0wmapLW';
@@ -294,6 +299,23 @@ function handleLogin(): void {
         return;
     }
 
+    // Hat der gespeicherte Hash andere Kosten (etwa aus einer anderen PHP-Fassung), wird er nach der richtigen
+    // Anmeldung mit BCRYPT_KOSTEN neu berechnet; danach braucht ein bekannter Name so lange wie ein unbekannter.
+    // Der neue Hash gibt eine neue Sitzungsmarke: Anmeldungen auf anderen Geräten enden dabei einmalig.
+    // Scheitert das Schreiben, bleibt der alte Hash und die Anmeldung gilt trotzdem.
+    if (password_needs_rehash((string)$user['password_hash'], PASSWORD_BCRYPT, ['cost' => BCRYPT_KOSTEN])) {
+        try {
+            $neuerHash = password_hash($password, PASSWORD_BCRYPT, ['cost' => BCRYPT_KOSTEN]);
+            $neu = getDB()->prepare("UPDATE admin_users SET password_hash = :hash, updated_at = datetime('now') WHERE id = :id AND password_hash = :alt");
+            $neu->execute([':hash' => $neuerHash, ':id' => $user['id'], ':alt' => $user['password_hash']]);
+            if ($neu->rowCount() === 1) {
+                $user['password_hash'] = $neuerHash;
+            }
+        } catch (\Throwable $e) {
+            error_log('Anmeldung: Neuberechnung des Passwort-Hashs gescheitert (' . get_class($e) . ')');
+        }
+    }
+
     // Regenerate session ID for security
     session_regenerate_id(true);
     $_SESSION['user_id'] = $user['id'];
@@ -379,7 +401,7 @@ function handleSetup(): void {
         return;
     }
 
-    $hash = password_hash($password, PASSWORD_BCRYPT);
+    $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => BCRYPT_KOSTEN]);
 
     $stmt = $db->prepare('INSERT INTO admin_users (username, password_hash, display_name) VALUES (:username, :hash, :displayName)');
     $stmt->execute([
