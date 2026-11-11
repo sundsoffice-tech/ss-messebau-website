@@ -210,11 +210,21 @@ function bremseStempeln($fp, string $inhalt, array $gueltig, int $jetzt): ?int {
         $trenner = '';
     }
     $zeile = $trenner . $jetzt . "\n";
-    if (fseek($fp, $laenge) !== 0 || @fwrite($fp, $zeile) !== strlen($zeile) || !@fflush($fp)) {
+    if (fseek($fp, $laenge) !== 0 || @fwrite($fp, $zeile) !== strlen($zeile) || !@fflush($fp) || !bremseGesichert($fp)) {
         @ftruncate($fp, $laenge); // einen abgerissenen Rest wieder abschneiden
         return null;
     }
     return $laenge;
+}
+
+/**
+ * Lässt den Stempel bis auf den Datenträger schreiben und meldet, ob das gelang. Manche Dateisysteme
+ * melden einen vollen Speicher erst hier und nicht schon beim Schreiben; ohne diese Probe gälte der
+ * Versuch dann als gezählt, obwohl der Stempel verloren gehen kann. fsync() gibt es ab PHP 8.1;
+ * fehlt die Funktion, bleibt es beim Ergebnis des Schreibens.
+ */
+function bremseGesichert($fp): bool {
+    return !function_exists('fsync') || @fsync($fp);
 }
 
 function handleLogin(): void {
