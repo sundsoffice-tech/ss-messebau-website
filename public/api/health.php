@@ -51,9 +51,27 @@ try {
     $status = 'degraded';
 }
 
-// Check data directory is writable
+// Check data directory is writable: echte Schreibprobe. is_writable() prüft nur das Recht am
+// Ordner; bei vollem Speicher bliebe das Feld "ok", während etwa die Anmeldung mit 503 antwortet,
+// weil sie ihren Versuch nicht zählen kann. Die Probe legt eine Datei neu an, schreibt eine Zeile
+// (so viel wie ein Stempel der Anmeldebremse) und entfernt sie wieder. Ihr Name fällt unter das
+// Löschmuster rate_limit_*.json der Bereinigung, falls doch einmal eine Probe liegen bleibt.
 $dataDir = __DIR__ . '/data';
-$checks['data_writable'] = is_writable($dataDir) ? 'ok' : 'error';
+$checks['data_writable'] = 'error';
+try {
+    $probeDatei = $dataDir . '/rate_limit_schreibprobe_' . bin2hex(random_bytes(8)) . '.json';
+    $probe = @fopen($probeDatei, 'x');
+    if ($probe !== false) {
+        $probeZeile = time() . "\n";
+        if (@fwrite($probe, $probeZeile) === strlen($probeZeile) && @fflush($probe)) {
+            $checks['data_writable'] = 'ok';
+        }
+        fclose($probe);
+        @unlink($probeDatei);
+    }
+} catch (\Throwable $e) {
+    // bleibt "error"
+}
 if ($checks['data_writable'] !== 'ok') {
     $status = 'degraded';
 }

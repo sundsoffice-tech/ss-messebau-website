@@ -43,11 +43,17 @@ function kleinOrdner(): ?string {
         return null;
     }
     foreach (glob(KLEINFS . '/anm-*') ?: [] as $alt) {
-        array_map('unlink', glob($alt . '/*') ?: []);
-        @rmdir($alt);
+        kleinWeg($alt);
     }
     $ordner = KLEINFS . '/anm-' . bin2hex(random_bytes(4));
     return @mkdir($ordner, 0755) ? $ordner : null;
+}
+
+/** Entfernt einen Ordner dieses Tests vom Kleinst-Dateisystem samt Inhalt. */
+function kleinWeg(string $ordner): void {
+    if (strncmp($ordner, KLEINFS . '/anm-', strlen(KLEINFS) + 5) === 0) {
+        exec('rm -rf ' . escapeshellarg($ordner));
+    }
 }
 
 /** Füllt das Kleinst-Dateisystem, bis keine Seite mehr frei ist. Rückgabe: Pfad der Fülldatei. */
