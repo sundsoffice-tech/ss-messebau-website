@@ -47,6 +47,11 @@ preg_match_all('/password_hash\([^;]*\);/', $quelltext . "\n" . $werkzeug, $aufr
 $ohneKosten = array_values(array_filter($aufrufe[0], fn($a) => strpos($a, "'cost' =>") === false));
 pruefe('jeder password_hash()-Aufruf in auth.php und admin-passwort-setzen.php nennt die Kosten',
     count($aufrufe[0]) >= 3 && $ohneKosten === [], json_encode($ohneKosten, JSON_UNESCAPED_UNICODE));
+// In auth.php nicht irgendeine Zahl, sondern die Konstante (eine 12 bei der Ersteinrichtung fiele sonst nicht auf).
+preg_match_all('/password_hash\([^;]*\);/', $quelltext, $aufrufeAuth);
+$ohneKonstante = array_values(array_filter($aufrufeAuth[0], fn($a) => strpos($a, "['cost' => BCRYPT_KOSTEN]") === false));
+pruefe('jeder password_hash()-Aufruf in auth.php rechnet mit BCRYPT_KOSTEN',
+    count($aufrufeAuth[0]) >= 2 && $ohneKonstante === [], json_encode($ohneKonstante, JSON_UNESCAPED_UNICODE));
 pruefe('das Werkzeug der Kommandozeile erzeugt Hashes mit denselben Kosten wie auth.php',
     preg_match("/password_hash\(\\\$passwort, PASSWORD_BCRYPT, \['cost' => (\d+)\]\)/", $werkzeug, $w) === 1 && (int)$w[1] === $kosten,
     'Werkzeug ' . ($w[1] ?? 'ohne Angabe') . ', auth.php ' . $kosten);
