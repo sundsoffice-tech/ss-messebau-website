@@ -86,9 +86,11 @@ const NACHRICHTEN = `
 // Genau ein curl_init und ein curl_exec, gezählt wie PHP sie liest (Groß- und Kleinschreibung egal,
 // Leerraum vor der Klammer erlaubt): Ein zweites könnte die Frage des Besuchers ohne die Anweisung
 // senden (Programmierer 11.11.2026). Andere Anfragewege (file_get_contents, fsockopen, curl_multi_*)
-// fängt das nicht; gegen sie hilft nur, dass hinter der Anweisung keine Eingabequelle steht (6.) und
-// $input und $rawMessage nur an ihren bekannten Stellen stehen, also nicht vorher kopiert werden
-// (STELLEN). Ein Aufruf über einen Variablennamen oder mit Kommentar vor der Klammer wird nicht gezählt.
+// fängt das nicht. Gegen sie helfen nur, dass hinter der Anweisung keine Eingabequelle steht (6.), und
+// die Stellenzahlen von $input und $rawMessage, die eine zusätzliche Kopierzeile vor der Anweisung
+// fangen. Nicht gefangen: eine Kopie innerhalb einer vorhandenen Zeile ($rawMessage = $kopie = …,
+// strlen($kopie = $rawMessage)), get_defined_vars() oder compact() hinter der Anweisung, ein Aufruf
+// über einen Variablennamen oder mit Kommentar vor der Klammer.
 const ANFRAGEN: [string, RegExp][] = [['curl_init(', /\bcurl_init\s*\(/gi], ['curl_exec(', /\bcurl_exec\s*\(/gi]]
 const MODELL_FREI = (text: string) => text.replace(/'model' => '[^']*'/g, "'model' => …")
 // Von der festen Anweisung bis zum Dateiende greift der Code auf keine dieser Eingabequellen zu (P3),
@@ -97,12 +99,15 @@ const MODELL_FREI = (text: string) => text.replace(/'model' => '[^']*'/g, "'mode
 // Das ist eine Liste bekannter Quellen, keine Garantie; die Stellenzahlen fangen die übrigen Wege
 // zur Nachrichtenliste.
 const BROWSER = /\$input\b|\$rawMessage\b|\$_(GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|php:\/\/input|\bfilter_input\b|\bgetallheaders\b/
-// Wie oft die beiden Variablen im Code stehen (ohne Kommentarzeilen). Jeder weitere Zugriff, auch über
+// Wie oft diese Variablen im Code stehen (ohne Zeilen, die mit // oder # beginnen; Kommentare am
+// Zeilenende, Zeilen in Blockkommentaren und Texte zählen mit, das macht den Test strenger, nie
+// lockerer). Jeder weitere Zugriff, auch über
 // Liste, Schleife, Referenz oder Index ([$systemPrompt] = …, $messages[0] = …, array_shift($messages)),
 // ändert die Zahl. Dazu die Nachricht des Besuchers und das Zusatzwissen: Ein Zusatz an ihnen
 // ($message .= …, $trainingContext .= …) erreicht das Modell an der Anweisung vorbei (Spieltheoretiker E5).
-// $input und $rawMessage stehen nur vor der Anweisung; eine Kopie dort ($kopie = $rawMessage;) für eine
-// zweite Anfrage dahinter ändert ihre Zahl (Programmierer 11.11.2026).
+// $input und $rawMessage stehen nur vor der Anweisung; eine eigene Kopierzeile dort ($kopie = $rawMessage;)
+// für eine zweite Anfrage dahinter ändert ihre Zahl, eine Kopie innerhalb einer vorhandenen Zeile nicht
+// (Programmierer 11.11.2026).
 const STELLEN = { systemPrompt: 5, messages: 4, message: 2, trainingContext: 3, input: 5, rawMessage: 3 }
 const RUECKWEG =
   'Gewollt? Dann den Wortlaut in src/lib/__tests__/chat-rechtsfragen.test.ts mitziehen und im PR begründen.'
