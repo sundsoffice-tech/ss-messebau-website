@@ -568,7 +568,7 @@ Viel Erfolg beim Messeauftritt!`,
     id: '3',
     title: 'Nachhaltiger Messebau: Systemstände mehrfach nutzen',
     slug: 'nachhaltiger-messebau',
-    excerpt: 'Wiederverwendbare Systeme, lokale Partner, effiziente Logistik: So geht moderner, nachhaltiger Messebau.',
+    excerpt: 'Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik: So geht moderner, nachhaltiger Messebau.',
     content: `**Autor:** S&S Messebau GbR
 
 ---
@@ -663,7 +663,7 @@ Viele Aussteller denken: „Transport – das ist halt notwendig." Stimmt, aber 
 
 **Was wir bei S&S tun:**
 - Wir optimieren Verpackung und Beladung (jeder cm zählt)
-- Wir bündeln Transporte und planen sie ab NRW, damit weniger Fahrten anfallen
+- Wir planen Transporte zentral ab NRW, zusammen mit Aufbau und Einlagerung
 - Wir planen Auf- und Abbauten zeitnah hintereinander, um Hin- und Rückfahrten zu minimieren
 
 **Nachhaltigkeit im Transport reduziert oft auch die Kosten** – durch bessere Planung und Effizienz.
