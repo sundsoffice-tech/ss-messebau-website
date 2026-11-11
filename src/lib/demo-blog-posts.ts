@@ -568,7 +568,7 @@ Viel Erfolg beim Messeauftritt!`,
     id: '3',
     title: 'Nachhaltiger Messebau: Systemstände mehrfach nutzen',
     slug: 'nachhaltiger-messebau',
-    excerpt: 'Wiederverwendbare Systeme, lokale Partner, effiziente Logistik: So geht moderner, nachhaltiger Messebau.',
+    excerpt: 'Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik: So geht moderner, nachhaltiger Messebau.',
     content: `**Autor:** S&S Messebau GbR
 
 ---
@@ -663,7 +663,7 @@ Viele Aussteller denken: „Transport – das ist halt notwendig." Stimmt, aber 
 
 **Was wir bei S&S tun:**
 - Wir optimieren Verpackung und Beladung (jeder cm zählt)
-- Wir bündeln Transporte und planen sie ab NRW, damit weniger Fahrten anfallen
+- Wir planen Transporte zentral ab NRW, zusammen mit Aufbau und Einlagerung
 - Wir planen Auf- und Abbauten zeitnah hintereinander, um Hin- und Rückfahrten zu minimieren
 
 **Nachhaltigkeit im Transport reduziert oft auch die Kosten** – durch bessere Planung und Effizienz.
@@ -2710,6 +2710,120 @@ Alle Dokumente abgerufen am 10. November 2026, die Mitteilung der Koelnmesse zur
 - [NürnbergMesse: Presseinformation vom 08.07.2026](https://edge.sitecorecloud.io/nurnbergmes0e18-nmmultisite6e34-prod50da-6065/media/Project/NuernbergMesse/NuernbergMesse/PressReleases/2026/BPK/NrnbergMesse-bleibt-in-der-Gewinnzone-und-wchst-weltweit-Presseinformation-DEUTSCH.pdf)
 - [Deutsche Messe: Abschlussmeldung zur HANNOVER MESSE 2026 (englisch)](https://www.messe.de/en/newsroom/press-releases/deutsche-messe-ag/press-release_10304)`,
     category: 'Markt',
+    imageUrl: '',
+    publishedAt: new Date('2026-11-11').getTime()
+  },
+  {
+    id: '10',
+    title: 'Umweltaussagen am Messestand: die Regeln seit 2026',
+    slug: 'umweltaussagen-messestand-uwg',
+    excerpt: 'Seit 27. September 2026 gelten neue Regeln für Umweltaussagen in der Werbung. Was das für Standgrafik, Flyer und Siegel auf der Messe heißt.',
+    content: `Seit dem 27. September 2026 gelten in Deutschland neue Regeln für Werbung mit Umweltaussagen. Sie stehen im Gesetz gegen den unlauteren Wettbewerb, kurz UWG, und setzen eine Richtlinie der Europäischen Union um. Wer für 2027 Standgrafik, Flyer, Produktschilder oder Werbegeschenke plant, plant von Anfang an unter diesen Regeln.
+
+Für Aussteller ist das Thema greifbarer, als es klingt. Ein Messestand ist Werbung auf engem Raum: große Schlagworte auf der Rückwand, Siegel auf dem Exponat, Versprechen im Prospekt. Genau solche Aussagen ohne nähere Angabe hat der Gesetzgeber im Blick.
+
+Dieser Beitrag fasst in eigenen Worten zusammen, was im Gesetz, in der Richtlinie und in der amtlichen Begründung steht, Stand 10. November 2026, mit den Quellen am Ende. Wie Gerichte die neuen Vorschriften auslegen, haben wir nicht ausgewertet. Der Beitrag ist eine Übersicht und keine Rechtsberatung. Ob eine bestimmte Aussage zulässig ist, klären Sie mit Ihrer Rechtsabteilung oder Ihrem Anwalt, bevor gedruckt wird.
+
+## Das Wichtigste in Kürze
+
+- Die neuen Vorschriften gelten seit dem 27. September 2026. Grundlage ist das Dritte Gesetz zur Änderung des UWG vom 12. Februar 2026.
+- Als Umweltaussage zählt nicht nur Text. Das Gesetz nennt ausdrücklich Bilder, grafische Elemente und Symbole, dazu Etiketten, Markennamen, Firmennamen und Produktbezeichnungen.
+- Gegenüber Verbrauchern sind mehrere Praktiken stets unzulässig, darunter allgemeine Umweltaussagen ohne nachweisbare anerkannte hervorragende Umweltleistung und Nachhaltigkeitssiegel, die weder auf einem Zertifizierungssystem beruhen noch staatlich festgesetzt sind.
+- Das allgemeine Irreführungsverbot in § 5 Absatz 1 und 2 UWG gilt auch zwischen Unternehmen. Die Liste der stets unzulässigen Praktiken gilt nach ihrem Wortlaut nur gegenüber Verbrauchern.
+- Eine allgemeine Übergangsfrist über den 27. September 2026 hinaus enthält das Gesetz nicht. Nur für Waren, die vor dem 27. September 2026 in Verkehr gebracht wurden, gilt bis zum 26. September 2028 eine Sondervorschrift: Ansprüche auf Unterlassung und Beseitigung wegen der neuen Vorschriften sind dort nach Treu und Glauben und verhältnismäßig geltend zu machen, abgewogen im Einzelfall (§ 15b UWG).
+
+## Was sich geändert hat
+
+Das Dritte Gesetz zur Änderung des Gesetzes gegen den unlauteren Wettbewerb wurde am 12. Februar 2026 ausgefertigt und am 19. Februar 2026 im Bundesgesetzblatt veröffentlicht (BGBl. 2026 I Nr. 43). Es setzt die Richtlinie (EU) 2024/825 vom 28. Februar 2024 um, die Verbraucher besser gegen unlautere Praktiken schützen soll. Die Richtlinie verlangt, dass die Mitgliedstaaten die neuen Regeln ab dem 27. September 2026 anwenden, und an diesem Tag sind die hier dargestellten neuen Vorschriften dieses Gesetzes in Kraft getreten.
+
+Geändert wurden vor allem drei Stellen: die Begriffsbestimmungen in § 2, das Irreführungsverbot in § 5 und der Anhang des Gesetzes mit den Handlungen, die gegenüber Verbrauchern stets unzulässig sind.
+
+## Was als Umweltaussage zählt
+
+Das Gesetz fasst den Begriff weit. Eine Umweltaussage ist jede Aussage oder Darstellung im Kontext einer geschäftlichen Handlung, die rechtlich nicht verpflichtend ist und in der ausdrücklich oder stillschweigend angegeben wird, dass ein Produkt, eine Marke oder ein Unternehmer eine positive oder keine Auswirkung auf die Umwelt hat, weniger schädlich ist als andere oder sich im Laufe der Zeit verbessert hat. Ausdrücklich genannt sind Darstellungen durch Text, Bilder, grafische Elemente oder Symbole wie Etiketten, Markennamen, Firmennamen oder Produktbezeichnungen.
+
+Die Begründung des Gesetzentwurfs hält dazu fest, dass die Form einer Aussage oder Darstellung nicht maßgeblich ist. Erfasst sind nur Aussagen in der kommerziellen Kommunikation, nicht etwa solche in gesetzlich vorgeschriebenen Berichten. Verwendet ein Unternehmen Angaben aus seinem Nachhaltigkeitsbericht in freiwilliger Werbung, die sich an Verbraucher richtet, fällt das nach den Fragen und Antworten der Kommissionsdienststellen unter die Richtlinie, etwa wenn die Angabe eine Umweltaussage ist.
+
+Eine allgemeine Umweltaussage liegt nach dem Gesetz vor, wenn die Aussage schriftlich oder mündlich getroffen wird, nicht auf einem Nachhaltigkeitssiegel steht und ihre Spezifizierung nicht klar und in hervorgehobener Weise auf demselben Medium angegeben ist. Die Richtlinie nennt in ihren Erwägungsgründen als Beispiele allgemeiner Umweltaussagen unter anderem „umweltfreundlich“, „umweltschonend“, „grün“, „klimafreundlich“ und „energieeffizient“. Sie zeigt den Unterschied an einem Beispiel: „klimafreundliche Verpackungen“ wäre eine allgemeine Aussage, „100 % der für die Herstellung dieser Verpackungen verwendeten Energie stammen aus erneuerbaren Quellen“ dagegen eine spezifische.
+
+Und die Farbe Grün? Das Wort Farbe steht im deutschen Gesetz nicht. Die Richtlinie sagt in ihren Erwägungsgründen, eine schriftliche oder mündliche Aussage könne in Kombination mit impliziten Aussagen wie Farben oder Bildern eine allgemeine Umweltaussage darstellen. Die Dienststellen der Europäischen Kommission schreiben in ihren Fragen und Antworten vom September 2026, stillschweigende Angaben wie Farben oder Bilder allein, ohne Text, könnten nicht als allgemeine Umweltaussage angesehen werden. Dieses Papier ist nach eigenem Hinweis kein offizieller Standpunkt der Kommission.
+
+## Was gegenüber Verbrauchern stets unzulässig ist
+
+Der Anhang des UWG führt Handlungen auf, die gegenüber Verbrauchern stets unzulässig sind. Neu hinzugekommen sind unter anderem:
+
+- **Nummer 2a:** das Anbringen eines Nachhaltigkeitssiegels, das weder auf einem Zertifizierungssystem beruht noch von staatlichen Stellen festgesetzt wurde.
+- **Nummer 4a:** eine allgemeine Umweltaussage, wenn der Unternehmer keine ihr zugrunde liegende anerkannte hervorragende Umweltleistung nachweisen kann. Was als anerkannte hervorragende Umweltleistung gilt, bestimmt das Gesetz selbst: die Umweltleistung im Einklang mit der Verordnung (EG) Nr. 66/2010, mit offiziell anerkannten Umweltkennzeichen nach DIN EN ISO 14024 Typ I oder mit Umwelthöchstleistungen nach sonstigem Unionsrecht.
+- **Nummer 4b:** eine Umweltaussage zum gesamten Produkt oder zur gesamten Geschäftstätigkeit, wenn sie sich nur auf einen bestimmten Aspekt des Produkts oder eine bestimmte Aktivität bezieht.
+- **Nummer 4c:** eine Aussage, die sich auf die Kompensation von Treibhausgasemissionen gründet und nach der ein Produkt hinsichtlich der Treibhausgasemissionen neutrale, verringerte oder positive Auswirkungen auf die Umwelt hat. Die Richtlinie nennt in ihren Erwägungsgründen als Beispiele „klimaneutral“, „zertifiziert CO2-neutral“ und „mit Klimaausgleich“. Zulässig sollen solche Aussagen danach nur sein, wenn sie auf den tatsächlichen Auswirkungen im Lebenszyklus des Produkts beruhen und nicht auf Kompensation außerhalb seiner Wertschöpfungskette.
+- **Nummer 10a:** die Darstellung von Anforderungen, die kraft Gesetzes für alle Produkte der betreffenden Kategorie auf dem Unionsmarkt gelten, als Besonderheit des eigenen Angebots.
+
+Ein Zertifizierungssystem im Sinne des Gesetzes ist ein System der Überprüfung durch Dritte, dessen Bedingungen öffentlich einsehbar sind; unter anderem muss es allen Unternehmern unter transparenten Bedingungen offenstehen, und ein unabhängiger Dritter muss überwachen, ob der Unternehmer die Anforderungen einhält. Ein selbst entworfenes Zeichen, das kein Dritter prüft, erfüllt das nicht.
+
+Kein Fall der Liste, aber ebenfalls nur gegenüber Verbrauchern geregelt: Nach § 5 Absatz 3 Nummer 4 ist es irreführend, eine Aussage über die künftige Umweltleistung zu treffen, wenn dahinter keine klaren, objektiven, öffentlich einsehbaren und überprüfbaren Verpflichtungen in einem detaillierten und realistischen Umsetzungsplan stehen. Der Plan muss messbare und zeitgebundene Ziele enthalten und regelmäßig von einem unabhängigen externen Sachverständigen überprüft werden, dessen Erkenntnisse Verbrauchern zur Verfügung gestellt werden.
+
+## Fachmesse oder Publikumsmesse: Gilt das auch zwischen Unternehmen?
+
+Auf diese Frage kommt es für Aussteller an. Nach einer Angabe des Verbands der deutschen Messewirtschaft AUMA vom November 2026 sind etwa 40 Prozent aller Messen in Deutschland Messen für Endverbraucher und 60 Prozent Fachbesuchermessen.
+
+Der Wortlaut ist eindeutig, soweit es um die Liste im Anhang geht: Sie gilt gegenüber Verbrauchern. Dasselbe gilt für die Regel zu Aussagen über die künftige Umweltleistung. Die Begründung des Gesetzentwurfs bestätigt, dass diese Regel nur im Verhältnis von Unternehmern zu Verbrauchern Anwendung findet.
+
+Daraus folgt aber nicht, dass auf einer Fachmesse alles erlaubt wäre. Das allgemeine Irreführungsverbot in § 5 Absatz 1 schützt Verbraucher und sonstige Marktteilnehmer. In § 5 Absatz 2 Nummer 1 stehen seit der Änderung ausdrücklich ökologische oder soziale Merkmale sowie Haltbarkeit, Reparierbarkeit und Recyclingfähigkeit als wesentliche Merkmale einer Ware oder Dienstleistung. Die Begründung nennt diese Ergänzung klarstellend und schreibt, die Vorschrift gelte sowohl für das Verhältnis von Unternehmer zu Unternehmer als auch für das Verhältnis von Unternehmer zu Verbraucher. Unwahre oder zur Täuschung geeignete Angaben über solche Merkmale sind also auch gegenüber Fachbesuchern irreführend. Dazu kommt die Rechtsprechung: Der Bundesgerichtshof hat am 27. Juni 2024 (I ZR 98/23) über eine Anzeige mit dem Wort „klimaneutral“ in einer Fachzeitung der Lebensmittelbranche entschieden, dass bei einem mehrdeutigen Umweltbegriff regelmäßig schon in der Werbung selbst erläutert sein muss, was gemeint ist. Maßstab war dabei das Verständnis eines Durchschnittsverbrauchers: Das Berufungsgericht hatte angenommen, das Fachpublikum der Branche sei so breit, dass ein anderes Verständnis fernliege, und der Bundesgerichtshof hat das nicht beanstandet. Das Urteil erging vor der Gesetzesänderung zu § 5 UWG.
+
+Es kommt dabei nicht auf den Namen der Messe an, sondern darauf, an wen sich eine Aussage richtet. Auch auf einer Fachmesse können sich Aussagen an Verbraucher richten: an Publikumstagen, auf Verpackungen und Etiketten, die so später im Handel stehen, auf Werbegeschenken und auf Standfotos für Website oder Social Media. Das ist unsere Folgerung aus dem Wortlaut „gegenüber Verbrauchern“, kein Zitat.
+
+## Die Sondervorschrift für ältere Waren und ihre Grenzen
+
+Im Oktober 2026 kam eine Sondervorschrift hinzu, § 15b UWG, verkündet am 27. Oktober 2026 (BGBl. 2026 I Nr. 322) und rückwirkend zum 27. September 2026 in Kraft. Sie betrifft Ansprüche auf Beseitigung und Unterlassung wegen der neuen Vorschriften im Hinblick auf Waren, die vor dem 27. September 2026 in Verkehr gebracht wurden. Solche Ansprüche sind nach Treu und Glauben und unter Berücksichtigung der Verhältnismäßigkeit geltend zu machen. Abzuwägen sind insbesondere die Schwere des Verstoßes, die Anstrengungen des Unternehmers zur Beseitigung, die Kosten und die Umweltbelastungen, die mit der Beseitigung verbunden wären.
+
+Die Vorschrift ist befristet. Nach dem Gesetzblatt wird § 15b am 27. September 2028 wieder gestrichen; der Bericht des Rechtsausschusses hält fest, dass die Vorschrift nach dem 26. September 2028 keinen Anwendungsbereich mehr hat.
+
+Wichtig für Aussteller ist die Reichweite. Der Wortlaut bezieht sich auf Waren. Die Wettbewerbszentrale folgert daraus in ihrer Meldung vom 24. September 2026, dass es für die übrige Werbung beim 27. September 2026 als Stichtag bleibt: Website, Online-Shop und Social-Media-Kanal, aber auch Katalog oder Plakat müssen die Vorgaben einhalten. Das ist die Einschätzung eines Verbands, kein Gesetzestext. Der Bericht des Rechtsausschusses nennt als Zweck der Vorschrift den Umgang mit Bestandsprodukten. Für neu gedruckte Standgrafik und neue Prospekte sehen wir deshalb keinen Anhaltspunkt, dass die Sondervorschrift greift. Das ist unsere Folgerung, kein Zitat.
+
+## Wer dagegen vorgehen kann
+
+Ansprüche auf Beseitigung und Unterlassung stehen nach § 8 UWG unter anderem Mitbewerbern, eingetragenen Wirtschaftsverbänden, qualifizierten Verbraucherverbänden und den Industrie- und Handelskammern zu. Mitbewerber können bei Vorsatz oder Fahrlässigkeit Schadensersatz verlangen, Verbraucher nach § 9 Absatz 2 ebenfalls, wenn die unzulässige Handlung sie zu einer geschäftlichen Entscheidung veranlasst hat, die sie sonst nicht getroffen hätten. Vor einem Gerichtsverfahren sollen die Berechtigten nach § 13 UWG abmahnen.
+
+Ein Bußgeld sieht § 19 UWG nur für einen besonderen Fall vor: wenn Verbraucherinteressen verletzt werden, bei einem weitverbreiteten Verstoß und nur im Rahmen einer koordinierten Durchsetzungsmaßnahme auf europäischer Ebene. Dann sind bis zu fünfzigtausend Euro möglich. Hat ein Unternehmen im Geschäftsjahr vor der Behördenentscheidung in den betroffenen Mitgliedstaaten mehr als 1,25 Millionen Euro umgesetzt, sind es bis zu 4 Prozent dieses Umsatzes.
+
+## Was aus dem zweiten Richtlinienvorschlag wird
+
+Neben der umgesetzten Richtlinie gab es einen zweiten Vorschlag der Kommission, die sogenannte Green Claims Directive über die Begründung ausdrücklicher Umweltaussagen. Die Themenseite der Kommission führte ihn am 10. November 2026 als anhängig. Im Arbeitsprogramm 2027 vom 4. November 2026 steht der Vorschlag auf der Liste der Vorhaben, die die Kommission innerhalb von sechs Monaten zurückziehen will. Zurückgezogen war er damit am 10. November 2026 noch nicht. Die Regeln, die seit dem 27. September 2026 gelten, sind davon nicht berührt.
+
+## Was das am Messestand bedeutet
+
+Die folgenden Punkte sind unsere Einordnung für die Standplanung: Folgerungen aus dem Gesetz, nicht sein Wortlaut, keine vollständige Liste und keine Rechtsberatung.
+
+1. **Schlagworte auf der Rückwand prüfen.** Kurze Umweltschlagworte ohne Erläuterung sind der Fall, den das Gesetz als allgemeine Umweltaussage beschreibt. Wer eine Eigenschaft bewerben will, nennt sie konkret, hervorgehoben, auf demselben Medium und so, dass er sie belegen kann.
+2. **Siegel und Zeichen klären.** Für jedes Umwelt- oder Sozialsiegel auf Exponat, Verpackung oder Grafik sollte feststehen, welches Zertifizierungssystem oder welche staatliche Stelle dahintersteht.
+3. **Aussagen über das ganze Unternehmen meiden, wenn nur ein Teil gemeint ist.** Was für eine Produktlinie gilt, gehört zu dieser Produktlinie.
+4. **Bilder und Symbole mitdenken.** Sie zählen nach dem Gesetz zur Darstellung. Ein Motiv kann zusammen mit dem Text daneben eine Aussage ergeben, die keiner so gemeint hat.
+5. **Alte Drucksachen durchsehen.** Prüfen Sie Prospekte und Banner aus früheren Jahren, bevor Sie sie wieder einsetzen. Die Sondervorschrift des § 15b ist auf Waren zugeschnitten.
+6. **Vor dem Druck freigeben lassen.** Planen Sie die rechtliche Freigabe der Texte vor der Druckdatenabgabe ein.
+
+Wir bauen Ihren Stand und setzen die Texte und Motive um, die Sie freigegeben haben. Ob eine Werbeaussage zulässig ist, prüfen wir nicht; das klären Sie mit Ihrer Rechtsabteilung oder Ihrem Anwalt. Nennen Sie uns Ihren Messetermin früh, damit vor der Druckdatenabgabe Zeit für diese Prüfung bleibt. [Zum Kontakt](/kontakt)
+
+## Quellen
+
+Alle Dokumente abgerufen am 10. November 2026.
+
+- [Gesetz gegen den unlauteren Wettbewerb, Gesamttext](https://www.gesetze-im-internet.de/uwg_2004/BJNR141400004.html)
+- [Bundesgesetzblatt 2026 I Nr. 43: Drittes Gesetz zur Änderung des UWG](https://www.recht.bund.de/bgbl/1/2026/43/regelungstext.pdf?__blob=publicationFile&v=1)
+- [Bundesgesetzblatt 2026 I Nr. 43, Verkündungsseite](https://www.recht.bund.de/bgbl/1/2026/43/VO.html)
+- [Bundesgesetzblatt 2026 I Nr. 322: Gesetz mit der Einfügung von § 15b UWG](https://www.recht.bund.de/bgbl/1/2026/322/regelungstext.pdf?__blob=publicationFile&v=1)
+- [Bundesgesetzblatt 2026 I Nr. 322, Verkündungsseite](https://www.recht.bund.de/bgbl/1/2026/322/VO.html)
+- [Richtlinie (EU) 2024/825, Amtsblatt der Europäischen Union](https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=OJ:L_202400825)
+- [Bundestag, Drucksache 21/1855: Gesetzentwurf mit Begründung](https://dserver.bundestag.de/btd/21/018/2101855.pdf)
+- [Bundestag, Drucksache 21/8158: Bericht des Rechtsausschusses zu § 15b UWG (Vorabfassung)](https://dserver.bundestag.de/btd/21/081/2108158.pdf)
+- [Europäische Kommission: Fragen und Antworten zur Richtlinie (EU) 2024/825, September 2026](https://commission.europa.eu/document/download/3c257883-bb2a-4dd9-a6dc-501d587bb34f_de)
+- [Bundesgerichtshof: Pressemitteilung Nr. 138/2024 zum Urteil vom 27. Juni 2024, I ZR 98/23](https://www.bundesgerichtshof.de/SharedDocs/Pressemitteilungen/DE/2024/2024138.html)
+- [Bundesgerichtshof: Urteil vom 27. Juni 2024, I ZR 98/23, Volltext](https://www.bundesgerichtshof.de/SharedDocs/Entscheidungen/DE/Zivilsenate/I_ZS/2023/I_ZR__98-23.pdf?__blob=publicationFile&v=1)
+- [Wettbewerbszentrale: UWG erhält begrenzte EmpCo-Übergangsregel, 24.09.2026](https://www.wettbewerbszentrale.de/uwg-erhaelt-begrenzte-empco-uebergangsregel/)
+- [Europäische Kommission: Themenseite Green Claims](https://environment.ec.europa.eu/topics/circular-economy-topics/green-claims_en)
+- [Europäische Kommission: Arbeitsprogramm 2027, Anhänge](https://commission.europa.eu/document/download/9ad0afe2-f9a8-46e9-bd3b-74c2de496c48_en?filename=COM_2026_710_1_annexe_EN.pdf)
+- [Europäische Kommission: Arbeitsprogramm 2027, Übersicht](https://commission.europa.eu/strategy-and-policy/strategy-documents/commission-work-programme/commission-work-programme-2027_en)
+- [AUMA: Pressemitteilung vom 02.11.2026](https://www.presseportal.de/pm/166321/6382367)`,
+    category: 'Recht',
     imageUrl: '',
     publishedAt: new Date('2026-11-11').getTime()
   }

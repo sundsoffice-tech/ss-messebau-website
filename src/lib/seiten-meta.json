@@ -118,7 +118,7 @@
   },
   "/blog/nachhaltiger-messebau": {
     "title": "Nachhaltiger Messebau: Systemstände mehrfach nutzen | S&S Messebau",
-    "description": "Wiederverwendbare Systeme, lokale Partner, effiziente Logistik: So geht moderner, nachhaltiger Messebau.",
+    "description": "Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik: So geht moderner, nachhaltiger Messebau.",
     "ogType": "article"
   },
   "/blog/schnelle-angebotsstellung-messebau-48h": {
@@ -139,6 +139,11 @@
   "/blog/messebudget-messezahlen": {
     "title": "Messebudget 2027: Was die Zahlen der Branche sagen | S&S Messebau",
     "description": "Schlussrechnung 2025, Prognose fürs erste Quartal 2026, Pläne der Aussteller, Kostenanteile: was die Zahlen für Ihr Messebudget 2027 hergeben.",
+    "ogType": "article"
+  },
+  "/blog/umweltaussagen-messestand-uwg": {
+    "title": "Umweltaussagen am Messestand: die Regeln seit 2026 | S&S Messebau",
+    "description": "Seit 27. September 2026 gelten neue Regeln für Umweltaussagen in der Werbung. Was das für Standgrafik, Flyer und Siegel auf der Messe heißt.",
     "ogType": "article"
   }
 }

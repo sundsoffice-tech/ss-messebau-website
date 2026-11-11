@@ -1,0 +1,166 @@
+{
+  "de": {
+    "leistungen.sustainability.co2.desc": {
+      "alt": "Transporte bündeln wir und planen sie ab NRW, damit weniger Fahrten anfallen.",
+      "neu": "Transporte planen wir zentral ab NRW, zusammen mit Aufbau und Einlagerung."
+    },
+    "sustainability.logistics.desc": {
+      "alt": "Transporte bündeln wir und planen sie ab NRW, damit weniger Fahrten anfallen.",
+      "neu": "Transporte planen wir zentral ab NRW, zusammen mit Aufbau und Einlagerung."
+    },
+    "sustainability.branchen.title": {
+      "alt": "Nachhaltiger Messebau für jede Branche",
+      "neu": "Wiederverwendbare Messestände für jede Branche"
+    },
+    "sustainability.branchen.logistics.desc": {
+      "alt": "Regionale Partner, gebündelte Transporte und Planung ab NRW.",
+      "neu": "Partner in NRW, Transport und Planung aus einer Hand ab NRW."
+    },
+    "home.services.touren.b1": {
+      "alt": "Zentrale Logistik ab NRW – kurze Wege, schnelle Reaktion",
+      "neu": "Zentrale Logistik ab NRW, ein Ansprechpartner, schnelle Reaktion"
+    },
+    "leistungen.touren.b1": {
+      "alt": "Zentrale Logistik ab NRW – kurze Wege, schnelle Reaktionszeiten",
+      "neu": "Zentrale Logistik ab NRW, ein Ansprechpartner, schnelle Reaktion"
+    },
+    "leistungen.ausstattung.flooring.subtitle": {
+      "alt": "Von klassischem Messebau-Teppich bis zu hochwertigen Klick-Parkett-Systemen – alle Systeme sind schnell verlegbar, strapazierfähig und wiederverwendbar.",
+      "neu": "Von klassischem Messeteppich bis zu hochwertigen Klick-Parkett-Systemen: alle Böden sind schnell verlegt und für den Messebetrieb ausgelegt. Vinyl, Parkett und Podestböden lassen sich mehrfach einsetzen."
+    },
+    "about.werte.v2.desc": {
+      "alt": "Wiederverwendbare Systeme, lokale Partner, langlebige Qualität.",
+      "neu": "Wiederverwendbare Systeme, Partner in NRW, gebaut für viele Einsätze."
+    },
+    "about.compare.r6.aspect": {
+      "alt": "Nachhaltigkeit",
+      "neu": "Wiederverwendung"
+    },
+    "about.compare.r6.ss": {
+      "alt": "Wiederverwendbare Systeme, feste Termine",
+      "neu": "Systemstände, die wir einlagern und wieder einsetzen"
+    },
+    "ablauf.faq.a10": {
+      "alt": "Wir setzen auf wiederverwendbare Systeme, lokale Partner und langlebige Materialien. Details finden Sie auf unserer Nachhaltigkeits-Seite.",
+      "neu": "Unsere Systemstände sind für viele Einsätze gebaut: Wir lagern die Teile ein und setzen sie wieder ein. Verbrauchsmaterial wie Messeteppich wird in der Regel nur einmal eingesetzt. Details finden Sie auf unserer Nachhaltigkeits-Seite."
+    },
+    "nachhaltigkeit.hero.subtitle": {
+      "alt": "Messebau muss nicht Wegwerfkultur sein. Mit wiederverwendbaren Systemen, lokalem Partnernetzwerk und Einlagerung zwischen den Messen sparen Sie Material und Kosten.",
+      "neu": "Messebau muss nicht Wegwerfkultur sein. Mit wiederverwendbaren Systemen, Partnern in NRW und Einlagerung zwischen den Messen sparen Sie Material und Kosten."
+    },
+    "nachhaltigkeit.systeme.title2": {
+      "alt": "Lokales Partnernetzwerk",
+      "neu": "Partnernetzwerk in NRW und bundesweit"
+    },
+    "nachhaltigkeit.systeme.desc2": {
+      "alt": "Kurze Transportwege durch regionale Partner in NRW und bundesweit. Transporte bündeln wir, damit weniger Fahrten anfallen.",
+      "neu": "Wir planen ab NRW und arbeiten mit Partnerbetrieben in NRW und bundesweit. Transport, Aufbau und Einlagerung kommen aus einer Hand."
+    },
+    "nachhaltigkeit.systeme.title3": {
+      "alt": "Langlebige Qualität",
+      "neu": "Für viele Einsätze gebaut"
+    },
+    "nachhaltigkeit.systeme.desc3": {
+      "alt": "Hochwertige Materialien, die viele Messeeinsätze überstehen. Gebaut für viele Einsätze, nicht nur für eine Messe.",
+      "neu": "Systemteile, die für wiederholten Auf- und Abbau konstruiert sind. Gebaut für viele Einsätze, nicht nur für eine Messe."
+    },
+    "nachhaltigkeit.measures.m4": {
+      "alt": "Optimierte Transportplanung für weniger Fahrten",
+      "neu": "Transportplanung zentral ab NRW"
+    },
+    "nachhaltigkeit.measures.m5": {
+      "alt": "Professionelle Lagerung statt Entsorgung",
+      "neu": "Einlagerung der Systemteile bis zum nächsten Einsatz"
+    },
+    "nachhaltigkeit.measures.m6": {
+      "alt": "Reparatur vor Neukauf bei Beschädigungen",
+      "neu": "Beschädigte Teile reparieren wir, wenn es möglich ist"
+    },
+    "nachhaltigkeit.measures.m8": {
+      "alt": "Lokale Lieferanten bevorzugt",
+      "neu": "Fertigung mit Partnerbetrieben, Planung ab NRW"
+    }
+  },
+  "en": {
+    "leistungen.sustainability.co2.desc": {
+      "alt": "We bundle transports and plan them from NRW so that fewer trips are needed.",
+      "neu": "We plan transports centrally from NRW, together with set-up and storage."
+    },
+    "sustainability.logistics.desc": {
+      "alt": "We bundle transports and plan them from NRW so that fewer trips are needed.",
+      "neu": "We plan transports centrally from NRW, together with set-up and storage."
+    },
+    "sustainability.branchen.title": {
+      "alt": "Sustainable Exhibition Construction for Every Industry",
+      "neu": "Reusable Trade Show Stands for Every Industry"
+    },
+    "sustainability.branchen.logistics.desc": {
+      "alt": "Regional partners, bundled transports and planning from NRW.",
+      "neu": "Partners in NRW, transport and planning from a single source, from NRW."
+    },
+    "home.services.touren.b1": {
+      "alt": "Central logistics from NRW – short distances, quick response",
+      "neu": "Central logistics from NRW, one point of contact, quick response"
+    },
+    "leistungen.touren.b1": {
+      "alt": "Central logistics from NRW – short distances, fast response times",
+      "neu": "Central logistics from NRW, one point of contact, quick response"
+    },
+    "leistungen.ausstattung.flooring.subtitle": {
+      "alt": "From classic exhibition carpet to high-quality click-parquet systems – all systems are quick to install, durable and reusable.",
+      "neu": "From classic exhibition carpet to high-quality click-parquet systems: every floor is quick to install and built for trade show use. Vinyl, parquet and platform floors can be used again."
+    },
+    "about.werte.v2.desc": {
+      "alt": "Reusable systems, local partners, long-lasting quality.",
+      "neu": "Reusable systems, partners in NRW, built for many shows."
+    },
+    "about.compare.r6.aspect": {
+      "alt": "Sustainability",
+      "neu": "Reuse"
+    },
+    "about.compare.r6.ss": {
+      "alt": "Reusable systems, fixed dates",
+      "neu": "System stands that we store and use again"
+    },
+    "ablauf.faq.a10": {
+      "alt": "We rely on reusable systems, local partners, and durable materials. Details can be found on our sustainability page.",
+      "neu": "Our system stands are built for many shows: we store the parts and use them again. Consumables such as exhibition carpet are usually used only once. Details can be found on our sustainability page."
+    },
+    "nachhaltigkeit.hero.subtitle": {
+      "alt": "Exhibition construction doesn't have to be throwaway culture. With reusable systems, a local partner network and storage between trade shows, you save materials and costs.",
+      "neu": "Exhibition construction doesn't have to be throwaway culture. With reusable systems, partners in NRW and storage between trade shows, you save materials and costs."
+    },
+    "nachhaltigkeit.systeme.title2": {
+      "alt": "Local Partner Network",
+      "neu": "Partner Network in NRW and Across Germany"
+    },
+    "nachhaltigkeit.systeme.desc2": {
+      "alt": "Short transport routes through regional partners in NRW and nationwide. We bundle transports so that fewer trips are needed.",
+      "neu": "We plan from NRW and work with partner companies in NRW and across Germany. Transport, set-up and storage come from a single source."
+    },
+    "nachhaltigkeit.systeme.title3": {
+      "alt": "Long-Lasting Quality",
+      "neu": "Built for Many Shows"
+    },
+    "nachhaltigkeit.systeme.desc3": {
+      "alt": "High-quality materials that withstand many trade show deployments. Built for many shows, not just for one.",
+      "neu": "System components designed for repeated assembly and dismantling. Built for many shows, not just for one."
+    },
+    "nachhaltigkeit.measures.m4": {
+      "alt": "Optimized transport planning for fewer trips",
+      "neu": "Transport planning handled centrally from NRW"
+    },
+    "nachhaltigkeit.measures.m5": {
+      "alt": "Professional storage instead of disposal",
+      "neu": "Storage of system components until the next show"
+    },
+    "nachhaltigkeit.measures.m6": {
+      "alt": "Repair before replacement for damages",
+      "neu": "We repair damaged parts whenever possible"
+    },
+    "nachhaltigkeit.measures.m8": {
+      "alt": "Local suppliers preferred",
+      "neu": "Production with partner workshops, planning from NRW"
+    }
+  }
+}
