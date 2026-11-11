@@ -171,6 +171,13 @@ $z = instanz(['chef', 'zweiter']);
 [$code, $aus] = lauf($z, [['Benutzernamen? ', 'gibtesnicht'], [FRAGE1, NEU], [FRAGE2, NEU]]);
 $h = hashes($z);
 pruef('unbekannter Name: Ende 1 mit Meldung, nichts geändert', $code === 1 && str_contains($aus, 'gibt es nicht') && password_verify(ALT, $h['chef']) && password_verify(ALT, $h['zweiter']), "Code $code");
+// Gegenprobe der Messung „nicht auf dem Schirm“: Was bei eingeschalteter Anzeige getippt wird,
+// steht in der Ausgabe. Fände der Test das nicht, belegte auch das Fehlen des Passworts nichts.
+pruef('Gegenprobe: der getippte Name steht auf dem Schirm', str_contains($aus, 'gibtesnicht'));
+$z = instanz(['chef', 'zweiter name']);
+[$code] = lauf($z, [['Benutzernamen? ', 'zweiter name'], [FRAGE1, NEU], [FRAGE2, NEU]]);
+$h = hashes($z);
+pruef('Benutzername mit Leerzeichen: nur dieser geändert', $code === 0 && password_verify(NEU, $h['zweiter name']) && password_verify(ALT, $h['chef']), "Code $code");
 
 echo "Fall 5: kein Admin, keine Datenbank\n";
 $z = instanz([]);
@@ -187,8 +194,12 @@ exec('printf %s ' . escapeshellarg(NEU . "\n" . NEU . "\n") . ' | bash ' . escap
 pruef('Einstieg: Ende 1, Hash unverändert', $code === 1 && password_verify(ALT, hashes($z)['chef']), "Code $code");
 pruef('Meldung nennt das Terminal', str_contains(implode("\n", $ausgabe), 'Terminal'));
 $ausgabe = [];
-exec('printf %s ' . escapeshellarg(NEU . "\n" . NEU . "\n") . ' | php ' . escapeshellarg($z . '/admin-passwort-setzen.php') . ' setzen chef 2>&1 | cat', $ausgabe, $code);
+exec('printf %s ' . escapeshellarg("chef\n" . NEU . "\n" . NEU . "\n") . ' | php ' . escapeshellarg($z . '/admin-passwort-setzen.php') . ' setzen 2>&1 | cat', $ausgabe, $code);
 pruef('Werkzeug direkt, Ausgabe in ein Rohr: Hash unverändert', password_verify(ALT, hashes($z)['chef']) && str_contains(implode("\n", $ausgabe), 'Terminal'));
+// Von Hand am Terminal gestartet stünde das Passwort beim Tippen auf dem Schirm: Das Werkzeug
+// fragt dann gar nicht erst, sondern verweist auf den Einstieg.
+[$code, $aus] = terminal('php ' . escapeshellarg($z . '/admin-passwort-setzen.php') . ' setzen', []);
+pruef('Werkzeug direkt am Terminal: Ende 1, Verweis auf den Einstieg, Hash unverändert', $code === 1 && str_contains($aus, 'Einstieg') && password_verify(ALT, hashes($z)['chef']), "Code $code");
 $ausgabe = [];
 exec('php ' . escapeshellarg($z . '/admin-passwort-setzen.php') . ' 2>&1', $ausgabe, $code);
 pruef('Werkzeug ohne Befehl: Ende 1, Verweis auf den Einstieg', $code === 1 && str_contains(implode("\n", $ausgabe), 'Einstieg'), "Code $code");
@@ -259,6 +270,15 @@ $taub = ersatz('stty', 'for a in "$@"; do [ "$a" = "-echo" ] && exit 0; done; ex
 [$code, $aus] = lauf($z, [[FRAGE1, NEU], [FRAGE2, NEU]], $taub);
 pruef('Ende 1 mit Meldung, Passwort wird nicht abgefragt', $code === 1 && str_contains($aus, 'nicht verdecken') && !str_contains($aus, 'Neues Passwort'), "Code $code");
 pruef('Hash unverändert', password_verify(ALT, hashes($z)['chef']));
+
+echo "Fall 13: das Passwort kommt Zeichen für Zeichen an\n";
+$z = instanz(['chef']);
+// Leerzeichen am Rand, Rückstrich, Anführungszeichen, Dollar: nichts davon darf die Shell verändern.
+$pw = ' Rand\\mit"Zeichen$HOME\'x ';
+[$code] = lauf($z, [[FRAGE1, $pw], [FRAGE2, $pw]]);
+$h = hashes($z);
+pruef('genau das getippte Passwort gilt', $code === 0 && password_verify($pw, $h['chef']), "Code $code");
+pruef('eine gekürzte oder veränderte Fassung gilt nicht', !password_verify(trim($pw), $h['chef']) && !password_verify(str_replace('\\', '', $pw), $h['chef']));
 
 echo "\n" . ($faelle - $fehler) . ' von ' . $faelle . " Prüfungen bestanden\n";
 exit($fehler === 0 ? 0 : 1);

@@ -81,12 +81,13 @@ echo "\n== Fall S2: Passwort neu gesetzt mit admin-passwort-setzen.php ==\n";
 $u = starte($apiQuelle);
 $s = [sitzung($u), sitzung($u), sitzung($u), sitzung($u), sitzung($u)];
 $vorher = hashVon($u, 'chef');
-// Das Werkzeug verlangt ein Terminal an der Ausgabe; script stellt eines. Es liest Passwort und Wiederholung.
-$befehl = escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg($u['api'] . '/admin-passwort-setzen.php') . ' setzen chef';
+// Das Werkzeug verlangt ein Terminal an der Ausgabe (script stellt eines) und die Eingabe über ein Rohr,
+// wie sie der Einstieg admin-passwort-setzen.sh liefert: Benutzername, Passwort, Wiederholung.
+$befehl = 'printf %s ' . escapeshellarg("chef\n" . NEU . "\n" . NEU . "\n") . ' | '
+    . escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg($u['api'] . '/admin-passwort-setzen.php') . ' setzen';
 $rohre = [];
 $prozess = proc_open('script -qec ' . escapeshellarg($befehl) . ' /dev/null',
     [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $rohre);
-fwrite($rohre[0], NEU . "\n" . NEU . "\n");
 fclose($rohre[0]);
 $ausgabe = stream_get_contents($rohre[1]) . stream_get_contents($rohre[2]);
 $exit = proc_close($prozess);
