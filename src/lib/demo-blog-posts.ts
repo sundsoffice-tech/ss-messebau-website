@@ -2455,7 +2455,7 @@ Die Angaben stammen von den Seiten der bewilligenden Stellen, aus den Förderric
 
 ## Das Wichtigste in Kürze
 
-- **Bund, Messen in Deutschland:** Junge innovative Unternehmen können für einen Platz auf dem Gemeinschaftsstand des Bundes einen Zuschuss erhalten: 60 Prozent der Kosten für Standmiete und Standbau bei den ersten zwei Teilnahmen, danach 50 Prozent, höchstens 7.500 Euro pro Aussteller und Messe, gerechnet ohne Umsatzsteuer.
+- **Bund, Messen in Deutschland:** Junge innovative Unternehmen können für einen Platz auf dem Gemeinschaftsstand des Bundes einen Zuschuss erhalten: 60 Prozent der förderfähigen Ausgaben für Standmiete und Standbau bei den ersten zwei Teilnahmen am Programm, danach 50 Prozent, höchstens 7.500 Euro pro Aussteller und Messe, gerechnet ohne Umsatzsteuer.
 - **Bund, Auslandsmessen:** Hier gibt es keinen Zuschuss auf das Konto, sondern einen Platz auf einem deutschen Gemeinschaftsstand gegen einen Beteiligungspreis.
 - **Nordrhein-Westfalen:** Kleine und mittlere Unternehmen erhalten für Auslandsmessen bis zu 50 Prozent der förderfähigen Kosten, höchstens 7.500 Euro pro Unternehmen und Jahr. Messen in Deutschland fördert das Land nach der geltenden Richtlinie nicht mehr.
 - **Fristen:** Beim Bundesprogramm melden Sie sich spätestens acht Wochen vor Messebeginn beim Veranstalter an. In Nordrhein-Westfalen muss der Antrag spätestens zwei Monate vor Beginn des Vorhabens gestellt sein.
@@ -2464,11 +2464,11 @@ Die Angaben stammen von den Seiten der bewilligenden Stellen, aus den Förderric
 
 Das Programm heißt bei der Bewilligungsstelle, dem Bundesamt für Wirtschaft und Ausfuhrkontrolle (BAFA), „Young Innovators“. Gefördert wird die Teilnahme an einem Gemeinschaftsstand, den der Messeveranstalter auf einer internationalen Leitmesse in Deutschland organisiert.
 
-**Wer gefördert wird:** rechtlich selbstständige Unternehmen mit Sitz und Geschäftsbetrieb in Deutschland, die weniger als 50 Mitarbeiter haben, deren Jahresbilanzsumme oder Jahresumsatz höchstens zehn Millionen Euro beträgt und die jünger als zehn Jahre sind. Sie müssen Produkte, Verfahren oder Dienstleistungen neu entwickelt oder wesentlich verbessert haben. Ausgenommen sind nach der Förderrichtlinie unter anderem Consulting-Unternehmen, Marketing-Unternehmen und Research-Anbieter.
+**Wer gefördert wird:** rechtlich selbstständige Unternehmen mit Sitz und Geschäftsbetrieb in Deutschland, die weniger als 50 Mitarbeiter haben, deren Jahresbilanzsumme oder Jahresumsatz höchstens zehn Millionen Euro beträgt und die bei Antragstellung jünger als zehn Jahre sind. Sie müssen Produkte, Verfahren oder Dienstleistungen neu entwickelt oder wesentlich verbessert haben. Ausgenommen sind nach der Förderrichtlinie unter anderem Consulting-Unternehmen, Marketing-Unternehmen und Research-Anbieter.
 
 **Was gefördert wird:** die vom Messeveranstalter in Rechnung gestellten Kosten für Standmiete und Standbau auf dem Gemeinschaftsstand. Weitere Leistungen, die Sie beim Veranstalter zusätzlich bestellen, sind nicht förderfähig. Wer außerhalb des Gemeinschaftsstands ausstellt, wird nicht gefördert.
 
-**Wie viel:** 60 Prozent der förderfähigen Ausgaben bei den ersten zwei Teilnahmen und 50 Prozent ab der dritten, bis zu 7.500 Euro pro Aussteller und Messe. Förderfähig sind höchstens drei Teilnahmen an derselben Messe. Ergibt die Berechnung weniger als 500 Euro, gibt es keine Förderung.
+**Wie viel:** 60 Prozent der förderfähigen Ausgaben bei den ersten zwei Teilnahmen am Programm und 50 Prozent ab der dritten, bis zu 7.500 Euro pro Aussteller und Messe. Förderfähig sind höchstens drei Teilnahmen an derselben Messe. Ergibt die Berechnung weniger als 500 Euro, gibt es keine Förderung.
 
 **Der Ablauf laut BAFA:**
 
@@ -2572,5 +2572,145 @@ Alle Dokumente abgerufen am 10. November 2026.
     category: 'Förderung',
     imageUrl: '',
     publishedAt: new Date('2026-11-10').getTime()
+  },
+  {
+    id: '9',
+    title: 'Messebudget 2027: Was die Zahlen der Branche sagen',
+    slug: 'messebudget-messezahlen',
+    excerpt: 'Schlussrechnung 2025, Prognose fürs erste Quartal 2026, Pläne der Aussteller, Kostenanteile: was die Zahlen für Ihr Messebudget 2027 hergeben.',
+    content: `Im vierten Quartal legen viele Unternehmen fest, auf welchen Messen sie im kommenden Jahr ausstellen und wie viel Geld dafür bereitsteht. Die Zahlen, die dabei helfen, sind 2026 uneinheitlich: Das Messejahr 2025 schloss mit einem leichten Plus, für das erste Quartal 2026 erwartete der Verband der deutschen Messewirtschaft AUMA in einer Prognose dagegen weniger Aussteller und weniger vermietete Fläche, bei leicht steigenden Besucherzahlen.
+
+Dieser Beitrag trägt zusammen, was Verbände, Studien und Messegesellschaften bis November 2026 veröffentlicht haben: wie das Messejahr 2025 ausging, was 2026 bisher zeigt, was Aussteller planen, wohin das Geld einer Messebeteiligung fließt und was Besucher erwarten.
+
+Jede Zahl steht mit Jahr und Herkunft im Text, die Quellen stehen am Ende. Abgerufen haben wir sie am 10. November 2026, die Mitteilung der Koelnmesse zur Finanzpressekonferenz am 11. November 2026. Prognosen und vorläufige Zahlen können sich ändern; spätere Veröffentlichungen ersetzen die hier genannten. Die Internetseite des AUMA konnten wir am 10. November 2026 nicht abrufen; die Angaben des Verbands stammen deshalb aus seinen Pressemitteilungen, gelesen über das Presseportal von news aktuell. Zwei Angaben geben wir nach einer Zusammenfassung des Zentralverbands des Deutschen Handwerks wieder; das steht an der jeweiligen Stelle.
+
+## Das Wichtigste in Kürze
+
+- 2025 zählte der AUMA auf 304 Messen in Deutschland rund 192.000 ausstellende Unternehmen und mehr als 12,7 Millionen Besucherinnen und Besucher. Aussteller, Standfläche und Besucher lagen über den Vorveranstaltungen (plus 0,7, 0,4 und 1,9 Prozent).
+- Für das erste Quartal 2026 nannte der Verband in einer Prognose minus 2,3 Prozent bei den Ausstellern und minus 4,6 Prozent bei der vermieteten Standfläche, bei plus 0,9 Prozent Besuchern.
+- In einer Befragung vom November 2025 planten Aussteller für 2026/2027 im Durchschnitt 5,1 Messebeteiligungen nach 5,4 in den Jahren 2024/2025. Steigende Kosten nannten 64,1 Prozent als Herausforderung.
+- Laut einer Prognos-Studie im Auftrag des AUMA gibt ein Aussteller auf einer internationalen oder nationalen Messe in Deutschland im Durchschnitt rund 64.000 Euro aus. Davon entfallen 35 % auf Standmiete und Betrieb und 29 % auf den Standbau; eigene Personalkosten weist die Studie nicht aus.
+- Fast 40 Prozent der befragten Besucher entscheiden sich ein bis vier Wochen vor der Messe für den Besuch.
+
+## Messejahr 2025: leichtes Plus in der Schlussrechnung
+
+Für 2025 gibt es zwei Stände. Wer mit den Zahlen vom Januar arbeitet, hat den älteren. Im Januar 2026 veröffentlichte der AUMA eine erste Hochrechnung, im Juni 2026 die Schlussrechnung:
+
+| Kennzahl 2025 | Hochrechnung Januar 2026 | Schlussrechnung Juni 2026 |
+|---|---|---|
+| Messen | 304 | 304 |
+| Aussteller | 190.490, plus 0,7 Prozent | rund 192.000, plus 0,7 Prozent |
+| Standfläche | mehr als 6,9 Millionen Quadratmeter, plus 0,7 Prozent | über 6,9 Millionen Quadratmeter, plus 0,4 Prozent |
+| Besucher | mehr als 12,8 Millionen, plus drei Prozent | mehr als 12,7 Millionen, plus 1,9 Prozent |
+
+Die Veränderungen beziehen sich jeweils auf die Vorveranstaltungen der Messen, nicht auf das Kalenderjahr davor. Maßgeblich ist die Schlussrechnung: Bei Fläche und Besuchern fällt das Plus kleiner aus als in der Hochrechnung, die Zahl der Aussteller liegt etwas höher.
+
+Messen in Deutschland sind international. Nach der Schlussrechnung kamen 2025 mehr als 99.000 Aussteller und fast 2,8 Millionen Besucher aus dem Ausland. Die Schlussrechnung schreibt, 66 Prozent aller Aussteller seien aus dem Ausland gekommen; aus ihren eigenen Zahlen (mehr als 99.000 von rund 192.000) ergeben sich knapp 52 Prozent. In anderen Mitteilungen nennt der Verband 65 und 66 Prozent als Durchschnitt der Leitmessen. Die Messeveranstalter erzielten 2025 laut einer Zusammenfassung des Zentralverbands des Deutschen Handwerks, der sich auf den AUMA beruft, einen Umsatz von 4,4 Milliarden Euro, mehr als die 4,1 Milliarden Euro der Jahre 2018/2019; eine Preisbereinigung nennt die Quelle nicht.
+
+## Erstes Quartal 2026: Prognose sieht Aussteller und Fläche im Minus
+
+Im Juni 2026 überschrieb der AUMA seine Meldung mit dem Satz, die Wirtschaftsflaute schlage nun auch auf Messen durch. Die Prognose für das erste Quartal 2026, veröffentlicht im Juni 2026, jeweils verglichen mit den Vorveranstaltungen:
+
+- Aussteller: minus 2,3 Prozent
+- vermietete Standfläche: minus 4,6 Prozent
+- Besucher: plus 0,9 Prozent
+
+Das Besucherplus ist klein. Zum Vergleich: Für 2025 nannte die Hochrechnung des Verbands bei den Besuchern ein Plus von drei Prozent, die spätere Schlussrechnung 1,9 Prozent.
+
+Für das Gesamtjahr 2026 nannte der Verband im Juni 319 Messen, im Januar waren 320 geplant. Zahlen für das ganze Jahr haben wir in den abgerufenen Quellen nicht gefunden. Der Zentralverband des Deutschen Handwerks gibt eine Prognose des AUMA vom September 2026 so wieder: leicht rückläufige Zahlen bei Ausstellern und vermieteter Standfläche, weiter steigende Besucherzahlen.
+
+Einzelne Meldungen der Veranstalter:
+
+- Die Messe Frankfurt hat im Oktober 2025 entschieden, die Prolight + Sound im März 2026 nicht als eigenständige Messe auszurichten. Sie begründete das mit zu geringer Resonanz der Aussteller nach dem Ende der Frühbucherphase und kündigte einen Themenbereich auf der Light + Building an.
+- Die Eurobike startet laut Messe Frankfurt „mit einem kompakteren, fokussierteren und wirtschaftlicheren Format“.
+- Die HANNOVER MESSE 2026 zählte 110.000 Besucher nach 123.000 im Jahr 2025; die Deutsche Messe verweist dabei auf Streiks im Luftverkehr und im öffentlichen Verkehr. Ab 2027 läuft die Messe von Montag bis Donnerstag; die Deutsche Messe begründet das mit der Konzentration auf die besucherstärksten Tage.
+- Die Koelnmesse stellt sich für 2026 turnusbedingt auf ein herausforderndes Jahr ein und schreibt, der Mittelstand stehe unter erheblichem Druck.
+
+Für 2025 meldeten die großen Messegesellschaften diese Umsätze, in denen auch das Auslandsgeschäft steckt. Die Messe Frankfurt nannte rund 766 Millionen Euro (2024: 775 Millionen Euro); im Inland ging ihr Umsatz von rund 432 auf rund 398 Millionen Euro zurück, im Ausland stieg er von rund 343 auf rund 368 Millionen Euro. Die Koelnmesse nannte 455,5 Millionen Euro (2024: 365,8 Millionen Euro), die Messe Düsseldorf 374,4 Millionen Euro und die NürnbergMesse 345,5 Millionen Euro.
+
+## Was Aussteller planen
+
+Der AUMA befragt jedes Jahr 400 ausstellende Unternehmen aus Deutschland, zuletzt im November 2025. Die Ergebnisse, veröffentlicht im März 2026:
+
+- Rund 59 Prozent wollen ihre Messebeteiligungen konstant halten.
+- Im Durchschnitt sinkt die Zahl von 5,4 Messebeteiligungen in den Jahren 2024/2025 auf prognostizierte 5,1 für 2026/2027.
+- 97,5 Prozent sehen Messen weiterhin als unverzichtbare Plattform für Austausch, Innovation und Geschäftsanbahnung.
+- Steigende Kosten nennen 64,1 Prozent als Herausforderung, häufiger als jede andere.
+- 54,5 Prozent sehen sich durch die wirtschaftliche Lage unter erhöhtem Budgetdruck.
+
+Bei 400 Befragten sind solche Werte auf einige Prozentpunkte genau, nicht auf die Nachkommastelle. Befragt wurden Unternehmen, die ausstellen; wer Messen aufgegeben hat, kommt nicht vor.
+
+Der Verband liest daraus, dass sich Aussteller auf etwas weniger, dafür strategisch wichtigere Beteiligungen konzentrieren und viele stärker in die Qualität ihrer Auftritte investieren. Wie sich die Budgets im Einzelnen entwickeln, steht in der Pressemitteilung nicht; die Studie selbst konnten wir am Recherchetag nicht abrufen.
+
+## Wohin das Geld einer Messebeteiligung fließt
+
+Die jüngste Studie dazu hat Prognos im Auftrag des AUMA erstellt, mit Stand Februar 2026. Erhoben wurde zwischen September 2024 und Oktober 2025 bei 30 Messeveranstaltungen an zehn deutschen Messeplätzen. Danach gibt ein Aussteller einer internationalen oder nationalen Messe in Deutschland im Durchschnitt rund 64.000 Euro aus; ob mit oder ohne Umsatzsteuer, sagt die Tabelle der Studie nicht. Bei regionalen Messen sind es rund 17.700 Euro, bei lokalen Veranstaltungen rund 12.700 Euro.
+
+Die Anteile der Ausgaben auf internationalen und nationalen Messen laut Studie:
+
+| Ausgabenbereich | Anteil |
+|---|---|
+| Standmiete und Betrieb | 35 % |
+| Standbau | 29 % |
+| Übernachtung, Verpflegung | 13 % |
+| Mobilität | 13 % |
+| Sonstiges | 4 % |
+| Einkäufe, Kulturveranstaltungen | 4 % |
+| Externes Personal | 2 % |
+
+Standmiete mit Betrieb und Standbau machen zusammen 64 Prozent der erfassten Ausgaben aus. Eigene Personalkosten führt die Tabelle nicht auf; die Anteile beziehen sich also nicht auf das ganze Messebudget. Die Zahlen sind Durchschnitte über sehr verschiedene Messen und Standgrößen. Sie zeigen die Verteilung, nicht den Preis eines bestimmten Standes. Einen belegten Durchschnittspreis je Quadratmeter Standbau haben wir in den abgerufenen Quellen nicht gefunden, ebenso wenig eine nachprüfbare Zahl dazu, wie stark sich Standmiete und Standbau zuletzt verteuert haben.
+
+Den Umsatz, den Aussteller in einem durchschnittlichen Messejahr im Inland auslösen, beziffert die Studie auf 11,8 Milliarden Euro ohne Umsatzsteuer. Mit den Durchschnittswerten je Aussteller lässt sich diese Summe nicht verrechnen. Die Studie bezieht auch regionale und lokale Veranstaltungen ein; mit der Jahresbilanz des Verbands lassen sich ihre Zahlen ebenfalls nicht verrechnen.
+
+## Was Besucher erwarten
+
+Am 2. November 2026 hat der AUMA eine Befragung von 1.855 Messebesuchern veröffentlicht, nach eigener Angabe die erste dieser Art. Befragt wurden deutschsprachige Besucher zwischen 18 und 64 Jahren, die zwischen April 2025 und April 2026 mindestens eine Messe in Deutschland besucht haben. Die wichtigsten Ergebnisse:
+
+- Fast 82 Prozent stimmen zu, dass sie auf Messen Dinge erleben, die digital nicht in gleicher Weise möglich sind.
+- Für mehr als 71 Prozent sind Messen eine verlässliche Informationsquelle.
+- Fast 40 Prozent entscheiden sich ein bis vier Wochen vor Veranstaltungsbeginn für den Besuch, knapp 23 Prozent noch später.
+- Beim Fachpublikum nennen rund 60 Prozent die Relevanz der Aussteller als wichtigstes Kriterium. Privatbesucher achten nach der Mitteilung zuerst auf Eintrittspreise und Reiseaufwand.
+
+Wie befragt wurde, sagt die Mitteilung nicht, und die Angaben zum Zeitpunkt der Entscheidung trennt sie nicht nach Fach- und Privatbesuchern. Der Verband merkt an, dass das Gewinnen von Besuchern am Messestand in seinen Befragungen von Ausstellern und Veranstaltern zunehmend als Herausforderung genannt wird.
+
+## Der Blick von außen
+
+Der Weltverband UFI befragt zweimal im Jahr Unternehmen der Messewirtschaft, also Veranstalter, Geländebetreiber und Dienstleister, nicht Aussteller. Für Deutschland lagen im Barometer vom Juli 2026 nur 20 Antworten vor; eine Quote für die Branche lässt sich daraus nicht lesen. Für Europa nennt die Mitteilung des Verbands geopolitische Herausforderungen mit 22% der Nennungen als das auf kurze Sicht am häufigsten genannte Problem. In allen übrigen Regionen außer dem Nahen Osten und Afrika steht auf kurze Sicht die Lage der Wirtschaft im Heimatmarkt an erster Stelle.
+
+## Was daraus für die Planung 2027 folgt
+
+Die folgenden Punkte sind unsere Einordnung der Zahlen.
+
+1. Was eine Messe dem einzelnen Aussteller bringt, misst keine dieser Quellen. Die befragten Aussteller planen im Schnitt etwas weniger Beteiligungen; aus der Schlussrechnung errechnet kamen 2025 je Aussteller rund 1 Prozent mehr Besucher als bei den Vorveranstaltungen, Fach- und Privatbesucher zusammen. Für die einzelne Messe folgt aus solchen Gesamtzahlen nichts. Prüfen Sie deshalb jede eigene Messe einzeln, statt pauschal zu kürzen oder pauschal fortzuschreiben.
+2. Standmiete mit Betrieb und Standbau sind die großen Blöcke der erfassten Ausgaben. Wer das Budget prüft, fängt dort an: bei der Standgröße, bei der Bauweise und bei der Frage, ob ein Stand für mehrere Messen geplant werden kann.
+3. Viele der befragten Besucher entscheiden spät. Einladungen und Terminvereinbarungen in den letzten vier Wochen vor der Messe erreichen sie in der Phase, in der sie ihren Besuch planen.
+4. Für das Fachpublikum zählt zuerst, welche Aussteller da sind. Über das Verhältnis von Exponaten und Standgestaltung sagt die Mitteilung zur Befragung nichts.
+5. Fragen Sie den Veranstalter, ob sich bei Flächen und Platzierung etwas geändert hat. Aus den Gesamtzahlen eines Quartals lässt sich für die einzelne Messe nichts ablesen.
+
+Sie planen Ihre Messen für 2027 und möchten wissen, was der Standbau in Ihrer Größe kostet? [Schreiben Sie uns](/kontakt), wir rechnen ihn für Ihre Messe und Ihre Fläche unverbindlich durch.
+
+## Quellen
+
+Alle Dokumente abgerufen am 10. November 2026, die Mitteilung der Koelnmesse zur Finanzpressekonferenz am 11. November 2026.
+
+- [AUMA: Hochrechnung zum Messejahr 2025, Pressemitteilung vom 06.01.2026](https://www.presseportal.de/pm/166321/6190942)
+- [AUMA: Schlussrechnung 2025 und erstes Quartal 2026, Pressemitteilung vom 04.06.2026](https://www.presseportal.de/pm/166321/6288126)
+- [AUMA: Befragung ausstellender Unternehmen, Pressemitteilung vom 31.03.2026](https://www.presseportal.de/pm/166321/6247127)
+- [AUMA: Wirtschaftliche Bedeutung der Messewirtschaft, Pressemitteilung vom 03.03.2026](https://www.presseportal.de/pm/166321/6227812)
+- [AUMA: Studie zu Bedürfnissen von Messebesuchern, Pressemitteilung vom 02.11.2026](https://www.presseportal.de/pm/166321/6382367)
+- [Prognos im Auftrag des AUMA: Der Messe-Effekt, Studie, Februar 2026](https://www.prognos.com/sites/default/files/2026-03/auma-studie-wirtschaftliche-bedeutung-messewirtschaft-deutschland.pdf)
+- [Zentralverband des Deutschen Handwerks: Messe-Ausblick, 09.10.2026](https://www.zdh.de/themen-und-positionen/handwerk-international/aussenwirtschaft/newsletter-export-info-service/veranstaltungen-und-messen/messe-ausblick-deutschland-bleibt-globaler-hotspot/)
+- [UFI: Global Exhibition Barometer, Juli 2026 (englisch)](https://www.ufi.org/app/uploads/2026/07/UFI-Barometer-37th-Edition.pdf)
+- [UFI: Mitteilung zum Barometer, 08.07.2026 (englisch)](https://www.ufi.org/media-releases/ufi-global-exhibition-barometer-shows-limited-impact-of-the-current-situation-in-the-middle-east/)
+- [Messe Frankfurt: Pressemitteilung zur Unternehmenspressekonferenz, 24.06.2026](https://www.messefrankfurt.com/content/dam/messefrankfurt-redaktion/corporate/press/2026-06-pk/20260624-messe-frankfurt-behauptet-sich-in-herausfordernden-zeiten.pdf)
+- [Messe Frankfurt: Prolight + Sound 2026, Pressemitteilung vom 27.10.2025 (englisch)](https://pls.messefrankfurt.com/frankfurt/en/press/press-releases/prolight-sound/new-focus-as-themed-area-light-building.html)
+- [Koelnmesse: Mitteilung zur Finanzpressekonferenz, 01.07.2026 (über das Presseportal)](https://www.presseportal.de/pm/8249/6305951)
+- [Koelnmesse: Pressemitteilung zu den vorläufigen Zahlen 2025](https://www.koelnmesse.com/press-office/for-media-representatives/press-releases/?datei=pm_9000_2026_1_DE.xml&title=Koelnmesse+achieves+strong+results+and+further+expands+its+international+market+position+in+2025)
+- [Messe Düsseldorf: Mitteilung zum Geschäftsjahr 2025, 29.05.2026 (englisch)](https://www.messe-duesseldorf.com/en/News_Stories/Newsroom/Successful_Despite_Challenging_Times_Messe_D%C3%BCsseldorf_Strengthens_Economic_Foundations_for_Growth)
+- [NürnbergMesse: Presseinformation vom 08.07.2026](https://edge.sitecorecloud.io/nurnbergmes0e18-nmmultisite6e34-prod50da-6065/media/Project/NuernbergMesse/NuernbergMesse/PressReleases/2026/BPK/NrnbergMesse-bleibt-in-der-Gewinnzone-und-wchst-weltweit-Presseinformation-DEUTSCH.pdf)
+- [Deutsche Messe: Abschlussmeldung zur HANNOVER MESSE 2026 (englisch)](https://www.messe.de/en/newsroom/press-releases/deutsche-messe-ag/press-release_10304)`,
+    category: 'Markt',
+    imageUrl: '',
+    publishedAt: new Date('2026-11-11').getTime()
   }
 ]

@@ -127,11 +127,12 @@ function datenIm(text: string): [number, number, number][] {
  * dort grün. Hier muss das ganze Datum an einer Stelle stehen, in deutscher, numerischer oder englischer Schreibweise.
  */
 function datenOhneBeleg(beitrag: string, protokoll: string): string[] {
+  // Die Auszüge bleiben durch ein Zeichen getrennt, damit kein Datum aus dem Ende des einen und dem Anfang des nächsten entsteht
   const belegtext = (
     quellenDesProtokolls(protokoll)
       .flatMap((q) => q.auszuege)
-      .join('\n') +
-    '\n' +
+      .join(' ¶ ') +
+    ' ¶ ' +
     abschnitt(protokoll, 'Annahmen und eigene Rechnungen')
   ).replace(/\s+/g, ' ')
   const aussagen = beitrag.split(/^## Quellen\s*$/m)[0].replace(/\]\([^)]*\)/g, ']')
@@ -153,10 +154,47 @@ function datenOhneBeleg(beitrag: string, protokoll: string): string[] {
   return [...new Set(ohne)]
 }
 
-/** Wendungen einer nicht abgeschlossenen Gegenprüfung („Runde 2: steht noch aus“, „Runde 2: offen“, „wird nachgereicht“). */
-const GEGENPRUEFUNG_OFFEN = /steht (noch )?aus|ausstehend|läuft noch|nachgereicht|: (noch )?offen(?![a-zäöü])|: folgt(?![a-zäöü])/i
-/** Die Formel, mit der der Abschnitt die Zahl der geprüften Aussagen nennt; null zählt nicht. */
-const GEGENPRUEFUNG_ZAHL = /(?<!\d)[1-9]\d* (Aussagen|Stellen) geprüft/
+/**
+ * Was nach „## Quellen“ stehen darf: Verweiszeilen und der Satz zum Abruftag. Wurde eine Quelle an einem zweiten Tag
+ * nachgeholt, nennt der Satz sie: „Alle Dokumente abgerufen am 10. November 2026, die Mitteilung der X am 11. November 2026.“
+ */
+const NACH_QUELLEN_ERLAUBT =
+  /^(- \[[^\]]+\]\(https:\/\/[^)\s]+\)|Alle (Seiten und )?Dokumente abgerufen am \d{1,2}\. [A-Za-zä]+ \d{4}(, [^.]{3,90} am \d{1,2}\. [A-Za-zä]+ \d{4})?\.)$/
+
+/** Kopf jeder Zeile der Gegenprüfung: Datum, Art des Eintrags (Runde n, Vorprüfung …, Nachtrag …), dann der Text. */
+const GEGENPRUEFUNG_KOPF = /^- \d{2}\.\d{2}\.\d{4}, (Runde [1-9]|Vorprüfung[^:]{0,60}|Nachtrag[^:]{0,80}): (.+)$/
+/** Die Formel, mit der eine Runde die Zahl der geprüften Aussagen nennt; null und „0 von 80“ zählen nicht. */
+const GEGENPRUEFUNG_ZAHL = /(?<!\d)(?<!von )[1-9]\d* (Aussagen|Stellen) geprüft/
+/** Ein Eintrag, dessen Text mit einem Wort für „noch nicht fertig“ beginnt („Runde 2: offen“, „Nachtrag: folgt“). */
+const EINTRAG_OFFEN = /^(noch )?(offen|in Arbeit|geplant|folgt|begonnen|ausstehend)(?![a-zäöü])|^(steht|läuft|kommt|fehlt) noch|^wird (noch )?(geprüft|nachgereicht)/i
+/** Wendungen mitten im Text („Ergebnis steht noch aus.“); „besteht aus“, „steht aus Sicht“, „steht ausdrücklich“ treffen nicht. */
+const GEGENPRUEFUNG_OFFEN = /(?<![a-zäöüß])steht (noch )?aus(?=\s*([.;,:)]|$))|ausstehend|läuft noch/im
+
+/**
+ * Formprüfung des Abschnitts „Gegenprüfung“ als Positivliste: Jede Zeile beginnt mit Datum und Art des Eintrags
+ * („- 10.11.2026, Runde 1: …“, „Vorprüfung …“, „Nachtrag …“). Es gibt eine Runde 1, jede Runde nennt die Zahl der
+ * geprüften Aussagen oder Stellen, und kein Eintrag ist als offen geführt. Ob die Prüfung stattfand und was sie
+ * fand, prüft kein Test.
+ */
+function gegenpruefungFehler(text: string): string[] {
+  const zeilen = text
+    .split('\n')
+    .map((z) => z.trim())
+    .filter(Boolean)
+  const fehler: string[] = []
+  if (!zeilen.some((z) => /^- \d{2}\.\d{2}\.\d{4}, Runde 1: /.test(z))) fehler.push('keine Zeile „- TT.MM.JJJJ, Runde 1: …“')
+  for (const z of zeilen) {
+    const kurz = z.slice(0, 50)
+    const kopf = z.match(GEGENPRUEFUNG_KOPF)
+    if (!kopf) {
+      fehler.push(`Form: ${kurz}`)
+      continue
+    }
+    if (kopf[1].startsWith('Runde') && !GEGENPRUEFUNG_ZAHL.test(z)) fehler.push(`Runde ohne Zahl: ${kurz}`)
+    if (EINTRAG_OFFEN.test(kopf[2]) || GEGENPRUEFUNG_OFFEN.test(z)) fehler.push(`offen: ${kurz}`)
+  }
+  return fehler
+}
 
 const mitProtokoll = DEMO_BLOG_POSTS.filter((p) => !OHNE_PROTOKOLL.includes(p.slug))
 const meta = seitenMeta as Record<string, { title: string; description: string; ogType?: string }>
@@ -166,6 +204,8 @@ describe('Blog: Quellenprotokoll je Beitrag', () => {
   it('die Liste der Beiträge ohne Protokoll nennt nur vorhandene Beiträge', () => {
     const slugs = DEMO_BLOG_POSTS.map((p) => p.slug)
     expect(OHNE_PROTOKOLL.filter((s) => !slugs.includes(s))).toEqual([])
+    // Die Liste der Altbeiträge wird nur kürzer; ein neuer Beitrag ohne Protokoll kommt nicht hinein
+    expect(OHNE_PROTOKOLL.length).toBeLessThanOrEqual(6)
     expect(new Set(slugs).size).toBe(slugs.length)
   })
 
@@ -201,10 +241,7 @@ describe('Blog: Quellenprotokoll je Beitrag', () => {
     // Jedes volle Datum steht als Ganzes in einem Auszug oder unter den Annahmen
     expect(datenOhneBeleg([post.title, post.excerpt, post.content].join('\n'), protokoll), 'Datum ohne ganzen Beleg').toEqual([])
     // Die Gegenprüfung ist abgeschlossen und nennt ihr Ergebnis; ein Protokoll mit offener Prüfung geht nicht hinaus
-    const gegen = abschnitt(protokoll, 'Gegenprüfung')
-    expect(gegen, 'Gegenprüfung nicht abgeschlossen').not.toMatch(GEGENPRUEFUNG_OFFEN)
-    expect(gegen).toMatch(/\d{2}\.\d{2}\.\d{4}/)
-    expect(gegen, 'Zahl der geprüften Aussagen').toMatch(GEGENPRUEFUNG_ZAHL)
+    expect(gegenpruefungFehler(abschnitt(protokoll, 'Gegenprüfung')), 'Gegenprüfung').toEqual([])
     // Nach der ersten Überschrift „## Quellen“ stehen nur der Satz zum Abruftag und Verweise, auch nach einer zweiten
     const nachQuellen = post.content
       .split(/^## Quellen\s*$/m)
@@ -212,8 +249,7 @@ describe('Blog: Quellenprotokoll je Beitrag', () => {
       .join('\n## Quellen\n')
       .split('\n')
       .filter((z) => z.trim())
-    const erlaubt = /^(- \[[^\]]+\]\(https:\/\/[^)\s]+\)|Alle (Seiten und )?Dokumente abgerufen am \d{1,2}\. [A-Za-zä]+ \d{4}\.)$/
-    expect(nachQuellen.filter((z) => !erlaubt.test(z))).toEqual([])
+    expect(nachQuellen.filter((z) => !NACH_QUELLEN_ERLAUBT.test(z))).toEqual([])
     // Kein fremdes Bild ohne belegte Lizenz
     expect(post.imageUrl).toBe('')
   })
@@ -283,19 +319,67 @@ describe('Blog: Quellenprotokoll je Beitrag', () => {
     expect(datenOhneBeleg(vertauscht, protokoll)).toEqual(['14. Januar 2027', '27. März 2027'])
     // „7. Januar 2027“ ist nicht durch „27. Januar 2027“ belegt, der erste Tag eines Zeitraums nicht durch den letzten
     expect(datenOhneBeleg('Frist 7. Januar 2027, Abbau ab 18. Juni 2027.', protokoll)).toEqual(['7. Januar 2027', '18. Juni 2027'])
+    // Ein Datum, das sich erst aus dem Ende eines Auszugs und dem Anfang des nächsten ergibt, ist nicht belegt
+    const geteilt = protokoll.replace('bis spätestens 27. Januar 2027 einzureichen', 'bis spätestens 27.“\n- Auszug: „Januar 2027 einzureichen')
+    expect(datenOhneBeleg('Pläne bis 27. Januar 2027.', geteilt)).toEqual(['27. Januar 2027'])
+    // Ein numerisches Datum im Beitrag wird wie eines mit Monatsnamen gelesen
+    expect(datenOhneBeleg('Aufbau ab 28.03.2027.', protokoll)).toEqual(['28. März 2027'])
     // Ein Datum ohne Jahr und ein Datum in der Quellenliste werden hier nicht geprüft
     expect(datenOhneBeleg('Am 9. März war Schluss.\n\n## Quellen\n\n- [Stand 9. März 2031](https://example.org/a)', protokoll)).toEqual([])
   })
 
-  it('die Formprüfung der Gegenprüfung erkennt offene Runden und eine fehlende Zahl', () => {
-    for (const offen of ['Runde 2: steht aus.', 'Runde 2 steht noch aus.', 'Runde 2: ausstehend', 'Runde 2: offen', 'Runde 2: folgt', 'Ergebnis wird nachgereicht.', 'Runde 2 läuft noch.']) {
-      expect(offen, offen).toMatch(GEGENPRUEFUNG_OFFEN)
+  it('die Formprüfung der Gegenprüfung ist eine Positivliste: Kopf je Zeile, Zahl je Runde, kein offener Eintrag', () => {
+    const gut = [
+      '- 10.11.2026, Vorprüfung der Methode: Eine zweite Instanz hat Statistik und Folgerungen gelesen.',
+      '- 10.11.2026, Runde 1: Jede Aussage gegen den Rohtext gehalten. 128 Aussagen geprüft, 111 trugen.',
+      '- 10.11.2026, Runde 2: Die geänderten Stellen wurden erneut gelesen. 34 Stellen geprüft, 9 trugen nicht. Eine dritte Lesung gab es nicht.',
+      '- 11.11.2026, Nachtrag nach der Prüfung der Rechnungen: 62 Zahlen im Auszug gelesen, ohne Abweichung.',
+    ].join('\n')
+    expect(gegenpruefungFehler(gut)).toEqual([])
+    // Ehrliche Sätze im Text eines Eintrags bleiben grün
+    for (const ehrlich of [
+      'Alle 17 Funde sind berichtigt, kein Punkt ist noch offen.',
+      'Die Prüfung besteht aus zwei Runden.',
+      'Im Auszug steht ausdrücklich der Betrag.',
+      'Das Ergebnis steht aus Sicht der zweiten Instanz fest.',
+      'Zwei Auszüge wurden nachgereicht und gelesen.',
+      'Auf Runde 2 folgt keine dritte Lesung.',
+      'In Runde 2 offen geblieben ist nichts.',
+      'Runde 1 geplant und am 10.11.2026 durchgeführt.',
+    ]) {
+      expect(gegenpruefungFehler(`${gut} ${ehrlich}`), ehrlich).toEqual([])
     }
-    expect('Alle 17 Funde sind berichtigt, kein Punkt ist noch offen.').not.toMatch(GEGENPRUEFUNG_OFFEN)
-    expect('128 Aussagen geprüft, 111 trugen.').toMatch(GEGENPRUEFUNG_ZAHL)
-    expect('30 Stellen geprüft').toMatch(GEGENPRUEFUNG_ZAHL)
-    expect('0 Aussagen geprüft').not.toMatch(GEGENPRUEFUNG_ZAHL)
-    expect('Alle Aussagen geprüft').not.toMatch(GEGENPRUEFUNG_ZAHL)
+    // Jede dieser Zeilen macht den Abschnitt rot: offene Runde in vielen Worten, Runde ohne Zahl, Zeile ohne Kopf
+    for (const zeile of [
+      '- 11.11.2026, Runde 3: steht aus.',
+      '- 11.11.2026, Runde 3: 12 Stellen geprüft, das Ergebnis steht noch aus.',
+      '- 11.11.2026, Runde 3: offen',
+      '- 11.11.2026, Runde 3: in Arbeit',
+      '- 11.11.2026, Runde 3: wird noch geprüft',
+      '- 11.11.2026, Runde 3: begonnen',
+      '- 11.11.2026, Runde 3: Die geänderten Stellen wurden gelesen.',
+      '- 11.11.2026, Runde 3: 0 Aussagen geprüft',
+      '- 11.11.2026, Runde 3: 0 von 80 Aussagen geprüft',
+      '- 11.11.2026, Runde 3: Alle Aussagen geprüft',
+      '- 11.11.2026, Nachtrag: offen',
+      '- 11.11.2026, Nachtrag zur Rechtsprüfung: folgt',
+      '- 11.11.2026, Gegenprüfung: offen',
+      '- 11.11.2026, Zweite Runde: 12 Stellen geprüft',
+      '- Runde 3: 12 Stellen geprüft',
+      'Runde 3 läuft noch.',
+      'Ergebnis: noch offen',
+    ]) {
+      expect(gegenpruefungFehler(`${gut}\n${zeile}`).length, zeile).toBeGreaterThan(0)
+    }
+    // Der Satz zum Abruftag darf eine nachgeholte Quelle mit ihrem Tag nennen, sonst nichts
+    expect('Alle Dokumente abgerufen am 10. November 2026.').toMatch(NACH_QUELLEN_ERLAUBT)
+    expect('Alle Dokumente abgerufen am 10. November 2026, die Mitteilung der Koelnmesse zur Finanzpressekonferenz am 11. November 2026.').toMatch(NACH_QUELLEN_ERLAUBT)
+    expect('Alle Dokumente abgerufen am 10. November 2026. Die Abnahme kostet 9.999 Euro.').not.toMatch(NACH_QUELLEN_ERLAUBT)
+    expect('Alle Dokumente abgerufen am 10. November 2026, die Abnahme kostet 9.999 Euro.').not.toMatch(NACH_QUELLEN_ERLAUBT)
+    // Ohne Runde 1 und ohne Inhalt ist der Abschnitt nicht abgeschlossen
+    expect(gegenpruefungFehler('- 10.11.2026, Runde 2: 30 Stellen geprüft.').length).toBe(1)
+    expect(gegenpruefungFehler('').length).toBe(1)
+    expect(gegenpruefungFehler('- Steht aus.').length).toBe(2)
   })
 })
 

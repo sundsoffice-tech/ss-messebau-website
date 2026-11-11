@@ -169,7 +169,7 @@ Recherche am 10.11.2026. Der Beitrag stellt drei Förderwege für Messeauftritte
 | B1 | Ministerium hat Liste der Messen für junge innovative Unternehmen veröffentlicht, Stand 04.11.2026 | Q2 |
 | B2 | NRW fördert Auslandsmessen nach Richtlinie, die bis Ende 2027 gilt; außer Kraft am 31. Dezember 2027 | Q5 |
 | B4 | Über Förderfähigkeit entscheidet die Bewilligungsstelle | Q9, Q5 |
-| B5 | Bundesprogramm 60 Prozent bei den ersten zwei Teilnahmen, danach 50 Prozent, höchstens 7.500 Euro pro Aussteller und Messe | Q1, Q9 |
+| B5 | Bundesprogramm 60 Prozent bei den ersten zwei Teilnahmen am Programm, danach 50 Prozent, höchstens 7.500 Euro pro Aussteller und Messe | Q1, Q9 |
 | B6 | NRW bis zu 50 Prozent der förderfähigen Kosten, höchstens 7.500 Euro pro Unternehmen und Jahr | Q5, Q3 |
 | B7 | Messen in Deutschland fördert NRW nach der geltenden Richtlinie nicht mehr | Q5, Q7 |
 | B8 | Bundesprogramm: Anmeldung spätestens acht Wochen vor Messebeginn beim Veranstalter | Q1, Q9 |
@@ -275,4 +275,5 @@ Recherche am 10.11.2026. Der Beitrag stellt drei Förderwege für Messeauftritte
 ## Gegenprüfung
 
 - 10.11.2026, Runde 1: Eine zweite Instanz hat jede Tatsachenaussage des Beitrags gegen den Rohtext der Quellen gehalten. 88 Aussagen geprüft, 75 trugen, 13 trugen nicht oder nur teilweise (1 schwer: Geltung der hessischen Richtlinie für 2027 nicht belegt). Alle 13 sind berichtigt, der Absatz zu Hessen ist gestrichen; zwölf weggelassene Einschränkungen der Quellen wurden geprüft und fünf davon ergänzt.
-- 10.11.2026, Runde 2: Die geänderten Stellen des Beitrags und alle 76 Zeilen dieser Tabelle wurden erneut gegen den Rohtext gehalten. 30 Stellen geprüft, 27 trugen, 3 trugen nicht oder nur teilweise (keine schwer; eine mittel: das Unabhängigkeitskriterium in Nordrhein-Westfalen gilt für alle Messen, nicht nur für die in Europa); bei 7 Zeilen der Tabelle gab es Einwände gegen Wortlaut oder Auszug. Alles ist nach den Vorschlägen der Prüfung berichtigt. Eine dritte Lesung dieser letzten Berichtigungen gab es nicht.
+- 10.11.2026, Runde 2: Die geänderten Stellen des Beitrags und alle 76 Zeilen dieser Tabelle wurden erneut gegen den Rohtext gehalten. 30 Stellen geprüft, 27 trugen, 3 trugen nicht oder nur teilweise (keine schwer; eine mittel: das Unabhängigkeitskriterium in Nordrhein-Westfalen gilt für alle Messen, nicht nur für die in Europa); bei 7 Zeilen der Tabelle gab es Einwände gegen Wortlaut oder Auszug. Alles ist nach den Vorschlägen der Prüfung berichtigt. Eine dritte Lesung dieser letzten Berichtigungen gab es nicht. Danach kamen vier Zeilen dieser Tabelle hinzu (B84 bis B87).
+- 11.11.2026, Nachtrag nach der Prüfung der Rechnungen und Bezugsgrößen: 62 Zahlen und Tagesangaben des Beitrags wurden im Auszug beim richtigen Gegenstand gelesen, ohne Abweichung; drei Bezugsgrößen sind danach genauer gefasst (Teilnahmen am Programm, förderfähige Ausgaben, Alter bei Antragstellung).
