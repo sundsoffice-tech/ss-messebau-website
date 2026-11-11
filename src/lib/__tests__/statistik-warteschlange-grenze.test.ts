@@ -34,6 +34,17 @@ async function besucher() {
   return tracker
 }
 
+/** Der Tab wird verborgen und wieder gezeigt: Der Tracker sendet, was wartet. */
+async function tabVerbergen() {
+  Object.defineProperty(document, 'hidden', { configurable: true, get: () => true })
+  Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' })
+  // Im Browser steigt das Ereignis vom Dokument zum Fenster auf; dort hängt der Lauscher.
+  window.dispatchEvent(new Event('visibilitychange'))
+  await vi.advanceTimersByTimeAsync(100)
+  Object.defineProperty(document, 'hidden', { configurable: true, get: () => false })
+  Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' })
+}
+
 beforeEach(() => {
   localStorage.clear()
   sessionStorage.clear()
@@ -135,17 +146,76 @@ describe('Obergrenzen der Statistik-Warteschlange', () => {
     await import('@/lib/analytics-tracker')
 
     // Der Tab wird verborgen: Der Tracker sendet, ohne dass vorher etwas neu gespeichert wurde.
-    Object.defineProperty(document, 'hidden', { configurable: true, get: () => true })
-    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' })
-    // Im Browser steigt das Ereignis vom Dokument zum Fenster auf; dort hängt der Lauscher.
-    window.dispatchEvent(new Event('visibilitychange'))
-    await vi.advanceTimersByTimeAsync(100)
-    Object.defineProperty(document, 'hidden', { configurable: true, get: () => false })
-    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' })
+    await tabVerbergen()
 
     expect(fetchMock).toHaveBeenCalledTimes(1)
     const gesendet = JSON.parse((fetchMock.mock.calls[0][1] as { body: string }).body).events as Array<{ session_id: string }>
     expect(gesendet.map((e) => e.session_id)).toEqual(['frisch'])
     expect(warteschlange()).toEqual([])
+  })
+
+  it('ist alles Wartende zu alt, geht nichts hinaus und der Speicher wird geräumt', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200 })
+    vi.stubGlobal('fetch', fetchMock)
+    const alt = { event: 'cta_click', ts: '2026-11-09T09:00:00.000Z', session_id: 'alt', visitor_id: 'v', url: 'https://sunds-messebau.de/' }
+    localStorage.setItem(QUEUE_KEY, JSON.stringify([alt, { ...alt, ts: '2026-11-08T12:00:00.000Z' }]))
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    vi.resetModules()
+    await import('@/lib/analytics-tracker')
+
+    await tabVerbergen()
+
+    expect(fetchMock).not.toHaveBeenCalled()
+    expect(localStorage.getItem(QUEUE_KEY)).toBe('[]')
+  })
+
+  it('beschädigte Einträge im Speicher halten das Senden nicht auf', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200 })
+    vi.stubGlobal('fetch', fetchMock)
+    const heil = { event: 'cta_click', ts: '2026-11-10T09:30:00.000Z', session_id: 'heil', visitor_id: 'v', url: 'https://sunds-messebau.de/' }
+    // Ein leerer Eintrag, eine Zahl, ein Text und ein Objekt ohne Ereignisnamen neben einem heilen Ereignis
+    localStorage.setItem(QUEUE_KEY, JSON.stringify([null, 42, 'kaputt', { ts: heil.ts }, heil]))
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    vi.resetModules()
+    const tracker = await import('@/lib/analytics-tracker')
+
+    await tabVerbergen()
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    const gesendet = JSON.parse((fetchMock.mock.calls[0][1] as { body: string }).body).events as Array<{ session_id: string }>
+    expect(gesendet.map((e) => e.session_id)).toEqual(['heil'])
+    expect(warteschlange()).toEqual([])
+
+    // Auch das Einreihen danach arbeitet weiter
+    tracker.trackPhoneClick('footer')
+    expect(zahl('phone_click')).toBe(1)
+  })
+
+  it('ein Speicherinhalt, der keine Liste ist, gilt als leer und wird geräumt', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200 })
+    vi.stubGlobal('fetch', fetchMock)
+    localStorage.setItem(QUEUE_KEY, JSON.stringify({ event: 'cta_click' }))
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    vi.resetModules()
+    await import('@/lib/analytics-tracker')
+
+    await tabVerbergen()
+
+    expect(fetchMock).not.toHaveBeenCalled()
+    expect(localStorage.getItem(QUEUE_KEY)).toBe('[]')
+  })
+
+  it('lag nichts im Speicher, schreibt das Senden auch nichts hinein', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200 })
+    vi.stubGlobal('fetch', fetchMock)
+    localStorage.setItem(CONSENT_KEY, 'granted')
+    vi.resetModules()
+    await import('@/lib/analytics-tracker')
+    expect(localStorage.getItem(QUEUE_KEY)).toBeNull()
+
+    await tabVerbergen()
+
+    expect(fetchMock).not.toHaveBeenCalled()
+    expect(localStorage.getItem(QUEUE_KEY)).toBeNull()
   })
 })
