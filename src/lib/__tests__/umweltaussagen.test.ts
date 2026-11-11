@@ -306,7 +306,8 @@ describe('Umwelt- und Zahlenaussagen ohne Beleg (A12 bis A16)', () => {
  * „lokal“, „regional“ und „kurze Transportwege“ ohne Ort bei bundesweiter Arbeit, „statt Entsorgung“
  * als absolute Aussage, „langlebig“ für alle Materialien und „wiederverwendbar“ für alle Böden.
  * Die Sätze sind durch Texte ersetzt, die nur das Angebot beschreiben. Geprüft werden die beiden
- * Sprachdateien, die vorab gebauten Texte (ganz, auch der Blog) und index.html.
+ * Sprachdateien, die vorab gebauten Texte (ganz, auch der Blog), index.html, die Seitentitel und
+ * Beschreibungen (de/en) und der Blogbeitrag „Nachhaltiger Messebau“.
  * Wer eine der Wendungen wieder einführt, braucht zuerst den Beleg des Hauses (Partnerliste mit
  * Ort, Tourenplan, Angabe des Systemherstellers) und nimmt sie dann hier aus der Liste.
  */
@@ -333,8 +334,10 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
     ],
     [
       'alle Systeme wiederverwendbar',
-      // Jede absolute Fassung („alle Systeme/Böden … wiederverwendbar“), nicht nur der alte Satz.
-      /alle\s+(Systeme|Böden|Bodenbeläge)\b[^.]*wiederverwendbar|all\s+(systems|floors|floorings?)\b[^.]*reusable/i,
+      // Jede absolute Fassung („alle (unsere) Systeme/Böden … wiederverwendbar“), nicht nur der alte Satz;
+      // höchstens bis zum Satz- oder Zeilenende, damit zwei verschiedene Texte nicht zusammen anschlagen.
+      // Abkürzungen (z. B., bzw., e.g., i.e.) beenden den Satz nicht.
+      /\balle\s+(unsere\s+)?(Systeme|Böden|Bodenbeläge)\b(?:z\.\s?B\.|bzw\.|[^.\n])*wiederverwendbar|\ball\s+(of\s+)?(our\s+)?(systems|floors|floorings?)\b(?:e\.g\.|i\.e\.|[^.\n])*reusable/i,
       'Von klassischem Messebau-Teppich bis zu hochwertigen Klick-Parkett-Systemen – alle Systeme sind schnell verlegbar, strapazierfähig und wiederverwendbar.',
       'From classic exhibition carpet to high-quality click-parquet systems – all systems are quick to install, durable and reusable.',
     ],
@@ -372,6 +375,10 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
     ['src/locales/en.json', Object.values(englisch).join('\n')],
     ['scripts/seiten-inhalt.json', JSON.stringify(inhalt, null, 1)],
     ['index.html', startseite],
+    // Seit der Folge vom 11.11.2026 auch Seitentitel, Beschreibungen und der Blogbeitrag zum Thema.
+    ['src/lib/seiten-meta.json', JSON.stringify(seitenMeta, null, 1)],
+    ['src/lib/seiten-meta-en.json', JSON.stringify(seitenMetaEn, null, 1)],
+    [BLOG, beitragText],
   ]
 
   const funde = (quellenListe: Array<[string, string]>) =>
@@ -382,7 +389,7 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
       })
     )
 
-  it('keine der ersetzten Wendungen steht in den Sprachdateien, den vorab gebauten Texten oder index.html', () => {
+  it('keine der ersetzten Wendungen steht in Sprachdateien, Vorabtext, index.html, Seitentiteln oder im Blogbeitrag', () => {
     for (const [datei, text] of vier) expect(text.length, datei).toBeGreaterThan(1000)
     expect(funde(vier)).toEqual([])
   })
@@ -392,20 +399,46 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
       expect(muster.test(alt), `${name}: deutscher Satz`).toBe(true)
       expect(muster.test(old), `${name}: englischer Satz`).toBe(true)
     }
-    // Musterprobe (eine Simulation, nicht der Stand von main; der echte Lauf gegen main ist die Rotprobe
-    // außerhalb der Suite): Mit den alten Sätzen neben dem heutigen Text meldet dieselbe Suche jede Wendung.
-    const alteDe = wendungen.map(([, , alt]) => alt).join('\n')
-    const alteEn = wendungen.map(([, , , old]) => old).join('\n')
-    const stand = funde([
-      ['src/locales/de.json', vier[0][1] + '\n' + alteDe],
-      ['src/locales/en.json', vier[1][1] + '\n' + alteEn],
-      ['scripts/seiten-inhalt.json', vier[2][1] + '\n' + wendungen[0][2]],
+    // Musterprobe je Quelle (eine Simulation, nicht der Stand von main; der echte Lauf gegen main ist die
+    // Rotprobe außerhalb der Suite): Mit den alten Sätzen neben dem heutigen Text meldet dieselbe Suche jede
+    // Wendung in jeder der sieben Quellen. Fehlt eine Quelle in der Liste, fehlt sie hier auch nicht still.
+    const alte = wendungen.map(([, , alt, old]) => `${alt}\n${old}`).join('\n')
+    const stand = funde(vier.map(([datei, text]): [string, string] => [datei, `${text}\n${alte}`]))
+    expect(vier.map(([datei]) => datei)).toEqual([
+      'src/locales/de.json',
+      'src/locales/en.json',
+      'scripts/seiten-inhalt.json',
+      'index.html',
+      'src/lib/seiten-meta.json',
+      'src/lib/seiten-meta-en.json',
+      BLOG,
     ])
-    for (const [name] of wendungen) {
-      expect(stand.some((f) => f.startsWith(`src/locales/de.json: ${name}:`)), `de: ${name}`).toBe(true)
-      expect(stand.some((f) => f.startsWith(`src/locales/en.json: ${name}:`)), `en: ${name}`).toBe(true)
+    for (const [datei] of vier) {
+      for (const [name] of wendungen) {
+        expect(stand.some((f) => f.startsWith(`${datei}: ${name}:`)), `${datei}: ${name}`).toBe(true)
+      }
     }
-    expect(stand.some((f) => f.startsWith('scripts/seiten-inhalt.json: kurze Transportwege:'))).toBe(true)
+  })
+
+  it('Gegenprobe: das Muster „alle Systeme … wiederverwendbar“ erkennt Umstellungen und bleibt im Satz', () => {
+    const muster = wendungen.find(([name]) => name === 'alle Systeme wiederverwendbar')![1]
+    for (const satz of [
+      'Alle unsere Systeme sind wiederverwendbar.',
+      'Alle Böden sind mehrfach wiederverwendbar.',
+      'All of our systems are reusable.',
+      'all floors can be reusable',
+      'Alle Systeme (z. B. Wände und Böden) sind wiederverwendbar.',
+      'Alle Böden bzw. Beläge sind wiederverwendbar.',
+      'All systems, e.g. walls and floors, are reusable.',
+    ]) {
+      expect(muster.test(satz), satz).toBe(true)
+    }
+    // „all“ und „alle“ nur als eigenes Wort, nicht in „install“ oder „Halle“.
+    expect(muster.test('We install systems that are reusable.')).toBe(false)
+    expect(muster.test('In der Halle Böden verlegen, die wiederverwendbar sind.')).toBe(false)
+    // Zwei Texte, je für sich harmlos, ergeben über Satz- oder Zeilengrenze keinen Treffer.
+    expect(muster.test('Alle Systeme sind schnell verlegbar\nVinyl ist wiederverwendbar')).toBe(false)
+    expect(muster.test('Alle Systeme sind schnell verlegbar. Vinyl ist wiederverwendbar.')).toBe(false)
   })
 
   it('die neuen Sätze beschreiben das Angebot und nennen die Grenze beim Messeteppich', () => {
@@ -436,16 +469,19 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
   // [Name, Muster, alter deutscher Satz, alter englischer Satz]
   const wendungen: Array<[string, RegExp, string, string]> = [
     [
-      'gebündelte Transporte',
-      /Transporte bündeln|bündeln Transporte|gebündelten? Transporte|bundle transports|bundled transports/i,
-      'Transporte bündeln wir und planen sie ab NRW, damit weniger Fahrten anfallen.',
-      'We bundle transports and plan them from NRW so that fewer trips are needed.',
-    ],
-    [
       'lokale Partner',
-      /lokalen? Partnern?\b|local partners?\b/i,
+      // auch gebeugt und zusammengesetzt, wie im Block davor: „lokaler Partner“, „lokalen Partnerbetrieben“
+      /lokal\w*\s+Partner|local\s+partner/i,
       'Wiederverwendbare Systeme, lokale Partner, effiziente Logistik: So geht moderner, nachhaltiger Messebau.',
       'Reusable systems, local partners, efficient logistics.',
+    ],
+    [
+      'Nachhaltigkeit im Transport',
+      // Etikett „Nachhaltigkeit“ an den eigenen Ablaufangaben (Blog bis 11.11.2026, Rechtsrolle zu bbd0ea49);
+      // eine englische Fassung gab es nicht, der zweite Satz prüft nur das Muster.
+      /Nachhaltigkeit\s+im\s+Transport|sustainab\w*\s+(in\s+)?transport/i,
+      '**Nachhaltigkeit im Transport reduziert oft auch die Kosten** – durch bessere Planung und Effizienz.',
+      'Sustainability in transport often reduces costs too.',
     ],
   ]
 
@@ -469,6 +505,89 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
   it('keine der Wendungen steht in Sprachdateien, Vorabtext, index.html, Seitentiteln oder im Blogbeitrag', () => {
     for (const [datei, text] of quellen) expect(text.length, datei).toBeGreaterThan(1000)
     expect(funde(quellen)).toEqual([])
+  })
+
+  it('Gegenprobe: gebeugte und umgestellte Fassungen schlagen an', () => {
+    const muster = Object.fromEntries(wendungen.map(([name, m]) => [name, m]))
+    const faelle: Array<[string, string]> = [
+      ['lokale Partner', 'mit lokalen Partnerbetrieben'],
+      ['lokale Partner', 'ein lokaler Partner'],
+      ['lokale Partner', 'local partnerships'],
+      ['Nachhaltigkeit im Transport', 'sustainable transport'],
+    ]
+    for (const [name, satz] of faelle) expect(muster[name].test(satz), `${name}: ${satz}`).toBe(true)
+  })
+
+  // Fahrten und gebündelte Transporte: Listen geprüfter Stellen statt Listen verbotener Sätze. Ein Muster für
+  // „weniger Fahrten“ erkannte von 26 Umformulierungen derselben Wirkung keine (Wissenschaftler 11.11.2026).
+  // Jede Zeile, die das Wort trägt, muss in der Liste stehen; eine neue Stelle wird rot, bis jemand sie geprüft
+  // und mit Begründung eingetragen hat. Eine Wirkung („weniger Fahrten“, „Transporte bündeln“, „Leerfahrten
+  // vermeiden“) braucht vorher Tourenplan oder Frachtbrief; eine harmlose Stelle („Zufahrten“, „Leistungen
+  // bündeln“) wird eingetragen. Der Vergleich gilt der ganzen Zeile: Wer eine eingetragene Zeile ändert,
+  // prüft sie neu.
+  const STELLEN_WOERTER: Array<[string, RegExp]> = [
+    // „fahrt“ ohne Wortgrenze, damit Leerfahrt, Rückfahrt, Rundfahrt und Fahrtwege anschlagen (Wissenschaftler
+    // 11.11.2026: mit Wortgrenze rutschten gerade diese Wirkungswörter durch, 6 statt 10 von 34 Umformulierungen,
+    // bei derselben einen Zeile im Bestand). Eine harmlose Zufahrt oder Anfahrt wird eingetragen.
+    // „trip“ nur als Wort, damit LED-Strips und „striped“ nicht anschlagen.
+    ['Fahrten', /fahrt|\btrips?\b/i],
+    // Wortstamm: „gebündelt“, „Bündelung“, „bundle“, „bundled“
+    ['gebündelt', /bündel|bundl/i],
+  ]
+  const STELLEN_GEPRUEFT: Array<[string, string, string]> = [
+    // [Wort, Datei, Zeile] – Begründung im Kommentar darüber
+    // beschreibt das Problem, keine eigene Wirkung
+    ['Fahrten', BLOG, '- Ineffiziente Logistik (falsche Fristen, Leerfahrten) bringt zusätzliche Fahrten'],
+  ]
+  const HINWEIS =
+    'Neue Stelle mit „Fahrten“ oder „gebündelt“: prüfen. Eine Wirkung auf Fahrten oder Transporte braucht einen ' +
+    'Tourenplan oder Frachtbrief als Beleg; eine harmlose Stelle mit Begründung in STELLEN_GEPRUEFT ' +
+    '(src/lib/__tests__/umweltaussagen.test.ts) eintragen.'
+  const stellen = (liste: Array<[string, string]>): string[] =>
+    liste
+      .flatMap(([datei, text]) =>
+        STELLEN_WOERTER.flatMap(([wort, muster]) =>
+          text
+            .split('\n')
+            .filter((zeile) => muster.test(zeile))
+            .map((zeile) => `${wort} | ${datei} | ${zeile.trim()}`)
+        )
+      )
+      .sort()
+  const geprueft = STELLEN_GEPRUEFT.map(([wort, datei, zeile]) => `${wort} | ${datei} | ${zeile}`).sort()
+
+  it('jede Stelle mit „Fahrten“ oder „gebündelt“ in den Quellen ist geprüft', () => {
+    expect(stellen(quellen), HINWEIS).toEqual(geprueft)
+  })
+
+  // Die Proben tragen das Wort; eine Umformulierung ohne „fahrt“, „trip“ oder „bündel“ („weniger Touren“) sieht
+  // diese Prüfung nicht.
+  it('Gegenprobe: die gewählten Umformulierungen werden je eine neue Stelle, „trip“ nur als Wort', () => {
+    for (const satz of [
+      'Wir planen Auf- und Abbauten zeitnah hintereinander, um Hin- und Rückfahrten zu minimieren',
+      'damit weniger Leerfahrten anfallen',
+      'Wir senken die Anzahl der Fahrten.',
+      'Leerfahrten werden vermieden.',
+      'eine Fahrt statt zwei',
+      'keine Leerfahrt',
+      'nur eine Rückfahrt',
+      'eine Rundfahrt für drei Stände',
+      'Fahrtwege verkürzen',
+      'We reduce the number of trips.',
+      'fewer trips',
+      'Transporte bündeln wir ab NRW.',
+      'ein gebündelter Transport',
+      'Bündelung der Wege',
+      'We bundle all transports.',
+    ]) {
+      for (const [datei, text] of quellen) {
+        const vorher = stellen([[datei, text]]).length
+        expect(stellen([[datei, `${text}\n${satz}`]]).length, `${datei}: ${satz}`).toBe(vorher + 1)
+      }
+    }
+    for (const harmlos of ['LED-Strips', 'striped carpet']) {
+      expect(stellen([[BLOG, harmlos]]), harmlos).toEqual([])
+    }
   })
 
   it('Gegenprobe: der alte Wortlaut schlägt in jeder Quelle an', () => {
@@ -498,6 +617,9 @@ describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)
     expect(startseite).toContain(`<strong>Transporte ab NRW</strong> – ${neu}`)
     expect(beitrag?.excerpt).toBe('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik: So geht moderner, nachhaltiger Messebau.')
     expect(JSON.stringify(seitenMeta)).toContain('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik')
+    expect(beitrag?.content).toContain('- Wir stimmen Auf- und Abbautermine mit der Transportplanung ab\n')
+    expect(beitrag?.content).toContain('- Wir planen Verpackung und Beladung je Stand (jeder cm zählt)\n')
+    expect(beitrag?.content).toContain('**Effizienter Transport senkt oft auch die Kosten** – weniger Volumen, abgestimmte Termine.')
   })
 
   // Rückfallschutz für jeden der 20 geänderten Texte je Sprache, nicht nur für die mit Muster:
