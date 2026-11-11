@@ -421,3 +421,78 @@ describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () =
     expect(vorab['/branchen'].abschnitte).toContain(deutsch['sustainability.branchen.title'])
   })
 })
+
+/**
+ * Folge zur Prüfung vom 11.11.2026 (Rechtsrolle und Spieltheoretiker zu abb14a5e): „lokale Partner“
+ * stand noch im Anreißer und in der Beschreibung des Blogbeitrags (Google-Ausschnitt), „Transporte
+ * bündeln … weniger Fahrten“ noch auf der Startseite, in zwei Sprachschlüsseln und im Blogtext.
+ * Gebündelte Transporte darf die Seite erst mit Tourenplan oder Frachtbrief wieder nennen.
+ */
+describe('Folge: Blog-Anreißer und gebündelte Transporte (Prüfung 11.11.2026)', () => {
+  // [Name, Muster, alter deutscher Satz, alter englischer Satz]
+  const wendungen: Array<[string, RegExp, string, string]> = [
+    [
+      'gebündelte Transporte',
+      /Transporte bündeln|bündeln Transporte|gebündelten? Transporte|bundle transports|bundled transports/i,
+      'Transporte bündeln wir und planen sie ab NRW, damit weniger Fahrten anfallen.',
+      'We bundle transports and plan them from NRW so that fewer trips are needed.',
+    ],
+    [
+      'lokale Partner',
+      /lokalen? Partnern?\b|local partners?\b/i,
+      'Wiederverwendbare Systeme, lokale Partner, effiziente Logistik: So geht moderner, nachhaltiger Messebau.',
+      'Reusable systems, local partners, efficient logistics.',
+    ],
+  ]
+
+  const quellen: Array<[string, string]> = [
+    ['src/locales/de.json', Object.values(deutsch).join('\n')],
+    ['src/locales/en.json', Object.values(englisch).join('\n')],
+    ['scripts/seiten-inhalt.json', JSON.stringify(seitenInhalt, null, 1)],
+    ['index.html', startseite],
+    ['src/lib/seiten-meta.json', JSON.stringify(seitenMeta, null, 1)],
+    ['src/lib/seiten-meta-en.json', JSON.stringify(seitenMetaEn, null, 1)],
+    [BLOG, beitragText],
+  ]
+
+  const funde = (liste: Array<[string, string]>) =>
+    liste.flatMap(([datei, text]) =>
+      wendungen.flatMap(([name, muster]) =>
+        (text.match(new RegExp(muster.source, 'gi')) || []).map((t) => `${datei}: ${name}: „${t}“`)
+      )
+    )
+
+  it('keine der Wendungen steht in Sprachdateien, Vorabtext, index.html, Seitentiteln oder im Blogbeitrag', () => {
+    for (const [datei, text] of quellen) expect(text.length, datei).toBeGreaterThan(1000)
+    expect(funde(quellen)).toEqual([])
+  })
+
+  it('Gegenprobe: der alte Wortlaut schlägt in jeder Quelle an', () => {
+    for (const [name, muster, alt, old] of wendungen) {
+      expect(muster.test(alt), `${name}: deutscher Satz`).toBe(true)
+      expect(muster.test(old), `${name}: englischer Satz`).toBe(true)
+    }
+    // Musterprobe je Quelle (eine Simulation, kein Lauf gegen den alten Stand; der liegt als Rotprobe
+    // außerhalb): Mit dem alten deutschen und englischen Satz daneben nennt die Suche beide Wendungen dort.
+    const mitAlt = quellen.map(([datei, text]): [string, string] => [
+      datei,
+      [text, ...wendungen.map(([, , alt, old]) => `${alt}\n${old}`)].join('\n'),
+    ])
+    const stand = funde(mitAlt)
+    for (const [datei] of quellen) {
+      for (const [name] of wendungen) {
+        expect(stand.some((f) => f.startsWith(`${datei}: ${name}:`)), `${datei}: ${name}`).toBe(true)
+      }
+    }
+  })
+
+  it('die neuen Sätze stehen an ihrem Platz', () => {
+    const neu = 'Transporte planen wir zentral ab NRW, zusammen mit Aufbau und Einlagerung.'
+    expect(deutsch['leistungen.sustainability.co2.desc']).toBe(neu)
+    expect(deutsch['sustainability.logistics.desc']).toBe(neu)
+    expect(englisch['sustainability.logistics.desc']).toBe('We plan transports centrally from NRW, together with set-up and storage.')
+    expect(startseite).toContain(`<strong>Transporte ab NRW</strong> – ${neu}`)
+    expect(beitrag?.excerpt).toBe('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik: So geht moderner, nachhaltiger Messebau.')
+    expect(JSON.stringify(seitenMeta)).toContain('Wiederverwendbare Systeme, Partner in NRW, effiziente Logistik')
+  })
+})
