@@ -37,7 +37,7 @@ return [
         'fünf Stempel von vor zehn Minuten: 429 mit "5 Minuten"'],
     ['Sperre nur geteilt (LOCK_SH)',
         [['auth.php', 'if (!flock($fp, LOCK_EX)) {', 'if (!flock($fp, LOCK_SH)) {']],
-        '20 gleichzeitige Fehlversuche einer Adresse: genau fünf 401, der Rest 429'],
+        'Zähldatei von außen geteilt gesperrt: die Anmeldung wartet (keine Antwort in 2 s), weil der Server exklusiv sperrt'],
     ['Sperre wird vor dem Schreiben des Stempels freigegeben',
         [['auth.php', "        // Erst zählen, dann prüfen.\n        \$vorher = bremseStempeln(",
             "        // Erst zählen, dann prüfen.\n        flock(\$fp, LOCK_UN);\n        usleep(200000);\n        \$vorher = bremseStempeln("]],
