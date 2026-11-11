@@ -97,6 +97,21 @@ usleep(300000);
 pruefe('nach der Freigabe der geteilten Sperre steht genau ein Stempel des wartenden Versuchs',
     stempelZahl(bremsdatei($u, '127.0.9.14')) === 1 && groesse(bremsdatei($u, '127.0.9.14')) === 11,
     stempelZahl(bremsdatei($u, '127.0.9.14')) . ' / ' . groesse(bremsdatei($u, '127.0.9.14')));
+// Die Probe oben zeigt, dass der Server wartet, nicht, dass er erst nach dem Warten liest. Ein Umbau
+// „geteilt lesen, dann exklusiv schreiben“ besteht sie und fiel bisher nur in B3 auf, also mit Zufall
+// (Spieltheoretiker 11.11.2026). Deshalb füllt der Test die Datei, während der Server wartet: Liest
+// der Server erst unter der exklusiven Sperre, sieht er fünf Stempel, antwortet 429 und schreibt
+// nichts dazu; hat er vorher gelesen, stempelt er über den Inhalt des Tests hinweg.
+$z = bremsdatei($u, '127.0.9.15');
+$fp = fopen($z, 'c+');
+flock($fp, LOCK_SH);
+$a = anmelden($u, 'chef', 'falsch-falsch', '127.0.9.15', 2);
+file_put_contents($z, str_repeat(time() . "\n", 5));
+flock($fp, LOCK_UN);
+fclose($fp);
+usleep(1500000);
+pruefe('während des Wartens füllt der Test die Zähldatei auf fünf Stempel: der Server liest erst unter der exklusiven Sperre, die Datei bleibt bei 5 Stempeln und 55 Byte',
+    $a['status'] === 0 && stempelZahl($z) === 5 && groesse($z) === 55, kurz($a) . ' / ' . stempelZahl($z) . ' / ' . groesse($z));
 
 // ─── Fall B4: Zähler lässt sich nicht führen ─────────────────────────────────
 echo "\n== Fall B4: Zähler nicht zu schreiben ==\n";
