@@ -15,8 +15,9 @@
  * Benutzer an, löscht nichts und schreibt das Passwort in keine Datei und kein
  * Protokoll.
  *
- * Bestehende Anmeldungen im Admin-Bereich bleiben gültig, solange sie benutzt
- * werden; das Werkzeug beendet sie nicht.
+ * Mit dem neuen Hash enden alle bestehenden Anmeldungen im Admin-Bereich: Jede
+ * Sitzung trägt eine Marke zum Passwort-Stand ihrer Anmeldung (auth.php), und
+ * die passt nach dem Tausch nicht mehr.
  *
  * Aufrufe (nur vom Einstieg):
  *   php admin-passwort-setzen.php liste     eine Zeile je Benutzername
