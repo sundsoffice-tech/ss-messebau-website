@@ -132,7 +132,6 @@ pruefe('gleichzeitiger Passworttausch: der neue Hash bleibt stehen, das alte Pas
     $gespeichert === $hashNeu && password_verify(NEU, $gespeichert) && !password_verify(ALT, $gespeichert), kurz($a));
 pruefe('gleichzeitiger Passworttausch: die Sitzung der Anmeldung mit dem alten Passwort gilt nicht',
     $a['status'] === 200 && $sitzungGilt($w, $a) === false, kurz($a));
-stoppe($w);
 
 echo "\n== Fall P5: scheitert das Schreiben der Neuberechnung, gilt die Anmeldung trotzdem ==\n";
 $ankerSchreiben = 'UPDATE admin_users SET password_hash = :hash';
@@ -145,4 +144,3 @@ db($f)->prepare('UPDATE admin_users SET password_hash = ? WHERE username = ?')->
 $a = anmelden($f, 'chef', ALT);
 pruefe('Schreibfehler bei der Neuberechnung: Anmeldung 200, Hash unverändert, Sitzung gilt',
     $a['status'] === 200 && hashVon($f, 'chef') === $hashAlt && $sitzungGilt($f, $a) === true, kurz($a));
-stoppe($f);
