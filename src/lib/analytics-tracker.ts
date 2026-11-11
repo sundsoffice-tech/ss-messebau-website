@@ -229,12 +229,32 @@ function clearStatisticsStorage(): void {
   } catch { /* ignore */ }
 }
 
+/**
+ * Liest die Warteschlange. Beschädigte Einträge (kein Objekt, kein Ereignisname) fallen
+ * beim Lesen weg: Ein einzelner solcher Eintrag ließ sonst das Kürzen scheitern, und der
+ * Tracker dieses Browsers sendete nie wieder etwas.
+ */
 function getQueue(): TrackingEvent[] {
   try {
     const raw = localStorage.getItem(QUEUE_KEY)
-    return raw ? JSON.parse(raw) : []
+    if (!raw) return []
+    const liste: unknown = JSON.parse(raw)
+    if (!Array.isArray(liste)) return []
+    return liste.filter(
+      (e): e is TrackingEvent => !!e && typeof e === 'object' && typeof (e as TrackingEvent).event === 'string',
+    )
   } catch {
     return []
+  }
+}
+
+/** Ob im Speicher etwas anderes liegt als nichts oder eine leere Liste. */
+function speicherTraegtWartendes(): boolean {
+  try {
+    const raw = localStorage.getItem(QUEUE_KEY)
+    return raw !== null && raw !== '[]'
+  } catch {
+    return false
   }
 }
 
@@ -301,8 +321,9 @@ async function flushQueue(): Promise<void> {
   }
   const queue = begrenzeQueue(getQueue())
   if (queue.length === 0) {
-    // Auch die Reste im Speicher räumen, wenn alles Wartende zu alt war.
-    saveQueue(queue)
+    // Reste im Speicher räumen, wenn alles Wartende zu alt oder beschädigt war.
+    // Lag nichts, wird nichts geschrieben: Der Schlüssel entsteht erst mit dem ersten Ereignis.
+    if (speicherTraegtWartendes()) saveQueue(queue)
     return
   }
 
