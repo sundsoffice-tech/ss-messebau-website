@@ -221,9 +221,11 @@ function handleLogin(): void {
     $maxAttempts = 5;
     $windowSeconds = 900; // 15 minutes
 
+    // Benutzername und Passwort gelten nur als Text. Alles andere (Liste, Objekt, Zahl, kein
+    // JSON-Objekt als Rumpf) zählt wie eine fehlende Eingabe.
     $input = json_decode(file_get_contents('php://input'), true);
-    $username = trim($input['username'] ?? '');
-    $password = $input['password'] ?? '';
+    $username = is_string($input['username'] ?? null) ? trim($input['username']) : '';
+    $password = is_string($input['password'] ?? null) ? $input['password'] : '';
 
     // Unvollständige oder überlange Eingaben zählen nicht als Versuch und werden nicht geprüft.
     $eingabeFehler = null;
