@@ -48,6 +48,7 @@ jobs:
         run: |
           test -f dist/index.html || { echo "::error::dist/index.html fehlt"; exit 1; }
           grep -q '<div id="root">' dist/index.html || { echo "::error::#root fehlt in dist/index.html"; exit 1; }
-          test -f dist/_s/kontakt.html || { echo "::error::dist/_s/ fehlt (scripts/seiten-vorab.mjs)"; exit 1; }
+          test -f dist/_s/kontakt.html || { echo "::error::dist/_s/kontakt.html fehlt (scripts/seiten-vorab.mjs)"; exit 1; }
+          test -f dist/_s/nicht-gefunden.html || { echo "::error::dist/_s/nicht-gefunden.html fehlt (scripts/seiten-vorab.mjs)"; exit 1; }
           test -f dist/.htaccess || { echo "::error::dist/.htaccess fehlt"; exit 1; }
           echo "Build vollständig"
