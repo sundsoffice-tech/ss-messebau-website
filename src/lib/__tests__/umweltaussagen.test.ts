@@ -299,3 +299,125 @@ describe('Umwelt- und Zahlenaussagen ohne Beleg (A12 bis A16)', () => {
     }
   })
 })
+
+/**
+ * Orts-, Weg- und Haltbarkeitsaussagen der eigenen Seite (Prüfung Wettbewerbsrecht 11.11.2026):
+ * „lokal“, „regional“ und „kurze Transportwege“ ohne Ort bei bundesweiter Arbeit, „statt Entsorgung“
+ * als absolute Aussage, „langlebig“ für alle Materialien und „wiederverwendbar“ für alle Böden.
+ * Die Sätze sind durch Texte ersetzt, die nur das Angebot beschreiben. Geprüft werden die beiden
+ * Sprachdateien, die vorab gebauten Texte (ganz, auch der Blog) und index.html.
+ * Wer eine der Wendungen wieder einführt, braucht zuerst den Beleg des Hauses (Partnerliste mit
+ * Ort, Tourenplan, Angabe des Systemherstellers) und nimmt sie dann hier aus der Liste.
+ */
+describe('Orts- und Haltbarkeitsaussagen ohne Beleg (Prüfung 11.11.2026)', () => {
+  // [Name, Muster, Satz wie er bis 11.11.2026 in de.json stand, Satz aus en.json]
+  const wendungen: Array<[string, RegExp, string, string]> = [
+    [
+      'kurze Transportwege',
+      /kurzen? Transportwege|short transport routes/i,
+      'Kurze Transportwege durch regionale Partner in NRW und bundesweit. Transporte bündeln wir, damit weniger Fahrten anfallen.',
+      'Short transport routes through regional partners in NRW and nationwide. We bundle transports so that fewer trips are needed.',
+    ],
+    [
+      'statt Entsorgung',
+      /statt Entsorgung|instead of disposal/i,
+      'Professionelle Lagerung statt Entsorgung',
+      'Professional storage instead of disposal',
+    ],
+    [
+      'lokales Partnernetzwerk',
+      /lokale[sm]? Partnernetzwerk|local partner network/i,
+      'Lokales Partnernetzwerk',
+      'Local Partner Network',
+    ],
+    [
+      'alle Systeme wiederverwendbar',
+      /alle Systeme sind schnell verlegbar, strapazierfähig und wiederverwendbar|all systems are quick to install, durable and reusable/i,
+      'Von klassischem Messebau-Teppich bis zu hochwertigen Klick-Parkett-Systemen – alle Systeme sind schnell verlegbar, strapazierfähig und wiederverwendbar.',
+      'From classic exhibition carpet to high-quality click-parquet systems – all systems are quick to install, durable and reusable.',
+    ],
+    [
+      'langlebige Materialien',
+      /langlebigen? Materialien|durable materials/i,
+      'Wir setzen auf wiederverwendbare Systeme, lokale Partner und langlebige Materialien. Details finden Sie auf unserer Nachhaltigkeits-Seite.',
+      'We rely on reusable systems, local partners, and durable materials. Details can be found on our sustainability page.',
+    ],
+    [
+      'lokale Lieferanten',
+      /lokalen? Lieferanten|local suppliers/i,
+      'Lokale Lieferanten bevorzugt',
+      'Local suppliers preferred',
+    ],
+    // Aus denselben geänderten Sätzen, über die sechs genannten Wendungen hinaus:
+    [
+      'lokale Partner',
+      /lokalen? Partnern?\b|local partners?\b/i,
+      'Wiederverwendbare Systeme, lokale Partner, langlebige Qualität.',
+      'Reusable systems, local partners, long-lasting quality.',
+    ],
+    [
+      'regionale Partner',
+      /regionalen? Partnern?\b|regional partners?\b/i,
+      'Regionale Partner, gebündelte Transporte und Planung ab NRW.',
+      'Regional partners, bundled transports and planning from NRW.',
+    ],
+    ['langlebige Qualität', /langlebige Qualität|long-lasting quality/i, 'Langlebige Qualität', 'Long-Lasting Quality'],
+  ]
+
+  const vier: Array<[string, string]> = [
+    ['src/locales/de.json', Object.values(deutsch).join('\n')],
+    ['src/locales/en.json', Object.values(englisch).join('\n')],
+    ['scripts/seiten-inhalt.json', JSON.stringify(inhalt, null, 1)],
+    ['index.html', startseite],
+  ]
+
+  const funde = (quellenListe: Array<[string, string]>) =>
+    quellenListe.flatMap(([datei, text]) =>
+      wendungen.flatMap(([name, muster]) => {
+        const treffer = text.match(new RegExp(muster.source, 'gi')) || []
+        return treffer.map((t) => `${datei}: ${name}: „${t}“`)
+      })
+    )
+
+  it('keine der ersetzten Wendungen steht in den Sprachdateien, den vorab gebauten Texten oder index.html', () => {
+    for (const [datei, text] of vier) expect(text.length, datei).toBeGreaterThan(1000)
+    expect(funde(vier)).toEqual([])
+  })
+
+  it('Gegenprobe: am Wortlaut von main (bis 11.11.2026) schlägt jede Wendung in beiden Sprachen an', () => {
+    for (const [name, muster, alt, old] of wendungen) {
+      expect(muster.test(alt), `${name}: deutscher Satz`).toBe(true)
+      expect(muster.test(old), `${name}: englischer Satz`).toBe(true)
+    }
+    // Der Stand von main als Ganzes: Mit den alten Sätzen an ihrem Platz meldet dieselbe Suche jede Wendung.
+    const alteDe = wendungen.map(([, , alt]) => alt).join('\n')
+    const alteEn = wendungen.map(([, , , old]) => old).join('\n')
+    const stand = funde([
+      ['src/locales/de.json', vier[0][1] + '\n' + alteDe],
+      ['src/locales/en.json', vier[1][1] + '\n' + alteEn],
+      ['scripts/seiten-inhalt.json', vier[2][1] + '\n' + wendungen[0][2]],
+    ])
+    for (const [name] of wendungen) {
+      expect(stand.some((f) => f.startsWith(`src/locales/de.json: ${name}:`)), `de: ${name}`).toBe(true)
+      expect(stand.some((f) => f.startsWith(`src/locales/en.json: ${name}:`)), `en: ${name}`).toBe(true)
+    }
+    expect(stand.some((f) => f.startsWith('scripts/seiten-inhalt.json: kurze Transportwege:'))).toBe(true)
+  })
+
+  it('die neuen Sätze beschreiben das Angebot und nennen die Grenze beim Messeteppich', () => {
+    expect(deutsch['nachhaltigkeit.systeme.title2']).toBe('Partnernetzwerk in NRW und bundesweit')
+    expect(englisch['nachhaltigkeit.systeme.title2']).toBe('Partner Network in NRW and Across Germany')
+    expect(deutsch['nachhaltigkeit.systeme.desc2']).toMatch(/^Wir planen ab NRW und arbeiten mit Partnerbetrieben in NRW und bundesweit\./)
+    expect(englisch['nachhaltigkeit.systeme.desc2']).toMatch(/^We plan from NRW and work with partner companies in NRW and across Germany\./)
+    // Der Satz zu den Böden nennt nur noch die Böden, die sich mehrfach einsetzen lassen.
+    expect(deutsch['leistungen.ausstattung.flooring.subtitle']).toContain('Vinyl, Parkett und Podestböden lassen sich mehrfach einsetzen.')
+    expect(englisch['leistungen.ausstattung.flooring.subtitle']).toContain('Vinyl, parquet and platform floors can be used again.')
+    expect(deutsch['ablauf.faq.a10']).toContain('Messeteppich wird in der Regel nur einmal eingesetzt')
+    expect(englisch['ablauf.faq.a10']).toContain('exhibition carpet are usually used only once')
+    // Die vorab gebauten Texte der beiden Seiten tragen die neuen Fassungen aus der Sprachdatei.
+    const vorab = inhalt as Record<string, { absaetze: string[]; abschnitte: string[] }>
+    expect(vorab['/nachhaltigkeit'].absaetze).toContain(deutsch['nachhaltigkeit.hero.subtitle'])
+    expect(vorab['/nachhaltigkeit'].absaetze).toContain(deutsch['nachhaltigkeit.systeme.desc2'])
+    expect(vorab['/branchen'].abschnitte).toContain(deutsch['sustainability.branchen.title'])
+  })
+})
