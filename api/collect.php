@@ -35,7 +35,9 @@ require_once __DIR__ . '/statistik-zaehler.php';
 // dem Einreihen und beim Verlassen des Tabs; liegen bleibt nur, was nicht
 // zugestellt werden konnte (Netz weg, Tab vorher zu), und das geht beim
 // nächsten Seitenaufruf mit. Ein Tag deckt den Besuch, der am selben oder am
-// nächsten Tag fortgesetzt wird; Älteres zählt mit der Ankunftszeit. Länger
+// nächsten Tag fortgesetzt wird; Älteres zählt mit der Ankunftszeit (der Browser
+// sendet seit der Obergrenze seiner Warteschlange nichts mehr, was länger als 24
+// Stunden liegt; der Fall bleibt für alte Tabs und fremde Absender). Länger
 // darf das Fenster nicht sein: Die kürzeste Frist (Herzschlag) ist 24 Stunden.
 // 5 Minuten voraus: Spielraum für falsch gehende Uhren der Besucher.
 define('COLLECT_TS_ZURUECK', 86400);
