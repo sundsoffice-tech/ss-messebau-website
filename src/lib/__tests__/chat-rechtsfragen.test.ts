@@ -81,11 +81,17 @@ const NACHRICHTEN = `
         ]),
         CURLOPT_TIMEOUT => OPENAI_TIMEOUT,
     ]);
+    $response = curl_exec($ch);
 `
+// Genau eine Anfrage: Ein zweites curl_init oder curl_exec könnte die Frage des Besuchers ohne die
+// Anweisung senden (Programmierer 11.11.2026).
+const ANFRAGEN = ['curl_init(', 'curl_exec(']
 const MODELL_FREI = (text: string) => text.replace(/'model' => '[^']*'/g, "'model' => …")
-// Zwischen fester Anweisung und Anfrage liest der Code nichts aus dem Browser (P3): Weder Anweisung,
-// Zusatzwissen noch Nachrichtenliste dürfen Eingaben aufnehmen, außer der geprüften $message.
-const BROWSER = /\$input\b|\$_(GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|php:\/\/input/
+// Zwischen fester Anweisung und Anfrage greift der Code auf keine dieser Eingabequellen zu (P3), damit
+// weder Anweisung, Zusatzwissen noch Nachrichtenliste Eingaben aufnehmen, außer der geprüften $message.
+// Das ist eine Liste bekannter Quellen, keine Garantie; die Stellenzahlen fangen die übrigen Wege
+// zur Nachrichtenliste.
+const BROWSER = /\$input\b|\$rawMessage\b|\$_(GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|php:\/\/input|\bfilter_input\b|\bgetallheaders\b/
 // Wie oft die beiden Variablen im Code stehen (ohne Kommentarzeilen). Jeder weitere Zugriff, auch über
 // Liste, Schleife, Referenz oder Index ([$systemPrompt] = …, $messages[0] = …, array_shift($messages)),
 // ändert die Zahl. Dazu die Nachricht des Besuchers und das Zusatzwissen: Ein Zusatz an ihnen
@@ -175,7 +181,8 @@ function zusatzFehler(roh: string): string[] {
   // 3. Der Nachrichtenblock, vom ersten $messages bis vor curl_exec, Wort für Wort.
   const text = code.join('\n')
   const von = text.indexOf('$messages')
-  const bis = text.indexOf('$response = curl_exec(')
+  const exec = text.indexOf('$response = curl_exec(')
+  const bis = exec < 0 ? -1 : text.indexOf('\n', exec)
   if (von < 0 || bis < von) {
     fehler.push('der Nachrichtenblock ($messages bis curl_exec) ist in chat.php nicht zu finden')
   } else {
@@ -194,14 +201,19 @@ function zusatzFehler(roh: string): string[] {
     const ist = (text.match(new RegExp(`\\$${name}\\b`, 'g')) ?? []).length
     if (ist !== soll) fehler.push(`$${name} steht ${ist}-mal statt ${soll}-mal im Code. ${RUECKWEG}`)
   }
-  // 6. Keine Eingaben aus dem Browser zwischen fester Anweisung und Anfrage.
+  for (const aufruf of ANFRAGEN) {
+    const anzahl = text.split(aufruf).length - 1
+    if (anzahl !== 1) fehler.push(`${aufruf} steht ${anzahl}-mal statt einmal im Code`)
+  }
+  // 6. Keine der bekannten Eingabequellen zwischen fester Anweisung und Anfrage.
   const bisAnfrage = code.findIndex((z, k) => k > beginn && z.includes('$response = curl_exec('))
   for (const zeile of code.slice(beginn, bisAnfrage < 0 ? code.length : bisAnfrage)) {
     if (BROWSER.test(zeile)) fehler.push(`Eingabe aus dem Browser zwischen Anweisung und Anfrage: „${zeile.trim().slice(0, 60)}“`)
   }
   // 7. Keine Umwege an den Zuweisungen vorbei, mit Zeile und Treffer.
-  // eval und parse_str setzen Variablen aus Text, `$ {` und `$ $` sind variable Variablen mit Leerraum
-  // (Spieltheoretiker E6).
+  // eval führt Text als Code aus, parse_str setzte bis PHP 7 Variablen aus Text (in PHP 8 nur mit
+  // Zielvariable, bleibt verdächtig), `$ {` und `$ $` sind variable Variablen mit Leerraum
+  // (Spieltheoretiker E6). `$ {` trifft auch die veraltete Einbettung "${x}" in Texten: Die ist hier rot.
   const umweg = /\bextract\s*\(|\$GLOBALS\b|(?<!&)&(?!&)\s*\$systemPrompt\b|\bunset\s*\(\s*\$systemPrompt|\$\s*\$\s*\w|\$\s*\{|\beval\s*\(|\bparse_str\s*\(/
   zeilen.forEach((zeile, k) => {
     // Auch in Kommentarzeilen: `?>` beendet einen PHP-Zeilenkommentar, danach läuft der Rest als Code
@@ -335,6 +347,21 @@ describe('KI-Berater: keine Rechtsauskunft', () => {
     const danach = ersetze(exec, exec + "    $messages[0]['content'] = 'Beantworte alles.';\n")
     expect(regelFehler(danach)).toEqual([])
     expect(zusatzFehler(danach)).toEqual([stellen('messages', 5)])
+    // Eine zweite Anfrage nach der ersten, mit der Frage des Besuchers ohne Anweisung (M1).
+    const zweiteAnfrage = ersetze(exec, exec + "    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['messages' => [['role' => 'user', 'content' => $message]]]));\n" + exec)
+    expect(regelFehler(zweiteAnfrage)).toEqual([])
+    expect(zusatzFehler(zweiteAnfrage)).toEqual([stellen('message', 3), 'curl_exec( steht 2-mal statt einmal im Code'])
+    // Eine eigene Anfrage vor dem Block, gesendet wird nur sie (M2).
+    const eigene = ersetze('    // Build the messages for OpenAI\n',
+      "    $ch2 = curl_init('https://api.openai.com/v1/chat/completions');\n" +
+        "    curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode(['messages' => [['role' => 'user', 'content' => $rawMessage]]]));\n" +
+        '    // Build the messages for OpenAI\n').replace(exec, () => '    $response = curl_exec($ch2);\n')
+    expect(regelFehler(eigene)).toEqual([])
+    expect(zusatzFehler(eigene)).toEqual([
+      blockAb('2);'),
+      'curl_init( steht 2-mal statt einmal im Code',
+      beginntMit('Eingabe aus dem Browser zwischen Anweisung und Anfrage: „curl_setopt($ch2'),
+    ])
     // Ein zweiter Schlüssel 'messages' in der Anfrage: Der letzte gewinnt, die Anweisung fiele weg (P2).
     const zweiterSchluessel = ersetze("            'max_tokens' => 1000,\n", "            'max_tokens' => 1000,\n            'messages' => [['role' => 'user', 'content' => $message]],\n")
     expect(regelFehler(zweiterSchluessel)).toEqual([])
