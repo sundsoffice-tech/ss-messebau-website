@@ -86,11 +86,14 @@ const NACHRICHTEN = `
 // Genau ein curl_init und ein curl_exec, gezählt wie PHP sie liest (Groß- und Kleinschreibung egal,
 // Leerraum vor der Klammer erlaubt): Ein zweites könnte die Frage des Besuchers ohne die Anweisung
 // senden (Programmierer 11.11.2026). Andere Anfragewege (file_get_contents, fsockopen, curl_multi_*)
-// fängt das nicht; gegen sie hilft nur, dass hinter der Anweisung keine Eingabequelle steht (6.).
+// fängt das nicht; gegen sie hilft nur, dass hinter der Anweisung keine Eingabequelle steht (6.) und
+// $input und $rawMessage nur an ihren bekannten Stellen stehen, also nicht vorher kopiert werden
+// (STELLEN). Ein Aufruf über einen Variablennamen oder mit Kommentar vor der Klammer wird nicht gezählt.
 const ANFRAGEN: [string, RegExp][] = [['curl_init(', /\bcurl_init\s*\(/gi], ['curl_exec(', /\bcurl_exec\s*\(/gi]]
 const MODELL_FREI = (text: string) => text.replace(/'model' => '[^']*'/g, "'model' => …")
-// Zwischen fester Anweisung und Anfrage greift der Code auf keine dieser Eingabequellen zu (P3), damit
-// weder Anweisung, Zusatzwissen noch Nachrichtenliste Eingaben aufnehmen, außer der geprüften $message.
+// Von der festen Anweisung bis zum Dateiende greift der Code auf keine dieser Eingabequellen zu (P3),
+// damit weder Anweisung, Zusatzwissen, Nachrichtenliste noch eine zweite Anfrage Eingaben aufnehmen,
+// außer der geprüften $message.
 // Das ist eine Liste bekannter Quellen, keine Garantie; die Stellenzahlen fangen die übrigen Wege
 // zur Nachrichtenliste.
 const BROWSER = /\$input\b|\$rawMessage\b|\$_(GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|php:\/\/input|\bfilter_input\b|\bgetallheaders\b/
@@ -98,7 +101,9 @@ const BROWSER = /\$input\b|\$rawMessage\b|\$_(GET|POST|REQUEST|COOKIE|FILES|SERV
 // Liste, Schleife, Referenz oder Index ([$systemPrompt] = …, $messages[0] = …, array_shift($messages)),
 // ändert die Zahl. Dazu die Nachricht des Besuchers und das Zusatzwissen: Ein Zusatz an ihnen
 // ($message .= …, $trainingContext .= …) erreicht das Modell an der Anweisung vorbei (Spieltheoretiker E5).
-const STELLEN = { systemPrompt: 5, messages: 4, message: 2, trainingContext: 3 }
+// $input und $rawMessage stehen nur vor der Anweisung; eine Kopie dort ($kopie = $rawMessage;) für eine
+// zweite Anfrage dahinter ändert ihre Zahl (Programmierer 11.11.2026).
+const STELLEN = { systemPrompt: 5, messages: 4, message: 2, trainingContext: 3, input: 5, rawMessage: 3 }
 const RUECKWEG =
   'Gewollt? Dann den Wortlaut in src/lib/__tests__/chat-rechtsfragen.test.ts mitziehen und im PR begründen.'
 
@@ -338,6 +343,7 @@ describe('KI-Berater: keine Rechtsauskunft', () => {
     expect(zusatzFehler(verlauf)).toEqual([
       blockAb('messages = array_merge'),
       stellen('messages', 6),
+      stellen('input', 6),
       beginntMit('Eingabe aus dem Browser nach der festen Anweisung: „$messages = array_merge'),
     ])
     // Zusatzwissen in der Nachricht des Besuchers: Dort gilt der Vorrangsatz nicht.
@@ -361,19 +367,32 @@ describe('KI-Berater: keine Rechtsauskunft', () => {
     expect(regelFehler(eigene)).toEqual([])
     expect(zusatzFehler(eigene)).toEqual([
       blockAb('2);'),
+      stellen('rawMessage', 4),
       'curl_init( steht 2-mal statt einmal im Code',
       beginntMit('Eingabe aus dem Browser nach der festen Anweisung: „curl_setopt($ch2'),
     ])
     // Ein zweites curl_exec in anderer Schreibweise: PHP unterscheidet bei Funktionsnamen nicht nach
     // Groß- und Kleinschreibung und erlaubt Leerraum vor der Klammer.
-    const andereSchreibweise = ersetze(exec, exec + '    $response2 = Curl_Exec ($ch);\n')
+    const andereSchreibweise = ersetze(exec, exec + "    $ch3 = CURL_INIT ('https://api.openai.com/v1/chat/completions');\n    $response2 = Curl_Exec ($ch);\n")
     expect(regelFehler(andereSchreibweise)).toEqual([])
-    expect(zusatzFehler(andereSchreibweise)).toEqual(['curl_exec( steht 2-mal statt einmal im Code'])
+    expect(zusatzFehler(andereSchreibweise)).toEqual([
+      'curl_init( steht 2-mal statt einmal im Code',
+      'curl_exec( steht 2-mal statt einmal im Code',
+    ])
     // Eine zweite Anfrage ohne curl, nach der ersten, mit der Frage des Besuchers (Programmierer 11.11.2026).
     const ohneCurl = ersetze(exec, exec +
       "    $antwort2 = file_get_contents('https://api.openai.com/v1/chat/completions', false, stream_context_create(['http' => ['content' => $rawMessage]]));\n")
     expect(regelFehler(ohneCurl)).toEqual([])
-    expect(zusatzFehler(ohneCurl)).toEqual([beginntMit('Eingabe aus dem Browser nach der festen Anweisung: „$antwort2 = file_get_contents')])
+    expect(zusatzFehler(ohneCurl)).toEqual([
+      stellen('rawMessage', 4),
+      beginntMit('Eingabe aus dem Browser nach der festen Anweisung: „$antwort2 = file_get_contents'),
+    ])
+    // Dieselbe Anfrage mit einer Kopie der Frage, angelegt vor der Anweisung: Nur die Stellenzahl fängt sie.
+    const kopie = ersetze('    $message = preg_replace(', '    $kopie = $rawMessage;\n    $message = preg_replace(')
+      .replace(exec, () => exec +
+        "    $antwort2 = file_get_contents('https://api.openai.com/v1/chat/completions', false, stream_context_create(['http' => ['content' => $kopie]]));\n")
+    expect(regelFehler(kopie)).toEqual([])
+    expect(zusatzFehler(kopie)).toEqual([stellen('rawMessage', 4)])
     // Ein zweiter Schlüssel 'messages' in der Anfrage: Der letzte gewinnt, die Anweisung fiele weg (P2).
     const zweiterSchluessel = ersetze("            'max_tokens' => 1000,\n", "            'max_tokens' => 1000,\n            'messages' => [['role' => 'user', 'content' => $message]],\n")
     expect(regelFehler(zweiterSchluessel)).toEqual([])
@@ -401,6 +420,7 @@ describe('KI-Berater: keine Rechtsauskunft', () => {
     expect(regelFehler(zusatzWissen)).toEqual([])
     expect(zusatzFehler(zusatzWissen)).toEqual([
       stellen('trainingContext', 4),
+      stellen('input', 6),
       beginntMit("Eingabe aus dem Browser nach der festen Anweisung: „$trainingContext .= $input['context']"),
     ])
     // ?> beendet einen Zeilenkommentar, der Rest läuft als Code (E1).
