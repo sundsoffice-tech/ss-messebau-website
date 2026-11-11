@@ -123,10 +123,12 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'auth.php') {
  *
  * $zaehlbar false: Der Versuch wird weder gezählt noch geprüft (unvollständige Eingabe).
  * Rückgabe: [Stand, Sekunden bis zum nächsten Versuch]. Stand ist 'voll' (Grenze erreicht),
- * 'ungezaehlt', 'ok', 'falsch' oder 'defekt' (Datei nicht zu öffnen, zu sperren oder zu schreiben;
- * $pruefung lief nicht, der Aufrufer weist ab).
+ * 'ungezaehlt', 'ok', 'falsch' oder 'defekt'. 'defekt' heißt: Die Datei war nicht zu öffnen, zu
+ * sperren oder zu schreiben ($pruefung lief nicht), oder $pruefung hat eine Ausnahme geworfen (der
+ * Versuch zählt dann nicht). In beiden Fällen weist der Aufrufer ab.
  */
 function bremseVersuch(string $datei, int $max, int $fenster, bool $zaehlbar, callable $pruefung): array {
+    $vorher = null; // Länge der Zähldatei vor dem Stempel dieses Versuchs, sobald er geschrieben ist
     $fp = @fopen($datei, 'c+');
     if ($fp === false) {
         return ['defekt', 0];
@@ -158,6 +160,15 @@ function bremseVersuch(string $datei, int $max, int $fenster, bool $zaehlbar, ca
         // Gelungen: Zähler leeren. Misslingt das, bleibt er stehen; das macht die Bremse strenger, nie lockerer.
         @ftruncate($fp, 0);
         return ['ok', 0];
+    } catch (\Throwable $e) {
+        // Die Prüfung selbst ist ausgefallen (etwa Datenbank nicht lesbar). Der Versuch zählt dann
+        // nicht: Der eben geschriebene Stempel wird zurückgenommen. Ins Protokoll geht nur die Art
+        // des Fehlers, nie sein Text oder seine Spur.
+        if ($vorher !== null) {
+            @ftruncate($fp, $vorher);
+        }
+        error_log('Anmeldung nicht prüfbar: ' . get_class($e));
+        return ['defekt', 0];
     } finally {
         flock($fp, LOCK_UN);
         fclose($fp);
@@ -237,6 +248,7 @@ function handleLogin(): void {
 
     if ($stand === 'defekt') {
         // Lässt sich der Versuch nicht zählen, wird er nicht geprüft: Sonst liefe die Bremse leer.
+        // Dieselbe Antwort, wenn die Prüfung selbst ausfällt (Datenbank nicht lesbar).
         http_response_code(503);
         echo json_encode(['error' => 'Anmeldung derzeit nicht möglich']);
         return;
