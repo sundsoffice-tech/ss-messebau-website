@@ -20,7 +20,6 @@ import { InternalLinkSection } from '@/components/InternalLinkSection'
 import { USPBadges } from '@/components/ui/USPBadge'
 import { GuaranteeBanner } from '@/components/ui/GuaranteeBanner'
 import { FactBar } from '@/components/ui/FactBar'
-import { HackBanner } from '@/components/HackBanner'
 import { LogoWall } from '@/components/ui/LogoWall'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
 import { useReveal } from '@/hooks/use-reveal'
@@ -59,7 +58,7 @@ export function HomePage() {
     <div ref={revealRef}>
       <section
         id="hero"
-        className="relative min-h-[560px] sm:min-h-[640px] xl:min-h-[820px] flex items-center hero-gradient overflow-hidden"
+        className="relative min-h-[560px] sm:min-h-[640px] flex items-center hero-gradient overflow-hidden"
         aria-labelledby="hero-heading"
       >
         <motion.div
@@ -113,10 +112,8 @@ export function HomePage() {
                 {t('home.hero.secondary')}
               </Button>
             </div>
-            <HackBanner variant="mobile" />
           </div>
         </div>
-        <HackBanner variant="desktop" />
       </section>
 
       <GuaranteeBanner />
