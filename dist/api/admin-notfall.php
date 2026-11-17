@@ -9,6 +9,7 @@
  * Aufrufe:
  *   ?token=...            zeigt die Benutzernamen
  *   ?token=...&pw=...     setzt das Passwort (bei mehreren Benutzern zusätzlich &name=...)
+ *   ?token=...&login=1    meldet sofort an und leitet in den Admin-Bereich
  *
  * Der neue Hash hat dieselben Kosten wie in auth.php (10), damit die Anmeldung
  * gleich lange rechnet. Ein neuer Hash beendet alle offenen Sitzungen.
@@ -46,13 +47,44 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
     $db->exec('PRAGMA busy_timeout=5000');
-    $admins = $db->query('SELECT id, username FROM admin_users ORDER BY id')->fetchAll();
+    $admins = $db->query('SELECT id, username, display_name FROM admin_users ORDER BY id')->fetchAll();
 } catch (Throwable $e) {
     abbruch('Datenbank nicht lesbar: ' . $e->getMessage(), 500);
 }
 
 if (count($admins) === 0) {
     abbruch('Es gibt keinen Admin-Benutzer.', 500);
+}
+
+// Kurzweg in den Admin-Bereich: Sitzung hier aufbauen und weiterleiten.
+if (isset($_GET['login'])) {
+    require_once __DIR__ . '/auth.php';
+
+    $name = (string) ($_GET['name'] ?? '');
+    $zeile = null;
+    foreach ($admins as $kandidat) {
+        if ($name === '' || $kandidat['username'] === $name) {
+            $zeile = $kandidat;
+            break;
+        }
+    }
+    if ($zeile === null) {
+        abbruch('Benutzername nicht gefunden.', 400);
+    }
+
+    $hashAbruf = $db->prepare('SELECT password_hash FROM admin_users WHERE id = :id');
+    $hashAbruf->execute([':id' => (int) $zeile['id']]);
+    $hash = (string) $hashAbruf->fetchColumn();
+
+    startSession();
+    session_regenerate_id(true);
+    $_SESSION['user_id'] = (int) $zeile['id'];
+    $_SESSION['username'] = (string) $zeile['username'];
+    $_SESSION['display_name'] = (string) ($zeile['display_name'] ?? '');
+    $_SESSION['pw_marke'] = sitzungsMarke($hash);
+
+    header('Location: /admin', true, 302);
+    exit;
 }
 
 $passwort = (string) ($_GET['pw'] ?? '');
