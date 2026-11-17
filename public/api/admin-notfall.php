@@ -19,7 +19,14 @@ header('Content-Type: text/plain; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('X-Robots-Tag: noindex');
 
-const TOKEN = 'f3a91c7d2b45e8a06c1d94be7f30528a';
+/**
+ * Zeichen, das den Weg öffnet. Es steht absichtlich NICHT im Quelltext, weil das
+ * Repository öffentlich ist: Gültig ist der Inhalt von data/notfall-token.txt. Die
+ * Datei liegt neben der Datenbank, ist nicht versioniert und überlebt Deploys.
+ * Der Wert hier ist nur die Erstausstattung, bis die Datei geschrieben ist.
+ */
+const TOKEN_ERSTSATZ = 'f3a91c7d2b45e8a06c1d94be7f30528a';
+const TOKEN_DATEI = __DIR__ . '/data/notfall-token.txt';
 const PASSWORT_MIN_BYTES = 12;
 const PASSWORT_MAX_BYTES = 72;
 
@@ -30,12 +37,34 @@ function abbruch(string $meldung, int $code = 400): void
     exit;
 }
 
+/** Gültiges Zeichen: aus der Datei, sonst die Erstausstattung. */
+function gueltigesToken(): string
+{
+    if (is_file(TOKEN_DATEI)) {
+        $inhalt = trim((string) @file_get_contents(TOKEN_DATEI));
+        if (strlen($inhalt) >= 32) {
+            return $inhalt;
+        }
+    }
+    return TOKEN_ERSTSATZ;
+}
+
 $gegeben = (string) ($_GET['token'] ?? '');
-if ($gegeben === '' || !hash_equals(TOKEN, $gegeben)) {
+if ($gegeben === '' || !hash_equals(gueltigesToken(), $gegeben)) {
     abbruch('Nicht gefunden.', 404);
 }
 
 require_once __DIR__ . '/config.php';
+
+// Neues Zeichen würfeln (nur mit gültigem Zeichen erreichbar). Ab dann gilt nur noch das neue.
+if (isset($_GET['neu'])) {
+    $neues = bin2hex(random_bytes(20));
+    if (@file_put_contents(TOKEN_DATEI, $neues . "\n") === false) {
+        abbruch('Die Datei ' . TOKEN_DATEI . ' ließ sich nicht schreiben.', 500);
+    }
+    echo "Neues Zeichen gesetzt. Das alte gilt nicht mehr.\n", $neues, "\n";
+    exit;
+}
 
 if (!is_file(DB_PATH)) {
     abbruch('Die Datenbank der Website wurde nicht gefunden.', 500);
